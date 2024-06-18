@@ -87,7 +87,7 @@ export default function Profile() {
     }
   };
 
-  const handleDeleteAccount = async () => {
+const handleDeleteAccount = async () => {
     try {
       dispatch(deleteUserStart());
       const res = await fetch(`/api/user/delete/${currentUser._id}`, {
@@ -96,8 +96,8 @@ export default function Profile() {
       const data = await res.json();
       if (data.success === false) {
         console.log(data);
-        return;
         dispatch(deleteUserFail(data));
+        return;
       }
       dispatch(deleteUserSuccess());
     } catch (error) {
