@@ -64,9 +64,8 @@ Creating a comprehensive task model for a centralized scholarship management sys
 2. **Provide Registration Information:**
    - Enter personal details: full name, email, date of birth.
    - Create username and password.
-   - Agree to terms and conditions.
 
-3. **Email Verification:**
+3. **Verification**
    - Receive verification email.
    - Click on the verification link.
 
@@ -74,6 +73,10 @@ Creating a comprehensive task model for a centralized scholarship management sys
    - Enter contact details: address, phone number.
    - Upload profile picture (optional).
    - Fill out academic information.
+     
+5. **Terms and Conditions**
+   - Display Terms and Conditions
+   - Agree to Terms and Conditions 
 
 **System Tasks:**
 
