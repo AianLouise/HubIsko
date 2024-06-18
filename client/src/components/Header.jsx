@@ -10,7 +10,7 @@ export default function Header() {
           <h1 className='font-bold'>Auth App</h1>
         </Link>
         <ul className='flex gap-4'>
-          <Link to='/'>
+          <Link to='/home'>
             <li>Home</li>
           </Link>
           <Link to='/about'>

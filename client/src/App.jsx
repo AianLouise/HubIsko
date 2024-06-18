@@ -8,13 +8,15 @@ import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
 import VerifyEmail from "./components/VerifyEmail";
 import VerifyYourEmail from "./components/VerifyYourEmail";
+import Landing from "./pages/Landing";
 
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+      <Route path="/" element={<Landing />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/about" element={<About />} />
