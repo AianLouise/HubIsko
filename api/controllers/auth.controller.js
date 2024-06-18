@@ -2,6 +2,7 @@ import User from '../models/user.model.js';
 import bcryptjs from 'bcryptjs';
 import { errorHandler } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
 
 export const signup = async (req, res, next) => {
   const { fullName, email, dateOfBirth, username, password } = req.body;
@@ -11,11 +12,44 @@ export const signup = async (req, res, next) => {
     email,
     dateOfBirth,
     username,
-    password: hashedPassword
+    password: hashedPassword,
+    emailVerified: false // Add a flag for email verification
   });
   try {
-    await newUser.save();
-    res.status(201).json({ message: 'User created successfully' });
+    const savedUser = await newUser.save();
+
+    // Generate a verification token
+    const emailVerificationToken = jwt.sign(
+      { userId: savedUser._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' } // Token expires in 1 day
+    );
+
+    // Save or update the verification token in the database
+    savedUser.emailVerificationToken = emailVerificationToken;
+    await savedUser.save();
+
+    // Email setup (this is a simplified setup, customize as needed)
+    const transporter = nodemailer.createTransport({
+      service: 'gmail', // Use your preferred email service
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
+
+    console.log('Sending verification email to:', email);
+    await transporter.sendMail({
+      from: '"HubIsko" <yourappemail@example.com>', // sender address
+      to: email, // list of receivers
+      subject: 'Verify Your Email', // Subject line
+      html: `<p>Please click the link below to verify your email:</p><p><a href="${verificationUrl}">${verificationUrl}</a></p>`, // html body
+    });
+    console.log('Verification email sent successfully to:', email);
+
+    res.status(201).json({ message: 'User created successfully. Please check your email to verify your account.' });
   } catch (error) {
     next(error);
   }
