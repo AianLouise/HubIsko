@@ -27,6 +27,9 @@ Certainly! Here's the completed Table of Contents for the document on a centrali
     - [Finalize Registration](#5-finalize-registration)
     - [System Tasks](#system-tasks)
     - [Administrator Tasks](#administrator-tasks)
+- [Pages for Not Logged In Users](#pages-for-not-logged-in-users)
+- [Pages for Logged In Users](#pages-for-logged-in-users)
+- [Design and Functionality Considerations](#design-and-functionality-considerations)
 
 This structured Table of Contents reflects the comprehensive breakdown of tasks, processes, and functionalities within the centralized scholarship management system document. Each section is designed to provide clear guidance and understanding for users navigating through the content. If you have any further questions or need additional details, feel free to ask!
 
@@ -481,3 +484,79 @@ Certainly! User registration is a fundamental process in a centralized scholarsh
   - Ensure compliance with system policies and regulations.
 
 ---
+
+### Pages for Not Logged In Users
+
+1. **Home Page**
+   - Overview of the scholarship management system.
+   - Highlights of key features and benefits.
+   - Call to action for users to register or log in.
+
+2. **About Us**
+   - Mission and vision statements of the scholarship management system.
+   - Introduction to the team or organization behind the system.
+
+3. **Scholarship Listings**
+   - Search filters to find scholarships based on criteria (field of study, eligibility).
+   - Detailed listings for each scholarship, including description, eligibility requirements, and application deadlines.
+   - Ability to view scholarship details and application links.
+
+4. **Login/Register**
+   - Separate pages or modal windows for users to log in or register.
+   - Registration form with fields for entering personal information (name, email, password).
+   - Verification process for activating accounts.
+
+5. **Help/Support**
+   - FAQs section with answers to common questions about the system.
+   - Contact form or support email for users to reach out for assistance.
+   - Links to support resources such as tutorials and user guides.
+
+6. **Privacy Policy and Terms of Use**
+   - Detailed information on how user data is handled and protected.
+   - Terms and conditions governing the use of the scholarship management system.
+
+### Pages for Logged In Users
+
+1. **Dashboard**
+   - Personalized dashboard displaying relevant information based on user role (applicant, provider, administrator).
+   - Quick links to profile management, scholarship applications/reviews, and system settings.
+
+2. **Profile Management**
+   - Edit personal details, upload documents, and manage account settings.
+   - View application history and status updates.
+
+3. **Scholarship Listings**
+   - Ability to search, filter, and apply for scholarships.
+   - Track application statuses and receive notifications for updates.
+
+4. **Provider Dashboard**
+   - Setup organization profile, manage scholarships, and review applicant submissions.
+   - Communicate with applicants and update application statuses.
+
+5. **Admin Dashboard**
+   - Manage user accounts, roles, and permissions.
+   - Review and approve/reject new scholarship submissions.
+   - Configure system-wide settings and integration options.
+
+6. **Forum/Community**
+   - Participate in discussions on scholarship opportunities, academic topics, etc.
+   - Moderation tools for managing discussions and enforcing guidelines.
+
+7. **Help/Support**
+   - Access additional support resources, such as troubleshooting tips or user guides.
+   - Contact form for specific inquiries or issues.
+
+8. **Blog/News**
+   - Stay updated with the latest news, announcements, and blog posts related to scholarships and education.
+
+9. **Logout**
+   - Option to securely log out of the system to protect user privacy.
+
+### Design and Functionality Considerations
+
+- **Responsive Design:** Ensures seamless usability across different devices (desktops, tablets, mobile phones).
+- **Clear Navigation:** Intuitive menus and links for easy access to relevant features and information.
+- **Security Measures:** SSL encryption, secure login processes, and data protection practices.
+- **Personalization:** Tailored content and functionalities based on user roles (applicant, provider, administrator).
+
+By structuring the website in this way, both logged in and not logged in users can easily navigate through the scholarship management system, perform necessary tasks, and access relevant information based on their roles and permissions.

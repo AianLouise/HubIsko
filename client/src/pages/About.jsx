@@ -1,29 +1,40 @@
 import React from 'react'
 import Header from '../components/Header'
+import Footer from '../components/Footer' // Import the Footer component
 
-export default function About() {
+export default function AboutUs() {
   return (
-    <>
+    <div className="flex flex-col min-h-screen"> {/* Wrap content in a flex container */}
       <Header />
-    <div className='px-4 py-12 max-w-2xl mx-auto'>
-      <h1 className='text-3xl font-bold  mb-4 text-slate-800'>About</h1>
-      <p className='mb-4 text-slate-700'>
-        This is a MERN (MongoDB, Express, React, Node.js) stack application with
-        authentication. It allows users to sign up, log in, and log out, and
-        provides access to protected routes only for authenticated users.
-      </p>
-      <p className='mb-4 text-slate-700'>
-        The front-end of the application is built with React and uses React
-        Router for client-side routing. The back-end is built with Node.js and
-        Express, and uses MongoDB as the database. Authentication is implemented
-        using JSON Web Tokens (JWT).
-      </p>
-      <p className='mb-4 text-slate-700'>
-        This application is intended as a starting point for building full-stack
-        web applications with authentication using the MERN stack. Feel free to
-        use it as a template for your own projects!
-      </p>
+      <main className="flex-grow"> {/* Main content area */}
+        <div className='px-4 py-12 max-w-2xl mx-auto'>
+          <h1 className='text-3xl font-bold mb-4 text-slate-800'>About Us</h1>
+          <p className='mb-4 text-slate-700'>
+            At the heart of our Scholarship Management System is a commitment to
+            empowering students and organizations in the pursuit of educational
+            excellence. Our mission is to simplify the scholarship process, making
+            education accessible to all. Our vision is to become the leading platform
+            for scholarship management, where opportunities meet potential.
+          </p>
+          <p className='mb-4 text-slate-700'>
+            Our team is composed of passionate educators, technologists, and advocates
+            for higher education. We believe in the transformative power of education
+            and are dedicated to removing financial barriers to academic achievement.
+          </p>
+          <p className='mb-4 text-slate-700'>
+            With years of experience in the educational sector, our organization has
+            developed a deep understanding of the challenges faced by students and
+            scholarship providers. We've channeled this knowledge into creating a
+            comprehensive system that addresses these challenges head-on, offering
+            an intuitive, reliable, and efficient platform.
+          </p>
+          <p className='mb-4 text-slate-700'>
+            Thank you for choosing to explore our Scholarship Management System. We
+            are excited to support you on your journey to educational success!
+          </p>
+        </div>
+      </main>
+      <Footer /> {/* Place the Footer component here */}
     </div>
-    </>
   );
 }

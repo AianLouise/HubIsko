@@ -15,7 +15,7 @@ const VerifyEmail = () => {
         setMessage(data);
         if (response.ok) {
           setTimeout(() => {
-            navigate('/sign-in');
+            navigate('/login');
           }, 3000);
         }
       } catch (error) {
