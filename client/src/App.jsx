@@ -7,12 +7,12 @@ import Profile from "./pages/Profile";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
 import VerifyEmail from "./components/VerifyEmail";
+import VerifyYourEmail from "./components/VerifyYourEmail";
 
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/sign-in" element={<SignIn />} />
@@ -22,6 +22,7 @@ export default function App() {
           <Route path='/profile' element={<Profile />} />
         </Route>
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/verify-your-email" element={<VerifyYourEmail />} />
       </Routes>
     </BrowserRouter >
   )

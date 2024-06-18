@@ -77,40 +77,38 @@ export const signin = async (req, res, next) => {
 export const google = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
+
     if (user) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      // If user already exists, log them in
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
       const { password: _, ...rest } = user.toObject();
-      const expiryDate = new Date(Date.now() + 3600000); // 1 hour
       res
         .cookie('access_token', token, {
           httpOnly: true,
-          expires: expiryDate,
+          expires: new Date(Date.now() + 3600000), // 1 hour
         })
         .status(200)
         .json(rest);
     } else {
-      const generatedPassword =
-        Math.random().toString(36).slice(-8) +
-        Math.random().toString(36).slice(-8);
-      const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+      // If user does not exist, create a new user
       const newUser = new User({
-        fullName: req.body.name, // Assuming fullName is provided in req.body.name
+        fullName: req.body.name,
         email: req.body.email,
-        dateOfBirth: new Date(), // Assuming dateOfBirth needs to be provided or generated
-        username:
-          req.body.name.split(' ').join('').toLowerCase() +
-          Math.random().toString(36).slice(-8),
-        password: hashedPassword,
+        dateOfBirth: new Date(), // Placeholder, update according to your needs
+        username: `${req.body.name.split(' ').join('').toLowerCase()}${Math.random().toString(36).slice(-8)}`,
+        password: bcryptjs.hashSync(Math.random().toString(36).slice(-8), 10), // Random password
         profilePicture: req.body.photo,
+        emailVerified: true, // Mark email as verified since it's from Google
       });
+
       await newUser.save();
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
       const { password: _, ...rest } = newUser.toObject();
-      const expiryDate = new Date(Date.now() + 3600000); // 1 hour
       res
         .cookie('access_token', token, {
           httpOnly: true,
-          expires: expiryDate,
+          expires: new Date(Date.now() + 3600000), // 1 hour
         })
         .status(201)
         .json(rest);
