@@ -159,7 +159,7 @@ export const resendVerificationEmail = async (req, res, next) => {
     }
     if (user.emailVerified) {
       console.log("User already verified");
-      return res.status(200).json({ message: "User already verified. No need to resend email." });
+      return res.status(200).json({ message: "Your email is already verified. Please log in." });
     } else {
       // Generate a new verification token
       const emailVerificationToken = jwt.sign(
