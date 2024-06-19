@@ -18,7 +18,7 @@ export default function Home() {
             to provide scholarships, our platform offers a suite of tools to simplify
             your journey.
           </p>
-          <p className='mb-4 text-slate-700'>
+          <div className='mb-4 text-slate-700'>
             Key Features:
             <ul className='list-disc ml-8'>
               <li>Easy scholarship discovery with personalized recommendations.</li>
@@ -26,8 +26,8 @@ export default function Home() {
               <li>Tools for organizations to manage applications and select recipients.</li>
               <li>Secure and transparent handling of your data.</li>
             </ul>
-          </p>
-          <p className='mb-4 text-slate-700'>
+          </div>
+          <div className='mb-4 text-slate-700'>
             Benefits:
             <ul className='list-disc ml-8'>
               <li>Maximize your scholarship opportunities with minimal effort.</li>
@@ -35,7 +35,7 @@ export default function Home() {
               <li>Access a wide network of scholarship providers and applicants.</li>
               <li>Get support from our dedicated team every step of the way.</li>
             </ul>
-          </p>
+          </div>
           <p className='mb-4 text-slate-700'>
             Ready to take the next step in your educational journey? Register or log in now
             to explore all the features our scholarship management system has to offer!
