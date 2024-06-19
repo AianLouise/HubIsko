@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import OAuth from '../components/OAuth';
 import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import { useEffect } from 'react';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -13,6 +15,17 @@ export default function SignUp() {
     fullName: '', // Added fullName to formData
     dateOfBirth: '', // Added dateOfBirth to formData
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -80,7 +93,12 @@ export default function SignUp() {
       const data = await res.json();
       setLoading(false);
       if (data.success === false) {
-        setError(data.message || 'An error occurred');
+        // Customize error message here based on the error returned from the backend
+        if (data.message.includes('E11000 duplicate key error collection')) {
+          setError('Email already exists. Please use a different email.');
+        } else {
+          setError(data.message || 'An error occurred');
+        }
         return;
       }
       navigate('/login');
@@ -105,23 +123,54 @@ export default function SignUp() {
 
       {/* Right Column for Sign Up Form */}
       <div className='flex flex-1 flex-col items-center justify-center'>
-        <h1 className='text-3xl text-center font-semibold my-7'>Sign Up</h1>
+        <h1 className='text-3xl text-center font-semibold my-7'>Register</h1>
         <form onSubmit={handleSubmit} className='w-full max-w-md flex flex-col gap-4'>
           <input type="text" id="fullName" placeholder="Full Name" className='bg-slate-100 p-3 rounded-lg' onChange={handleChange} />
           <input type="date" id="dateOfBirth" placeholder="Date of Birth" className='bg-slate-100 p-3 rounded-lg' onChange={handleChange} />
           <input type="text" id="username" placeholder="Username" className='bg-slate-100 p-3 rounded-lg' onChange={handleChange} />
           <input type="email" id="email" placeholder="Email" className='bg-slate-100 p-3 rounded-lg' onChange={handleChange} />
-          <input type="password" id="password" placeholder="Password" className='bg-slate-100 p-3 rounded-lg' onChange={handleChange} />
-          <input type="password" id="confirmPassword" placeholder="Confirm Password" className='bg-slate-100 p-3 rounded-lg' onChange={handleChange} />
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              id="password"
+              placeholder="Password"
+              className='bg-slate-100 p-3 rounded-lg w-full'
+              onChange={handleChange}
+            />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className='absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-blue-500 hover:underline'
+            >
+              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+            </button>
+          </div>
+
+          <div className="relative">
+            <input
+              type={showConfirmPassword ? 'text' : 'password'}
+              id="confirmPassword"
+              placeholder="Confirm Password"
+              className='bg-slate-100 p-3 rounded-lg w-full'
+              onChange={handleChange}
+            />
+            <button
+              type="button"
+              onClick={toggleConfirmPasswordVisibility}
+              className='absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-blue-500 hover:underline'
+            >
+              <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
+            </button>
+          </div>
           <button disabled={loading} className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>
-            {loading ? 'Loading...' : 'Sign Up'}
+            {loading ? 'Loading...' : 'Register'}
           </button>
           <OAuth />
         </form>
         <div className='flex gap-2 mt-5'>
           <p>Have an account?</p>
           <Link to='/login'>
-            <span className='text-blue-500'>Sign In</span>
+            <span className='text-blue-500'>Login</span>
           </Link>
         </div>
         {error && <p className='text-red-700'>{error}</p>}

@@ -8,6 +8,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import VerifyEmail from "./components/VerifyEmail";
 import VerifyYourEmail from "./components/VerifyYourEmail";
 import ScholarshipListing from "./pages/ScholarshipListing";
+import ForgotPassword from "./components/ForgotPassword";
 
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/verify-your-email" element={<VerifyYourEmail />} />
         <Route path="/resend-verification-email" element={<VerifyYourEmail />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
     </BrowserRouter >
   )

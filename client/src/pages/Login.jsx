@@ -9,6 +9,9 @@ import {
 } from '../redux/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import OAuth from '../components/OAuth';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -66,6 +69,12 @@ export default function SignIn() {
     }
   };
 
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className='flex flex-col md:flex-row items-center justify-center p-4 gap-10 min-h-screen'>
       {/* Left Column for Logo or Image */}
@@ -81,7 +90,7 @@ export default function SignIn() {
 
       {/* Right Column for Sign In Form */}
       <div className='flex flex-1 flex-col items-center justify-center'>
-        <h1 className='text-3xl text-center font-semibold my-7'>Sign In</h1>
+        <h1 className='text-3xl text-center font-semibold my-7'>Login</h1>
         <form onSubmit={handleSubmit} className='w-full max-w-md flex flex-col gap-4'>
           <input
             type='email'
@@ -92,28 +101,47 @@ export default function SignIn() {
             className='bg-slate-100 p-3 rounded-lg'
             onChange={handleChange}
           />
-          <input
-            type='password'
-            placeholder='Password'
-            id='password'
-            aria-label='Password'
-            required
-            className='bg-slate-100 p-3 rounded-lg'
-            onChange={handleChange}
-          />
+
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder='Password'
+              id='password'
+              aria-label='Password'
+              required
+              className='bg-slate-100 p-3 rounded-lg w-full'
+              onChange={handleChange}
+            />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className='absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-blue-500 hover:underline'
+            >
+              {showPassword ? <FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}
+            </button>
+          </div>
+
+          {/* Forgot Password Link */}
+          <div className="text-right w-full">
+            <Link to='/forgot-password' className='text-sm text-blue-500 hover:underline'>
+              Forgot Password?
+            </Link>
+          </div>
+
           <button
             type='submit'
             disabled={loading}
             className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-50'
           >
-            {loading ? 'Loading...' : 'Sign In'}
+            {loading ? 'Loading...' : 'Login'}
           </button>
+
           <OAuth />
         </form>
         <div className='flex gap-2 mt-5'>
           <p>Don't Have an account?</p>
           <Link to='/register' className='text-blue-500 hover:underline'>
-            Sign up
+            Register
           </Link>
         </div>
         {error && (
