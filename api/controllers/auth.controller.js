@@ -51,7 +51,7 @@ export const signup = async (req, res, next) => {
     });
     console.log('Verification email sent successfully to:', email);
 
-    res.status(201).json({ message: 'User created successfully. Please check your email to verify your account.' });
+    res.status(201).json({ success: true, message: 'User created successfully. Please check your email to verify your account.' });
   } catch (error) {
     next(error);
   }

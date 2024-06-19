@@ -5,6 +5,7 @@ import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import { useEffect } from 'react';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import logo from '../assets/logo.png';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -12,27 +13,17 @@ export default function SignUp() {
     email: '',
     password: '',
     confirmPassword: '',
-    fullName: '', // Added fullName to formData
-    dateOfBirth: '', // Added dateOfBirth to formData
+    fullName: '',
+    dateOfBirth: '',
   });
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
-
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [logoUrl, setLogoUrl] = useState('');
 
   const navigate = useNavigate();
-
-  const [logoUrl, setLogoUrl] = useState('');
 
   useEffect(() => {
     const fetchLogoUrl = async () => {
@@ -50,9 +41,12 @@ export default function SignUp() {
     fetchLogoUrl();
   }, []);
 
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
+
   const handleChange = (e) => {
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    setFormData({ ...formData, [e.target.id]: value });
+    const { type, checked, value, id } = e.target;
+    setFormData({ ...formData, [id]: type === 'checkbox' ? checked : value });
   };
 
   const validateForm = () => {
@@ -61,7 +55,6 @@ export default function SignUp() {
       setError('Please fill in all fields');
       return false;
     }
-    // Enhanced email validation
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setError('Email is invalid');
       return false;
@@ -85,25 +78,20 @@ export default function SignUp() {
     try {
       const res = await fetch('/api/auth/signup', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      setLoading(false);
-      if (data.success === false) {
-        // Customize error message here based on the error returned from the backend
-        if (data.message.includes('E11000 duplicate key error collection')) {
-          setError('Email already exists. Please use a different email.');
-        } else {
-          setError(data.message || 'An error occurred');
-        }
-        return;
+      if (!data.success) {
+        setError(data.message.includes('E11000 duplicate key error collection') ?
+          'Email already exists. Please use a different email.' :
+          data.message || 'An error occurred');
+      } else {
+        navigate('/login');
       }
-      navigate('/login');
     } catch (error) {
       setError(error.message || 'An error occurred');
+    } finally {
       setLoading(false);
     }
   };
@@ -113,11 +101,7 @@ export default function SignUp() {
       {/* Left Column for Graphic or Welcome Message */}
       <div className='flex-1 flex justify-center items-center'>
         <Link to='/'>
-          {logoUrl ? (
-            <img src={logoUrl} alt="Logo" className="w-48 h-auto" />
-          ) : (
-            <div>Loading logo...</div> // Placeholder or loader while the logo is being fetched
-          )}
+          <img src={logo} alt="Logo" className="w-48 h-auto" />
         </Link>
       </div>
 
