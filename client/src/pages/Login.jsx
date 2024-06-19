@@ -37,7 +37,7 @@ export default function SignIn() {
       }
       dispatch(signInSuccess(data));
       if (!data.emailVerified) {
-        navigate('/verify-your-email');
+        navigate('/verify-your-email', { state: { email: formData.email } });
       } else {
         navigate('/');
       }

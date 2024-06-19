@@ -40,7 +40,7 @@ export const signup = async (req, res, next) => {
 
     // const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
 
-    const verificationUrl = `https://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`; 
+    const verificationUrl = `https://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`;
 
     console.log('Sending verification email to:', email);
     await transporter.sendMail({
@@ -158,41 +158,42 @@ export const resendVerificationEmail = async (req, res, next) => {
       return res.status(404).json({ message: "User not found" });
     }
     if (user.emailVerified) {
-      return res.status(400).json({ message: "User already verified" });
+      console.log("User already verified");
+      return res.status(200).json({ message: "User already verified. No need to resend email." });
+    } else {
+      // Generate a new verification token
+      const emailVerificationToken = jwt.sign(
+        { userId: user._id },
+        process.env.JWT_SECRET,
+        { expiresIn: '1d' } // Token expires in 1 day
+      );
+
+      // Save or update the verification token in the database
+      user.emailVerificationToken = emailVerificationToken;
+      await user.save();
+
+      // Email setup (reuse from signup)
+      const transporter = nodemailer.createTransport({
+        service: 'gmail', // Use your preferred email service
+        auth: {
+          user: process.env.EMAIL_USERNAME,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      });
+
+      const verificationUrl = `https://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`;
+
+      console.log('Resending verification email to:', email);
+      await transporter.sendMail({
+        from: '"HubIsko" <yourappemail@example.com>', // sender address
+        to: email, // list of receivers
+        subject: 'Verify Your Email', // Subject line
+        html: `<p>Please click the link below to verify your email:</p><p><a href="${verificationUrl}">${verificationUrl}</a></p>`, // html body
+      });
+      console.log('Verification email resent successfully to:', email);
+
+      return res.status(200).json({ message: "Verification email resent successfully" });
     }
-
-    // Generate a new verification token
-    const emailVerificationToken = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' } // Token expires in 1 day
-    );
-
-    // Save or update the verification token in the database
-    user.emailVerificationToken = emailVerificationToken;
-    await user.save();
-
-    // Email setup (reuse from signup)
-    const transporter = nodemailer.createTransport({
-      service: 'gmail', // Use your preferred email service
-      auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-    });
-
-    const verificationUrl = `https://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`;
-
-    console.log('Resending verification email to:', email);
-    await transporter.sendMail({
-      from: '"HubIsko" <yourappemail@example.com>', // sender address
-      to: email, // list of receivers
-      subject: 'Verify Your Email', // Subject line
-      html: `<p>Please click the link below to verify your email:</p><p><a href="${verificationUrl}">${verificationUrl}</a></p>`, // html body
-    });
-    console.log('Verification email resent successfully to:', email);
-
-    res.status(200).json({ message: "Verification email resent successfully" });
   } catch (error) {
     next(error);
   }
