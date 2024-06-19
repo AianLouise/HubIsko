@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { getDownloadURL, getStorage, ref } from 'firebase/storage';
+import { useEffect } from 'react';
 import {
   signInStart,
   signInSuccess,
@@ -18,6 +20,24 @@ export default function SignIn() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
+
+  const [logoUrl, setLogoUrl] = useState('');
+
+  useEffect(() => {
+    const fetchLogoUrl = async () => {
+      const storage = getStorage();
+      const logoRef = ref(storage, '/System Files/logo.jpg'); // Update the path to your logo
+      try {
+        const url = await getDownloadURL(logoRef);
+        setLogoUrl(url);
+      } catch (error) {
+        console.error('Failed to fetch logo:', error);
+        // Handle any errors or set a default logo if needed
+      }
+    };
+
+    fetchLogoUrl();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,7 +71,11 @@ export default function SignIn() {
       {/* Left Column for Logo or Image */}
       <div className='flex flex-1 justify-center items-center'>
         <Link to='/'>
-          <img src='https://via.placeholder.com/150' alt='Logo' className='w-48 h-auto' />
+          {logoUrl ? (
+            <img src={logoUrl} alt="Logo" className="w-48 h-auto" />
+          ) : (
+            <div>Loading logo...</div> // Placeholder or loader while the logo is being fetched
+          )}
         </Link>
       </div>
 
