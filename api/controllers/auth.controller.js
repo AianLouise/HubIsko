@@ -123,3 +123,77 @@ export const google = async (req, res, next) => {
 export const signout = (req, res) => {
   res.clearCookie('access_token').json('Signout successfully');
 };
+
+export const verifyEmail = async (req, res, next) => {
+  const { token } = req.query;
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.userId);
+
+    if (!user) {
+      return next(errorHandler(400, 'Invalid token'));
+    }
+
+    if (user.emailVerified) {
+      return res.status(400).send('Email already verified');
+    }
+
+    user.emailVerified = true;
+    user.emailVerificationToken = undefined;
+    await user.save();
+
+    res.status(200).send('Email verified successfully');
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const resendVerificationEmail = async (req, res, next) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.emailVerified) {
+      return res.status(400).json({ message: "User already verified" });
+    }
+
+    // Generate a new verification token
+    const emailVerificationToken = jwt.sign(
+      { userId: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' } // Token expires in 1 day
+    );
+
+    // Save or update the verification token in the database
+    user.emailVerificationToken = emailVerificationToken;
+    await user.save();
+
+    // Email setup (reuse from signup)
+    const transporter = nodemailer.createTransport({
+      service: 'gmail', // Use your preferred email service
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    const verificationUrl = `https://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`;
+
+    console.log('Resending verification email to:', email);
+    await transporter.sendMail({
+      from: '"HubIsko" <yourappemail@example.com>', // sender address
+      to: email, // list of receivers
+      subject: 'Verify Your Email', // Subject line
+      html: `<p>Please click the link below to verify your email:</p><p><a href="${verificationUrl}">${verificationUrl}</a></p>`, // html body
+    });
+    console.log('Verification email resent successfully to:', email);
+
+    res.status(200).json({ message: "Verification email resent successfully" });
+  } catch (error) {
+    next(error);
+  }
+};

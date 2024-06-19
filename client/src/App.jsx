@@ -24,6 +24,7 @@ export default function App() {
         </Route>
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/verify-your-email" element={<VerifyYourEmail />} />
+        <Route path="/resend-verification-email" element={<VerifyYourEmail />} />
       </Routes>
     </BrowserRouter >
   )

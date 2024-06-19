@@ -8,7 +8,6 @@ export default function SignUp() {
     email: '',
     password: '',
     confirmPassword: '',
-    termsAccepted: false, // Existing state for terms checkbox
     fullName: '', // Added fullName to formData
     dateOfBirth: '', // Added dateOfBirth to formData
   });
@@ -24,7 +23,7 @@ export default function SignUp() {
   };
 
   const validateForm = () => {
-    const { username, email, password, confirmPassword, termsAccepted, fullName, dateOfBirth } = formData;
+    const { username, email, password, confirmPassword, fullName, dateOfBirth } = formData;
     if (!username || !email || !password || !confirmPassword || !fullName || !dateOfBirth) {
       setError('Please fill in all fields');
       return false;
@@ -40,10 +39,6 @@ export default function SignUp() {
     }
     if (password !== confirmPassword) {
       setError('Passwords do not match');
-      return false;
-    }
-    if (!termsAccepted) {
-      setError('You must accept the terms and conditions');
       return false;
     }
     return true;
@@ -94,10 +89,6 @@ export default function SignUp() {
           <input type="email" id="email" placeholder="Email" className='bg-slate-100 p-3 rounded-lg' onChange={handleChange} />
           <input type="password" id="password" placeholder="Password" className='bg-slate-100 p-3 rounded-lg' onChange={handleChange} />
           <input type="password" id="confirmPassword" placeholder="Confirm Password" className='bg-slate-100 p-3 rounded-lg' onChange={handleChange} />
-          <div className="flex items-center gap-2">
-            <input type="checkbox" id="termsAccepted" onChange={handleChange} />
-            <label htmlFor="termsAccepted">I agree to the Terms and Conditions</label>
-          </div>
           <button disabled={loading} className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>
             {loading ? 'Loading...' : 'Sign Up'}
           </button>
