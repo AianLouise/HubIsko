@@ -50,8 +50,8 @@ export default function SignUp() {
   };
 
   const validateForm = () => {
-    const { username, email, password, confirmPassword, fullName, dateOfBirth } = formData;
-    if (!username || !email || !password || !confirmPassword || !fullName || !dateOfBirth) {
+    const { username, email, password, confirmPassword, firstName, lastName, dateOfBirth } = formData;
+    if (!username || !email || !password || !confirmPassword || !firstName || !lastName || !dateOfBirth) {
       setError('Please fill in all fields');
       return false;
     }
@@ -109,10 +109,13 @@ export default function SignUp() {
       <div className='flex flex-1 flex-col items-center justify-center'>
         <h1 className='text-3xl text-center font-semibold my-7'>Register</h1>
         <form onSubmit={handleSubmit} className='w-full max-w-md flex flex-col gap-4'>
-          <input type="text" id="fullName" placeholder="Full Name" className='bg-slate-100 p-3 rounded-lg' onChange={handleChange} />
+          <div className="flex gap-4">
+            <input type="text" id="firstName" placeholder="First Name" className='bg-slate-100 p-3 rounded-lg flex-1' onChange={handleChange} />
+            <input type="text" id="lastName" placeholder="Last Name" className='bg-slate-100 p-3 rounded-lg flex-1' onChange={handleChange} />
+          </div>
+          <input type="email" id="email" placeholder="Email Address" className='bg-slate-100 p-3 rounded-lg' onChange={handleChange} />
           <input type="date" id="dateOfBirth" placeholder="Date of Birth" className='bg-slate-100 p-3 rounded-lg' onChange={handleChange} />
           <input type="text" id="username" placeholder="Username" className='bg-slate-100 p-3 rounded-lg' onChange={handleChange} />
-          <input type="email" id="email" placeholder="Email" className='bg-slate-100 p-3 rounded-lg' onChange={handleChange} />
           <div className="relative">
             <input
               type={showPassword ? 'text' : 'password'}

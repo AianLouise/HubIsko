@@ -33,6 +33,7 @@ export default function OAuth() {
       console.log('could not login with google', error);
     }
   };
+  
   return (
     <button
       type='button'

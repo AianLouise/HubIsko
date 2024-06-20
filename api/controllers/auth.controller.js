@@ -5,15 +5,16 @@ import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 
 export const signup = async (req, res, next) => {
-  const { fullName, email, dateOfBirth, username, password } = req.body;
+  const { firstName, lastName, email, dateOfBirth, username, password } = req.body;
   const hashedPassword = bcryptjs.hashSync(password, 10);
   const newUser = new User({
-    fullName,
+    firstName,
+    lastName,
     email,
     dateOfBirth,
     username,
     password: hashedPassword,
-    emailVerified: false // Add a flag for email verification
+    emailVerified: false // Mark email as unverified by default
   });
   try {
     const savedUser = await newUser.save();
@@ -76,15 +77,19 @@ export const signin = async (req, res, next) => {
   }
 };
 
+
 export const google = async (req, res, next) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const { email, name, photo } = req.body;
+
+    // Find the user by email
+    const user = await User.findOne({ email });
 
     if (user) {
-      // If user already exists, log them in
+      // Existing user logic
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-      const { password: _, ...rest } = user.toObject();
-      res
+      const { password, ...rest } = user.toObject();
+      return res
         .cookie('access_token', token, {
           httpOnly: true,
           expires: new Date(Date.now() + 3600000), // 1 hour
@@ -92,21 +97,38 @@ export const google = async (req, res, next) => {
         .status(200)
         .json(rest);
     } else {
-      // If user does not exist, create a new user
+      // Split the name and handle the case where only a first name is provided
+      const names = name.split(' ').filter(Boolean); // Filter out any empty strings
+      let firstName, lastName;
+
+      if (names.length > 1) {
+        lastName = names.pop(); // Get the last element as the last name
+        firstName = names.join(' '); // Join the remaining elements as the first name
+      } else {
+        firstName = names[0]; // Use the single provided name as the first name
+        lastName = ''; // No last name provided
+      }
+
+      // Generate a unique username
+      const username = `${firstName}${lastName}`.toLowerCase().replace(/\s+/g, '') + Math.random().toString(36).slice(-8);
+
+      // Create a new user
       const newUser = new User({
-        fullName: req.body.name,
-        email: req.body.email,
+        firstName,
+        lastName,
+        email,
         dateOfBirth: new Date(), // Placeholder, update according to your needs
-        username: `${req.body.name.split(' ').join('').toLowerCase()}${Math.random().toString(36).slice(-8)}`,
+        username,
         password: bcryptjs.hashSync(Math.random().toString(36).slice(-8), 10), // Random password
-        profilePicture: req.body.photo,
-        emailVerified: true, // Mark email as verified since it's from Google
+        profilePicture: photo,
+        emailVerified: true,
       });
 
       await newUser.save();
 
+      // Generate a token and send the response
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-      const { password: _, ...rest } = newUser.toObject();
+      const { password, ...rest } = newUser.toObject();
       res
         .cookie('access_token', token, {
           httpOnly: true,
@@ -119,6 +141,7 @@ export const google = async (req, res, next) => {
     next(error);
   }
 };
+
 
 export const signout = (req, res) => {
   res.clearCookie('access_token').json('Signout successfully');

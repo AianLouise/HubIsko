@@ -1,46 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getDownloadURL, getStorage, ref } from 'firebase/storage';
-import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   signInStart,
   signInSuccess,
   signInFail,
 } from '../redux/user/userSlice';
-import { useDispatch, useSelector } from 'react-redux';
 import OAuth from '../components/OAuth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import logo from '../assets/logo.png';
 
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
   const { loading, error } = useSelector((state) => state.user);
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
-
-  const [logoUrl, setLogoUrl] = useState('');
-
-  useEffect(() => {
-    const fetchLogoUrl = async () => {
-      const storage = getStorage();
-      const logoRef = ref(storage, '/System Files/logo.jpg'); // Update the path to your logo
-      try {
-        const url = await getDownloadURL(logoRef);
-        setLogoUrl(url);
-      } catch (error) {
-        console.error('Failed to fetch logo:', error);
-        // Handle any errors or set a default logo if needed
-      }
-    };
-
-    fetchLogoUrl();
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,22 +55,12 @@ export default function SignIn() {
     }
   };
 
-  const [showPassword, setShowPassword] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
   return (
     <div className='flex flex-col md:flex-row items-center justify-center p-4 gap-10 min-h-screen'>
       {/* Left Column for Logo or Image */}
-      <div className='flex flex-1 justify-center items-center'>
+      <div className='flex-1 flex justify-center items-center'>
         <Link to='/'>
-          {logoUrl ? (
-            <img src={logoUrl} alt="Logo" className="w-48 h-auto" />
-          ) : (
-            <div>Loading logo...</div> // Placeholder or loader while the logo is being fetched
-          )}
+          <img src={logo} alt="Logo" className="w-48 h-auto" />
         </Link>
       </div>
 
