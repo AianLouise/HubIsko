@@ -51,7 +51,9 @@ const newUser = new User({
       },
     });
 
-    const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
+    const verificationUrl = ` https://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`;
+
+    // const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
 
     console.log('Sending verification email to:', email);
     await transporter.sendMail({
@@ -222,9 +224,9 @@ export const resendVerificationEmail = async (req, res, next) => {
         },
       });
 
-      // const verificationUrl = `https://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`;
+      const verificationUrl = `https://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`;
 
-      const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
+      // const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
 
       console.log('Resending verification email to:', email);
       await transporter.sendMail({
