@@ -48,13 +48,13 @@ export default function SignIn() {
 
       if (!data.emailVerified) {
         navigate('/verify-your-email', { state: { email: formData.email } });
-      } else if (!data.profileComplete) {
-        // Navigate to the Complete Profile page if the profile is not complete
-        navigate('/complete-profile', { state: { userId: data.userId } });
+      } else if (!data.applicantDetails.profileComplete) {
+        // Navigate to the Complete Profile page if the applicant's profile is not complete
+        navigate('/complete-profile', { state: { userId: data._id } });
       } else {
         navigate('/');
       }
-      
+
     } catch (error) {
       dispatch(signInFail(error));
     }

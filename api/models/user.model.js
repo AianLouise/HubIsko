@@ -1,4 +1,52 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+
+// Sub-schema for Applicant
+const applicantSchema = new mongoose.Schema({
+    profileComplete: {
+        type: Boolean,
+        default: false,
+    },
+    address: {
+        type: String,
+        
+    },
+    phoneNumber: {
+        type: String,
+        
+    },
+    schoolName: {
+        type: String,
+        
+    },
+    GPA: {
+        type: Number,
+       
+    },
+    documents: [{
+        type: String,
+        
+    }],
+}, { _id: false }); // Disable automatic _id generation for embedded sub-schema
+
+// Sub-schema for Scholarship Provider
+const scholarshipProviderSchema = new mongoose.Schema({
+    organizationName: {
+        type: String,
+        required: true,
+    },
+    contactPerson: {
+        type: String,
+        required: true,
+    },
+    providerAddress: {
+        type: String,
+        required: true,
+    },
+    providerPhoneNumber: {
+        type: String,
+        required: true,
+    },
+}, { _id: false }); // Disable automatic _id generation for embedded sub-schema
 
 // Base schema (User schema)
 const userSchema = new mongoose.Schema({
@@ -45,61 +93,10 @@ const userSchema = new mongoose.Schema({
         enum: ['applicant', 'scholarship_provider', 'admin'],
         default: 'applicant',
     },
+    applicantDetails: applicantSchema, // Embedded schema for applicant details
+    scholarshipProviderDetails: scholarshipProviderSchema, // Embedded schema for scholarship provider details
 }, { timestamps: true });
 
-// Sub-schema for Applicant
-const applicantSchema = new mongoose.Schema({
-    profileComplete: {
-        type: Boolean,
-        default: false,
-        required: true,
-    },
-    address: {
-        type: String,
-        required: true,
-    },
-    phoneNumber: {
-        type: String,
-        required: true,
-    },
-    schoolName: {
-        type: String,
-        required: true,
-    },
-    GPA: {
-        type: Number,
-        required: true,
-    },
-    documents: [{
-        type: String,
-        required: true,
-    }],
-});
-
-// Sub-schema for Scholarship Provider
-const scholarshipProviderSchema = new mongoose.Schema({
-    organizationName: {
-        type: String,
-        required: true,
-    },
-    contactPerson: {
-        type: String,
-        required: true,
-    },
-    providerAddress: {
-        type: String,
-        required: true,
-    },
-    providerPhoneNumber: {
-        type: String,
-        required: true,
-    },
-});
-
-// Define discriminators based on the 'role' field
 const User = mongoose.model('User', userSchema);
-
-User.discriminator('applicant', applicantSchema);
-User.discriminator('scholarship_provider', scholarshipProviderSchema);
 
 export default User;

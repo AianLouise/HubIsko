@@ -5,18 +5,29 @@ import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 
 export const signup = async (req, res, next) => {
-  const { firstName, lastName, email, dateOfBirth, username, password, role} = req.body;
+  const { firstName, lastName, email, dateOfBirth, username, password, role } = req.body;
   const hashedPassword = bcryptjs.hashSync(password, 10);
-  const newUser = new User({
-    firstName,
-    lastName,
-    email,
-    dateOfBirth,
-    username,
-    password: hashedPassword,
-    role,
-    emailVerified: false // Mark email as unverified by default
-  });
+
+  // Create a new user instance with profileComplete set to false
+const newUser = new User({
+  firstName,
+  lastName,
+  email,
+  dateOfBirth,
+  username,
+  password: hashedPassword,
+  role: role || 'applicant',
+  emailVerified: false,
+  applicantDetails: {
+    profileComplete: false,
+    address: "",
+    phoneNumber: "",
+    schoolName: "",
+    GPA: 0,
+    documents: [],
+  },
+});
+
   try {
     const savedUser = await newUser.save();
 
@@ -31,7 +42,7 @@ export const signup = async (req, res, next) => {
     savedUser.emailVerificationToken = emailVerificationToken;
     await savedUser.save();
 
-    // Email setup (this is a simplified setup, customize as needed)
+    // Email setup (simplified setup, customize as needed)
     const transporter = nodemailer.createTransport({
       service: 'gmail', // Use your preferred email service
       auth: {
@@ -40,16 +51,14 @@ export const signup = async (req, res, next) => {
       },
     });
 
-     const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
-
-    // const verificationUrl = `https://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`;
+    const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
 
     console.log('Sending verification email to:', email);
     await transporter.sendMail({
-      from: '"HubIsko" <yourappemail@example.com>', // sender address
-      to: email, // list of receivers
-      subject: 'Verify Your Email', // Subject line
-      html: `<p>Please click the link below to verify your email:</p><p><a href="${verificationUrl}">${verificationUrl}</a></p>`, // html body
+      from: '"HubIsko" <yourappemail@example.com>',
+      to: email,
+      subject: 'Verify Your Email',
+      html: `<p>Please click the link below to verify your email:</p><p><a href="${verificationUrl}">${verificationUrl}</a></p>`,
     });
     console.log('Verification email sent successfully to:', email);
 
