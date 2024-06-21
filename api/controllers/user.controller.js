@@ -1,6 +1,8 @@
 import User from '../models/user.model.js';
 import { errorHandler } from '../utils/error.js';
 import bcryptjs from 'bcryptjs';
+import crypto from 'crypto';
+import nodemailer from 'nodemailer';
 
 export const test = (req, res) => {
   res.json({
@@ -51,9 +53,58 @@ export const deleteUser = async (req, res, next) => {
 };
 
 export const forgotPassword = async (req, res, next) => {
+  const { email } = req.body;
 
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Email not found' });
+    }
+
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    user.resetPasswordToken = resetToken;
+    await user.save();
+
+    const resetUrl = `http://localhost:5173/reset-password?token=${resetToken}`;
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    await transporter.sendMail({
+      from: '"HubIsko" <yourappemail@example.com>',
+      to: user.email,
+      subject: 'Password Reset Request',
+      html: `<p>To reset your password, click the following link:</p><a href="${resetUrl}">${resetUrl}</a>`,
+    });
+
+    res.json({ message: 'Password reset email sent' });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const resetPassword = async (req, res, next) => {
+  const { token, password } = req.body;
 
+  try {
+    const user = await User.findOne({ resetPasswordToken: token });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid or expired token' });
+    }
+
+    user.password = bcryptjs.hashSync(password, 10);
+    user.resetPasswordToken = undefined;
+    await user.save();
+
+    res.json({ message: 'Password reset successful' });
+  } catch (error) {
+    next(error);
+  }
 };
