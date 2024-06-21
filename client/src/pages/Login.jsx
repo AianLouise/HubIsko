@@ -45,11 +45,16 @@ export default function SignIn() {
         return;
       }
       dispatch(signInSuccess(data));
+
       if (!data.emailVerified) {
         navigate('/verify-your-email', { state: { email: formData.email } });
+      } else if (!data.profileComplete) {
+        // Navigate to the Complete Profile page if the profile is not complete
+        navigate('/complete-profile', { state: { userId: data.userId } });
       } else {
         navigate('/');
       }
+      
     } catch (error) {
       dispatch(signInFail(error));
     }

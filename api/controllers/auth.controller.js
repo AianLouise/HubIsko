@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 
 export const signup = async (req, res, next) => {
-  const { firstName, lastName, email, dateOfBirth, username, password } = req.body;
+  const { firstName, lastName, email, dateOfBirth, username, password, role} = req.body;
   const hashedPassword = bcryptjs.hashSync(password, 10);
   const newUser = new User({
     firstName,
@@ -14,6 +14,7 @@ export const signup = async (req, res, next) => {
     dateOfBirth,
     username,
     password: hashedPassword,
+    role,
     emailVerified: false // Mark email as unverified by default
   });
   try {
@@ -39,9 +40,9 @@ export const signup = async (req, res, next) => {
       },
     });
 
-    // const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
+     const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
 
-    const verificationUrl = `https://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`;
+    // const verificationUrl = `https://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`;
 
     console.log('Sending verification email to:', email);
     await transporter.sendMail({
@@ -204,7 +205,9 @@ export const resendVerificationEmail = async (req, res, next) => {
         },
       });
 
-      const verificationUrl = `https://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`;
+      // const verificationUrl = `https://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`;
+
+      const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
 
       console.log('Resending verification email to:', email);
       await transporter.sendMail({

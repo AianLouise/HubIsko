@@ -15,6 +15,7 @@ export default function SignUp() {
     confirmPassword: '',
     fullName: '',
     dateOfBirth: '',
+    role: 'applicant',
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -50,7 +51,7 @@ export default function SignUp() {
   };
 
   const validateForm = () => {
-    const { username, email, password, confirmPassword, firstName, lastName, dateOfBirth } = formData;
+    const { username, email, password, confirmPassword, firstName, lastName, dateOfBirth, role } = formData;
     if (!username || !email || !password || !confirmPassword || !firstName || !lastName || !dateOfBirth) {
       setError('Please fill in all fields');
       return false;
@@ -87,7 +88,7 @@ export default function SignUp() {
           'Email already exists. Please use a different email.' :
           data.message || 'An error occurred');
       } else {
-        navigate('/login');
+        navigate('/resend-verification-email', { state: { email: formData.email } });
       }
     } catch (error) {
       setError(error.message || 'An error occurred');

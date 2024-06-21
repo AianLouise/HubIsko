@@ -9,6 +9,7 @@ import VerifyEmail from "./components/VerifyEmail";
 import VerifyYourEmail from "./components/VerifyYourEmail";
 import ScholarshipListing from "./pages/ScholarshipListing";
 import ForgotPassword from "./components/ForgotPassword";
+import CompleteProfile from "./pages/CompleteProfile";
 
 
 export default function App() {
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/verify-your-email" element={<VerifyYourEmail />} />
         <Route path="/resend-verification-email" element={<VerifyYourEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/complete-profile" element={<CompleteProfile />} />
       </Routes>
     </BrowserRouter >
   )
