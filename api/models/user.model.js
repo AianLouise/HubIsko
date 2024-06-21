@@ -8,23 +8,18 @@ const applicantSchema = new mongoose.Schema({
     },
     address: {
         type: String,
-        
     },
     phoneNumber: {
         type: String,
-        
     },
     schoolName: {
         type: String,
-        
     },
     GPA: {
         type: Number,
-       
     },
     documents: [{
-        type: String,
-        
+        type: String, 
     }],
 }, { _id: false }); // Disable automatic _id generation for embedded sub-schema
 
@@ -86,7 +81,11 @@ const userSchema = new mongoose.Schema({
     },
     emailVerificationToken: {
         type: String,
-        default: "",
+        required: false,
+    },
+    resetPasswordToken: {
+        type: String,
+        required: false,
     },
     role: {
         type: String,

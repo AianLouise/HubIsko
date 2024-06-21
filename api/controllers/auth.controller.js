@@ -132,6 +132,14 @@ export const google = async (req, res, next) => {
         password: bcryptjs.hashSync(Math.random().toString(36).slice(-8), 10), // Random password
         profilePicture: photo,
         emailVerified: true,
+        applicantDetails: {
+          profileComplete: false,
+          address: "",
+          phoneNumber: "",
+          schoolName: "",
+          GPA: 0,
+          documents: [],
+        },
       });
 
       await newUser.save();
