@@ -49,3 +49,11 @@ export const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
+
+export const forgotPassword = async (req, res, next) => {
+
+};
+
+export const resetPassword = async (req, res, next) => {
+
+};
