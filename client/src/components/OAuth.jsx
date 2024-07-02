@@ -28,7 +28,13 @@ export default function OAuth() {
       const data = await res.json();
       console.log(data);
       dispatch(signInSuccess(data));
-      navigate('/');
+
+      // Check if profileComplete is false and navigate to /complete-profile
+      if (!data.applicantDetails.profileComplete) {
+        navigate('/complete-profile');
+      } else {
+        navigate('/');
+      }
     } catch (error) {
       console.log('could not login with google', error);
     }

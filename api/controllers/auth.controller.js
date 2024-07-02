@@ -132,8 +132,12 @@ export const google = async (req, res, next) => {
       const newUser = new User({
         firstName,
         lastName,
+        middleName: "",
+        nameExtension: "",
+        sex: "",
         email,
-        dateOfBirth: new Date(), // Placeholder, update according to your needs
+        dateOfBirth: '',
+        mobileNumber: "",
         username,
         password: bcryptjs.hashSync(Math.random().toString(36).slice(-8), 10), // Random password
         profilePicture: photo,
