@@ -46,7 +46,10 @@ export default function SignIn() {
       }
       dispatch(signInSuccess(data));
 
-      if (!data.emailVerified) {
+      // Navigate to the Provider Dashboard if the user's role is scholarship_provider
+      if (data.role === 'scholarship_provider') {
+        navigate('/provider-dashboard');
+      } else if (!data.emailVerified) {
         navigate('/verify-your-email', { state: { email: formData.email } });
       } else if (!data.applicantDetails.profileComplete) {
         // Navigate to the Complete Profile page if the applicant's profile is not complete

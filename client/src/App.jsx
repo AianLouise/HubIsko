@@ -11,6 +11,7 @@ import ScholarshipListing from "./pages/ScholarshipListing";
 import ForgotPassword from "./components/ForgotPassword";
 import CompleteProfile from "./pages/CompleteProfile";
 import ResetPassword from "./components/ResetPassword";
+import ProviderDashboard from "./pages/Scholarship-Provider/providerDashboard";
 
 
 export default function App() {
@@ -31,6 +32,9 @@ export default function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/complete-profile" element={<CompleteProfile />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+
+        <Route path="/provider-dashboard" element={<ProviderDashboard />} />
+
       </Routes>
     </BrowserRouter >
   )
