@@ -110,3 +110,13 @@ export const resetPassword = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getUserDetails = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+    res.status(200).json(user);
+  }
+  catch (error) {
+    next(error);
+  }
+};
