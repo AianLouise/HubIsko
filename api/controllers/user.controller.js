@@ -120,3 +120,33 @@ export const getUserDetails = async (req, res, next) => {
     next(error);
   }
 };
+
+export const CompleteProfile = async (req, res, next) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        $set: {
+          firstName: req.body.firstName,
+          middleName: req.body.middleName,
+          lastName: req.body.lastName,
+          nameExtension: req.body.nameExtension,
+          sex: req.body.sex,
+          dateOfBirth: req.body.dateOfBirth,
+          mobileNumber: req.body.mobileNumber,
+          "applicantDetails.profileComplete": true, // Set profileComplete to true
+        },
+      },
+      { new: true } // Return the modified document rather than the original.
+    );
+
+    if (!updatedUser) {
+      return res.status(404).send({ message: "User not found." });
+    }
+
+    res.status(200).send(updatedUser);
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    next(error); // Pass the error to the next middleware
+  }
+};

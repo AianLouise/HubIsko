@@ -12,8 +12,12 @@ export const signup = async (req, res, next) => {
 const newUser = new User({
   firstName,
   lastName,
+  middleName: "",
+  nameExtension: "",
+  sex: "",
   email,
   dateOfBirth,
+  mobileNumber: "",
   username,
   password: hashedPassword,
   role: role || 'applicant',

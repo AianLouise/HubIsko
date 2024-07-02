@@ -53,6 +53,18 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    middleName: {
+        type: String,
+        required: false,
+    },
+    nameExtension: {
+        type: String,
+        required: false,
+    },
+    sex: {
+        type: String,
+        required: false,
+    },
     email: {
         type: String,
         required: true,
@@ -60,6 +72,10 @@ const userSchema = new mongoose.Schema({
     },
     dateOfBirth: {
         type: Date,
+        required: false,
+    },
+    mobileNumber: {
+        type: String,
         required: false,
     },
     username: {

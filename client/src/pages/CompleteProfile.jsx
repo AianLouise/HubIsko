@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Step 1
 
 export default function CompleteProfile() {
   const [formData, setFormData] = useState({
@@ -7,7 +8,11 @@ export default function CompleteProfile() {
     lastName: '',
     nameExtension: 'None',
     sex: 'FEMALE',
+    dateOfBirth: '',
+    mobileNumber: '',
   });
+
+  const navigate = useNavigate(); // Step 2
 
   useEffect(() => {
     fetch('/api/user/details')
@@ -17,6 +22,7 @@ export default function CompleteProfile() {
           ...prevFormData,
           firstName: data.firstName || '',
           lastName: data.lastName || '',
+          dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth).toISOString().split('T')[0] : '',
         }));
       })
       .catch((error) => console.error('Error fetching user details:', error));
@@ -24,26 +30,34 @@ export default function CompleteProfile() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const keys = name.split('.');
-    if (keys.length === 2) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [keys[0]]: {
-          ...prevFormData[keys[0]],
-          [keys[1]]: value,
-        },
-      }));
-    } else {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: value,
-      }));
-    }
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    fetch('/api/user/complete-profile', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Network response was not ok.');
+      })
+      .then(data => {
+        console.log('Success:', data);
+        navigate('/'); // Step 3: Navigate to home page
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   };
 
   return (
@@ -73,6 +87,14 @@ export default function CompleteProfile() {
           <option value="FEMALE">Female</option>
           <option value="MALE">Male</option>
         </select>
+      </div>
+      <div className="flex flex-col">
+        <label className="mb-1 text-gray-700 font-semibold">Date of Birth *</label>
+        <input type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md" />
+      </div>
+      <div className="flex flex-col">
+        <label className="mb-1 text-gray-700 font-semibold">Mobile Number *</label>
+        <input type="tel" name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md" />
       </div>
 
       <button type="submit" className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">Submit</button>
