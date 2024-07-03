@@ -35,7 +35,7 @@ export default function Header() {
           <li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'><Link to='/about'>About</Link></li>
           {currentUser ? (
             <>
-              <Link to='/profile'><img src={currentUser.profilePicture} alt='profile' className='h-7 w-7 rounded-full object-cover' /></Link>
+              <Link to='/profile'><img src={currentUser.profilePicture} alt='profile' className='h-11 w-11 p-2 rounded-full object-cover' /></Link>
             </>
           ) : (
             <>

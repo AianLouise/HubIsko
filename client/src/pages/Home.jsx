@@ -203,9 +203,9 @@ export default function Home() {
           <div className='flex justify-center text-4xl font-bold text-slate-700 pb-10'>Apply now!</div>
           <div className='flex flex-row gap-10 border text-center p-10 rounded-md shadow-inner mb-10'>
 
-            <div className='mb-4 text-slate-700 flex flex-col text-center justify-center border border-b bg-white p-10'>
+            <div className='mb-4 text-slate-700 flex flex-col text-center justify-center border border-b w-1/2 bg-white p-10'>
               <div className='text-left'>
-                <div className='pb-2 font-bold text-2xl'>Ready to take the next step in your educational journey?
+                <div className='pb-2 font-bold text-xl'>Ready to take the next step in your educational journey?
                 </div>
                 <p className='text-lg text-slate-500 font-medium '>Join us! It's completely free!</p>
                 <div className='flex flex-row justify-between items-center'>
@@ -222,9 +222,9 @@ export default function Home() {
 
 
 
-            <div className='mb-4 text-slate-700 flex flex-col text-center justify-center border border-b bg-white p-10'>
+            <div className='mb-4 text-slate-700 flex flex-col text-center justify-center border border-b w-1/2 bg-white p-10'>
               <div className='text-left'>
-                <div className='pb-2 font-bold text-2xl'>Are you looking to provide scholarships to deserving students?
+                <div className='pb-2 font-bold text-xl'>Are you looking to provide scholarships to deserving students?
                 </div>
                 <p className='text-lg text-slate-500 font-medium '>We're looking to help you!</p>
                 <div className='flex flex-row justify-between items-center'>
