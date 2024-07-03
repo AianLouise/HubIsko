@@ -14,7 +14,7 @@ export default function ProviderDashboard() {
       // Uncomment and use the dispatch if you're managing state with Redux
       dispatch(signOut());
       console.log('Signed out successfully');
-      navigate('/login'); // Use navigate to redirect to login page
+      navigate('/'); // Use navigate to redirect to login page
     } catch (error) {
       console.log(error);
     }
