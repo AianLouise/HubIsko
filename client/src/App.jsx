@@ -14,6 +14,7 @@ import CompleteProfile from "./pages/CompleteProfile";
 import ResetPassword from "./components/ResetPassword";
 import ProviderDashboard from "./pages/Scholarship-Provider/providerDashboard";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
+import ApplicantDashboard from "./pages/ApplicantDashboard";
 
 
 export default function App() {
@@ -23,19 +24,20 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/verify-your-email" element={<VerifyYourEmail />} />
+        <Route path="/resend-verification-email" element={<VerifyYourEmail />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+
         <Route path="/scholarship-listing" element={<ScholarshipListing />} />
         <Route path="/about" element={<About />} />
 
         <Route element={<PrivateRoute />}>
           <Route path='/profile' element={<Profile />} />
+          <Route path="/complete-profile" element={<CompleteProfile />} />
+          <Route path="/applicant-dashboard" element={<ApplicantDashboard />} />
         </Route>
-
-        <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/verify-your-email" element={<VerifyYourEmail />} />
-        <Route path="/resend-verification-email" element={<VerifyYourEmail />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/complete-profile" element={<CompleteProfile />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route element={<ProviderPrivateRoute allowedRoles={['scholarship_provider']} />}>
           <Route path="/provider-dashboard" element={<ProviderDashboard />} />

@@ -31,6 +31,9 @@ export default function Header() {
         </Link>
         <ul className='flex gap-4'>
           <li><Link to='/'>Home</Link></li>
+          {currentUser?.role === 'applicant' && (
+            <li><Link to='/applicant-dashboard'>Applicant Dashboard</Link></li>
+          )}
           <li><Link to='/scholarship-listing'>Scholarship Listing</Link></li>
           <li><Link to='/about'>About</Link></li>
           {currentUser ? (
@@ -48,3 +51,4 @@ export default function Header() {
     </div>
   );
 }
+
