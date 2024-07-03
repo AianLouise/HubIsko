@@ -24,35 +24,35 @@ const applicantSchema = new mongoose.Schema({
     },
     motherFirstName: {
         type: String,
-        required: true,
+        required: false,
     },
     motherMiddleName: {
         type: String,
-        required: true,
+        required: false,
     },
     motherLastName: {
         type: String,
-        required: true,
+        required: false,
     },
     motherDOB: {
         type: Date,
-        required: true,
+        required: false,
     },
     fatherFirstName: {
         type: String,
-        required: true,
+        required: false,
     },
     fatherMiddleName: {
         type: String,
-        required: true,
+        required: false,
     },
     fatherLastName: {
         type: String,
-        required: true,
+        required: false,
     },
     fatherDOB: {
         type: Date,
-        required: true,
+        required: false,
     },
 }, { _id: false });
 

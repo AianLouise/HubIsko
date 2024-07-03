@@ -22,14 +22,22 @@ const newUser = new User({
   password: hashedPassword,
   role: role || 'applicant',
   emailVerified: false,
-  applicantDetails: {
-    profileComplete: false,
-    address: "",
-    phoneNumber: "",
-    schoolName: "",
-    GPA: 0,
-    documents: [],
-  },
+applicantDetails: {
+  profileComplete: false,
+  permanentAddress: "",
+  barangay: "",
+  municipality: "",
+  province: "",
+  motherFirstName: "",
+  motherMiddleName: "",
+  motherLastName: "",
+  motherDOB: "",
+  fatherFirstName: "",
+  fatherMiddleName: "",
+  fatherLastName: "",
+  fatherDOB: "",
+  documents: [],
+},
 });
 
   try {
