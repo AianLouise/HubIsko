@@ -22,6 +22,38 @@ const applicantSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    motherFirstName: {
+        type: String,
+        required: true,
+    },
+    motherMiddleName: {
+        type: String,
+        required: true,
+    },
+    motherLastName: {
+        type: String,
+        required: true,
+    },
+    motherDOB: {
+        type: Date,
+        required: true,
+    },
+    fatherFirstName: {
+        type: String,
+        required: true,
+    },
+    fatherMiddleName: {
+        type: String,
+        required: true,
+    },
+    fatherLastName: {
+        type: String,
+        required: true,
+    },
+    fatherDOB: {
+        type: Date,
+        required: true,
+    },
 }, { _id: false });
 
 // Sub-schema for Scholarship Provider

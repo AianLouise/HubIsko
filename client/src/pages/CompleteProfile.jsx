@@ -151,6 +151,50 @@ export default function CompleteProfile() {
         </select>
       </div>
 
+      <div className="bg-blue-500 text-white p-4 rounded-md mb-4">
+        <h2 className="text-xl font-bold">Mother's Maiden Name</h2>
+      </div>
+      <div className="flex flex-col space-y-4 mb-4">
+        <div className="flex flex-col">
+          <label className="mb-1 text-gray-700 font-semibold">First Name *</label>
+          <input type="text" name="motherFirstName" value={formData.motherFirstName} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md" placeholder="MARIA" />
+        </div>
+        <div className="flex flex-col">
+          <label className="mb-1 text-gray-700 font-semibold">Middle Name *</label>
+          <input type="text" name="motherMiddleName" value={formData.motherMiddleName} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md" placeholder="BAGTAS" />
+        </div>
+        <div className="flex flex-col">
+          <label className="mb-1 text-gray-700 font-semibold">Last Name *</label>
+          <input type="text" name="motherLastName" value={formData.motherLastName} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md" placeholder="SANTOS" />
+        </div>
+        <div className="flex flex-col">
+          <label className="mb-1 text-gray-700 font-semibold">Mother's Date of Birth (mm/dd/yyyy) *</label>
+          <input type="date" name="motherDOB" value={formData.motherDOB} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md" />
+        </div>
+      </div>
+
+      <div className="bg-blue-500 text-white p-4 rounded-md mb-4">
+        <h2 className="text-xl font-bold">Father's Name</h2>
+      </div>
+      <div className="flex flex-col space-y-4 mb-4">
+        <div className="flex flex-col">
+          <label className="mb-1 text-gray-700 font-semibold">First Name *</label>
+          <input type="text" name="fatherFirstName" value={formData.fatherFirstName} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md" placeholder="EDGARDO" />
+        </div>
+        <div className="flex flex-col">
+          <label className="mb-1 text-gray-700 font-semibold">Middle Name *</label>
+          <input type="text" name="fatherMiddleName" value={formData.fatherMiddleName} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md" placeholder="GUZMAN" />
+        </div>
+        <div className="flex flex-col">
+          <label className="mb-1 text-gray-700 font-semibold">Last Name *</label>
+          <input type="text" name="fatherLastName" value={formData.fatherLastName} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md" placeholder="DELA CRUZ" />
+        </div>
+        <div className="flex flex-col">
+          <label className="mb-1 text-gray-700 font-semibold">Father's Date of Birth (mm/dd/yyyy) *</label>
+          <input type="date" name="fatherDOB" value={formData.fatherDOB} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md" />
+        </div>
+      </div>
+
       <button type="submit" className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">Submit</button>
     </form>
   );
