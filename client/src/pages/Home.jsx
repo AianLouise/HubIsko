@@ -23,7 +23,7 @@ export default function Home() {
             </h4>
             <div className='mt-8 flex gap-4 justify-center'>
               <Link to="/register" className='inline-block'>
-                <button className='border bg-blue-600 text-white p-3 text-md font-semibold rounded-full hover:bg-blue-700 transition-colors'>
+                <button className='border bg-blue-600 text-white p-4 text-md font-semibold rounded-full hover:bg-blue-700 transition-colors'>
                   Sign Up for Free
                 </button>
               </Link>
