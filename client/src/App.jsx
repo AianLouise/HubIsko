@@ -15,7 +15,7 @@ import ResetPassword from "./components/ResetPassword";
 import ProviderDashboard from "./pages/Scholarship-Provider/providerDashboard";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import ApplicantDashboard from "./pages/ApplicantDashboard";
-
+import RegisterAsProvider from "./pages/RegisterAsProvider";
 
 export default function App() {
   return (
@@ -24,6 +24,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/register-as-provider" element={<RegisterAsProvider />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/verify-your-email" element={<VerifyYourEmail />} />

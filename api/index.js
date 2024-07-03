@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRoutes from './routes/user.route.js';
 import authRoutes from './routes/auth.route.js';
+import providerRoutes from './routes/provider.route.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import cors from 'cors';
@@ -27,6 +28,7 @@ const __dirname = path.resolve();
 // API Routes
 app.use('/api/user', userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/provider", providerRoutes);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'client', 'dist')));
