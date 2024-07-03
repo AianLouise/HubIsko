@@ -6,22 +6,23 @@ const applicantSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    address: {
+    permanentAddress: {
         type: String,
+        required: false,
     },
-    phoneNumber: {
+    barangay: {
         type: String,
+        required: false,
     },
-    schoolName: {
+    municipality: {
         type: String,
+        required: false,
     },
-    GPA: {
-        type: Number,
+    province: {
+        type: String,
+        required: false,
     },
-    documents: [{
-        type: String, 
-    }],
-}, { _id: false }); // Disable automatic _id generation for embedded sub-schema
+}, { _id: false });
 
 // Sub-schema for Scholarship Provider
 const scholarshipProviderSchema = new mongoose.Schema({

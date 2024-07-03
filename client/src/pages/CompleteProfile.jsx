@@ -7,7 +7,7 @@ export default function CompleteProfile() {
     middleName: '',
     lastName: '',
     nameExtension: 'None',
-    sex: 'FEMALE',
+    sex: 'MALE',
     dateOfBirth: '',
     mobileNumber: '',
   });
@@ -78,8 +78,14 @@ export default function CompleteProfile() {
         <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md" />
       </div>
       <div className="flex flex-col">
-        <label className="mb-1 text-gray-700 font-semibold">Name Extension *</label>
-        <input type="text" name="nameExtension" value={formData.nameExtension} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md" />
+        <label className="mb-1 text-gray-700 font-semibold">Name Extension (if applicable)</label>
+        <select name="nameExtension" value={formData.nameExtension} onChange={handleChange} className="p-2 border border-gray-300 rounded-md">
+          <option value="">None</option>
+          <option value="Jr.">Jr. (Junior)</option>
+          <option value="Sr.">Sr. (Senior)</option>
+          <option value="III">III (The Third)</option>
+          <option value="IV">IV (The Fourth)</option>
+        </select>
       </div>
       <div className="flex flex-col">
         <label className="mb-1 text-gray-700 font-semibold">Sex *</label>
@@ -95,6 +101,54 @@ export default function CompleteProfile() {
       <div className="flex flex-col">
         <label className="mb-1 text-gray-700 font-semibold">Mobile Number *</label>
         <input type="tel" name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md" />
+      </div>
+
+      <div className="bg-blue-500 text-white p-4 rounded-md mb-4">
+        <h2 className="text-xl font-bold">Permanent Address</h2>
+      </div>
+      <div className="flex flex-col">
+        <span className="mb-2 text-sm text-gray-600">Note: Your permanent address is based on the voter's id or certification of your parents.</span>
+        <label className="mb-1 text-gray-700 font-semibold">House/Bldg. No., Street *</label>
+        <input type="text" name="permanentAddress" value={formData.permanentAddress} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md" placeholder="#123 CAPITOL STREET" />
+      </div>
+      <div className="flex flex-col">
+        <label className="mb-1 text-gray-700 font-semibold">Barangay *</label>
+        <input type="text" name="barangay" value={formData.barangay} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md" placeholder="SAN JOSE" />
+      </div>
+      <div className="flex flex-col">
+        <label className="mb-1 text-gray-700 font-semibold">Municipality *</label>
+        <select name="municipality" value={formData.municipality} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md">
+          <option value="">Select a municipality</option>
+          <option value="Angeles City">Angeles City</option>
+          <option value="Apalit">Apalit</option>
+          <option value="Aramina">Aramina</option>
+          <option value="Bacolor">Bacolor</option>
+          <option value="Candaba">Candaba</option>
+          <option value="Floridablanca">Floridablanca</option>
+          <option value="Guagua">Guagua</option>
+          <option value="Lubao">Lubao</option>
+          <option value="Mabalacat City">Mabalacat City</option>
+          <option value="Macabebe">Macabebe</option>
+          <option value="Magalang">Magalang</option>
+          <option value="Masantol">Masantol</option>
+          <option value="Mexico">Mexico</option>
+          <option value="Minalin">Minalin</option>
+          <option value="Porac">Porac</option>
+          <option value="San Fernando">San Fernando</option>
+          <option value="San Luis">San Luis</option>
+          <option value="San Simon">San Simon</option>
+          <option value="Santa Ana">Santa Ana</option>
+          <option value="Santa Rita">Santa Rita</option>
+          <option value="Santo Tomas">Santo Tomas</option>
+          <option value="Sasmuan (Sexmoan)">Sasmuan (Sexmoan)</option>
+        </select>
+      </div>
+      <div className="flex flex-col">
+        <label className="mb-1 text-gray-700 font-semibold">Province *</label>
+        <select name="province" value={formData.province} onChange={handleChange} required className="p-2 border border-gray-300 rounded-md">
+          <option value="">Select a province</option>
+          <option value="Pampanga">Pampanga</option>
+        </select>
       </div>
 
       <button type="submit" className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">Submit</button>

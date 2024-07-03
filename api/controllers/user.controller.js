@@ -135,6 +135,10 @@ export const CompleteProfile = async (req, res, next) => {
           dateOfBirth: req.body.dateOfBirth,
           mobileNumber: req.body.mobileNumber,
           "applicantDetails.profileComplete": true, // Set profileComplete to true
+          "applicantDetails.permanentAddress": req.body.permanentAddress,
+          "applicantDetails.barangay": req.body.barangay,
+          "applicantDetails.municipality": req.body.municipality,
+          "applicantDetails.province": req.body.province,
         },
       },
       { new: true } // Return the modified document rather than the original.
