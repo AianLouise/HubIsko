@@ -16,6 +16,7 @@ import ProviderDashboard from "./pages/Scholarship-Provider/providerDashboard";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import ApplicantDashboard from "./pages/ApplicantDashboard";
 import RegisterAsProvider from "./pages/RegisterAsProvider";
+import CompleteProfileConfirmation from "./pages/CompleteProfileConfirmation";
 
 export default function App() {
   return (
@@ -37,6 +38,7 @@ export default function App() {
         <Route element={<PrivateRoute />}>
           <Route path='/profile' element={<Profile />} />
           <Route path="/complete-profile" element={<CompleteProfile />} />
+          <Route path="/complete-profile-confirmation" element={<CompleteProfileConfirmation />} />
           <Route path="/applicant-dashboard" element={<ApplicantDashboard />} />
         </Route>
 
