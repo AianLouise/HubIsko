@@ -17,6 +17,8 @@ import UnauthorizedPage from "./pages/UnauthorizedPage";
 import ApplicantDashboard from "./pages/ApplicantDashboard";
 import RegisterAsProvider from "./pages/RegisterAsProvider";
 import CompleteProfileConfirmation from "./pages/CompleteProfileConfirmation";
+import AccountManagement from "./pages/AccountManagement";
+import PasswordAndSecurity from "./pages/PasswordAndSecurity";
 
 export default function App() {
   return (
@@ -47,6 +49,9 @@ export default function App() {
         </Route>
 
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
+
+        <Route path="/account-management" element={<AccountManagement />} />
+        <Route path="/password-and-security" element={<PasswordAndSecurity />} />
       </Routes>
     </BrowserRouter >
   )

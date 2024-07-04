@@ -18,6 +18,7 @@ import {
   signOut
 } from '../redux/user/userSlice';
 import Header from '../components/Header';
+import AccountManagement from './AccountManagement';
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -119,6 +120,7 @@ const handleDeleteAccount = async () => {
   return (
     <>
       <Header />
+      <AccountManagement />
       <div className='p-3 max-w-lg mx-auto'>
         <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
         <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
@@ -189,10 +191,6 @@ const handleDeleteAccount = async () => {
         <p className='text-green-700 mt-5'>
           {updateSuccess && 'User is updated successfully!'}
         </p>
-        <div>
-          <h1>{currentUser?.emailVerified ? 'Email Verified' : 'Email Not Verified'}</h1>
-          <p>Email Verified Status: {String(currentUser?.emailVerified)}</p>
-        </div>
       </div>
     </>
   );
