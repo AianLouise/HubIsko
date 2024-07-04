@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { FaCheckCircle } from "react-icons/fa";
 
 const VerifyEmail = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [message, setMessage] = useState('');
+  const [redirectMessage, setRedirectMessage] = useState('');
 
   useEffect(() => {
     const verifyEmail = async () => {
@@ -14,9 +16,10 @@ const VerifyEmail = () => {
         const data = await response.text();
         setMessage(data);
         if (response.ok) {
+          setRedirectMessage('Redirecting to login page...');
           setTimeout(() => {
             navigate('/login');
-          }, 3000);
+          }, 5000);
         }
       } catch (error) {
         setMessage('Error verifying email');
@@ -27,9 +30,17 @@ const VerifyEmail = () => {
   }, [location, navigate]);
 
   return (
-    <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl text-center font-semibold my-7">Email Verification</h1>
-      <p className="text-center">{message}</p>
+    <div className="flex flex-col min-h-screen bg-[#f8f8fb] no-scrollbar justify-center items-center">
+      <div className="text-center px-8 py-10">
+        <h1 className="text-5xl font-bold text-slate-800 mb-8">
+          Email Verification
+        </h1>
+        <div className="mt-8 flex justify-center">
+          <FaCheckCircle className="text-4xl text-blue-600" />
+        </div>
+        <p className="text-lg text-slate-700 pt-6">{message}</p>
+        {redirectMessage && <p className="text-md text-slate-600 pt-4">{redirectMessage}</p>}
+      </div>
     </div>
   );
 };
