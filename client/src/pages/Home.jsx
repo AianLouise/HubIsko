@@ -228,12 +228,9 @@ export default function Home() {
                 </div>
                 <p className='text-lg text-slate-500 font-medium '>We're looking to help you!</p>
                 <div className='flex flex-row justify-between items-center'>
-                  <div className='border rounded-full italic pl-4 p-1 mt-4 text-left bg-[#f8f8fb] font-medium text-slate-400'>
-                    <div className='flex flex-row gap-10 text-center items-center'>
-                      <div>Enter your email</div>
-                      <div className='bg-blue-600 text-white p-2 rounded-full px-4 flex flex-row items-center gap-2'>forums <FaAngleRight /></div>
-                    </div>
-                  </div>
+                  <a href="/apply-as-provider" className="mt-4 bg-blue-600 text-white p-2 rounded-full px-4 flex flex-row items-center gap-2 cursor-pointer">
+                    Apply as a Provider <FaAngleRight />
+                  </a>
                   <div className='bg-blue-600 w-24 h-20 rounded-md'></div>
                 </div>
               </div>

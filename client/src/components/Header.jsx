@@ -46,12 +46,12 @@ export default function Header() {
           <h1 className='font-bold text-2xl hover:text-slate-600 ease-in-out transition-colors'>HubIsko</h1>
         </Link>
         <ul className='flex gap-8 font-bold text-slate-600'>
-          <li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'><Link to='/'>Home</Link></li>
+          <Link to='/'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>Home</li></Link>
           {currentUser && currentUser.role === 'applicant' && (
-            <li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'><Link to='/scholar-dashboard'>Scholar Dashboard</Link></li>
+            <Link to='/scholar-dashboard'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>Scholar Dashboard</li></Link>
           )}
-          <li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'><Link to='/scholarship-listing'>Scholarship Listing</Link></li>
-          <li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'><Link to='/about'>About</Link></li>
+          <Link to='/scholarship-listing'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>Scholarship Listing</li></Link>
+          <Link to='/about'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>About</li></Link>
           {currentUser ? (
             <div className="relative"> {/* This div wraps both the image and the dropdown */}
               <img src={currentUser.profilePicture} alt='profile' className='h-11 w-11 p-2 rounded-full object-cover cursor-pointer' onClick={toggleDropdown} />
@@ -65,8 +65,8 @@ export default function Header() {
             </div>
           ) : (
             <>
-              <li className='border p-2 px-4 rounded-full hover:bg-slate-200'><Link to='/login'>Login</Link></li>
-              <li className='bg-blue-600 text-white p-2 px-4 rounded-full hover:bg-blue-800'><Link to='/register'>Register</Link></li>
+              <Link to='/login'><li className='border p-2 px-4 rounded-full hover:bg-slate-200'>Login</li></Link>
+              <Link to='/register'><li className='bg-blue-600 text-white p-2 px-4 rounded-full hover:bg-blue-800'>Register</li></Link>
             </>
           )}
         </ul>

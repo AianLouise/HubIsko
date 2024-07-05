@@ -29,7 +29,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/register-as-provider" element={<RegisterAsProvider />} />
+        <Route path="/apply-as-provider" element={<RegisterAsProvider />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/verify-your-email" element={<VerifyYourEmail />} />
