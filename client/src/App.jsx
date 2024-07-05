@@ -14,12 +14,13 @@ import CompleteProfile from "./pages/CompleteProfile";
 import ResetPassword from "./components/ResetPassword";
 import ProviderDashboard from "./pages/Scholarship-Provider/providerDashboard";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
-import ApplicantDashboard from "./pages/ApplicantDashboard";
+import ScholarDashboard from "./pages/ScholarDashboard";
 import RegisterAsProvider from "./pages/RegisterAsProvider";
 import CompleteProfileConfirmation from "./pages/CompleteProfileConfirmation";
 import AccountManagement from "./pages/AccountManagement";
 import PasswordAndSecurity from "./pages/PasswordAndSecurity";
 import ChangePassword from "./components/ChangePassword";
+import ProviderHeader from "./components/ProviderHeader";
 
 export default function App() {
   return (
@@ -42,11 +43,12 @@ export default function App() {
           <Route path='/profile' element={<Profile />} />
           <Route path="/complete-profile" element={<CompleteProfile />} />
           <Route path="/complete-profile-confirmation" element={<CompleteProfileConfirmation />} />
-          <Route path="/applicant-dashboard" element={<ApplicantDashboard />} />
+          <Route path="/scholar-dashboard" element={<ScholarDashboard />} />
         </Route>
 
         <Route element={<ProviderPrivateRoute allowedRoles={['scholarship_provider']} />}>
           <Route path="/provider-dashboard" element={<ProviderDashboard />} />
+          <Route path="/provider-Header" element={<ProviderHeader />} />
         </Route>
 
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
@@ -54,6 +56,8 @@ export default function App() {
         <Route path="/account-management" element={<AccountManagement />} />
         <Route path="/password-and-security" element={<PasswordAndSecurity />} />
         <Route path="/change-password" element={<ChangePassword />} />
+
+
       </Routes>
     </BrowserRouter >
   )
