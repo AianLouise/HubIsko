@@ -65,7 +65,7 @@ export default function SignIn() {
   };
 
   return (
-    <div className='bg-[#f8f8fb] flex flex-col md:flex-row items-center text-leftp-4 gap-10 min-h-screen'>
+    <div className='bg-[#f8f8fb] flex flex-col md:flex-row items-center text-left p-4 gap-10 min-h-screen'>
       {/* Left Column for Logo or Image */}
       <div className='w-1/2 flex justify-center items-center'>
         <Link to='/'>
@@ -139,7 +139,7 @@ export default function SignIn() {
 
         
         </form>
-        <div className='flex w-full p-2 xl:px-20 gap-2 mt-5'>
+        <div className='flex w-full p-2  justify-center gap-2 mt-5'>
           <p>Don't Have an account?</p>
           <Link to='/register' className='text-blue-500 hover:underline'>
             Register
