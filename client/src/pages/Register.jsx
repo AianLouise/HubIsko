@@ -103,6 +103,7 @@ export default function SignUp() {
       <div className='flex-1 flex justify-center items-center'>
         <Link to='/'>
           <div className='bg-blue-600 w-56 h-56 rounded-md'></div>
+          <div className='bg-blue-600 w-56 h-56 rounded-md'></div>
         </Link>
       </div>
 
