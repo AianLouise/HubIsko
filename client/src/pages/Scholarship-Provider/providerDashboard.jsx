@@ -1,39 +1,80 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-// Uncomment and correct the import path for your signOut action
-import { signOut } from '../../redux/user/userSlice.js';
+import React, { useEffect, useRef, useState } from 'react';
+import Sidebar from '../../components/ProviderSidebar';
+import { useDispatch, useSelector } from 'react-redux';
+import { signOut } from '../../redux/user/userSlice';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 export default function ProviderDashboard() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // State initialization
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
+  // Redux hooks
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.user.currentUser);
+
+  // Toggle functions
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+
+  // Effect hook for handling clicks outside the dropdown to close it
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Sign out handler
   const handleSignOut = async () => {
     try {
       await fetch('/api/auth/signout');
-      // Uncomment and use the dispatch if you're managing state with Redux
       dispatch(signOut());
-      console.log('Signed out successfully');
-      navigate('/'); // Use navigate to redirect to login page
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <header className="bg-blue-600 text-white p-4 text-2xl font-bold text-center">
-        Provider Dashboard
+    <div className={`flex flex-col min-h-screen`}>
+      {/* Header component inline with conditional padding */}
+      <header className={`bg-gray-50 text-gray-800 p-4 flex justify-between items-center shadow-lg ${sidebarOpen ? 'pl-64' : 'pl-4'}`}>
+        <div className="container mx-auto flex justify-between items-center">
+          <button onClick={toggleSidebar} className="text-blue-500 mr-auto ml-5">
+            <FontAwesomeIcon icon={faBars} />
+          </button>
+          <h1 className="text-lg font-bold ml-4 text-blue-500">Provider Dashboard</h1>
+          <div className="relative flex items-center ml-auto">
+            <span className="text-base mr-4">{currentUser.username}</span>
+            <div className="relative" ref={dropdownRef}>
+              <img src={currentUser.profilePicture || 'https://via.placeholder.com/40'} alt="Profile" className="h-8 w-8 mr-2 rounded-full" onClick={toggleDropdown} />
+              {dropdownOpen && (
+                <div className="absolute mt-2 right-0 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50">
+                  <ul>
+                    <li className="p-2 hover:bg-gray-100 cursor-pointer">Profile</li>
+                    <li className="p-2 hover:bg-gray-100 cursor-pointer">Settings</li>
+                    <li className="p-2 hover:bg-gray-100 cursor-pointer" onClick={handleSignOut}>Sign out</li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </header>
-      <main className="flex-grow bg-[#f8f8fb] p-10">
+
+      {/* Sidebar component now as a separate component */}
+      <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+
+      {/* Main content with conditional margin */}
+      <main className={`flex-grow p-10 transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
         <div className="flex justify-between items-center mb-10">
           <h1 className="text-4xl font-bold text-slate-800">Welcome, Provider</h1>
-          <button
-            className="bg-red-500 text-white py-2 px-4 rounded-full hover:bg-red-700 transition duration-300"
-            onClick={handleSignOut}
-          >
-            Sign Out
-          </button>
         </div>
         <div className="grid grid-cols-3 gap-8 mb-10">
           <div className="bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2">
@@ -58,9 +99,6 @@ export default function ProviderDashboard() {
           </ul>
         </div>
       </main>
-      <footer className="bg-slate-800 text-white p-4 text-center">
-        &copy; 2024 Scholarship Management System
-      </footer>
     </div>
   );
 }

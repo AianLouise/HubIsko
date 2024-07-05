@@ -162,3 +162,28 @@ export const CompleteProfile = async (req, res, next) => {
     next(error); // Pass the error to the next middleware
   }
 };
+
+export const changePassword = async (req, res, next) => {
+  const userId = req.params.id;
+  const { oldPassword, newPassword } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return next(errorHandler(404, 'User not found'));
+    }
+
+    const isMatch = await bcryptjs.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return next(errorHandler(400, 'Old password does not match'));
+    }
+
+    const hashedNewPassword = bcryptjs.hashSync(newPassword, 10);
+    user.password = hashedNewPassword;
+    await user.save();
+
+    res.status(200).json({ message: 'Password successfully changed' });
+  } catch (error) {
+    next(error);
+  }
+};

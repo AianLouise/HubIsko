@@ -2,14 +2,14 @@ import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-export default function ApplicantDashboard() {
+export default function ScholarDashboard() {
   return (
     <div className="flex flex-col min-h-screen"> {/* Flex container */}
       <Header />
       <main className="flex-grow"> {/* Main content grows to fill available space */}
         <div className='px-4 py-12 max-w-4xl mx-auto'>
           <h1 className='text-3xl font-bold mb-4 text-slate-800'>
-            Applicant Dashboard
+            Scholar Dashboard
           </h1>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* Overview of current applications */}
