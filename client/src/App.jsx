@@ -19,6 +19,7 @@ import RegisterAsProvider from "./pages/RegisterAsProvider";
 import CompleteProfileConfirmation from "./pages/CompleteProfileConfirmation";
 import AccountManagement from "./pages/AccountManagement";
 import PasswordAndSecurity from "./pages/PasswordAndSecurity";
+import ChangePassword from "./components/ChangePassword";
 
 export default function App() {
   return (
@@ -52,6 +53,7 @@ export default function App() {
 
         <Route path="/account-management" element={<AccountManagement />} />
         <Route path="/password-and-security" element={<PasswordAndSecurity />} />
+        <Route path="/change-password" element={<ChangePassword />} />
       </Routes>
     </BrowserRouter >
   )
