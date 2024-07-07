@@ -29,7 +29,7 @@ export default function ScholarDashboard() {
 
             {/* Profile Management */}
             <div className="bg-white shadow rounded-lg col-span-1 md:col-span-2">
-              <h2 className="font-semibold text-xl mb-2 w-full bg-blue-600 p-4 rounded-t-lg text-white">Profile Management</h2>
+              <h2 className="font-semibold text-xl w-full bg-blue-600 p-4 rounded-t-lg text-white">Profile Management</h2>
 
               <div className="space-y-4 p-4 text-slate-800">
                 {/* Edit personal details */}
@@ -75,20 +75,20 @@ export default function ScholarDashboard() {
                       <div className='flex flex-row justify-between mt-2 gap-2'>
 
 
-                      <div className='flex flex-row'>
+                      <div className='flex flex-row gap-2'>
                       <div className='flex flex-row gap-1 px-2'>
-                      <FaRegHeart  className='w-6 h-6 font-bold' />
+                      <FaRegHeart  className='w-6 h-6 font-bold text-blue-600' />
                       <span>123</span>
                       </div>
 
                       <div className='flex flex-row gap-1'>
-                      <BiCommentDots  className='w-6 h-6' />
+                      <BiCommentDots  className='w-6 h-6 text-blue-600' />
                       <span>10</span>
                       </div>
                       </div>
 
                       <div className='flex flex-row gap-1 pr-2'>
-                      <FaRegEye className='w-6 h-6' />
+                      <FaRegEye className='w-6 h-6 text-blue-600' />
                       <span>1.2k</span>
                       </div>
 
