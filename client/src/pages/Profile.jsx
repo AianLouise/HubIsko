@@ -20,6 +20,10 @@ import {
 import Header from '../components/Header';
 import AccountManagement from './AccountManagement';
 
+import { IoPerson } from "react-icons/io5";
+import { FaEye } from "react-icons/fa";
+
+
 export default function Profile() {
   const dispatch = useDispatch();
   const fileRef = useRef(null);
@@ -120,10 +124,12 @@ const handleDeleteAccount = async () => {
   return (
     <>
       <Header />
-      <AccountManagement />
-      <div className='p-3 max-w-lg mx-auto'>
-        <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
-        <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
+      <AccountManagement/>
+      {/* max-w-6xl px-24 mx-auto flex justify-between items-center */}
+      <div className='max-w-[950px] mx-auto flex flex-col gap-10'>
+      <div className='bg-white shadow p-10 py-4 border rounded-md'>
+        <h1 className='text-xl font-bold my-7 text-slate-700'>Profile Information</h1>
+        <form onSubmit={handleSubmit} className='flex flex-col w-full gap-4 text-slate-700'>
           <input
             type='file'
             ref={fileRef}
@@ -137,12 +143,21 @@ const handleDeleteAccount = async () => {
       allow write: if
       request.resource.size < 2 * 1024 * 1024 &&
       request.resource.contentType.matches('image/.*') */}
+          <div className='flex flex-row items-center gap-8 border-b pb-4'>
           <img
             src={formData.profilePicture || currentUser.profilePicture}
             alt='profile'
-            className='h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2'
+            className='h-24 w-24 cursor-pointer border-4 border-blue-300 hover:border-blue-600 p-1 rounded-full object-cover mt-2 transition ease-in-out'
             onClick={() => fileRef.current.click()}
           />
+
+            <div className='flex flex-col'>
+              <span className='text-xl font-bold'>Profile Photo</span>
+              <span className='opacity-70'>Click to upload a photo.</span>
+            </div>
+          
+          </div>
+
           <p className='text-sm self-center'>
             {imageError ? (
               <span className='text-red-700'>
@@ -156,6 +171,10 @@ const handleDeleteAccount = async () => {
               ''
             )}
           </p>
+          <div className='grid grid-cols-2 gap-x-10 gap-y-10'>
+          <div className='flex flex-col gap-1'>
+            <span className='font-medium text-slate-500'>Username</span>
+
           <input
             defaultValue={currentUser.username}
             type='text'
@@ -164,6 +183,45 @@ const handleDeleteAccount = async () => {
             className='bg-slate-100 rounded-lg p-3'
             onChange={handleChange}
           />
+
+          </div>
+          <div className='flex flex-col gap-1'>
+          <span className='font-medium text-slate-500'>Name</span>
+          <input
+            defaultValue={currentUser.name}
+            type='text'
+            id='Name'
+            placeholder='Name'
+            className='bg-slate-100 rounded-lg p-3 w-full'
+          />
+          </div>
+
+          <div className='flex flex-col gap-1'>
+            <span className='font-medium text-slate-500'>Gender</span>
+            
+            <select name="Gender" id="Gender" className='bg-slate-100 rounded-lg p-3'>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Others">Others</option>
+            </select>
+            
+          </div>
+
+          <div className='flex flex-col gap-1'>
+            <span className='font-medium text-slate-500'>Birthday</span>
+
+          <input
+            
+            type='Date'
+            id='Bday'
+            placeholder='Bday'
+            className='bg-slate-100 rounded-lg p-3'
+           
+          />
+          </div>
+
+          <div className='flex flex-col gap-1'>
+            <span className='font-medium text-slate-500'>Email</span>
           <input
             defaultValue={currentUser.email}
             type='email'
@@ -172,26 +230,115 @@ const handleDeleteAccount = async () => {
             className='bg-slate-100 rounded-lg p-3'
             onChange={handleChange}
           />
+          </div>
+
+          <div className='flex flex-col gap-1'>
+            <span className='font-medium text-slate-500'>Location</span>
           <input
-            type='password'
-            id='password'
-            placeholder='Password'
+           
+            type='text'
+            id='Location'
+            placeholder='Location'
             className='bg-slate-100 rounded-lg p-3'
-            onChange={handleChange}
+            
           />
-          <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'>
+          </div>
+        </div>
+          
+        <div className='w-full flex justify-end my-4'>
+
+          <button className='bg-blue-600 px-14 font-medium text-white p-3 rounded-lg hover:bg-blue-800 disabled:bg-white disabled:border-2 transition ease-in-out'>
             {loading ? 'Loading...' : 'Update'}
           </button>
-        </form>
-        <div className='flex justify-between mt-5'>
-          <span onClick={handleDeleteAccount} className='text-red-700 cursor-pointer'>Delete Account</span>
-          <span onClick={handleSignOut} className='text-red-700 cursor-pointer'>Sign out</span>
+          
         </div>
+
+      </form>
+
         <p className='text-red-700 mt-5'>{error && 'Something went wrong!'}</p>
         <p className='text-green-700 mt-5'>
           {updateSuccess && 'User is updated successfully!'}
         </p>
       </div>
+
+    {/* PASSWORD AND SECURITY */}
+      <div className='bg-white shadow w-full border flex flex-col p-10 h-auto rounded-md text-slate-700'>
+      <h1 className='font-bold text-xl mb-8'>Password and Security</h1>
+      
+      <div className='grid grid-cols-2 gap-8'>
+
+      <div className='flex flex-col gap-1'>
+            <span className='font-medium text-slate-500'>Enter your password</span>
+          <input
+           
+            type='Password'
+            id='Password'
+            placeholder='Password'
+            className='bg-slate-100 rounded-lg p-3'
+            
+          />
+      </div>
+
+      <div className='flex flex-col gap-1'>
+            <span className='font-medium text-slate-500'>Enter new password</span>
+          <input
+           
+            type='Password'
+            id='NewPassword'
+            placeholder='New Password'
+            className='bg-slate-100 rounded-lg p-3'
+            
+          />
+      </div>
+
+      <div className='flex flex-col gap-1'>
+            <span className='font-medium text-slate-500'>Confirm Password</span>
+          <input
+           
+            type='Password'
+            id='ConfirmPassword'
+            placeholder='Confirm Password'
+            className='bg-slate-100 rounded-lg p-3'
+            
+          />
+      </div>
+      </div>
+  
+      <div className='w-full flex flex-row gap-4 justify-end my-4 mt-8'>
+          
+      <button className='flex flex-row items-center gap-2 border px-6 rounded-md p-3 font-medium hover:text-white hover:bg-blue-600 transition ease-in-out'>
+      <FaEye />
+          Show Passwords
+      </button>
+
+          <button className='bg-blue-600 px-10 font-medium text-white p-3 rounded-lg hover:bg-blue-800 disabled:bg-white disabled:border-2 transition ease-in-out'>
+            {loading ? 'Loading...' : 'Change Password'}
+          </button>
+      </div>
+      </div>
+
+
+      {/* DELETE ACCOUNT */}
+        <div className='bg-white shadow w-full border flex flex-col p-10 h-auto rounded-md mb-10 text-slate-700'>
+        <h1 className='font-bold text-xl mb-8'>Delete your Account</h1>
+
+        <div className='flex flex-col gap-4'>
+        <span className='font-medium text-slate-500'>When you decide to delete your account, your information will be permanently lost in our website. You can cancel the deletion within 30 days.</span>
+        
+        <div className='flex flex-row gap-4 items-center pl-2'>
+        <input type="checkbox" className='w-6 h-6 checked:bg-blue-100 hover:bg-blue-600'/>
+        <div className='font-medium text-slate-500'>I confirm that I want my account deleted.</div>
+        </div>
+        
+        <div className=' w-full flex flex-row gap-2 justify-end mt-4'>
+            <button className='bg-white border-2 font-medium text-slate-700 p-2 px-4 rounded-md hover:bg-slate-200 transition ease-in-out'>Learn More</button>
+            <button onClick={handleDeleteAccount} className='bg-red-500 font-medium text-white p-2 px-4 rounded-md hover:bg-red-700 transition ease-in-out'>Delete Account</button>
+        </div>
+
+
+      </div>
+      </div>
+    </div>
     </>
   );
 }
