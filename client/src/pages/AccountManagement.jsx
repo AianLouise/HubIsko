@@ -5,12 +5,12 @@ export default function AccountManagement() {
   // Example of a function to determine if a link is active
   const getActiveLinkClass = ({ isActive }) => 
     isActive ? "text-blue-700 font-semibold" : "text-blue-500 hover:text-blue-700";
-
+  
   return (
     <div>
       <div className="bg-gray-100 p-4 shadow">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold text-gray-700">Account Settings</h1>
+        <div className="max-w-6xl px-24 mx-auto flex justify-between items-center">
+          <h1 className="text-xl font-bold text-slate-800">Account Settings</h1>
           <nav>
             <ul className="flex space-x-4">
               <li>
@@ -27,5 +27,6 @@ export default function AccountManagement() {
         </div>
       </div>
     </div>
+
   );
 }

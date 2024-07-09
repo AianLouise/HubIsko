@@ -67,7 +67,7 @@ export default function ScholarDashboard() {
 
           {/* POSTS */}
                 <div className='grid grid-cols-3 sm:grid-rows-1 gap-8'>
-                    <div className='bg-white border p-4 rounded-md flex flex-col'>
+                    <div className='bg-white border p-4 rounded-md flex flex-col hover:-translate-y-1 hover:shadow-lg transition ease-in-out'>
                       Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, vel.
                       <span className='text-sm flex items-end justify-end w-full text-slate-600'>Posted: July 7,2024</span>
 
