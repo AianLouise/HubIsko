@@ -54,7 +54,7 @@ export default function SignIn() {
         navigate('/verify-your-email', { state: { email: formData.email } });
       } else if (!data.applicantDetails.profileComplete) {
         // Navigate to the Complete Profile page if the applicant's profile is not complete
-        navigate('/complete-profile', { state: { userId: data._id } });
+        navigate('/CoRH', { state: { userId: data._id } });
       } else {
         navigate('/');
       }
