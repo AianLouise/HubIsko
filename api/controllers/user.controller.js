@@ -78,11 +78,11 @@ export const forgotPassword = async (req, res, next) => {
       },
     });
 
-   await transporter.sendMail({
-  from: '"HubIsko" <yourappemail@example.com>',
-  to: user.email,
-  subject: 'Password Reset Request',
-  html: `
+    await transporter.sendMail({
+      from: '"HubIsko" <yourappemail@example.com>',
+      to: user.email,
+      subject: 'Password Reset Request',
+      html: `
     <div style="max-width: 600px; margin: auto; padding: 20px; font-family: Arial, sans-serif; background-color: #f9f9f9; border-radius: 10px; border: 1px solid #ddd;">
       <h2 style="color: #0056b3; text-align: center; margin-bottom: 20px;">Password Reset Request</h2>
       <p style="font-size: 16px; color: #333;">Hello,</p>
@@ -97,8 +97,7 @@ export const forgotPassword = async (req, res, next) => {
       <p style="font-size: 16px; color: #333;">The HubIsko Team</p>
     </div>
   `
-});
-
+    });
 
     res.json({ message: 'Password reset email sent' });
   } catch (error) {
