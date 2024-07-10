@@ -68,12 +68,28 @@ applicantDetails: {
     const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
 
     console.log('Sending verification email to:', email);
+
     await transporter.sendMail({
       from: '"HubIsko" <yourappemail@example.com>',
       to: email,
       subject: 'Verify Your Email',
-      html: `<p>Please click the link below to verify your email:</p><p><a href="${verificationUrl}">${verificationUrl}</a></p>`,
+      html: `
+        <div style="max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px; font-family: Arial, sans-serif; background-color: #f9f9f9; border-radius: 10px;">
+          <h2 style="color: #0056b3; text-align: center; margin-bottom: 20px;">Welcome to HubIsko!</h2>
+          <img src="cid:hubisko-logo" alt="HubIsko Logo" style="display: block; margin: auto; width: 100px; border-radius: 50%; filter: grayscale(50%);"/>
+          <p style="font-size: 16px; color: #333; text-align: center;">Hello,</p>
+          <p style="font-size: 16px; color: #333; text-align: center;">Thank you for signing up with HubIsko. Please click the button below to verify your email address and get started:</p>
+          <div style="text-align: center; margin: 20px 0;">
+            <a href="${verificationUrl}" style="background-color: #0056b3; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-size: 16px; display: inline-block;">Verify Email</a>
+          </div>
+          <p style="font-size: 16px; color: #333; text-align: center;">If the button above does not work, please copy and paste the following link into your browser:</p>
+          <p style="font-size: 16px; color: #0056b3; text-align: center;"><a href="${verificationUrl}" style="color: #0056b3;">${verificationUrl}</a></p>
+          <p style="font-size: 16px; color: #333; text-align: center;">Best,</p>
+          <p style="font-size: 16px; color: #333; text-align: center;">The HubIsko Team</p>
+        </div>
+      `
     });
+    
     console.log('Verification email sent successfully to:', email);
 
     res.status(201).json({ success: true, message: 'User created successfully. Please check your email to verify your account.' });
@@ -251,12 +267,28 @@ export const resendVerificationEmail = async (req, res, next) => {
       const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
 
       console.log('Resending verification email to:', email);
+      
       await transporter.sendMail({
-        from: '"HubIsko" <yourappemail@example.com>', // sender address
-        to: email, // list of receivers
-        subject: 'Verify Your Email', // Subject line
-        html: `<p>Please click the link below to verify your email:</p><p><a href="${verificationUrl}">${verificationUrl}</a></p>`, // html body
+        from: '"HubIsko" <yourappemail@example.com>',
+        to: email,
+        subject: 'Verify Your Email',
+        html: `
+          <div style="max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px; font-family: Arial, sans-serif; background-color: #f9f9f9; border-radius: 10px;">
+            <h2 style="color: #0056b3; text-align: center; margin-bottom: 20px;">Welcome to HubIsko!</h2>
+            <img src="cid:hubisko-logo" alt="HubIsko Logo" style="display: block; margin: auto; width: 100px; border-radius: 50%; filter: grayscale(50%);"/>
+            <p style="font-size: 16px; color: #333; text-align: center;">Hello,</p>
+            <p style="font-size: 16px; color: #333; text-align: center;">Thank you for signing up with HubIsko. Please click the button below to verify your email address and get started:</p>
+            <div style="text-align: center; margin: 20px 0;">
+              <a href="${verificationUrl}" style="background-color: #0056b3; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-size: 16px; display: inline-block;">Verify Email</a>
+            </div>
+            <p style="font-size: 16px; color: #333; text-align: center;">If the button above does not work, please copy and paste the following link into your browser:</p>
+            <p style="font-size: 16px; color: #0056b3; text-align: center;"><a href="${verificationUrl}" style="color: #0056b3;">${verificationUrl}</a></p>
+            <p style="font-size: 16px; color: #333; text-align: center;">Best,</p>
+            <p style="font-size: 16px; color: #333; text-align: center;">The HubIsko Team</p>
+          </div>
+        `
       });
+
       console.log('Verification email resent successfully to:', email);
 
       return res.status(200).json({ message: "Verification email resent successfully" });

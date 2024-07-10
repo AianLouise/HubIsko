@@ -78,12 +78,27 @@ export const forgotPassword = async (req, res, next) => {
       },
     });
 
-    await transporter.sendMail({
-      from: '"HubIsko" <yourappemail@example.com>',
-      to: user.email,
-      subject: 'Password Reset Request',
-      html: `<p>To reset your password, click the following link:</p><a href="${resetUrl}">${resetUrl}</a>`,
-    });
+   await transporter.sendMail({
+  from: '"HubIsko" <yourappemail@example.com>',
+  to: user.email,
+  subject: 'Password Reset Request',
+  html: `
+    <div style="max-width: 600px; margin: auto; padding: 20px; font-family: Arial, sans-serif; background-color: #f9f9f9; border-radius: 10px; border: 1px solid #ddd;">
+      <h2 style="color: #0056b3; text-align: center; margin-bottom: 20px;">Password Reset Request</h2>
+      <p style="font-size: 16px; color: #333;">Hello,</p>
+      <p style="font-size: 16px; color: #333;">We received a request to reset your password. Click the button below to reset it:</p>
+      <div style="text-align: center; margin: 20px 0;">
+        <a href="${resetUrl}" style="background-color: #0056b3; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-size: 16px; display: inline-block;">Reset Password</a>
+      </div>
+      <p style="font-size: 16px; color: #333;">If the button above does not work, copy and paste the following link into your browser:</p>
+      <p style="font-size: 16px; color: #0056b3; text-align: center;"><a href="${resetUrl}" style="color: #0056b3;">${resetUrl}</a></p>
+      <p style="font-size: 16px; color: #333;">If you did not request a password reset, please ignore this email or contact support if you have questions.</p>
+      <p style="font-size: 16px; color: #333;">Thank you,</p>
+      <p style="font-size: 16px; color: #333;">The HubIsko Team</p>
+    </div>
+  `
+});
+
 
     res.json({ message: 'Password reset email sent' });
   } catch (error) {

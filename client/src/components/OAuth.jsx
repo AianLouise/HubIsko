@@ -30,12 +30,17 @@ export default function OAuth() {
       console.log(data);
       dispatch(signInSuccess(data));
 
-      // Check if profileComplete is false and navigate to /complete-profile
-      if (!data.applicantDetails.profileComplete) {
-        navigate('/CoRH');
-      } else {
-        navigate('/');
-      }
+        // Navigate to the Provider Dashboard if the user's role is scholarship_provider
+        if (data.role === 'scholarship_provider') {
+          navigate('/provider-dashboard');
+        } else if (!data.emailVerified) {
+          navigate('/verify-your-email', { state: { email: formData.email } });
+        } else if (!data.applicantDetails.profileComplete) {
+          // Navigate to the Complete Profile page if the applicant's profile is not complete
+          navigate('/CoRH', { state: { userId: data._id } });
+        } else {
+          navigate('/');
+        }
     } catch (error) {
       console.log('could not login with google', error);
     }

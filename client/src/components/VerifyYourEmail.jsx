@@ -1,12 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
+
+const RESEND_DELAY = 30; // seconds
 
 export default function VerifyYourEmail() {
   const [message, setMessage] = useState('');
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [timer, setTimer] = useState(RESEND_DELAY);
   const location = useLocation();
   const emailAddress = location.state?.email;
 
+  useEffect(() => {
+    const lastClickedTime = localStorage.getItem('lastResendTime');
+    if (lastClickedTime) {
+      const timeElapsed = Math.floor((Date.now() - lastClickedTime) / 1000);
+      if (timeElapsed < RESEND_DELAY) {
+        setIsButtonDisabled(true);
+        setTimer(RESEND_DELAY - timeElapsed);
+      } else {
+        localStorage.removeItem('lastResendTime');
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    let interval;
+    if (isButtonDisabled) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => {
+          if (prevTimer <= 1) {
+            clearInterval(interval);
+            setIsButtonDisabled(false);
+            setTimer(RESEND_DELAY);
+            localStorage.removeItem('lastResendTime');
+          }
+          return prevTimer - 1;
+        });
+      }, 1000);
+    }
+
+    return () => clearInterval(interval);
+  }, [isButtonDisabled]);
+
   const handleResendEmail = async () => {
+    setIsButtonDisabled(true);
+    localStorage.setItem('lastResendTime', Date.now());
+
     try {
       const response = await fetch('/api/auth/resend-verification-email', {
         method: 'POST',
@@ -44,13 +83,14 @@ export default function VerifyYourEmail() {
         </p>
         <button
           onClick={handleResendEmail}
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          className={`w-full p-2 rounded text-white ${isButtonDisabled ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'}`}
+          disabled={isButtonDisabled}
         >
-          Resend Verification Email
+          {isButtonDisabled ? `Resend available in ${timer}s` : 'Resend Verification Email'}
         </button>
         {message && (
           <div className="mt-4 text-center">
-            <p className="text-red-500">{message}</p>
+            <p className="text-green-500">{message}</p>
             {message === 'Your email is already verified. Please log in.' && (
               <Link to="/login" className="text-blue-500 hover:underline">
                 Go to Login
