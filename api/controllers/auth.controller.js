@@ -20,6 +20,7 @@ const newUser = new User({
   mobileNumber: "",
   username,
   password: hashedPassword,
+  authProvider: 'email',
   role: role || 'applicant',
   emailVerified: false,
 applicantDetails: {
@@ -146,6 +147,7 @@ export const google = async (req, res, next) => {
         password: bcryptjs.hashSync(Math.random().toString(36).slice(-8), 10), // Random password
         profilePicture: photo,
         emailVerified: true,
+        authProvider: 'google',
         applicantDetails: {
           profileComplete: false,
           permanentAddress: "",

@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState(''); // New state to handle message type
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('Processing...');
+    setMessageType('info'); // Default message type
 
     try {
       const response = await fetch('/api/user/forgot-password', {
@@ -17,13 +19,30 @@ export default function ForgotPassword() {
         body: JSON.stringify({ email }),
       });
 
+      const data = await response.json(); // Parse JSON response
+
       if (response.ok) {
-        setMessage('If your email is in our database, you will receive a password reset link.');
+        setMessage(data.message); // Use server's response message
+        setMessageType('success');
       } else {
-        throw new Error('Failed to send password reset email.');
+        setMessage(data.message); // Use server's error message
+        setMessageType('error');
       }
     } catch (error) {
       setMessage('An error occurred. Please try again later.');
+      setMessageType('error');
+    }
+  };
+
+  // Function to determine message styling based on messageType
+  const messageStyles = () => {
+    switch (messageType) {
+      case 'success':
+        return "text-center text-sm text-green-600";
+      case 'error':
+        return "text-center text-sm text-red-600";
+      default:
+        return "text-center text-sm text-indigo-600";
     }
   };
 
@@ -50,7 +69,7 @@ export default function ForgotPassword() {
             Send Reset Link
           </button>
         </form>
-        {message && <p className="text-center text-sm text-indigo-600">{message}</p>}
+        {message && <p className={messageStyles()}>{message}</p>}
       </div>
     </div>
   );

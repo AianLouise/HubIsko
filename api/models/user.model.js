@@ -136,6 +136,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    authProvider: {
+        type: String,
+        required: false,
+    },
     role: {
         type: String,
         enum: ['applicant', 'scholarship_provider', 'admin'],
