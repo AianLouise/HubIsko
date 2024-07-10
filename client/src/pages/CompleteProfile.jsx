@@ -84,11 +84,13 @@ export default function CompleteProfile() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto p-6 space-y-6 bg-white rounded-lg shadow-lg mt-10 mb-10">
-        <div className="bg-blue-600 text-white p-4 rounded-md">
-          <h2 className="text-2xl font-bold">Complete Your Profile</h2>
+       <div className=" flex justify-center pt-8 rounded-md">
+          <h2 className="text-xl font-medium text-slate-600">Please fill out the areas to complete your profile</h2>
         </div>
-
+      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto p-6 space-y-6 bg-white border rounded-lg shadow-lg mt-4 mb-10">
+      <div className='bg-blue-600 text-white p-4 rounded-md'>
+       <h2 className='text-xl font-bold'> Basic Information</h2>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex flex-col">
             <label className="mb-2 text-gray-700 font-semibold">First Name <span className="text-red-500">*</span></label>

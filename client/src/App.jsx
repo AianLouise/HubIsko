@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import CompleteOrReturnHome from "./pages/CompleteOrReturnHome";
 import Register from "./pages/Register";
 import About from "./pages/About";
 import Profile from "./pages/Profile";
@@ -21,6 +22,8 @@ import AccountManagement from "./pages/AccountManagement";
 import PasswordAndSecurity from "./pages/PasswordAndSecurity";
 import ChangePassword from "./components/ChangePassword";
 import ProviderHeader from "./components/ProviderHeader";
+import Forums from "./pages/Forums";
+
 
 export default function App() {
   return (
@@ -35,9 +38,11 @@ export default function App() {
         <Route path="/verify-your-email" element={<VerifyYourEmail />} />
         <Route path="/resend-verification-email" element={<VerifyYourEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-
         <Route path="/scholarship-listing" element={<ScholarshipListing />} />
         <Route path="/about" element={<About />} />
+        <Route path="/CoRH" element={<CompleteOrReturnHome />} />
+        <Route path="/forums" element={<Forums />} />
+
 
         <Route element={<PrivateRoute />}>
           <Route path='/profile' element={<Profile />} />

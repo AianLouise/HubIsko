@@ -10,10 +10,6 @@ import { FaCheck } from "react-icons/fa6";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
-<style>
-
-</style>
-
 export default function Home() {
   const { currentUser } = useSelector(state => state.user);
 

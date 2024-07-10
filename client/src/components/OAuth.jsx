@@ -32,7 +32,7 @@ export default function OAuth() {
 
       // Check if profileComplete is false and navigate to /complete-profile
       if (!data.applicantDetails.profileComplete) {
-        navigate('/complete-profile');
+        navigate('/CoRH');
       } else {
         navigate('/');
       }

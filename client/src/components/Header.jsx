@@ -45,12 +45,17 @@ export default function Header() {
           <div className='bg-blue-600 w-10 h-10 rounded-md mx-2'></div>
           <h1 className='font-bold text-2xl hover:text-slate-600 ease-in-out transition-colors'>HubIsko</h1>
         </Link>
+        
         <ul className='flex gap-8 font-bold text-slate-600'>
           <Link to='/'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>Home</li></Link>
+
           {currentUser && currentUser.role === 'applicant' && (
             <Link to='/scholar-dashboard'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>Scholar Dashboard</li></Link>
           )}
+
           <Link to='/scholarship-listing'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>Scholarship Listing</li></Link>
+          <Link to='/forums'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>Forums</li></Link>
+
           <Link to='/about'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>About</li></Link>
           {currentUser ? (
             <div className="relative"> {/* This div wraps both the image and the dropdown */}
@@ -63,6 +68,7 @@ export default function Header() {
                 </div>
               )}
             </div>
+
           ) : (
             <>
               <Link to='/login'><li className='border p-2 px-4 rounded-full hover:bg-slate-200'>Login</li></Link>
