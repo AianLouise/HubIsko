@@ -180,7 +180,7 @@ export default function Forums() {
                         <span>1.2k</span>
                         </div>
                         </div>
-                </div>
+                     </div>
                         
                     </div>
                 </div>

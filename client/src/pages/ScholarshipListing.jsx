@@ -5,6 +5,7 @@
   import { FaRedo } from "react-icons/fa";
   import { FaHandHolding } from "react-icons/fa6";
   import { FaInfoCircle } from "react-icons/fa";
+import { Link } from 'react-router-dom';
 
 
 
@@ -116,11 +117,11 @@
                   </div>
 
                  
-                    <button className='bg-blue-600 text-white p-2 flex justify-center items-center rounded-md my-4 font-medium
+                    <Link to='/application-details' className='bg-blue-600 text-white p-2 flex justify-center items-center rounded-md my-4 font-medium
                     hover:bg-blue-800 transition ease-in-out'>
                     
                       More Details for Application
-                    </button>
+                    </Link>
                  
 
 

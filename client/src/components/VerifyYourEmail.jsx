@@ -79,11 +79,15 @@ export default function VerifyYourEmail() {
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-4">Verify Your Email</h2>
         <p className="mb-4">
-          Your email <strong>{emailAddress}</strong> is not verified. Please check your inbox for the verification email or click the button below to resend the verification email.
+          Your email <strong>{emailAddress}</strong> is not verified. Please check your inbox for the verification email.
         </p>
+        <div className='border-t w-full mt-4'></div>
+        <div className='flex items-center justify-center'>
+        <p className="text-center -translate-y-3 bg-white px-4 text-slate-500">Didn't receive the email?</p>
+        </div>
         <button
           onClick={handleResendEmail}
-          className={`w-full p-2 rounded text-white ${isButtonDisabled ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'}`}
+          className={`w-full p-2 rounded text-white ${isButtonDisabled ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600 font-medium transition ease-in-out'}`}
           disabled={isButtonDisabled}
         >
           {isButtonDisabled ? `Resend available in ${timer}s` : 'Resend Verification Email'}
