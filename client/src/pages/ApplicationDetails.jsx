@@ -100,6 +100,14 @@ return(
                         </div>
                     </button>
 
+                    <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'>
+                        <div className='bg-blue-600 w-12 h-12 rounded-md'></div>
+                        <div className='flex flex-col justify-center text-left'>
+                        <span className='text-slate-600 '>Visit our profile!</span>
+                        <span className=''>DepEd</span>
+                        </div>
+                    </button>
+
                 </div>
             </div>
 
