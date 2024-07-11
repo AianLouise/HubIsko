@@ -3,8 +3,8 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { FaHandHolding } from "react-icons/fa6";
 import { FaRegCalendarXmark } from "react-icons/fa6";
-import { TiRefresh } from "react-icons/ti";
-import { RxGlobe } from "react-icons/rx";
+import { MdOutlineRefresh } from "react-icons/md";
+import { BsGlobe2 } from "react-icons/bs";
 import { FaArrowRightLong } from "react-icons/fa6";
 
 
@@ -38,7 +38,7 @@ return(
     <div className='max-w-6xl px-24 mx-auto mb-20'>
         <div className='flex gap-2'>
             <span className='flex gap-1 bg-white border px-4 py-2 rounded-md shadow'>
-            <TiRefresh className='w-6 h-6 text-blue-600'/>
+            <MdOutlineRefresh className='w-6 h-6 text-blue-600'/>
                 Last update: July 2, 2024
             </span>
             <span className='flex gap-2 bg-white border px-4 py-2 rounded-md shadow items-center'> 
@@ -122,7 +122,7 @@ return(
                         <span className='text-slate-600'>They'll offer more information!</span>
                         </div>
                         </div>
-                    <RxGlobe className='w-8 h-8 ml-4 group-hover:w-12 group-hover:h-12 group-hover:text-blue-600 transition-all ease-in-out'/>
+                    <BsGlobe2 className='w-8 h-8 ml-4 group-hover:w-12 group-hover:h-12 group-hover:text-blue-600 transition-all ease-in-out'/>
                         
                     </button>
 
