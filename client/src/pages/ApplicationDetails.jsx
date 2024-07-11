@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { FaHandHolding } from "react-icons/fa6";
 import { FaRegCalendarXmark } from "react-icons/fa6";
+import { TiRefresh } from "react-icons/ti";
 import { RxGlobe } from "react-icons/rx";
 import { FaArrowRightLong } from "react-icons/fa6";
 
@@ -36,7 +37,10 @@ return(
 
     <div className='max-w-6xl px-24 mx-auto mb-20'>
         <div className='flex gap-2'>
-            <span className='bg-white border px-4 py-2 rounded-md shadow'>Last update: July 2, 2024</span>
+            <span className='flex gap-1 bg-white border px-4 py-2 rounded-md shadow'>
+            <TiRefresh className='w-6 h-6 text-blue-600'/>
+                Last update: July 2, 2024
+            </span>
             <span className='flex gap-2 bg-white border px-4 py-2 rounded-md shadow items-center'> 
             <FaRegCalendarXmark className='text-red-500' />
             Deadline: July 30, 2024</span>
