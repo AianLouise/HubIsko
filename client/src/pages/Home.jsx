@@ -37,9 +37,12 @@ export default function Home() {
                       Sign Up for Free
                     </button>
                   </Link>
+
+              
                   <button className='group flex items-center border p-4 text-md font-semibold rounded-full hover:bg-slate-200 transition-all ease-in-out bg-white'>
                     Visit our Forums <FaAngleRight className='group-hover:translate-x-2 group-hover:bg-blue-600 text-xl ml-2 bg-slate-400 text-white rounded-full transition ease-in-out' />
                   </button>
+                 
                 </div>
               ) : (
                 // For Registered Users
@@ -49,9 +52,12 @@ export default function Home() {
                       View Scholarships
                     </button>
                   </Link>
+
+                  <Link to="/forums">
                   <button className='group flex items-center border p-4 text-md font-semibold rounded-full hover:bg-slate-200 transition-all ease-in-out bg-white'>
                     Visit our Forums <FaAngleRight className='group-hover:translate-x-2 group-hover:bg-blue-600 text-xl ml-2 bg-slate-400 text-white rounded-full transition ease-in-out' />
                   </button>
+                  </Link>
                 </div>
               )}
 
