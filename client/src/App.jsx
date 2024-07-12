@@ -24,6 +24,7 @@ import ChangePassword from "./components/ChangePassword";
 import ProviderHeader from "./components/ProviderHeader";
 import Forums from "./pages/Forums";
 import ApplicationDetails from "./pages/ApplicationDetails";
+import PostDetails from "./pages/PostDetails";
 
 
 export default function App() {
@@ -43,6 +44,7 @@ export default function App() {
         <Route path="/about" element={<About />} />
         <Route path="/CoRH" element={<CompleteOrReturnHome />} />
         <Route path="/forums" element={<Forums />} />
+        <Route path="/forums/post/:postId" element={<PostDetails />} />
         <Route path="/application-details" element={<ApplicationDetails />} />
 
 
