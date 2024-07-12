@@ -8,6 +8,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { BiCommentDots } from "react-icons/bi";
 import { FaRegEye } from "react-icons/fa6";
 import { FaNewspaper } from "react-icons/fa";
+import { Link } from 'react-router-dom';
 
 export default function Forums() {
 
@@ -147,7 +148,9 @@ export default function Forums() {
             </div>
 
             <div className='grid grid-cols-3 sm:grid-rows-1 mb-4'>
-                    <div className='flex flex-col gap-4 bg-white border shadow px-8 py-6'>
+
+                  <Link to='/forum-post-detail'>
+                    <div className='flex flex-col gap-4 bg-white border rounded-md shadow px-8 py-6 hover:bg-slate-200 hover:-translate-y-1 transition ease-in-out cursor-pointer'>
                         <div className='flex flex-row gap-3'>
                             <div className='bg-blue-600 rounded-full w-12 h-12'></div>
                             <div className='flex flex-col'>
@@ -183,12 +186,11 @@ export default function Forums() {
                      </div>
                         
                     </div>
-                </div>
-           
+                  </Link>
 
-
+            </div>
+          
         </div>
-
         </main>
      <Footer />
     </div>
