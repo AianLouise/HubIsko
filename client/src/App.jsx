@@ -24,8 +24,9 @@ import ChangePassword from "./components/ChangePassword";
 import ProviderHeader from "./components/ProviderHeader";
 import Forums from "./pages/Forums";
 import ApplicationDetails from "./pages/ApplicationDetails";
-import ForumPostDetail from "./pages/Post";
 import OthersProfile from "./pages/OthersProfile";
+import ForumDetail from "./pages/Post";
+
 
 
 export default function App() {
@@ -46,9 +47,9 @@ export default function App() {
         <Route path="/CoRH" element={<CompleteOrReturnHome />} />
         <Route path="/forums" element={<Forums />} />
         <Route path="/application-details" element={<ApplicationDetails />} />
-        <Route path="/forum-post-detail" element={<ForumPostDetail />} />
         <Route path="/others-profile" element={<OthersProfile />} />
-        
+        <Route path="/forum-detail" element={<ForumDetail />} />
+
 
 
         <Route element={<PrivateRoute />}>
