@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import userRoutes from './routes/user.route.js';
 import authRoutes from './routes/auth.route.js';
 import providerRoutes from './routes/provider.route.js';
+import forumRoutes from './routes/forum.route.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import cors from 'cors';
@@ -29,6 +30,7 @@ const __dirname = path.resolve();
 app.use('/api/user', userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/provider", providerRoutes);
+app.use('/api/forums', forumRoutes);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'client', 'dist')));
