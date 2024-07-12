@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 
 
 
-export default function ForumPostDetail() {
+export default function ForumDetail() {
 
   
     const [showDropdown, setShowDropdown] = useState(false);
