@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { Link } from 'react-router-dom';
 import { MdModeEdit } from "react-icons/md";
 import { IoDocumentAttachOutline } from "react-icons/io5";
 import { HiDocumentText } from "react-icons/hi";
@@ -66,6 +67,7 @@ export default function ScholarDashboard() {
                 </div>
 
           {/* POSTS */}
+              <Link to={`/forum-detail`}>
                 <div className='grid grid-cols-3 sm:grid-rows-1 gap-8'>
                     <div className='bg-white border p-4 rounded-md flex flex-col hover:-translate-y-1 hover:shadow-lg transition ease-in-out'>
                       Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, vel.
@@ -97,6 +99,7 @@ export default function ScholarDashboard() {
                     </div>
             
                   </div>
+                </Link>
         
         </div>
       </main>

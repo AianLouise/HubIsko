@@ -7,6 +7,8 @@ import { signOut } from '../redux/user/userSlice';
 import { IoIosNotifications } from "react-icons/io";
 import { IoChatbubblesSharp, IoSadOutline } from "react-icons/io5";
 import { IoClose } from "react-icons/io5";
+import { BsThreeDots } from "react-icons/bs";
+
 
 
 
@@ -151,13 +153,18 @@ export default function Header() {
           </div>
                     <div className='flex flex-col p-2 px-4 mt-4 w-full'>
                       <span className='font-medium'>New Notifications</span>
-                      <div className='flex flex-col gap-2 mt-2 hover:bg-slate-200 w-full p-2 rounded-md'>
-                          <div className='flex flex-row text-sm w-full gap-4'>
-                            <div className='bg-blue-600 w-16 h-16 rounded-full'></div>
+                      <div className='flex flex-col gap-2 mt-2 hover:bg-slate-200 w-full p-2 rounded-md group'>
+                          <div className='flex flex-row justify-between items-center text-sm w-full gap-8'>
+                            <div className='bg-blue-600 w-16 h-16 rounded-full mr-4'></div>
                             <div className='flex flex-col text-left'>
-                              <span className='font-bold text-lg'>HubIsko</span>
+                              <div className='flex gap-2 items-center font-bold text-lg '>
+                                <div className='bg-blue-600 w-2 h-2 rounded-full'></div>
+                                HubIsko
+                                </div>
                               <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cupiditate voluptatum repellat dolore officia voluptatem non debitis! Ullam nobis vel temporibus?</span>
+                             
                             </div>
+                            <BsThreeDots className='w-10 h-10' />
                           </div>
                       </div>
                     </div>
