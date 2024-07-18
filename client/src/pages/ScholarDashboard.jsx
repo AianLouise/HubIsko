@@ -11,6 +11,7 @@ import { BiCommentDots } from "react-icons/bi";
 import { FaRegEye } from "react-icons/fa6";
 
 
+
 export default function ScholarDashboard() {
   return (
     <div className="flex flex-col min-h-screen"> {/* Flex container */}
@@ -22,11 +23,14 @@ export default function ScholarDashboard() {
           </h1> */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* Overview of current applications */}
-            <div className="bg-white shadow rounded-lg">
+
+            <Link to={'/application-box'}  className="flex flex-col items-center bg-white shadow rounded-lg hover:bg-slate-100">
+        
               <h2 className="font-bold text-xl mb-2 w-full p-4 rounded-t-lg border-b-2">Current Applications</h2>
-              <div className='flex w-full h-[250px] items-center justify-center text-8xl font-bold text-blue-600'>00</div>
+              <div className='text-8xl mt-20 font-bold text-blue-600'>00</div>
               {/* Application items */}
-            </div>
+          
+            </Link>
 
             {/* Profile Management */}
             <div className="bg-white shadow rounded-lg col-span-1 md:col-span-2">

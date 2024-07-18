@@ -27,6 +27,7 @@ import ApplicationDetails from "./pages/ApplicationDetails";
 import OthersProfile from "./pages/OthersProfile";
 import ForumDetail from "./pages/Post";
 import ApplyingStages from "./pages/ApplyingStages";
+import ApplicationBox from "./pages/ApplicationBox";
 
 
 
@@ -51,8 +52,7 @@ export default function App() {
         <Route path="/others-profile" element={<OthersProfile />} />
         <Route path="/forum-detail" element={<ForumDetail />} />
         <Route path="/applying-stages" element={<ApplyingStages />} />
-
-
+        <Route path="/application-box" element={<ApplicationBox />} />
 
         <Route element={<PrivateRoute />}>
           <Route path='/profile' element={<Profile />} />
