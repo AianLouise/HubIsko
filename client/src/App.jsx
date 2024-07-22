@@ -50,7 +50,7 @@ export default function App() {
         <Route path="/forums" element={<Forums />} />
         <Route path="/application-details" element={<ApplicationDetails />} />
         <Route path="/others-profile" element={<OthersProfile />} />
-        <Route path="/forum-detail" element={<ForumDetail />} />
+        <Route path="/forums/post/:postId" element={<ForumDetail />} />
         <Route path="/applying-stages" element={<ApplyingStages />} />
         <Route path="/application-box" element={<ApplicationBox />} />
 
