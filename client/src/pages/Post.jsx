@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { FaRegHeart } from "react-icons/fa";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BiCommentDots } from "react-icons/bi";
 import { FaRegEye } from "react-icons/fa";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
+
 
 
 export default function ForumDetail() {
@@ -15,6 +17,9 @@ export default function ForumDetail() {
     const [post, setPost] = useState(null);
     const [commentContent, setCommentContent] = useState('');
     const [loading, setLoading] = useState(false);
+    const [isLiked, setIsLiked] = useState(false);
+
+    const { currentUser } = useSelector(state => state.user);
 
     useEffect(() => {
         fetchPostDetails();
@@ -28,6 +33,12 @@ export default function ForumDetail() {
             }
             const postData = await response.json();
             setPost(postData);
+    
+            // Assuming you have the current user's ID available
+            const currentUserId = currentUser._id; // Replace this with actual logic to retrieve current user's ID
+            const isLikedByCurrentUser = postData.likes.includes(currentUserId);
+    
+            setIsLiked(isLikedByCurrentUser);
         } catch (error) {
             console.error('Error fetching post details:', error);
         }
@@ -59,6 +70,55 @@ export default function ForumDetail() {
             console.error('Error adding comment:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleLike = async () => {
+        // Optimistically toggle the isLiked state and update the likes array
+        const wasLiked = isLiked;
+        const currentUserID = currentUser._id; // Replace this with actual logic to retrieve current user's ID
+        setIsLiked(!wasLiked);
+    
+        if (wasLiked) {
+            // If it was liked, remove the user's ID from the likes array
+            setPost(prevPost => ({
+                ...prevPost,
+                likes: prevPost.likes.filter(id => id !== currentUserID)
+            }));
+        } else {
+            // If it was not liked, add the user's ID to the likes array
+            setPost(prevPost => ({
+                ...prevPost,
+                likes: [...prevPost.likes, currentUserID]
+            }));
+        }
+    
+        try {
+            const response = await fetch(`/api/forums/like/${postId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Include authorization header if needed
+                },
+                body: JSON.stringify({ userId: currentUserID })
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to update like status');
+            }
+    
+            // If the server updates successfully, you can optionally refresh the post data
+            // or rely on the optimistic update already performed
+        } catch (error) {
+            console.error('Error updating like status:', error);
+            // Revert the UI changes if the request fails
+            setIsLiked(wasLiked);
+            // Revert likes array update
+            setPost(prevPost => ({
+                ...prevPost,
+                likes: wasLiked ? [...prevPost.likes, currentUserID] : prevPost.likes.filter(id => id !== currentUserID)
+            }));
+            // Show an error message to the user
         }
     };
 
@@ -101,9 +161,18 @@ export default function ForumDetail() {
 
 
                                 <div className='flex flex-row gap-2'>
-                                    <div className='flex flex-row gap-1 px-2'>
-                                        <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
-                                        <span>Like</span>
+                                    <div className='flex flex-row gap-1 px-2' onClick={() => handleLike(postId)}>
+                                        {isLiked ? (
+                                            <>
+                                                <FaHeart className='w-6 h-6 font-bold text-blue-600' />
+                                                <span>Unlike</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
+                                                <span>Like</span>
+                                            </>
+                                        )}
                                     </div>
 
                                     <div className='flex flex-row gap-1'>
