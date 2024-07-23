@@ -19,7 +19,7 @@ export default function AccountManagement() {
               </li>
 
               <li>
-                <NavLink to="/personal-info" className={getActiveLinkClass}>Personal Info</NavLink>
+                <NavLink to="/personal-info" className={getActiveLinkClass}>Student Info</NavLink>
               </li>
 
               <li>

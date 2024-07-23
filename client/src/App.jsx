@@ -28,6 +28,7 @@ import OthersProfile from "./pages/OthersProfile";
 import ForumDetail from "./pages/Post";
 import ApplyingStages from "./pages/ApplyingStages";
 import ApplicationBox from "./pages/ApplicationBox";
+import InboxedApplicationDetail from "./pages/InboxedApplicationDetail";
 
 
 
@@ -53,6 +54,7 @@ export default function App() {
         <Route path="/forums/post/:postId" element={<ForumDetail />} />
         <Route path="/applying-stages" element={<ApplyingStages />} />
         <Route path="/application-box" element={<ApplicationBox />} />
+        <Route path="/inboxed-application-detail" element={<InboxedApplicationDetail />} />
 
         <Route element={<PrivateRoute />}>
           <Route path='/profile' element={<Profile />} />
