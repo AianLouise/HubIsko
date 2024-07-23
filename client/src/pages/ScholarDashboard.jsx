@@ -2,13 +2,14 @@ import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
-import { MdModeEdit } from "react-icons/md";
-import { IoDocumentAttachOutline } from "react-icons/io5";
-import { HiDocumentText } from "react-icons/hi";
-import { MdLockOutline } from "react-icons/md";
+// import { MdModeEdit } from "react-icons/md";
+// import { IoDocumentAttachOutline } from "react-icons/io5";
+// import { HiDocumentText } from "react-icons/hi";
+// import { MdLockOutline } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa";
 import { BiCommentDots } from "react-icons/bi";
 import { FaRegEye } from "react-icons/fa6";
+import { FaAngleRight } from "react-icons/fa";
 
 
 
@@ -74,8 +75,22 @@ export default function ScholarDashboard() {
             </div>
 
             <div className="space-y-4 p-4 text-slate-800">
+              
+              {/* IF WALA */}
 
-              <Link to={`/inboxed-application-detail`}>
+              <div className='h-full flex flex-col gap-2 justify-center items-center mt-20'>
+                <span className='text-xl font-medium text-slate-500'>You have no Applications yet.</span>
+
+                <Link to={'/scholarship-listing'}>
+                <button className='flex gap-2 items-center bg-blue-600 rounded-md px-4 py-2 text-white fond-medium hover:bg-blue-800 group transition ease-in-out'>
+                  Go to Scholarship List
+                  <FaAngleRight className='w-5 h-5  group-hover:translate-x-2 transition ease-in-out' />
+                  </button>
+                </Link>
+              </div>
+              
+              {/* APPLICATIONS (IF MERON) */}
+              {/* <Link to={`/inboxed-application-detail`}>
               <div className='flex items-center justify-between hover:bg-slate-200 p-2 rounded-md'>
                 <div className='flex flex-row gap-2'>
                 <div className='bg-blue-600 w-12 h-12 rounded-md'></div>
@@ -93,7 +108,7 @@ export default function ScholarDashboard() {
                 <div className='bg-yellow-400 rounded-full w-2 h-2'></div><span>Pending</span>
                </div>
               </div>
-              </Link>
+              </Link> */}
 
             </div>
 
