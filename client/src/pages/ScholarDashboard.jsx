@@ -66,7 +66,7 @@ export default function ScholarDashboard() {
 
             <div className="bg-white shadow rounded-lg col-span-1 md:col-span-2">
             <div className='flex justify-between "font-semibold text-xl w-full bg-blue-600 p-4 rounded-t-lg text-white'>
-            <h2 >Application Inbox</h2>
+            <h2 >Application Archive</h2>
         
             <Link to={`/application-box`}>
             <button className='bg-white text-blue-600 font-bold px-2 rounded-md hover:bg-slate-200'>See all</button>
