@@ -6,6 +6,9 @@ import { FaPlus, FaStar, FaWrench, FaRegHeart, FaNewspaper } from "react-icons/f
 import { FaRegEye } from "react-icons/fa6";
 import { BiCommentDots } from "react-icons/bi";
 
+import { useParams } from 'react-router-dom';
+import moment from 'moment';
+
 export default function Forums() {
   const [recentPosts, setRecentPosts] = useState([]);
   const navigate = useNavigate();

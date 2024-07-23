@@ -104,10 +104,27 @@ export const getPostById = async (req, res) => {
           select: 'username'
         }
       });
+
     if (!post) {
       return res.status(404).json({ msg: 'Post not found' });
     }
-    res.json(post);
+
+    // Assuming 'likes' is an array of user IDs who liked the post
+    const totalLikes = post.likes.length;
+
+    // Assuming 'comments' is populated, its length gives the total number of comments
+    const totalComments = post.comments.length;
+
+    // Access the 'views' field directly from the post object
+    const totalViews = post.views;
+
+    // Modify the response to include totalLikes, totalComments, and totalViews
+    res.json({
+      ...post.toObject(), // Convert the Mongoose document to a plain JavaScript object
+      totalLikes,
+      totalComments,
+      totalViews // Include totalViews in the response
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');

@@ -7,7 +7,7 @@ import {
   likeComment, 
   getPostById, 
   getCommentById, 
-  deleteComment 
+  deleteComment
 } from '../controllers/forum.controller.js';
 import { verifyToken } from '../utils/verifyUser.js';
 
