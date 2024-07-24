@@ -99,10 +99,10 @@ export default function Home() {
               </div>
 
 
-              <div className='rounded-xl w-full h-[600px] shadow-md flex flex-row'>
+              <div className='rounded-xl w-full h-[500px] lg:h-[600px] shadow-md flex flex-row'>
 
                 <div className='flex flex-col justify-center text-left w-[800px] px-10 lg:px-20 pt-16 pb-32 gap-3'>
-                  <FaSearch className='text-6xl text-blue-600 my-4' />
+                  <FaSearch className='text-xl lg:text-6xl text-blue-600 my-4' />
                   <div className='text-2xl lg:text-4xl font-bold'>Exploring Resources</div>
                   <div className='text-sm lg:text-lg font-medium text-slate-500'>Reliable materials for your learnings!</div>
                   <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi molestiae, aspernatur praesentium sint earum ullam perspiciatis vel fugit temporibus necessitatibus!</span>
