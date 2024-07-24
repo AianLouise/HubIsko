@@ -33,38 +33,6 @@ export default function ScholarDashboard() {
           
             </div>
 
-            {/* Profile Management */}
-            {/* <div className="bg-white shadow rounded-lg col-span-1 md:col-span-2">
-              <h2 className="font-semibold text-xl w-full bg-blue-600 p-4 rounded-t-lg text-white">Profile Management</h2>
-
-              <div className="space-y-4 p-4 text-slate-800">
-              
-                <button className='border-b flex flex-row w-full justify-between p-4 rounded-md hover:bg-slate-200'>
-                  <span className='text-lg font-bold'>Edit Personal Details</span>
-                  <MdModeEdit className='text-2xl text-blue-600' />
-            
-                </button>
-          
-                <button className='border-b flex flex-row w-full justify-between p-4 rounded-md hover:bg-slate-200'>
-                  <span className='text-lg font-bold'>Upload Documents</span>
-                  <IoDocumentAttachOutline className='text-2xl text-blue-600' />
-         
-                </button>
-      
-                <button className='border-b flex flex-row w-full justify-between p-4 rounded-md hover:bg-slate-200'>
-                  <span className='text-lg font-bold'>Academic History and GPA</span>
-                  <HiDocumentText  className='text-2xl text-blue-600' />
-         
-                </button>
-          
-                <button className='flex flex-row w-full justify-between p-4 rounded-md hover:bg-slate-200'>
-                  <span className='text-lg font-bold'>Change Password and Security</span>
-                  <MdLockOutline   className='text-2xl text-blue-600' />
-     
-                </button>
-              </div>
-            </div> */}
-
             <div className="bg-white shadow rounded-lg col-span-1 md:col-span-2">
             <div className='flex justify-between "font-semibold text-xl w-full bg-blue-600 p-4 rounded-t-lg text-white'>
             <h2 >Application Archive</h2>
