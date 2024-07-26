@@ -17,7 +17,15 @@ export default function ApplicationBox() {
                         
 
                             <div className="border bg-white flex flex-col gap-8 rounded-md p-4 shadow mt-20">
+                                <div className="flex justify-between items-center">
                                <span className="text-xl">Application Inbox</span>
+                               <input 
+                                type="text" 
+                                placeholder='Search' 
+                                name="" 
+                                id="" 
+                                className='border-2 py-2 px-4 font-medium rounded-md focus:outline-blue-400'/>
+                                </div>
                                 
                            
                                 <div className="flex flex-col">
