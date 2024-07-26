@@ -30,6 +30,7 @@ import ApplyingStages from "./pages/ApplyingStages";
 import ApplicationBox from "./pages/ApplicationBox";
 import InboxedApplicationDetail from "./pages/InboxedApplicationDetail";
 import StudentInfo from "./pages/StudentInfo";
+import ProfilePreview from "./pages/ProfilePreview";
 
 
 
@@ -57,6 +58,8 @@ export default function App() {
         <Route path="/application-box" element={<ApplicationBox />} />
         <Route path="/inboxed-application-detail" element={<InboxedApplicationDetail />} />
         <Route path="/student-info" element={<StudentInfo />} />
+        <Route path="/profile-preview" element={<ProfilePreview />} />
+
 
         <Route element={<PrivateRoute />}>
           <Route path='/profile' element={<Profile />} />
