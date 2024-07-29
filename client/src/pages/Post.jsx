@@ -1,23 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { FaRegHeart, FaHeart, FaRegEye } from "react-icons/fa";
 import { BiCommentDots } from "react-icons/bi";
-import { FaRegEye } from "react-icons/fa";
 import { IoMdArrowDropdown } from "react-icons/io";
-import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
-
 
 
 export default function ForumDetail() {
+    const [loading, setLoading] = useState(false);
+    const [isLiked, setIsLiked] = useState(false);
     const { postId } = useParams();
     const [post, setPost] = useState(null);
     const [commentContent, setCommentContent] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [isLiked, setIsLiked] = useState(false);
 
     const { currentUser } = useSelector(state => state.user);
 
@@ -33,11 +30,11 @@ export default function ForumDetail() {
             }
             const postData = await response.json();
             setPost(postData);
-    
+
             // Assuming you have the current user's ID available
             const currentUserId = currentUser._id; // Replace this with actual logic to retrieve current user's ID
             const isLikedByCurrentUser = postData.likes.includes(currentUserId);
-    
+
             setIsLiked(isLikedByCurrentUser);
         } catch (error) {
             console.error('Error fetching post details:', error);
@@ -52,7 +49,7 @@ export default function ForumDetail() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming you're storing the token in localStorage
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // Include the token
                 },
                 body: JSON.stringify({ content: commentContent }),
             });
@@ -78,7 +75,7 @@ export default function ForumDetail() {
         const wasLiked = isLiked;
         const currentUserID = currentUser._id; // Replace this with actual logic to retrieve current user's ID
         setIsLiked(!wasLiked);
-    
+
         if (wasLiked) {
             // If it was liked, remove the user's ID from the likes array
             setPost(prevPost => ({
@@ -92,7 +89,7 @@ export default function ForumDetail() {
                 likes: [...prevPost.likes, currentUserID]
             }));
         }
-    
+
         try {
             const response = await fetch(`/api/forums/like/${postId}`, {
                 method: 'PUT',
@@ -102,11 +99,11 @@ export default function ForumDetail() {
                 },
                 body: JSON.stringify({ userId: currentUserID })
             });
-    
+
             if (!response.ok) {
                 throw new Error('Failed to update like status');
             }
-    
+
             // If the server updates successfully, you can optionally refresh the post data
             // or rely on the optimistic update already performed
         } catch (error) {
@@ -125,6 +122,59 @@ export default function ForumDetail() {
 
     const [showDropdown, setShowDropdown] = useState(false);
     const toggleDropdown = () => setShowDropdown(!showDropdown);
+    const [replies, setReplies] = useState({}); // Holds reply texts for each comment
+
+    const [activeReplyBox, setActiveReplyBox] = useState(null);
+    const [repliesVisibility, setRepliesVisibility] = useState({});
+
+
+    const toggleReplyBox = (commentId) => {
+        setActiveReplyBox(activeReplyBox === commentId ? null : commentId);
+    };
+
+    const toggleRepliesVisibility = (commentId) => {
+        setRepliesVisibility({
+            ...repliesVisibility,
+            [commentId]: !repliesVisibility[commentId]
+        });
+    };
+
+    const handleReplyChange = (commentId, text) => {
+        setReplies(prevReplies => ({ ...prevReplies, [commentId]: text }));
+    };
+
+
+    const handleReplyComment = async (commentId) => {
+        console.log('Comment ID:', commentId); // Log the comment ID
+
+        const replyContent = replies[commentId];
+        if (!replyContent) return; // Optionally, add more validation
+
+        try {
+            const response = await fetch(`/api/forums/comment/reply/${commentId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ content: replyContent }) // Ensure this matches the server's expected structure
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log('Reply submitted successfully', data);
+
+            // Update the UI accordingly, e.g., clear the reply text
+            setReplies(prevReplies => ({ ...prevReplies, [commentId]: '' }));
+            // Optionally, fetch updated comments here to include the new reply
+        } catch (error) {
+            console.error('Failed to submit reply:', error);
+            // Handle the error (e.g., show an error message to the user)
+        }
+    };
 
     if (!post) {
         return <div>Loading...</div>;
@@ -146,7 +196,11 @@ export default function ForumDetail() {
                     </div>
                     <div className='border shadow p-4 rounded-md bg-white'>
                         <div className='flex gap-4'>
-                            <div className='bg-blue-600 w-12 h-12 rounded-full'></div>
+                            <img
+                                src={post.author.profilePicture}
+                                alt={`${post.author.username}'s profile`}
+                                className='w-12 h-12 rounded-full object-cover'
+                            />
                             <div className='flex flex-col'>
                                 <span className='font-bold text-lg'>{post.author.username}</span>
                                 <span className='text-sm text-gray-500'>{moment(post.createdAt).format('MMMM DD, YYYY')}</span>
@@ -236,35 +290,104 @@ export default function ForumDetail() {
                         }
 
                         <div className="my-8">
+                            {/* Header for the comments section */}
                             <h2 className="text-2xl font-bold mb-4">Comments ({post.comments.length})</h2>
+
+                            {/* Loop through each comment in the post */}
                             {post.comments.map(comment => (
-                                <div key={comment._id} className='flex gap-2 w-full items-center mb-4'> {/* Added mb-4 for gap */}
-                                    <div className='bg-blue-600 w-12 h-12 rounded-full'></div>
-                                    <div className='flex flex-col bg-white border rounded-md w-full shadow '>
+                                <div key={comment._id} className='flex gap-2 w-full items-center mb-4'>
+                                    {/* User avatar */}
+                                    <img
+                                        src={comment.author.profilePicture}
+                                        alt={`${comment.author.username}'s profile`}
+                                        className='w-12 h-12 rounded-full object-cover'
+                                    />
+                                    {/* Comment container */}
+                                    <div className='flex flex-col bg-white border rounded-md w-full shadow'>
+                                        {/* Comment content */}
                                         <span className='p-4 text-sm border-b'>{comment.content}</span>
 
+                                        {/* Comment actions: likes, replies, views */}
                                         <div className='flex flex-row justify-between px-4 py-2 gap-2'>
                                             <div className='flex flex-row gap-2'>
+                                                {/* Like button and count */}
                                                 <div className='flex flex-row gap-1 px-2'>
                                                     <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
                                                     <span>{comment.likes ? comment.likes.length : 0}</span>
                                                 </div>
 
-                                                <div className='flex flex-row gap-1'>
+                                                {/* Reply button and count */}
+                                                <div className='flex flex-row gap-1' onClick={() => toggleReplyBox(comment._id)}>
                                                     <BiCommentDots className='w-6 h-6 text-blue-600' />
                                                     <span>{comment.replies ? comment.replies.length : 0}</span>
                                                 </div>
                                             </div>
 
+                                            {/* View count */}
                                             <div className='flex flex-row gap-1 pr-2'>
                                                 <FaRegEye className='w-6 h-6 text-blue-600' />
                                                 <span>{comment.views ? comment.views : 'N/A'}</span>
                                             </div>
                                         </div>
+
+                                        {/* View replies link */}
+                                        {comment.replies && comment.replies.length > 0 && (
+                                            <div className='px-4 py-2'>
+                                                <span
+                                                    className='text-blue-600 cursor-pointer'
+                                                    onClick={() => toggleRepliesVisibility(comment._id)}
+                                                >
+                                                    {repliesVisibility[comment._id]
+                                                        ? 'Hide replies'
+                                                        : comment.replies.length === 1
+                                                            ? 'View 1 reply'
+                                                            : `View all ${comment.replies.length} replies`}
+                                                </span>
+                                            </div>
+                                        )}
+
+                                        {/* Replies, shown if repliesVisibility matches the comment ID */}
+                                        {repliesVisibility[comment._id] && (
+                                            <div className="px-4 py-2">
+                                                {comment.replies.map(reply => (
+                                                    <div key={reply._id} className='flex gap-2 w-full items-center mb-2'>
+                                                        {/* User avatar */}
+                                                        <img
+                                                            src={reply.author.profilePicture}
+                                                            alt={`${reply.author.username}'s profile`}
+                                                            className='w-10 h-10 rounded-full object-cover'
+                                                        />
+                                                        <div className='flex flex-col bg-gray-100 border rounded-md w-full shadow'>
+                                                            <span className='p-2 text-sm border-b'>{reply.content}</span>
+                                                            <span className='p-2 text-sm border-b'>Author: {reply.author.username}</span>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {/* Reply box, shown if activeReplyBox matches the comment ID */}
+                                        {activeReplyBox === comment._id && (
+                                            <div className="p-4">
+                                                <textarea
+                                                    className="w-full border rounded-md p-2"
+                                                    placeholder="Write a reply..."
+                                                    value={replies[comment._id] || ''}
+                                                    onChange={(e) => handleReplyChange(comment._id, e.target.value)}
+                                                ></textarea>
+                                                <button
+                                                    className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md"
+                                                    onClick={() => handleReplyComment(comment._id)}
+                                                >
+                                                    Reply
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))}
                         </div>
+
                     </div>
                 </div>
             </main>

@@ -96,13 +96,22 @@ export const likeComment = async (req, res) => {
 export const getPostById = async (req, res) => {
   try {
     const post = await ForumPost.findById(req.params.postId)
-      .populate('author', ['username', 'email'])
+      .populate('author', ['username', 'email', 'profilePicture']) // Include profilePicture
       .populate({
         path: 'comments',
-        populate: {
-          path: 'author',
-          select: 'username'
-        }
+        populate: [
+          {
+            path: 'author',
+            select: 'username profilePicture' // Include profilePicture
+          },
+          {
+            path: 'replies',
+            populate: {
+              path: 'author',
+              select: 'username profilePicture' // Include profilePicture
+            }
+          }
+        ]
       });
 
     if (!post) {
@@ -172,3 +181,40 @@ export const deleteComment = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+export const addReplyToComment = async (req, res) => {
+  try {
+    const { commentId } = req.params; // Get the comment ID from the URL parameters
+    const { content } = req.body; // Get the reply content from the request body
+    if (!content) {
+      return res.status(400).json({ msg: 'Reply content cannot be empty.' });
+    }
+
+    // Find the original comment
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      return res.status(404).json({ msg: 'Comment not found' });
+    }
+
+    // Create a new reply comment
+    const reply = new Comment({
+      content,
+      author: req.user.id,
+      post: comment.post, // Associate the reply with the same post as the original comment
+      createdAt: new Date()
+    });
+
+    // Save the reply comment
+    const savedReply = await reply.save();
+
+    // Add the reply's ID to the original comment's replies array
+    comment.replies.push(savedReply._id);
+    await comment.save();
+
+    res.json({ msg: 'Reply added successfully', reply: savedReply });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+};
+
