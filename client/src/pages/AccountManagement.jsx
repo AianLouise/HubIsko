@@ -8,7 +8,7 @@ export default function AccountManagement() {
   
   return (
  
-    <div className='sticky top-0 z-10 mb-10'> 
+    <div className='sticky top-0 z-10'> 
       <div className="bg-white p-4 shadow">
         <div className="max-w-6xl px-24 mx-auto flex justify-between items-center">
           <h1 className="text-xl font-bold text-slate-800">Account Settings</h1>
@@ -19,7 +19,7 @@ export default function AccountManagement() {
               </li>
 
               <li>
-                <NavLink to="/personal-info" className={getActiveLinkClass}>Personal Info</NavLink>
+                <NavLink to="/student-info" className={getActiveLinkClass}>Student Info</NavLink>
               </li>
 
               <li>

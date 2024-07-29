@@ -6,6 +6,7 @@
   import { FaHandHolding } from "react-icons/fa6";
   import { FaInfoCircle } from "react-icons/fa";
 import { Link } from 'react-router-dom';
+import { BiFilter } from 'react-icons/bi';
 
 
 
@@ -47,7 +48,27 @@ import { Link } from 'react-router-dom';
           </div>
           
 
-    
+        <div className='flex flex-col gap-4 justify-center items-left mx-auto max-w-6xl px-24 my-8'>
+          <div className='flex items-center justify-between'>
+            <span className='text-xl font-bold text-slate-600'>Organizations</span>
+            <button className='bg-white px-4 py-2 border rounded-md shadow font-medium flex items-center gap-2'>
+              <BiFilter className='text-xl text-blue-600'/>Filter</button>
+          </div>
+
+          <div className='flex'>
+
+            <Link to='/profile-preview' className='flex flex-col items-center group'>
+              <button className='flex flex-col items-center group'>
+                <div className='bg-blue-600 w-20 h-20 rounded-full group-hover:bg-blue-800'></div>
+                <span className='font-medium'>Deped</span>
+                <div className='flex gap-2 items-center'>
+                  <div className='bg-blue-600 w-2 h-2 rounded-full'></div>
+                <span className='text-sm'>1 new</span>
+                </div>
+              </button>
+            </Link>
+          </div>
+        </div>
           
           <div className='flex flex-col mx-auto max-w-6xl justify-center items-center px-24'>
             <div className='flex flex-row w-full items-center gap-4'>

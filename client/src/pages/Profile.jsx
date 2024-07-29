@@ -123,10 +123,11 @@ const handleDeleteAccount = async () => {
 
   return (
     <>
+    <div className='bg-[#f8f8fb]'>
       <Header />
       <AccountManagement/>
       {/* max-w-6xl px-24 mx-auto flex justify-between items-center */}
-      <div className='max-w-[950px] mx-auto flex flex-col gap-10'>
+      <div className='max-w-[950px] mx-auto flex flex-col gap-10 pt-10 '>
       <div className='bg-white shadow p-10 py-4 border rounded-md'>
         <h1 className='text-xl font-bold my-7 text-slate-700'>Profile Information</h1>
         <form onSubmit={handleSubmit} className='flex flex-col w-full gap-4 text-slate-700'>
@@ -338,6 +339,7 @@ const handleDeleteAccount = async () => {
 
       </div>
       </div>
+    </div>
     </div>
     </>
   );

@@ -8,6 +8,10 @@ import { FaSearch } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa6";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { VscTriangleRight } from "react-icons/vsc";
+
+
+
 
 
 export default function Home() {
@@ -18,11 +22,11 @@ export default function Home() {
       <Header />
       <main className="flex-grow bg-[#f8f8fb] no-scrollbar"> {/* Main content grows to fill available space */}
         <div className=''>
-          <div className='text-center px-56 py-20'>
-            <h1 className='text-8xl font-bold text-slate-800 px-20'>
+          <div className='text-center lg:px-56 py-20'>
+            <h1 className='text-4xl sm:px-none lg:text-8xl font-bold text-slate-800 lg:px-20'>
               Explore Scholarships through <span className='text-blue-600'>technology.</span>
             </h1>
-            <h4 className='pt-10 text-2xl font-medium text-slate-700'>
+            <h4 className='pt-10  text-sm lg:text-2xl font-medium text-slate-700'>
               A scholarship management system for your locale!
             </h4>
             <div className='mt-8 flex gap-4 justify-center'>
@@ -66,8 +70,8 @@ export default function Home() {
         </div>
         <div className='px-4 max-w-6xl mx-auto'>
           <div className='border shadow-2xl rounded-md mb-40 w-6xl transition-all hover:-translate-y-2 bg-white'>
-            <h1 className='bg-blue-600 p-4 text-white font-bold text-2xl rounded-t-md'>Our Goal</h1>
-            <p className='mb-4 text-slate-700 p-8 font-medium'>
+            <h1 className='text-center lg:text-left bg-blue-600 p-4 text-white font-bold text-xl lg:text-2xl rounded-t-md'>Our Goal</h1>
+            <p className='mb-4 text-slate-700 p-6 lg:px-8 font-medium'>
               Our comprehensive scholarship management system is designed to streamline
               the process of finding, applying for, and managing scholarships. Whether
               you're a student seeking financial assistance or an organization looking
@@ -78,23 +82,29 @@ export default function Home() {
 
           <div className='text-slate-700 w-full mb-40 border-2rounded-md p-4 '>
 
-            <div className='font-bold text-4xl w-full text-center mb-10'>Browse Our Features</div>
+            <div className='font-bold text-2xl lg:text-4xl w-full text-center mb-10'>Browse Our Features</div>
 
             <div className='m-2 flex flex-col justify-between gap-2 items-center text-center'>
-              <div className='flex flex-row gap-3 font-semibold mb-6'>
+              <div className=' hidden lg:flex flex-row gap-3 font-semibold mb-6'>
                 <button className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Explore Resources</button>
                 <button className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Fast Processing</button>
                 <button className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Organization Tools</button>
                 <button className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Enhanced Security</button>
               </div>
 
+              <div className='flex lg:hidden flex-row gap-3 font-semibold mb-6 items-center'>
+              <VscTriangleRight className='text-6xl text-blue-600 rotate-180' />
+              <button className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Explore Resources</button>
+              <VscTriangleRight className='text-6xl text-blue-600' />
+              </div>
 
-              <div className=' rounded-xl w-full h-[600px] shadow-md flex flex-row'>
 
-                <div className='flex flex-col justify-center text-left w-[800px] px-20 pt-16 pb-32 gap-3'>
-                  <FaSearch className='text-6xl text-blue-600 my-4' />
-                  <div className='text-4xl font-bold'>Exploring Resources</div>
-                  <div className='text-lg font-medium text-slate-500'>Reliable materials for your learnings!</div>
+              <div className='rounded-xl w-full h-[500px] lg:h-[600px] shadow-md flex flex-row'>
+
+                <div className='flex flex-col justify-center text-left w-[800px] px-10 lg:px-20 pt-16 pb-32 gap-3'>
+                  <FaSearch className='text-xl lg:text-6xl text-blue-600 my-4' />
+                  <div className='text-2xl lg:text-4xl font-bold'>Exploring Resources</div>
+                  <div className='text-sm lg:text-lg font-medium text-slate-500'>Reliable materials for your learnings!</div>
                   <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi molestiae, aspernatur praesentium sint earum ullam perspiciatis vel fugit temporibus necessitatibus!</span>
                   <div className='flex flex-row'>
                     <Link to="" className='flex flex-row gap-2 text-blue-600 text-xl font-medium pt-4 hover:text-slate-700 group'>
@@ -104,7 +114,7 @@ export default function Home() {
                 </div>
 
 
-                <div className='flex justify-center items-center w-1/2'>
+                <div className='hidden lg:flex justify-center items-center w-1/2'>
                   <div className='bg-blue-600 rounded-md w-1/2 h-64 hover:-translate-y-2 transition ease-in-out'></div>
                 </div>
 
@@ -118,18 +128,18 @@ export default function Home() {
           {/* BENEFITS */}
           <div className='mb-36 border-b text-slate-700 flex flex-col gap-8 text-center'>
 
-            <div className='pb-2 font-bold text-4xl w-full text-center mb-8'>What we'll provide?</div>
+            <div className='pb-2 font-bold text-2xl lg:text-4xl w-full text-center mb-8'>What we'll provide?</div>
 
             <div className='flex flex-row gap-8 text-center items-center justify-center text-md font-semibold'>
 
-              <div className='bg-white flex flex-row items-center justify-between w-full border h-96 rounded-md shadow-md hover:-translate-y-2 transition-all p-20'>
+              <div className='bg-white flex flex-row items-center justify-between w-full border lg:h-96 rounded-md shadow-md hover:-translate-y-2 transition-all p-8 lg:p-20'>
                 <div className='bg-blue-600 rounded-md w-[350px] h-40 mr-8'></div>
 
                 <div className='w-1/2 text-left flex flex-col gap-8'>
-                  <div className='text-blue-600 text-md font-semibold'>ABUNDANT OPPORTUNITIES</div>
-                  <span className='font-bold text-4xl'> Maximize your scholarship opportunities with minimal effort </span>
+                  <div className=' text-blue-600 text-md font-semibold'>ABUNDANT OPPORTUNITIES</div>
+                  <span className='hidden lg:block font-bold text-4xl'> Maximize your scholarship opportunities with minimal effort </span>
 
-                  <div className='flex flex-col text-lg text-slate-600 gap-1'>
+                  <div className='hidden lg:flex flex-col text-lg text-slate-600 gap-1'>
                     <span className=''>Lorem ipsum dolor sit.</span>
                     <span className=''>Lorem ipsum dolor sit.</span>
                     <span className=''>Lorem ipsum dolor sit.</span>
@@ -139,36 +149,36 @@ export default function Home() {
 
             </div>
 
-            <div className='flex flex-row gap-8 text-center items-center justify-center text-md font-semibold'>
+            <div className='flex flex-row gap-8 text-center items-center justify-between lg:justify-center text-md font-semibold'>
 
-              <div className='flex flex-row items-center justify-between w-full h-96 rounded-md hover:-translate-y-2 transition-all p-20'>
+              <div className='flex flex-row items-center justify-between w-full lg:h-96 rounded-md hover:-translate-y-2 transition-all p-10 lg:p-20'>
 
                 <div className='w-1/2 text-left flex flex-col gap-8'>
-                  <div className='text-blue-600 text-md font-semibold'>AUTOMATE USER-FRIENDLY</div>
-                  <span className='font-bold text-4xl'> Stay organized with dashboard overviews and timely alerts </span>
+                  <div className='text-blue-600 text-md font-semibold'>USER-FRIENDLY AUTOMATION</div>
+                  <span className='hidden lg:block font-bold text-4xl'> Stay organized with dashboard overviews and timely alerts </span>
 
-                  <div className='flex flex-col text-lg text-slate-600 gap-1'>
+                  <div className='hidden lg:flex flex-col text-lg text-slate-600 gap-1'>
                     <span className=''>Lorem ipsum dolor sit.</span>
                     <span className=''>Lorem ipsum dolor sit.</span>
                     <span className=''>Lorem ipsum dolor sit.</span>
                   </div>
                 </div>
 
-                <div className='bg-blue-600 rounded-md w-[350px] h-40 mr-8'></div>
+                <div className='bg-blue-600 rounded-md w-[350px] h-40 ml-8'></div>
               </div>
 
             </div>
 
             <div className='flex flex-row gap-8 text-center items-center justify-center text-md font-semibold'>
 
-              <div className='bg-white flex flex-row items-center justify-between w-full border h-96 rounded-md shadow-md hover:-translate-y-2 transition-all p-20'>
+              <div className='bg-white flex flex-row items-center justify-between w-full border lg:h-96 rounded-md shadow-md hover:-translate-y-2 transition-all p-10 lg:p-20'>
                 <div className='bg-blue-600 rounded-md w-[350px] h-40 mr-8'></div>
 
                 <div className='w-1/2 text-left flex flex-col gap-8'>
                   <div className='text-blue-600 text-md font-semibold'>RESPONSIVE SYSTEM AND USERS</div>
-                  <span className='font-bold text-4xl'> Access a wide network of scholarship providers and applicants </span>
+                  <span className='hidden lg:block font-bold text-4xl'> Access a wide network of scholarship providers and applicants </span>
 
-                  <div className='flex flex-col text-lg text-slate-600 gap-1'>
+                  <div className='hidden lg:flex flex-col text-lg text-slate-600 gap-1'>
                     <span className=''>Lorem ipsum dolor sit.</span>
                     <span className=''>Lorem ipsum dolor sit.</span>
                     <span className=''>Lorem ipsum dolor sit.</span>
@@ -180,20 +190,20 @@ export default function Home() {
 
             <div className='flex flex-row gap-8 text-center items-center justify-center text-md font-semibold'>
 
-              <div className='flex flex-row items-center justify-between w-full h-96 rounded-md hover:-translate-y-2 transition-all p-20'>
+              <div className='flex flex-row items-center justify-between w-full lg:h-96 rounded-md hover:-translate-y-2 transition-all p-10 lg:p-20'>
 
                 <div className='w-1/2 text-left flex flex-col gap-8'>
                   <div className='text-blue-600 text-md font-semibold'>STEP BY STEP PROCESS</div>
-                  <span className='font-bold text-4xl'> Get support from our dedicated team every step of the way. </span>
+                  <span className='hidden lg:block font-bold text-4xl'> Get support from our dedicated team every step of the way. </span>
 
-                  <div className='flex flex-col text-lg text-slate-600 gap-1'>
+                  <div className='hidden lg:flex flex-col text-lg text-slate-600 gap-1'>
                     <span className=''>Lorem ipsum dolor sit.</span>
                     <span className=''>Lorem ipsum dolor sit.</span>
                     <span className=''>Lorem ipsum dolor sit.</span>
                   </div>
                 </div>
 
-                <div className='bg-blue-600 rounded-md w-[350px] h-40 mr-8'></div>
+                <div className='bg-blue-600 rounded-md w-[350px] h-40 ml-8'></div>
               </div>
 
             </div>
@@ -202,38 +212,43 @@ export default function Home() {
 
 
           {/* APPLY FOR ROLE */}
-          <div className='flex justify-center text-4xl font-bold text-slate-700 pb-10'>Apply now!</div>
-          <div className='flex flex-row gap-10 border text-center p-10 rounded-md shadow-inner mb-10'>
+          <div className='flex justify-center text-2xl lg:text-4xl font-bold text-slate-700 pb-10'>Apply now!</div>
+          <div className='flex flex-col lg:flex-row gap-10 border text-center p-10 rounded-md shadow-inner mb-10'>
 
-            <div className='mb-4 text-slate-700 flex flex-col text-center justify-center border border-b w-1/2 bg-white p-10'>
+            <div className='mb-4 text-slate-700 flex flex-col text-center justify-center border border-b lg:w-1/2 bg-white p-10'>
               <div className='text-left'>
-                <div className='pb-2 font-bold text-xl'>Ready to take the next step in your educational journey?
+                <div className='pb-2 font-bold text-md lg:text-xl'>Ready to take the next step in your educational journey?
                 </div>
-                <p className='text-lg text-slate-500 font-medium '>Join us! It's completely free!</p>
+                <p className='text-sm lg:text-lg text-slate-500 font-medium '>Join us! It's completely free!</p>
                 <div className='flex flex-row justify-between items-center'>
-                  <div className='border rounded-full italic pl-4 p-1 mt-4 text-left bg-[#f8f8fb] font-medium text-slate-400'>
+                  <div className='hidden lg:block border rounded-full italic pl-4 p-1 mt-4 text-left bg-[#f8f8fb] font-medium text-slate-400'>
                     <div className='flex flex-row gap-10 text-center items-center'>
-                      <div>Enter your email</div>
-                      <div className='bg-blue-600 text-white p-2 rounded-full px-4 flex flex-row items-center gap-2'>forums <FaAngleRight /></div>
+                      <div className='hidden lg:block text-sm lg:text-md'>Enter your email</div>
+                      <div className=' bg-blue-600 text-white p-2 rounded-full px-4 flex flex-row items-center gap-2'>forums <FaAngleRight /></div>
                     </div>
                   </div>
-                  <div className='bg-blue-600 w-24 h-20 rounded-md'></div>
+
+                  <div className='lg:hidden mt-6'>
+                    <button className='bg-blue-600 rounded-md text-white px-14 py-2 text-sm font-medium'>Apply Now!</button>
+                  </div>
+
+                  <div className='hidden lg:block bg-blue-600 w-24 h-20 rounded-md'></div>
                 </div>
               </div>
             </div>
 
 
 
-            <div className='mb-4 text-slate-700 flex flex-col text-center justify-center border border-b w-1/2 bg-white p-10'>
+            <div className='mb-4 text-slate-700 flex flex-col text-center justify-center border border-b lg:w-1/2 bg-white p-10'>
               <div className='text-left'>
-                <div className='pb-2 font-bold text-xl'>Are you looking to provide scholarships to deserving students?
+                <div className='pb-2 font-bold text-md lg:text-xl'>Are you looking to provide scholarships to deserving students?
                 </div>
-                <p className='text-lg text-slate-500 font-medium '>We're looking to help you!</p>
+                <p className='text-sm lg:text-lg text-slate-500 font-medium '>We're looking to help you!</p>
                 <div className='flex flex-row justify-between items-center'>
-                  <a href="/apply-as-provider" className="mt-4 bg-blue-600 text-white p-2 rounded-full px-4 flex flex-row items-center gap-2 cursor-pointer">
+                  <a href="/apply-as-provider" className="mt-4 bg-blue-600 text-white p-2 rounded-md lg:rounded-full font-medium px-3 lg:px-4 flex flex-row items-center gap-2 cursor-pointer">
                     Apply as a Provider <FaAngleRight />
                   </a>
-                  <div className='bg-blue-600 w-24 h-20 rounded-md'></div>
+                  <div className='lg:block hidden bg-blue-600 w-24 h-20 rounded-md'></div>
                 </div>
               </div>
             </div>
