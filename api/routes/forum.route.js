@@ -15,13 +15,13 @@ import { verifyToken } from '../utils/verifyUser.js';
 const router = express.Router();
 
 // Route to create a new post
-router.post('/post', verifyToken, createPost);
+router.post('/post', createPost);
 
 // Route to get all posts
-router.get('/posts', verifyToken, getPosts);
+router.get('/posts', getPosts);
 
 // Route to get a specific post by its ID
-router.get('/view/:postId', verifyToken, getPostById);
+router.get('/view/:postId', getPostById);
 
 // Route to add a comment to a specific post
 router.post('/comment/:postId', verifyToken, addComment);
