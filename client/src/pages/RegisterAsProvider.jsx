@@ -272,40 +272,54 @@ export default function RegisterAsProvider() {
         <div className={`w-full ${getHideorActive(3)}`}>
           <h2 className="text-2xl font-bold mb-6">Upload Required Documents</h2>
           <p className="mb-4">Upload necessary documents for verification.</p>
-          
+
           <div className="mb-4">
             <label htmlFor="registrationCertificate" className="block text-sm font-medium text-gray-700">Registration Certificate</label>
             <input type="file" name="registrationCertificate" id="registrationCertificate" className="mt-1 p-2 w-full border rounded-md" />
           </div>
-          
+
           <div className="mb-4">
             <label htmlFor="tin" className="block text-sm font-medium text-gray-700">Tax Identification Number (TIN)</label>
             <input type="file" name="tin" id="tin" className="mt-1 p-2 w-full border rounded-md" />
           </div>
-          
+
           <div className="mb-4">
             <label htmlFor="proofOfAddress" className="block text-sm font-medium text-gray-700">Proof of Address</label>
             <input type="file" name="proofOfAddress" id="proofOfAddress" className="mt-1 p-2 w-full border rounded-md" />
           </div>
-          
+
           <div className="mb-4">
             <label htmlFor="authorizationLetter" className="block text-sm font-medium text-gray-700">Authorization Letter</label>
             <input type="file" name="authorizationLetter" id="authorizationLetter" className="mt-1 p-2 w-full border rounded-md" />
           </div>
-          
+
           <div className="mb-4">
             <label htmlFor="idProofContactPerson" className="block text-sm font-medium text-gray-700">ID Proof of Contact Person</label>
             <input type="file" name="idProofContactPerson" id="idProofContactPerson" className="mt-1 p-2 w-full border rounded-md" />
           </div>
-          
+
           <div className="mb-4">
             <label htmlFor="additionalDocuments" className="block text-sm font-medium text-gray-700">Additional Documents</label>
             <input type="file" name="additionalDocuments" id="additionalDocuments" className="mt-1 p-2 w-full border rounded-md" />
           </div>
         </div>
 
-        <div className={getHideorActive(4)} >
-          <span>Text</span>
+        <div className={`w-full ${getHideorActive(4)}`}>
+          <h2 className="text-2xl font-bold mb-6">Terms and Conditions</h2>
+          <p className="mb-4">
+            Please read the following terms and conditions carefully before proceeding with the registration:
+          </p>
+          <ul className="list-disc list-inside mb-4">
+            <li>You agree to provide accurate and truthful information during the registration process.</li>
+            <li>You agree to upload all necessary documents for verification purposes.</li>
+            <li>You acknowledge that the provided information and documents will be used for verification and registration purposes only.</li>
+            <li>You agree to comply with all applicable laws and regulations.</li>
+            <li>You understand that failure to comply with these terms may result in the rejection of your registration.</li>
+          </ul>
+          <div className="mb-4">
+            <input type="checkbox" name="agreeTerms" id="agreeTerms" className="mr-2" />
+            <label htmlFor="agreeTerms" className="text-sm font-medium text-gray-700">I agree to the terms and conditions</label>
+          </div>
         </div>
 
         <div className={isConfirmationVisible ? getConfirmation(5) : 'hidden'}>
