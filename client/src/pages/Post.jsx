@@ -7,6 +7,7 @@ import { FaRegHeart, FaHeart, FaRegEye } from "react-icons/fa";
 import { BiCommentDots } from "react-icons/bi";
 import { IoMdArrowDropdown } from "react-icons/io";
 import moment from 'moment';
+import { CgAttachment } from 'react-icons/cg';
 
 
 export default function ForumDetail() {
@@ -64,7 +65,7 @@ export default function ForumDetail() {
             }));
             setCommentContent('');
         } catch (error) {
-            console.error('Error adding comment:', error);
+            console.error('Error adding reply:', error);
         } finally {
             setLoading(false);
         }
@@ -183,7 +184,7 @@ export default function ForumDetail() {
     return (
         <div className='flex flex-col min-h-screen'>
             <Header />
-            <main className='flex-grow bg-[#f8f8fb] no-scrollbar font-medium'>
+            <main className='flex-grow bg-[#f8f8fb] no-scrollbar font-medium text-slate-700'>
 
                 <div className='flex flex-col gap-8 mx-auto max-w-6xl px-24'>
 
@@ -196,11 +197,14 @@ export default function ForumDetail() {
                     </div>
                     <div className='border shadow p-4 rounded-md bg-white'>
                         <div className='flex gap-4'>
+
+                            <Link to={'/others-profile'}> 
                             <img
                                 src={post.author.profilePicture}
                                 alt={`${post.author.username}'s profile`}
-                                className='w-12 h-12 rounded-full object-cover'
+                                className='w-12 h-12 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
                             />
+                            </Link>
                             <div className='flex flex-col'>
                                 <span className='font-bold text-lg'>{post.author.username}</span>
                                 <span className='text-sm text-gray-500'>{moment(post.createdAt).format('MMMM DD, YYYY')}</span>
@@ -253,21 +257,27 @@ export default function ForumDetail() {
 
                     <div className='border-t'>
                         <form onSubmit={handleCommentSubmit} className="bg-white p-8 rounded-md shadow mb-8">
-                            <h2 className="text-2xl font-bold mb-4">Add Comment</h2>
+                    
                             <textarea
-                                className="w-full p-4 border rounded-md mb-4"
-                                placeholder="Write your comment..."
+                                className="w-full p-4 border rounded-md mb-4 focus:outline-blue-200"
+                                placeholder="Write your reply..."
                                 value={commentContent}
                                 onChange={(e) => setCommentContent(e.target.value)}
                                 required
                             />
+                            <div className='w-full flex justify-end'>
+                            
+                            <button className=' bg-blue-600 p-4 rounded-md mx-4 hover:bg-blue-800'>
+                                <CgAttachment className='w-6 h-6 text-white' />
+                            </button>
                             <button
                                 type="submit"
                                 className={`bg-blue-600 text-white p-3 rounded-md ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-800 transition ease-in-out'}`}
                                 disabled={loading}
                             >
-                                {loading ? 'Adding...' : 'Add Comment'}
+                                {loading ? 'Adding...' : 'Add Reply'}
                             </button>
+                            </div>
                         </form>
 
                         <div onClick={toggleDropdown} className='mt-4 px-4 py-2 border flex bg-white rounded-md w-48 shadow cursor-pointer hover:bg-slate-200 group'>
@@ -291,22 +301,31 @@ export default function ForumDetail() {
 
                         <div className="my-8">
                             {/* Header for the comments section */}
-                            <h2 className="text-2xl font-bold mb-4">Comments ({post.comments.length})</h2>
+                            <h2 className="text-2xl font-bold mb-4">Replies <span className='text-blue-600'>({post.comments.length})</span></h2>
 
                             {/* Loop through each comment in the post */}
                             {post.comments.map(comment => (
-                                <div key={comment._id} className='flex gap-2 w-full items-center mb-4'>
+                                <div key={comment._id} className='flex gap-2 w-full mb-4'>
                                     {/* User avatar */}
+
+                                    <Link to={'/others-profile'}>
                                     <img
                                         src={comment.author.profilePicture}
                                         alt={`${comment.author.username}'s profile`}
-                                        className='w-12 h-12 rounded-full object-cover'
+                                        className='w-14 h-14 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
                                     />
+                                    </Link>
                                     {/* Comment container */}
                                     <div className='flex flex-col bg-white border rounded-md w-full shadow'>
                                         {/* Comment content */}
+                                        <div className='flex flex-col'>
+                                        <div className='pt-4'>
+                                        <span className='p-4 text-lg font-bold'>{comment.author.username}</span>
+                                        <span className='text-sm text-gray-500'>{moment(comment.createdAt).format('MMMM DD, YYYY')}</span>
+                                        </div>
+                                        
                                         <span className='p-4 text-sm border-b'>{comment.content}</span>
-
+                                        </div>
                                         {/* Comment actions: likes, replies, views */}
                                         <div className='flex flex-row justify-between px-4 py-2 gap-2'>
                                             <div className='flex flex-row gap-2'>

@@ -173,7 +173,7 @@ export default function Forums() {
 
           <div className='grid grid-cols-2 gap-6 mb-4'>
             {recentPosts.map((post) => (
-                 <div key={post._id} className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow cursor-pointer' onClick={() => handlePostClick(post._id)}>
+                 <div key={post._id} className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow cursor-pointer hover:bg-slate-100 hover:-translate-y-1 transition ease-in-out' onClick={() => handlePostClick(post._id)}>
                 <div className='flex flex-row gap-3'>
                   <div className='bg-blue-600 rounded-full w-12 h-12'></div>
                   <div className='flex flex-col'>

@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from '../../redux/user/userSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { BiDotsHorizontal } from 'react-icons/bi';
+import { BiSolidRightArrow } from "react-icons/bi";
+
 
 export default function ProviderDashboard() {
   // State initialization
@@ -41,21 +44,32 @@ export default function ProviderDashboard() {
     }
   };
 
+  const maxUsernameLength = 6;
+  const truncatedUsername = currentUser.username.length > maxUsernameLength 
+  ? currentUser.username.slice(0, maxUsernameLength) + '...' 
+  : currentUser.username;
+
   return (
     <div className={`flex flex-col min-h-screen`}>
       {/* Header component inline with conditional padding */}
-      <header className={`bg-gray-50 text-gray-800 p-4 flex justify-between items-center shadow-lg ${sidebarOpen ? 'pl-64' : 'pl-4'}`}>
-        <div className="container mx-auto flex justify-between items-center">
-          <button onClick={toggleSidebar} className="text-blue-500 mr-auto ml-5">
-            <FontAwesomeIcon icon={faBars} />
+      <header className={`bg-white text-gray-800 p-4 flex justify-between items-center shadow border-b ${sidebarOpen ? 'pl-64' : 'pl-0'}`}>
+        <div className="max-w-8xl w-full mx-auto px-24 flex justify-between items-center">
+
+          <div className='flex items-center gap-2'>
+          <button onClick={toggleSidebar} className="text-blue-600">
+            <FontAwesomeIcon icon={faBars} className=' w-4 h-4 ' />
           </button>
-          <h1 className="text-lg font-bold ml-4 text-blue-500">Provider Dashboard</h1>
-          <div className="relative flex items-center ml-auto">
-            <span className="text-base mr-4">{currentUser.username}</span>
+
+          <h1 className="text-lg font-bold text-blue-500">Provider Dashboard</h1>
+          <h1 className="text-lg font-bold text-blue-500">/ Home </h1>
+          </div>
+
+          <div className="flex gap-2 items-center">
+            <span className="text-base">{truncatedUsername}</span>
             <div className="relative" ref={dropdownRef}>
-              <img src={currentUser.profilePicture || 'https://via.placeholder.com/40'} alt="Profile" className="h-8 w-8 mr-2 rounded-full" onClick={toggleDropdown} />
+              <img src={currentUser.profilePicture || 'https://via.placeholder.com/40'} alt="Profile" className="h-8 w-8 rounded-full" onClick={toggleDropdown} />
               {dropdownOpen && (
-                <div className="absolute mt-2 right-0 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50">
+                <div className="absolute mt-2 right-0 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50 font-medium">
                   <ul>
                     <li className="p-2 hover:bg-gray-100 cursor-pointer">Profile</li>
                     <li className="p-2 hover:bg-gray-100 cursor-pointer">Settings</li>
@@ -72,25 +86,78 @@ export default function ProviderDashboard() {
       <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
 
       {/* Main content with conditional margin */}
-      <main className={`flex-grow p-10 transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
-        <div className="flex justify-between items-center mb-10">
-          <h1 className="text-4xl font-bold text-slate-800">Welcome, Provider</h1>
-        </div>
-        <div className="grid grid-cols-3 gap-8 mb-10">
-          <div className="bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2">
-            <h2 className="text-xl font-semibold text-slate-700 mb-2">Total Scholarships</h2>
-            <p className="text-2xl font-bold">15</p>
-          </div>
-          <div className="bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2">
-            <h2 className="text-xl font-semibold text-slate-700 mb-2">Applications Received</h2>
-            <p className="text-2xl font-bold">45</p>
-          </div>
-          <div className="bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2">
-            <h2 className="text-xl font-semibold text-slate-700 mb-2">Active Scholarships</h2>
-            <p className="text-2xl font-bold">10</p>
+
+      <main className={`flex-grow bg-[#f8f8fb] transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
+        
+      <div className='border-b mb-8'>
+          <div className={'flex items-center mx-auto justify-between px-24'}>
+            <div className='flex flex-col gap-2 w-1/2'>
+              <h1 className='text-4xl font-bold text-gray-800'>Welcome provider!</h1>
+              <p className='text-lg text-slate-500 font-medium'>Here is your dashboard!</p>
+            </div>
+            <div className='bg-blue-600 w-36 h-36 my-8 rounded-md'></div>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2">
+
+        <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex'>
+       
+       <div className='grid grid-cols-2 gap-10'>
+          <div className="flex divide-x bg-white p-6 rounded-md shadow-md transition-all">
+
+            <div className='flex flex-col w-1/2 items-center'>
+            <h2 className="text-xl font-semibold text-slate-700">Applications Received</h2>
+            <p className="text-8xl font-bold flex h-full justify-center items-center">45</p>
+            </div>
+
+            <div className='px-4 flex flex-col gap-2 w-full'>
+              <span className='font-medium'>Received Applications</span>
+              
+              <button className='flex gap-2 justify-between border rounded-md w-full p-2 hover:bg-slate-200'>
+                <div className='flex gap-2 items-center'>
+                <div className='bg-blue-600 w-6 h-6 rounded-md'></div>
+                 <span className='font-medium'>Name : <span className='text-blue-600 font-normal'>sent a new application</span></span>
+                </div>
+
+                <BiDotsHorizontal className='text-blue-600 w-6 h-6' />
+              </button>
+              
+
+              
+
+
+            </div>
+          </div>
+          
+          <div className="flex flex-col gap-8">
+          <button className="flex justify-between items-center bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2 hover:bg-slate-200 group ease-in-out">
+            <div>
+            <h2 className="text-xl font-semibold text-slate-700">Total Applications</h2>
+            <p className="text-2xl font-bold text-left">45</p>
+            </div>
+            
+            <div className='hidden items-center text-blue-600 font-medium gap-2 group-hover:flex ease-in-out transition'>
+            <span>View</span>
+            <BiSolidRightArrow className=' w-6 h-6' />
+            </div>
+           
+          </button>
+
+          <button className="flex justify-between items-center bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2 hover:bg-slate-200 group ease-in-out">
+            <div>
+            <h2 className="text-xl font-semibold text-slate-700">Active Applications</h2>
+            <p className="text-2xl font-bold text-left">12</p>
+            </div>
+            
+            <div className='hidden items-center text-blue-600 font-medium gap-2 group-hover:flex ease-in-out transition'>
+            <span>View</span>
+            <BiSolidRightArrow className=' w-6 h-6' />
+            </div>
+           
+          </button>
+        </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-md shadow-md transition-all">
           <h2 className="text-2xl font-bold text-slate-700 mb-4">Recent Activity</h2>
           <ul className="list-disc pl-5 text-slate-700">
             <li className="mb-2">New application received for Scholarship A</li>
@@ -98,6 +165,9 @@ export default function ProviderDashboard() {
             <li>New scholarship posted: Scholarship C</li>
           </ul>
         </div>
+        </div>
+
+
       </main>
     </div>
   );
