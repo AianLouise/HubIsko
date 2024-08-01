@@ -21,7 +21,6 @@ import CompleteProfileConfirmation from "./pages/CompleteProfileConfirmation";
 import AccountManagement from "./pages/AccountManagement";
 import PasswordAndSecurity from "./pages/PasswordAndSecurity";
 import ChangePassword from "./components/ChangePassword";
-import ProviderHeader from "./components/ProviderHeader";
 import Forums from "./pages/Forums";
 import ApplicationDetails from "./pages/ApplicationDetails";
 import OthersProfile from "./pages/OthersProfile";
@@ -32,6 +31,8 @@ import InboxedApplicationDetail from "./pages/InboxedApplicationDetail";
 import StudentInfo from "./pages/StudentInfo";
 import ProfilePreview from "./pages/ProfilePreview";
 import PostDetails from "./pages/PostDetails";
+import ProviderHeader from "./components/ProviderHeader";
+import Scholarships from "./pages/Scholarship-Provider/scholarships";
 
 
 
@@ -61,6 +62,8 @@ export default function App() {
         <Route path="/student-info" element={<StudentInfo />} />
         <Route path="/profile-preview" element={<ProfilePreview />} />
         <Route path="/post-details" element={<PostDetails />} />
+        <Route path="/scholarships" element={<Scholarships />} />
+  
 
 
         <Route element={<PrivateRoute />}>
@@ -72,7 +75,7 @@ export default function App() {
 
         <Route element={<ProviderPrivateRoute allowedRoles={['scholarship_provider']} />}>
           <Route path="/provider-dashboard" element={<ProviderDashboard />} />
-          <Route path="/provider-Header" element={<ProviderHeader />} />
+          <Route path="/provider-header" element={<ProviderHeader />} />
         </Route>
 
         <Route path="/unauthorized" element={<UnauthorizedPage />} />

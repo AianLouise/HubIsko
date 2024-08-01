@@ -5,6 +5,7 @@ import { IoDocuments } from "react-icons/io5";
 import { FaCog } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { MdForum } from "react-icons/md";
+import { Link } from 'react-router-dom';
 
 function Sidebar({ isOpen, toggleSidebar }) {
   return (
@@ -27,6 +28,9 @@ function Sidebar({ isOpen, toggleSidebar }) {
 
       <nav className='font-medium'>
         <ul className="space-y-2">
+
+
+          <Link to={'/provider-dashboard'}>
           <li>
             
             <a href="#" className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
@@ -34,12 +38,16 @@ function Sidebar({ isOpen, toggleSidebar }) {
               Home
             </a>
           </li>
+          </Link>
+
+        <Link to={'/scholarships'}>
           <li>
             <a href="#" className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
             <FaGoogleScholar className='w-4 h-4 text-blue-600 group-hover:text-white transition' />
               Scholarships
             </a>
           </li>
+          </Link>
           <li>
             <a href="#" className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
             <IoDocuments className='w-4 h-4 text-blue-600 group-hover:text-white transition' />
