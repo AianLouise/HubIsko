@@ -48,18 +48,27 @@ function Sidebar({ isOpen, toggleSidebar }) {
             </a>
           </li>
           </Link>
+
+      <Link to={'/scholar-applications'}>
+     
           <li>
             <a href="#" className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
             <IoDocuments className='w-4 h-4 text-blue-600 group-hover:text-white transition' />
               Applications
             </a>
           </li>
+      </Link>
+
+
+    <Link to={'/provider-forums'}>
           <li>
             <a href="#" className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
             <MdForum className='w-4 h-4 text-blue-600 group-hover:text-white transition' />
               Forums
             </a>
           </li>
+    </Link>
+
           <li>
             <a href="#" className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white">
             <FaCog className='w-4 h-4 text-blue-600 group-hover:text-white transition' />

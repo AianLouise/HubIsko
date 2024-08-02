@@ -33,6 +33,10 @@ import ProfilePreview from "./pages/ProfilePreview";
 import PostDetails from "./pages/PostDetails";
 import ProviderHeader from "./components/ProviderHeader";
 import Scholarships from "./pages/Scholarship-Provider/scholarships";
+import ScholarApplications from "./pages/Scholarship-Provider/ScholarApplications";
+import ProviderForums from "./pages/Scholarship-Provider/ProviderForums";
+import ProviderForumDetail from "./pages/Scholarship-Provider/ProviderForumDetail";
+import PreviewProfile from "./pages/Scholarship-Provider/PreviewProfile";
 
 
 
@@ -63,6 +67,10 @@ export default function App() {
         <Route path="/profile-preview" element={<ProfilePreview />} />
         <Route path="/post-details" element={<PostDetails />} />
         <Route path="/scholarships" element={<Scholarships />} />
+        <Route path="/scholar-applications" element={<ScholarApplications />} />
+        <Route path="/provider-forums" element={<ProviderForums />} />
+        <Route path="/provider-forums/post/:postId" element={<ProviderForumDetail />} />
+        <Route path="/preview-profile" element={<PreviewProfile />} />
   
 
 
