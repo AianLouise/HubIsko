@@ -9,7 +9,6 @@ import { BiFilter } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 
 
-
 export default function ScholarApplications() {
   // State initialization
   const [sidebarOpen, setSidebarOpen] = useState(false);

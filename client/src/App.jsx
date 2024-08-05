@@ -37,7 +37,8 @@ import ScholarApplications from "./pages/Scholarship-Provider/ScholarApplication
 import ProviderForums from "./pages/Scholarship-Provider/ProviderForums";
 import ProviderForumDetail from "./pages/Scholarship-Provider/ProviderForumDetail";
 import PreviewProfile from "./pages/Scholarship-Provider/PreviewProfile";
-
+import PostScholarship from "./pages/Scholarship-Provider/PostScholarship";
+import AdminHome from "./pages/Admin/AdminHome";
 
 
 export default function App() {
@@ -71,6 +72,9 @@ export default function App() {
         <Route path="/provider-forums" element={<ProviderForums />} />
         <Route path="/provider-forums/post/:postId" element={<ProviderForumDetail />} />
         <Route path="/preview-profile" element={<PreviewProfile />} />
+        <Route path="/post-scholarship" element={<PostScholarship />} />
+
+        <Route path="/admin-home" element={<AdminHome />} />
   
 
 

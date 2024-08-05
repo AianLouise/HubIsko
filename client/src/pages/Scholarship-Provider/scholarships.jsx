@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from '../../redux/user/userSlice';
 import { useEffect, useRef, useState } from 'react';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
+
 
 export default function Scholarships() {
  // State initialization
@@ -97,12 +99,16 @@ export default function Scholarships() {
         </div>
 
         <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex'>
-
+        
+        
         <div className='flex justify-between'>
+
+            <Link to='/post-scholarship'>
             <button className='bg-blue-600 text-white px-8 py-4 shadow rounded-md flex items-center gap-2 hover:bg-blue-800'>
                 <FontAwesomeIcon icon={faPlus} className='w-4 h-4' />
                     <span>Post a Scholarship</span>
             </button>
+            </Link>
 
             <input 
             type="text" 

@@ -10,9 +10,6 @@ import { IoClose } from "react-icons/io5";
 import { BsThreeDots } from "react-icons/bs";
 
 
-
-
-
 export default function Header() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.user);
