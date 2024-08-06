@@ -198,16 +198,25 @@ export default function ForumDetail() {
                     <div className='border shadow p-4 rounded-md bg-white'>
                         <div className='flex gap-4'>
 
-                            <Link to={'/others-profile'}> 
-                            <img
-                                src={post.author.profilePicture}
-                                alt={`${post.author.username}'s profile`}
-                                className='w-12 h-12 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
-                            />
+                            <Link to={'/others-profile'}>
+                                <img
+                                    src={post.author.profilePicture}
+                                    alt={`${post.author.username}'s profile`}
+                                    className='w-12 h-12 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
+                                />
                             </Link>
                             <div className='flex flex-col'>
                                 <span className='font-bold text-lg'>{post.author.username}</span>
-                                <span className='text-sm text-gray-500'>{moment(post.createdAt).format('MMMM DD, YYYY')}</span>
+                                <span className='text-sm text-slate-500'>
+                                    {new Date(post.createdAt).toLocaleString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                        hour: 'numeric',
+                                        minute: 'numeric',
+                                        hour12: true,
+                                    })}
+                                </span>
                             </div>
                         </div>
                         <div className='mt-6 flex flex-col gap-2 pl-2'>
@@ -257,7 +266,7 @@ export default function ForumDetail() {
 
                     <div className='border-t'>
                         <form onSubmit={handleCommentSubmit} className="bg-white p-8 rounded-md shadow mb-8">
-                    
+
                             <textarea
                                 className="w-full p-4 border rounded-md mb-4 focus:outline-blue-200"
                                 placeholder="Write your reply..."
@@ -266,17 +275,17 @@ export default function ForumDetail() {
                                 required
                             />
                             <div className='w-full flex justify-end'>
-                            
-                            <button className=' bg-blue-600 p-4 rounded-md mx-4 hover:bg-blue-800'>
-                                <CgAttachment className='w-6 h-6 text-white' />
-                            </button>
-                            <button
-                                type="submit"
-                                className={`bg-blue-600 text-white p-3 rounded-md ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-800 transition ease-in-out'}`}
-                                disabled={loading}
-                            >
-                                {loading ? 'Adding...' : 'Add Reply'}
-                            </button>
+
+                                <button className=' bg-blue-600 p-4 rounded-md mx-4 hover:bg-blue-800'>
+                                    <CgAttachment className='w-6 h-6 text-white' />
+                                </button>
+                                <button
+                                    type="submit"
+                                    className={`bg-blue-600 text-white p-3 rounded-md ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-800 transition ease-in-out'}`}
+                                    disabled={loading}
+                                >
+                                    {loading ? 'Adding...' : 'Add Reply'}
+                                </button>
                             </div>
                         </form>
 
@@ -309,22 +318,22 @@ export default function ForumDetail() {
                                     {/* User avatar */}
 
                                     <Link to={'/others-profile'}>
-                                    <img
-                                        src={comment.author.profilePicture}
-                                        alt={`${comment.author.username}'s profile`}
-                                        className='w-14 h-14 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
-                                    />
+                                        <img
+                                            src={comment.author.profilePicture}
+                                            alt={`${comment.author.username}'s profile`}
+                                            className='w-14 h-14 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
+                                        />
                                     </Link>
                                     {/* Comment container */}
                                     <div className='flex flex-col bg-white border rounded-md w-full shadow'>
                                         {/* Comment content */}
                                         <div className='flex flex-col'>
-                                        <div className='pt-4'>
-                                        <span className='p-4 text-lg font-bold'>{comment.author.username}</span>
-                                        <span className='text-sm text-gray-500'>{moment(comment.createdAt).format('MMMM DD, YYYY')}</span>
-                                        </div>
-                                        
-                                        <span className='p-4 text-sm border-b'>{comment.content}</span>
+                                            <div className='pt-4'>
+                                                <span className='p-4 text-lg font-bold'>{comment.author.username}</span>
+                                                <span className='text-sm text-gray-500'>{moment(comment.createdAt).format('MMMM DD, YYYY')}</span>
+                                            </div>
+
+                                            <span className='p-4 text-sm border-b'>{comment.content}</span>
                                         </div>
                                         {/* Comment actions: likes, replies, views */}
                                         <div className='flex flex-row justify-between px-4 py-2 gap-2'>

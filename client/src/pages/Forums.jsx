@@ -181,10 +181,13 @@ export default function Forums() {
                   <div className='flex flex-col'>
                     <span className='font-medium'>{post.author.username}</span>
                     <span className='text-sm text-slate-500'>
-                      {new Date(post.createdAt).toLocaleDateString('en-US', {
+                      {new Date(post.createdAt).toLocaleString('en-US', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true,
                       })}
                     </span>
                   </div>
