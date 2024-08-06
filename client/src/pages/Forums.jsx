@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { FaPlus, FaStar, FaWrench, FaRegHeart, FaNewspaper } from "react-icons/fa";
@@ -61,10 +61,12 @@ export default function Forums() {
                 <option value="My Posts">My posts</option>
               </select>
 
-              <button className='flex gap-2 items-center justify-center bg-blue-600 p-3 rounded-md border hover:bg-blue-800 transition ease-in-out'>
-                <FaPlus className='w-5 h-5 text-white' />
-                <span className='font-medium text-white'>Create a New post</span>
-              </button>
+              <Link to="/forums/create-post">
+                <button className='flex gap-2 items-center justify-center bg-blue-600 p-3 rounded-md border hover:bg-blue-800 transition ease-in-out'>
+                  <FaPlus className='w-5 h-5 text-white' />
+                  <span className='font-medium text-white'>Create a New post</span>
+                </button>
+              </Link>
             </div>
 
             <div>
@@ -173,7 +175,7 @@ export default function Forums() {
 
           <div className='grid grid-cols-2 gap-6 mb-4'>
             {recentPosts.map((post) => (
-                 <div key={post._id} className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow cursor-pointer hover:bg-slate-100 hover:-translate-y-1 transition ease-in-out' onClick={() => handlePostClick(post._id)}>
+              <div key={post._id} className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow cursor-pointer hover:bg-slate-100 hover:-translate-y-1 transition ease-in-out' onClick={() => handlePostClick(post._id)}>
                 <div className='flex flex-row gap-3'>
                   <div className='bg-blue-600 rounded-full w-12 h-12'></div>
                   <div className='flex flex-col'>
@@ -211,8 +213,8 @@ export default function Forums() {
             ))}
           </div>
 
-            </div>
-        
+        </div>
+
       </main>
       <Footer />
     </div>
