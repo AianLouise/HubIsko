@@ -137,8 +137,8 @@ export default function RegisterAsProvider() {
   };
 
   return (
-    <main className='bg-[#f8f8fb] font-medium flex flex-col items-center min-h-screen pb-10'>
-      <span className='mt-28 text-2xl text-slate-500'>Let's get your organization setup!</span>
+    <main className='bg-[#f8f8fb] font-medium flex flex-col items-center min-h-screen pb-14 pt-14'>
+      <span className='text-2xl text-slate-500'>Let's get your organization setup!</span>
       <span className='text-sm mt-2 text-slate-500'>We'll guide you step by step!</span>
       <div className='flex justify-center items-center gap-4 mt-4 mb-8'>
         {[1, 2, 3, 4].map((step) => (
@@ -333,11 +333,11 @@ export default function RegisterAsProvider() {
 
 
           <div className='flex justify-between mt-8'>
-            {activeStep > 1 && <button type="button" onClick={handlePrevious} className="bg-gray-300 text-gray px-4 py-2 rounded-md">Previous</button>}
-            {activeStep < maxStep && activeStep !== 1 && <button type="button" onClick={handleNext} className="bg-blue-600 text-white px-4 py-2 rounded-md">Next</button>}
+            {activeStep > 1 && <button type="button" onClick={handlePrevious} className="bg-gray-300 text-gray px-6 py-2 rounded-md">Previous</button>}
+            {activeStep < maxStep && activeStep !== 1 && <button type="button" onClick={handleNext} className="bg-blue-600 text-white px-6 py-2 rounded-md">Next</button>}
             {activeStep === 1 && <div className="flex-grow"></div>}
-            {activeStep === 1 && <button type="button" onClick={handleNext} className="bg-blue-600 text-white px-4 py-2 rounded-md">Next</button>}
-            {activeStep === maxStep && <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-md">Submit</button>}
+            {activeStep === 1 && <button type="button" onClick={handleNext} className="bg-blue-600 text-white px-6 py-2 rounded-md">Next</button>}
+            {activeStep === maxStep && <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-md">Submit</button>}
           </div>
         </form>
       </div>
