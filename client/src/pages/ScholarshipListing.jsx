@@ -47,8 +47,8 @@ export default function ScholarshipListing() {
             </div>
 
 
-            <div className='hidden lg:block bg-blue-600 w-36 h-36 my-8 rounded-md flex items-center justify-center'>
-              <FaGraduationCap className='text-white text-9xl my-auto mx-auto mt-1' />
+            <div className='hidden lg:block bg-blue-600 w-36 h-36 my-8 rounded-md items-center justify-center'>
+              <FaGraduationCap className='text-white text-8xl my-auto mx-auto mt-6' />
             </div>
           </div>
 
