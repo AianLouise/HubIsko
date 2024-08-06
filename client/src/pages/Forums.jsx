@@ -5,9 +5,8 @@ import Footer from '../components/Footer';
 import { FaPlus, FaStar, FaWrench, FaRegHeart, FaNewspaper } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa6";
 import { BiCommentDots } from "react-icons/bi";
-
-import { useParams } from 'react-router-dom';
-import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComments } from '@fortawesome/free-solid-svg-icons';
 
 export default function Forums() {
   const [recentPosts, setRecentPosts] = useState([]);
@@ -47,7 +46,9 @@ export default function Forums() {
               <h1 className='text-4xl font-bold text-gray-800'>Welcome to the forums!</h1>
               <p className='text-lg text-slate-500 font-medium'>Join or Browse the discussions!</p>
             </div>
-            <div className='bg-blue-600 w-36 h-36 my-8 rounded-md'></div>
+            <div className='bg-blue-600 w-36 h-36 my-8 rounded-md flex items-center justify-center'>
+              <FontAwesomeIcon icon={faComments} className='text-white text-6xl' />
+            </div>
           </div>
         </div>
 
