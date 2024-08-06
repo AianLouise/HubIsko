@@ -131,7 +131,7 @@ export const google = async (req, res, next) => {
       }
 
       // Generate a unique username
-      const username = `${firstName}${lastName}`.toLowerCase().replace(/\s+/g, '') + Math.random().toString(36).slice(-8);
+      const username = `${firstName}${lastName}`.toLowerCase().replace(/\s+/g, '') + Math.floor(Math.random() * 90 + 10);
 
       // Create a new user
       const newUser = new User({
