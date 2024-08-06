@@ -9,37 +9,37 @@ export const signup = async (req, res, next) => {
   const hashedPassword = bcryptjs.hashSync(password, 10);
 
   // Create a new user instance with profileComplete set to false
-const newUser = new User({
-  firstName,
-  lastName,
-  middleName: "",
-  nameExtension: "",
-  sex: "",
-  email,
-  dateOfBirth,
-  mobileNumber: "",
-  username,
-  password: hashedPassword,
-  authProvider: 'email',
-  role: role || 'applicant',
-  emailVerified: false,
-applicantDetails: {
-  profileComplete: false,
-  permanentAddress: "",
-  barangay: "",
-  municipality: "",
-  province: "",
-  motherFirstName: "",
-  motherMiddleName: "",
-  motherLastName: "",
-  motherDOB: "",
-  fatherFirstName: "",
-  fatherMiddleName: "",
-  fatherLastName: "",
-  fatherDOB: "",
-  documents: [],
-},
-});
+  const newUser = new User({
+    firstName,
+    lastName,
+    middleName: "",
+    nameExtension: "",
+    sex: "",
+    email,
+    dateOfBirth,
+    mobileNumber: "",
+    username,
+    password: hashedPassword,
+    authProvider: 'email',
+    role: role || 'applicant',
+    emailVerified: false,
+    applicantDetails: {
+      profileComplete: false,
+      permanentAddress: "",
+      barangay: "",
+      municipality: "",
+      province: "",
+      motherFirstName: "",
+      motherMiddleName: "",
+      motherLastName: "",
+      motherDOB: "",
+      fatherFirstName: "",
+      fatherMiddleName: "",
+      fatherLastName: "",
+      fatherDOB: "",
+      documents: [],
+    },
+  });
 
   try {
     const savedUser = await newUser.save();
@@ -90,7 +90,7 @@ applicantDetails: {
         </div>
       `
     });
-    
+
     console.log('Verification email sent successfully to:', email);
 
     res.status(201).json({ success: true, message: 'User created successfully. Please check your email to verify your account.' });
@@ -269,7 +269,7 @@ export const resendVerificationEmail = async (req, res, next) => {
       const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
 
       console.log('Resending verification email to:', email);
-      
+
       await transporter.sendMail({
         from: '"HubIsko" <yourappemail@example.com>',
         to: email,

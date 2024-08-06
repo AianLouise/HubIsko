@@ -3,7 +3,7 @@ import { signupAsProvider, test } from '../controllers/provider.controller.js';
 
 const router = express.Router();
 
-router.get("/", test);
-router.post("/signup-as-provider", signupAsProvider);
+router.get("/test", test);
+router.post("/signupAsProvider", signupAsProvider);
 
 export default router;

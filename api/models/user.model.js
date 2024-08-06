@@ -62,16 +62,56 @@ const scholarshipProviderSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    contactPerson: {
+    organizationType: {
         type: String,
         required: true,
     },
-    providerAddress: {
+    registrationNumber: {
         type: String,
         required: true,
     },
-    providerPhoneNumber: {
+    email: {
         type: String,
+        required: true,
+    },
+    contactPersonName: {
+        type: String,
+        required: true,
+    },
+    contactPersonPosition: {
+        type: String,
+        required: true,
+    },
+    contactPersonNumber: {
+        type: String,
+        required: true,
+    },
+    streetAddress: {
+        type: String,
+        required: true,
+    },
+    city: {
+        type: String,
+        required: true,
+    },
+    state: {
+        type: String,
+        required: true,
+    },
+    postalCode: {
+        type: String,
+        required: true,
+    },
+    country: {
+        type: String,
+        required: true,
+    },
+    website: {
+        type: String,
+        required: true,
+    },
+    agreeTerms: {
+        type: Boolean,
         required: true,
     },
 }, { _id: false }); // Disable automatic _id generation for embedded sub-schema

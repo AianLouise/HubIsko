@@ -1,5 +1,6 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
+import { validationResult } from 'express-validator';
 
 export const test = (req, res) => {
   res.json({
@@ -8,24 +9,56 @@ export const test = (req, res) => {
 };
 
 export const signupAsProvider = async (req, res) => {
+  // Validate request
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   try {
-    const { name, email, password, organizationName, contactPerson, providerAddress, providerPhoneNumber } = req.body;
-
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Create a new user with the role of "provider" and include scholarship provider details
-    const newUser = new User({
+    const {
+      username,
       email,
-      username: email, // Assuming the username is the email for simplicity
-      password: hashedPassword,
+      password,
+      contactPersonName,
+      organizationName,
+      organizationType,
+      registrationNumber,
+      contactPersonPosition,
+      contactPersonNumber,
+      streetAddress,
+      city,
+      state,
+      postalCode,
+      country,
+      website,
+      agreeTerms
+    } = req.body;
+
+    // Create new user object without document fields
+    const newUser = new User({
+      username,
+      email,
+      password: bcrypt.hashSync(password, 8),
       role: 'scholarship_provider',
+      mobileNumber: "0987654321", // Corrected field
+      emailVerified: false,
+      authProvider: 'email',
       scholarshipProviderDetails: {
         organizationName,
-        contactPerson,
-        providerAddress,
-        providerPhoneNumber
+        organizationType,
+        registrationNumber,
+        email,
+        contactPersonName,
+        contactPersonPosition,
+        contactPersonNumber,
+        streetAddress,
+        city,
+        state,
+        postalCode,
+        country,
+        website,
+        agreeTerms
       }
     });
 
@@ -38,9 +71,17 @@ export const signupAsProvider = async (req, res) => {
       email: savedUser.email,
       role: savedUser.role,
       organizationName: savedUser.scholarshipProviderDetails.organizationName,
-      contactPerson: savedUser.scholarshipProviderDetails.contactPerson,
-      providerAddress: savedUser.scholarshipProviderDetails.providerAddress,
-      providerPhoneNumber: savedUser.scholarshipProviderDetails.providerPhoneNumber,
+      organizationType: savedUser.scholarshipProviderDetails.organizationType,
+      registrationNumber: savedUser.scholarshipProviderDetails.registrationNumber,
+      contactPersonName: savedUser.scholarshipProviderDetails.contactPersonName,
+      contactPersonPosition: savedUser.scholarshipProviderDetails.contactPersonPosition,
+      contactPersonNumber: savedUser.scholarshipProviderDetails.contactPersonNumber,
+      streetAddress: savedUser.scholarshipProviderDetails.streetAddress,
+      city: savedUser.scholarshipProviderDetails.city,
+      state: savedUser.scholarshipProviderDetails.state,
+      postalCode: savedUser.scholarshipProviderDetails.postalCode,
+      country: savedUser.scholarshipProviderDetails.country,
+      website: savedUser.scholarshipProviderDetails.website
     });
   } catch (error) {
     res.status(500).json({ message: 'Error signing up as provider', error: error.message });
