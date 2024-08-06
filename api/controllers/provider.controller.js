@@ -32,10 +32,15 @@ export const signupAsProvider = async (req, res) => {
       postalCode,
       country,
       website,
-      agreeTerms
+      agreeTerms,
+      tin,
+      proofOfAddress,
+      authorizationLetter,
+      idProofContactPerson,
+      additionalDocuments
     } = req.body;
 
-    // Create new user object without document fields
+    // Create new user object with document fields
     const newUser = new User({
       username,
       email,
@@ -58,7 +63,12 @@ export const signupAsProvider = async (req, res) => {
         postalCode,
         country,
         website,
-        agreeTerms
+        agreeTerms,
+        tin,
+        proofOfAddress,
+        authorizationLetter,
+        idProofContactPerson,
+        additionalDocuments
       }
     });
 
@@ -81,7 +91,12 @@ export const signupAsProvider = async (req, res) => {
       state: savedUser.scholarshipProviderDetails.state,
       postalCode: savedUser.scholarshipProviderDetails.postalCode,
       country: savedUser.scholarshipProviderDetails.country,
-      website: savedUser.scholarshipProviderDetails.website
+      website: savedUser.scholarshipProviderDetails.website,
+      tin: savedUser.scholarshipProviderDetails.tin,
+      proofOfAddress: savedUser.scholarshipProviderDetails.proofOfAddress,
+      authorizationLetter: savedUser.scholarshipProviderDetails.authorizationLetter,
+      idProofContactPerson: savedUser.scholarshipProviderDetails.idProofContactPerson,
+      additionalDocuments: savedUser.scholarshipProviderDetails.additionalDocuments
     });
   } catch (error) {
     res.status(500).json({ message: 'Error signing up as provider', error: error.message });

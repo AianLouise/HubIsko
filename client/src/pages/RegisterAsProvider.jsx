@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowRightLong } from "react-icons/fa6";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../firebase";
 
 export default function RegisterAsProvider() {
   const [formData, setFormData] = useState({
@@ -21,17 +23,18 @@ export default function RegisterAsProvider() {
     password: '',
     confirmPassword: '',
     agreeTerms: false,
-    // registrationCertificate: null,
-    // tin: null,
-    // proofOfAddress: null,
-    // authorizationLetter: null,
-    // idProofContactPerson: null,
-    // additionalDocuments: null,
+    registrationCertificate: '',
+    tin: '',
+    proofOfAddress: '',
+    authorizationLetter: '',
+    idProofContactPerson: '',
+    additionalDocuments: ''
   });
 
   const [errors, setErrors] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [countdown, setCountdown] = useState(10);
+  const [uploadProgress, setUploadProgress] = useState({});
 
   useEffect(() => {
     let intervalId;
@@ -58,12 +61,38 @@ export default function RegisterAsProvider() {
     }));
   };
 
-  const handleFileChange = (event) => {
-    const { name, files } = event.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: files[0],
-    }));
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    const file = files[0];
+    if (!file) return;
+
+    const currentDate = new Date().toISOString().split('T')[0];
+    const formattedFileName = `provider-documents/${formData.organizationName}_${name}_${currentDate}`;
+    const storageRef = ref(storage, formattedFileName);
+
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setUploadProgress((prevProgress) => ({
+          ...prevProgress,
+          [name]: progress,
+        }));
+      },
+      (error) => {
+        console.error("File upload error:", error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setFormData((prevState) => ({
+            ...prevState,
+            [name]: downloadURL,
+          }));
+        });
+      }
+    );
   };
 
   const [activeStep, setActiveStep] = useState(1);

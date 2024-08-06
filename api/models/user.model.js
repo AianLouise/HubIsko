@@ -114,6 +114,26 @@ const scholarshipProviderSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
     },
+    tin: {
+        type: String,
+        default: '',
+    },
+    proofOfAddress: {
+        type: String,
+        default: '',
+    },
+    authorizationLetter: {
+        type: String,
+        default: '',
+    },
+    idProofContactPerson: {
+        type: String,
+        default: '',
+    },
+    additionalDocuments: {
+        type: String,
+        default: '',
+    },
 }, { _id: false }); // Disable automatic _id generation for embedded sub-schema
 
 // Base schema (User schema)
