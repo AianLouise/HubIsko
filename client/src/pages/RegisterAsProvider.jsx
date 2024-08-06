@@ -38,7 +38,7 @@ export default function RegisterAsProvider() {
     if (showModal && countdown > 0) {
       intervalId = setInterval(() => {
         setCountdown(prevCountdown => prevCountdown - 1);
-      }, 100000);
+      }, 1000);
     } else if (countdown === 0) {
       window.location.href = '/';
     }

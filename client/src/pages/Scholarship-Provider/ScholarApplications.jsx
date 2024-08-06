@@ -40,15 +40,16 @@ export default function ScholarApplications() {
     try {
       await fetch('/api/auth/signout');
       dispatch(signOut());
+      navigate('/'); // Navigate to home page
     } catch (error) {
       console.log(error);
     }
   };
 
   const maxUsernameLength = 6;
-  const truncatedUsername = currentUser.username.length > maxUsernameLength 
-  ? currentUser.username.slice(0, maxUsernameLength) + '...' 
-  : currentUser.username;
+  const truncatedUsername = currentUser.username.length > maxUsernameLength
+    ? currentUser.username.slice(0, maxUsernameLength) + '...'
+    : currentUser.username;
 
   const [recentPosts, setRecentPosts] = useState([]);
   const navigate = useNavigate();
@@ -76,44 +77,44 @@ export default function ScholarApplications() {
     navigate(`/forums/post/${postId}`);
   };
 
-    return (
-<div className={`flex flex-col min-h-screen font-medium`}>
-        {/* Header component inline with conditional padding */}
-        <header className={`bg-white text-gray-800 p-4 flex justify-between items-center shadow border-b ${sidebarOpen ? 'pl-64' : 'pl-0'}`}>
-          <div className="max-w-8xl w-full mx-auto px-24 flex justify-between items-center">
-  
-            <div className='flex items-center gap-2'>
+  return (
+    <div className={`flex flex-col min-h-screen font-medium`}>
+      {/* Header component inline with conditional padding */}
+      <header className={`bg-white text-gray-800 p-4 flex justify-between items-center shadow border-b ${sidebarOpen ? 'pl-64' : 'pl-0'}`}>
+        <div className="max-w-8xl w-full mx-auto px-24 flex justify-between items-center">
+
+          <div className='flex items-center gap-2'>
             <button onClick={toggleSidebar} className="text-blue-600">
               <FontAwesomeIcon icon={faBars} className=' w-4 h-4 ' />
             </button>
-  
+
             <h1 className="text-lg font-bold text-blue-500">Provider Dashboard</h1>
             <h1 className="text-lg font-bold text-blue-500">/ Home </h1>
-            </div>
-  
-            <div className="flex gap-2 items-center">
-              <span className="text-base">{truncatedUsername}</span>
-              <div className="relative" ref={dropdownRef}>
-                <img src={currentUser.profilePicture || 'https://via.placeholder.com/40'} alt="Profile" className="h-8 w-8 rounded-full" onClick={toggleDropdown} />
-                {dropdownOpen && (
-                  <div className="absolute mt-2 right-0 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50 font-medium">
-                    <ul>
-                      <li className="p-2 hover:bg-gray-100 cursor-pointer">Profile</li>
-                      <li className="p-2 hover:bg-gray-100 cursor-pointer">Settings</li>
-                      <li className="p-2 hover:bg-gray-100 cursor-pointer" onClick={handleSignOut}>Sign out</li>
-                    </ul>
-                  </div>
-                )}
-              </div>
+          </div>
+
+          <div className="flex gap-2 items-center">
+            <span className="text-base">{truncatedUsername}</span>
+            <div className="relative" ref={dropdownRef}>
+              <img src={currentUser.profilePicture || 'https://via.placeholder.com/40'} alt="Profile" className="h-8 w-8 rounded-full" onClick={toggleDropdown} />
+              {dropdownOpen && (
+                <div className="absolute mt-2 right-0 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50 font-medium">
+                  <ul>
+                    <li className="p-2 hover:bg-gray-100 cursor-pointer">Profile</li>
+                    <li className="p-2 hover:bg-gray-100 cursor-pointer">Settings</li>
+                    <li className="p-2 hover:bg-gray-100 cursor-pointer" onClick={handleSignOut}>Sign out</li>
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
-        </header>
+        </div>
+      </header>
 
-        <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+      <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
 
-        
-        <main className={`flex-grow bg-[#f8f8fb] transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
-                
+
+      <main className={`flex-grow bg-[#f8f8fb] transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
+
         <div className='border-b mb-8'>
           <div className={'flex items-center mx-auto justify-between px-24'}>
             <div className='flex flex-col gap-2 w-1/2'>
@@ -126,44 +127,44 @@ export default function ScholarApplications() {
 
         <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex'>
 
-        <div className='flex items-center gap-4'>
-            <input 
-            type="text" 
-            className='border border-gray-300 rounded-md p-2 pr-8'
-            placeholder='Search for applications...'
+          <div className='flex items-center gap-4'>
+            <input
+              type="text"
+              className='border border-gray-300 rounded-md p-2 pr-8'
+              placeholder='Search for applications...'
             />
 
             <button className='bg-blue-600 px-4 py-2 rounded-md flex gap-2 text-white'>
-            <BiFilter className='w-6 h-6' />
-            <span>Filter</span>
+              <BiFilter className='w-6 h-6' />
+              <span>Filter</span>
             </button>
-        </div>
+          </div>
 
-        {/* TABLE */}
+          {/* TABLE */}
 
-        <div className='overflow-x-auto rounded-md bg-white shadow'>
+          <div className='overflow-x-auto rounded-md bg-white shadow'>
             <table className='w-full border-2 border-gray-200'>
-            <thead>
+              <thead>
                 <tr className='bg-slate-100'>
-                <th className='border border-gray-200'>#No</th>
-                <th className='border border-gray-200 p-2'>Name</th>
-                <th className='border border-gray-200 p-2'>Email</th>
-                <th className='border border-gray-200 p-2'>Date</th>
-                <th className='border border-gray-200 p-2'>Status</th>
-                <th className='border border-gray-200 p-2'>Actions</th>
+                  <th className='border border-gray-200'>#No</th>
+                  <th className='border border-gray-200 p-2'>Name</th>
+                  <th className='border border-gray-200 p-2'>Email</th>
+                  <th className='border border-gray-200 p-2'>Date</th>
+                  <th className='border border-gray-200 p-2'>Status</th>
+                  <th className='border border-gray-200 p-2'>Actions</th>
                 </tr>
-            </thead>
-            <tbody>
-            
-            </tbody>
-            </table>
-        
-        </div>
-        
-        </div>
-        </main>
-        </div>
+              </thead>
+              <tbody>
 
-    );
+              </tbody>
+            </table>
+
+          </div>
+
+        </div>
+      </main>
+    </div>
+
+  );
 
 }

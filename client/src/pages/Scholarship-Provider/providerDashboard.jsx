@@ -39,15 +39,16 @@ export default function ProviderDashboard() {
     try {
       await fetch('/api/auth/signout');
       dispatch(signOut());
+      navigate('/'); // Navigate to home page
     } catch (error) {
       console.log(error);
     }
   };
 
   const maxUsernameLength = 6;
-  const truncatedUsername = currentUser.username.length > maxUsernameLength 
-  ? currentUser.username.slice(0, maxUsernameLength) + '...' 
-  : currentUser.username;
+  const truncatedUsername = currentUser.username.length > maxUsernameLength
+    ? currentUser.username.slice(0, maxUsernameLength) + '...'
+    : currentUser.username;
 
   return (
     <div className={`flex flex-col min-h-screen`}>
@@ -56,12 +57,12 @@ export default function ProviderDashboard() {
         <div className="max-w-8xl w-full mx-auto px-24 flex justify-between items-center">
 
           <div className='flex items-center gap-2'>
-          <button onClick={toggleSidebar} className="text-blue-600">
-            <FontAwesomeIcon icon={faBars} className=' w-4 h-4 ' />
-          </button>
+            <button onClick={toggleSidebar} className="text-blue-600">
+              <FontAwesomeIcon icon={faBars} className=' w-4 h-4 ' />
+            </button>
 
-          <h1 className="text-lg font-bold text-blue-500">Provider Dashboard</h1>
-          <h1 className="text-lg font-bold text-blue-500">/ Home </h1>
+            <h1 className="text-lg font-bold text-blue-500">Provider Dashboard</h1>
+            <h1 className="text-lg font-bold text-blue-500">/ Home </h1>
           </div>
 
           <div className="flex gap-2 items-center">
@@ -88,8 +89,8 @@ export default function ProviderDashboard() {
       {/* Main content with conditional margin */}
 
       <main className={`flex-grow bg-[#f8f8fb] transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
-        
-      <div className='border-b mb-8'>
+
+        <div className='border-b mb-8'>
           <div className={'flex items-center mx-auto justify-between px-24'}>
             <div className='flex flex-col gap-2 w-1/2'>
               <h1 className='text-4xl font-bold text-gray-800'>Welcome provider!</h1>
@@ -100,71 +101,71 @@ export default function ProviderDashboard() {
         </div>
 
         <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex'>
-       
-       <div className='grid grid-cols-2 gap-10'>
-          <div className="flex divide-x bg-white p-6 rounded-md shadow-md transition-all">
 
-            <div className='flex flex-col w-1/2 items-center'>
-            <h2 className="text-xl font-semibold text-slate-700">Applications Received</h2>
-            <p className="text-8xl font-bold flex h-full justify-center items-center">45</p>
+          <div className='grid grid-cols-2 gap-10'>
+            <div className="flex divide-x bg-white p-6 rounded-md shadow-md transition-all">
+
+              <div className='flex flex-col w-1/2 items-center'>
+                <h2 className="text-xl font-semibold text-slate-700">Applications Received</h2>
+                <p className="text-8xl font-bold flex h-full justify-center items-center">45</p>
+              </div>
+
+              <div className='px-4 flex flex-col gap-2 w-full'>
+                <span className='font-medium'>Received Applications</span>
+
+                <button className='flex gap-2 justify-between border rounded-md w-full p-2 hover:bg-slate-200'>
+                  <div className='flex gap-2 items-center'>
+                    <div className='bg-blue-600 w-6 h-6 rounded-md'></div>
+                    <span className='font-medium'>Name : <span className='text-blue-600 font-normal'>sent a new application</span></span>
+                  </div>
+
+                  <BiDotsHorizontal className='text-blue-600 w-6 h-6' />
+                </button>
+
+
+
+
+
+              </div>
             </div>
 
-            <div className='px-4 flex flex-col gap-2 w-full'>
-              <span className='font-medium'>Received Applications</span>
-              
-              <button className='flex gap-2 justify-between border rounded-md w-full p-2 hover:bg-slate-200'>
-                <div className='flex gap-2 items-center'>
-                <div className='bg-blue-600 w-6 h-6 rounded-md'></div>
-                 <span className='font-medium'>Name : <span className='text-blue-600 font-normal'>sent a new application</span></span>
+            <div className="flex flex-col gap-8">
+              <button className="flex justify-between items-center bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2 hover:bg-slate-200 group ease-in-out">
+                <div>
+                  <h2 className="text-xl font-semibold text-slate-700">Total Applications</h2>
+                  <p className="text-2xl font-bold text-left">45</p>
                 </div>
 
-                <BiDotsHorizontal className='text-blue-600 w-6 h-6' />
+                <div className='hidden items-center text-blue-600 font-medium gap-2 group-hover:flex ease-in-out transition'>
+                  <span>View</span>
+                  <BiSolidRightArrow className=' w-6 h-6' />
+                </div>
+
               </button>
-              
 
-              
+              <button className="flex justify-between items-center bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2 hover:bg-slate-200 group ease-in-out">
+                <div>
+                  <h2 className="text-xl font-semibold text-slate-700">Active Applications</h2>
+                  <p className="text-2xl font-bold text-left">12</p>
+                </div>
 
+                <div className='hidden items-center text-blue-600 font-medium gap-2 group-hover:flex ease-in-out transition'>
+                  <span>View</span>
+                  <BiSolidRightArrow className=' w-6 h-6' />
+                </div>
 
+              </button>
             </div>
           </div>
-          
-          <div className="flex flex-col gap-8">
-          <button className="flex justify-between items-center bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2 hover:bg-slate-200 group ease-in-out">
-            <div>
-            <h2 className="text-xl font-semibold text-slate-700">Total Applications</h2>
-            <p className="text-2xl font-bold text-left">45</p>
-            </div>
-            
-            <div className='hidden items-center text-blue-600 font-medium gap-2 group-hover:flex ease-in-out transition'>
-            <span>View</span>
-            <BiSolidRightArrow className=' w-6 h-6' />
-            </div>
-           
-          </button>
 
-          <button className="flex justify-between items-center bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2 hover:bg-slate-200 group ease-in-out">
-            <div>
-            <h2 className="text-xl font-semibold text-slate-700">Active Applications</h2>
-            <p className="text-2xl font-bold text-left">12</p>
-            </div>
-            
-            <div className='hidden items-center text-blue-600 font-medium gap-2 group-hover:flex ease-in-out transition'>
-            <span>View</span>
-            <BiSolidRightArrow className=' w-6 h-6' />
-            </div>
-           
-          </button>
-        </div>
-        </div>
-
-        <div className="bg-white p-6 rounded-md shadow-md transition-all">
-          <h2 className="text-2xl font-bold text-slate-700 mb-4">Recent Activity</h2>
-          <ul className="list-disc pl-5 text-slate-700">
-            <li className="mb-2">New application received for Scholarship A</li>
-            <li className="mb-2">Scholarship B has been updated</li>
-            <li>New scholarship posted: Scholarship C</li>
-          </ul>
-        </div>
+          <div className="bg-white p-6 rounded-md shadow-md transition-all">
+            <h2 className="text-2xl font-bold text-slate-700 mb-4">Recent Activity</h2>
+            <ul className="list-disc pl-5 text-slate-700">
+              <li className="mb-2">New application received for Scholarship A</li>
+              <li className="mb-2">Scholarship B has been updated</li>
+              <li>New scholarship posted: Scholarship C</li>
+            </ul>
+          </div>
         </div>
 
 
