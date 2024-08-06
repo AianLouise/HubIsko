@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaArrowRightLong } from "react-icons/fa6";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebase";
+import { FaBuilding, FaUser, FaFileAlt, FaCheckCircle } from 'react-icons/fa';
 
 export default function RegisterAsProvider() {
   const [formData, setFormData] = useState({
@@ -175,9 +176,14 @@ export default function RegisterAsProvider() {
             <div className='flex flex-col gap-1 items-center text-center'>
               <span className={`text-xl font-bold ${activeStep === step ? 'text-blue-600' : 'text-gray-400'}`}>{step}</span>
               <button
-                className={`w-12 h-12 shadow rounded-md ${activeStep === step ? 'bg-blue-600' : 'border'}`}
+                className={`w-12 h-12 shadow rounded-md flex items-center justify-center ${activeStep === step ? 'bg-blue-600' : 'border'}`}
                 onClick={() => setActiveStep(step)}
-              ></button>
+              >
+                {step === 1 && <FaBuilding className={activeStep === step ? 'text-white' : 'text-blue-600'} />}
+                {step === 2 && <FaUser className={activeStep === step ? 'text-white' : 'text-blue-600'} />}
+                {step === 3 && <FaFileAlt className={activeStep === step ? 'text-white' : 'text-blue-600'} />}
+                {step === 4 && <FaCheckCircle className={activeStep === step ? 'text-white' : 'text-blue-600'} />}
+              </button>
               <span className='text-sm text-slate-600'>
                 {step === 1 && "Organization Information"}
                 {step === 2 && "Account Information"}
