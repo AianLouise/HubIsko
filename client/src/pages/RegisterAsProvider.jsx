@@ -99,43 +99,43 @@ export default function RegisterAsProvider() {
   };
 
   const handleSubmit = async (event) => {
-      event.preventDefault();
-      
-      // Perform form validation
-      const validationErrors = validateForm();
-      if (Object.keys(validationErrors).length > 0) {
-        setErrors(validationErrors);
-        return; // Stop submission if there are validation errors
+    event.preventDefault();
+
+    // Perform form validation
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return; // Stop submission if there are validation errors
+    }
+
+    // Log all form data to the console
+    console.log('Form Data:', formData);
+
+    try {
+      // Send form data to the API endpoint
+      const response = await fetch('/api/provider/signupAsProvider', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-    
-      // Log all form data to the console
-      console.log('Form Data:', formData);
-    
-      try {
-          // Send form data to the API endpoint
-          const response = await fetch('/api/provider/signupAsProvider', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(formData),
-          });
-  
-          if (!response.ok) {
-              throw new Error('Network response was not ok');
-          }
-  
-          const result = await response.json();
-          console.log('Success:', result);
-  
-          // Simulate form submission success
-          setShowModal(true);
-      } catch (error) {
-          console.error('Error:', error);
-          // Handle error (e.g., show error message to the user)
-      }
+
+      const result = await response.json();
+      console.log('Success:', result);
+
+      // Simulate form submission success
+      setShowModal(true);
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle error (e.g., show error message to the user)
+    }
   };
-  
+
   return (
     <main className='bg-[#f8f8fb] font-medium flex flex-col items-center min-h-screen pb-10'>
       <span className='mt-28 text-2xl text-slate-500'>Let's get your organization setup!</span>
@@ -182,13 +182,13 @@ export default function RegisterAsProvider() {
                   <input type="text" name="registrationNumber" id="registrationNumber" value={formData.registrationNumber} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Official registration or incorporation number" />
                   {errors.registrationNumber && <p className="text-red-500 text-sm">{errors.registrationNumber}</p>}
                 </div>
-                <div className="mb-4">
+                <div className="">
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
                   <input type="email" name="email" id="email" value={formData.email} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Official email address for communication" />
                   {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                 </div>
                 <hr className="col-span-2" />
-                <div className="mb-4 col-span-2">
+                <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700">Contact Person Details</label>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="mb-4">
@@ -206,7 +206,7 @@ export default function RegisterAsProvider() {
                   </div>
                 </div>
                 <hr className="col-span-2" />
-                <div className="mb-4 col-span-2">
+                <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700">Physical Address</label>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="mb-4">
@@ -231,6 +231,7 @@ export default function RegisterAsProvider() {
                     </div>
                   </div>
                 </div>
+                <hr className="col-span-2" />
                 <div className="mb-4 col-span-2">
                   <label htmlFor="website" className="block text-sm font-medium text-gray-700">Website</label>
                   <input type="text" name="website" id="website" value={formData.website} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Official website URL of the organization" />
@@ -243,17 +244,17 @@ export default function RegisterAsProvider() {
             <div className='bg-white p-8 shadow rounded-md border'>
               <h2 className="text-2xl font-bold mb-6">Enter Account Information</h2>
               <div className='grid grid-cols-2 gap-4'>
-                <div className="mb-4">
+                <div className="mb-4 col-span-2">
                   <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
                   <input type="text" name="username" id="username" value={formData.username} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Preferred username for account login" />
                   {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
                 </div>
-                <div className="mb-4">
+                <div className="mb-4 col-span-2">
                   <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
                   <input type="password" name="password" id="password" value={formData.password} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Choose a strong password" />
                   {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
                 </div>
-                <div className="mb-4">
+                <div className="mb-4 col-span-2">
                   <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
                   <input type="password" name="confirmPassword" id="confirmPassword" value={formData.confirmPassword} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Re-enter your password" />
                   {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
@@ -303,6 +304,24 @@ export default function RegisterAsProvider() {
             <div className='bg-white p-8 shadow rounded-md border'>
               <h2 className="text-2xl font-bold mb-6">Agree to Terms and Conditions</h2>
               <div className="mb-4">
+                <div className="bg-gray-100 p-4 rounded-md mb-4 max-h-60 overflow-y-scroll" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                  <h3 className="text-lg font-semibold mb-2">Sample Terms and Conditions</h3>
+                  <p className="text-sm text-gray-700 mb-2">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisi vel consectetur euismod, nisl nisi consectetur nisl, euismod consectetur nisi nisl euismod. Nisi vel consectetur euismod, nisl nisi consectetur nisl, euismod consectetur nisi nisl euismod. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisi vel consectetur euismod, nisl nisi consectetur nisl, euismod consectetur nisi nisl euismod.
+                  </p>
+                  <p className="text-sm text-gray-700 mb-2">
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla at consequat nisi. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor.
+                  </p>
+                  <p className="text-sm text-gray-700 mb-2">
+                    Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat.
+                  </p>
+                  <p className="text-sm text-gray-700 mb-2">
+                    Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Pellentesque sed dolor. Aliquam congue fermentum nisl. Mauris accumsan nulla vel diam. Sed in lacus ut enim adipiscing aliquet. Nulla venenatis. In pede mi, aliquet sit amet, euismod in, auctor ut, ligula. Aliquam dapibus tincidunt metus.
+                  </p>
+                  <p className="text-sm text-gray-700 mb-2">
+                    Praesent justo dolor, lobortis quis, lobortis dignissim, pulvinar ac, lorem. Vestibulum sed ante. Donec sagittis euismod purus. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
+                  </p>
+                </div>
                 <label className="inline-flex items-center">
                   <input type="checkbox" name="agreeTerms" checked={formData.agreeTerms} onChange={handleChange} className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out" />
                   <span className="ml-2 text-sm text-gray-700">I agree to the <a href="#" className="text-blue-500">Terms and Conditions</a></span>
@@ -312,9 +331,12 @@ export default function RegisterAsProvider() {
             </div>
           )}
 
+
           <div className='flex justify-between mt-8'>
-            {activeStep > 1 && <button type="button" onClick={handlePrevious} className="bg-gray-300 text-white px-4 py-2 rounded-md">Back</button>}
-            {activeStep < maxStep && <button type="button" onClick={handleNext} className="bg-blue-600 text-white px-4 py-2 rounded-md">Next</button>}
+            {activeStep > 1 && <button type="button" onClick={handlePrevious} className="bg-gray-300 text-gray px-4 py-2 rounded-md">Previous</button>}
+            {activeStep < maxStep && activeStep !== 1 && <button type="button" onClick={handleNext} className="bg-blue-600 text-white px-4 py-2 rounded-md">Next</button>}
+            {activeStep === 1 && <div className="flex-grow"></div>}
+            {activeStep === 1 && <button type="button" onClick={handleNext} className="bg-blue-600 text-white px-4 py-2 rounded-md">Next</button>}
             {activeStep === maxStep && <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-md">Submit</button>}
           </div>
         </form>
