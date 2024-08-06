@@ -177,7 +177,11 @@ export default function Forums() {
             {recentPosts.map((post) => (
               <div key={post._id} className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow cursor-pointer hover:bg-slate-100 hover:-translate-y-1 transition ease-in-out' onClick={() => handlePostClick(post._id)}>
                 <div className='flex flex-row gap-3'>
-                  <div className='bg-blue-600 rounded-full w-12 h-12'></div>
+                  <img
+                    src={post.author.profilePicture || 'default-profile-pic-url'} // Use a default profile picture if not available
+                    alt={`${post.author.username}'s profile`}
+                    className='w-12 h-12 rounded-full'
+                  />
                   <div className='flex flex-col'>
                     <span className='font-medium'>{post.author.username}</span>
                     <span className='text-sm text-slate-500'>

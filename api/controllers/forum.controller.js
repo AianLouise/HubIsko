@@ -19,7 +19,7 @@ export const createPost = async (req, res) => {
 
 export const getPosts = async (req, res) => {
   try {
-    const posts = await ForumPost.find().populate('author', ['username', 'email']);
+    const posts = await ForumPost.find().populate('author', ['username', 'email', 'profilePicture']);
     const modifiedPosts = posts.map(post => ({
       ...post.toObject(),
       totalLikes: post.likes.length,
