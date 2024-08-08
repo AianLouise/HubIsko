@@ -34,6 +34,7 @@ export default function RegisterAsProvider() {
 
   const [errors, setErrors] = useState({});
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [countdown, setCountdown] = useState(10);
   const [uploadProgress, setUploadProgress] = useState({});
 
@@ -48,6 +49,20 @@ export default function RegisterAsProvider() {
     }
     return () => clearInterval(intervalId);
   }, [showModal, countdown]);
+
+  useEffect(() => {
+    if (showModal) {
+      const timer = setInterval(() => {
+        setCountdown((prevCountdown) => {
+          if (prevCountdown === 1) {
+            clearInterval(timer);
+            handleHome();
+          }
+          return prevCountdown - 1;
+        });
+      }, 1000);
+    }
+  }, [showModal]);
 
   const navigate = useNavigate();
   const handleHome = () => {
@@ -130,11 +145,13 @@ export default function RegisterAsProvider() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
 
     // Perform form validation
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      setLoading(false);
       return; // Stop submission if there are validation errors
     }
 
@@ -158,9 +175,10 @@ export default function RegisterAsProvider() {
       const result = await response.json();
       console.log('Success:', result);
 
-      // Simulate form submission success
+      setLoading(false);
       setShowModal(true);
     } catch (error) {
+      setLoading(false);
       console.error('Error:', error);
       // Handle error (e.g., show error message to the user)
     }
@@ -216,11 +234,6 @@ export default function RegisterAsProvider() {
                   <label htmlFor="registrationNumber" className="block text-sm font-medium text-gray-700">Registration Number</label>
                   <input type="text" name="registrationNumber" id="registrationNumber" value={formData.registrationNumber} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Official registration or incorporation number" />
                   {errors.registrationNumber && <p className="text-red-500 text-sm">{errors.registrationNumber}</p>}
-                </div>
-                <div className="">
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
-                  <input type="email" name="email" id="email" value={formData.email} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Official email address for communication" />
-                  {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                 </div>
                 <hr className="col-span-2" />
                 <div className="col-span-2">
@@ -283,6 +296,11 @@ export default function RegisterAsProvider() {
                   <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
                   <input type="text" name="username" id="username" value={formData.username} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Preferred username for account login" />
                   {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
+                </div>
+                <div className="mb-4 col-span-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
+                  <input type="email" name="email" id="email" value={formData.email} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Official email address for communication" />
+                  {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                 </div>
                 <div className="mb-4 col-span-2">
                   <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
@@ -372,16 +390,39 @@ export default function RegisterAsProvider() {
             {activeStep < maxStep && activeStep !== 1 && <button type="button" onClick={handleNext} className="bg-blue-600 text-white px-6 py-2 rounded-md">Next</button>}
             {activeStep === 1 && <div className="flex-grow"></div>}
             {activeStep === 1 && <button type="button" onClick={handleNext} className="bg-blue-600 text-white px-6 py-2 rounded-md">Next</button>}
-            {activeStep === maxStep && <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-md">Submit</button>}
+            {activeStep === maxStep && (
+              <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-md flex items-center justify-center">
+                {loading ? (
+                  <div className="flex justify-center items-center">
+                    <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                    </svg>
+                  </div>
+                ) : (
+                  'Submit'
+                )}
+              </button>
+            )}
           </div>
         </form>
       </div>
+
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-8 rounded-md shadow-lg text-center">
+            <h2 className="text-2xl font-bold mb-4">Sending Email Verification</h2>
+            <p>Please wait while we send the verification link to your email address.</p>
+          </div>
+        </div>
+      )}
 
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-8 rounded-md shadow-lg text-center">
             <h2 className="text-2xl font-bold mb-4">Thank You!</h2>
             <p className="mb-4">Your registration was successful.</p>
+            <p className="mb-4">A verification link has been sent to your email address. Please check your inbox and verify your email.</p>
             <p>You will be redirected to the home page in {countdown} seconds.</p>
             <button onClick={handleHome} className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md">Go to Home</button>
           </div>
