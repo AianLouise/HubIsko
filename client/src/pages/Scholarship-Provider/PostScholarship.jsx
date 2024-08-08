@@ -11,6 +11,23 @@ export default function PostScholarship() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [files, setFiles] = useState([]);
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    amount: '',
+    requirements: '',
+    deadline: '',
+    website: '',
+    email: '',
+    phone: '',
+    address: '',
+    eligibility: '',
+    applicationProcess: '',
+    numScholarships: '',
+    duration: '',
+    category: 'academic', // default category
+    provider: '', // this will be set to currentUser._id in useEffect
+  });
   const dropdownRef = useRef(null);
 
   // Redux hooks
@@ -34,6 +51,16 @@ export default function PostScholarship() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Set provider in formData when currentUser is available
+  useEffect(() => {
+    if (currentUser) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        provider: currentUser._id,
+      }));
+    }
+  }, [currentUser]);
+
   // Sign out handler
   const handleSignOut = async () => {
     try {
@@ -52,26 +79,10 @@ export default function PostScholarship() {
 
   const handleFileChange = (e) => {
     setFiles([...e.target.files]);
-  };
-
-  const formData = {
-    name: 'Scholarship Name',
-    description: 'Description of the scholarship',
-    amount: 1000,
-    requirements: 'Requirements for the scholarship',
-    deadline: '2023-12-31', // Ensure this is a valid date string
-    website: 'https://example.com',
-    email: 'example@example.com',
-    phone: '123-456-7890',
-    address: '123 Example Street',
-    eligibility: 'Eligibility criteria',
-    applicationProcess: 'Application process details',
-    numScholarships: 10,
-    duration: '1 year',
-    category: 'Category of the scholarship',
-    provider: currentUser._id, // Use the logged-in user's ID
-    image: 'https://example.com/image.jpg', // Optional
-    documents: 'List of required documents', // Optional
+    setFormData({
+      ...formData,
+      documents: [...e.target.files]
+    });
   };
 
   const handleChange = (e) => {
@@ -84,14 +95,25 @@ export default function PostScholarship() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('Form Data:', formData); // Log form data
+    const amountValue = parseFloat(formData.amount);
+    if (isNaN(amountValue) || amountValue <= 0) {
+      console.error('Amount must be a positive number.');
+      return;
+    }
+  
+    const updatedFormData = {
+      ...formData,
+      amount: amountValue,
+    };
+  
+    console.log('Form Data:', updatedFormData); // Log form data
     try {
       const response = await fetch('http://localhost:3000/api/scholarshipProgram/create-scholarship', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(updatedFormData),
       });
       const responseData = await response.json();
       if (!response.ok) {
@@ -104,6 +126,7 @@ export default function PostScholarship() {
       console.error('Error:', error);
     }
   };
+  
 
   return (
     <div className={`flex flex-col min-h-screen font-medium`}>
@@ -275,17 +298,6 @@ export default function PostScholarship() {
             </div>
 
             <div className="flex flex-col gap-4">
-              <label htmlFor="image" className="text-lg font-medium text-gray-800">Scholarship Image</label>
-              <input
-                type="file"
-                id="image"
-                name="image"
-                className="border border-gray-300 p-2 rounded-md"
-                // onChange={handleFileChange}  // Uncomment if you handle image file uploads
-              />
-            </div>
-
-            <div className="flex flex-col gap-4">
               <label htmlFor="eligibility" className="text-lg font-medium text-gray-800">Eligibility Criteria</label>
               <textarea
                 id="eligibility"
@@ -340,18 +352,6 @@ export default function PostScholarship() {
                 className="border border-gray-300 p-2 rounded-md"
                 placeholder="Enter scholarship duration"
                 required
-              />
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <label htmlFor="documents" className="text-lg font-medium text-gray-800">Supporting Documents</label>
-              <input
-                type="file"
-                id="documents"
-                name="documents"
-                className="border border-gray-300 p-2 rounded-md"
-                multiple
-                onChange={handleFileChange}
               />
             </div>
 

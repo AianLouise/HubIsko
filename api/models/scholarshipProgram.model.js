@@ -67,7 +67,7 @@ const ScholarshipProgramSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-});
+}, { timestamps: { createdAt: 'dateCreated' } });
 
 const Scholarship = mongoose.model('Scholarship', ScholarshipProgramSchema);
 
