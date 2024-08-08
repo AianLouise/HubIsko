@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import OAuth from '../components/OAuth';
 import { getDownloadURL, getStorage, ref } from 'firebase/storage';
-import { useEffect } from 'react';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -41,6 +40,15 @@ export default function SignUp() {
 
     fetchLogoUrl();
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError('');
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
@@ -130,12 +138,12 @@ export default function SignUp() {
               <input type="text" id="lastName" placeholder="Last Name" className='border bg-white p-3 rounded-lg focus:outline-blue-600' onChange={handleChange} required />
             </div>
             <input type="email" id="email" placeholder="Email Address" className='border bg-white p-3 rounded-lg focus:outline-blue-600' onChange={handleChange} required />
-            <input 
-              type="date" 
-              id="dateOfBirth" 
-              className='border bg-white p-3 rounded-lg focus:outline-blue-600' 
-              onChange={handleChange} 
-              required 
+            <input
+              type="date"
+              id="dateOfBirth"
+              className='border bg-white p-3 rounded-lg focus:outline-blue-600'
+              onChange={handleChange}
+              required
               max={new Date().toISOString().split('T')[0]} // Set max attribute to today's date
             />
             <input type="text" id="username" placeholder="Username" className='border bg-white p-3 rounded-lg focus:outline-blue-600' onChange={handleChange} required />
@@ -185,7 +193,11 @@ export default function SignUp() {
             </Link>
           </div>
         </div>
-        {error && <p className='text-red-700'>{error}</p>}
+        {error && (
+          <div className="fixed top-5 right-5 bg-red-500 text-white px-4 py-2 rounded-md shadow-md opacity-95">
+            {error}
+          </div>
+        )}
       </div>
     </div>
   );

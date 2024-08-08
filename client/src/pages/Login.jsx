@@ -138,7 +138,7 @@ export default function SignIn() {
             </Link>
           </div>
           {showErrorNotification && (
-            <div className="absolute top-5 right-5 bg-red-500 text-white px-4 py-2 rounded-md shadow-md opacity-95">
+            <div className="fixed top-5 right-5 bg-red-500 text-white px-4 py-2 rounded-md shadow-md opacity-95">
               {error.message || 'Something went wrong!'}
             </div>
           )}
