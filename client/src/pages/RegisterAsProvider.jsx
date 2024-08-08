@@ -34,6 +34,7 @@ export default function RegisterAsProvider() {
 
   const [errors, setErrors] = useState({});
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [countdown, setCountdown] = useState(10);
   const [uploadProgress, setUploadProgress] = useState({});
 
@@ -48,6 +49,20 @@ export default function RegisterAsProvider() {
     }
     return () => clearInterval(intervalId);
   }, [showModal, countdown]);
+
+  useEffect(() => {
+    if (showModal) {
+      const timer = setInterval(() => {
+        setCountdown((prevCountdown) => {
+          if (prevCountdown === 1) {
+            clearInterval(timer);
+            handleHome();
+          }
+          return prevCountdown - 1;
+        });
+      }, 1000);
+    }
+  }, [showModal]);
 
   const navigate = useNavigate();
   const handleHome = () => {
@@ -130,11 +145,13 @@ export default function RegisterAsProvider() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
 
     // Perform form validation
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      setLoading(false);
       return; // Stop submission if there are validation errors
     }
 
@@ -158,9 +175,10 @@ export default function RegisterAsProvider() {
       const result = await response.json();
       console.log('Success:', result);
 
-      // Simulate form submission success
+      setLoading(false);
       setShowModal(true);
     } catch (error) {
+      setLoading(false);
       console.error('Error:', error);
       // Handle error (e.g., show error message to the user)
     }
@@ -372,10 +390,32 @@ export default function RegisterAsProvider() {
             {activeStep < maxStep && activeStep !== 1 && <button type="button" onClick={handleNext} className="bg-blue-600 text-white px-6 py-2 rounded-md">Next</button>}
             {activeStep === 1 && <div className="flex-grow"></div>}
             {activeStep === 1 && <button type="button" onClick={handleNext} className="bg-blue-600 text-white px-6 py-2 rounded-md">Next</button>}
-            {activeStep === maxStep && <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-md">Submit</button>}
+            {activeStep === maxStep && (
+              <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-md flex items-center justify-center">
+                {loading ? (
+                  <div className="flex justify-center items-center">
+                    <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                    </svg>
+                  </div>
+                ) : (
+                  'Submit'
+                )}
+              </button>
+            )}
           </div>
         </form>
       </div>
+
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-8 rounded-md shadow-lg text-center">
+            <h2 className="text-2xl font-bold mb-4">Sending Email Verification</h2>
+            <p>Please wait while we send the verification link to your email address.</p>
+          </div>
+        </div>
+      )}
 
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
