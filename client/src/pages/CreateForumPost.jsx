@@ -60,15 +60,20 @@ export default function CreateForumPost() {
         }
     }, [submitTrigger, formData, currentUser, navigate]);
 
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        // Handle the file upload logic here
+    };
+
     return (
         <div className='flex flex-col min-h-screen'>
             <Header />
             <main className='flex-grow bg-[#f8f8fb] no-scrollbar'>
-                <div className='max-w-6xl mx-auto px-24 py-8'>
-                    <h1 className='text-4xl font-bold text-gray-800 mb-6'>Create a New Post</h1>
-                    <form onSubmit={handleSubmit} className='bg-white p-8 rounded-md shadow'>
+                <div className='max-w-3xl mx-auto px-4 py-10'>
+                    <h1 className='text-3xl font-bold text-gray-800 mb-6 text-center'>Create a New Post</h1>
+                    <form onSubmit={handleSubmit} className='bg-white p-6 rounded-md shadow-md'>
                         <div className='mb-4'>
-                            <label htmlFor="title" className='block text-sm font-medium text-gray-700'>
+                            <label htmlFor="title" className='block text-lg font-medium text-gray-700 mb-2'>
                                 Title
                             </label>
                             <input
@@ -77,11 +82,12 @@ export default function CreateForumPost() {
                                 name="title"
                                 value={formData.title}
                                 onChange={handleChange}
-                                className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm'
+                                className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500'
+                                placeholder="Enter the title of your post"
                             />
                         </div>
                         <div className='mb-4'>
-                            <label htmlFor="content" className='block text-sm font-medium text-gray-700'>
+                            <label htmlFor="content" className='block text-lg font-medium text-gray-700 mb-2'>
                                 Content
                             </label>
                             <textarea
@@ -89,13 +95,26 @@ export default function CreateForumPost() {
                                 name="content"
                                 value={formData.content}
                                 onChange={handleChange}
-                                className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm'
-                                rows="5"
+                                className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500'
+                                rows="8"
+                                placeholder="Write the content of your post"
+                            />
+                        </div>
+                        <div className='mb-4'>
+                            <label htmlFor="attachment" className='block text-lg font-medium text-gray-700 mb-2'>
+                                Add Attachment
+                            </label>
+                            <input
+                                type="file"
+                                id="attachment"
+                                name="attachment"
+                                onChange={handleFileChange}
+                                className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500'
                             />
                         </div>
                         <button
                             type="submit"
-                            className='w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-800 transition ease-in-out'
+                            className='w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-800 transition ease-in-out duration-300'
                         >
                             Submit
                         </button>

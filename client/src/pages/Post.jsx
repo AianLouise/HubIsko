@@ -8,6 +8,8 @@ import { BiCommentDots } from "react-icons/bi";
 import { IoMdArrowDropdown } from "react-icons/io";
 import moment from 'moment';
 import { CgAttachment } from 'react-icons/cg';
+import { formatDistanceToNow } from 'date-fns';
+import { AiFillFilePdf, AiFillFileWord } from 'react-icons/ai';
 
 
 export default function ForumDetail() {
@@ -16,6 +18,7 @@ export default function ForumDetail() {
     const { postId } = useParams();
     const [post, setPost] = useState(null);
     const [commentContent, setCommentContent] = useState('');
+    const [selectedFiles, setSelectedFiles] = useState([]);
 
     const { currentUser } = useSelector(state => state.user);
 
@@ -57,19 +60,42 @@ export default function ForumDetail() {
             if (!response.ok) {
                 throw new Error('Failed to add comment');
             }
-            const newComment = await response.json();
-            // Update post state to include new comment
-            setPost(prevPost => ({
-                ...prevPost,
-                comments: [...prevPost.comments, newComment],
-            }));
-            setCommentContent('');
+            await response.json();
+            // Refresh the page
+            window.location.reload();
         } catch (error) {
             console.error('Error adding reply:', error);
         } finally {
             setLoading(false);
         }
     };
+
+    const handleFileChange = (event) => {
+        const files = Array.from(event.target.files);
+        const fileObjs = files.map((file) => ({
+          file,
+          url: URL.createObjectURL(file),
+        }));
+        setSelectedFiles((prevFiles) => [...prevFiles, ...fileObjs]);
+    
+        // Log file names to the console
+        files.forEach(file => console.log(`File added: ${file.name}`));
+      };
+
+    const handleRemoveFile = (index) => {
+        setSelectedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    };
+
+    const handleAttachmentClick = () => {
+        document.getElementById('fileInput').click();
+    };
+
+    useEffect(() => {
+        // Cleanup object URLs when component unmounts
+        return () => {
+            selectedFiles.forEach(file => URL.revokeObjectURL(file.url));
+        };
+    }, [selectedFiles]);
 
     const handleLike = async () => {
         // Optimistically toggle the isLiked state and update the likes array
@@ -178,7 +204,14 @@ export default function ForumDetail() {
     };
 
     if (!post) {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+            </div>
+        );
     }
 
     return (
@@ -265,28 +298,83 @@ export default function ForumDetail() {
 
 
                     <div className='border-t'>
-                        <form onSubmit={handleCommentSubmit} className="bg-white p-8 rounded-md shadow mb-8">
-
+                        <form onSubmit={handleCommentSubmit} className="bg-white p-8 rounded-md shadow mb-8 mx-auto">
                             <textarea
-                                className="w-full p-4 border rounded-md mb-4 focus:outline-blue-200"
+                                className="w-full p-4 border rounded-md mb-4 focus:outline-blue-200 resize-none"
                                 placeholder="Write your reply..."
                                 value={commentContent}
                                 onChange={(e) => setCommentContent(e.target.value)}
                                 required
                             />
-                            <div className='w-full flex justify-end'>
-
-                                <button className=' bg-blue-600 p-4 rounded-md mx-4 hover:bg-blue-800'>
+                            <div className='w-full flex justify-end items-center'>
+                                <button
+                                    type="button"
+                                    className='bg-blue-600 p-3 rounded-md mx-2 hover:bg-blue-800 flex items-center justify-center'
+                                    onClick={handleAttachmentClick}
+                                >
                                     <CgAttachment className='w-6 h-6 text-white' />
                                 </button>
+                                <input
+                                    type="file"
+                                    id="fileInput"
+                                    className="hidden"
+                                    multiple
+                                    onChange={handleFileChange}
+                                />
                                 <button
                                     type="submit"
-                                    className={`bg-blue-600 text-white p-3 rounded-md ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-800 transition ease-in-out'}`}
+                                    className={`bg-blue-600 text-white p-3 rounded-md mx-2 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-800 transition ease-in-out'}`}
                                     disabled={loading}
                                 >
                                     {loading ? 'Adding...' : 'Add Reply'}
                                 </button>
                             </div>
+                            {selectedFiles.length > 0 && (
+                                <div className="mt-4">
+                                    <h4 className="font-medium mb-2">Attached Files:</h4>
+                                    <ul className="grid grid-cols-2 gap-4">
+                                        {selectedFiles.map((fileObj, index) => (
+                                            <li key={index} className="flex flex-col items-center justify-center space-y-2 p-2 border rounded-md shadow-sm h-40">
+                                                {fileObj.file.type.startsWith('image/') ? (
+                                                    <>
+                                                        <img
+                                                            src={fileObj.url}
+                                                            alt={fileObj.file.name}
+                                                            className="w-24 h-24 object-cover rounded-md shadow"
+                                                        />
+                                                        <span className="text-sm text-gray-600 text-center">{fileObj.file.name}</span>
+                                                    </>
+                                                ) : fileObj.file.type === 'application/pdf' ? (
+                                                    <div className="flex flex-col items-center justify-center h-full">
+                                                        <AiFillFilePdf className="w-8 h-8 text-red-600" />
+                                                        <a href={fileObj.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-center">
+                                                            {fileObj.file.name}
+                                                        </a>
+                                                    </div>
+                                                ) : fileObj.file.type === 'application/msword' || fileObj.file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ? (
+                                                    <div className="flex flex-col items-center justify-center h-full">
+                                                        <AiFillFileWord className="w-8 h-8 text-blue-600" />
+                                                        <a href={fileObj.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-center">
+                                                            {fileObj.file.name}
+                                                        </a>
+                                                    </div>
+                                                ) : (
+                                                    <a href={fileObj.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-center">
+                                                        {fileObj.file.name}
+                                                    </a>
+                                                )}
+                                                <button
+                                                    type="button"
+                                                    className="text-red-600 hover:text-red-800"
+                                                    onClick={() => handleRemoveFile(index)}
+                                                >
+                                                    Remove
+                                                </button>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
                         </form>
 
                         <div onClick={toggleDropdown} className='mt-4 px-4 py-2 border flex bg-white rounded-md w-48 shadow cursor-pointer hover:bg-slate-200 group'>
@@ -319,9 +407,9 @@ export default function ForumDetail() {
 
                                     <Link to={'/others-profile'}>
                                         <img
-                                            src={comment.author.profilePicture}
+                                            src={comment.author.profilePicture || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToiRnzzyrDtkmRzlAvPPbh77E-Mvsk3brlxQ&s'}
                                             alt={`${comment.author.username}'s profile`}
-                                            className='w-14 h-14 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
+                                            className='w-10 h-10 mt-2 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
                                         />
                                     </Link>
                                     {/* Comment container */}
@@ -330,7 +418,9 @@ export default function ForumDetail() {
                                         <div className='flex flex-col'>
                                             <div className='pt-4'>
                                                 <span className='p-4 text-lg font-bold'>{comment.author.username}</span>
-                                                <span className='text-sm text-gray-500'>{moment(comment.createdAt).format('MMMM DD, YYYY')}</span>
+                                                <span className='text-sm text-gray-500'>
+                                                    {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
+                                                </span>
                                             </div>
 
                                             <span className='p-4 text-sm border-b'>{comment.content}</span>
@@ -352,10 +442,10 @@ export default function ForumDetail() {
                                             </div>
 
                                             {/* View count */}
-                                            <div className='flex flex-row gap-1 pr-2'>
+                                            {/* <div className='flex flex-row gap-1 pr-2'>
                                                 <FaRegEye className='w-6 h-6 text-blue-600' />
                                                 <span>{comment.views ? comment.views : 'N/A'}</span>
-                                            </div>
+                                            </div> */}
                                         </div>
 
                                         {/* View replies link */}
@@ -378,16 +468,34 @@ export default function ForumDetail() {
                                         {repliesVisibility[comment._id] && (
                                             <div className="px-4 py-2">
                                                 {comment.replies.map(reply => (
-                                                    <div key={reply._id} className='flex gap-2 w-full items-center mb-2'>
+                                                    <div key={reply._id} className="flex gap-4 w-full items-start mb-4">
                                                         {/* User avatar */}
                                                         <img
                                                             src={reply.author.profilePicture}
                                                             alt={`${reply.author.username}'s profile`}
-                                                            className='w-10 h-10 rounded-full object-cover'
+                                                            className="w-10 h-10 rounded-full object-cover"
                                                         />
-                                                        <div className='flex flex-col bg-gray-100 border rounded-md w-full shadow'>
-                                                            <span className='p-2 text-sm border-b'>{reply.content}</span>
-                                                            <span className='p-2 text-sm border-b'>Author: {reply.author.username}</span>
+                                                        <div className="flex flex-col bg-white border border-gray-200 rounded-lg w-full shadow-sm p-4">
+                                                            <div className="flex justify-between items-center mb-2">
+                                                                <span className="text-sm font-semibold text-gray-700">{reply.author.username}</span>
+                                                                <span className="text-xs text-gray-500">
+                                                                    {formatDistanceToNow(new Date(reply.createdAt), { addSuffix: true })}
+                                                                </span>
+                                                            </div>
+                                                            <p className="text-sm text-gray-800 mb-2">{reply.content}</p>
+                                                            <div className="flex gap-4 mt-2">
+                                                                {/* Like button and count */}
+                                                                <div className='flex flex-row gap-1 px-2'>
+                                                                    <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
+                                                                    <span>{comment.likes ? comment.likes.length : 0}</span>
+                                                                </div>
+
+                                                                {/* Reply button and count */}
+                                                                <div className='flex flex-row gap-1' onClick={() => toggleReplyBox(comment._id)}>
+                                                                    <BiCommentDots className='w-6 h-6 text-blue-600' />
+                                                                    <span>{comment.replies ? comment.replies.length : 0}</span>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 ))}
