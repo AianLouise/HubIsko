@@ -63,14 +63,10 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
                     )}
                     </div>
                 </div>
-                
-            </div>
-
-            
+            </div>            
 
             {sidebarOpen && (
-                <aside className="fixed font-medium inset-y-0 left-0 transform translate-x-0 w-64 transition-transform duration-200 ease-in-out bg-white shadow-lg p-4 z-50">
-                                  
+                <aside className="fixed font-medium inset-y-0 left-0 transform translate-x-0 w-64 transition-transform duration-300 ease-in-out bg-white shadow-lg p-4 z-50">                   
                    <div className='flex justify-between mb-8'>
                         <div className='flex items-center gap-2'>
                         <div className='bg-blue-600 w-6 h-6 rounded-md'></div>

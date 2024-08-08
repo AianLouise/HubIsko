@@ -13,7 +13,7 @@ export default function Scholarships() {
   return (
     <div className={`flex flex-col min-h-screen`}>
 
-      <main className={`flex-grow bg-[#f8f8fb] transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-64' : ''} `}>
+      <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''} `}>
       <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
 
         <div className='border-b mb-8'>
