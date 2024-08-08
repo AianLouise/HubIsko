@@ -7,9 +7,8 @@ import { FaRegHeart, FaHeart, FaRegEye } from "react-icons/fa";
 import { BiCommentDots } from "react-icons/bi";
 import { IoMdArrowDropdown } from "react-icons/io";
 import moment from 'moment';
-import { CgAttachment } from 'react-icons/cg';
 import { formatDistanceToNow } from 'date-fns';
-import { AiFillFilePdf, AiFillFileWord } from 'react-icons/ai';
+import { AiFillFilePdf, AiFillFileWord, AiOutlinePaperClip } from 'react-icons/ai';
 
 
 export default function ForumDetail() {
@@ -312,7 +311,7 @@ export default function ForumDetail() {
                                     className='bg-blue-600 p-3 rounded-md mx-2 hover:bg-blue-800 flex items-center justify-center'
                                     onClick={handleAttachmentClick}
                                 >
-                                    <CgAttachment className='w-6 h-6 text-white' />
+                                    <AiOutlinePaperClip className='w-6 h-6 text-white' />
                                 </button>
                                 <input
                                     type="file"

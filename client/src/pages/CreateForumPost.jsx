@@ -3,19 +3,35 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { AiFillFilePdf, AiFillFileWord, AiOutlinePaperClip } from 'react-icons/ai';
+import { FaTrashAlt } from 'react-icons/fa';
 
 export default function CreateForumPost() {
+    const [formData, setFormData] = useState({ title: '', content: '' });
     const currentUser = useSelector((state) => state.user.currentUser);
-    const [formData, setFormData] = useState({
-        title: '',
-        content: ''
-    });
+    const [selectedFiles, setSelectedFiles] = useState([]);
     const [submitTrigger, setSubmitTrigger] = useState(false);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        console.log('Current User:', currentUser); // Debugging line
-    }, [currentUser]);
+    const handleFileChange = (event) => {
+        const files = Array.from(event.target.files);
+        const fileObjs = files.map((file) => ({
+            file,
+            url: URL.createObjectURL(file),
+        }));
+        setSelectedFiles((prevFiles) => [...prevFiles, ...fileObjs]);
+
+        // Log file names to the console
+        files.forEach(file => console.log(`File added: ${file.name}`));
+    };
+
+    const handleRemoveFile = (index) => {
+        setSelectedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    };
+
+    const handleAttachmentClick = () => {
+        document.getElementById('fileInput').click();
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -60,10 +76,6 @@ export default function CreateForumPost() {
         }
     }, [submitTrigger, formData, currentUser, navigate]);
 
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        // Handle the file upload logic here
-    };
 
     return (
         <div className='flex flex-col min-h-screen'>
@@ -96,29 +108,83 @@ export default function CreateForumPost() {
                                 value={formData.content}
                                 onChange={handleChange}
                                 className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500'
-                                rows="8"
-                                placeholder="Write the content of your post"
+                                placeholder="Enter the content of your post"
                             />
                         </div>
-                        <div className='mb-4'>
-                            <label htmlFor="attachment" className='block text-lg font-medium text-gray-700 mb-2'>
-                                Add Attachment
-                            </label>
-                            <input
-                                type="file"
-                                id="attachment"
-                                name="attachment"
-                                onChange={handleFileChange}
-                                className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500'
-                            />
+                        <div className='mb-4 flex flex-col items-center'>
+                            <div className='flex items-center'>
+                                <input
+                                    type="file"
+                                    id="fileInput"
+                                    name="file"
+                                    onChange={handleFileChange}
+                                    className='hidden'
+                                    multiple
+                                />
+                            </div>
                         </div>
-                        <button
-                            type="submit"
-                            className='w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-800 transition ease-in-out duration-300'
-                        >
-                            Submit
-                        </button>
+                        <div className='flex justify-end items-center'>
+                            <button
+                                type="button"
+                                className='bg-blue-600 text-white p-3 rounded-md mx-2 hover:bg-blue-800 flex items-center justify-center'
+                                onClick={handleAttachmentClick}
+                            >
+                                <AiOutlinePaperClip className="w-6 h-6" />
+                            </button>
+                            <button
+                                type="submit"
+                                className='bg-blue-600 text-white p-3 rounded-md hover:bg-blue-800 transition ease-in-out'
+                            >
+                                Create Post
+                            </button>
+                        </div>
                     </form>
+                    {selectedFiles.length > 0 && (
+                        <div className="mt-4">
+                            <h4 className="font-medium mb-2">Attached Files:</h4>
+                            <ul className="grid grid-cols-2 gap-4">
+                                {selectedFiles.map((fileObj, index) => (
+                                    <li key={index} className="flex flex-col items-center justify-center space-y-2 p-2 border rounded-md shadow-sm h-40">
+                                        {fileObj.file.type.startsWith('image/') ? (
+                                            <>
+                                                <img
+                                                    src={fileObj.url}
+                                                    alt={fileObj.file.name}
+                                                    className="w-24 h-24 object-cover rounded-md shadow"
+                                                />
+                                                <span className="text-sm text-gray-600 text-center">{fileObj.file.name}</span>
+                                            </>
+                                        ) : fileObj.file.type === 'application/pdf' ? (
+                                            <div className="flex flex-col items-center justify-center h-full">
+                                                <AiFillFilePdf className="w-8 h-8 text-red-600" />
+                                                <a href={fileObj.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-center">
+                                                    {fileObj.file.name}
+                                                </a>
+                                            </div>
+                                        ) : fileObj.file.type === 'application/msword' || fileObj.file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ? (
+                                            <div className="flex flex-col items-center justify-center h-full">
+                                                <AiFillFileWord className="w-8 h-8 text-blue-600" />
+                                                <a href={fileObj.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-center">
+                                                    {fileObj.file.name}
+                                                </a>
+                                            </div>
+                                        ) : (
+                                            <a href={fileObj.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-center">
+                                                {fileObj.file.name}
+                                            </a>
+                                        )}
+                                        <button
+                                            type="button"
+                                            className="text-red-600 hover:text-red-800 flex items-center"
+                                            onClick={() => handleRemoveFile(index)}
+                                        >
+                                            <FaTrashAlt className="mr-1" /> Remove
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </div>
             </main>
             <Footer />
