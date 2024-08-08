@@ -31,7 +31,6 @@ import InboxedApplicationDetail from "./pages/InboxedApplicationDetail";
 import StudentInfo from "./pages/StudentInfo";
 import ProfilePreview from "./pages/ProfilePreview";
 import PostDetails from "./pages/PostDetails";
-import ProviderHeader from "./components/ProviderHeader";
 import Scholarships from "./pages/Scholarship-Provider/scholarships";
 import ScholarApplications from "./pages/Scholarship-Provider/ScholarApplications";
 import ProviderForums from "./pages/Scholarship-Provider/ProviderForums";
@@ -79,7 +78,7 @@ export default function App() {
         <Route path="/post-scholarship" element={<PostScholarship />} />
 
         <Route path="/admin-home" element={<AdminHome />} />
-  
+
 
 
         <Route element={<PrivateRoute />}>
@@ -90,8 +89,7 @@ export default function App() {
         </Route>
 
         <Route element={<ProviderPrivateRoute allowedRoles={['scholarship_provider']} />}>
-          <Route path="/provider-dashboard" element={<ProviderDashboard />} />
-          <Route path="/provider-header" element={<ProviderHeader />} />
+        <Route path="/provider-dashboard" element={<ProviderDashboard />} />
         </Route>
 
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
