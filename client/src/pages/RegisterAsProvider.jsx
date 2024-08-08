@@ -217,11 +217,6 @@ export default function RegisterAsProvider() {
                   <input type="text" name="registrationNumber" id="registrationNumber" value={formData.registrationNumber} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Official registration or incorporation number" />
                   {errors.registrationNumber && <p className="text-red-500 text-sm">{errors.registrationNumber}</p>}
                 </div>
-                <div className="">
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
-                  <input type="email" name="email" id="email" value={formData.email} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Official email address for communication" />
-                  {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
-                </div>
                 <hr className="col-span-2" />
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700">Contact Person Details</label>
@@ -283,6 +278,11 @@ export default function RegisterAsProvider() {
                   <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
                   <input type="text" name="username" id="username" value={formData.username} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Preferred username for account login" />
                   {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
+                </div>
+                <div className="mb-4 col-span-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
+                  <input type="email" name="email" id="email" value={formData.email} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Official email address for communication" />
+                  {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                 </div>
                 <div className="mb-4 col-span-2">
                   <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
@@ -382,6 +382,7 @@ export default function RegisterAsProvider() {
           <div className="bg-white p-8 rounded-md shadow-lg text-center">
             <h2 className="text-2xl font-bold mb-4">Thank You!</h2>
             <p className="mb-4">Your registration was successful.</p>
+            <p className="mb-4">A verification link has been sent to your email address. Please check your inbox and verify your email.</p>
             <p>You will be redirected to the home page in {countdown} seconds.</p>
             <button onClick={handleHome} className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md">Go to Home</button>
           </div>
