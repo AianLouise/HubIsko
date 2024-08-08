@@ -5,7 +5,6 @@ import Sidebar from '../../components/ProviderSidebar';
 import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from '../../redux/user/userSlice';
 import { useNavigate } from 'react-router-dom';
-// import { createScholarship } from '../../redux/scholarships/scholarshipSlice';
 
 export default function PostScholarship() {
   // State initialization
@@ -55,21 +54,54 @@ export default function PostScholarship() {
     setFiles([...e.target.files]);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const formData = {
+    name: 'Scholarship Name',
+    description: 'Description of the scholarship',
+    amount: 1000,
+    requirements: 'Requirements for the scholarship',
+    deadline: '2023-12-31', // Ensure this is a valid date string
+    website: 'https://example.com',
+    email: 'example@example.com',
+    phone: '123-456-7890',
+    address: '123 Example Street',
+    eligibility: 'Eligibility criteria',
+    applicationProcess: 'Application process details',
+    numScholarships: 10,
+    duration: '1 year',
+    category: 'Category of the scholarship',
+    provider: currentUser._id, // Use the logged-in user's ID
+    image: 'https://example.com/image.jpg', // Optional
+    documents: 'List of required documents', // Optional
+  };
 
-    const formData = new FormData(e.target);
-    files.forEach((file) => {
-      formData.append('documents', file);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
     });
+  };
 
-    const scholarshipData = Object.fromEntries(formData.entries());
-
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log('Form Data:', formData); // Log form data
     try {
-      // await dispatch(createScholarship(scholarshipData)).unwrap();
-      navigate('/scholarships'); // Navigate to scholarships page or show a success message
+      const response = await fetch('http://localhost:3000/api/scholarshipProgram/create-scholarship', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      const responseData = await response.json();
+      if (!response.ok) {
+        console.error('Server Response:', responseData);
+        throw new Error('Failed to create scholarship program');
+      }
+      console.log('Scholarship program created successfully:', responseData);
+      navigate('/scholarships'); // Navigate to the scholarships page
     } catch (error) {
-      console.error('Failed to create scholarship:', error);
+      console.error('Error:', error);
     }
   };
 
@@ -80,7 +112,7 @@ export default function PostScholarship() {
         <div className="max-w-8xl w-full mx-auto px-24 flex justify-between items-center">
           <div className='flex items-center gap-2'>
             <button onClick={toggleSidebar} className="text-blue-600">
-              <FontAwesomeIcon icon={faBars} className=' w-4 h-4 ' />
+              <FontAwesomeIcon icon={faBars} className='w-4 h-4' />
             </button>
             <h1 className="text-lg font-bold text-blue-500">Provider Dashboard</h1>
             <h1 className="text-lg font-bold text-blue-500">/ Home </h1>
@@ -120,82 +152,218 @@ export default function PostScholarship() {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-4">
               <label htmlFor="name" className="text-lg font-medium text-gray-800">Scholarship Name</label>
-              <input type="text" id="name" name="name" className="border border-gray-300 p-2 rounded-md" placeholder="Enter scholarship name" required />
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter scholarship name"
+                required
+              />
             </div>
 
             <div className="flex flex-col gap-4">
               <label htmlFor="description" className="text-lg font-medium text-gray-800">Scholarship Description</label>
-              <textarea id="description" name="description" cols="30" rows="10" className="border border-gray-300 p-2 rounded-md" placeholder="Enter scholarship description" required></textarea>
+              <textarea
+                id="description"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                cols="30"
+                rows="10"
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter scholarship description"
+                required
+              ></textarea>
             </div>
 
             <div className="flex flex-col gap-4">
               <label htmlFor="amount" className="text-lg font-medium text-gray-800">Scholarship Amount</label>
-              <input type="number" id="amount" name="amount" className="border border-gray-300 p-2 rounded-md" placeholder="Enter scholarship amount" required />
+              <input
+                type="number"
+                id="amount"
+                name="amount"
+                value={formData.amount}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter scholarship amount"
+                required
+              />
             </div>
 
             <div className="flex flex-col gap-4">
               <label htmlFor="requirements" className="text-lg font-medium text-gray-800">Scholarship Requirements</label>
-              <textarea id="requirements" name="requirements" cols="30" rows="10" className="border border-gray-300 p-2 rounded-md" placeholder="Enter scholarship requirements" required></textarea>
+              <textarea
+                id="requirements"
+                name="requirements"
+                value={formData.requirements}
+                onChange={handleChange}
+                cols="30"
+                rows="10"
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter scholarship requirements"
+                required
+              ></textarea>
             </div>
 
             <div className="flex flex-col gap-4">
               <label htmlFor="deadline" className="text-lg font-medium text-gray-800">Scholarship Deadline</label>
-              <input type="date" id="deadline" name="deadline" className="border border-gray-300 p-2 rounded-md" required />
+              <input
+                type="date"
+                id="deadline"
+                name="deadline"
+                value={formData.deadline}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+                required
+              />
             </div>
 
             <div className="flex flex-col gap-4">
               <label htmlFor="website" className="text-lg font-medium text-gray-800">Scholarship Website</label>
-              <input type="text" id="website" name="website" className="border border-gray-300 p-2 rounded-md" placeholder="Enter scholarship website" />
+              <input
+                type="text"
+                id="website"
+                name="website"
+                value={formData.website}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter scholarship website"
+              />
             </div>
 
             <div className="flex flex-col gap-4">
               <label htmlFor="email" className="text-lg font-medium text-gray-800">Scholarship Email</label>
-              <input type="email" id="email" name="email" className="border border-gray-300 p-2 rounded-md" placeholder="Enter scholarship email" required />
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter scholarship email"
+                required
+              />
             </div>
 
             <div className="flex flex-col gap-4">
               <label htmlFor="phone" className="text-lg font-medium text-gray-800">Scholarship Phone</label>
-              <input type="tel" id="phone" name="phone" className="border border-gray-300 p-2 rounded-md" placeholder="Enter scholarship phone" />
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter scholarship phone"
+              />
             </div>
 
             <div className="flex flex-col gap-4">
               <label htmlFor="address" className="text-lg font-medium text-gray-800">Scholarship Address</label>
-              <input type="text" id="address" name="address" className="border border-gray-300 p-2 rounded-md" placeholder="Enter scholarship address" />
+              <input
+                type="text"
+                id="address"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter scholarship address"
+              />
             </div>
 
             <div className="flex flex-col gap-4">
               <label htmlFor="image" className="text-lg font-medium text-gray-800">Scholarship Image</label>
-              <input type="file" id="image" name="image" className="border border-gray-300 p-2 rounded-md" />
+              <input
+                type="file"
+                id="image"
+                name="image"
+                className="border border-gray-300 p-2 rounded-md"
+                // onChange={handleFileChange}  // Uncomment if you handle image file uploads
+              />
             </div>
 
             <div className="flex flex-col gap-4">
               <label htmlFor="eligibility" className="text-lg font-medium text-gray-800">Eligibility Criteria</label>
-              <textarea id="eligibility" name="eligibility" cols="30" rows="10" className="border border-gray-300 p-2 rounded-md" placeholder="Enter eligibility criteria" required></textarea>
+              <textarea
+                id="eligibility"
+                name="eligibility"
+                value={formData.eligibility}
+                onChange={handleChange}
+                cols="30"
+                rows="10"
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter eligibility criteria"
+                required
+              ></textarea>
             </div>
 
             <div className="flex flex-col gap-4">
               <label htmlFor="applicationProcess" className="text-lg font-medium text-gray-800">Application Process</label>
-              <textarea id="applicationProcess" name="applicationProcess" cols="30" rows="10" className="border border-gray-300 p-2 rounded-md" placeholder="Enter application process" required></textarea>
+              <textarea
+                id="applicationProcess"
+                name="applicationProcess"
+                value={formData.applicationProcess}
+                onChange={handleChange}
+                cols="30"
+                rows="10"
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter application process"
+                required
+              ></textarea>
             </div>
 
             <div className="flex flex-col gap-4">
               <label htmlFor="numScholarships" className="text-lg font-medium text-gray-800">Number of Scholarships</label>
-              <input type="number" id="numScholarships" name="numScholarships" className="border border-gray-300 p-2 rounded-md" placeholder="Enter number of scholarships" required />
+              <input
+                type="number"
+                id="numScholarships"
+                name="numScholarships"
+                value={formData.numScholarships}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter number of scholarships"
+                required
+              />
             </div>
 
             <div className="flex flex-col gap-4">
               <label htmlFor="duration" className="text-lg font-medium text-gray-800">Scholarship Duration</label>
-              <input type="text" id="duration" name="duration" className="border border-gray-300 p-2 rounded-md" placeholder="Enter scholarship duration" required />
+              <input
+                type="text"
+                id="duration"
+                name="duration"
+                value={formData.duration}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter scholarship duration"
+                required
+              />
             </div>
 
             <div className="flex flex-col gap-4">
               <label htmlFor="documents" className="text-lg font-medium text-gray-800">Supporting Documents</label>
-              <input type="file" id="documents" name="documents" className="border border-gray-300 p-2 rounded-md" multiple onChange={handleFileChange} />
+              <input
+                type="file"
+                id="documents"
+                name="documents"
+                className="border border-gray-300 p-2 rounded-md"
+                multiple
+                onChange={handleFileChange}
+              />
             </div>
 
             <div className="flex flex-col gap-4">
               <label htmlFor="category" className="text-lg font-medium text-gray-800">Category</label>
-              <select id="category" name="category" className="border border-gray-300 p-2 rounded-md">
+              <select
+                id="category"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+              >
                 <option value="academic">Academic</option>
                 <option value="athletic">Athletic</option>
                 <option value="arts">Arts</option>

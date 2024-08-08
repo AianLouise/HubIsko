@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const ScholarshipSchema = new mongoose.Schema({
+const ScholarshipProgramSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -23,6 +23,7 @@ const ScholarshipSchema = new mongoose.Schema({
   },
   website: {
     type: String,
+    required: true,
   },
   email: {
     type: String,
@@ -30,9 +31,11 @@ const ScholarshipSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
+    required: true,
   },
   address: {
     type: String,
+    required: true,
   },
   image: {
     type: String,
@@ -54,20 +57,18 @@ const ScholarshipSchema = new mongoose.Schema({
     required: true,
   },
   documents: {
-    type: [String], // Array of file paths or URLs
+    type: String,
   },
   category: {
     type: String,
-    enum: ['academic', 'athletic', 'arts', 'community', 'other'],
     required: true,
   },
   provider: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    type: String,
     required: true,
   },
-}, { timestamps: true });
+});
 
-const Scholarship = mongoose.model('Scholarship', ScholarshipSchema);
+const Scholarship = mongoose.model('Scholarship', ScholarshipProgramSchema);
 
-module.exports = Scholarship;
+export default Scholarship;
