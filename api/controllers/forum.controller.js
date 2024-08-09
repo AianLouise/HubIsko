@@ -2,13 +2,16 @@ import ForumPost from '../models/forumPost.model.js';
 import Comment from '../models/comment.model.js';
 
 export const createPost = async (req, res) => {
-  const { title, content, author } = req.body;
+  const { title, content, author, attachments } = req.body;
+
   try {
     const newPost = new ForumPost({
       title,
       content,
-      author
+      author,
+      attachments, // Add attachments to the new post
     });
+
     const post = await newPost.save();
     res.json(post);
   } catch (err) {
