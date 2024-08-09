@@ -39,6 +39,9 @@ import PreviewProfile from "./pages/Scholarship-Provider/PreviewProfile";
 import PostScholarship from "./pages/Scholarship-Provider/PostScholarship";
 import AdminHome from "./pages/Admin/AdminHome";
 import CreateForumPost from "./pages/CreateForumPost";
+import Accounts from "./pages/Admin/Accounts";
+import Layout from "./components/Layout"; 
+import Students from "./pages/Admin/Students";
 
 
 export default function App() {
@@ -62,6 +65,7 @@ export default function App() {
         <Route path="/others-profile" element={<OthersProfile />} />
         <Route path="/forums/post/:postId" element={<ForumDetail />} />
         <Route path="/forums/create-post" element={<CreateForumPost />} />
+     
 
 
         <Route path="/applying-stages" element={<ApplyingStages />} />
@@ -77,7 +81,17 @@ export default function App() {
         <Route path="/preview-profile" element={<PreviewProfile />} />
         <Route path="/post-scholarship" element={<PostScholarship />} />
 
-        <Route path="/admin-home" element={<AdminHome />} />
+
+
+        <Route path="/" element={<Layout />}>
+          <Route path="admin-home" element={<AdminHome />} />
+          <Route path="accounts" element={<Accounts />} />
+          <Route path="students" element={<Students />} />
+          {/* Add other routes here */}
+        </Route>
+
+ 
+   
 
 
 
