@@ -5,6 +5,8 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { AiFillFilePdf, AiFillFileWord, AiOutlinePaperClip } from 'react-icons/ai';
 import { FaTrashAlt } from 'react-icons/fa';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { format } from 'date-fns';
 
 export default function CreateForumPost() {
     const [formData, setFormData] = useState({ title: '', content: '' });
@@ -41,41 +43,51 @@ export default function CreateForumPost() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setSubmitTrigger(true);
-    };
 
-    useEffect(() => {
-        if (submitTrigger) {
-            const sendApiRequest = async () => {
-                try {
-                    const response = await fetch('/api/forums/post', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ ...formData, author: currentUser._id })
-                    });
+        const storage = getStorage();
 
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
+        // Upload files to Firebase and get the file URLs
+        const uploadedFilePaths = await Promise.all(selectedFiles.map(async (fileObj) => {
+            const file = fileObj.file;
+            const fileName = `${currentUser.username}_${file.name}_${format(new Date(), 'yyyyMMdd')}`;
+            const storageRef = ref(storage, `forum_uploads/${fileName}`);
+            await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(storageRef);
+            return downloadURL; // Save the download URL in the database
+        }));
 
-                    const result = await response.json();
-                    console.log('Success:', result);
-                    navigate('/forums');
-                } catch (error) {
-                    console.error('Error:', error);
-                } finally {
-                    setSubmitTrigger(false);
-                }
-            };
+        // Send post data to the backend
+        const postData = {
+            ...formData,
+            author: currentUser._id,
+            attachments: uploadedFilePaths // Save file paths in the database
+        };
 
-            sendApiRequest();
+        try {
+            const response = await fetch('/api/forums/post', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postData)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log('Success:', result);
+            navigate('/forums');
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+            setSubmitTrigger(false);
         }
-    }, [submitTrigger, formData, currentUser, navigate]);
-
+    };
 
     return (
         <div className='flex flex-col min-h-screen'>
