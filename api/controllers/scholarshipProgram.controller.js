@@ -18,13 +18,33 @@ export const createScholarshipProgram = async (req, res) => {
       amount,
       deadline,
       email,
+      website,
+      phone,
+      address,
+      eligibility,
+      applicationProcess,
+      numScholarships,
+      duration,
+      documents,
+      category,
+      typeOfScholarship,
+      academicRequirements,
+      fieldOfStudy,
+      levelOfEducation,
+      location,
+      otherCriteria,
+      applicationStartDate,
+      applicationEndDate,
+      notificationDate,
+      coverage,
+      contactPerson,
       provider,
     } = req.body;
 
     // Validate required fields
-    if (!name || !description || !amount || !deadline || !email || !provider) {
+    if (!name || !description || !amount || !deadline || !email || !provider || !category) {
       return res.status(400).json({
-        message: 'Name, description, amount, deadline, email, and provider are required fields.',
+        message: 'Name, description, amount, deadline, email, provider, and category are required fields.',
       });
     }
 
@@ -52,6 +72,11 @@ export const createScholarshipProgram = async (req, res) => {
       });
     }
 
+    // Ensure other date fields are valid if provided
+    const parsedApplicationStartDate = applicationStartDate ? new Date(applicationStartDate) : null;
+    const parsedApplicationEndDate = applicationEndDate ? new Date(applicationEndDate) : null;
+    const parsedNotificationDate = notificationDate ? new Date(notificationDate) : null;
+
     // Create a new Scholarship document
     const newScholarship = new Scholarship({
       name,
@@ -59,6 +84,26 @@ export const createScholarshipProgram = async (req, res) => {
       amount: numericAmount,
       deadline: parsedDeadline,
       email,
+      website,
+      phone,
+      address,
+      eligibility,
+      applicationProcess,
+      numScholarships,
+      duration,
+      documents,
+      category,
+      typeOfScholarship,
+      academicRequirements,
+      fieldOfStudy,
+      levelOfEducation,
+      location,
+      otherCriteria,
+      applicationStartDate: parsedApplicationStartDate,
+      applicationEndDate: parsedApplicationEndDate,
+      notificationDate: parsedNotificationDate,
+      coverage,
+      contactPerson,
       provider, // Assign the provider ID
     });
 
