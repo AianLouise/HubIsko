@@ -1,3 +1,4 @@
+import { getOverlappingDaysInIntervals } from 'date-fns';
 import Scholarship from '../models/scholarshipProgram.model.js';
 import User from '../models/user.model.js';
 
@@ -240,5 +241,85 @@ export const getScholarshipProviders = async (req, res) => {
   } catch (error) {
     console.error('Error fetching scholarship providers:', error.message);
     res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+export const getScholarshipProgramById = async (req, res) => {
+  try {
+    const { id } = req.params; // Extract id from route parameters
+
+    if (!id) {
+      return res.status(400).json({ error: 'Scholarship Program ID is required' });
+    }
+
+    const scholarshipProgram = await Scholarship.findById(id);
+
+    if (!scholarshipProgram) {
+      return res.status(404).json({ error: 'Scholarship Program not found' });
+    }
+
+    const formattedProgram = {
+      id: scholarshipProgram._id,
+      title: scholarshipProgram.title,
+      description: scholarshipProgram.description,
+      applicationInstructions: scholarshipProgram.applicationInstructions,
+      totalSlots: scholarshipProgram.totalSlots,
+      duration: scholarshipProgram.duration,
+      documents: scholarshipProgram.documents.map(doc => ({
+        category: doc.category,
+        type: doc.type
+      })),
+      academicRequirements: scholarshipProgram.academicRequirements,
+      fieldOfStudy: scholarshipProgram.fieldOfStudy,
+      levelOfEducation: scholarshipProgram.levelOfEducation,
+      location: scholarshipProgram.location,
+      otherCriteria: scholarshipProgram.otherCriteria,
+      applicationStartDate: scholarshipProgram.applicationStartDate,
+      applicationEndDate: scholarshipProgram.applicationEndDate,
+      notificationDate: scholarshipProgram.notificationDate,
+      coverage: scholarshipProgram.coverage,
+      contactPerson: scholarshipProgram.contactPerson,
+      providerId: scholarshipProgram.providerId,
+      purpose: scholarshipProgram.purpose,
+      benefits: scholarshipProgram.benefits.map(benefit => ({
+        // Assuming benefits have a similar structure
+        // Add the necessary fields here
+      })),
+      qualifications: scholarshipProgram.qualifications.map(qualification => ({
+        // Assuming qualifications have a similar structure
+        // Add the necessary fields here
+      })),
+      eligibility: scholarshipProgram.eligibility,
+      additionalInformation: scholarshipProgram.additionalInformation,
+      scholarshipImage: scholarshipProgram.scholarshipImage,
+      scholarshipBanner: scholarshipProgram.scholarshipBanner,
+      status: scholarshipProgram.status,
+      highlight: scholarshipProgram.highlight,
+      targetAudience: scholarshipProgram.targetAudience,
+      url: scholarshipProgram.url,
+      approvedScholars: scholarshipProgram.approvedScholars
+    };
+
+    res.status(200).json(formattedProgram);
+  } catch (error) {
+    console.error('Error fetching scholarship program:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+export const getOrganizationName = async (req, res) => {
+  try {
+    const { providerId } = req.params;
+    const user = await User.findById(providerId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const organizationName = user.scholarshipProviderDetails.organizationName;
+    res.status(200).json({ organizationName });
+  } catch (error) {
+    console.error('Error fetching organization name:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };

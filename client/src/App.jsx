@@ -61,7 +61,7 @@ export default function App() {
         <Route path="/about" element={<About />} />
         <Route path="/CoRH" element={<CompleteOrReturnHome />} />
         <Route path="/forums" element={<Forums />} />
-        <Route path="/application-details" element={<ApplicationDetails />} />
+        <Route path="/application-details/:id" element={<ApplicationDetails />} />
         <Route path="/others-profile" element={<OthersProfile />} />
         <Route path="/forums/post/:postId" element={<ForumDetail />} />
         <Route path="/forums/create-post" element={<CreateForumPost />} />

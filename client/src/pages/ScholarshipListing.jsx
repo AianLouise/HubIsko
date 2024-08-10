@@ -43,6 +43,13 @@ export default function ScholarshipListing() {
     fetchProviders();
   }, []);
 
+  const truncateText = (text, limit) => {
+    if (text.length > limit) {
+      return text.substring(0, limit) + '...';
+    }
+    return text;
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -124,7 +131,7 @@ export default function ScholarshipListing() {
 
                   <div className='flex flex-col ml-6'>
                     <h2 className='lg:text-xl font-semibold'>{scholarship.title}</h2>
-                    <p className='text-sm lg:text-base'>{scholarship.highlight}</p>
+                    <p className='text-sm lg:text-base'>{truncateText(scholarship.highlight, 50)}</p>
                   </div>
                 </div>
 
@@ -147,9 +154,9 @@ export default function ScholarshipListing() {
                           <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
                           <p className='font-medium'>Info: </p>
                         </div>
-                        <p className='text-sm lg:hidden'>{scholarship.description}</p>
+                        <p className='text-sm lg:hidden'>{truncateText(scholarship.description, 50)}</p>
                       </div>
-                      <p className='w-full text-sm hidden lg:block'>{scholarship.description}</p>
+                      <p className='w-full text-sm hidden lg:block'>{truncateText(scholarship.description, 50)}</p>
                     </div>
                     <div className='flex lg:flex-row lg:gap-4'>
                       <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
@@ -157,9 +164,9 @@ export default function ScholarshipListing() {
                           <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
                           <p className='font-medium'>Eligibility: </p>
                         </div>
-                        <p className='text-sm lg:hidden'>{scholarship.eligibility}</p>
+                        <p className='text-sm lg:hidden'>{truncateText(scholarship.eligibility, 50)}</p>
                       </div>
-                      <p className='w-full text-sm hidden lg:block'>{scholarship.eligibility}</p>
+                      <p className='w-full text-sm hidden lg:block'>{truncateText(scholarship.eligibility, 50)}</p>
                     </div>
                     <div className='flex lg:flex-row lg:gap-4'>
                       <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
@@ -172,9 +179,13 @@ export default function ScholarshipListing() {
                       <p className='w-full text-sm hidden lg:block'>{scholarship.deadline}</p>
                     </div>
                   </div>
-                  <Link to='/application-details' className='bg-blue-600 text-white p-2 flex justify-center items-center rounded-md my-4 text-sm lg:text-base font-medium hover:bg-blue-800 transition ease-in-out'>
-                    More Details for Application
-                  </Link>
+                      <Link
+                        to={`/application-details/${scholarship.id}`}
+                        key={scholarship._id}
+                        className='bg-blue-600 text-white p-2 flex justify-center items-center rounded-md my-4 text-sm lg:text-base font-medium hover:bg-blue-800 transition ease-in-out'
+                      >
+                        More Details for Application
+                      </Link>
                 </div>
               </div>
             ))}
