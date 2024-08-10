@@ -6,21 +6,14 @@ export default function PostScholarship() {
   const { currentUser } = useSelector((state) => state.user);
 
   const [formData, setFormData] = useState({
-    name: '',
+    title: '',
     description: '',
-    amount: '',
-    deadline: '',
-    email: '',
-    website: '',
-    phone: '',
-    address: '',
-    eligibility: '',
-    applicationProcess: '',
-    numScholarships: '',
+    applicationInstructions: '',
+    numberOfScholarships: '',
     duration: '',
     documents: '',
     category: '',
-    typeOfScholarship: '',
+    type: '',
     academicRequirements: '',
     fieldOfStudy: '',
     levelOfEducation: '',
@@ -31,7 +24,15 @@ export default function PostScholarship() {
     notificationDate: '',
     coverage: '',
     contactPerson: '',
-    provider: currentUser._id,
+    providerId: currentUser._id,
+    purpose: '',
+    benefits: '',
+    qualifications: '',
+    eligibility: '',
+    additionalInformation: '',
+    highlight: '',
+    targetAudience: '',
+    url: ''
   });
 
   const handleChange = (e) => {
@@ -45,7 +46,7 @@ export default function PostScholarship() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!formData.name || !formData.description || !formData.amount || !formData.deadline || !formData.email) {
+    if (!formData.title || !formData.description || !formData.numberOfScholarships || !formData.applicationStartDate || !formData.applicationEndDate) {
       console.error('Validation failed: Missing required fields');
       return;
     }
@@ -96,15 +97,15 @@ export default function PostScholarship() {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             {/* Basic Information */}
             <div className="flex flex-col gap-4">
-              <label htmlFor="name" className="text-lg font-medium text-gray-800">Scholarship Name</label>
+              <label htmlFor="title" className="text-lg font-medium text-gray-800">Scholarship Title</label>
               <input
                 type="text"
-                id="name"
-                name="name"
-                value={formData.name}
+                id="title"
+                name="title"
+                value={formData.title}
                 onChange={handleChange}
                 className="border border-gray-300 p-2 rounded-md"
-                placeholder="Enter scholarship name"
+                placeholder="Enter scholarship title"
                 required
               />
             </div>
@@ -125,122 +126,30 @@ export default function PostScholarship() {
             </div>
 
             <div className="flex flex-col gap-4">
-              <label htmlFor="amount" className="text-lg font-medium text-gray-800">Amount</label>
+              <label htmlFor="applicationInstructions" className="text-lg font-medium text-gray-800">Application Instructions</label>
+              <input
+                type="text"
+                id="applicationInstructions"
+                name="applicationInstructions"
+                value={formData.applicationInstructions}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter application instructions"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <label htmlFor="numberOfScholarships" className="text-lg font-medium text-gray-800">Number of Scholarships</label>
               <input
                 type="number"
-                id="amount"
-                name="amount"
-                value={formData.amount}
-                onChange={handleChange}
-                className="border border-gray-300 p-2 rounded-md"
-                placeholder="Enter scholarship amount"
-                required
-              />
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <label htmlFor="deadline" className="text-lg font-medium text-gray-800">Deadline</label>
-              <input
-                type="date"
-                id="deadline"
-                name="deadline"
-                value={formData.deadline}
-                onChange={handleChange}
-                className="border border-gray-300 p-2 rounded-md"
-                required
-              />
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <label htmlFor="email" className="text-lg font-medium text-gray-800">Contact Email</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="border border-gray-300 p-2 rounded-md"
-                placeholder="Enter contact email"
-                required
-              />
-            </div>
-
-            {/* Additional Fields */}
-            <div className="flex flex-col gap-4">
-              <label htmlFor="website" className="text-lg font-medium text-gray-800">Website</label>
-              <input
-                type="text"
-                id="website"
-                name="website"
-                value={formData.website}
-                onChange={handleChange}
-                className="border border-gray-300 p-2 rounded-md"
-                placeholder="Enter scholarship website"
-              />
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <label htmlFor="phone" className="text-lg font-medium text-gray-800">Phone</label>
-              <input
-                type="text"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className="border border-gray-300 p-2 rounded-md"
-                placeholder="Enter contact phone number"
-              />
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <label htmlFor="address" className="text-lg font-medium text-gray-800">Address</label>
-              <input
-                type="text"
-                id="address"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                className="border border-gray-300 p-2 rounded-md"
-                placeholder="Enter address"
-              />
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <label htmlFor="eligibility" className="text-lg font-medium text-gray-800">Eligibility</label>
-              <input
-                type="text"
-                id="eligibility"
-                name="eligibility"
-                value={formData.eligibility}
-                onChange={handleChange}
-                className="border border-gray-300 p-2 rounded-md"
-                placeholder="Enter eligibility criteria"
-              />
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <label htmlFor="applicationProcess" className="text-lg font-medium text-gray-800">Application Process</label>
-              <input
-                type="text"
-                id="applicationProcess"
-                name="applicationProcess"
-                value={formData.applicationProcess}
-                onChange={handleChange}
-                className="border border-gray-300 p-2 rounded-md"
-                placeholder="Enter application process"
-              />
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <label htmlFor="numScholarships" className="text-lg font-medium text-gray-800">Number of Scholarships</label>
-              <input
-                type="number"
-                id="numScholarships"
-                name="numScholarships"
-                value={formData.numScholarships}
+                id="numberOfScholarships"
+                name="numberOfScholarships"
+                value={formData.numberOfScholarships}
                 onChange={handleChange}
                 className="border border-gray-300 p-2 rounded-md"
                 placeholder="Enter number of scholarships"
+                required
               />
             </div>
 
@@ -254,6 +163,7 @@ export default function PostScholarship() {
                 onChange={handleChange}
                 className="border border-gray-300 p-2 rounded-md"
                 placeholder="Enter duration"
+                required
               />
             </div>
 
@@ -266,7 +176,7 @@ export default function PostScholarship() {
                 value={formData.documents}
                 onChange={handleChange}
                 className="border border-gray-300 p-2 rounded-md"
-                placeholder="Enter required documents"
+                placeholder="Enter required documents (comma-separated)"
               />
             </div>
 
@@ -285,15 +195,16 @@ export default function PostScholarship() {
             </div>
 
             <div className="flex flex-col gap-4">
-              <label htmlFor="typeOfScholarship" className="text-lg font-medium text-gray-800">Type of Scholarship</label>
+              <label htmlFor="type" className="text-lg font-medium text-gray-800">Type of Scholarship</label>
               <input
                 type="text"
-                id="typeOfScholarship"
-                name="typeOfScholarship"
-                value={formData.typeOfScholarship}
+                id="type"
+                name="type"
+                value={formData.type}
                 onChange={handleChange}
                 className="border border-gray-300 p-2 rounded-md"
                 placeholder="Enter type of scholarship"
+                required
               />
             </div>
 
@@ -307,6 +218,7 @@ export default function PostScholarship() {
                 onChange={handleChange}
                 className="border border-gray-300 p-2 rounded-md"
                 placeholder="Enter academic requirements"
+                required
               />
             </div>
 
@@ -320,6 +232,7 @@ export default function PostScholarship() {
                 onChange={handleChange}
                 className="border border-gray-300 p-2 rounded-md"
                 placeholder="Enter field of study"
+                required
               />
             </div>
 
@@ -333,6 +246,7 @@ export default function PostScholarship() {
                 onChange={handleChange}
                 className="border border-gray-300 p-2 rounded-md"
                 placeholder="Enter level of education"
+                required
               />
             </div>
 
@@ -346,6 +260,7 @@ export default function PostScholarship() {
                 onChange={handleChange}
                 className="border border-gray-300 p-2 rounded-md"
                 placeholder="Enter location"
+                required
               />
             </div>
 
@@ -371,6 +286,7 @@ export default function PostScholarship() {
                 value={formData.applicationStartDate}
                 onChange={handleChange}
                 className="border border-gray-300 p-2 rounded-md"
+                required
               />
             </div>
 
@@ -383,6 +299,7 @@ export default function PostScholarship() {
                 value={formData.applicationEndDate}
                 onChange={handleChange}
                 className="border border-gray-300 p-2 rounded-md"
+                required
               />
             </div>
 
@@ -421,6 +338,113 @@ export default function PostScholarship() {
                 onChange={handleChange}
                 className="border border-gray-300 p-2 rounded-md"
                 placeholder="Enter contact person"
+              />
+            </div>
+
+            {/* New Fields */}
+          
+
+            <div className="flex flex-col gap-4">
+              <label htmlFor="purpose" className="text-lg font-medium text-gray-800">Purpose</label>
+              <input
+                type="text"
+                id="purpose"
+                name="purpose"
+                value={formData.purpose}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter purpose"
+              />
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <label htmlFor="benefits" className="text-lg font-medium text-gray-800">Benefits</label>
+              <input
+                type="text"
+                id="benefits"
+                name="benefits"
+                value={formData.benefits}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter benefits"
+              />
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <label htmlFor="qualifications" className="text-lg font-medium text-gray-800">Qualifications</label>
+              <input
+                type="text"
+                id="qualifications"
+                name="qualifications"
+                value={formData.qualifications}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter qualifications"
+              />
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <label htmlFor="eligibility" className="text-lg font-medium text-gray-800">Eligibility</label>
+              <input
+                type="text"
+                id="eligibility"
+                name="eligibility"
+                value={formData.eligibility}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter eligibility criteria"
+              />
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <label htmlFor="additionalInformation" className="text-lg font-medium text-gray-800">Additional Information</label>
+              <input
+                type="text"
+                id="additionalInformation"
+                name="additionalInformation"
+                value={formData.additionalInformation}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter additional information"
+              />
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <label htmlFor="highlight" className="text-lg font-medium text-gray-800">Highlight</label>
+              <input
+                type="text"
+                id="highlight"
+                name="highlight"
+                value={formData.highlight}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter highlight"
+              />
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <label htmlFor="targetAudience" className="text-lg font-medium text-gray-800">Target Audience</label>
+              <input
+                type="text"
+                id="targetAudience"
+                name="targetAudience"
+                value={formData.targetAudience}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter target audience"
+              />
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <label htmlFor="url" className="text-lg font-medium text-gray-800">URL</label>
+              <input
+                type="text"
+                id="url"
+                name="url"
+                value={formData.url}
+                onChange={handleChange}
+                className="border border-gray-300 p-2 rounded-md"
+                placeholder="Enter scholarship URL"
               />
             </div>
 

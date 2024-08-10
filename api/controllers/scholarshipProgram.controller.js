@@ -13,21 +13,14 @@ export const createScholarshipProgram = async (req, res) => {
 
     // Extract data from request body
     const {
-      name,
+      title,
       description,
-      amount,
-      deadline,
-      email,
-      website,
-      phone,
-      address,
-      eligibility,
-      applicationProcess,
-      numScholarships,
+      applicationInstructions,
+      numberOfScholarships,
       duration,
       documents,
       category,
-      typeOfScholarship,
+      type,
       academicRequirements,
       fieldOfStudy,
       levelOfEducation,
@@ -38,62 +31,46 @@ export const createScholarshipProgram = async (req, res) => {
       notificationDate,
       coverage,
       contactPerson,
-      provider,
+      providerId,
+      banner,
+      purpose,
+      benefits,
+      qualifications,
+      eligibility,
+      additionalInformation,
+      highlight,
+      targetAudience,
+      url
     } = req.body;
 
     // Validate required fields
-    if (!name || !description || !amount || !deadline || !email || !provider || !category) {
+    if (!title || !description || !applicationInstructions || numberOfScholarships === undefined || !duration || !category || !type || !academicRequirements || !fieldOfStudy || !levelOfEducation || !location || !applicationStartDate || !applicationEndDate || !notificationDate || !coverage || !contactPerson || !providerId) {
       return res.status(400).json({
-        message: 'Name, description, amount, deadline, email, provider, and category are required fields.',
+        message: 'Title, description, application instructions, number of scholarships, duration, category, type, academic requirements, field of study, level of education, location, application start date, application end date, notification date, coverage, contact person, and provider ID are required fields.',
       });
     }
 
-    // Validate email format
-    const emailRegex = /\S+@\S+\.\S+/;
-    if (!emailRegex.test(email)) {
+    // Validate date fields
+    const parsedApplicationStartDate = new Date(applicationStartDate);
+    const parsedApplicationEndDate = new Date(applicationEndDate);
+    const parsedNotificationDate = new Date(notificationDate);
+
+    if (isNaN(parsedApplicationStartDate.getTime()) || isNaN(parsedApplicationEndDate.getTime()) || isNaN(parsedNotificationDate.getTime())) {
       return res.status(400).json({
-        message: 'Invalid email format.',
+        message: 'Invalid date format for application start date, application end date, or notification date.',
       });
     }
-
-    // Ensure amount is a number and positive
-    const numericAmount = parseFloat(amount);
-    if (isNaN(numericAmount) || numericAmount <= 0) {
-      return res.status(400).json({
-        message: 'Amount must be a positive number.',
-      });
-    }
-
-    // Ensure deadline is a valid date
-    const parsedDeadline = new Date(deadline);
-    if (isNaN(parsedDeadline.getTime())) {
-      return res.status(400).json({
-        message: 'Invalid deadline date.',
-      });
-    }
-
-    // Ensure other date fields are valid if provided
-    const parsedApplicationStartDate = applicationStartDate ? new Date(applicationStartDate) : null;
-    const parsedApplicationEndDate = applicationEndDate ? new Date(applicationEndDate) : null;
-    const parsedNotificationDate = notificationDate ? new Date(notificationDate) : null;
 
     // Create a new Scholarship document
     const newScholarship = new Scholarship({
-      name,
+      title,
       description,
-      amount: numericAmount,
-      deadline: parsedDeadline,
-      email,
-      website,
-      phone,
-      address,
-      eligibility,
-      applicationProcess,
-      numScholarships,
+      applicationInstructions,
+      numberOfScholarships,
       duration,
       documents,
       category,
-      typeOfScholarship,
+      type,
       academicRequirements,
       fieldOfStudy,
       levelOfEducation,
@@ -104,7 +81,16 @@ export const createScholarshipProgram = async (req, res) => {
       notificationDate: parsedNotificationDate,
       coverage,
       contactPerson,
-      provider, // Assign the provider ID
+      providerId, // Assign the provider ID
+      banner,
+      purpose,
+      benefits,
+      qualifications,
+      eligibility,
+      additionalInformation,
+      highlight,
+      targetAudience,
+      url
     });
 
     // Save the Scholarship document to the database
