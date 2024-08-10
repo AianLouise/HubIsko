@@ -43,12 +43,15 @@ export default function ScholarshipListing() {
     fetchProviders();
   }, []);
 
-  const truncateText = (text, limit) => {
-    if (text.length > limit) {
-      return text.substring(0, limit) + '...';
+  function truncateText(text, maxLength) {
+    if (typeof text !== 'string') {
+      return '';
     }
-    return text;
-  };
+    if (text.length <= maxLength) {
+      return text;
+    }
+    return text.substring(0, maxLength) + '...';
+  }
 
   if (loading) {
     return <div>Loading...</div>;
@@ -131,7 +134,7 @@ export default function ScholarshipListing() {
 
                   <div className='flex flex-col ml-6'>
                     <h2 className='lg:text-xl font-semibold'>{scholarship.title}</h2>
-                    <p className='text-sm lg:text-base'>{truncateText(scholarship.highlight, 50)}</p>
+                    <p className='text-sm lg:text-base'>{truncateText(scholarship.title, 50)}</p>
                   </div>
                 </div>
 

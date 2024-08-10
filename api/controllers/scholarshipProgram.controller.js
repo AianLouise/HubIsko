@@ -1,5 +1,4 @@
-import { getOverlappingDaysInIntervals } from 'date-fns';
-import Scholarship from '../models/scholarshipProgram.model.js';
+import { Scholarship } from '../models/scholarshipProgram.model.js';
 import User from '../models/user.model.js';
 
 export const test = (req, res) => {
@@ -17,39 +16,30 @@ export const createScholarshipProgram = async (req, res) => {
     const {
       title,
       description,
-      applicationInstructions,
+      amount,
       totalSlots,
       duration,
-      documents,
       category,
       type,
       academicRequirements,
       fieldOfStudy,
       levelOfEducation,
       location,
-      otherCriteria,
       applicationStartDate,
       applicationEndDate,
       notificationDate,
       coverage,
       contactPerson,
       providerId,
-      banner,
-      purpose,
-      benefits,
-      qualifications,
-      eligibility,
-      additionalInformation,
-      highlight,
-      targetAudience,
-      url,
       scholarshipImage, // Added field for scholarship image
       scholarshipBanner,  // Added field for scholarship banner
-      status = 'Pending Approval'
+      status = 'Pending Approval',
+      details // Extract details from request body
     } = req.body;
 
     // Validate required fields
-    if (!title || !description || !applicationInstructions || totalSlots === undefined || !duration || !category || !type || !academicRequirements || !fieldOfStudy || !levelOfEducation || !location || !applicationStartDate || !applicationEndDate || !notificationDate || !coverage || !contactPerson || !providerId) {
+    if (!title || !description || totalSlots === undefined || !duration || !amount || !category || !type || !academicRequirements || !fieldOfStudy || !levelOfEducation || !location || !applicationStartDate || !applicationEndDate || !notificationDate || !coverage || !contactPerson || !providerId) {
+      console.error('Validation Error: Missing required fields');
       return res.status(400).json({
         message: 'Title, description, application instructions, number of scholarships, duration, category, type, academic requirements, field of study, level of education, location, application start date, application end date, notification date, coverage, contact person, and provider ID are required fields.',
       });
@@ -61,8 +51,17 @@ export const createScholarshipProgram = async (req, res) => {
     const parsedNotificationDate = new Date(notificationDate);
 
     if (isNaN(parsedApplicationStartDate.getTime()) || isNaN(parsedApplicationEndDate.getTime()) || isNaN(parsedNotificationDate.getTime())) {
+      console.error('Validation Error: Invalid date format');
       return res.status(400).json({
         message: 'Invalid date format for application start date, application end date, or notification date.',
+      });
+    }
+
+    // Validate details field
+    if (!Array.isArray(details)) {
+      console.error('Validation Error: Details should be an array');
+      return res.status(400).json({
+        message: 'Details should be an array.',
       });
     }
 
@@ -70,35 +69,28 @@ export const createScholarshipProgram = async (req, res) => {
     const newScholarship = new Scholarship({
       title,
       description,
-      applicationInstructions,
+      amount,
       totalSlots,
       duration,
-      documents,
       category,
       type,
       academicRequirements,
       fieldOfStudy,
       levelOfEducation,
       location,
-      otherCriteria,
       applicationStartDate: parsedApplicationStartDate,
       applicationEndDate: parsedApplicationEndDate,
       notificationDate: parsedNotificationDate,
       coverage,
       contactPerson,
       providerId, // Assign the provider ID
-      banner,
-      purpose,
-      benefits,
-      qualifications,
-      eligibility,
-      additionalInformation,
-      highlight,
-      targetAudience,
-      url,
       scholarshipImage, // Added field for scholarship image
       scholarshipBanner, // Added field for scholarship banner
-      status // Default status
+      status, // Default status
+      details: details.map(detail => ({
+        title: detail.title,
+        content: detail.content
+      }))
     });
 
     // Save the Scholarship document to the database
@@ -139,38 +131,28 @@ export const getScholarshipProgramsByProviderId = async (req, res) => {
       _id: program._id,
       title: program.title,
       description: program.description,
-      applicationInstructions: program.applicationInstructions,
+      amount: program.amount,
+      slotsFilled: program.slotsFilled,
       totalSlots: program.totalSlots,
       duration: program.duration,
-      documents: program.documents.map(doc => ({
-        category: doc.category,
-        type: doc.type
-      })),
+      category: program.category,
+      type: program.type,
       academicRequirements: program.academicRequirements,
       fieldOfStudy: program.fieldOfStudy,
       levelOfEducation: program.levelOfEducation,
       location: program.location,
-      otherCriteria: program.otherCriteria,
       applicationStartDate: program.applicationStartDate,
       applicationEndDate: program.applicationEndDate,
       notificationDate: program.notificationDate,
       coverage: program.coverage,
       contactPerson: program.contactPerson,
       providerId: program.providerId,
-      purpose: program.purpose,
-      benefits: program.benefits.map(benefit => ({
-        // Assuming benefits have a similar structure
-        // Add the necessary fields here
-      })),
-      qualifications: program.qualifications.map(qualification => ({
-        // Assuming qualifications have a similar structure
-        // Add the necessary fields here
-      })),
-      eligibility: program.eligibility,
-      additionalInformation: program.additionalInformation,
-      scholarshipImage: program.scholarshipImage, // Add scholarshipImage field
-      scholarshipBanner: program.scholarshipBanner, // Add scholarshipBanner field
-      status: program.status // Add status field
+      scholarshipImage: program.scholarshipImage,
+      scholarshipBanner: program.scholarshipBanner,
+      status: program.status,
+      approvedScholars: program.approvedScholars,
+      details: program.details,
+      datePosted: program.datePosted
     }));
 
     res.status(200).json(formattedPrograms);
@@ -183,38 +165,32 @@ export const getScholarshipProgramsByProviderId = async (req, res) => {
 export const getAllScholarshipPrograms = async (req, res) => {
   try {
     const programs = await Scholarship.find();
-    const formattedPrograms = programs.map(program => ({
+       const formattedPrograms = programs.map(program => ({
       id: program._id,
       title: program.title,
       description: program.description,
+      amount: program.amount,
+      slotsFilled: program.slotsFilled,
       totalSlots: program.totalSlots,
       duration: program.duration,
-      documents: program.documents,
       category: program.category,
       type: program.type,
       academicRequirements: program.academicRequirements,
       fieldOfStudy: program.fieldOfStudy,
       levelOfEducation: program.levelOfEducation,
       location: program.location,
-      otherCriteria: program.otherCriteria,
       applicationStartDate: program.applicationStartDate,
       applicationEndDate: program.applicationEndDate,
       notificationDate: program.notificationDate,
       coverage: program.coverage,
       contactPerson: program.contactPerson,
       providerId: program.providerId,
-      purpose: program.purpose,
-      benefits: program.benefits,
-      qualifications: program.qualifications,
-      eligibility: program.eligibility,
-      additionalInformation: program.additionalInformation,
       scholarshipImage: program.scholarshipImage,
       scholarshipBanner: program.scholarshipBanner,
       status: program.status,
-      highlight: program.highlight,
-      targetAudience: program.targetAudience,
-      url: program.url,
-      approvedScholars: program.approvedScholars
+      approvedScholars: program.approvedScholars,
+      details: program.details,
+      datePosted: program.datePosted
     }));
 
     res.status(200).json(formattedPrograms);
@@ -225,8 +201,6 @@ export const getAllScholarshipPrograms = async (req, res) => {
 };
 
 // New function to get scholarship provider details
-
-
 export const getScholarshipProviders = async (req, res) => {
   try {
     // Find all users with the role 'scholarship_provider'
@@ -258,46 +232,35 @@ export const getScholarshipProgramById = async (req, res) => {
       return res.status(404).json({ error: 'Scholarship Program not found' });
     }
 
-    const formattedProgram = {
+       const formattedProgram = {
       id: scholarshipProgram._id,
       title: scholarshipProgram.title,
       description: scholarshipProgram.description,
-      applicationInstructions: scholarshipProgram.applicationInstructions,
+      amount: scholarshipProgram.amount,
+      slotsFilled: scholarshipProgram.slotsFilled,
       totalSlots: scholarshipProgram.totalSlots,
       duration: scholarshipProgram.duration,
-      documents: scholarshipProgram.documents.map(doc => ({
-        category: doc.category,
-        type: doc.type
-      })),
+      category: scholarshipProgram.category,
+      type: scholarshipProgram.type,
       academicRequirements: scholarshipProgram.academicRequirements,
       fieldOfStudy: scholarshipProgram.fieldOfStudy,
       levelOfEducation: scholarshipProgram.levelOfEducation,
       location: scholarshipProgram.location,
-      otherCriteria: scholarshipProgram.otherCriteria,
       applicationStartDate: scholarshipProgram.applicationStartDate,
       applicationEndDate: scholarshipProgram.applicationEndDate,
       notificationDate: scholarshipProgram.notificationDate,
       coverage: scholarshipProgram.coverage,
       contactPerson: scholarshipProgram.contactPerson,
       providerId: scholarshipProgram.providerId,
-      purpose: scholarshipProgram.purpose,
-      benefits: scholarshipProgram.benefits.map(benefit => ({
-        // Assuming benefits have a similar structure
-        // Add the necessary fields here
-      })),
-      qualifications: scholarshipProgram.qualifications.map(qualification => ({
-        // Assuming qualifications have a similar structure
-        // Add the necessary fields here
-      })),
-      eligibility: scholarshipProgram.eligibility,
-      additionalInformation: scholarshipProgram.additionalInformation,
       scholarshipImage: scholarshipProgram.scholarshipImage,
       scholarshipBanner: scholarshipProgram.scholarshipBanner,
       status: scholarshipProgram.status,
-      highlight: scholarshipProgram.highlight,
-      targetAudience: scholarshipProgram.targetAudience,
-      url: scholarshipProgram.url,
-      approvedScholars: scholarshipProgram.approvedScholars
+      approvedScholars: scholarshipProgram.approvedScholars,
+      details: scholarshipProgram.details.map(detail => ({
+        title: detail.title,
+        content: detail.content
+      })),
+      datePosted: scholarshipProgram.datePosted
     };
 
     res.status(200).json(formattedProgram);

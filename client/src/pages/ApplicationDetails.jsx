@@ -10,13 +10,12 @@ export default function Forums() {
     const { id } = useParams();
     const [scholarship, setScholarship] = useState(null);
 
-    console.log(id);
-
     useEffect(() => {
         const fetchScholarship = async () => {
             try {
                 const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${id}`);
                 const data = await response.json();
+                console.log('Fetched Scholarship:', data); // Add this line
                 setScholarship(data);
             } catch (error) {
                 console.error('Error fetching scholarship:', error);
@@ -43,8 +42,10 @@ export default function Forums() {
     };
 
     useEffect(() => {
-        fetchOrganizationName();
-      }, [fetchOrganizationName]);
+        if (scholarship) {
+            fetchOrganizationName();
+        }
+    }, [scholarship]);
 
     if (!scholarship) {
         return <div>Loading...</div>;
@@ -67,7 +68,7 @@ export default function Forums() {
                         </div>
                         <div className='flex flex-col gap-2 w-1/2'>
                             <div className='flex flex-row divide-x-2 divide-blue-200 mb-2'>
-                            <span className='text-2xl font-bold text-gray-600 pr-4'>{organizationName}</span>
+                                <span className='text-2xl font-bold text-gray-600 pr-4'>{organizationName}</span>
                                 <span className='text-2xl font-medium text-gray-400 pl-4'>{new Date(scholarship.applicationStartDate).toLocaleDateString()}</span>
                             </div>
                             <h1 className='text-4xl font-bold text-gray-800'>{scholarship.title}</h1>
@@ -98,46 +99,17 @@ export default function Forums() {
                             ) : 'Scholarship Banner'}
                         </div>
 
-                        {/* Details Section */}
-                        <div className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
-                            <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>What is this scholarship for?</span>
-                            <span className='text-sm p-4'>{scholarship.purpose}</span>
-                        </div>
-
-                        {/* Benefits Section */}
-                        <div className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
-                            <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>What are the benefits?</span>
-                            <span className='text-sm p-4'>
-                                {/* {scholarship.benefits.map((benefit, index) => (
-                                    <div key={index}>{benefit}</div>
-                                ))} */}
-                            </span>
-                        </div>
-
-                        {/* Qualifications Section */}
-                        <div className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
-                            <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>What are the qualifications?</span>
-                            <span className='text-sm p-4'>
-                                {/* {scholarship.qualifications.map((qualification, index) => (
-                                    <div key={index}>{qualification}</div>
-                                ))} */}
-                            </span>
-                        </div>
-
-                        {/* Application Instructions Section */}
-                        <div className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
-                            <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>How can I apply?</span>
-                            <span className='text-sm p-4'>{scholarship.applicationInstructions}</span>
-                        </div>
-
-                        {/* Documents Section */}
-                        <div className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
-                            <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>What documents should I prepare?</span>
-                            <span className='text-sm p-4'>
-                                {/* {scholarship.documents.map((doc, index) => (
-                                    <div key={index}>{doc.category} - {doc.type}</div>
-                                ))} */}
-                            </span>
+                        <div>
+                            {scholarship.details && scholarship.details.length > 0 ? (
+                                scholarship.details.map((detail, index) => (
+                                    <div key={index} className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
+                                        <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>{detail.title}</span>
+                                        <span className='text-sm p-4'>{detail.content}</span>
+                                    </div>
+                                ))
+                            ) : (
+                                <div>No details available</div>
+                            )}
                         </div>
 
                         {/* FAQ Section */}
@@ -172,7 +144,7 @@ export default function Forums() {
                                     <div className='bg-blue-600 w-12 h-12 rounded-md'></div>
                                     <div className='flex flex-col justify-center text-left'>
                                         <span className='text-slate-600 '>Visit our profile!</span>
-                                        <span className=''>{scholarship.providerId}</span>
+                                        <span className=''>{organizationName}</span>
                                     </div>
                                 </button>
                             </div>
