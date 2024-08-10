@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 export default function PostScholarship() {
   const { currentUser } = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     applicationInstructions: '',
-    numberOfScholarships: '',
+    totalSlots: '',
     duration: '',
     documents: '',
     category: '',
@@ -43,14 +45,16 @@ export default function PostScholarship() {
     });
   };
 
+   
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    if (!formData.title || !formData.description || !formData.numberOfScholarships || !formData.applicationStartDate || !formData.applicationEndDate) {
+  
+    if (!formData.title || !formData.description || !formData.totalSlots || !formData.applicationStartDate || !formData.applicationEndDate) {
       console.error('Validation failed: Missing required fields');
       return;
     }
-
+  
     try {
       const response = await fetch('/api/scholarshipProgram/create-scholarship', {
         method: 'POST',
@@ -59,19 +63,17 @@ export default function PostScholarship() {
         },
         body: JSON.stringify(formData),
       });
-
+  
       if (response.ok) {
         const result = await response.json();
         console.log('Scholarship posted successfully:', result);
-        // Handle successful submission (e.g., redirect, show message, etc.)
+        navigate('/scholarships'); // Redirect to /scholarships
       } else {
         const errorText = await response.text();
         console.error('Failed to post scholarship:', response.statusText, errorText);
-        // Handle error response (e.g., show error message)
       }
     } catch (error) {
       console.error('Error submitting scholarship:', error);
-      // Handle request error (e.g., show error message)
     }
   };
 
@@ -140,12 +142,12 @@ export default function PostScholarship() {
             </div>
 
             <div className="flex flex-col gap-4">
-              <label htmlFor="numberOfScholarships" className="text-lg font-medium text-gray-800">Number of Scholarships</label>
+              <label htmlFor="totalSlots" className="text-lg font-medium text-gray-800">Number of Scholarship Slots</label>
               <input
                 type="number"
-                id="numberOfScholarships"
-                name="numberOfScholarships"
-                value={formData.numberOfScholarships}
+                id="totalSlots"
+                name="totalSlots"
+                value={formData.totalSlots}
                 onChange={handleChange}
                 className="border border-gray-300 p-2 rounded-md"
                 placeholder="Enter number of scholarships"

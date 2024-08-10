@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 
-const scholarshipSchema = new mongoose.Schema({
+const scholarshipProgramSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   applicationInstructions: { type: String, required: true },
-  numberOfScholarships: { type: Number, required: true },
+  totalSlots: { type: Number, required: true },
   duration: { type: String, required: true },
   documents: { type: [String], required: true },
   category: { type: String, required: true },
@@ -31,4 +31,4 @@ const scholarshipSchema = new mongoose.Schema({
   url: { type: String }
 });
 
-export default mongoose.model('Scholarship', scholarshipSchema);
+export default mongoose.model('ScholarshipProgram', scholarshipProgramSchema);
