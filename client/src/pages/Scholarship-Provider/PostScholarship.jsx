@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 export default function PostScholarship() {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -34,8 +36,13 @@ export default function PostScholarship() {
     additionalInformation: '',
     highlight: '',
     targetAudience: '',
-    url: ''
+    url: '',
+    scholarshipImage: '',
+    scholarshipBanner: ''
   });
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedBanner, setSelectedBanner] = useState(null);
+  const [submitTrigger, setSubmitTrigger] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,41 +52,69 @@ export default function PostScholarship() {
     });
   };
 
-   
-  
+  const handleImageChange = (e) => {
+    setSelectedImage(e.target.files[0]);
+  };
+
+  const handleBannerChange = (e) => {
+    setSelectedBanner(e.target.files[0]);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
-    if (!formData.title || !formData.description || !formData.totalSlots || !formData.applicationStartDate || !formData.applicationEndDate) {
-      console.error('Validation failed: Missing required fields');
-      return;
+    setSubmitTrigger(true);
+    setIsLoading(true);
+
+    const storage = getStorage();
+    let scholarshipImageUrl = '';
+    let scholarshipBannerUrl = '';
+
+    if (selectedImage) {
+      const imageRef = ref(storage, `/scholarship-program-documents/scholarship_images/${selectedImage.name}`);
+      await uploadBytes(imageRef, selectedImage);
+      scholarshipImageUrl = await getDownloadURL(imageRef);
     }
-  
+
+    if (selectedBanner) {
+      const bannerRef = ref(storage, `/scholarship-program-documents/scholarship_banners/${selectedBanner.name}`);
+      await uploadBytes(bannerRef, selectedBanner);
+      scholarshipBannerUrl = await getDownloadURL(bannerRef);
+    }
+
+    const postData = {
+      ...formData,
+      scholarshipImage: scholarshipImageUrl,
+      scholarshipBanner: scholarshipBannerUrl
+    };
+
     try {
       const response = await fetch('/api/scholarshipProgram/create-scholarship', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(postData),
       });
-  
+
       if (response.ok) {
         const result = await response.json();
         console.log('Scholarship posted successfully:', result);
-        navigate('/scholarships'); // Redirect to /scholarships
+        navigate('/scholarships');
       } else {
         const errorText = await response.text();
         console.error('Failed to post scholarship:', response.statusText, errorText);
       }
     } catch (error) {
       console.error('Error submitting scholarship:', error);
+    } finally {
+      setSubmitTrigger(false);
+      setIsLoading(false);
     }
   };
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
 
   return (
     <div className={`flex flex-col min-h-screen`}>
@@ -87,7 +122,7 @@ export default function PostScholarship() {
         <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col gap-8">
-            <div className="flex gap-4 items-center">
+            <div className="flex justify-between items-center">
               <h1 className="text-3xl font-bold text-gray-800">Post a Scholarship</h1>
               <div className="bg-blue-600 w-36 h-36 rounded-md"></div>
             </div>
@@ -99,17 +134,43 @@ export default function PostScholarship() {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             {/* Basic Information */}
             <div className="flex flex-col gap-4">
-              <label htmlFor="title" className="text-lg font-medium text-gray-800">Scholarship Title</label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                className="border border-gray-300 p-2 rounded-md"
-                placeholder="Enter scholarship title"
-                required
-              />
+              <div className="flex flex-col gap-4">
+                <label htmlFor="scholarshipImage" className="text-lg font-medium text-gray-800">Scholarship Image</label>
+                <input
+                  type="file"
+                  id="scholarshipImage"
+                  name="scholarshipImage"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="border border-gray-300 p-2 rounded-md"
+                  required
+                />
+              </div>
+              <div className="flex flex-col gap-4">
+                <label htmlFor="scholarshipBanner" className="text-lg font-medium text-gray-800">Scholarship Banner</label>
+                <input
+                  type="file"
+                  id="scholarshipBanner"
+                  name="scholarshipBanner"
+                  accept="image/*"
+                  onChange={handleBannerChange}
+                  className="border border-gray-300 p-2 rounded-md"
+                  required
+                />
+              </div>
+              <div className="flex flex-col gap-4">
+                <label htmlFor="title" className="text-lg font-medium text-gray-800">Scholarship Title</label>
+                <input
+                  type="text"
+                  id="title"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  className="border border-gray-300 p-2 rounded-md"
+                  placeholder="Enter scholarship title"
+                  required
+                />
+              </div>
             </div>
 
             <div className="flex flex-col gap-4">
@@ -344,7 +405,7 @@ export default function PostScholarship() {
             </div>
 
             {/* New Fields */}
-          
+
 
             <div className="flex flex-col gap-4">
               <label htmlFor="purpose" className="text-lg font-medium text-gray-800">Purpose</label>
@@ -453,8 +514,9 @@ export default function PostScholarship() {
             <button
               type="submit"
               className="bg-blue-600 text-white py-2 px-4 rounded-md"
+              disabled={isLoading}
             >
-              Submit
+              {isLoading ? 'Loading...' : 'Submit'}
             </button>
           </form>
         </div>

@@ -28,7 +28,9 @@ const scholarshipProgramSchema = new mongoose.Schema({
   additionalInformation: { type: String },
   highlight: { type: String },
   targetAudience: { type: String },
-  url: { type: String }
+  url: { type: String },
+  scholarshipImage: { type: String }, // Added field for scholarship image
+  scholarshipBanner: { type: String }  // Added field for scholarship banner
 });
 
 export default mongoose.model('ScholarshipProgram', scholarshipProgramSchema);

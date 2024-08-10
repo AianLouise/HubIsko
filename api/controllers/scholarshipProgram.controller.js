@@ -40,7 +40,9 @@ export const createScholarshipProgram = async (req, res) => {
       additionalInformation,
       highlight,
       targetAudience,
-      url
+      url,
+      scholarshipImage, // Added field for scholarship image
+      scholarshipBanner  // Added field for scholarship banner
     } = req.body;
 
     // Validate required fields
@@ -90,7 +92,9 @@ export const createScholarshipProgram = async (req, res) => {
       additionalInformation,
       highlight,
       targetAudience,
-      url
+      url,
+      scholarshipImage, // Added field for scholarship image
+      scholarshipBanner  // Added field for scholarship banner
     });
 
     // Save the Scholarship document to the database
