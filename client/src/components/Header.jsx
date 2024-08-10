@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import { useDispatch } from 'react-redux';
@@ -39,10 +39,13 @@ export default function Header() {
   const [showModal, setShowModal] = useState(false);
 
 
+  const navigate = useNavigate();
+
   const handleSignOut = async () => {
     try {
       await fetch('/api/auth/signout');
       dispatch(signOut());
+      navigate('/');
     } catch (error) {
       console.log(error);
     }

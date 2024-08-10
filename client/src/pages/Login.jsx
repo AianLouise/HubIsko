@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signInStart, signInSuccess, signInFail } from '../redux/user/userSlice';
@@ -14,6 +14,32 @@ export default function SignIn() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.user);
+
+
+  useEffect(() => {
+    if (currentUser) {
+        if (currentUser.role === 'admin') {
+            navigate('/admin-home');
+        } else if (currentUser.role === 'scholarship_provider') {
+            if (!currentUser.emailVerified) {
+                navigate('/verify-your-email', { state: { email: currentUser.email } });
+            } else {
+                navigate('/provider-dashboard');
+            }
+        } else if (currentUser.role === 'applicant') {
+            if (!currentUser.emailVerified) {
+                navigate('/verify-your-email', { state: { email: currentUser.email } });
+            } else if (!currentUser.applicantDetails.profileComplete) {
+                navigate('/CoRH', { state: { userId: currentUser._id } });
+            } else {
+                navigate('/');
+            }
+        } else {
+            navigate('/');
+        }
+    }
+}, [currentUser, navigate]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -47,11 +73,19 @@ export default function SignIn() {
       if (data.role === 'admin') {
         navigate('/admin-home');
       } else if (data.role === 'scholarship_provider') {
-        navigate('/provider-dashboard');
-      } else if (!data.emailVerified) {
-        navigate('/verify-your-email', { state: { email: formData.email } });
-      } else if (!data.applicantDetails.profileComplete) {
-        navigate('/CoRH', { state: { userId: data._id } });
+        if (!data.emailVerified) {
+          navigate('/verify-your-email', { state: { email: formData.email } });
+        } else {
+          navigate('/provider-dashboard');
+        }
+      } else if (data.role === 'applicant') {
+        if (!data.emailVerified) {
+          navigate('/verify-your-email', { state: { email: formData.email } });
+        } else if (!data.applicantDetails.profileComplete) {
+          navigate('/CoRH', { state: { userId: data._id } });
+        } else {
+          navigate('/');
+        }
       } else {
         navigate('/');
       }
