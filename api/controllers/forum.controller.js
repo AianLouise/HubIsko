@@ -28,8 +28,57 @@ export const getPosts = async (req, res) => {
       totalLikes: post.likes.length,
       totalComments: post.comments.length,
     }));
-
+    
     res.json(modifiedPosts);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+};
+
+export const getPostById = async (req, res) => {
+  try {
+    const post = await ForumPost.findById(req.params.postId)
+      .populate('author', ['username', 'email', 'profilePicture']) // Include profilePicture
+      .populate({
+        path: 'comments',
+        populate: [
+          {
+            path: 'author',
+            select: 'username profilePicture' // Include profilePicture
+          },
+          {
+            path: 'replies',
+            populate: {
+              path: 'author',
+              select: 'username profilePicture' // Include profilePicture
+            }
+          }
+        ]
+      })
+      .populate('attachments'); // Populate attachments
+
+    if (!post) {
+      return res.status(404).json({ msg: 'Post not found' });
+    }
+
+    // Assuming 'likes' is an array of user IDs who liked the post
+    const totalLikes = post.likes.length;
+
+    // Assuming 'comments' is populated, its length gives the total number of comments
+    const totalComments = post.comments.length;
+
+    // Access the 'views' field directly from the post object
+    const totalViews = post.views;
+
+    // Modify the response to include totalLikes, totalComments, totalViews, and attachments
+    res.json({
+      ...post.toObject(), // Convert the Mongoose document to a plain JavaScript object
+      totalLikes,
+      totalComments,
+      totalViews, // Include totalViews in the response
+      attachments: post.attachments // Include attachments in the response
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
@@ -96,52 +145,6 @@ export const likeComment = async (req, res) => {
   }
 };
 
-export const getPostById = async (req, res) => {
-  try {
-    const post = await ForumPost.findById(req.params.postId)
-      .populate('author', ['username', 'email', 'profilePicture']) // Include profilePicture
-      .populate({
-        path: 'comments',
-        populate: [
-          {
-            path: 'author',
-            select: 'username profilePicture' // Include profilePicture
-          },
-          {
-            path: 'replies',
-            populate: {
-              path: 'author',
-              select: 'username profilePicture' // Include profilePicture
-            }
-          }
-        ]
-      });
-
-    if (!post) {
-      return res.status(404).json({ msg: 'Post not found' });
-    }
-
-    // Assuming 'likes' is an array of user IDs who liked the post
-    const totalLikes = post.likes.length;
-
-    // Assuming 'comments' is populated, its length gives the total number of comments
-    const totalComments = post.comments.length;
-
-    // Access the 'views' field directly from the post object
-    const totalViews = post.views;
-
-    // Modify the response to include totalLikes, totalComments, and totalViews
-    res.json({
-      ...post.toObject(), // Convert the Mongoose document to a plain JavaScript object
-      totalLikes,
-      totalComments,
-      totalViews // Include totalViews in the response
-    });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
-  }
-};
 
 
 export const getCommentById = async (req, res) => {

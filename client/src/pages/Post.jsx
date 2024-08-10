@@ -9,6 +9,11 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import moment from 'moment';
 import { formatDistanceToNow } from 'date-fns';
 import { AiFillFilePdf, AiFillFileWord, AiOutlinePaperClip } from 'react-icons/ai';
+import Modal from 'react-modal';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaFilePdf, FaFileWord } from 'react-icons/fa';
+
+Modal.setAppElement('#root');
 
 
 export default function ForumDetail() {
@@ -72,14 +77,14 @@ export default function ForumDetail() {
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
         const fileObjs = files.map((file) => ({
-          file,
-          url: URL.createObjectURL(file),
+            file,
+            url: URL.createObjectURL(file),
         }));
         setSelectedFiles((prevFiles) => [...prevFiles, ...fileObjs]);
-    
+
         // Log file names to the console
         files.forEach(file => console.log(`File added: ${file.name}`));
-      };
+    };
 
     const handleRemoveFile = (index) => {
         setSelectedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
@@ -202,6 +207,39 @@ export default function ForumDetail() {
         }
     };
 
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+    const openModal = (index) => {
+        setSelectedImageIndex(index);
+        setModalIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalIsOpen(false);
+    };
+
+    const nextImage = () => {
+        setSelectedImageIndex((prevIndex) => (prevIndex + 1) % post.attachments.length);
+    };
+
+    const prevImage = () => {
+        setSelectedImageIndex((prevIndex) => (prevIndex - 1 + post.attachments.length) % post.attachments.length);
+    };
+
+    useEffect(() => {
+        if (modalIsOpen) {
+            document.body.classList.add('no-scroll');
+        } else {
+            document.body.classList.remove('no-scroll');
+        }
+
+        // Cleanup function to remove the class when the component unmounts
+        return () => {
+            document.body.classList.remove('no-scroll');
+        };
+    }, [modalIsOpen]);
+
     if (!post) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -229,7 +267,6 @@ export default function ForumDetail() {
                     </div>
                     <div className='border shadow p-4 rounded-md bg-white'>
                         <div className='flex gap-4'>
-
                             <Link to={'/others-profile'}>
                                 <img
                                     src={post.author.profilePicture}
@@ -255,10 +292,100 @@ export default function ForumDetail() {
                             <span className='text-left text-3xl font-bold'>{post.title}</span>
                             <span className='text-sm font-normal'>{post.content}</span>
                         </div>
+                        <div>
+                            {post.attachments && post.attachments.length > 0 && (
+                                <div className='mt-10'>
+                                    <div className={`grid gap-2 ${post.attachments.length === 1 ? 'grid-cols-1' : post.attachments.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
+                                        {post.attachments.slice(0, 3).map((attachment, index) => {
+                                            const url = new URL(attachment);
+                                            const pathname = url.pathname;
+                                            const isImage = pathname.match(/\.(jpeg|jpg|gif|png)$/i);
+
+                                            return isImage ? (
+                                                <div key={index} className='relative flex items-center justify-center'>
+                                                    <img
+                                                        src={attachment}
+                                                        alt={`Attachment ${index + 1}`}
+                                                        className='object-cover rounded-md cursor-pointer'
+                                                        onClick={() => openModal(index)}
+                                                        onLoad={() => console.log(`Image ${index + 1} loaded successfully.`)}
+                                                        onError={(e) => {
+                                                            console.error(`Failed to load image ${index + 1}: ${attachment}`);
+                                                            e.target.onerror = null;
+                                                            e.target.src = 'fallback-image-url';
+                                                        }}
+                                                    />
+                                                    {index === 2 && post.attachments.length > 3 && (
+                                                        <div
+                                                            className='absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-lg font-bold cursor-pointer'
+                                                            onClick={() => openModal(index)}
+                                                        >
+                                                            +{post.attachments.length - 3} more
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ) : null;
+                                        })}
+                                    </div>
+                                    <div className='mt-4'>
+                                        {post.attachments.slice(0, 3).map((attachment, index) => {
+                                            const url = new URL(attachment);
+                                            const pathname = url.pathname;
+                                            const isImage = pathname.match(/\.(jpeg|jpg|gif|png)$/i);
+                                            const isPDF = pathname.match(/\.pdf$/i);
+                                            const isDOCX = pathname.match(/\.docx$/i);
+                                            const fileName = decodeURIComponent(pathname.substring(pathname.lastIndexOf('/') + 1));
+                                            const cleanFileName = fileName
+                                                .replace(/^forum_uploads\//, '') // Remove 'forum_uploads/'
+                                                .replace(/_\d{8}\.docx$/, '.docx'); // Remove date at the end if it's a .docx file
+
+                                            return !isImage ? (
+                                                <a
+                                                    key={index}
+                                                    href={attachment}
+                                                    target='_blank'
+                                                    rel='noopener noreferrer'
+                                                    className='text-blue-600 underline flex items-center mt-2'
+                                                    download={cleanFileName} // This sets the file name for download
+                                                >
+                                                    {isPDF && <FaFilePdf className='w-4 h-4 mr-2' />}
+                                                    {isDOCX && <FaFileWord className='w-4 h-4 mr-2' />}
+                                                    {cleanFileName}
+                                                </a>
+                                            ) : null;
+                                        })}
+                                    </div>
+
+                                </div>
+                            )}
+
+                            <Modal
+                                isOpen={modalIsOpen}
+                                onRequestClose={closeModal}
+                                contentLabel="Image Modal"
+                                className="fixed inset-0 flex items-center justify-center z-50"
+                                overlayClassName="fixed inset-0 bg-black bg-opacity-75"
+                            >
+                                <button onClick={closeModal} className="absolute top-5 right-10 mt-2 mr-2 text-white text-4xl">&times;</button>
+                                {post.attachments && post.attachments.length > 0 && (
+                                    <div className="relative flex items-center justify-center p-5 rounded-lg w-3/4 h-3/4 max-w-3xl max-h-3xl overflow-auto">
+                                        <img src={post.attachments[selectedImageIndex]} alt="Selected" className="max-w-full max-h-full object-contain" />
+                                    </div>
+                                )}
+                                <button onClick={prevImage} className="group absolute left-10 top-1/2 transform -translate-y-1/2 text-white text-4xl px-4 py-10 rounded-lg hover:bg-gray-100">
+                                    <div className="group-hover:text-black">
+                                        <FaChevronLeft />
+                                    </div>
+                                </button>
+                                <button onClick={nextImage} className="group absolute right-10 top-1/2 transform -translate-y-1/2 text-white text-4xl px-4 py-10 rounded-lg hover:bg-gray-100">
+                                    <div className="group-hover:text-black">
+                                        <FaChevronRight />
+                                    </div>
+                                </button>
+                            </Modal>
+                        </div>
                         <div className='border-t mt-4'>
                             <div className='flex flex-row justify-between mt-3 gap-2'>
-
-
                                 <div className='flex flex-row gap-2'>
                                     <div className='flex flex-row gap-1 px-2' onClick={() => handleLike(postId)}>
                                         {isLiked ? (
@@ -273,13 +400,11 @@ export default function ForumDetail() {
                                             </>
                                         )}
                                     </div>
-
                                     <div className='flex flex-row gap-1'>
                                         <BiCommentDots className='w-6 h-6 text-blue-600' />
                                         <span>{post.totalComments}</span>
                                     </div>
                                 </div>
-
                                 <div className='flex gap-2'>
                                     <div className='flex flex-row gap-1 px-2'>
                                         <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
@@ -290,7 +415,6 @@ export default function ForumDetail() {
                                         <span>{post.totalViews}</span>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
