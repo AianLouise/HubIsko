@@ -4,6 +4,7 @@ const scholarshipProgramSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   applicationInstructions: { type: String, required: true },
+  slotsFilled: { type: Number, default: 0 },
   totalSlots: { type: Number, required: true },
   duration: { type: String, required: true },
   documents: { type: [String], required: true },
@@ -29,8 +30,14 @@ const scholarshipProgramSchema = new mongoose.Schema({
   highlight: { type: String },
   targetAudience: { type: String },
   url: { type: String },
-  scholarshipImage: { type: String }, // Added field for scholarship image
-  scholarshipBanner: { type: String }  // Added field for scholarship banner
+  scholarshipImage: { type: String },
+  scholarshipBanner: { type: String },
+  status: { 
+    type: String, 
+    enum: ['Draft', 'Pending Approval', 'Active', 'Closed', 'Archived', 'Cancelled', 'Completed'], 
+    default: 'Draft' 
+  },
+  approvedScholars: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Scholar' }] // Add approvedScholars field
 });
 
 export default mongoose.model('ScholarshipProgram', scholarshipProgramSchema);

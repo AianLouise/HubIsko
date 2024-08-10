@@ -62,7 +62,12 @@ export default function Scholarships() {
           </div>
 
           {loading ? (
-            <div>Loading...</div>
+            <div className="flex justify-center items-center h-screen">
+              <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+            </div>
           ) : error ? (
             <div>Error: {error}</div>
           ) : !Array.isArray(scholarships) || scholarships.length === 0 ? (
@@ -73,19 +78,26 @@ export default function Scholarships() {
             <div className='grid grid-cols-3 gap-8'>
               {scholarships.map((scholarship) => (
                 <div key={scholarship._id} className='bg-white rounded-md shadow'>
-                  <div className='bg-blue-600 w-full h-36 rounded-t-md'></div>
+                  <div
+                    className='w-full h-36 rounded-t-md'
+                    style={{
+                      backgroundImage: `url(${scholarship.scholarshipBanner})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center'
+                    }}
+                  ></div>
                   <div className='p-4'>
                     <div className='flex justify-between items-center'>
-                      <h1 className='text-xl font-bold text-gray-800'>{scholarship.title}</h1>
-                      <span className={`text-xl ${scholarship.slotsFilled === scholarship.totalSlots ? 'text-red-600' : ''}`}>
-                        {scholarship.slotsFilled}/{scholarship.totalSlots}
+                      <h1 className='text-lg font-bold text-gray-800'>{scholarship.title}</h1>
+                      <span className={`text-lg ${scholarship.slotsFilled === scholarship.totalSlots ? 'text-red-600' : ''} ${scholarship.status === 'Pending Approval' ? 'text-yellow-500' : ''} ${scholarship.status === 'Active' ? 'text-green-500' : ''} ${scholarship.status === 'Closed' ? 'text-gray-500' : ''} ${scholarship.status === 'Archived' ? 'text-blue-500' : ''} ${scholarship.status === 'Cancelled' ? 'text-red-500' : ''} ${scholarship.status === 'Completed' ? 'text-purple-500' : ''}`}>
+                        {scholarship.status === 'Pending Approval' ? 'Pending Approval' : `${scholarship.slotsFilled}/${scholarship.totalSlots}`}
                       </span>
                     </div>
                     <span className='text-slate-600'>{scholarship.amount}</span>
                     <p className='text-gray-500'>{scholarship.description}</p>
                     <div className='flex justify-between items-center mt-4'>
                       <button className='text-blue-600 font-bold border hover:bg-slate-200 px-4 rounded-md'>View Details</button>
-                      <span className='text-gray-500'>Deadline: {scholarship.deadline}</span>
+                      {/* <span className='text-gray-500'>Deadline: {scholarship.deadline}</span> */}
                     </div>
                   </div>
                 </div>
