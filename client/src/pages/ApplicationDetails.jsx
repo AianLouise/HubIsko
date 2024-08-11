@@ -4,7 +4,7 @@ import Footer from '../components/Footer';
 import { FaHandHolding, FaRegCalendarXmark, FaArrowRightLong } from "react-icons/fa6";
 import { MdOutlineRefresh } from "react-icons/md";
 import { BsGlobe2 } from "react-icons/bs";
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 export default function Forums() {
     const { id } = useParams();
@@ -154,14 +154,32 @@ export default function Forums() {
                         <div className='flex flex-col items-center justify-center border-t my-10'>
                             <span className='font-bold text-slate-700 py-8 text-2xl'>Ready to Apply?</span>
                             <div className='flex gap-4 w-full'>
-                                <button className='bg-white flex border justify-between items-center shadow rounded-md p-4 w-1/2 hover:shadow-xl hover:bg-slate-200 transition ease-in-out'>
-                                    <span>Apply Online</span>
-                                    <FaArrowRightLong />
+                                <button className='bg-white flex border justify-between items-center shadow rounded-md p-4 w-1/2 h-22 hover:-translate-y-2 hover:bg-slate-200 transition ease-in-out group'>
+                                    <div className='flex flex-row gap-4 '>
+                                        <div className='bg-blue-600 w-14 h-14 rounded-md'></div>
+                                        <div className='flex flex-col text-left'>
+                                            <span className='text-lg text-left'>Apply in Organization's website!</span>
+                                            <span className='text-slate-600'>They'll offer more information!</span>
+                                        </div>
+                                    </div>
+                                    <BsGlobe2 className='w-8 h-8 ml-4 group-hover:w-12 group-hover:h-12 group-hover:text-blue-600 transition-all ease-in-out' />
+
                                 </button>
-                                <button className='bg-blue-600 text-white border justify-between flex items-center shadow rounded-md p-4 w-1/2 hover:shadow-xl hover:bg-blue-700 transition ease-in-out'>
-                                    <span>Visit Website</span>
-                                    <BsGlobe2 />
-                                </button>
+
+
+                                <Link to='/applying-stages' className='bg-white flex items-center border justify-between shadow rounded-md p-4 w-1/2 h-22 hover:-translate-y-2 hover:bg-slate-200 transition ease-in-out group'>
+
+                                    <div className='flex flex-row gap-4 '>
+                                        <div className='bg-blue-600 w-14 h-14 rounded-md'></div>
+                                        <div className='flex flex-col text-left'>
+                                            <span className='text-lg'>Apply now in Hubisko!</span>
+                                            <span className='text-slate-600'>We'll guide you step by step!</span>
+                                        </div>
+                                    </div>
+
+                                    <FaArrowRightLong className='w-8 h-8 mr-4 group-hover:translate-x-2 group-hover:text-blue-600 transition ease-in-out' />
+
+                                </Link>
                             </div>
                         </div>
                     </div>
