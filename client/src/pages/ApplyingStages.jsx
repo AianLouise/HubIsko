@@ -6,7 +6,7 @@ import { FaInfoCircle, FaUsers, FaGraduationCap, FaEllipsisH, FaFileContract, Fa
 
 export default function ApplyingStages() {
     const [activeStep, setActiveStep] = useState(1);
-    const maxStep = 4;
+    const maxStep = 6;
 
     const handleNext = () => {
         setActiveStep((prevStep) => prevStep < maxStep ? prevStep + 1 : prevStep);
@@ -362,8 +362,7 @@ export default function ApplyingStages() {
                             </div>
 
 
-                            <div className='flex mt-10 justify-between p-4'>
-                                <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                            <div className='flex  justify-end p-4'>
                                 <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleNext}>Next</button>
                             </div>
                         </div>
@@ -627,7 +626,7 @@ export default function ApplyingStages() {
 
                                 <div className='flex mt-10 justify-between'>
                                     <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
-                                    <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleNext}>Next</button>
+                                    <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleSubmit}>Submit</button>
                                 </div>
                             </div>
                         </div>
