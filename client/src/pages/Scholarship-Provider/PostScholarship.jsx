@@ -7,7 +7,6 @@ import { FaHandHolding, FaRegCalendarXmark, FaArrowRightLong } from "react-icons
 import { MdOutlineRefresh } from "react-icons/md";
 import { BsGlobe2 } from "react-icons/bs";
 
-
 export default function PostScholarship() {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -49,14 +48,16 @@ export default function PostScholarship() {
     });
   };
 
-
+  // Handle image selection for scholarship image
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setScholarshipImage(imageUrl);
+      setSelectedImage(file); // Set the selected image file here
     }
   };
+
 
   const handleImageClick = () => {
     fileInputRef.current.click();
@@ -65,11 +66,13 @@ export default function PostScholarship() {
   const [bannerImage, setBannerImage] = useState('https://via.placeholder.com/600x200');
   const bannerFileInputRef = useRef(null);
 
+  // Handle image selection for scholarship banner
   const handleBannerImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setBannerImage(imageUrl);
+      setSelectedBanner(file); // Set the selected banner file here
     }
   };
 
@@ -86,6 +89,7 @@ export default function PostScholarship() {
     setCurrentPage(1);
   };
 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
@@ -94,18 +98,21 @@ export default function PostScholarship() {
     let scholarshipImageUrl = '';
     let scholarshipBannerUrl = '';
 
+      // Upload scholarship image to Firebase Storage
     if (selectedImage) {
-      const imageRef = ref(storage, `/scholarship-program-documents/scholarship_images/${selectedImage.name}`);
+      const imageRef = ref(storage, `/scholarship-program-documents/scholarship_images/${formData.title}/${selectedImage.name}`);
       await uploadBytes(imageRef, selectedImage);
       scholarshipImageUrl = await getDownloadURL(imageRef);
     }
-
+    
+    // Upload scholarship banner to Firebase Storage
     if (selectedBanner) {
-      const bannerRef = ref(storage, `/scholarship-program-documents/scholarship_banners/${selectedBanner.name}`);
+      const bannerRef = ref(storage, `/scholarship-program-documents/scholarship_banners/${formData.title}/${selectedBanner.name}`);
       await uploadBytes(bannerRef, selectedBanner);
       scholarshipBannerUrl = await getDownloadURL(bannerRef);
     }
 
+    // Prepare data to be sent to the backend
     const postData = {
       ...formData,
       scholarshipImage: scholarshipImageUrl,
@@ -117,6 +124,7 @@ export default function PostScholarship() {
     };
 
     try {
+      // Send data to the backend
       const response = await fetch('/api/scholarshipProgram/create-scholarship', {
         method: 'POST',
         headers: {

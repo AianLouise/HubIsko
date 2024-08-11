@@ -165,7 +165,7 @@ export const getScholarshipProgramsByProviderId = async (req, res) => {
 export const getAllScholarshipPrograms = async (req, res) => {
   try {
     const programs = await Scholarship.find();
-       const formattedPrograms = programs.map(program => ({
+    const formattedPrograms = programs.map(program => ({
       id: program._id,
       title: program.title,
       description: program.description,
@@ -232,7 +232,7 @@ export const getScholarshipProgramById = async (req, res) => {
       return res.status(404).json({ error: 'Scholarship Program not found' });
     }
 
-       const formattedProgram = {
+    const formattedProgram = {
       id: scholarshipProgram._id,
       title: scholarshipProgram.title,
       description: scholarshipProgram.description,
