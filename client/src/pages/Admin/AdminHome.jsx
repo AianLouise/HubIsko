@@ -14,7 +14,7 @@ export default function AdminHome() {
                     </div>
                     <div className='bg-blue-600 w-36 h-36 my-8 rounded-md'></div>
                 </div>
-                </div>
+             </div>
             <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex'>
                 
        

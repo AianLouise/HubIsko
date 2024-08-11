@@ -3,7 +3,7 @@ import { BiFilter } from "react-icons/bi";
 import { Link } from "react-router-dom";
 
 
-export default function Students() {
+export default function ProviderAccounts() {
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -12,8 +12,8 @@ export default function Students() {
         <div className='border-b mb-8'>
           <div className={'flex items-center mx-auto justify-between px-24'}>
             <div className='flex flex-col gap-2 w-1/2'>
-              <h1 className='text-4xl font-bold text-gray-800'>Students' Info</h1>
-              <p className='text-lg text-slate-500 font-medium'>This will serve as a storage for student's info</p>
+              <h1 className='text-4xl font-bold text-gray-800'>Providers Info</h1>
+              <p className='text-lg text-slate-500 font-medium'>This will serve as a storage for Provider's info</p>
             </div>
             <div className='bg-blue-600 w-36 h-36 my-8 rounded-md'></div>
           </div>
@@ -37,24 +37,24 @@ export default function Students() {
           {/* TABLE */}
 
           <div className='overflow-x-auto rounded-md bg-white shadow'>
-            <table className='w-full border-2 border-gray-200 text-center'>
+            <table className='w-full border-2 border-gray-200'>
               <thead>
                 <tr className='bg-slate-100'>
                   <th className='border border-gray-200'>#No</th>
-                  <th className='border border-gray-200 p-2'>Name</th>
+                  <th className='border border-gray-200 p-2'>Organization</th>
                   <th className='border border-gray-200 p-2'>Email</th>
-                  <th className='border border-gray-200 p-2'>Date Verified</th>
+                  <th className='border border-gray-200 p-2'>Contact Person</th>
                   <th className='border border-gray-200 p-2'>Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-center">
                 <tr className="divide-x">
                   <td className='p-2'>1</td>
+                  <td className='p-2'>Provider</td>
+                  <td className='p-2'>Provider@email.com</td>
                   <td className='p-2'>John Doe</td>
-                  <td className='p-2'>sample@email.com</td>
-                  <td className='p-2'>12/12/2021</td>
                   <td className='py-4'>
-                    <Link to={'/student-details'} className='bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white'>View Details</Link>
+                    <Link to={'/provider-details'} className='bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white'>View Details</Link>
                   </td>
                 </tr>
               </tbody>
