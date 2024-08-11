@@ -23,7 +23,7 @@ export default function PostScholarship() {
     duration: '',
     category: '',
     type: '',
-    academicRequirements: '',
+    academicRequirements: [],
     fieldOfStudy: '',
     levelOfEducation: '',
     location: '',
@@ -98,13 +98,13 @@ export default function PostScholarship() {
     let scholarshipImageUrl = '';
     let scholarshipBannerUrl = '';
 
-      // Upload scholarship image to Firebase Storage
+    // Upload scholarship image to Firebase Storage
     if (selectedImage) {
       const imageRef = ref(storage, `/scholarship-program-documents/scholarship_images/${formData.title}/${selectedImage.name}`);
       await uploadBytes(imageRef, selectedImage);
       scholarshipImageUrl = await getDownloadURL(imageRef);
     }
-    
+
     // Upload scholarship banner to Firebase Storage
     if (selectedBanner) {
       const bannerRef = ref(storage, `/scholarship-program-documents/scholarship_banners/${formData.title}/${selectedBanner.name}`);
@@ -169,6 +169,42 @@ export default function PostScholarship() {
   const handleDelete = (id) => {
     setSections(sections.filter(section => section.id !== id));
   };
+
+  //Custom requirements
+  const [customRequirement, setCustomRequirement] = useState("");
+
+const handleCheckboxChange = (e) => {
+  const { value, checked } = e.target;
+  setFormData((prevFormData) => {
+    if (checked) {
+      return {
+        ...prevFormData,
+        academicRequirements: [...prevFormData.academicRequirements, value],
+      };
+    } else {
+      return {
+        ...prevFormData,
+        academicRequirements: prevFormData.academicRequirements.filter(
+          (requirement) => requirement !== value
+        ),
+      };
+    }
+  });
+};
+
+const handleCustomRequirementChange = (e) => {
+  setCustomRequirement(e.target.value);
+};
+
+const addCustomRequirement = () => {
+  if (customRequirement.trim() !== "") {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      academicRequirements: [...prevFormData.academicRequirements, customRequirement.trim()],
+    }));
+    setCustomRequirement("");
+  }
+};
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
@@ -250,30 +286,43 @@ export default function PostScholarship() {
 
               <div className="flex flex-col gap-4">
                 <label htmlFor="duration" className="text-lg font-medium text-gray-800">Duration</label>
-                <input
-                  type="text"
+                <select
                   id="duration"
                   name="duration"
                   value={formData.duration}
                   onChange={handleChange}
                   className="border border-gray-300 p-2 rounded-md"
-                  placeholder="Enter duration"
                   required
-                />
+                >
+                  <option value="" disabled>Select duration</option>
+                  <option value="1 semester">1 semester</option>
+                  <option value="2 semesters">2 semesters</option>
+                  <option value="1 year">1 year</option>
+                  <option value="2 years">2 years</option>
+                  <option value="3 years">3 years</option>
+                  <option value="4 years">4 years</option>
+                  <option value="Until graduation">Until graduation</option>
+                </select>
               </div>
 
               <div className="flex flex-col gap-4">
                 <label htmlFor="category" className="text-lg font-medium text-gray-800">Category</label>
-                <input
-                  type="text"
+                <select
                   id="category"
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
                   className="border border-gray-300 p-2 rounded-md"
-                  placeholder="Enter category"
                   required
-                />
+                >
+                  <option value="" disabled>Select category</option>
+                  <option value="Undergraduate">Undergraduate</option>
+                  <option value="Postgraduate">Postgraduate</option>
+                  <option value="PhD">PhD</option>
+                  <option value="Research">Research</option>
+                  <option value="Vocational">Vocational</option>
+                  <option value="Other">Other</option>
+                </select>
               </div>
 
               <div className="flex flex-col gap-4">
@@ -299,16 +348,89 @@ export default function PostScholarship() {
 
               <div className="flex flex-col gap-4">
                 <label htmlFor="academicRequirements" className="text-lg font-medium text-gray-800">Academic Requirements</label>
-                <input
-                  type="text"
-                  id="academicRequirements"
-                  name="academicRequirements"
-                  value={formData.academicRequirements}
-                  onChange={handleChange}
-                  className="border border-gray-300 p-2 rounded-md"
-                  placeholder="Enter academic requirements"
-                  required
-                />
+
+                <div className="flex flex-col gap-2">
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="academicRequirements"
+                      value="High School Diploma"
+                      onChange={handleCheckboxChange}
+                      checked={formData.academicRequirements.includes("High School Diploma")}
+                    />
+                    High School Diploma
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="academicRequirements"
+                      value="Undergraduate Degree"
+                      onChange={handleCheckboxChange}
+                      checked={formData.academicRequirements.includes("Undergraduate Degree")}
+                    />
+                    Undergraduate Degree
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="academicRequirements"
+                      value="Postgraduate Degree"
+                      onChange={handleCheckboxChange}
+                      checked={formData.academicRequirements.includes("Postgraduate Degree")}
+                    />
+                    Postgraduate Degree
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="academicRequirements"
+                      value="PhD"
+                      onChange={handleCheckboxChange}
+                      checked={formData.academicRequirements.includes("PhD")}
+                    />
+                    PhD
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="academicRequirements"
+                      value="Minimum GPA 3.0"
+                      onChange={handleCheckboxChange}
+                      checked={formData.academicRequirements.includes("Minimum GPA 3.0")}
+                    />
+                    Minimum GPA 3.0
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="academicRequirements"
+                      value="Minimum GPA 3.5"
+                      onChange={handleCheckboxChange}
+                      checked={formData.academicRequirements.includes("Minimum GPA 3.5")}
+                    />
+                    Minimum GPA 3.5
+                  </label>
+                </div>
+
+                <div className="flex flex-col gap-2 mt-4">
+                  <label htmlFor="customAcademicRequirement" className="text-lg font-medium text-gray-800">Add Custom Requirement</label>
+                  <input
+                    type="text"
+                    id="customAcademicRequirement"
+                    name="customAcademicRequirement"
+                    value={customRequirement}
+                    onChange={handleCustomRequirementChange}
+                    className="border border-gray-300 p-2 rounded-md"
+                    placeholder="Enter custom requirement"
+                  />
+                  <button
+                    type="button"
+                    onClick={addCustomRequirement}
+                    className="bg-blue-500 text-white p-2 rounded-md mt-2"
+                  >
+                    Add Requirement
+                  </button>
+                </div>
               </div>
 
               <div className="flex flex-col gap-4">

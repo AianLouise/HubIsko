@@ -57,6 +57,14 @@ export const createScholarshipProgram = async (req, res) => {
       });
     }
 
+    // Validate academicRequirements field
+    if (!Array.isArray(academicRequirements)) {
+      console.error('Validation Error: Academic requirements should be an array');
+      return res.status(400).json({
+        message: 'Academic requirements should be an array.',
+      });
+    }
+
     // Validate details field
     if (!Array.isArray(details)) {
       console.error('Validation Error: Details should be an array');

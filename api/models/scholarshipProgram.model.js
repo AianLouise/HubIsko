@@ -10,7 +10,7 @@ const scholarshipProgramSchema = new mongoose.Schema({
   duration: { type: String, required: true },
   category: { type: String, required: true },
   type: { type: String, required: true },
-  academicRequirements: { type: String, required: true },
+  academicRequirements: { type: [String], required: true }, // Changed to array of strings
   fieldOfStudy: { type: String, required: true },
   levelOfEducation: { type: String, required: true },
   location: { type: String, required: true },
@@ -36,7 +36,6 @@ const scholarshipProgramSchema = new mongoose.Schema({
   ],
   datePosted: { type: Date, default: Date.now } // Added field for date posted
 });
-
 
 // Models
 const Scholarship = mongoose.model('ScholarshipProgram', scholarshipProgramSchema);

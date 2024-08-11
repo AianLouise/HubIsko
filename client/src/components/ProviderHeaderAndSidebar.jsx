@@ -11,34 +11,30 @@ import { Link } from 'react-router-dom';
 import { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { signOut } from '../redux/user/userSlice';
-import { useNavigate } from 'react-router-dom';
 
 export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
-    const navigate = useNavigate();
 
     const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
     const dispatch = useDispatch();
-    const { currentUser } = useSelector((state) => state.user);
+    const currentUser = useSelector((state) => state.user.currentUser);
 
     const handleSignOut = async () => {
-
         try {
             await fetch('/api/auth/signout');
             dispatch(signOut());
-            navigate('/'); // Navigate to home page
         } catch (error) {
             console.log(error);
         }
     };
 
-
+    
     const maxUsernameLength = 6;
     const truncatedUsername = currentUser.username.length > maxUsernameLength
-        ? currentUser.username.slice(0, maxUsernameLength) + '...'
-        : currentUser.username;
+    ? currentUser.username.slice(0, maxUsernameLength) + '...'
+    : currentUser.username;
 
     return (
         <header className="bg-white text-gray-800 p-4 flex justify-between items-center shadow border-b w-full">
@@ -55,69 +51,69 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
                 <div className="flex gap-2 items-center">
                     <span className="text-base">{truncatedUsername}</span>
                     <div className="relative" ref={dropdownRef}>
-                        <img src={currentUser.profilePicture || 'https://via.placeholder.com/40'} alt="Profile" className="h-8 w-8 rounded-full" onClick={toggleDropdown} />
-                        {dropdownOpen && (
-                            <div className="absolute mt-2 right-0 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50 font-medium">
-                                <ul>
-                                    <li className="p-2 hover:bg-gray-100 cursor-pointer">Profile</li>
-                                    <li className="p-2 hover:bg-gray-100 cursor-pointer">Settings</li>
-                                    <li className="p-2 hover:bg-gray-100 cursor-pointer" onClick={handleSignOut}>Sign out</li>
-                                </ul>
-                            </div>
-                        )}
+                    <img src={currentUser.profilePicture || 'https://via.placeholder.com/40'} alt="Profile" className="h-8 w-8 rounded-full" onClick={toggleDropdown} />
+                    {dropdownOpen && (
+                        <div className="absolute mt-2 right-0 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50 font-medium">
+                        <ul>
+                            <li className="p-2 hover:bg-gray-100 cursor-pointer">Profile</li>
+                            <li className="p-2 hover:bg-gray-100 cursor-pointer">Settings</li>
+                            <li className="p-2 hover:bg-gray-100 cursor-pointer" onClick={handleSignOut}>Sign out</li>
+                        </ul>
+                        </div>
+                    )}
                     </div>
                 </div>
-            </div>
+            </div>            
 
             {sidebarOpen && (
-                <aside className="fixed font-medium inset-y-0 left-0 transform translate-x-0 w-64 transition-transform duration-300 ease-in-out bg-white shadow-lg p-4 z-50">
-                    <div className='flex justify-between mb-8'>
+                <aside className="fixed font-medium inset-y-0 left-0 transform translate-x-0 w-64 transition-transform duration-300 ease-in-out bg-white shadow-lg p-4 z-50">                   
+                   <div className='flex justify-between mb-8'>
                         <div className='flex items-center gap-2'>
-                            <div className='bg-blue-600 w-6 h-6 rounded-md'></div>
-                            <span className='font-bold text-blue-600 text-2xl'>HubIsko</span>
+                        <div className='bg-blue-600 w-6 h-6 rounded-md'></div>
+                        <span className='font-bold text-blue-600 text-2xl'>HubIsko</span>
                         </div>
                         <button onClick={toggleSidebar} className='border border-blue-600 rounded-full items-center justify-center flex w-8 hover:bg-slate-200 transition hover:border-none'>
-                            <IoClose className='w-4 h-4 text-blue-600' />
+                        <IoClose className='w-4 h-4 text-blue-600' />
                         </button>
                     </div>
-
-
+               
+               
                     <nav className="">
                         <ul className="space-y-2">
                             <li>
-                                <Link to={'/provider-dashboard'} className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
-                                    <FaHouse className="w-4 h-4 text-blue-600" />
-                                    Home
-                                </Link>
+                           <Link to={'/provider-dashboard'} className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
+                            <FaHouse className="w-4 h-4 text-blue-600" />
+                                Home
+                            </Link>
                             </li>
 
                             <li>
-                                <Link to={'/scholarships'} className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
-                                    <FaGoogleScholar className="w-4 h-4 text-blue-600" />
-                                    Scholarships
-                                </Link>
+                           <Link to={'/scholarships'} className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
+                             <FaGoogleScholar className="w-4 h-4 text-blue-600" />
+                                Scholarships
+                          </Link>
                             </li>
 
-
+                                 
                             <li>
-                                <Link to={'/scholar-applications'} className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
-                                    <IoDocuments className="w-4 h-4 text-blue-600" />
-                                    Scholarships
-                                </Link>
-                            </li>
-
-                            <li>
-                                <Link to={'/provider-forums'} className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
-                                    <MdForum className="w-4 h-4 text-blue-600" />
-                                    Forums
-                                </Link>
+                            <Link to={'/scholar-applications'} className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
+                             <IoDocuments className="w-4 h-4 text-blue-600" />
+                                Scholarships
+                            </Link>
                             </li>
 
                             <li>
-                                <a href="#" className="flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
-                                    <FaCog className="w-4 h-4 text-blue-600" />
-                                    Settings
-                                </a>
+                            <Link to={'/provider-forums'} className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
+                             <MdForum className="w-4 h-4 text-blue-600" />
+                                Forums
+                            </Link>
+                            </li>
+
+                            <li>
+                            <a href="#" className="flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
+                            <FaCog className="w-4 h-4 text-blue-600" />
+                                Settings
+                            </a>
                             </li>
 
                         </ul>
