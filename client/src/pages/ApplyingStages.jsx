@@ -50,7 +50,7 @@ export default function ApplyingStages() {
         <div className='flex flex-col min-h-screen'>
             <Header />
             <main className='flex-grow font-medium text-slate-700'>
-                <div className='flex flex-col mx-auto max-w-7xl px-24'>
+                <div className='flex flex-col mx-auto max-w-7xl px-24 my-10'>
 
                     <div className='flex justify-center items-center gap-4 mt-4 mb-8'>
                         {[1, 2, 3, 4].map((step) => (
@@ -83,27 +83,30 @@ export default function ApplyingStages() {
                             <span className='text-lg font-bold'>Basic Information</span>
                         </div>
 
-                        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4'>
+                                              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4'>
                             <div>
                                 <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
                                 <input
                                     type="text"
+                                    placeholder="Enter your first name"
                                     className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                 />
                             </div>
-
+                        
                             <div>
                                 <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
                                 <input
                                     type="text"
+                                    placeholder="Enter your last name"
                                     className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                 />
                             </div>
-
+                        
                             <div>
                                 <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
                                 <input
                                     type="text"
+                                    placeholder="Enter your middle name"
                                     className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                 />
                             </div>
