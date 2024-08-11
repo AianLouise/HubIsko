@@ -42,6 +42,11 @@ import CreateForumPost from "./pages/CreateForumPost";
 import Accounts from "./pages/Admin/Accounts";
 import Layout from "./components/Layout"; 
 import Students from "./pages/Admin/Students";
+import ProviderAccounts from "./pages/Admin/ProviderAccounts";
+import VerificationDetails from "./pages/Admin/VerificationDetails";
+import StudentDetails from "./pages/Admin/StudentDetails";
+import ProviderDetails from "./pages/Admin/ProviderDetails";
+import Inbox from "./pages/Admin/Inbox";
 
 
 export default function App() {
@@ -87,6 +92,11 @@ export default function App() {
           <Route path="admin-home" element={<AdminHome />} />
           <Route path="accounts" element={<Accounts />} />
           <Route path="students" element={<Students />} />
+          <Route path="provider-accounts" element={<ProviderAccounts />} />
+          <Route path="verification-details" element={<VerificationDetails />} />
+          <Route path="student-details" element={<StudentDetails />} />
+          <Route path="provider-details" element={<ProviderDetails />} />
+          <Route path="inbox" element={<Inbox />} />
           {/* Add other routes here */}
         </Route>
 

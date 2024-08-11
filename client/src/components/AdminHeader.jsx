@@ -28,8 +28,13 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
     };
 
     useEffect(() => {
-        // Open the dropdown if the path starts with /accounts, /students, or /inbox, otherwise close it
-        if (location.pathname.startsWith('/accounts') || location.pathname.startsWith('/students')) {
+        if (location.pathname.startsWith('/accounts') 
+            || location.pathname.startsWith('/students') 
+            || location.pathname.startsWith('/provider-accounts') 
+            || location.pathname.startsWith('/verification-details')
+            || location.pathname.startsWith('/student-details')
+            || location.pathname.startsWith('/provider-details')
+        ) { 
             setIsAccountsDropdownOpen(true);
         } else {
             setIsAccountsDropdownOpen(false);
@@ -77,8 +82,10 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                     <nav>
                         <ul className="space-y-2">
                             <li>
-                            <Link to={'/admin-home'} className="flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
-                                <GoHomeFill className="w-5 h-5 text-blue-600" /> 
+                            <Link to={'/admin-home'} 
+                             className={`flex gap-2 items-center text-gray-800 py-2 px-4 rounded-md ${
+                                location.pathname.startsWith('/admin-home') ? 'bg-blue-600 text-white' : ''}`} >
+                                <GoHomeFill className={`w-5 h-5 text-blue-600 ${location.pathname.startsWith('/admin-home') ? 'text-white' : ''}`} /> 
                                 Dashboard
                             </Link>
                             </li>
@@ -87,10 +94,23 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                             <div className="">
                             <Link to={'/accounts'}
                             onClick={toggleAccountsDropdown} 
-                           
+
                             className={`flex gap-2 items-center text-gray-800 py-2 px-4 rounded-md ${
-                                location.pathname.startsWith('/accounts') || location.pathname.startsWith('/students') ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                 <BsFillPersonFill className={`w-5 h-5 text-blue-600 ${location.pathname.startsWith('/accounts') || location.pathname.startsWith('/students') ? 'text-white' : ''} `}/>
+                                location.pathname.startsWith('/accounts') 
+                                || location.pathname.startsWith('/students')
+                                || location.pathname.startsWith('/provider-accounts') 
+                                || location.pathname.startsWith('/verification-details') 
+                                || location.pathname.startsWith('/student-details')
+                                || location.pathname.startsWith('/provider-details')
+                                ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                 <BsFillPersonFill className={`w-5 h-5 text-blue-600 
+                                 ${location.pathname.startsWith('/accounts') 
+                                    || location.pathname.startsWith('/students') 
+                                    || location.pathname.startsWith('/provider-accounts') 
+                                    || location.pathname.startsWith('/verification-details')  
+                                    || location.pathname.startsWith('/student-details')
+                                    || location.pathname.startsWith('/provider-details')
+                                    ? 'text-white' : ''} `}/>
                                 Accounts
                             </Link>
                            
@@ -110,10 +130,10 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                           </Link>
                                       </li>
                                       <li>
-                                          <a href="#" className="flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
-                                          <BsBuildingFill className="w-5 h-5 text-blue-600" />
+                                      <Link to={'/provider-accounts'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${ location.pathname === '/provider-accounts' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200' }`}>
+                                          <BsBuildingFill className={`w-5 h-5 text-blue-600 ${ location.pathname === '/provider-accounts' ? ' text-white' : '' }`} />
                                           Scholarship Providers
-                                          </a>
+                                       </Link> 
                                       </li>
                                       </ul>
                             
@@ -125,7 +145,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
 
                             <li>
                             <div>
-                            <Link to={'#'}
+                            <Link to={'/inbox'}
                                         onClick={toggleInboxDropdown}
                                         className={`flex gap-2 items-center text-gray-800 py-2 px-4 rounded-md ${
                                             location.pathname.startsWith('/inbox') ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
@@ -137,7 +157,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                             {isInboxDropdownOpen&& (
                           
 
-                            <ul className="ml-4 my-2">
+                            <ul className="ml-4 my-2 space-y-2">
                             <li>
                                 <a href="#" className="flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
                                 <FaGoogleScholar className="w-5 h-5 text-blue-600" />

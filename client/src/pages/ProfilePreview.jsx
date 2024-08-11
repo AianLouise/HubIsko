@@ -74,6 +74,7 @@ export default function ProfilePreview() {
               <span>Container for About</span>
             </div>
           )}
+          
           {selectedTab === 'Scholarships' && (
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-700'>
             {scholarships.map((scholarship) => (
