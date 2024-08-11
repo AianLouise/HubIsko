@@ -443,8 +443,10 @@ export default function ApplyingStages() {
                                     />
                                 </div>
 
-                                <div className='flex mt-10 justify-between'>
-                                    <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                                <div className='flex mt-10 justify-end space-x-4'>
+                                    {activeStep > 1 && (
+                                        <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                                    )}
                                     <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleNext}>Next</button>
                                 </div>
                             </div>
@@ -485,8 +487,10 @@ export default function ApplyingStages() {
                                     </div>
                                 </div>
 
-                                <div className='flex mt-10 justify-between'>
-                                    <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                                <div className='flex mt-10 justify-end space-x-4'>
+                                    {activeStep > 1 && (
+                                        <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                                    )}
                                     <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleNext}>Next</button>
                                 </div>
                             </div>
@@ -527,8 +531,10 @@ export default function ApplyingStages() {
                                     </div>
                                 </div>
 
-                                <div className='flex mt-10 justify-between'>
-                                    <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                                <div className='flex mt-4 justify-end space-x-4'>
+                                    {activeStep > 1 && (
+                                        <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                                    )}
                                     <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleNext}>Next</button>
                                 </div>
                             </div>
@@ -586,8 +592,10 @@ export default function ApplyingStages() {
                                     </div>
                                 </div>
 
-                                <div className='flex mt-10 justify-between'>
-                                    <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                                <div className='flex mt-4 justify-end space-x-4'>
+                                    {activeStep > 1 && (
+                                        <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                                    )}
                                     <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleNext}>Next</button>
                                 </div>
                             </div>
@@ -624,7 +632,7 @@ export default function ApplyingStages() {
                                     </label>
                                 </div>
 
-                                <div className='flex mt-10 justify-between'>
+                                <div className='flex mt-4 justify-end space-x-4'>
                                     <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
                                     <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleSubmit}>Submit</button>
                                 </div>
