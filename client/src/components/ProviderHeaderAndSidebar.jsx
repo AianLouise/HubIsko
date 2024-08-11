@@ -98,7 +98,7 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
                             <li>
                             <Link to={'/scholar-applications'} className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
                              <IoDocuments className="w-4 h-4 text-blue-600" />
-                                Scholarships
+                                Applications
                             </Link>
                             </li>
 
