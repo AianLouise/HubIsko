@@ -6,22 +6,19 @@ export default function CompleteProfile() {
     firstName: '',
     middleName: '',
     lastName: '',
-    nameExtension: '',
-    sex: 'MALE',
-    dateOfBirth: '',
-    mobileNumber: '',
-    permanentAddress: '',
-    barangay: '',
-    municipality: '',
-    province: '',
-    motherFirstName: '',
-    motherMiddleName: '',
-    motherLastName: '',
-    motherDOB: '',
-    fatherFirstName: '',
-    fatherMiddleName: '',
-    fatherLastName: '',
-    fatherDOB: ''
+    birthdate: '',
+    gender: '',
+    bloodType: '',
+    civilStatus: '',
+    maidenName: '',
+    spouseName: '',
+    spouseOccupation: '',
+    religion: '',
+    height: '',
+    weight: '',
+    birthplace: '',
+    contactNumber: '',
+    address: ''
   });
 
   const [showModal, setShowModal] = useState(false);
@@ -43,11 +40,12 @@ export default function CompleteProfile() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
     }));
   };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -82,385 +80,364 @@ export default function CompleteProfile() {
       });
   };
 
+  // State variables to manage the selected civil status and input field values
+  const [civilStatus, setCivilStatus] = useState('');
+  const [maidenName, setMaidenName] = useState('');
+  const [spouseName, setSpouseName] = useState('');
+  const [spouseOccupation, setSpouseOccupation] = useState('');
+
+  // Function to handle changes in the civil status dropdown
+  const handleCivilStatusChange = (e) => {
+    const status = e.target.value;
+    setCivilStatus(status);
+
+    // Reset input fields if the selected status is not 'Married'
+    if (status !== 'Married') {
+      setMaidenName('');
+      setSpouseName('');
+      setSpouseOccupation('');
+    }
+  };
+
+  // Boolean to check if the selected civil status is 'Married'
+  const isMarried = civilStatus === 'Married';
+
   return (
     <div>
-       <div className=" flex justify-center pt-8 rounded-md">
-          <h2 className="text-xl font-medium text-slate-600">Please fill out the areas to complete your profile</h2>
+      <div className=" flex justify-center pt-8 rounded-md">
+        <h2 className="text-xl font-medium text-slate-600">Please fill out the areas to complete your profile</h2>
+      </div>
+      <form onSubmit={handleSubmit} className="max-w-6xl mx-auto p-6 space-y-6 bg-white border rounded-lg shadow-lg mt-4 mb-10">
+        <div className="bg-blue-600 text-white p-4 rounded-t-lg">
+          <span className='text-lg font-bold'>Basic Information</span>
         </div>
-      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto p-6 space-y-6 bg-white border rounded-lg shadow-lg mt-4 mb-10">
-      <div className='bg-blue-600 text-white p-4 rounded-md'>
-       <h2 className='text-xl font-bold'> Basic Information</h2>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">First Name <span className="text-red-500">*</span></label>
+
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4'>
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
             <input
               type="text"
               name="firstName"
               value={formData.firstName}
               onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
+              placeholder="Enter your first name"
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
             />
           </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Middle Name <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              name="middleName"
-              value={formData.middleName}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-            />
-          </div>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Last Name <span className="text-red-500">*</span></label>
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
             <input
               type="text"
               name="lastName"
               value={formData.lastName}
               onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
+              placeholder="Enter your last name"
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
             />
           </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Name Extension (if applicable)</label>
-            <select
-              name="nameExtension"
-              value={formData.nameExtension}
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
+            <input
+              type="text"
+              name="middleName"
+              value={formData.middleName}
               onChange={handleChange}
-              className="p-2 border border-gray-300 rounded-md"
-            >
-              <option value="">None</option>
-              <option value="Jr.">Jr. (Junior)</option>
-              <option value="Sr.">Sr. (Senior)</option>
-              <option value="III">III (The Third)</option>
-              <option value="IV">IV (The Fourth)</option>
-            </select>
+              placeholder="Enter your middle name"
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+            />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Sex <span className="text-red-500">*</span></label>
-            <select
-              name="sex"
-              value={formData.sex}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-            >
-              <option value="FEMALE">Female</option>
-              <option value="MALE">Male</option>
-            </select>
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Date of Birth <span className="text-red-500">*</span></label>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4'>
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
             <input
               type="date"
-              name="dateOfBirth"
-              value={formData.dateOfBirth}
+              name="birthdate"
+              value={formData.birthdate}
               onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
             />
           </div>
-        </div>
 
-        <div className="flex flex-col">
-          <label className="mb-2 text-gray-700 font-semibold">Mobile Number <span className="text-red-500">*</span></label>
-          <input
-            type="tel"
-            name="mobileNumber"
-            value={formData.mobileNumber}
-            onChange={handleChange}
-            required
-            className="p-2 border border-gray-300 rounded-md"
-          />
-        </div>
-
-        <div className="bg-blue-600 text-white p-4 rounded-md mt-6">
-          <h2 className="text-xl font-bold">Permanent Address</h2>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">House/Bldg. No., Street <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              name="permanentAddress"
-              value={formData.permanentAddress}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-              placeholder="#123 CAPITOL STREET"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Barangay <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              name="barangay"
-              value={formData.barangay}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-              placeholder="SAN JOSE"
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Municipality <span className="text-red-500">*</span></label>
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Gender</label>
             <select
-              name="municipality"
-              value={formData.municipality}
+              name="gender"
+              value={formData.gender}
               onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
             >
-              <option value="">Select a municipality</option>
-              <option value="Angeles City">Angeles City</option>
-              <option value="Apalit">Apalit</option>
-              <option value="Aramina">Aramina</option>
-              <option value="Bacolor">Bacolor</option>
-              <option value="Candaba">Candaba</option>
-              <option value="Floridablanca">Floridablanca</option>
-              <option value="Guagua">Guagua</option>
-              <option value="Lubao">Lubao</option>
-              <option value="Mabalacat City">Mabalacat City</option>
-              <option value="Macabebe">Macabebe</option>
-              <option value="Magalang">Magalang</option>
-              <option value="Masantol">Masantol</option>
-              <option value="Mexico">Mexico</option>
-              <option value="Minalin">Minalin</option>
-              <option value="Porac">Porac</option>
-              <option value="San Fernando">San Fernando</option>
-              <option value="San Luis">San Luis</option>
-              <option value="San Simon">San Simon</option>
-              <option value="Santa Ana">Santa Ana</option>
-              <option value="Santa Rita">Santa Rita</option>
-              <option value="Santo Tomas">Santo Tomas</option>
-              <option value="Sasmuan (Sexmoan)">Sasmuan (Sexmoan)</option>
+              <option value="">Select Gender</option>
+              <option value="Female">Female</option>
+              <option value="Male">Male</option>
+              <option value="Other">Other</option>
             </select>
           </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Province <span className="text-red-500">*</span></label>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Blood Type</label>
             <select
-              name="province"
-              value={formData.province}
+              name="bloodType"
+              value={formData.bloodType}
               onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
             >
-              <option value="">Select a province</option>
-              <option value="Pampanga">Pampanga</option>
+              <option value="">Select Blood Type</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
             </select>
           </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Civil Status</label>
+            <select
+              name="civilStatus"
+              value={civilStatus}
+              onChange={handleCivilStatusChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+            >
+              <option value="">Select Civil Status</option>
+              <option value="Single">Single</option>
+              <option value="Married">Married</option>
+              <option value="Divorced">Divorced</option>
+              <option value="Widowed">Widowed</option>
+            </select>
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Maiden Name</label>
+            <input
+              type="text"
+              name="maidenName"
+              value={maidenName}
+              onChange={(e) => setMaidenName(e.target.value)}
+              disabled={!isMarried}
+              placeholder="Enter maiden name"
+              className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${!isMarried ? 'text-gray-400' : ''}`}
+            />
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Name of Spouse</label>
+            <input
+              type="text"
+              name="spouseName"
+              value={spouseName}
+              onChange={(e) => setSpouseName(e.target.value)}
+              disabled={!isMarried}
+              placeholder="Enter name of spouse"
+              className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${!isMarried ? 'text-gray-400' : ''}`}
+            />
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation of Spouse</label>
+            <input
+              type="text"
+              name="spouseOccupation"
+              value={spouseOccupation}
+              onChange={(e) => setSpouseOccupation(e.target.value)}
+              disabled={!isMarried}
+              placeholder="Enter occupation of spouse"
+              className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${!isMarried ? 'text-gray-400' : ''}`}
+            />
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Religion</label>
+            <select
+              name="religion"
+              value={formData.religion}
+              onChange={handleChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+            >
+              <option value="Roman Catholic">Roman Catholic</option>
+              <option value="Iglesia ni Cristo">Iglesia ni Cristo</option>
+              <option value="Islam">Islam</option>
+              <option value="Born Again Christian">Born Again Christian</option>
+              <option value="Others">Others</option>
+            </select>
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Height</label>
+            <input
+              type="number"
+              name="height"
+              value={formData.height}
+              onChange={handleChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              placeholder="Enter height in cm"
+            />
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Weight</label>
+            <input
+              type="number"
+              name="weight"
+              value={formData.weight}
+              onChange={handleChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              placeholder="Enter weight in kg"
+            />
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Birthplace</label>
+            <input
+              type="text"
+              name="birthplace"
+              value={formData.birthplace}
+              onChange={handleChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              placeholder="Enter birthplace"
+            />
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Contact Number</label>
+            <input
+              type="tel"
+              name="contactNumber"
+              value={formData.contactNumber}
+              onChange={handleChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              placeholder="Enter contact number"
+              pattern="^(09|\+639)\d{9}$"
+              title="Please enter a valid Philippine phone number (e.g., 09123456789 or +639123456789)"
+            />
+          </div>
         </div>
 
-        <div className="bg-blue-600 text-white p-4 rounded-md mt-6">
-          <h2 className="text-xl font-bold">Parent Details</h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Mother's Maiden First Name <span className="text-red-500">*</span></label>
+               <div className='grid grid-cols-1 gap-4 p-4'>
+          <div className='col-span-1'>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>
+              Address
+            </label>
             <input
               type="text"
-              name="motherFirstName"
-              value={formData.motherFirstName}
+              name="address"
+              value={formData.address}
               onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-              placeholder="JUANA"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Mother's Maiden Middle Name <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              name="motherMiddleName"
-              value={formData.motherMiddleName}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-              placeholder="DELA CRUZ"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Mother's Maiden Last Name <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              name="motherLastName"
-              value={formData.motherLastName}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-              placeholder="SANTOS"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Mother's Date of Birth <span className="text-red-500">*</span></label>
-            <input
-              type="date"
-              name="motherDOB"
-              value={formData.motherDOB}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              placeholder="Enter full address"
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Father's First Name <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              name="fatherFirstName"
-              value={formData.fatherFirstName}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-              placeholder="JUAN"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Father's Middle Name <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              name="fatherMiddleName"
-              value={formData.fatherMiddleName}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-              placeholder="DELA CRUZ"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Father's Last Name <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              name="fatherLastName"
-              value={formData.fatherLastName}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-              placeholder="SANTOS"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Father's Date of Birth <span className="text-red-500">*</span></label>
-            <input
-              type="date"
-              name="fatherDOB"
-              value={formData.fatherDOB}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-            />
-          </div>
-        </div>
 
-        <div className="flex flex-col space-y-4 mt-6">
+        <div className="flex justify-end space-x-2 px-4">
           <button
             type="submit"
-            className="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-200"
+            className="py-2 px-6 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
           >
             Submit
           </button>
+          <button
+            type="reset"
+            className="py-2 px-6 bg-gray-500 text-white rounded-lg shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
+          >
+            Clear
+          </button>
         </div>
-      </form>
+      </form >
+
 
       {/* Modal */}
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50">
-          <div className="relative w-full max-w-lg mx-auto">
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-gray-800">Confirm Submission</h2>
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="text-gray-600 hover:text-gray-800 focus:outline-none"
-                >
-                  <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              <div className="space-y-4">
-                <div className="border-t border-gray-200 pt-4">
-                  <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Name:</span> {formData.firstName} {formData.middleName} {formData.lastName} {formData.nameExtension}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Sex:</span> {formData.sex === 'MALE' ? 'Male' : 'Female'}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Date of Birth:</span> {formData.dateOfBirth}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Mobile Number:</span> {formData.mobileNumber}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Permanent Address:</span> {formData.permanentAddress}, {formData.barangay}, {formData.municipality}, {formData.province}
-                  </p>
-                  <div className="mt-4">
-                    <p className="text-sm font-semibold">Mother's Details:</p>
-                    <p className="text-sm text-gray-600 ml-2">
-                      <span className="font-semibold">First Name:</span> {formData.motherFirstName}
-                    </p>
-                    <p className="text-sm text-gray-600 ml-2">
-                      <span className="font-semibold">Middle Name:</span> {formData.motherMiddleName}
-                    </p>
-                    <p className="text-sm text-gray-600 ml-2">
-                      <span className="font-semibold">Last Name:</span> {formData.motherLastName}
-                    </p>
-                    <p className="text-sm text-gray-600 ml-2">
-                      <span className="font-semibold">Date of Birth:</span> {formData.motherDOB}
-                    </p>
-                  </div>
-                  <div className="mt-4">
-                    <p className="text-sm font-semibold">Father's Details:</p>
-                    <p className="text-sm text-gray-600 ml-2">
-                      <span className="font-semibold">First Name:</span> {formData.fatherFirstName}
-                    </p>
-                    <p className="text-sm text-gray-600 ml-2">
-                      <span className="font-semibold">Middle Name:</span> {formData.fatherMiddleName}
-                    </p>
-                    <p className="text-sm text-gray-600 ml-2">
-                      <span className="font-semibold">Last Name:</span> {formData.fatherLastName}
-                    </p>
-                    <p className="text-sm text-gray-600 ml-2">
-                      <span className="font-semibold">Date of Birth:</span> {formData.fatherDOB}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex justify-end mt-6">
+      {
+        showModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50">
+            <div className="relative w-full max-w-lg mx-auto">
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-2xl font-bold text-gray-800">Confirm Submission</h2>
                   <button
-                    onClick={() => {
-                      handleConfirmSubmit();
-                      setShowModal(false);
-                    }}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700 transition duration-200 focus:outline-none"
+                    onClick={() => setShowModal(false)}
+                    className="text-gray-600 hover:text-gray-800 focus:outline-none"
                   >
-                    Confirm Submit
+                    <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                   </button>
+                </div>
+                <div className="space-y-4">
+                  <div className="border-t border-gray-200 pt-4">
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Name:</span> {formData.firstName} {formData.middleName} {formData.lastName} {formData.nameExtension}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Sex:</span> {formData.sex === 'MALE' ? 'Male' : 'Female'}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Date of Birth:</span> {formData.dateOfBirth}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Mobile Number:</span> {formData.mobileNumber}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Permanent Address:</span> {formData.permanentAddress}, {formData.barangay}, {formData.municipality}, {formData.province}
+                    </p>
+                    <div className="mt-4">
+                      <p className="text-sm font-semibold">Mother's Details:</p>
+                      <p className="text-sm text-gray-600 ml-2">
+                        <span className="font-semibold">First Name:</span> {formData.motherFirstName}
+                      </p>
+                      <p className="text-sm text-gray-600 ml-2">
+                        <span className="font-semibold">Middle Name:</span> {formData.motherMiddleName}
+                      </p>
+                      <p className="text-sm text-gray-600 ml-2">
+                        <span className="font-semibold">Last Name:</span> {formData.motherLastName}
+                      </p>
+                      <p className="text-sm text-gray-600 ml-2">
+                        <span className="font-semibold">Date of Birth:</span> {formData.motherDOB}
+                      </p>
+                    </div>
+                    <div className="mt-4">
+                      <p className="text-sm font-semibold">Father's Details:</p>
+                      <p className="text-sm text-gray-600 ml-2">
+                        <span className="font-semibold">First Name:</span> {formData.fatherFirstName}
+                      </p>
+                      <p className="text-sm text-gray-600 ml-2">
+                        <span className="font-semibold">Middle Name:</span> {formData.fatherMiddleName}
+                      </p>
+                      <p className="text-sm text-gray-600 ml-2">
+                        <span className="font-semibold">Last Name:</span> {formData.fatherLastName}
+                      </p>
+                      <p className="text-sm text-gray-600 ml-2">
+                        <span className="font-semibold">Date of Birth:</span> {formData.fatherDOB}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex justify-end mt-6">
+                    <button
+                      onClick={() => {
+                        handleConfirmSubmit();
+                        setShowModal(false);
+                      }}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700 transition duration-200 focus:outline-none"
+                    >
+                      Confirm Submit
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
       {/* End Modal */}
 
 
-    </div>
+    </div >
   );
 }

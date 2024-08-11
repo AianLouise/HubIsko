@@ -2,58 +2,74 @@ import mongoose from 'mongoose';
 
 // Sub-schema for Applicant
 const applicantSchema = new mongoose.Schema({
-    profileComplete: {
-        type: Boolean,
-        default: false,
-    },
-    permanentAddress: {
-        type: String,
-        required: false,
-    },
-    barangay: {
-        type: String,
-        required: false,
-    },
-    municipality: {
-        type: String,
-        required: false,
-    },
-    province: {
-        type: String,
-        required: false,
-    },
-    motherFirstName: {
-        type: String,
-        required: false,
-    },
-    motherMiddleName: {
-        type: String,
-        required: false,
-    },
-    motherLastName: {
-        type: String,
-        required: false,
-    },
-    motherDOB: {
-        type: Date,
-        required: false,
-    },
-    fatherFirstName: {
-        type: String,
-        required: false,
-    },
-    fatherMiddleName: {
-        type: String,
-        required: false,
-    },
-    fatherLastName: {
-        type: String,
-        required: false,
-    },
-    fatherDOB: {
-        type: Date,
-        required: false,
-    },
+  profileComplete: {
+    type: Boolean,
+    default: false,
+  },
+  firstName: {
+    type: String,
+    required: false,
+  },
+  middleName: {
+    type: String,
+    required: false,
+  },
+  lastName: {
+    type: String,
+    required: false,
+  },
+  birthdate: {
+    type: Date,
+    required: false,
+  },
+  gender: {
+    type: String,
+    required: false,
+  },
+  bloodType: {
+    type: String,
+    required: false,
+  },
+  civilStatus: {
+    type: String,
+    required: false,
+  },
+  maidenName: {
+    type: String,
+    required: false,
+  },
+  spouseName: {
+    type: String,
+    required: false,
+  },
+  spouseOccupation: {
+    type: String,
+    required: false,
+  },
+  religion: {
+    type: String,
+    required: false,
+  },
+  height: {
+    type: Number,
+    required: false,
+  },
+  weight: {
+    type: Number,
+    required: false,
+  },
+  birthplace: {
+    type: String,
+    required: false,
+  },
+  contactNumber: {
+    type: String,
+    required: false,
+  },
+  address: {
+    type: String,
+    required: false,
+  },
 }, { _id: false });
 
 // Sub-schema for Scholarship Provider
