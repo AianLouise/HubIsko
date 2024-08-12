@@ -5,13 +5,12 @@ import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 
 export const signup = async (req, res, next) => {
-  const { firstName, lastName, email, dateOfBirth, username, password, role } = req.body;
+  const { firstName, lastName, email, username, password, role } = req.body;
   const hashedPassword = bcryptjs.hashSync(password, 10);
 
   // Create a new user instance with profileComplete set to false
   const newUser = new User({
     email,
-    dateOfBirth,
     username,
     password: hashedPassword,
     authProvider: 'email',
@@ -22,7 +21,7 @@ export const signup = async (req, res, next) => {
       firstName,
       lastName,
       middleName: "",
-      birthdate: dateOfBirth,
+      birthdate: "",
       gender: "",
       bloodType: "",
       civilStatus: "",

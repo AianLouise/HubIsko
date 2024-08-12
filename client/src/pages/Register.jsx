@@ -13,7 +13,6 @@ export default function SignUp() {
     confirmPassword: '',
     firstName: '',
     lastName: '',
-    dateOfBirth: '',
     role: 'applicant',
   });
 
@@ -85,8 +84,8 @@ export default function SignUp() {
   };
 
   const validateForm = () => {
-    const { username, email, password, confirmPassword, firstName, lastName, dateOfBirth } = formData;
-    if (!username || !email || !password || !confirmPassword || !firstName || !lastName || !dateOfBirth) {
+    const { username, email, password, confirmPassword, firstName, lastName } = formData;
+    if (!username || !email || !password || !confirmPassword || !firstName || !lastName) {
       setError('Please fill in all fields');
       return false;
     }
@@ -138,14 +137,6 @@ export default function SignUp() {
               <input type="text" id="lastName" placeholder="Last Name" className='border bg-white p-3 rounded-lg focus:outline-blue-600' onChange={handleChange} required />
             </div>
             <input type="email" id="email" placeholder="Email Address" className='border bg-white p-3 rounded-lg focus:outline-blue-600' onChange={handleChange} required />
-            <input
-              type="date"
-              id="dateOfBirth"
-              className='border bg-white p-3 rounded-lg focus:outline-blue-600'
-              onChange={handleChange}
-              required
-              max={new Date().toISOString().split('T')[0]} // Set max attribute to today's date
-            />
             <input type="text" id="username" placeholder="Username" className='border bg-white p-3 rounded-lg focus:outline-blue-600' onChange={handleChange} required />
             <div className="relative">
               <input
