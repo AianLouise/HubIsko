@@ -1,8 +1,85 @@
 import ScholarshipApplication from '../models/scholarshipApplication.model.js';
-import User from '../models/user.model.js';
 
 export const test = (req, res) => {
-  res.json({
-    message: 'API is working!',
-  });
+    res.json({
+        message: 'API is working!',
+    });
+};
+
+export const createScholarshipApplication = async (req, res) => {
+    try {
+        const {
+            firstName,
+            lastName,
+            middleName,
+            birthdate,
+            gender,
+            bloodType,
+            civilStatus,
+            maidenName,
+            spouseName,
+            spouseOccupation,
+            religion,
+            height,
+            weight,
+            birthplace,
+            contactNumber,
+            address,
+            town,
+            barangay,
+            province,
+            father,
+            mother,
+            guardian,
+            education,
+            relatives,
+            workExperience,
+            skillsAndQualifications,
+            documents,
+            termsAndConditions
+        } = req.body;
+
+        const newApplication = new ScholarshipApplication({
+            firstName,
+            lastName,
+            middleName,
+            birthdate,
+            gender,
+            bloodType,
+            civilStatus,
+            maidenName,
+            spouseName,
+            spouseOccupation,
+            religion,
+            height,
+            weight,
+            birthplace,
+            contactNumber,
+            address,
+            town,
+            barangay,
+            province,
+            father,
+            mother,
+            guardian,
+            education,
+            relatives,
+            workExperience,
+            skillsAndQualifications,
+            documents,
+            termsAndConditions
+        });
+
+        await newApplication.save();
+
+        res.status(201).json({
+            message: 'Scholarship application created successfully',
+            application: newApplication
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error creating scholarship application',
+            error: error.message
+        });
+    }
 };

@@ -131,8 +131,7 @@ export default function ApplyingStages() {
             }),
             skillsAndQualifications: {
                 skills: [],
-                certifications: [],
-                languages: []
+                qualifications: []
             },
             documents: {
                 identificationCard: null,

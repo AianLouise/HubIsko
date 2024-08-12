@@ -1,81 +1,5 @@
 import mongoose from 'mongoose';
 
-// Sub-schema for Relatives
-const relativeSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: false,
-    },
-    birthdate: {
-        type: Date,
-        required: false,
-    },
-    relationship: {
-        type: String,
-        required: false,
-    },
-    occupation: {
-        type: String,
-        required: false,
-    }
-}, { _id: false });
-
-// Sub-schema for Work Experience
-const workExperienceSchema = new mongoose.Schema({
-    companyName: {
-        type: String,
-        required: false,
-    },
-    position: {
-        type: String,
-        required: false,
-    },
-    startDate: {
-        type: Date,
-        required: false,
-    },
-    endDate: {
-        type: Date,
-        required: false,
-    },
-    responsibilities: {
-        type: String,
-        required: false,
-    }
-}, { _id: false });
-
-// Sub-schema for Skills and Qualifications
-const skillsAndQualificationsSchema = new mongoose.Schema({
-    skills: {
-        type: [String],
-        required: false,
-    },
-    qualifications: {
-        type: [String],
-        required: false,
-    }
-}, { _id: false });
-
-// Sub-schema for Documents
-const documentSchema = new mongoose.Schema({
-    identificationCard: {
-        type: String,
-        required: false,
-    },
-    proofOfAddress: {
-        type: String,
-        required: false,
-    },
-    academicTranscripts: {
-        type: String,
-        required: false,
-    },
-    passportPhoto: {
-        type: String,
-        required: false,
-    }
-}, { _id: false });
-
 // Main schema for Scholarship Application
 const scholarshipApplicationSchema = new mongoose.Schema({
     firstName: {
@@ -91,7 +15,7 @@ const scholarshipApplicationSchema = new mongoose.Schema({
         required: false,
     },
     birthdate: {
-        type: Date,
+        type: String,
         required: false,
     },
     gender: {
@@ -302,16 +226,74 @@ const scholarshipApplicationSchema = new mongoose.Schema({
             }
         }
     },
-    otherInfo: {
-        relatives: [relativeSchema],
-        workExperience: [workExperienceSchema],
-        skillsAndQualifications: skillsAndQualificationsSchema,
-        documents: documentSchema,
-        termsAndConditions: {
-            agreed: {
-                type: Boolean,
-                required: false,
-            }
+    relatives: [{
+        name: {
+            type: String,
+            required: false,
+        },
+        birthdate: {
+            type: Date,
+            required: false,
+        },
+        relationship: {
+            type: String,
+            required: false,
+        }
+    }],
+    workExperience: [{
+        companyName: {
+            type: String,
+            required: false,
+        },
+        startDate: {
+            type: Date,
+            required: false,
+        },
+        position: {
+            type: String,
+            required: false,
+        },
+        monthlySalary: {
+            type: Number,
+            required: false,
+        },
+        statusOfAppointment: {
+            type: String,
+            required: false,
+        }
+    }],
+    skillsAndQualifications: [{
+        skills: {
+            type: String,
+            required: false,
+        },
+        qualifications: {
+            type: String,
+            required: false,
+        }
+    }],
+    documents: {
+        identificationCard: {
+            type: String,
+            required: false,
+        },
+        proofOfAddress: {
+            type: String,
+            required: false,
+        },
+        academicTranscripts: {
+            type: String,
+            required: false,
+        },
+        passportPhoto: {
+            type: String,
+            required: false,
+        }
+    },
+    termsAndConditions: {
+        agreed: {
+            type: Boolean,
+            required: false,
         }
     }
 }, { timestamps: true });
