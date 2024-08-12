@@ -154,38 +154,10 @@ const scholarshipProviderSchema = new mongoose.Schema({
 
 // Base schema (User schema)
 const userSchema = new mongoose.Schema({
-    firstName: {
-        type: String,
-        required: false,
-    },
-    lastName: {
-        type: String,
-        required: false,
-    },
-    middleName: {
-        type: String,
-        required: false,
-    },
-    nameExtension: {
-        type: String,
-        required: false,
-    },
-    sex: {
-        type: String,
-        required: false,
-    },
     email: {
         type: String,
         required: true,
         unique: true,
-    },
-    dateOfBirth: {
-        type: Date,
-        required: false,
-    },
-    mobileNumber: {
-        type: String,
-        required: false,
     },
     username: {
         type: String,

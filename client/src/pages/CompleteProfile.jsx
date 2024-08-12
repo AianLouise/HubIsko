@@ -24,28 +24,40 @@ export default function CompleteProfile() {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch('/api/user/details')
-      .then((response) => response.json())
-      .then((data) => {
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          firstName: data.firstName || '',
-          lastName: data.lastName || '',
-          dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth).toISOString().split('T')[0] : '',
-        }));
-      })
-      .catch((error) => console.error('Error fetching user details:', error));
-  }, []);
+  // useEffect(() => {
+  //   fetch('/api/user/details')
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setFormData((prevFormData) => ({
+  //         ...prevFormData,
+  //         firstName: data.firstName || '',
+  //         lastName: data.lastName || '',
+  //         dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth).toISOString().split('T')[0] : '',
+  //       }));
+  //     })
+  //     .catch((error) => console.error('Error fetching user details:', error));
+  // }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
+    setFormData({
+      ...formData,
       [name]: value
-    }));
+    });
   };
 
+  const isSingleWidowedOrDivorced = ['Single', 'Widowed', 'Divorced', ''].includes(formData.civilStatus);
+
+  useEffect(() => {
+    if (isSingleWidowedOrDivorced) {
+      setFormData((prevData) => ({
+        ...prevData,
+        maidenName: '',
+        spouseName: '',
+        spouseOccupation: ''
+      }));
+    }
+  }, [formData.civilStatus, isSingleWidowedOrDivorced]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -80,39 +92,19 @@ export default function CompleteProfile() {
       });
   };
 
-  // State variables to manage the selected civil status and input field values
-  const [civilStatus, setCivilStatus] = useState('');
-  const [maidenName, setMaidenName] = useState('');
-  const [spouseName, setSpouseName] = useState('');
-  const [spouseOccupation, setSpouseOccupation] = useState('');
 
-  // Function to handle changes in the civil status dropdown
-  const handleCivilStatusChange = (e) => {
-    const status = e.target.value;
-    setCivilStatus(status);
-
-    // Reset input fields if the selected status is not 'Married'
-    if (status !== 'Married') {
-      setMaidenName('');
-      setSpouseName('');
-      setSpouseOccupation('');
-    }
-  };
-
-  // Boolean to check if the selected civil status is 'Married'
-  const isMarried = civilStatus === 'Married';
 
   return (
     <div>
       <div className=" flex justify-center pt-8 rounded-md">
         <h2 className="text-xl font-medium text-slate-600">Please fill out the areas to complete your profile</h2>
       </div>
-      <form onSubmit={handleSubmit} className="max-w-6xl mx-auto p-6 space-y-6 bg-white border rounded-lg shadow-lg mt-4 mb-10">
+           <form onSubmit={handleSubmit} className="max-w-6xl mx-auto space-y-6 bg-white border rounded-lg shadow-lg mt-4 mb-10">
         <div className="bg-blue-600 text-white p-4 rounded-t-lg">
           <span className='text-lg font-bold'>Basic Information</span>
         </div>
-
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4'>
+      
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4'>
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
             <input
@@ -122,9 +114,10 @@ export default function CompleteProfile() {
               onChange={handleChange}
               placeholder="Enter your first name"
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              required
             />
           </div>
-
+      
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
             <input
@@ -134,9 +127,10 @@ export default function CompleteProfile() {
               onChange={handleChange}
               placeholder="Enter your last name"
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              required
             />
           </div>
-
+      
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
             <input
@@ -146,10 +140,11 @@ export default function CompleteProfile() {
               onChange={handleChange}
               placeholder="Enter your middle name"
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              required
             />
           </div>
         </div>
-
+      
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4'>
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
@@ -159,9 +154,10 @@ export default function CompleteProfile() {
               value={formData.birthdate}
               onChange={handleChange}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              required
             />
           </div>
-
+      
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Gender</label>
             <select
@@ -169,6 +165,7 @@ export default function CompleteProfile() {
               value={formData.gender}
               onChange={handleChange}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              required
             >
               <option value="">Select Gender</option>
               <option value="Female">Female</option>
@@ -176,7 +173,7 @@ export default function CompleteProfile() {
               <option value="Other">Other</option>
             </select>
           </div>
-
+      
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Blood Type</label>
             <select
@@ -184,6 +181,7 @@ export default function CompleteProfile() {
               value={formData.bloodType}
               onChange={handleChange}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              required
             >
               <option value="">Select Blood Type</option>
               <option value="A+">A+</option>
@@ -196,14 +194,15 @@ export default function CompleteProfile() {
               <option value="O-">O-</option>
             </select>
           </div>
-
+      
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Civil Status</label>
             <select
               name="civilStatus"
-              value={civilStatus}
-              onChange={handleCivilStatusChange}
+              value={formData.civilStatus}
+              onChange={handleChange}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              required
             >
               <option value="">Select Civil Status</option>
               <option value="Single">Single</option>
@@ -212,46 +211,46 @@ export default function CompleteProfile() {
               <option value="Widowed">Widowed</option>
             </select>
           </div>
-
+      
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Maiden Name</label>
             <input
               type="text"
               name="maidenName"
-              value={maidenName}
-              onChange={(e) => setMaidenName(e.target.value)}
-              disabled={!isMarried}
+              value={formData.maidenName}
+              onChange={handleChange}
               placeholder="Enter maiden name"
-              className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${!isMarried ? 'text-gray-400' : ''}`}
+              disabled={isSingleWidowedOrDivorced}
+              className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
             />
           </div>
-
+      
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Name of Spouse</label>
             <input
               type="text"
               name="spouseName"
-              value={spouseName}
-              onChange={(e) => setSpouseName(e.target.value)}
-              disabled={!isMarried}
+              value={formData.spouseName}
+              onChange={handleChange}
               placeholder="Enter name of spouse"
-              className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${!isMarried ? 'text-gray-400' : ''}`}
+              disabled={isSingleWidowedOrDivorced}
+              className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
             />
           </div>
-
+      
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation of Spouse</label>
             <input
               type="text"
               name="spouseOccupation"
-              value={spouseOccupation}
-              onChange={(e) => setSpouseOccupation(e.target.value)}
-              disabled={!isMarried}
+              value={formData.spouseOccupation}
+              onChange={handleChange}
               placeholder="Enter occupation of spouse"
-              className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${!isMarried ? 'text-gray-400' : ''}`}
+              disabled={isSingleWidowedOrDivorced}
+              className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
             />
           </div>
-
+      
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Religion</label>
             <select
@@ -259,6 +258,7 @@ export default function CompleteProfile() {
               value={formData.religion}
               onChange={handleChange}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              required
             >
               <option value="Roman Catholic">Roman Catholic</option>
               <option value="Iglesia ni Cristo">Iglesia ni Cristo</option>
@@ -267,7 +267,7 @@ export default function CompleteProfile() {
               <option value="Others">Others</option>
             </select>
           </div>
-
+      
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Height</label>
             <input
@@ -277,9 +277,10 @@ export default function CompleteProfile() {
               onChange={handleChange}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               placeholder="Enter height in cm"
+              required
             />
           </div>
-
+      
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Weight</label>
             <input
@@ -289,9 +290,10 @@ export default function CompleteProfile() {
               onChange={handleChange}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               placeholder="Enter weight in kg"
+              required
             />
           </div>
-
+      
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Birthplace</label>
             <input
@@ -301,9 +303,10 @@ export default function CompleteProfile() {
               onChange={handleChange}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               placeholder="Enter birthplace"
+              required
             />
           </div>
-
+      
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Contact Number</label>
             <input
@@ -315,11 +318,12 @@ export default function CompleteProfile() {
               placeholder="Enter contact number"
               pattern="^(09|\+639)\d{9}$"
               title="Please enter a valid Philippine phone number (e.g., 09123456789 or +639123456789)"
+              required
             />
           </div>
         </div>
-
-               <div className='grid grid-cols-1 gap-4 p-4'>
+      
+        <div className='grid grid-cols-1 gap-4 p-4'>
           <div className='col-span-1'>
             <label className='block text-sm font-medium text-gray-700 mb-2'>
               Address
@@ -331,12 +335,12 @@ export default function CompleteProfile() {
               onChange={handleChange}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               placeholder="Enter full address"
+              required
             />
           </div>
         </div>
-
-
-        <div className="flex justify-end space-x-2 px-4">
+      
+        <div className="flex justify-end space-x-2 px-4 py-4">
           <button
             type="submit"
             className="py-2 px-6 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
@@ -350,7 +354,7 @@ export default function CompleteProfile() {
             Clear
           </button>
         </div>
-      </form >
+      </form>
 
 
       {/* Modal */}
@@ -373,50 +377,53 @@ export default function CompleteProfile() {
                 <div className="space-y-4">
                   <div className="border-t border-gray-200 pt-4">
                     <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Name:</span> {formData.firstName} {formData.middleName} {formData.lastName} {formData.nameExtension}
+                      <span className="font-semibold">First Name:</span> {formData.firstName}
                     </p>
                     <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Sex:</span> {formData.sex === 'MALE' ? 'Male' : 'Female'}
+                      <span className="font-semibold">Middle Name:</span> {formData.middleName}
                     </p>
                     <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Date of Birth:</span> {formData.dateOfBirth}
+                      <span className="font-semibold">Last Name:</span> {formData.lastName}
                     </p>
                     <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Mobile Number:</span> {formData.mobileNumber}
+                      <span className="font-semibold">Birthdate:</span> {formData.birthdate}
                     </p>
                     <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Permanent Address:</span> {formData.permanentAddress}, {formData.barangay}, {formData.municipality}, {formData.province}
+                      <span className="font-semibold">Gender:</span> {formData.gender}
                     </p>
-                    <div className="mt-4">
-                      <p className="text-sm font-semibold">Mother's Details:</p>
-                      <p className="text-sm text-gray-600 ml-2">
-                        <span className="font-semibold">First Name:</span> {formData.motherFirstName}
-                      </p>
-                      <p className="text-sm text-gray-600 ml-2">
-                        <span className="font-semibold">Middle Name:</span> {formData.motherMiddleName}
-                      </p>
-                      <p className="text-sm text-gray-600 ml-2">
-                        <span className="font-semibold">Last Name:</span> {formData.motherLastName}
-                      </p>
-                      <p className="text-sm text-gray-600 ml-2">
-                        <span className="font-semibold">Date of Birth:</span> {formData.motherDOB}
-                      </p>
-                    </div>
-                    <div className="mt-4">
-                      <p className="text-sm font-semibold">Father's Details:</p>
-                      <p className="text-sm text-gray-600 ml-2">
-                        <span className="font-semibold">First Name:</span> {formData.fatherFirstName}
-                      </p>
-                      <p className="text-sm text-gray-600 ml-2">
-                        <span className="font-semibold">Middle Name:</span> {formData.fatherMiddleName}
-                      </p>
-                      <p className="text-sm text-gray-600 ml-2">
-                        <span className="font-semibold">Last Name:</span> {formData.fatherLastName}
-                      </p>
-                      <p className="text-sm text-gray-600 ml-2">
-                        <span className="font-semibold">Date of Birth:</span> {formData.fatherDOB}
-                      </p>
-                    </div>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Blood Type:</span> {formData.bloodType}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Civil Status:</span> {formData.civilStatus}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Maiden Name:</span> {formData.maidenName || 'N/A'}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Name of Spouse:</span> {formData.spouseName || 'N/A'}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Occupation of Spouse:</span> {formData.spouseOccupation || 'N/A'}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Religion:</span> {formData.religion}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Height:</span> {formData.height} cm
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Weight:</span> {formData.weight} kg
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Birthplace:</span> {formData.birthplace}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Contact Number:</span> {formData.contactNumber}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Address:</span> {formData.address}
+                    </p>
                   </div>
                   <div className="flex justify-end mt-6">
                     <button
