@@ -92,6 +92,57 @@ export default function ApplyingStages() {
             occupation: '',
             yearlyIncome: '',
             contactNo: ''
+        },
+        education: {
+            elementary: {
+                school: '',
+                award: '',
+                yearGraduated: ''
+            },
+            juniorHighSchool: {
+                school: '',
+                award: '',
+                yearGraduated: ''
+            },
+            seniorHighSchool: {
+                school: '',
+                award: '',
+                yearGraduated: ''
+            },
+            college: {
+                school: '',
+                course: '',
+                yearGraduated: ''
+            }
+        },
+        otherInfo: {
+            relatives: Array(6).fill({
+                name: '',
+                birthdate: '',
+                relationship: '',
+                occupation: ''
+            }),
+            workExperience: Array(3).fill({
+                companyName: '',
+                position: '',
+                startDate: '',
+                endDate: '',
+                responsibilities: ''
+            }),
+            skillsAndQualifications: {
+                skills: [],
+                certifications: [],
+                languages: []
+            },
+            documents: {
+                identificationCard: null,
+                proofOfAddress: null,
+                academicTranscripts: null,
+                passportPhoto: null
+            },
+            termsAndConditions: {
+                agreed: false
+            }
         }
     });
 
@@ -1096,10 +1147,10 @@ export default function ApplyingStages() {
                         </div>
 
                         <div className={`${getHideorActive(5)} max-w-8xl mx-auto bg-white shadow-lg rounded-lg`}>
-                                                      <div className="bg-blue-600 text-white p-4 rounded-t-lg">
+                            <div className="bg-blue-600 text-white p-4 rounded-t-lg">
                                 <span className='text-lg font-bold'>Upload Requirements</span>
                             </div>
-                            
+
                             <div className='p-4'>
                                 <div className='mb-4'>
                                     <p className='text-sm text-gray-700'>
@@ -1112,7 +1163,7 @@ export default function ApplyingStages() {
                                         <li>Document 4: Passport-sized Photo</li>
                                     </ul>
                                 </div>
-                            
+
                                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
                                     <div>
                                         <label className='block text-sm font-medium text-gray-700 mb-2'>Identification Card</label>
@@ -1121,7 +1172,7 @@ export default function ApplyingStages() {
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         />
                                     </div>
-                            
+
                                     <div>
                                         <label className='block text-sm font-medium text-gray-700 mb-2'>Proof of Address</label>
                                         <input
@@ -1129,7 +1180,7 @@ export default function ApplyingStages() {
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         />
                                     </div>
-                            
+
                                     <div>
                                         <label className='block text-sm font-medium text-gray-700 mb-2'>Academic Transcripts</label>
                                         <input
@@ -1137,7 +1188,7 @@ export default function ApplyingStages() {
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         />
                                     </div>
-                            
+
                                     <div>
                                         <label className='block text-sm font-medium text-gray-700 mb-2'>Passport-sized Photo</label>
                                         <input
@@ -1146,7 +1197,7 @@ export default function ApplyingStages() {
                                         />
                                     </div>
                                 </div>
-                            
+
                                 <div className='flex mt-4 justify-end space-x-4'>
                                     {activeStep > 1 && (
                                         <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
@@ -1164,14 +1215,14 @@ export default function ApplyingStages() {
                             <div className='p-4'>
                                 <div className='mb-4'>
                                     <p className='text-sm text-gray-700'>
-                                        Please read the following terms and conditions carefully before proceeding:
+                                        Please read the following terms and conditions carefully before applying for the scholarship program:
                                     </p>
                                     <ul className='list-disc list-inside mt-2 text-sm text-gray-700'>
-                                        <li>Term 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-                                        <li>Term 2: Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li>
-                                        <li>Term 3: Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-                                        <li>Term 4: Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</li>
-                                        <li>Term 5: Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</li>
+                                        <li>The scholarship is open to all eligible applicants who meet the specified academic and financial criteria.</li>
+                                        <li>Applicants must provide accurate and complete information in the application form. Any falsification of information may result in disqualification.</li>
+                                        <li>Scholarship recipients are required to maintain the academic performance as stipulated in the scholarship guidelines to continue receiving funding.</li>
+                                        <li>Recipients may be required to participate in specific events or activities related to the scholarship program, such as mentorship sessions or community service.</li>
+                                        <li>The scholarship is non-transferable and must be used solely for the purpose of funding the recipient's education-related expenses.</li>
                                     </ul>
                                 </div>
 
@@ -1193,6 +1244,7 @@ export default function ApplyingStages() {
                                 </div>
                             </div>
                         </div>
+
                     </form>
                 </div>
             </main>
