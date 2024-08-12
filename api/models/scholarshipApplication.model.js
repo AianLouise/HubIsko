@@ -100,7 +100,7 @@ const scholarshipApplicationSchema = new mongoose.Schema({
             required: false,
         },
         yearlyIncome: {
-            type: Number,
+            type: String,
             required: false,
         },
         contactNo: {
@@ -130,7 +130,7 @@ const scholarshipApplicationSchema = new mongoose.Schema({
             required: false,
         },
         yearlyIncome: {
-            type: Number,
+            type: String,
             required: false,
         },
         contactNo: {
@@ -160,7 +160,7 @@ const scholarshipApplicationSchema = new mongoose.Schema({
             required: false,
         },
         yearlyIncome: {
-            type: Number,
+            type: String,
             required: false,
         },
         contactNo: {

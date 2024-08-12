@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { FaArrowRightLong } from "react-icons/fa6";
 import { FaInfoCircle, FaUsers, FaGraduationCap, FaEllipsisH, FaFileContract, FaUpload } from "react-icons/fa";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export default function ApplyingStages() {
     const [activeStep, setActiveStep] = useState(1);
@@ -24,28 +27,6 @@ export default function ApplyingStages() {
         }
     };
 
-    // State variables to manage the selected civil status and input field values
-    const [civilStatus, setCivilStatus] = useState('');
-    const [maidenName, setMaidenName] = useState('');
-    const [spouseName, setSpouseName] = useState('');
-    const [spouseOccupation, setSpouseOccupation] = useState('');
-
-    // Function to handle changes in the civil status dropdown
-    const handleCivilStatusChange = (e) => {
-        const status = e.target.value;
-        setCivilStatus(status);
-
-        // Reset input fields if the selected status is not 'Married'
-        if (status !== 'Married') {
-            setMaidenName('');
-            setSpouseName('');
-            setSpouseOccupation('');
-        }
-    };
-
-    // Boolean to check if the selected civil status is 'Married'
-    const isMarried = civilStatus === 'Married';
-
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -62,7 +43,7 @@ export default function ApplyingStages() {
         weight: '',
         birthplace: '',
         contactNumber: '',
-        address: '',
+        addressDetails: '',
         town: '',
         barangay: '',
         province: '',
@@ -97,17 +78,17 @@ export default function ApplyingStages() {
             elementary: {
                 school: '',
                 award: '',
-                yearGraduated: ''
+                yearGraduated: '',
             },
             juniorHighSchool: {
                 school: '',
                 award: '',
-                yearGraduated: ''
+                yearGraduated: '',
             },
             seniorHighSchool: {
                 school: '',
                 award: '',
-                yearGraduated: ''
+                yearGraduated: '',
             },
             college: {
                 school: '',
@@ -115,54 +96,133 @@ export default function ApplyingStages() {
                 yearGraduated: ''
             }
         },
-        otherInfo: {
-            relatives: Array(6).fill({
-                name: '',
-                birthdate: '',
-                relationship: '',
-                occupation: ''
-            }),
-            workExperience: Array(3).fill({
-                companyName: '',
-                position: '',
-                startDate: '',
-                endDate: '',
-                responsibilities: ''
-            }),
-            skillsAndQualifications: {
-                skills: [],
-                qualifications: []
-            },
-            documents: {
-                identificationCard: null,
-                proofOfAddress: null,
-                academicTranscripts: null,
-                passportPhoto: null
-            },
-            termsAndConditions: {
-                agreed: false
-            }
+        relatives: Array(6).fill({
+            name: '',
+            birthdate: '',
+            relationship: ''
+        }),
+        workExperience: Array(2).fill({
+            companyName: '',
+            position: '',
+            startDate: '',
+            monthlySalary: '',
+            statusOfAppointment: ''
+        }),
+        skillsAndQualifications: Array(6).fill({
+            skills: '',
+            qualifications: ''
+        }),
+        documents: {
+            identificationCard: null,
+            proofOfAddress: null,
+            academicTranscripts: null,
+            passportPhoto: null
+        },
+        termsAndConditions: {
+            agreed: false
         }
     });
 
     const [sameAsParents, setSameAsParents] = useState(false);
 
-    const handleChange = (e, parentType) => {
+    const handleChange = (e, parentKey = null) => {
+        const { name, value } = e.target;
+        setFormData(prevState => {
+            if (parentKey) {
+                return {
+                    ...prevState,
+                    [parentKey]: {
+                        ...prevState[parentKey],
+                        [name]: value
+                    }
+                };
+            } else {
+                return {
+                    ...prevState,
+                    [name]: value
+                };
+            }
+        });
+    };
+
+    const handleEducationChange = (e, level) => {
         const { name, value } = e.target;
         setFormData(prevState => ({
             ...prevState,
-            [parentType]: {
-                ...prevState[parentType],
-                [name]: value
+            education: {
+                ...prevState.education,
+                [level]: {
+                    ...prevState.education[level],
+                    [name]: value
+                }
             }
         }));
     };
 
-    const handleSubmit = (e) => {
+    const currentUser = useSelector((state) => state.user.currentUser);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Save formData to the database
-        console.log(formData);
+
+        const storage = getStorage();
+
+        // Upload files to Firebase and get the file URLs
+        const uploadedFilePaths = await Promise.all(Object.entries(formData.documents).map(async ([docType, fileObj]) => {
+            if (fileObj) {
+                const file = fileObj.file;
+                const fileExtension = file.name.split('.').pop(); // Extract the file extension
+                const fileNameWithoutExtension = file.name.replace(/\.[^/.]+$/, ""); // Remove the extension from the original file name
+                const fileName = `${currentUser.username}_${fileNameWithoutExtension}_${format(new Date(), 'yyyyMMdd')}.${fileExtension}`;
+                const storageRef = ref(storage, `scholarship_documents/${fileName}`);
+                await uploadBytes(storageRef, file);
+                const downloadURL = await getDownloadURL(storageRef);
+                return { [docType]: downloadURL }; // Save the download URL in the database
+            }
+            return { [docType]: null };
+        }));
+
+        // Combine the uploaded file URLs with the rest of the form data
+        const updatedFormData = {
+            ...formData,
+            documents: Object.assign({}, ...uploadedFilePaths),
+        };
+
+        // Send scholarship application data to the backend
+        try {
+            const response = await fetch('/api/scholarshipApplication/create-application', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedFormData)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log('Success:', result);
+            // Handle success (e.g., show a success message, redirect, etc.)
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle error (e.g., show an error message)
+        }
     };
+
+    // Boolean to check if the selected civil status is 'Married'
+    const isMarried = formData.civilStatus === 'Married';
+
+    useEffect(() => {
+        if (!isMarried) {
+            setFormData(prevState => ({
+                ...prevState,
+                maidenName: '',
+                spouseName: '',
+                spouseOccupation: ''
+            }));
+        }
+    }, [formData.civilStatus]);
 
     const handleCheckboxChange = (e) => {
         const isChecked = e.target.checked;
@@ -183,60 +243,105 @@ export default function ApplyingStages() {
         }
     };
 
-    const [relatives, setRelatives] = useState([{ name: '', birthdate: '', relationship: '' }]);
-    const [workExperiences, setWorkExperiences] = useState([{ companyName: '', dateStarted: '', position: '', monthlySalary: '', appointmentStatus: '' }]);
-    const [skills, setSkills] = useState(['']);
-    const [qualifications, setQualifications] = useState(['']);
     const [relativeErrorMessage, setRelativeErrorMessage] = useState('');
     const [workExperienceErrorMessage, setWorkExperienceErrorMessage] = useState('');
     const [skillErrorMessage, setSkillErrorMessage] = useState('');
 
+    const [visibleRelativeIndex, setVisibleRelativeIndex] = useState(0);
+    const [visibleSkillIndex, setVisibleSkillIndex] = useState(0);
+
+    const handleRelativeChange = (index, event) => {
+        const { name, value } = event.target;
+        const updatedRelatives = [...formData.relatives];
+        updatedRelatives[index] = {
+            ...updatedRelatives[index],
+            [name]: value,
+        };
+        setFormData({
+            ...formData,
+            relatives: updatedRelatives,
+        });
+    };
+
     const addRelative = () => {
-        if (relatives.length < 6) {
-            setRelatives([...relatives, { name: '', birthdate: '', relationship: '' }]);
+        if (visibleRelativeIndex < formData.relatives.length - 1) {
+            setVisibleRelativeIndex(visibleRelativeIndex + 1);
+            setRelativeErrorMessage(''); // Clear any previous error message
+        } else if (formData.relatives.length < 6) {
+            // Add a new relative object if the current number of relatives is less than 6
+            setFormData({
+                ...formData,
+                relatives: [...formData.relatives, { name: '', birthdate: '', relationship: '' }],
+            });
+            setVisibleRelativeIndex(visibleRelativeIndex + 1);
             setRelativeErrorMessage(''); // Clear any previous error message
         } else {
-            setRelativeErrorMessage('You can only add up to 6 relatives.');
+            // Show an error message
+            setRelativeErrorMessage("Maximum of 6 relatives can be added.");
         }
     };
+
+    const handleWorkChange = (index, event, type) => {
+        const { name, value } = event.target;
+        const updatedWorkExperience = [...formData.workExperience];
+        updatedWorkExperience[index] = {
+            ...updatedWorkExperience[index],
+            [name]: value,
+        };
+        setFormData({
+            ...formData,
+            workExperience: updatedWorkExperience,
+        });
+    };
+
+    const [visibleWorkExperienceIndex, setVisibleWorkExperienceIndex] = useState(0);
 
     const addWorkExperience = () => {
-        if (workExperiences.length < 2) {
-            setWorkExperiences([...workExperiences, { companyName: '', dateStarted: '', position: '', monthlySalary: '', appointmentStatus: '' }]);
+        if (visibleWorkExperienceIndex < formData.workExperience.length - 1) {
+            setVisibleWorkExperienceIndex(visibleWorkExperienceIndex + 1);
+            setWorkExperienceErrorMessage(''); // Clear any previous error message
+        } else if (formData.workExperience.length < 2) {
+            // Add a new work experience object if the current number of work experiences is less than 2
+            setFormData({
+                ...formData,
+                workExperience: [...formData.workExperience, { companyName: '', dateStarted: '', position: '', monthlySalary: '', appointmentStatus: '' }],
+            });
+            setVisibleWorkExperienceIndex(visibleWorkExperienceIndex + 1);
             setWorkExperienceErrorMessage(''); // Clear any previous error message
         } else {
-            setWorkExperienceErrorMessage('You can only add up to 2 work experiences.');
+            // Show an error message
+            setWorkExperienceErrorMessage("Maximum of 2 work experiences can be added.");
         }
     };
 
-    const addSkill = () => {
-        if (skills.length < 6) {
-            setSkills([...skills, '']);
-            setQualifications([...qualifications, '']);
+    const handleSkillChange = (index, event) => {
+        const { name, value } = event.target;
+        const updatedSkillsAndQualifications = [...formData.skillsAndQualifications];
+        updatedSkillsAndQualifications[index] = {
+            ...updatedSkillsAndQualifications[index],
+            [name]: value,
+        };
+        setFormData({
+            ...formData,
+            skillsAndQualifications: updatedSkillsAndQualifications,
+        });
+    };
+
+       const addSkill = () => {
+        if (visibleSkillIndex < formData.skillsAndQualifications.length - 1) {
+            setVisibleSkillIndex(visibleSkillIndex + 1);
+            setSkillErrorMessage(''); // Clear any previous error message
+        } else if (formData.skillsAndQualifications.length < 6) { // Change 6 to the desired maximum number of skills
+            // Add a new skill and qualification object if the current number is less than the maximum
+            setFormData({
+                ...formData,
+                skillsAndQualifications: [...formData.skillsAndQualifications, { skills: '', qualifications: '' }],
+            });
+            setVisibleSkillIndex(visibleSkillIndex + 1);
             setSkillErrorMessage(''); // Clear any previous error message
         } else {
-            setSkillErrorMessage('You can only add up to 6 skills.');
-        }
-    };
-
-    const handleInputChange = (index, event, type) => {
-        const { name, value } = event.target;
-        if (type === 'relative') {
-            const newRelatives = [...relatives];
-            newRelatives[index][name] = value;
-            setRelatives(newRelatives);
-        } else if (type === 'workExperience') {
-            const newWorkExperiences = [...workExperiences];
-            newWorkExperiences[index][name] = value;
-            setWorkExperiences(newWorkExperiences);
-        } else if (type === 'skill') {
-            const newSkills = [...skills];
-            newSkills[index] = value;
-            setSkills(newSkills);
-        } else if (type === 'qualification') {
-            const newQualifications = [...qualifications];
-            newQualifications[index] = value;
-            setQualifications(newQualifications);
+            // Show an error message
+            setSkillErrorMessage("Maximum of 6 skills and qualifications can be added."); // Change 6 to the desired maximum number of skills
         }
     };
 
@@ -302,7 +407,10 @@ export default function ApplyingStages() {
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
                                     <input
                                         type="text"
+                                        name="firstName"
                                         placeholder="Enter your first name"
+                                        value={formData.firstName}
+                                        onChange={handleChange}
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                     />
                                 </div>
@@ -311,7 +419,10 @@ export default function ApplyingStages() {
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
                                     <input
                                         type="text"
+                                        name="lastName"
                                         placeholder="Enter your last name"
+                                        value={formData.lastName}
+                                        onChange={handleChange}
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                     />
                                 </div>
@@ -320,7 +431,10 @@ export default function ApplyingStages() {
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
                                     <input
                                         type="text"
+                                        name="middleName"
                                         placeholder="Enter your middle name"
+                                        value={formData.middleName}
+                                        onChange={handleChange}
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                     />
                                 </div>
@@ -331,13 +445,21 @@ export default function ApplyingStages() {
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
                                     <input
                                         type="date"
+                                        name="birthdate"
+                                        value={formData.birthdate}
+                                        onChange={handleChange}
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                     />
                                 </div>
 
                                 <div>
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>Gender</label>
-                                    <select className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'>
+                                    <select
+                                        name="gender"
+                                        value={formData.gender}
+                                        onChange={handleChange}
+                                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                    >
                                         <option value="">Select Gender</option>
                                         <option value="Female">Female</option>
                                         <option value="Male">Male</option>
@@ -347,7 +469,12 @@ export default function ApplyingStages() {
 
                                 <div>
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>Blood Type</label>
-                                    <select className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'>
+                                    <select
+                                        name="bloodType"
+                                        value={formData.bloodType}
+                                        onChange={handleChange}
+                                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                    >
                                         <option value="">Select Blood Type</option>
                                         <option value="A+">A+</option>
                                         <option value="A-">A-</option>
@@ -363,9 +490,10 @@ export default function ApplyingStages() {
                                 <div>
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>Civil Status</label>
                                     <select
+                                        name="civilStatus"
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        value={civilStatus}
-                                        onChange={handleCivilStatusChange}
+                                        value={formData.civilStatus}
+                                        onChange={handleChange}
                                     >
                                         <option value="">Select Civil Status</option>
                                         <option value="Single">Single</option>
@@ -379,8 +507,9 @@ export default function ApplyingStages() {
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>Maiden Name</label>
                                     <input
                                         type="text"
-                                        value={maidenName}
-                                        onChange={(e) => setMaidenName(e.target.value)}
+                                        name="maidenName"
+                                        value={formData.maidenName}
+                                        onChange={handleChange}
                                         disabled={!isMarried}
                                         placeholder="Enter maiden name"
                                         className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${!isMarried ? 'text-gray-400' : ''}`}
@@ -391,8 +520,9 @@ export default function ApplyingStages() {
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>Name of Spouse</label>
                                     <input
                                         type="text"
-                                        value={spouseName}
-                                        onChange={(e) => setSpouseName(e.target.value)}
+                                        name="spouseName"
+                                        value={formData.spouseName}
+                                        onChange={handleChange}
                                         disabled={!isMarried}
                                         placeholder="Enter name of spouse"
                                         className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${!isMarried ? 'text-gray-400' : ''}`}
@@ -403,8 +533,9 @@ export default function ApplyingStages() {
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation of Spouse</label>
                                     <input
                                         type="text"
-                                        value={spouseOccupation}
-                                        onChange={(e) => setSpouseOccupation(e.target.value)}
+                                        name="spouseOccupation"
+                                        value={formData.spouseOccupation}
+                                        onChange={handleChange}
                                         disabled={!isMarried}
                                         placeholder="Enter occupation of spouse"
                                         className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${!isMarried ? 'text-gray-400' : ''}`}
@@ -414,6 +545,9 @@ export default function ApplyingStages() {
                                 <div>
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>Religion</label>
                                     <select
+                                        name="religion"
+                                        value={formData.religion}
+                                        onChange={handleChange}
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                     >
                                         <option value="Roman Catholic">Roman Catholic</option>
@@ -428,6 +562,9 @@ export default function ApplyingStages() {
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>Height</label>
                                     <input
                                         type="number"
+                                        name="height"
+                                        value={formData.height}
+                                        onChange={handleChange}
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         placeholder="Enter height in cm"
                                     />
@@ -437,6 +574,9 @@ export default function ApplyingStages() {
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>Weight</label>
                                     <input
                                         type="number"
+                                        name="weight"
+                                        value={formData.weight}
+                                        onChange={handleChange}
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         placeholder="Enter weight in kg"
                                     />
@@ -446,6 +586,9 @@ export default function ApplyingStages() {
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>Birthplace</label>
                                     <input
                                         type="text"
+                                        name="birthplace"
+                                        value={formData.birthplace}
+                                        onChange={handleChange}
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         placeholder="Enter birthplace"
                                     />
@@ -455,10 +598,14 @@ export default function ApplyingStages() {
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>Contact Number</label>
                                     <input
                                         type="tel"
+                                        name="contactNumber"
+                                        value={formData.contactNumber}
+                                        onChange={handleChange}
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         placeholder="Enter contact number"
                                         pattern="^(09|\+639)\d{9}$"
                                         title="Please enter a valid Philippine phone number (e.g., 09123456789 or +639123456789)"
+                                        required
                                     />
                                 </div>
                             </div>
@@ -470,6 +617,9 @@ export default function ApplyingStages() {
                                     </label>
                                     <input
                                         type="text"
+                                        name="addressDetails"
+                                        value={formData.addressDetails}
+                                        onChange={handleChange}
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         placeholder="Enter address details"
                                     />
@@ -480,6 +630,9 @@ export default function ApplyingStages() {
                                     </label>
                                     <input
                                         type="text"
+                                        name="town"
+                                        value={formData.town}
+                                        onChange={handleChange}
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         placeholder="Enter town"
                                     />
@@ -490,6 +643,9 @@ export default function ApplyingStages() {
                                     </label>
                                     <input
                                         type="text"
+                                        name="barangay"
+                                        value={formData.barangay}
+                                        onChange={handleChange}
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         placeholder="Enter barangay"
                                     />
@@ -500,6 +656,9 @@ export default function ApplyingStages() {
                                     </label>
                                     <input
                                         type="text"
+                                        name="province"
+                                        value={formData.province}
+                                        onChange={handleChange}
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         placeholder="Enter province"
                                     />
@@ -581,7 +740,7 @@ export default function ApplyingStages() {
                                     <div>
                                         <label className='block text-sm font-medium text-gray-700 mb-2'>Yearly Income</label>
                                         <select
-                                            name="yearlyIncome"
+                                            name="fatheryearlyIncome"
                                             value={formData.father.yearlyIncome}
                                             onChange={(e) => handleChange(e, 'father')}
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
@@ -681,16 +840,16 @@ export default function ApplyingStages() {
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         >
                                             <option value="" disabled>Select yearly income</option>
-                                            <option value="below_100k">Below ₱100,000</option>
-                                            <option value="100k_200k">₱100,000 - ₱200,000</option>
-                                            <option value="200k_300k">₱200,000 - ₱300,000</option>
-                                            <option value="300k_400k">₱300,000 - ₱400,000</option>
-                                            <option value="400k_500k">₱400,000 - ₱500,000</option>
-                                            <option value="500k_600k">₱500,000 - ₱600,000</option>
-                                            <option value="600k_700k">₱600,000 - ₱700,000</option>
-                                            <option value="700k_800k">₱700,000 - ₱800,000</option>
-                                            <option value="800k_900k">₱800,000 - ₱900,000</option>
-                                            <option value="900k_1M">₱900,000 - ₱1,000,000</option>
+                                            <option value="100000">Below ₱100,000</option>
+                                            <option value="200000">₱100,000 - ₱200,000</option>
+                                            <option value="300000">₱200,000 - ₱300,000</option>
+                                            <option value="400000">₱300,000 - ₱400,000</option>
+                                            <option value="500000">₱400,000 - ₱500,000</option>
+                                            <option value="600000">₱500,000 - ₱600,000</option>
+                                            <option value="700000">₱600,000 - ₱700,000</option>
+                                            <option value="800000">₱700,000 - ₱800,000</option>
+                                            <option value="900000">₱800,000 - ₱900,000</option>
+                                            <option value="1000000">₱900,000 - ₱1,000,000</option>
                                         </select>
                                     </div>
                                     <div>
@@ -792,16 +951,16 @@ export default function ApplyingStages() {
                                             disabled={sameAsParents}
                                         >
                                             <option value="" disabled>Select yearly income</option>
-                                            <option value="below_100k">Below ₱100,000</option>
-                                            <option value="100k_200k">₱100,000 - ₱200,000</option>
-                                            <option value="200k_300k">₱200,000 - ₱300,000</option>
-                                            <option value="300k_400k">₱300,000 - ₱400,000</option>
-                                            <option value="400k_500k">₱400,000 - ₱500,000</option>
-                                            <option value="500k_600k">₱500,000 - ₱600,000</option>
-                                            <option value="600k_700k">₱600,000 - ₱700,000</option>
-                                            <option value="700k_800k">₱700,000 - ₱800,000</option>
-                                            <option value="800k_900k">₱800,000 - ₱900,000</option>
-                                            <option value="900k_1M">₱900,000 - ₱1,000,000</option>
+                                            <option value="100000">Below ₱100,000</option>
+                                            <option value="200000">₱100,000 - ₱200,000</option>
+                                            <option value="300000">₱200,000 - ₱300,000</option>
+                                            <option value="400000">₱300,000 - ₱400,000</option>
+                                            <option value="500000">₱400,000 - ₱500,000</option>
+                                            <option value="600000">₱500,000 - ₱600,000</option>
+                                            <option value="700000">₱600,000 - ₱700,000</option>
+                                            <option value="800000">₱700,000 - ₱800,000</option>
+                                            <option value="900000">₱800,000 - ₱900,000</option>
+                                            <option value="1000000">₱900,000 - ₱1,000,000</option>
                                         </select>
                                     </div>
                                     <div>
@@ -841,6 +1000,9 @@ export default function ApplyingStages() {
                                             <label className='block text-sm font-medium text-gray-700 mb-2'>School</label>
                                             <input
                                                 type="text"
+                                                name="school"
+                                                value={formData.education.elementary.school}
+                                                onChange={(e) => handleEducationChange(e, 'elementary')}
                                                 placeholder="Enter elementary school name"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             />
@@ -849,13 +1011,21 @@ export default function ApplyingStages() {
                                             <label className='block text-sm font-medium text-gray-700 mb-2'>Award</label>
                                             <input
                                                 type="text"
+                                                name="award"
+                                                value={formData.education.elementary.award}
+                                                onChange={(e) => handleEducationChange(e, 'elementary')}
                                                 placeholder="Enter elementary award"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             />
                                         </div>
                                         <div>
                                             <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated</label>
-                                            <select className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'>
+                                            <select
+                                                name="yearGraduated"
+                                                value={formData.education.elementary.yearGraduated}
+                                                onChange={(e) => handleEducationChange(e, 'elementary')}
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            >
                                                 <option value="">Select year</option>
                                                 {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
                                                     <option key={year} value={year}>{year}</option>
@@ -871,6 +1041,9 @@ export default function ApplyingStages() {
                                             <label className='block text-sm font-medium text-gray-700 mb-2'>School</label>
                                             <input
                                                 type="text"
+                                                name="school"
+                                                value={formData.education.juniorHighSchool.school}
+                                                onChange={(e) => handleEducationChange(e, 'juniorHighSchool')}
                                                 placeholder="Enter junior high school name"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             />
@@ -879,13 +1052,21 @@ export default function ApplyingStages() {
                                             <label className='block text-sm font-medium text-gray-700 mb-2'>Award</label>
                                             <input
                                                 type="text"
+                                                name="award"
+                                                value={formData.education.juniorHighSchool.award}
+                                                onChange={(e) => handleEducationChange(e, 'juniorHighSchool')}
                                                 placeholder="Enter junior high school award"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             />
                                         </div>
                                         <div>
                                             <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated</label>
-                                            <select className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'>
+                                            <select
+                                                name="yearGraduated"
+                                                value={formData.education.juniorHighSchool.yearGraduated}
+                                                onChange={(e) => handleEducationChange(e, 'juniorHighSchool')}
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            >
                                                 <option value="">Select year</option>
                                                 {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
                                                     <option key={year} value={year}>{year}</option>
@@ -901,6 +1082,9 @@ export default function ApplyingStages() {
                                             <label className='block text-sm font-medium text-gray-700 mb-2'>School</label>
                                             <input
                                                 type="text"
+                                                name="school"
+                                                value={formData.education.seniorHighSchool.school}
+                                                onChange={(e) => handleEducationChange(e, 'seniorHighSchool')}
                                                 placeholder="Enter senior high school name"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             />
@@ -909,13 +1093,21 @@ export default function ApplyingStages() {
                                             <label className='block text-sm font-medium text-gray-700 mb-2'>Award</label>
                                             <input
                                                 type="text"
+                                                name="award"
+                                                value={formData.education.seniorHighSchool.award}
+                                                onChange={(e) => handleEducationChange(e, 'seniorHighSchool')}
                                                 placeholder="Enter senior high school award"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             />
                                         </div>
                                         <div>
                                             <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated</label>
-                                            <select className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'>
+                                            <select
+                                                name="yearGraduated"
+                                                value={formData.education.seniorHighSchool.yearGraduated}
+                                                onChange={(e) => handleEducationChange(e, 'seniorHighSchool')}
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            >
                                                 <option value="">Select year</option>
                                                 {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
                                                     <option key={year} value={year}>{year}</option>
@@ -931,6 +1123,9 @@ export default function ApplyingStages() {
                                             <label className='block text-sm font-medium text-gray-700 mb-2'>College</label>
                                             <input
                                                 type="text"
+                                                name="school"
+                                                value={formData.education.college.school}
+                                                onChange={(e) => handleEducationChange(e, 'college')}
                                                 placeholder="Enter college name"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             />
@@ -939,13 +1134,21 @@ export default function ApplyingStages() {
                                             <label className='block text-sm font-medium text-gray-700 mb-2'>College Course</label>
                                             <input
                                                 type="text"
+                                                name="course"
+                                                value={formData.education.college.course}
+                                                onChange={(e) => handleEducationChange(e, 'college')}
                                                 placeholder="Enter college course"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             />
                                         </div>
                                         <div>
                                             <label className='block text-sm font-medium text-gray-700 mb-2'>College Year Graduated</label>
-                                            <select className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'>
+                                            <select
+                                                name="yearGraduated"
+                                                value={formData.education.college.yearGraduated}
+                                                onChange={(e) => handleEducationChange(e, 'college')}
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            >
                                                 <option value="">Select year</option>
                                                 {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
                                                     <option key={year} value={year}>{year}</option>
@@ -972,8 +1175,8 @@ export default function ApplyingStages() {
                             <div className='p-4'>
                                 <span className='text-lg font-bold block'>Relatives</span>
                                 <span className='text-base font-bold block my-3'>Provide relative's information (Maximum of 6)</span>
-                                {relatives.map((relative, index) => (
-                                    <div key={index} className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4'>
+                                {formData.relatives.map((relative, index) => (
+                                    <div key={index} className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4 ${index > visibleRelativeIndex ? 'hidden' : ''}`}>
                                         <div>
                                             <label className='block text-sm font-medium text-gray-700 mb-2'>Name</label>
                                             <input
@@ -982,7 +1185,7 @@ export default function ApplyingStages() {
                                                 placeholder="Enter relative's name"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                                 value={relative.name}
-                                                onChange={(event) => handleInputChange(index, event, 'relative')}
+                                                onChange={(event) => handleRelativeChange(index, event)}
                                             />
                                         </div>
 
@@ -993,7 +1196,7 @@ export default function ApplyingStages() {
                                                 name="birthdate"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                                 value={relative.birthdate}
-                                                onChange={(event) => handleInputChange(index, event, 'relative')}
+                                                onChange={(event) => handleRelativeChange(index, event)}
                                             />
                                         </div>
 
@@ -1003,7 +1206,7 @@ export default function ApplyingStages() {
                                                 name="relationship"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                                 value={relative.relationship}
-                                                onChange={(event) => handleInputChange(index, event, 'relative')}
+                                                onChange={(event) => handleRelativeChange(index, event)}
                                             >
                                                 <option value="">Select relationship</option>
                                                 <option value="Parent">Parent</option>
@@ -1026,10 +1229,10 @@ export default function ApplyingStages() {
                                 </button>
                                 {relativeErrorMessage && <p className='text-red-600 mt-2'>{relativeErrorMessage}</p>}
 
-                                <span className='text-lg font-bold  mt-8 block'>Work Experience</span>
+                                <span className='text-lg font-bold mt-8 block'>Work Experience</span>
                                 <span className='text-base font-bold block my-3'>Are you a working student? Leave blank if not. (Maximum of 2)</span>
-                                {workExperiences.map((workExperience, index) => (
-                                    <div key={index} className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4'>
+                                {formData.workExperience.map((workExperience, index) => (
+                                    <div key={index} className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4 ${index > visibleWorkExperienceIndex ? 'hidden' : ''}`}>
                                         <div>
                                             <label className='block text-sm font-medium text-gray-700 mb-2'>Company Name</label>
                                             <input
@@ -1038,7 +1241,7 @@ export default function ApplyingStages() {
                                                 placeholder="Enter company name"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                                 value={workExperience.companyName}
-                                                onChange={(event) => handleInputChange(index, event, 'workExperience')}
+                                                onChange={(event) => handleWorkChange(index, event, 'workExperience')}
                                             />
                                         </div>
 
@@ -1049,7 +1252,7 @@ export default function ApplyingStages() {
                                                 name="dateStarted"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                                 value={workExperience.dateStarted}
-                                                onChange={(event) => handleInputChange(index, event, 'workExperience')}
+                                                onChange={(event) => handleWorkChange(index, event, 'workExperience')}
                                             />
                                         </div>
 
@@ -1061,7 +1264,7 @@ export default function ApplyingStages() {
                                                 placeholder="Enter position"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                                 value={workExperience.position}
-                                                onChange={(event) => handleInputChange(index, event, 'workExperience')}
+                                                onChange={(event) => handleWorkChange(index, event, 'workExperience')}
                                             />
                                         </div>
 
@@ -1073,7 +1276,7 @@ export default function ApplyingStages() {
                                                 placeholder="Enter monthly salary"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                                 value={workExperience.monthlySalary}
-                                                onChange={(event) => handleInputChange(index, event, 'workExperience')}
+                                                onChange={(event) => handleWorkChange(index, event, 'workExperience')}
                                             />
                                         </div>
 
@@ -1083,7 +1286,7 @@ export default function ApplyingStages() {
                                                 name="appointmentStatus"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                                 value={workExperience.appointmentStatus}
-                                                onChange={(event) => handleInputChange(index, event, 'workExperience')}
+                                                onChange={(event) => handleWorkChange(index, event, 'workExperience')}
                                             >
                                                 <option value="">Select appointment status</option>
                                                 <option value="Permanent">Permanent</option>
@@ -1104,26 +1307,29 @@ export default function ApplyingStages() {
 
                                 <span className='text-lg font-bold mt-8 block'>Skills & Qualifications</span>
                                 <span className='text-base font-bold block my-3'>Skills (Maximum of 6), Qualifications (Includes membership in related associations, hobbies, etc.)</span>
-                                {skills.map((skill, index) => (
-                                    <div key={index} className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
+                                                                {formData.skillsAndQualifications.map((skill, index) => (
+                                    <div key={index} className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 ${index > visibleSkillIndex ? 'hidden' : ''}`}>
                                         <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Skill</label>
                                             <input
                                                 type="text"
-                                                name="skill"
-                                                placeholder="Enter skill"
+                                                name="skills"
+                                                placeholder="Enter skill name"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                                value={skill}
-                                                onChange={(event) => handleInputChange(index, event, 'skill')}
+                                                value={index > visibleSkillIndex ? '' : skill.skills}
+                                                onChange={(event) => handleSkillChange(index, event)}
                                             />
                                         </div>
+                                
                                         <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Qualification</label>
                                             <input
                                                 type="text"
-                                                name="qualification"
+                                                name="qualifications"
                                                 placeholder="Enter qualification"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                                value={qualifications[index]}
-                                                onChange={(event) => handleInputChange(index, event, 'qualification')}
+                                                value={index > visibleSkillIndex ? '' : skill.qualifications}
+                                                onChange={(event) => handleSkillChange(index, event)}
                                             />
                                         </div>
                                     </div>
@@ -1229,6 +1435,7 @@ export default function ApplyingStages() {
                                     <input
                                         type="checkbox"
                                         id="agree"
+                                        name="agree"
                                         className='mr-2'
                                         required
                                     />
