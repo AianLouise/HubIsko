@@ -160,7 +160,11 @@ export const CompleteProfile = async (req, res, next) => {
           "applicantDetails.weight": req.body.weight,
           "applicantDetails.birthplace": req.body.birthplace,
           "applicantDetails.contactNumber": req.body.contactNumber,
-          "applicantDetails.address": req.body.address,
+          "applicantDetails.address.region": req.body.region,
+          "applicantDetails.address.province": req.body.province,
+          "applicantDetails.address.city": req.body.city,
+          "applicantDetails.address.barangay": req.body.barangay,
+          "applicantDetails.address.addressDetails": req.body.addressDetails,
         }
       },
       { new: true } // Return the modified document rather than the original.

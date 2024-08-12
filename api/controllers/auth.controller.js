@@ -9,7 +9,7 @@ export const signup = async (req, res, next) => {
   const hashedPassword = bcryptjs.hashSync(password, 10);
 
   // Create a new user instance with profileComplete set to false
-  const newUser = new User({
+   const newUser = new User({
     email,
     username,
     password: hashedPassword,
@@ -34,7 +34,13 @@ export const signup = async (req, res, next) => {
       weight: 0,
       birthplace: "",
       contactNumber: "",
-      address: "",
+      address: {
+        region: "",
+        province: "",
+        city: "",
+        barangay: "",
+        addressDetails: "",
+      },
     },
   });
 
@@ -130,7 +136,7 @@ export const google = async (req, res, next) => {
       // Generate a unique username
       const username = `${firstName}${lastName}`.toLowerCase().replace(/\s+/g, '') + Math.floor(Math.random() * 90 + 10);
 
-      // Create a new user
+            // Create a new user
       const newUser = new User({
         email,
         dateOfBirth: '',
@@ -157,7 +163,13 @@ export const google = async (req, res, next) => {
           weight: 0,
           birthplace: "",
           contactNumber: "",
-          address: "",
+          address: {
+            region: "",
+            province: "",
+            city: "",
+            barangay: "",
+            addressDetails: "",
+          },
         },
         profilePicture: photo,
       });

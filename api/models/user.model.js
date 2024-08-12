@@ -71,8 +71,26 @@ const applicantSchema = new mongoose.Schema({
     required: false,
   },
   address: {
-    type: String,
-    required: false,
+    region: {
+      type: String,
+      required: false,
+    },
+    province: {
+      type: String,
+      required: false,
+    },
+    city: {
+      type: String,
+      required: false,
+    },
+    barangay: {
+      type: String,
+      required: false,
+    },
+    addressDetails: {
+      type: String,
+      required: false,
+    },
   },
 }, { _id: false });
 
