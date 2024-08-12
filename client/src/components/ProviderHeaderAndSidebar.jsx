@@ -30,12 +30,6 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
         }
     };
 
-    
-    const maxUsernameLength = 6;
-    const truncatedUsername = currentUser.username.length > maxUsernameLength
-    ? currentUser.username.slice(0, maxUsernameLength) + '...'
-    : currentUser.username;
-
     return (
         <header className="bg-white text-gray-800 p-4 flex justify-between items-center shadow border-b w-full">
             <div className="max-w-8xl w-full mx-auto px-20 flex justify-between items-center">
@@ -49,7 +43,7 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
 
 
                 <div className="flex gap-2 items-center">
-                    <span className="text-base">{truncatedUsername}</span>
+                    <span className="text-base">{currentUser.username}</span>
                     <div className="relative" ref={dropdownRef}>
                     <img src={currentUser.profilePicture || 'https://via.placeholder.com/40'} alt="Profile" className="h-8 w-8 rounded-full" onClick={toggleDropdown} />
                     {dropdownOpen && (

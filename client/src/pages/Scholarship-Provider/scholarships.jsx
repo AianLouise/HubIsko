@@ -96,7 +96,9 @@ export default function Scholarships() {
                     <span className='text-slate-600'>{scholarship.amount}</span>
                     <p className='text-gray-500'>{scholarship.description}</p>
                     <div className='flex justify-between items-center mt-4'>
-                      <button className='text-blue-600 font-bold border hover:bg-slate-200 px-4 rounded-md'>View Details</button>
+                      <Link to={`/view-scholarships/${scholarship._id}`} className='text-blue-600 font-bold border hover:bg-slate-200 px-4 rounded-md'>
+                        View Details
+                      </Link>
                       {/* <span className='text-gray-500'>Deadline: {scholarship.deadline}</span> */}
                     </div>
                   </div>

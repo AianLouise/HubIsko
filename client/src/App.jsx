@@ -47,6 +47,7 @@ import VerificationDetails from "./pages/Admin/VerificationDetails";
 import StudentDetails from "./pages/Admin/StudentDetails";
 import ProviderDetails from "./pages/Admin/ProviderDetails";
 import Inbox from "./pages/Admin/Inbox";
+import ViewScholarshipDetials from "./pages/Scholarship-Provider/ViewScholarshipDetails";
 
 
 export default function App() {
@@ -80,6 +81,8 @@ export default function App() {
         <Route path="/profile-preview" element={<ProfilePreview />} />
         <Route path="/post-details" element={<PostDetails />} />
         <Route path="/scholarships" element={<Scholarships />} />
+        <Route path="/view-scholarships/:id" element={<ViewScholarshipDetials />} />
+
         <Route path="/scholar-applications" element={<ScholarApplications />} />
         <Route path="/provider-forums" element={<ProviderForums />} />
         <Route path="/provider-forums/post/:postId" element={<ProviderForumDetail />} />
