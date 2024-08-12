@@ -66,33 +66,128 @@ export default function ApplyingStages() {
         town: '',
         barangay: '',
         province: '',
-        fatherFirstName: '',
-        fatherLastName: '',
-        fatherMiddleName: '',
-        motherFirstName: '',
-        motherLastName: '',
-        motherMiddleName: '',
-        parentContact: '',
-        education: '',
-        schoolName: '',
-        yearGraduated: '',
-        hobbies: '',
-        skills: '',
-        languages: ''
+        father: {
+            firstName: '',
+            lastName: '',
+            middleName: '',
+            birthdate: '',
+            occupation: '',
+            yearlyIncome: '',
+            contactNo: ''
+        },
+        mother: {
+            firstName: '',
+            lastName: '',
+            middleName: '',
+            birthdate: '',
+            occupation: '',
+            yearlyIncome: '',
+            contactNo: ''
+        },
+        guardian: {
+            firstName: '',
+            lastName: '',
+            middleName: '',
+            birthdate: '',
+            occupation: '',
+            yearlyIncome: '',
+            contactNo: ''
+        }
     });
 
-    const handleChange = (e) => {
+    const [sameAsParents, setSameAsParents] = useState(false);
+
+    const handleChange = (e, parentType) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
+        setFormData(prevState => ({
+            ...prevState,
+            [parentType]: {
+                ...prevState[parentType],
+                [name]: value
+            }
+        }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         // Save formData to the database
         console.log(formData);
+    };
+
+    const handleCheckboxChange = (e) => {
+        const isChecked = e.target.checked;
+        setSameAsParents(isChecked);
+        if (isChecked) {
+            setFormData(prevState => ({
+                ...prevState,
+                guardian: {
+                    firstName: '',
+                    lastName: '',
+                    middleName: '',
+                    birthdate: '',
+                    occupation: '',
+                    yearlyIncome: '',
+                    contactNo: ''
+                }
+            }));
+        }
+    };
+
+    const [relatives, setRelatives] = useState([{ name: '', birthdate: '', relationship: '' }]);
+    const [workExperiences, setWorkExperiences] = useState([{ companyName: '', dateStarted: '', position: '', monthlySalary: '', appointmentStatus: '' }]);
+    const [skills, setSkills] = useState(['']);
+    const [qualifications, setQualifications] = useState(['']);
+    const [relativeErrorMessage, setRelativeErrorMessage] = useState('');
+    const [workExperienceErrorMessage, setWorkExperienceErrorMessage] = useState('');
+    const [skillErrorMessage, setSkillErrorMessage] = useState('');
+
+    const addRelative = () => {
+        if (relatives.length < 6) {
+            setRelatives([...relatives, { name: '', birthdate: '', relationship: '' }]);
+            setRelativeErrorMessage(''); // Clear any previous error message
+        } else {
+            setRelativeErrorMessage('You can only add up to 6 relatives.');
+        }
+    };
+
+    const addWorkExperience = () => {
+        if (workExperiences.length < 2) {
+            setWorkExperiences([...workExperiences, { companyName: '', dateStarted: '', position: '', monthlySalary: '', appointmentStatus: '' }]);
+            setWorkExperienceErrorMessage(''); // Clear any previous error message
+        } else {
+            setWorkExperienceErrorMessage('You can only add up to 2 work experiences.');
+        }
+    };
+
+    const addSkill = () => {
+        if (skills.length < 6) {
+            setSkills([...skills, '']);
+            setQualifications([...qualifications, '']);
+            setSkillErrorMessage(''); // Clear any previous error message
+        } else {
+            setSkillErrorMessage('You can only add up to 6 skills.');
+        }
+    };
+
+    const handleInputChange = (index, event, type) => {
+        const { name, value } = event.target;
+        if (type === 'relative') {
+            const newRelatives = [...relatives];
+            newRelatives[index][name] = value;
+            setRelatives(newRelatives);
+        } else if (type === 'workExperience') {
+            const newWorkExperiences = [...workExperiences];
+            newWorkExperiences[index][name] = value;
+            setWorkExperiences(newWorkExperiences);
+        } else if (type === 'skill') {
+            const newSkills = [...skills];
+            newSkills[index] = value;
+            setSkills(newSkills);
+        } else if (type === 'qualification') {
+            const newQualifications = [...qualifications];
+            newQualifications[index] = value;
+            setQualifications(newQualifications);
+        }
     };
 
     return (
@@ -379,26 +474,90 @@ export default function ApplyingStages() {
                                         <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
                                         <input
                                             type="text"
-                                            placeholder="Enter father's first name"
+                                            name="firstName"
+                                            value={formData.father.firstName}
+                                            onChange={(e) => handleChange(e, 'father')}
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            placeholder="Enter first name"
                                         />
                                     </div>
-
                                     <div>
                                         <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
                                         <input
                                             type="text"
-                                            placeholder="Enter father's last name"
+                                            name="lastName"
+                                            value={formData.father.lastName}
+                                            onChange={(e) => handleChange(e, 'father')}
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            placeholder="Enter last name"
                                         />
                                     </div>
-
                                     <div>
                                         <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
                                         <input
                                             type="text"
-                                            placeholder="Enter father's middle name"
+                                            name="middleName"
+                                            value={formData.father.middleName}
+                                            onChange={(e) => handleChange(e, 'father')}
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            placeholder="Enter middle name"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4'>
+                                    <div>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
+                                        <input
+                                            type="date"
+                                            name="birthdate"
+                                            value={formData.father.birthdate}
+                                            onChange={(e) => handleChange(e, 'father')}
+                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            placeholder="Enter birthdate"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation</label>
+                                        <input
+                                            type="text"
+                                            name="occupation"
+                                            value={formData.father.occupation}
+                                            onChange={(e) => handleChange(e, 'father')}
+                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            placeholder="Enter occupation"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Yearly Income</label>
+                                        <select
+                                            name="yearlyIncome"
+                                            value={formData.father.yearlyIncome}
+                                            onChange={(e) => handleChange(e, 'father')}
+                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                        >
+                                            <option value="" disabled>Select yearly income</option>
+                                            <option value="below_100k">Below ₱100,000</option>
+                                            <option value="100k_200k">₱100,000 - ₱200,000</option>
+                                            <option value="200k_300k">₱200,000 - ₱300,000</option>
+                                            <option value="300k_400k">₱300,000 - ₱400,000</option>
+                                            <option value="400k_500k">₱400,000 - ₱500,000</option>
+                                            <option value="500k_600k">₱500,000 - ₱600,000</option>
+                                            <option value="600k_700k">₱600,000 - ₱700,000</option>
+                                            <option value="700k_800k">₱700,000 - ₱800,000</option>
+                                            <option value="800k_900k">₱800,000 - ₱900,000</option>
+                                            <option value="900k_1M">₱900,000 - ₱1,000,000</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No.</label>
+                                        <input
+                                            type="text"
+                                            name="contactNo"
+                                            value={formData.father.contactNo}
+                                            onChange={(e) => handleChange(e, 'father')}
+                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            placeholder="Enter contact number"
                                         />
                                     </div>
                                 </div>
@@ -409,42 +568,210 @@ export default function ApplyingStages() {
                                         <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
                                         <input
                                             type="text"
-                                            placeholder="Enter mother's first name"
+                                            name="firstName"
+                                            value={formData.mother.firstName}
+                                            onChange={(e) => handleChange(e, 'mother')}
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            placeholder="Enter first name"
                                         />
                                     </div>
-
                                     <div>
                                         <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
                                         <input
                                             type="text"
-                                            placeholder="Enter mother's last name"
+                                            name="lastName"
+                                            value={formData.mother.lastName}
+                                            onChange={(e) => handleChange(e, 'mother')}
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            placeholder="Enter last name"
                                         />
                                     </div>
-
                                     <div>
                                         <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
                                         <input
                                             type="text"
-                                            placeholder="Enter mother's middle name"
+                                            name="middleName"
+                                            value={formData.mother.middleName}
+                                            onChange={(e) => handleChange(e, 'mother')}
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            placeholder="Enter middle name"
                                         />
                                     </div>
                                 </div>
 
-                                <span className='text-lg font-bold mt-8 block'>Parent's Contact</span>
-                                <div className='mt-4'>
-                                    <label className='block text-sm font-medium text-gray-700 mb-2'>Contact Number</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Enter contact number"
-                                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                    />
+                                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4'>
+                                    <div>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
+                                        <input
+                                            type="date"
+                                            name="birthdate"
+                                            value={formData.mother.birthdate}
+                                            onChange={(e) => handleChange(e, 'mother')}
+                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            placeholder="Enter birthdate"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation</label>
+                                        <input
+                                            type="text"
+                                            name="occupation"
+                                            value={formData.mother.occupation}
+                                            onChange={(e) => handleChange(e, 'mother')}
+                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            placeholder="Enter occupation"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Yearly Income</label>
+                                        <select
+                                            name="yearlyIncome"
+                                            value={formData.mother.yearlyIncome}
+                                            onChange={(e) => handleChange(e, 'mother')}
+                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                        >
+                                            <option value="" disabled>Select yearly income</option>
+                                            <option value="below_100k">Below ₱100,000</option>
+                                            <option value="100k_200k">₱100,000 - ₱200,000</option>
+                                            <option value="200k_300k">₱200,000 - ₱300,000</option>
+                                            <option value="300k_400k">₱300,000 - ₱400,000</option>
+                                            <option value="400k_500k">₱400,000 - ₱500,000</option>
+                                            <option value="500k_600k">₱500,000 - ₱600,000</option>
+                                            <option value="600k_700k">₱600,000 - ₱700,000</option>
+                                            <option value="700k_800k">₱700,000 - ₱800,000</option>
+                                            <option value="800k_900k">₱800,000 - ₱900,000</option>
+                                            <option value="900k_1M">₱900,000 - ₱1,000,000</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No.</label>
+                                        <input
+                                            type="text"
+                                            name="contactNo"
+                                            value={formData.mother.contactNo}
+                                            onChange={(e) => handleChange(e, 'mother')}
+                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            placeholder="Enter contact number"
+                                        />
+                                    </div>
                                 </div>
 
-                                <div className='flex mt-10 justify-between'>
-                                    <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                                <span className='text-lg font-bold mt-8 block'>Guardian's Information</span>
+                                <div className='mt-4'>
+                                    <label className='block text-sm font-medium text-gray-700 mb-2'>
+                                        <input
+                                            type="checkbox"
+                                            name="sameAsParents"
+                                            checked={sameAsParents}
+                                            onChange={handleCheckboxChange}
+                                            className='mr-2'
+                                        />
+                                        Same as parents
+                                    </label>
+                                </div>
+                                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
+                                    <div>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
+                                        <input
+                                            type="text"
+                                            name="firstName"
+                                            value={formData.guardian.firstName}
+                                            onChange={(e) => handleChange(e, 'guardian')}
+                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            disabled={sameAsParents}
+                                            placeholder="Enter first name"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
+                                        <input
+                                            type="text"
+                                            name="lastName"
+                                            value={formData.guardian.lastName}
+                                            onChange={(e) => handleChange(e, 'guardian')}
+                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            disabled={sameAsParents}
+                                            placeholder="Enter last name"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
+                                        <input
+                                            type="text"
+                                            name="middleName"
+                                            value={formData.guardian.middleName}
+                                            onChange={(e) => handleChange(e, 'guardian')}
+                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            disabled={sameAsParents}
+                                            placeholder="Enter middle name"
+                                        />
+                                    </div>
+                                </div>
+                                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4'>
+                                    <div>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
+                                        <input
+                                            type="date"
+                                            name="birthdate"
+                                            value={formData.guardian.birthdate}
+                                            onChange={(e) => handleChange(e, 'guardian')}
+                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            disabled={sameAsParents}
+                                            placeholder="Enter birthdate"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation</label>
+                                        <input
+                                            type="text"
+                                            name="occupation"
+                                            value={formData.guardian.occupation}
+                                            onChange={(e) => handleChange(e, 'guardian')}
+                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            disabled={sameAsParents}
+                                            placeholder="Enter occupation"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Yearly Income</label>
+                                        <select
+                                            name="yearlyIncome"
+                                            value={formData.guardian.yearlyIncome}
+                                            onChange={(e) => handleChange(e, 'guardian')}
+                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            disabled={sameAsParents}
+                                        >
+                                            <option value="" disabled>Select yearly income</option>
+                                            <option value="below_100k">Below ₱100,000</option>
+                                            <option value="100k_200k">₱100,000 - ₱200,000</option>
+                                            <option value="200k_300k">₱200,000 - ₱300,000</option>
+                                            <option value="300k_400k">₱300,000 - ₱400,000</option>
+                                            <option value="400k_500k">₱400,000 - ₱500,000</option>
+                                            <option value="500k_600k">₱500,000 - ₱600,000</option>
+                                            <option value="600k_700k">₱600,000 - ₱700,000</option>
+                                            <option value="700k_800k">₱700,000 - ₱800,000</option>
+                                            <option value="800k_900k">₱800,000 - ₱900,000</option>
+                                            <option value="900k_1M">₱900,000 - ₱1,000,000</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No.</label>
+                                        <input
+                                            type="text"
+                                            name="contactNo"
+                                            value={formData.guardian.contactNo}
+                                            onChange={(e) => handleChange(e, 'guardian')}
+                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            disabled={sameAsParents}
+                                            placeholder="Enter contact number"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className='flex mt-10 justify-end space-x-4'>
+                                    {activeStep > 1 && (
+                                        <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                                    )}
                                     <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleNext}>Next</button>
                                 </div>
                             </div>
@@ -455,39 +782,134 @@ export default function ApplyingStages() {
                                 <span className='text-lg font-bold'>Education Information</span>
                             </div>
 
-                            <div className='p-4'>
-                                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Highest Educational Attainment</label>
-                                        <input
-                                            type="text"
-                                            placeholder="Enter highest educational attainment"
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        />
+                            <div className='px-4'>
+                                <div className='px-4'>
+                                    {/* Elementary */}
+                                    <span className='text-lg font-bold mt-8 block'>Elementary</span>
+                                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>School</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter elementary school name"
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Award</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter elementary award"
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated</label>
+                                            <select className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'>
+                                                <option value="">Select year</option>
+                                                {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                                                    <option key={year} value={year}>{year}</option>
+                                                ))}
+                                            </select>
+                                        </div>
                                     </div>
 
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>School Name</label>
-                                        <input
-                                            type="text"
-                                            placeholder="Enter school name"
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        />
+                                    {/* Junior High School */}
+                                    <span className='text-lg font-bold mt-8 block'>Junior High School</span>
+                                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>School</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter junior high school name"
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Award</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter junior high school award"
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated</label>
+                                            <select className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'>
+                                                <option value="">Select year</option>
+                                                {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                                                    <option key={year} value={year}>{year}</option>
+                                                ))}
+                                            </select>
+                                        </div>
                                     </div>
 
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated</label>
-                                        <input
-                                            type="text"
-                                            placeholder="Enter year graduated"
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        />
+                                    {/* Senior High School */}
+                                    <span className='text-lg font-bold mt-8 block'>Senior High School</span>
+                                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>School</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter senior high school name"
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Award</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter senior high school award"
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated</label>
+                                            <select className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'>
+                                                <option value="">Select year</option>
+                                                {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                                                    <option key={year} value={year}>{year}</option>
+                                                ))}
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div className='flex mt-10 justify-between'>
-                                    <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
-                                    <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleNext}>Next</button>
+                                    {/* College */}
+                                    <span className='text-lg font-bold mt-8 block'>College</span>
+                                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>College</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter college name"
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>College Course</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Enter college course"
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>College Year Graduated</label>
+                                            <select className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'>
+                                                <option value="">Select year</option>
+                                                {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                                                    <option key={year} value={year}>{year}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className='flex mt-10 justify-end space-x-4 p-4'>
+                                        {activeStep > 1 && (
+                                            <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                                        )}
+                                        <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleNext}>Next</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -498,47 +920,186 @@ export default function ApplyingStages() {
                             </div>
 
                             <div className='p-4'>
-                                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Hobbies</label>
-                                        <input
-                                            type="text"
-                                            placeholder="Enter your hobbies"
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        />
-                                    </div>
+                                <span className='text-lg font-bold block'>Relatives</span>
+                                <span className='text-base font-bold block my-3'>Provide relative's information (Maximum of 6)</span>
+                                {relatives.map((relative, index) => (
+                                    <div key={index} className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4'>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Name</label>
+                                            <input
+                                                type="text"
+                                                name="name"
+                                                placeholder="Enter relative's name"
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                value={relative.name}
+                                                onChange={(event) => handleInputChange(index, event, 'relative')}
+                                            />
+                                        </div>
 
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Skills</label>
-                                        <input
-                                            type="text"
-                                            placeholder="Enter your skills"
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        />
-                                    </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
+                                            <input
+                                                type="date"
+                                                name="birthdate"
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                value={relative.birthdate}
+                                                onChange={(event) => handleInputChange(index, event, 'relative')}
+                                            />
+                                        </div>
 
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Languages Spoken</label>
-                                        <input
-                                            type="text"
-                                            placeholder="Enter languages spoken"
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        />
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Relationship</label>
+                                            <select
+                                                name="relationship"
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                value={relative.relationship}
+                                                onChange={(event) => handleInputChange(index, event, 'relative')}
+                                            >
+                                                <option value="">Select relationship</option>
+                                                <option value="Parent">Parent</option>
+                                                <option value="Sibling">Sibling</option>
+                                                <option value="Spouse">Spouse</option>
+                                                <option value="Child">Child</option>
+                                                <option value="Uncle">Uncle</option>
+                                                <option value="Aunt">Aunt</option>
+                                                <option value="Cousin">Cousin</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
+                                ))}
+                                <button
+                                    className='bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800'
+                                    onClick={addRelative}
+                                >
+                                    Add Relative
+                                </button>
+                                {relativeErrorMessage && <p className='text-red-600 mt-2'>{relativeErrorMessage}</p>}
 
-                                <div className='flex mt-10 justify-between'>
-                                    <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                                <span className='text-lg font-bold  mt-8 block'>Work Experience</span>
+                                <span className='text-base font-bold block my-3'>Are you a working student? Leave blank if not. (Maximum of 2)</span>
+                                {workExperiences.map((workExperience, index) => (
+                                    <div key={index} className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4'>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Company Name</label>
+                                            <input
+                                                type="text"
+                                                name="companyName"
+                                                placeholder="Enter company name"
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                value={workExperience.companyName}
+                                                onChange={(event) => handleInputChange(index, event, 'workExperience')}
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Date Started</label>
+                                            <input
+                                                type="date"
+                                                name="dateStarted"
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                value={workExperience.dateStarted}
+                                                onChange={(event) => handleInputChange(index, event, 'workExperience')}
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Position</label>
+                                            <input
+                                                type="text"
+                                                name="position"
+                                                placeholder="Enter position"
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                value={workExperience.position}
+                                                onChange={(event) => handleInputChange(index, event, 'workExperience')}
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Monthly Salary</label>
+                                            <input
+                                                type="text"
+                                                name="monthlySalary"
+                                                placeholder="Enter monthly salary"
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                value={workExperience.monthlySalary}
+                                                onChange={(event) => handleInputChange(index, event, 'workExperience')}
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Status of Appointment</label>
+                                            <select
+                                                name="appointmentStatus"
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                value={workExperience.appointmentStatus}
+                                                onChange={(event) => handleInputChange(index, event, 'workExperience')}
+                                            >
+                                                <option value="">Select appointment status</option>
+                                                <option value="Permanent">Permanent</option>
+                                                <option value="Temporary">Temporary</option>
+                                                <option value="Contractual">Contractual</option>
+                                                <option value="Casual">Casual</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                ))}
+                                <button
+                                    className='bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800'
+                                    onClick={addWorkExperience}
+                                >
+                                    Add Work Experience
+                                </button>
+                                {workExperienceErrorMessage && <p className='text-red-600 mt-2'>{workExperienceErrorMessage}</p>}
+
+                                <span className='text-lg font-bold mt-8 block'>Skills & Qualifications</span>
+                                <span className='text-base font-bold block my-3'>Skills (Maximum of 6), Qualifications (Includes membership in related associations, hobbies, etc.)</span>
+                                {skills.map((skill, index) => (
+                                    <div key={index} className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
+                                        <div>
+                                            <input
+                                                type="text"
+                                                name="skill"
+                                                placeholder="Enter skill"
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                value={skill}
+                                                onChange={(event) => handleInputChange(index, event, 'skill')}
+                                            />
+                                        </div>
+                                        <div>
+                                            <input
+                                                type="text"
+                                                name="qualification"
+                                                placeholder="Enter qualification"
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                value={qualifications[index]}
+                                                onChange={(event) => handleInputChange(index, event, 'qualification')}
+                                            />
+                                        </div>
+                                    </div>
+                                ))}
+                                <button
+                                    className='bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800'
+                                    onClick={addSkill}
+                                >
+                                    Add Skill & Qualification
+                                </button>
+                                {skillErrorMessage && <p className='text-red-600 mt-2'>{skillErrorMessage}</p>}
+
+                                <div className='flex mt-4 justify-end space-x-4'>
+                                    {activeStep > 1 && (
+                                        <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                                    )}
                                     <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleNext}>Next</button>
                                 </div>
                             </div>
                         </div>
 
                         <div className={`${getHideorActive(5)} max-w-8xl mx-auto bg-white shadow-lg rounded-lg`}>
-                            <div className="bg-blue-600 text-white p-4 rounded-t-lg">
+                                                      <div className="bg-blue-600 text-white p-4 rounded-t-lg">
                                 <span className='text-lg font-bold'>Upload Requirements</span>
                             </div>
-
+                            
                             <div className='p-4'>
                                 <div className='mb-4'>
                                     <p className='text-sm text-gray-700'>
@@ -551,7 +1112,7 @@ export default function ApplyingStages() {
                                         <li>Document 4: Passport-sized Photo</li>
                                     </ul>
                                 </div>
-
+                            
                                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
                                     <div>
                                         <label className='block text-sm font-medium text-gray-700 mb-2'>Identification Card</label>
@@ -560,7 +1121,7 @@ export default function ApplyingStages() {
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         />
                                     </div>
-
+                            
                                     <div>
                                         <label className='block text-sm font-medium text-gray-700 mb-2'>Proof of Address</label>
                                         <input
@@ -568,7 +1129,7 @@ export default function ApplyingStages() {
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         />
                                     </div>
-
+                            
                                     <div>
                                         <label className='block text-sm font-medium text-gray-700 mb-2'>Academic Transcripts</label>
                                         <input
@@ -576,7 +1137,7 @@ export default function ApplyingStages() {
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         />
                                     </div>
-
+                            
                                     <div>
                                         <label className='block text-sm font-medium text-gray-700 mb-2'>Passport-sized Photo</label>
                                         <input
@@ -585,9 +1146,11 @@ export default function ApplyingStages() {
                                         />
                                     </div>
                                 </div>
-
-                                <div className='flex mt-10 justify-between'>
-                                    <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                            
+                                <div className='flex mt-4 justify-end space-x-4'>
+                                    {activeStep > 1 && (
+                                        <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                                    )}
                                     <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleNext}>Next</button>
                                 </div>
                             </div>
@@ -624,7 +1187,7 @@ export default function ApplyingStages() {
                                     </label>
                                 </div>
 
-                                <div className='flex mt-10 justify-between'>
+                                <div className='flex mt-4 justify-end space-x-4'>
                                     <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
                                     <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleSubmit}>Submit</button>
                                 </div>

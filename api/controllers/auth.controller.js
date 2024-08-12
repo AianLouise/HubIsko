@@ -5,19 +5,12 @@ import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 
 export const signup = async (req, res, next) => {
-  const { firstName, lastName, email, dateOfBirth, username, password, role } = req.body;
+  const { firstName, lastName, email, username, password, role } = req.body;
   const hashedPassword = bcryptjs.hashSync(password, 10);
 
   // Create a new user instance with profileComplete set to false
-  const newUser = new User({
-    firstName,
-    lastName,
-    middleName: "",
-    nameExtension: "",
-    sex: "",
+   const newUser = new User({
     email,
-    dateOfBirth,
-    mobileNumber: "",
     username,
     password: hashedPassword,
     authProvider: 'email',
@@ -25,19 +18,29 @@ export const signup = async (req, res, next) => {
     emailVerified: false,
     applicantDetails: {
       profileComplete: false,
-      permanentAddress: "",
-      barangay: "",
-      municipality: "",
-      province: "",
-      motherFirstName: "",
-      motherMiddleName: "",
-      motherLastName: "",
-      motherDOB: "",
-      fatherFirstName: "",
-      fatherMiddleName: "",
-      fatherLastName: "",
-      fatherDOB: "",
-      documents: [],
+      firstName,
+      lastName,
+      middleName: "",
+      nameExtension: "",
+      birthdate: "",
+      gender: "",
+      bloodType: "",
+      civilStatus: "",
+      maidenName: "",
+      spouseName: "",
+      spouseOccupation: "",
+      religion: "",
+      height: 0,
+      weight: 0,
+      birthplace: "",
+      contactNumber: "",
+      address: {
+        region: "",
+        province: "",
+        city: "",
+        barangay: "",
+        addressDetails: "",
+      },
     },
   });
 
@@ -133,37 +136,42 @@ export const google = async (req, res, next) => {
       // Generate a unique username
       const username = `${firstName}${lastName}`.toLowerCase().replace(/\s+/g, '') + Math.floor(Math.random() * 90 + 10);
 
-      // Create a new user
+            // Create a new user
       const newUser = new User({
-        firstName,
-        lastName,
-        middleName: "",
-        nameExtension: "",
-        sex: "",
         email,
         dateOfBirth: '',
-        mobileNumber: "",
         username,
         password: bcryptjs.hashSync(Math.random().toString(36).slice(-8), 10), // Random password
-        profilePicture: photo,
-        emailVerified: true,
         authProvider: 'google',
+        role: 'applicant',
+        emailVerified: true,
         applicantDetails: {
           profileComplete: false,
-          permanentAddress: "",
-          barangay: "",
-          municipality: "",
-          province: "",
-          motherFirstName: "",
-          motherMiddleName: "",
-          motherLastName: "",
-          motherDOB: "",
-          fatherFirstName: "",
-          fatherMiddleName: "",
-          fatherLastName: "",
-          fatherDOB: "",
-          documents: [],
+          firstName,
+          lastName,
+          middleName: "",
+          nameExtension: "",
+          birthdate: '',
+          gender: "",
+          bloodType: "",
+          civilStatus: "",
+          maidenName: "",
+          spouseName: "",
+          spouseOccupation: "",
+          religion: "",
+          height: 0,
+          weight: 0,
+          birthplace: "",
+          contactNumber: "",
+          address: {
+            region: "",
+            province: "",
+            city: "",
+            barangay: "",
+            addressDetails: "",
+          },
         },
+        profilePicture: photo,
       });
 
       await newUser.save();

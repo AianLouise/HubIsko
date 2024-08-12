@@ -1,27 +1,43 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUserSuccess } from '../redux/user/userSlice'; // Adjust the import path as needed
 import { useNavigate } from 'react-router-dom';
+import { regions, provinces, cities, barangays, regionByCode, provincesByCode, provinceByName } from "select-philippines-address";
+
+// regions().then((region) => console.log(region));
+// regionByCode("01").then((region) => console.log(region.region_name));
+// provinces("01").then((province) => console.log(province));
+// provincesByCode("01").then((province) => console.log(province));
+// provinceByName("Rizal").then((province) => console.log(province.province_code));
+// cities("0128").then((city) => console.log(city));
+// barangays("052011").then((barangays) => console.log(barangays));
 
 export default function CompleteProfile() {
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.user);
+
   const [formData, setFormData] = useState({
     firstName: '',
     middleName: '',
     lastName: '',
     nameExtension: '',
-    sex: 'MALE',
-    dateOfBirth: '',
-    mobileNumber: '',
-    permanentAddress: '',
-    barangay: '',
-    municipality: '',
+    birthdate: '',
+    gender: '',
+    bloodType: '',
+    civilStatus: '',
+    maidenName: '',
+    spouseName: '',
+    spouseOccupation: '',
+    religion: '',
+    height: '',
+    weight: '',
+    birthplace: '',
+    contactNumber: '',
+    addressDetails: '', // Updated field name
+    region: '',
     province: '',
-    motherFirstName: '',
-    motherMiddleName: '',
-    motherLastName: '',
-    motherDOB: '',
-    fatherFirstName: '',
-    fatherMiddleName: '',
-    fatherLastName: '',
-    fatherDOB: ''
+    city: '',
+    barangay: ''
   });
 
   const [showModal, setShowModal] = useState(false);
@@ -33,21 +49,74 @@ export default function CompleteProfile() {
       .then((data) => {
         setFormData((prevFormData) => ({
           ...prevFormData,
-          firstName: data.firstName || '',
-          lastName: data.lastName || '',
-          dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth).toISOString().split('T')[0] : '',
+          firstName: data.applicantDetails.firstName || '',
+          lastName: data.applicantDetails.lastName || '',
         }));
       })
       .catch((error) => console.error('Error fetching user details:', error));
   }, []);
 
+  const [regionList, setRegionList] = useState([]);
+  const [provinceList, setProvinceList] = useState([]);
+  const [cityList, setCityList] = useState([]);
+  const [barangayList, setBarangayList] = useState([]);
+
+  useEffect(() => {
+    regions().then(setRegionList);
+  }, []);
+
+  const handleRegionChange = (e) => {
+    const regionCode = e.target.value;
+    const selectedRegion = regionList.find(region => region.region_code === regionCode);
+    const regionName = selectedRegion ? selectedRegion.region_name : '';
+
+    setFormData({ ...formData, region: regionName, regionCode: regionCode, province: '', city: '', barangay: '' });
+    provinces(regionCode).then(setProvinceList);
+    setCityList([]);
+    setBarangayList([]);
+  };
+
+  const handleProvinceChange = (e) => {
+    const provinceCode = e.target.value;
+    const selectedProvince = provinceList.find(province => province.province_code === provinceCode);
+    const provinceName = selectedProvince ? selectedProvince.province_name : '';
+
+    setFormData({ ...formData, province: provinceName, provinceCode: provinceCode, city: '', barangay: '' });
+    cities(provinceCode).then(setCityList);
+    setBarangayList([]);
+  };
+
+  const handleCityChange = (e) => {
+    const cityCode = e.target.value;
+    const selectedCity = cityList.find(city => city.city_code === cityCode);
+    const cityName = selectedCity ? selectedCity.city_name : '';
+
+    setFormData({ ...formData, city: cityName, cityCode: cityCode });
+    barangays(cityCode).then(setBarangayList);
+  };
+
+  const handleBarangayChange = (e) => {
+    const barangayCode = e.target.value;
+    setFormData({ ...formData, barangay: barangayCode });
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+    setFormData({ ...formData, [name]: value });
   };
+
+  const isSingleWidowedOrDivorced = ['Single', 'Widowed', 'Divorced', ''].includes(formData.civilStatus);
+
+  useEffect(() => {
+    if (isSingleWidowedOrDivorced) {
+      setFormData((prevData) => ({
+        ...prevData,
+        maidenName: '',
+        spouseName: '',
+        spouseOccupation: ''
+      }));
+    }
+  }, [formData.civilStatus, isSingleWidowedOrDivorced]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -71,396 +140,470 @@ export default function CompleteProfile() {
       })
       .then((data) => {
         console.log('Success:', data);
+        // Update the currentUser state in Redux
+        dispatch(updateUserSuccess({
+          ...currentUser,
+          applicantDetails: {
+            ...currentUser.applicantDetails,
+            profileComplete: true
+          }
+        }));
         navigate('/complete-profile-confirmation');
       })
-      .catch((error) => {
-        console.error('Error:', error);
-      })
-      .finally(() => {
-        setShowModal(false); // Close modal regardless of success or failure
-        document.body.classList.remove('modal-open'); // Remove class to enable scrolling
-      });
+      .catch((error) => console.error('Error:', error));
   };
+
+
 
   return (
     <div>
-       <div className=" flex justify-center pt-8 rounded-md">
-          <h2 className="text-xl font-medium text-slate-600">Please fill out the areas to complete your profile</h2>
+      <div className=" flex justify-center pt-8 rounded-md">
+        <h2 className="text-xl font-medium text-slate-600">Please fill out the areas to complete your profile</h2>
+      </div>
+      <form onSubmit={handleSubmit} className="max-w-6xl mx-auto space-y-6 bg-white border rounded-lg shadow-lg mt-4 mb-10">
+        <div className="bg-blue-600 text-white p-4 rounded-t-lg">
+          <span className='text-lg font-bold'>Basic Information</span>
         </div>
-      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto p-6 space-y-6 bg-white border rounded-lg shadow-lg mt-4 mb-10">
-      <div className='bg-blue-600 text-white p-4 rounded-md'>
-       <h2 className='text-xl font-bold'> Basic Information</h2>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">First Name <span className="text-red-500">*</span></label>
+
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4'>
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
             <input
               type="text"
               name="firstName"
               value={formData.firstName}
               onChange={handleChange}
+              placeholder="Enter your first name"
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               required
-              className="p-2 border border-gray-300 rounded-md"
             />
           </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Middle Name <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              name="middleName"
-              value={formData.middleName}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-            />
-          </div>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Last Name <span className="text-red-500">*</span></label>
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
             <input
               type="text"
               name="lastName"
               value={formData.lastName}
               onChange={handleChange}
+              placeholder="Enter your last name"
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               required
-              className="p-2 border border-gray-300 rounded-md"
             />
           </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Name Extension (if applicable)</label>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
+            <input
+              type="text"
+              name="middleName"
+              value={formData.middleName}
+              onChange={handleChange}
+              placeholder="Enter your middle name"
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              required
+            />
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Name Extension</label>
             <select
               name="nameExtension"
               value={formData.nameExtension}
               onChange={handleChange}
-              className="p-2 border border-gray-300 rounded-md"
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
             >
-              <option value="">None</option>
-              <option value="Jr.">Jr. (Junior)</option>
-              <option value="Sr.">Sr. (Senior)</option>
-              <option value="III">III (The Third)</option>
-              <option value="IV">IV (The Fourth)</option>
+              <option value="">Select Name Ext. (if applicable)</option>
+              <option value="Jr.">Jr.</option>
+              <option value="Sr.">Sr.</option>
+              <option value="II">II</option>
+              <option value="III">III</option>
+              <option value="IV">IV</option>
+              <option value="V">V</option>
             </select>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Sex <span className="text-red-500">*</span></label>
-            <select
-              name="sex"
-              value={formData.sex}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-            >
-              <option value="FEMALE">Female</option>
-              <option value="MALE">Male</option>
-            </select>
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Date of Birth <span className="text-red-500">*</span></label>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4'>
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
             <input
               type="date"
-              name="dateOfBirth"
-              value={formData.dateOfBirth}
+              name="birthdate"
+              value={formData.birthdate}
               onChange={handleChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               required
-              className="p-2 border border-gray-300 rounded-md"
             />
           </div>
-        </div>
 
-        <div className="flex flex-col">
-          <label className="mb-2 text-gray-700 font-semibold">Mobile Number <span className="text-red-500">*</span></label>
-          <input
-            type="tel"
-            name="mobileNumber"
-            value={formData.mobileNumber}
-            onChange={handleChange}
-            required
-            className="p-2 border border-gray-300 rounded-md"
-          />
-        </div>
-
-        <div className="bg-blue-600 text-white p-4 rounded-md mt-6">
-          <h2 className="text-xl font-bold">Permanent Address</h2>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">House/Bldg. No., Street <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              name="permanentAddress"
-              value={formData.permanentAddress}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-              placeholder="#123 CAPITOL STREET"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Barangay <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              name="barangay"
-              value={formData.barangay}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-              placeholder="SAN JOSE"
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Municipality <span className="text-red-500">*</span></label>
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Gender</label>
             <select
-              name="municipality"
-              value={formData.municipality}
+              name="gender"
+              value={formData.gender}
               onChange={handleChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               required
-              className="p-2 border border-gray-300 rounded-md"
             >
-              <option value="">Select a municipality</option>
-              <option value="Angeles City">Angeles City</option>
-              <option value="Apalit">Apalit</option>
-              <option value="Aramina">Aramina</option>
-              <option value="Bacolor">Bacolor</option>
-              <option value="Candaba">Candaba</option>
-              <option value="Floridablanca">Floridablanca</option>
-              <option value="Guagua">Guagua</option>
-              <option value="Lubao">Lubao</option>
-              <option value="Mabalacat City">Mabalacat City</option>
-              <option value="Macabebe">Macabebe</option>
-              <option value="Magalang">Magalang</option>
-              <option value="Masantol">Masantol</option>
-              <option value="Mexico">Mexico</option>
-              <option value="Minalin">Minalin</option>
-              <option value="Porac">Porac</option>
-              <option value="San Fernando">San Fernando</option>
-              <option value="San Luis">San Luis</option>
-              <option value="San Simon">San Simon</option>
-              <option value="Santa Ana">Santa Ana</option>
-              <option value="Santa Rita">Santa Rita</option>
-              <option value="Santo Tomas">Santo Tomas</option>
-              <option value="Sasmuan (Sexmoan)">Sasmuan (Sexmoan)</option>
+              <option value="">Select Gender</option>
+              <option value="Female">Female</option>
+              <option value="Male">Male</option>
+              <option value="Other">Other</option>
             </select>
           </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Province <span className="text-red-500">*</span></label>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Blood Type</label>
+            <select
+              name="bloodType"
+              value={formData.bloodType}
+              onChange={handleChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              required
+            >
+              <option value="">Select Blood Type</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Civil Status</label>
+            <select
+              name="civilStatus"
+              value={formData.civilStatus}
+              onChange={handleChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              required
+            >
+              <option value="">Select Civil Status</option>
+              <option value="Single">Single</option>
+              <option value="Married">Married</option>
+              <option value="Divorced">Divorced</option>
+              <option value="Widowed">Widowed</option>
+            </select>
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Maiden Name</label>
+            <input
+              type="text"
+              name="maidenName"
+              value={formData.maidenName}
+              onChange={handleChange}
+              placeholder="Enter maiden name"
+              disabled={isSingleWidowedOrDivorced}
+              className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
+            />
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Name of Spouse</label>
+            <input
+              type="text"
+              name="spouseName"
+              value={formData.spouseName}
+              onChange={handleChange}
+              placeholder="Enter name of spouse"
+              disabled={isSingleWidowedOrDivorced}
+              className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
+            />
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation of Spouse</label>
+            <input
+              type="text"
+              name="spouseOccupation"
+              value={formData.spouseOccupation}
+              onChange={handleChange}
+              placeholder="Enter occupation of spouse"
+              disabled={isSingleWidowedOrDivorced}
+              className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
+            />
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Religion</label>
+            <select
+              name="religion"
+              value={formData.religion}
+              onChange={handleChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              required
+            >
+              <option value="Roman Catholic">Roman Catholic</option>
+              <option value="Iglesia ni Cristo">Iglesia ni Cristo</option>
+              <option value="Islam">Islam</option>
+              <option value="Born Again Christian">Born Again Christian</option>
+              <option value="Others">Others</option>
+            </select>
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Height</label>
+            <input
+              type="number"
+              name="height"
+              value={formData.height}
+              onChange={handleChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              placeholder="Enter height in cm"
+              required
+            />
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Weight</label>
+            <input
+              type="number"
+              name="weight"
+              value={formData.weight}
+              onChange={handleChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              placeholder="Enter weight in kg"
+              required
+            />
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Birthplace</label>
+            <input
+              type="text"
+              name="birthplace"
+              value={formData.birthplace}
+              onChange={handleChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              placeholder="Enter birthplace"
+              required
+            />
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Contact Number</label>
+            <input
+              type="tel"
+              name="contactNumber"
+              value={formData.contactNumber}
+              onChange={handleChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              placeholder="Enter contact number"
+              pattern="^(09|\+639)\d{9}$"
+              title="Please enter a valid Philippine phone number (e.g., 09123456789 or +639123456789)"
+              required
+            />
+          </div>
+        </div>
+
+        <div className='grid grid-cols-2 gap-4 px-4'>
+          <div className='col-span-1'>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>
+              Region
+            </label>
+            <select
+              name="region"
+              value={formData.regionCode}
+              onChange={handleRegionChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              required
+            >
+              <option value="">Select Region</option>
+              {regionList.map((region) => (
+                <option key={region.region_code} value={region.region_code}>
+                  {region.region_name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className='col-span-1'>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>
+              Province
+            </label>
             <select
               name="province"
-              value={formData.province}
-              onChange={handleChange}
+              value={formData.provinceCode}
+              onChange={handleProvinceChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               required
-              className="p-2 border border-gray-300 rounded-md"
             >
-              <option value="">Select a province</option>
-              <option value="Pampanga">Pampanga</option>
+              <option value="">Select Province</option>
+              {provinceList.map((province) => (
+                <option key={province.province_code} value={province.province_code}>
+                  {province.province_name}
+                </option>
+              ))}
             </select>
           </div>
-        </div>
 
-        <div className="bg-blue-600 text-white p-4 rounded-md mt-6">
-          <h2 className="text-xl font-bold">Parent Details</h2>
-        </div>
+          <div className='col-span-1'>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>
+              City
+            </label>
+            <select
+              name="city"
+              value={formData.cityCode || ''}
+              onChange={handleCityChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              required
+            >
+              <option value="">Select City</option>
+              {cityList.map((city) => (
+                <option key={city.city_code} value={city.city_code}>
+                  {city.city_name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Mother's Maiden First Name <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              name="motherFirstName"
-              value={formData.motherFirstName}
-              onChange={handleChange}
+          <div className='col-span-1'>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>
+              Barangay
+            </label>
+            <select
+              name="barangay"
+              value={formData.barangay}
+              onChange={handleBarangayChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               required
-              className="p-2 border border-gray-300 rounded-md"
-              placeholder="JUANA"
-            />
+            >
+              <option value="">Select Barangay</option>
+              {barangayList.map((barangay) => (
+                <option key={barangay.brgy_code} value={barangay.brgy_name}>
+                  {barangay.brgy_name}
+                </option>
+              ))}
+            </select>
           </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Mother's Maiden Middle Name <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              name="motherMiddleName"
-              value={formData.motherMiddleName}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-              placeholder="DELA CRUZ"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Mother's Maiden Last Name <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              name="motherLastName"
-              value={formData.motherLastName}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-              placeholder="SANTOS"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Mother's Date of Birth <span className="text-red-500">*</span></label>
-            <input
-              type="date"
-              name="motherDOB"
-              value={formData.motherDOB}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-            />
-          </div>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Father's First Name <span className="text-red-500">*</span></label>
+          <div className='col-span-1'>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>
+              House No./Unit No./Bldg/Floor, Street, Subdivision
+            </label>
             <input
               type="text"
-              name="fatherFirstName"
-              value={formData.fatherFirstName}
+              name="addressDetails"
+              value={formData.addressDetails}
               onChange={handleChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+              placeholder="Enter House No./Unit No./Bldg/Floor, Street, Subdivision"
               required
-              className="p-2 border border-gray-300 rounded-md"
-              placeholder="JUAN"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Father's Middle Name <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              name="fatherMiddleName"
-              value={formData.fatherMiddleName}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-              placeholder="DELA CRUZ"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Father's Last Name <span className="text-red-500">*</span></label>
-            <input
-              type="text"
-              name="fatherLastName"
-              value={formData.fatherLastName}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
-              placeholder="SANTOS"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-2 text-gray-700 font-semibold">Father's Date of Birth <span className="text-red-500">*</span></label>
-            <input
-              type="date"
-              name="fatherDOB"
-              value={formData.fatherDOB}
-              onChange={handleChange}
-              required
-              className="p-2 border border-gray-300 rounded-md"
             />
           </div>
         </div>
 
-        <div className="flex flex-col space-y-4 mt-6">
+        <div className="flex justify-end space-x-2 px-4 py-4">
           <button
             type="submit"
-            className="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-200"
+            className="py-2 px-6 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
           >
             Submit
+          </button>
+          <button
+            type="reset"
+            className="py-2 px-6 bg-gray-500 text-white rounded-lg shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
+          >
+            Clear
           </button>
         </div>
       </form>
 
+
       {/* Modal */}
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50">
-          <div className="relative w-full max-w-lg mx-auto">
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-gray-800">Confirm Submission</h2>
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="text-gray-600 hover:text-gray-800 focus:outline-none"
-                >
-                  <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              <div className="space-y-4">
-                <div className="border-t border-gray-200 pt-4">
-                  <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Name:</span> {formData.firstName} {formData.middleName} {formData.lastName} {formData.nameExtension}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Sex:</span> {formData.sex === 'MALE' ? 'Male' : 'Female'}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Date of Birth:</span> {formData.dateOfBirth}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Mobile Number:</span> {formData.mobileNumber}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Permanent Address:</span> {formData.permanentAddress}, {formData.barangay}, {formData.municipality}, {formData.province}
-                  </p>
-                  <div className="mt-4">
-                    <p className="text-sm font-semibold">Mother's Details:</p>
-                    <p className="text-sm text-gray-600 ml-2">
-                      <span className="font-semibold">First Name:</span> {formData.motherFirstName}
-                    </p>
-                    <p className="text-sm text-gray-600 ml-2">
-                      <span className="font-semibold">Middle Name:</span> {formData.motherMiddleName}
-                    </p>
-                    <p className="text-sm text-gray-600 ml-2">
-                      <span className="font-semibold">Last Name:</span> {formData.motherLastName}
-                    </p>
-                    <p className="text-sm text-gray-600 ml-2">
-                      <span className="font-semibold">Date of Birth:</span> {formData.motherDOB}
-                    </p>
-                  </div>
-                  <div className="mt-4">
-                    <p className="text-sm font-semibold">Father's Details:</p>
-                    <p className="text-sm text-gray-600 ml-2">
-                      <span className="font-semibold">First Name:</span> {formData.fatherFirstName}
-                    </p>
-                    <p className="text-sm text-gray-600 ml-2">
-                      <span className="font-semibold">Middle Name:</span> {formData.fatherMiddleName}
-                    </p>
-                    <p className="text-sm text-gray-600 ml-2">
-                      <span className="font-semibold">Last Name:</span> {formData.fatherLastName}
-                    </p>
-                    <p className="text-sm text-gray-600 ml-2">
-                      <span className="font-semibold">Date of Birth:</span> {formData.fatherDOB}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex justify-end mt-6">
+      {
+        showModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50">
+            <div className="relative w-full max-w-lg mx-auto">
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-2xl font-bold text-gray-800">Confirm Submission</h2>
                   <button
-                    onClick={() => {
-                      handleConfirmSubmit();
-                      setShowModal(false);
-                    }}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700 transition duration-200 focus:outline-none"
+                    onClick={() => setShowModal(false)}
+                    className="text-gray-600 hover:text-gray-800 focus:outline-none"
                   >
-                    Confirm Submit
+                    <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                   </button>
+                </div>
+                <div className="space-y-4">
+                  <div className="border-t border-gray-200 pt-4">
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">First Name:</span> {formData.firstName}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Middle Name:</span> {formData.middleName}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Last Name:</span> {formData.lastName}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Birthdate:</span> {formData.birthdate}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Gender:</span> {formData.gender}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Blood Type:</span> {formData.bloodType}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Civil Status:</span> {formData.civilStatus}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Maiden Name:</span> {formData.maidenName || 'N/A'}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Name of Spouse:</span> {formData.spouseName || 'N/A'}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Occupation of Spouse:</span> {formData.spouseOccupation || 'N/A'}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Religion:</span> {formData.religion}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Height:</span> {formData.height} cm
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Weight:</span> {formData.weight} kg
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Birthplace:</span> {formData.birthplace}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Contact Number:</span> {formData.contactNumber}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Address:</span> {`${formData.addressDetails}, ${formData.barangay}, ${formData.city}, ${formData.province}, ${formData.region}`}
+                    </p>
+                  </div>
+                  <div className="flex justify-end mt-6">
+                    <button
+                      onClick={() => {
+                        handleConfirmSubmit();
+                        setShowModal(false);
+                      }}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700 transition duration-200 focus:outline-none"
+                    >
+                      Confirm Submit
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
       {/* End Modal */}
 
 
-    </div>
+    </div >
   );
 }
