@@ -62,7 +62,10 @@ export default function CompleteProfile() {
 
   const handleRegionChange = (e) => {
     const regionCode = e.target.value;
-    setFormData({ ...formData, region: regionCode, province: '', city: '', barangay: '' });
+    const selectedRegion = regionList.find(region => region.region_code === regionCode);
+    const regionName = selectedRegion ? selectedRegion.region_name : '';
+
+    setFormData({ ...formData, region: regionName, regionCode: regionCode, province: '', city: '', barangay: '' });
     provinces(regionCode).then(setProvinceList);
     setCityList([]);
     setBarangayList([]);
@@ -70,14 +73,20 @@ export default function CompleteProfile() {
 
   const handleProvinceChange = (e) => {
     const provinceCode = e.target.value;
-    setFormData({ ...formData, province: provinceCode, city: '', barangay: '' });
+    const selectedProvince = provinceList.find(province => province.province_code === provinceCode);
+    const provinceName = selectedProvince ? selectedProvince.province_name : '';
+
+    setFormData({ ...formData, province: provinceName, provinceCode: provinceCode, city: '', barangay: '' });
     cities(provinceCode).then(setCityList);
     setBarangayList([]);
   };
 
   const handleCityChange = (e) => {
     const cityCode = e.target.value;
-    setFormData({ ...formData, city: cityCode, barangay: '' });
+    const selectedCity = cityList.find(city => city.city_code === cityCode);
+    const cityName = selectedCity ? selectedCity.city_name : '';
+
+    setFormData({ ...formData, city: cityName, cityCode: cityCode });
     barangays(cityCode).then(setBarangayList);
   };
 
@@ -393,7 +402,7 @@ export default function CompleteProfile() {
             </label>
             <select
               name="region"
-              value={formData.region}
+              value={formData.regionCode}
               onChange={handleRegionChange}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               required
@@ -413,7 +422,7 @@ export default function CompleteProfile() {
             </label>
             <select
               name="province"
-              value={formData.province}
+              value={formData.provinceCode}
               onChange={handleProvinceChange}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               required
@@ -433,7 +442,7 @@ export default function CompleteProfile() {
             </label>
             <select
               name="city"
-              value={formData.city}
+              value={formData.cityCode || ''}
               onChange={handleCityChange}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               required
@@ -500,7 +509,7 @@ export default function CompleteProfile() {
       </form>
 
 
-            {/* Modal */}
+      {/* Modal */}
       {
         showModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50">
