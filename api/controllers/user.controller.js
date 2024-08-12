@@ -144,6 +144,7 @@ export const CompleteProfile = async (req, res, next) => {
       req.user.id,
       {
         $set: {
+          "applicantDetails.profileComplete": 'true',
           "applicantDetails.firstName": req.body.firstName,
           "applicantDetails.middleName": req.body.middleName,
           "applicantDetails.lastName": req.body.lastName,

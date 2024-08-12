@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUserSuccess } from '../redux/user/userSlice'; // Adjust the import path as needed
 import { useNavigate } from 'react-router-dom';
 import { regions, provinces, cities, barangays, regionByCode, provincesByCode, provinceByName } from "select-philippines-address";
 
@@ -11,6 +13,9 @@ import { regions, provinces, cities, barangays, regionByCode, provincesByCode, p
 // barangays("052011").then((barangays) => console.log(barangays));
 
 export default function CompleteProfile() {
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.user);
+
   const [formData, setFormData] = useState({
     firstName: '',
     middleName: '',
@@ -135,15 +140,17 @@ export default function CompleteProfile() {
       })
       .then((data) => {
         console.log('Success:', data);
+        // Update the currentUser state in Redux
+        dispatch(updateUserSuccess({
+          ...currentUser,
+          applicantDetails: {
+            ...currentUser.applicantDetails,
+            profileComplete: true
+          }
+        }));
         navigate('/complete-profile-confirmation');
       })
-      .catch((error) => {
-        console.error('Error:', error);
-      })
-      .finally(() => {
-        setShowModal(false); // Close modal regardless of success or failure
-        document.body.classList.remove('modal-open'); // Remove class to enable scrolling
-      });
+      .catch((error) => console.error('Error:', error));
   };
 
 
@@ -395,7 +402,7 @@ export default function CompleteProfile() {
           </div>
         </div>
 
-        <div className='grid grid-cols-1 gap-4 p-4'>
+        <div className='grid grid-cols-2 gap-4 px-4'>
           <div className='col-span-1'>
             <label className='block text-sm font-medium text-gray-700 mb-2'>
               Region
