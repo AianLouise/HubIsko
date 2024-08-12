@@ -47,7 +47,11 @@ import VerificationDetails from "./pages/Admin/VerificationDetails";
 import StudentDetails from "./pages/Admin/StudentDetails";
 import ProviderDetails from "./pages/Admin/ProviderDetails";
 import Inbox from "./pages/Admin/Inbox";
+import ScholarshipsData from "./pages/Admin/ScholarshipsData";
+import ScholarshipsDataDetails from "./pages/Admin/ScholarshipsDataDetails";
+import ScholarshipsDataDisplay from "./pages/Admin/ScholarshipsDataDisplay";
 import ViewScholarshipDetials from "./pages/Scholarship-Provider/ViewScholarshipDetails";
+
 
 
 export default function App() {

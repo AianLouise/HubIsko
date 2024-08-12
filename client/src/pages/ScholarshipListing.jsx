@@ -98,7 +98,7 @@ export default function ScholarshipListing() {
             ))}
           </div>
         </div>
-        <div className='flex flex-col mx-auto max-w-full justify-center items-center px-10 lg:px-24'>
+        <div className='flex flex-col mx-auto max-w-6xl justify-center items-center px-10 lg:px-24'>
           <div className='flex flex-row w-full items-center gap-4'>
             <input
               type="text"
