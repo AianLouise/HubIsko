@@ -3,6 +3,7 @@ import AdminHeader from "../../components/AdminHeader";
 import { BiFilter } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { PiArrowRightFill } from "react-icons/pi";
+import { GoDotFill } from "react-icons/go";
 
 export default function Accounts() {
 
@@ -29,7 +30,10 @@ export default function Accounts() {
                     <div className="grid grid-rows-3 gap-10 w-full">
                             <div className="flex justify-between items-center bg-white p-6 rounded-md shadow-md">
                                 <div>
+                                    <div className="flex items-center gap-2">
                                     <h2 className="text-xl font-semibold text-slate-700">Total Unverified Users</h2>
+                                    <span className="flex gap-2 items-center text-blue-600"><GoDotFill/> 5 new users</span>
+                                    </div>
                                     <p className="text-2xl font-bold text-left">50</p>
                                 </div>
                             </div>
