@@ -1,6 +1,8 @@
 import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import { BiFilter } from "react-icons/bi";
+import { PiArrowRightFill } from "react-icons/pi";
+import { GoDotFill } from "react-icons/go";
 
 export default function Inbox (){
 
@@ -39,7 +41,15 @@ export default function Inbox (){
                     
                     <span className="font-bold text-xl border-b w-full pb-2">Activity</span>
 
-                    <div className="flex justify-end mt-4 gap-4">
+                    <div className="flex items-center justify-between mt-4">
+
+                        <div className="flex gap-1">
+                            
+                        <span className="bg-blue-600 p-3 rounded-full w-4 h-4 text-white flex justify-center items-center">1</span> unread notification
+                        
+                        </div>
+
+                        <div className="flex gap-4">
                         <input 
                         type="text"
                         placeholder="Search in the inbox..."
@@ -50,41 +60,67 @@ export default function Inbox (){
                             <BiFilter className="w-6 h-6" />
                             <span>Filter</span>
                         </button>
+                        </div>
+                        
                     </div>
 
                     <div className="bg-white border rounded-md mt-4 divide-y">
-                        <div className="flex justify-between items-center p-4">
+                        <Link to={'/scholarships-data-details'} className="flex justify-between items-center p-4 hover:bg-slate-200 group transition ease-in-out">
+
+                            
                             <div className="flex items-center gap-4">
                                 <div className="bg-blue-600 w-14 h-14 rounded-full"></div>
-                                <div className="gap-2 flex">
+                                <div className="gap-2 flex flex-col">
+                                    <div className="flex gap-2">
                                     <span className="font-bold">DepEd</span>
                                     <span className="text-slate-500">Posted a Scholarship</span>
+                                    </div>
+                                    <span className="text-slate-500 text-sm flex items-center gap-2"><span className="text-blue-600"> New </span> <GoDotFill className="text-blue-600"/>   2 hours ago</span>
                                 </div>
                             </div>
-                            <span className="text-slate-500">2 hours ago</span>
-                        </div>
 
-                        <div className="flex justify-between items-center p-4">
+                            <div className="group-hover:flex justify-end items-center gap-2 text-blue-600 hidden">
+                                    <span className="text-xl">View</span>
+                                    <PiArrowRightFill className="w-6 h-6" />
+                                </div>
+                        </Link>
+
+                        <div className="flex justify-between items-center p-4 hover:bg-slate-200 group transition ease-in-out">
                             <div className="flex items-center gap-4">
                                 <div className="bg-blue-600 w-14 h-14 rounded-full"></div>
-                                <div className="gap-2 flex">
+                                <div className="gap-2 flex flex-col">
+                                    <div className="flex gap-2">
                                     <span className="font-bold">John Doe</span>
-                                    <span className="text-slate-500">Requested Verification</span>
+                                    <span className="text-slate-500">Requested a Verification</span>
+                                    </div>
+                                    <span className="text-slate-500 text-sm">2 hours ago</span>
                                 </div>
                             </div>
-                            <span className="text-slate-500">2 hours ago</span>
+
+                            <div className="group-hover:flex justify-end items-center gap-2 text-blue-600 hidden">
+                                    <span className="text-xl">View</span>
+                                    <PiArrowRightFill className="w-6 h-6" />
+                                </div>
                         </div>
 
-                        <div className="flex justify-between items-center p-4">
+                        <div className="flex justify-between items-center p-4 hover:bg-slate-200 group transition ease-in-out">
                             <div className="flex items-center gap-4">
                                 <div className="bg-blue-600 w-14 h-14 rounded-full"></div>
-                                <div className="gap-2 flex">
+                                <div className="gap-2 flex flex-col">
+                                    <div className="flex gap-2">
                                     <span className="font-bold">John Doe</span>
-                                    <span className="text-slate-500">Sent a Scholarship Application to <span className="text-blue-600">DepEd</span></span>
+                                    <span className="text-slate-500">Sent a scholarship application to <span className="text-blue-600">DepEd</span></span>
+                                    </div>
+                                    <span className="text-slate-500 text-sm">2 hours ago</span>
                                 </div>
                             </div>
-                            <span className="text-slate-500">2 hours ago</span>
+
+                            <div className="group-hover:flex justify-end items-center gap-2 text-blue-600 hidden">
+                                    <span className="text-xl">View</span>
+                                    <PiArrowRightFill className="w-6 h-6" />
+                                </div>
                         </div>
+
 
                     </div>
 

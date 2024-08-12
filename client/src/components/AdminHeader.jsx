@@ -40,7 +40,10 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
             setIsAccountsDropdownOpen(false);
         }
 
-        if (location.pathname.startsWith('/inbox')) {
+        if (location.pathname.startsWith('/inbox')
+            || location.pathname.startsWith('/scholarships-data')
+        
+        ) {
             setIsInboxDropdownOpen(true);
         } else {
             setIsInboxDropdownOpen(false);
@@ -147,10 +150,24 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                             <div>
                             <Link to={'/inbox'}
                                         onClick={toggleInboxDropdown}
-                                        className={`flex gap-2 items-center text-gray-800 py-2 px-4 rounded-md ${
-                                            location.pathname.startsWith('/inbox') ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                        <BsInboxFill className={`w-5 h-5 text-blue-600 ${location.pathname.startsWith('/inbox') ? 'text-white' : ''} `}/>
+                                        className={`flex gap-2 justify-between items-center text-gray-800 py-2 px-4 rounded-md ${
+                                            location.pathname.startsWith('/inbox') 
+                                            || location.pathname.startsWith('/scholarships-data')
+                                            
+                                            ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                        <div className="flex items-center gap-2">
+                                        <BsInboxFill className={`w-5 h-5 text-blue-600 
+                                            ${location.pathname.startsWith('/inbox') 
+                                            || location.pathname.startsWith('/scholarships-data')
+                                            
+                                            ? 'text-white' : ''} `}/>
                                         Inbox
+                                        </div>
+                                <div className={`bg-blue-600 rounded-full text-center flex items-center justify-center p-3 w-4 h-4 text-sm 
+                                            ${location.pathname.startsWith('/inbox')
+                                            || location.pathname.startsWith('/scholarships-data') 
+                                            
+                                    ? 'text-blue-600 bg-white' : 'text-white'} `}>1</div>
                             </Link>
 
 
@@ -159,10 +176,10 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
 
                             <ul className="ml-4 my-2 space-y-2">
                             <li>
-                                <a href="#" className="flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
-                                <FaGoogleScholar className="w-5 h-5 text-blue-600" />
+                            <Link to={'/scholarships-data'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${ location.pathname === '/scholarships-data' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200' }`}>
+                                <FaGoogleScholar className={`w-5 h-5 text-blue-600 ${ location.pathname === '/scholarships-data' ? ' text-white' : '' }`} />
                                 Scholarships
-                                </a>
+                                </Link>
                             </li>
                             <li>
                                 <a href="#" className="flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">

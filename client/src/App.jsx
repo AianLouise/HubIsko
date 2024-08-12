@@ -47,6 +47,10 @@ import VerificationDetails from "./pages/Admin/VerificationDetails";
 import StudentDetails from "./pages/Admin/StudentDetails";
 import ProviderDetails from "./pages/Admin/ProviderDetails";
 import Inbox from "./pages/Admin/Inbox";
+import ScholarshipsData from "./pages/Admin/ScholarshipsData";
+import ScholarshipsDataDetails from "./pages/Admin/ScholarshipsDataDetails";
+import ScholarshipsDataDisplay from "./pages/Admin/ScholarshipsDataDisplay";
+
 
 
 export default function App() {
@@ -97,6 +101,9 @@ export default function App() {
           <Route path="student-details" element={<StudentDetails />} />
           <Route path="provider-details" element={<ProviderDetails />} />
           <Route path="inbox" element={<Inbox />} />
+          <Route path="scholarships-data" element={<ScholarshipsData />} />
+          <Route path="scholarships-data-details" element={<ScholarshipsDataDetails />} />
+          <Route path="scholarships-data-display" element={<ScholarshipsDataDisplay />} />
           {/* Add other routes here */}
         </Route>
 
