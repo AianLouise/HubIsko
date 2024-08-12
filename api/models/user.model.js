@@ -18,6 +18,10 @@ const applicantSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  nameExtension: {
+    type: String,
+    required: false,
+  },
   birthdate: {
     type: Date,
     required: false,

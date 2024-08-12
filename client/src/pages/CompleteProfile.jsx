@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function CompleteProfile() {
-  const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState({
     firstName: '',
     middleName: '',
     lastName: '',
+    nameExtension: '',
     birthdate: '',
     gender: '',
     bloodType: '',
@@ -24,19 +25,18 @@ export default function CompleteProfile() {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   fetch('/api/user/details')
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setFormData((prevFormData) => ({
-  //         ...prevFormData,
-  //         firstName: data.firstName || '',
-  //         lastName: data.lastName || '',
-  //         dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth).toISOString().split('T')[0] : '',
-  //       }));
-  //     })
-  //     .catch((error) => console.error('Error fetching user details:', error));
-  // }, []);
+  useEffect(() => {
+    fetch('/api/user/details')
+      .then((response) => response.json())
+      .then((data) => {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          firstName: data.applicantDetails.firstName || '',
+          lastName: data.applicantDetails.lastName || '',
+        }));
+      })
+      .catch((error) => console.error('Error fetching user details:', error));
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -99,12 +99,12 @@ export default function CompleteProfile() {
       <div className=" flex justify-center pt-8 rounded-md">
         <h2 className="text-xl font-medium text-slate-600">Please fill out the areas to complete your profile</h2>
       </div>
-           <form onSubmit={handleSubmit} className="max-w-6xl mx-auto space-y-6 bg-white border rounded-lg shadow-lg mt-4 mb-10">
+      <form onSubmit={handleSubmit} className="max-w-6xl mx-auto space-y-6 bg-white border rounded-lg shadow-lg mt-4 mb-10">
         <div className="bg-blue-600 text-white p-4 rounded-t-lg">
           <span className='text-lg font-bold'>Basic Information</span>
         </div>
-      
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4'>
+
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4'>
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
             <input
@@ -117,7 +117,7 @@ export default function CompleteProfile() {
               required
             />
           </div>
-      
+
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
             <input
@@ -130,7 +130,7 @@ export default function CompleteProfile() {
               required
             />
           </div>
-      
+
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
             <input
@@ -143,8 +143,26 @@ export default function CompleteProfile() {
               required
             />
           </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Name Extension</label>
+            <select
+              name="nameExtension"
+              value={formData.nameExtension}
+              onChange={handleChange}
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+            >
+              <option value="">Select Name Ext. (if applicable)</option>
+              <option value="Jr.">Jr.</option>
+              <option value="Sr.">Sr.</option>
+              <option value="II">II</option>
+              <option value="III">III</option>
+              <option value="IV">IV</option>
+              <option value="V">V</option>
+            </select>
+          </div>
         </div>
-      
+
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4'>
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
@@ -157,7 +175,7 @@ export default function CompleteProfile() {
               required
             />
           </div>
-      
+
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Gender</label>
             <select
@@ -173,7 +191,7 @@ export default function CompleteProfile() {
               <option value="Other">Other</option>
             </select>
           </div>
-      
+
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Blood Type</label>
             <select
@@ -194,7 +212,7 @@ export default function CompleteProfile() {
               <option value="O-">O-</option>
             </select>
           </div>
-      
+
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Civil Status</label>
             <select
@@ -211,7 +229,7 @@ export default function CompleteProfile() {
               <option value="Widowed">Widowed</option>
             </select>
           </div>
-      
+
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Maiden Name</label>
             <input
@@ -224,7 +242,7 @@ export default function CompleteProfile() {
               className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
             />
           </div>
-      
+
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Name of Spouse</label>
             <input
@@ -237,7 +255,7 @@ export default function CompleteProfile() {
               className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
             />
           </div>
-      
+
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation of Spouse</label>
             <input
@@ -250,7 +268,7 @@ export default function CompleteProfile() {
               className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
             />
           </div>
-      
+
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Religion</label>
             <select
@@ -267,7 +285,7 @@ export default function CompleteProfile() {
               <option value="Others">Others</option>
             </select>
           </div>
-      
+
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Height</label>
             <input
@@ -280,7 +298,7 @@ export default function CompleteProfile() {
               required
             />
           </div>
-      
+
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Weight</label>
             <input
@@ -293,7 +311,7 @@ export default function CompleteProfile() {
               required
             />
           </div>
-      
+
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Birthplace</label>
             <input
@@ -306,7 +324,7 @@ export default function CompleteProfile() {
               required
             />
           </div>
-      
+
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Contact Number</label>
             <input
@@ -322,7 +340,7 @@ export default function CompleteProfile() {
             />
           </div>
         </div>
-      
+
         <div className='grid grid-cols-1 gap-4 p-4'>
           <div className='col-span-1'>
             <label className='block text-sm font-medium text-gray-700 mb-2'>
@@ -339,7 +357,7 @@ export default function CompleteProfile() {
             />
           </div>
         </div>
-      
+
         <div className="flex justify-end space-x-2 px-4 py-4">
           <button
             type="submit"
