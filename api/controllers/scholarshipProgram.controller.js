@@ -31,6 +31,7 @@ export const createScholarshipProgram = async (req, res) => {
       coverage,
       contactPerson,
       providerId,
+      organizationName, // Added field for organization name
       scholarshipImage, // Added field for scholarship image
       scholarshipBanner,  // Added field for scholarship banner
       status = 'Pending Approval',
@@ -92,6 +93,7 @@ export const createScholarshipProgram = async (req, res) => {
       coverage,
       contactPerson,
       providerId, // Assign the provider ID
+      organizationName, // Added field for organization name
       scholarshipImage, // Added field for scholarship image
       scholarshipBanner, // Added field for scholarship banner
       status, // Default status

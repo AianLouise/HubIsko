@@ -33,8 +33,9 @@ export default function ScholarDashboard() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+
         setApplications(data);
-        console.log('Fetched applications:', data); // Log the applications to the console
+
       } catch (error) {
         console.error('Error fetching applications:', error);
       } finally {
@@ -92,13 +93,15 @@ export default function ScholarDashboard() {
                   </div>
                 ) : (
                   applications.map((application) => (
-                    <Link key={application._id} to={`/inboxed-application-detail/${application._id}`}>
+                    <Link key={application._id} to={`/inboxed-application-detail/${application.name}`}>
                       <div className='flex items-center justify-between hover:bg-slate-200 p-2 rounded-md'>
                         <div className='flex flex-row gap-2'>
-                          <div className='bg-blue-600 w-12 h-12 rounded-md'></div>
+                          <div className='bg-blue-600 w-12 h-12 rounded-md'>
+                            <img src={application.scholarshipProgram.scholarshipImage} alt="Scholarship" className='w-full h-full object-cover rounded-md' />
+                          </div>
                           <div className='flex flex-col'>
                             <div className='flex items-center gap-2'>
-                              <span className='font-bold'>{application.scholarshipProgram.providerId}</span>
+                              <span className='font-bold'>{application.scholarshipProgram.organizationName}</span>
                               <div className='bg-blue-600 w-2 h-2 rounded-full'></div>
                               <span className='text-blue-600 text-sm'>New</span>
                             </div>

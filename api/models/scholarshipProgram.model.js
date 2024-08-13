@@ -20,6 +20,7 @@ const scholarshipProgramSchema = new mongoose.Schema({
   coverage: { type: String, required: true },
   contactPerson: { type: String, required: true },
   providerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  organizationName: { type: String }, // Changed to camelCase
   scholarshipImage: { type: String },
   scholarshipBanner: { type: String },
   status: { 

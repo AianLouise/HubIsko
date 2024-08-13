@@ -33,6 +33,7 @@ export default function PostScholarship() {
     coverage: '',
     contactPerson: '',
     providerId: currentUser ? currentUser._id : '',
+    organizationName: currentUser ? currentUser.scholarshipProviderDetails.organizationName : '',
     scholarshipImage: '',
     scholarshipBanner: '',
   });
