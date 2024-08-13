@@ -300,7 +300,12 @@ const scholarshipApplicationSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ScholarshipProgram',
         required: true
-    }
+    },
+    applicant: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Applicant',
+        required: true
+    },
 }, { timestamps: true });
 
 const ScholarshipApplication = mongoose.model('ScholarshipApplication', scholarshipApplicationSchema);

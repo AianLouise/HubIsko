@@ -9,12 +9,17 @@ import { FaInfoCircle, FaUsers, FaGraduationCap, FaEllipsisH, FaFileContract, Fa
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export default function ApplyingStages() {
+    const navigate = useNavigate();
+    const storage = getStorage();
+    const currentUser = useSelector((state) => state.user.currentUser);
+
     const [activeStep, setActiveStep] = useState(1);
     const maxStep = 6;
 
     const handleNext = () => {
         if (validateCurrentStep()) {
             setActiveStep((prevStep) => (prevStep < maxStep ? prevStep + 1 : prevStep));
+            window.scrollTo({ top: 240, behavior: 'smooth' });
         } else {
             // Optional: Display an error message or highlight missing fields
             console.log('Please complete all required fields before proceeding.');
@@ -177,16 +182,48 @@ export default function ApplyingStages() {
             agreed: false
         },
         scholarshipProgram: '',
+        applicant: currentUser._id
     });
 
+    const [scholarship, setScholarship] = useState(null);
+
     useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         if (scholarshipId) {
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 scholarshipProgram: scholarshipId, // Set the scholarshipProgram field with the id from the URL
             }));
         }
+        const fetchScholarship = async () => {
+            try {
+                const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipId}`);
+                const data = await response.json();
+                console.log('Fetched Scholarship:', data); // Add this line
+                setScholarship(data);
+            } catch (error) {
+                console.error('Error fetching scholarship:', error);
+            }
+        };
+
+        fetchScholarship();
     }, [scholarshipId]);
+
+
+    // useEffect(() => {
+    //     const fetchScholarship = async () => {
+    //         try {
+    //             const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipId}`);
+    //             const data = await response.json();
+    //             console.log('Fetched Scholarship:', data); // Add this line
+    //             setScholarship(data);
+    //         } catch (error) {
+    //             console.error('Error fetching scholarship:', error);
+    //         }
+    //     };
+
+    //     fetchScholarship();
+    // }, [scholarshipId]);
 
     const [sameAsParents, setSameAsParents] = useState(false);
 
@@ -224,12 +261,10 @@ export default function ApplyingStages() {
         }));
     };
 
-    const currentUser = useSelector((state) => state.user.currentUser);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const storage = getStorage();
 
         // Upload files to Firebase and get the file URLs
         const uploadedFilePaths = await Promise.all(Object.entries(formData.documents).map(async ([docType, fileObj]) => {
@@ -269,6 +304,7 @@ export default function ApplyingStages() {
             const result = await response.json();
             console.log('Success:', result);
             // Handle success (e.g., show a success message, redirect, etc.)
+            navigate('/scholar-dashboard'); // Redirect to the scholar dashboard
         } catch (error) {
             console.error('Error:', error);
             // Handle error (e.g., show an error message)
@@ -412,12 +448,22 @@ export default function ApplyingStages() {
 
     return (
         <div className='flex flex-col min-h-screen'>
-            <Header />
-            <main className='flex-grow font-medium text-slate-700'>
+            <main className='flex-grow font-medium text-slate-700 min-h-screen'>
                 <div className='flex flex-col mx-auto max-w-7xl px-24 my-10'>
-
+                    {scholarship && (
+                        <div className="scholarship-info mb-4 p-6 bg-white rounded-lg shadow-md">
+                            <div className="flex items-center">
+                                {scholarship.scholarshipImage && (
+                                    <img src={scholarship.scholarshipImage} alt={`${scholarship.title} logo`} className="w-32 h-32 object-contain mr-4" />
+                                )}
+                                <div>
+                                    <h2 className="text-2xl font-bold text-gray-800">You are applying to {scholarship.title}</h2>
+                                    <p className="text-gray-600 mt-2">{scholarship.description}</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                     <div>
-
                         <div className='flex justify-center gap-5 mt-4 mb-8'>
                             {[1, 2, 3, 4, 5, 6].map((step) => (
                                 <React.Fragment key={step}>

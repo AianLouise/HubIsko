@@ -67,17 +67,18 @@ export default function App() {
         <Route path="/verify-your-email" element={<VerifyYourEmail />} />
         <Route path="/resend-verification-email" element={<VerifyYourEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/scholarship-listing" element={<ScholarshipListing />} />
         <Route path="/about" element={<About />} />
         <Route path="/CoRH" element={<CompleteOrReturnHome />} />
+
         <Route path="/forums" element={<Forums />} />
-        <Route path="/scholarship-details/:id" element={<ApplicationDetails />} />
         <Route path="/others-profile" element={<OthersProfile />} />
         <Route path="/forums/post/:postId" element={<ForumDetail />} />
         <Route path="/forums/create-post" element={<CreateForumPost />} />
 
 
 
+        <Route path="/scholarship-listing" element={<ScholarshipListing />} />
+        <Route path="/scholarship-details/:id" element={<ApplicationDetails />} />
         <Route path="/applying-stages/:scholarshipId" element={<ApplyingStages />} />
         <Route path="/application-box" element={<ApplicationBox />} />
         <Route path="/inboxed-application-detail" element={<InboxedApplicationDetail />} />
