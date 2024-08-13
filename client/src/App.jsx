@@ -40,7 +40,7 @@ import PostScholarship from "./pages/Scholarship-Provider/PostScholarship";
 import AdminHome from "./pages/Admin/AdminHome";
 import CreateForumPost from "./pages/CreateForumPost";
 import Accounts from "./pages/Admin/Accounts";
-import Layout from "./components/Layout"; 
+import Layout from "./components/Layout";
 import Students from "./pages/Admin/Students";
 import ProviderAccounts from "./pages/Admin/ProviderAccounts";
 import VerificationDetails from "./pages/Admin/VerificationDetails";
@@ -75,10 +75,10 @@ export default function App() {
         <Route path="/others-profile" element={<OthersProfile />} />
         <Route path="/forums/post/:postId" element={<ForumDetail />} />
         <Route path="/forums/create-post" element={<CreateForumPost />} />
-     
 
 
-        <Route path="/applying-stages" element={<ApplyingStages />} />
+
+        <Route path="/applying-stages/:scholarshipId" element={<ApplyingStages />} />
         <Route path="/application-box" element={<ApplicationBox />} />
         <Route path="/inboxed-application-detail" element={<InboxedApplicationDetail />} />
         <Route path="/student-info" element={<StudentInfo />} />
@@ -110,8 +110,8 @@ export default function App() {
           {/* Add other routes here */}
         </Route>
 
- 
-   
+
+
 
 
 
@@ -123,7 +123,7 @@ export default function App() {
         </Route>
 
         <Route element={<ProviderPrivateRoute allowedRoles={['scholarship_provider']} />}>
-        <Route path="/provider-dashboard" element={<ProviderDashboard />} />
+          <Route path="/provider-dashboard" element={<ProviderDashboard />} />
         </Route>
 
         <Route path="/unauthorized" element={<UnauthorizedPage />} />

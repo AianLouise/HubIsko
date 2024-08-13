@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -67,8 +68,6 @@ export default function ApplyingStages() {
         return true;
     };
 
-
-
     const handlePrevious = () => {
         setActiveStep((prevStep) => Math.max(1, prevStep - 1));
     };
@@ -80,6 +79,8 @@ export default function ApplyingStages() {
             return 'hidden flex flex-col gap-2 border shadow bg-white w-full h-[auto] rounded-md';
         }
     };
+
+    const { scholarshipId } = useParams();
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -174,8 +175,18 @@ export default function ApplyingStages() {
         },
         termsAndConditions: {
             agreed: false
-        }
+        },
+        scholarshipProgram: '',
     });
+
+    useEffect(() => {
+        if (scholarshipId) {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                scholarshipProgram: scholarshipId, // Set the scholarshipProgram field with the id from the URL
+            }));
+        }
+    }, [scholarshipId]);
 
     const [sameAsParents, setSameAsParents] = useState(false);
 

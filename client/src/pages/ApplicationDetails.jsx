@@ -167,7 +167,7 @@ export default function Forums() {
                                 </button>
 
 
-                                <Link to='/applying-stages' className='bg-white flex items-center border justify-between shadow rounded-md p-4 w-1/2 h-22 hover:-translate-y-2 hover:bg-slate-200 transition ease-in-out group'>
+                                <Link  to={`/applying-stages/${scholarship.id}`}  className='bg-white flex items-center border justify-between shadow rounded-md p-4 w-1/2 h-22 hover:-translate-y-2 hover:bg-slate-200 transition ease-in-out group'>
 
                                     <div className='flex flex-row gap-4 '>
                                         <div className='bg-blue-600 w-14 h-14 rounded-md'></div>

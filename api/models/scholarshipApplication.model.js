@@ -295,6 +295,11 @@ const scholarshipApplicationSchema = new mongoose.Schema({
             type: Boolean,
             required: false,
         }
+    },
+    scholarshipProgram: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ScholarshipProgram',
+        required: true
     }
 }, { timestamps: true });
 
