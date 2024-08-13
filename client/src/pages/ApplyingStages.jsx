@@ -12,8 +12,62 @@ export default function ApplyingStages() {
     const maxStep = 6;
 
     const handleNext = () => {
-        setActiveStep((prevStep) => prevStep < maxStep ? prevStep + 1 : prevStep);
+        if (validateCurrentStep()) {
+            setActiveStep((prevStep) => (prevStep < maxStep ? prevStep + 1 : prevStep));
+        } else {
+            // Optional: Display an error message or highlight missing fields
+            console.log('Please complete all required fields before proceeding.');
+        }
     };
+
+    const validateCurrentStep = () => {
+        if (activeStep === 1) {
+            return (
+                formData.firstName.trim() !== '' &&
+                formData.lastName.trim() !== '' &&
+                formData.birthdate.trim() !== '' &&
+                formData.gender.trim() !== '' &&
+                formData.bloodType.trim() !== '' &&
+                formData.civilStatus.trim() !== '' &&
+                formData.contactNumber.trim() !== ''
+            );
+        } else if (activeStep === 2) {
+            return (
+                formData.father.firstName.trim() !== '' &&
+                formData.father.lastName.trim() !== '' &&
+                formData.father.middleName.trim() !== '' &&
+                formData.father.birthdate.trim() !== '' &&
+                formData.father.occupation.trim() !== '' &&
+                formData.father.yearlyIncome.trim() !== '' &&
+                formData.father.contactNo.trim() !== '' &&
+                formData.mother.firstName.trim() !== '' &&
+                formData.mother.lastName.trim() !== '' &&
+                formData.mother.middleName.trim() !== '' &&
+                formData.mother.birthdate.trim() !== '' &&
+                formData.mother.occupation.trim() !== '' &&
+                formData.mother.yearlyIncome.trim() !== '' &&
+                formData.mother.contactNo.trim() !== ''
+            );
+        } else if (activeStep === 3) {
+            return (
+                formData.education.elementary.school.trim() !== '' &&
+                formData.education.elementary.award.trim() !== '' &&
+                formData.education.elementary.yearGraduated.trim() !== '' &&
+                formData.education.juniorHighSchool.school.trim() !== '' &&
+                formData.education.juniorHighSchool.award.trim() !== '' &&
+                formData.education.juniorHighSchool.yearGraduated.trim() !== '' &&
+                formData.education.seniorHighSchool.school.trim() !== '' &&
+                formData.education.seniorHighSchool.award.trim() !== '' &&
+                formData.education.seniorHighSchool.yearGraduated.trim() !== '' &&
+                formData.education.college.school.trim() !== '' &&
+                formData.education.college.course.trim() !== ''
+            );
+        }
+        // Add similar checks for other steps if necessary
+        return true;
+    };
+
+
 
     const handlePrevious = () => {
         setActiveStep((prevStep) => Math.max(1, prevStep - 1));
@@ -327,7 +381,7 @@ export default function ApplyingStages() {
         });
     };
 
-       const addSkill = () => {
+    const addSkill = () => {
         if (visibleSkillIndex < formData.skillsAndQualifications.length - 1) {
             setVisibleSkillIndex(visibleSkillIndex + 1);
             setSkillErrorMessage(''); // Clear any previous error message
@@ -411,6 +465,7 @@ export default function ApplyingStages() {
                                         placeholder="Enter your first name"
                                         value={formData.firstName}
                                         onChange={handleChange}
+                                        required
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                     />
                                 </div>
@@ -423,6 +478,7 @@ export default function ApplyingStages() {
                                         placeholder="Enter your last name"
                                         value={formData.lastName}
                                         onChange={handleChange}
+                                        required
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                     />
                                 </div>
@@ -435,6 +491,7 @@ export default function ApplyingStages() {
                                         placeholder="Enter your middle name"
                                         value={formData.middleName}
                                         onChange={handleChange}
+                                        required
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                     />
                                 </div>
@@ -448,6 +505,7 @@ export default function ApplyingStages() {
                                         name="birthdate"
                                         value={formData.birthdate}
                                         onChange={handleChange}
+                                        required
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                     />
                                 </div>
@@ -458,6 +516,7 @@ export default function ApplyingStages() {
                                         name="gender"
                                         value={formData.gender}
                                         onChange={handleChange}
+                                        required
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                     >
                                         <option value="">Select Gender</option>
@@ -473,6 +532,7 @@ export default function ApplyingStages() {
                                         name="bloodType"
                                         value={formData.bloodType}
                                         onChange={handleChange}
+                                        required
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                     >
                                         <option value="">Select Blood Type</option>
@@ -494,6 +554,7 @@ export default function ApplyingStages() {
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         value={formData.civilStatus}
                                         onChange={handleChange}
+                                        required
                                     >
                                         <option value="">Select Civil Status</option>
                                         <option value="Single">Single</option>
@@ -548,6 +609,7 @@ export default function ApplyingStages() {
                                         name="religion"
                                         value={formData.religion}
                                         onChange={handleChange}
+                                        required
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                     >
                                         <option value="Roman Catholic">Roman Catholic</option>
@@ -565,6 +627,7 @@ export default function ApplyingStages() {
                                         name="height"
                                         value={formData.height}
                                         onChange={handleChange}
+                                        required
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         placeholder="Enter height in cm"
                                     />
@@ -577,6 +640,7 @@ export default function ApplyingStages() {
                                         name="weight"
                                         value={formData.weight}
                                         onChange={handleChange}
+                                        required
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         placeholder="Enter weight in kg"
                                     />
@@ -589,6 +653,7 @@ export default function ApplyingStages() {
                                         name="birthplace"
                                         value={formData.birthplace}
                                         onChange={handleChange}
+                                        required
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         placeholder="Enter birthplace"
                                     />
@@ -601,11 +666,9 @@ export default function ApplyingStages() {
                                         name="contactNumber"
                                         value={formData.contactNumber}
                                         onChange={handleChange}
+                                        required
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         placeholder="Enter contact number"
-                                        pattern="^(09|\+639)\d{9}$"
-                                        title="Please enter a valid Philippine phone number (e.g., 09123456789 or +639123456789)"
-                                        required
                                     />
                                 </div>
                             </div>
@@ -620,6 +683,7 @@ export default function ApplyingStages() {
                                         name="addressDetails"
                                         value={formData.addressDetails}
                                         onChange={handleChange}
+                                        required
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         placeholder="Enter address details"
                                     />
@@ -633,6 +697,7 @@ export default function ApplyingStages() {
                                         name="town"
                                         value={formData.town}
                                         onChange={handleChange}
+                                        required
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         placeholder="Enter town"
                                     />
@@ -646,6 +711,7 @@ export default function ApplyingStages() {
                                         name="barangay"
                                         value={formData.barangay}
                                         onChange={handleChange}
+                                        required
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         placeholder="Enter barangay"
                                     />
@@ -659,6 +725,7 @@ export default function ApplyingStages() {
                                         name="province"
                                         value={formData.province}
                                         onChange={handleChange}
+                                        required
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         placeholder="Enter province"
                                     />
@@ -686,6 +753,7 @@ export default function ApplyingStages() {
                                             name="firstName"
                                             value={formData.father.firstName}
                                             onChange={(e) => handleChange(e, 'father')}
+                                            required
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             placeholder="Enter first name"
                                         />
@@ -697,6 +765,7 @@ export default function ApplyingStages() {
                                             name="lastName"
                                             value={formData.father.lastName}
                                             onChange={(e) => handleChange(e, 'father')}
+                                            required
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             placeholder="Enter last name"
                                         />
@@ -708,6 +777,7 @@ export default function ApplyingStages() {
                                             name="middleName"
                                             value={formData.father.middleName}
                                             onChange={(e) => handleChange(e, 'father')}
+                                            required
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             placeholder="Enter middle name"
                                         />
@@ -722,6 +792,7 @@ export default function ApplyingStages() {
                                             name="birthdate"
                                             value={formData.father.birthdate}
                                             onChange={(e) => handleChange(e, 'father')}
+                                            required
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             placeholder="Enter birthdate"
                                         />
@@ -733,6 +804,7 @@ export default function ApplyingStages() {
                                             name="occupation"
                                             value={formData.father.occupation}
                                             onChange={(e) => handleChange(e, 'father')}
+                                            required
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             placeholder="Enter occupation"
                                         />
@@ -740,22 +812,23 @@ export default function ApplyingStages() {
                                     <div>
                                         <label className='block text-sm font-medium text-gray-700 mb-2'>Yearly Income</label>
                                         <select
-                                            name="fatheryearlyIncome"
+                                            name="yearlyIncome"
                                             value={formData.father.yearlyIncome}
                                             onChange={(e) => handleChange(e, 'father')}
+                                            required
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         >
                                             <option value="" disabled>Select yearly income</option>
-                                            <option value="below_100k">Below ₱100,000</option>
-                                            <option value="100k_200k">₱100,000 - ₱200,000</option>
-                                            <option value="200k_300k">₱200,000 - ₱300,000</option>
-                                            <option value="300k_400k">₱300,000 - ₱400,000</option>
-                                            <option value="400k_500k">₱400,000 - ₱500,000</option>
-                                            <option value="500k_600k">₱500,000 - ₱600,000</option>
-                                            <option value="600k_700k">₱600,000 - ₱700,000</option>
-                                            <option value="700k_800k">₱700,000 - ₱800,000</option>
-                                            <option value="800k_900k">₱800,000 - ₱900,000</option>
-                                            <option value="900k_1M">₱900,000 - ₱1,000,000</option>
+                                            <option value="100000">Below ₱100,000</option>
+                                            <option value="200000">₱100,000 - ₱200,000</option>
+                                            <option value="300000">₱200,000 - ₱300,000</option>
+                                            <option value="400000">₱300,000 - ₱400,000</option>
+                                            <option value="500000">₱400,000 - ₱500,000</option>
+                                            <option value="600000">₱500,000 - ₱600,000</option>
+                                            <option value="700000">₱600,000 - ₱700,000</option>
+                                            <option value="800000">₱700,000 - ₱800,000</option>
+                                            <option value="900000">₱800,000 - ₱900,000</option>
+                                            <option value="1000000">₱900,000 - ₱1,000,000</option>
                                         </select>
                                     </div>
                                     <div>
@@ -765,6 +838,7 @@ export default function ApplyingStages() {
                                             name="contactNo"
                                             value={formData.father.contactNo}
                                             onChange={(e) => handleChange(e, 'father')}
+                                            required
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             placeholder="Enter contact number"
                                         />
@@ -780,6 +854,7 @@ export default function ApplyingStages() {
                                             name="firstName"
                                             value={formData.mother.firstName}
                                             onChange={(e) => handleChange(e, 'mother')}
+                                            required
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             placeholder="Enter first name"
                                         />
@@ -791,6 +866,7 @@ export default function ApplyingStages() {
                                             name="lastName"
                                             value={formData.mother.lastName}
                                             onChange={(e) => handleChange(e, 'mother')}
+                                            required
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             placeholder="Enter last name"
                                         />
@@ -802,6 +878,7 @@ export default function ApplyingStages() {
                                             name="middleName"
                                             value={formData.mother.middleName}
                                             onChange={(e) => handleChange(e, 'mother')}
+                                            required
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             placeholder="Enter middle name"
                                         />
@@ -816,6 +893,7 @@ export default function ApplyingStages() {
                                             name="birthdate"
                                             value={formData.mother.birthdate}
                                             onChange={(e) => handleChange(e, 'mother')}
+                                            required
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             placeholder="Enter birthdate"
                                         />
@@ -827,6 +905,7 @@ export default function ApplyingStages() {
                                             name="occupation"
                                             value={formData.mother.occupation}
                                             onChange={(e) => handleChange(e, 'mother')}
+                                            required
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             placeholder="Enter occupation"
                                         />
@@ -837,6 +916,7 @@ export default function ApplyingStages() {
                                             name="yearlyIncome"
                                             value={formData.mother.yearlyIncome}
                                             onChange={(e) => handleChange(e, 'mother')}
+                                            required
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                         >
                                             <option value="" disabled>Select yearly income</option>
@@ -859,6 +939,7 @@ export default function ApplyingStages() {
                                             name="contactNo"
                                             value={formData.mother.contactNo}
                                             onChange={(e) => handleChange(e, 'mother')}
+                                            required
                                             className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             placeholder="Enter contact number"
                                         />
@@ -1003,6 +1084,7 @@ export default function ApplyingStages() {
                                                 name="school"
                                                 value={formData.education.elementary.school}
                                                 onChange={(e) => handleEducationChange(e, 'elementary')}
+                                                required
                                                 placeholder="Enter elementary school name"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             />
@@ -1014,6 +1096,7 @@ export default function ApplyingStages() {
                                                 name="award"
                                                 value={formData.education.elementary.award}
                                                 onChange={(e) => handleEducationChange(e, 'elementary')}
+                                                required
                                                 placeholder="Enter elementary award"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             />
@@ -1024,6 +1107,7 @@ export default function ApplyingStages() {
                                                 name="yearGraduated"
                                                 value={formData.education.elementary.yearGraduated}
                                                 onChange={(e) => handleEducationChange(e, 'elementary')}
+                                                required
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             >
                                                 <option value="">Select year</option>
@@ -1044,6 +1128,7 @@ export default function ApplyingStages() {
                                                 name="school"
                                                 value={formData.education.juniorHighSchool.school}
                                                 onChange={(e) => handleEducationChange(e, 'juniorHighSchool')}
+                                                required
                                                 placeholder="Enter junior high school name"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             />
@@ -1055,6 +1140,7 @@ export default function ApplyingStages() {
                                                 name="award"
                                                 value={formData.education.juniorHighSchool.award}
                                                 onChange={(e) => handleEducationChange(e, 'juniorHighSchool')}
+                                                required
                                                 placeholder="Enter junior high school award"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             />
@@ -1065,6 +1151,7 @@ export default function ApplyingStages() {
                                                 name="yearGraduated"
                                                 value={formData.education.juniorHighSchool.yearGraduated}
                                                 onChange={(e) => handleEducationChange(e, 'juniorHighSchool')}
+                                                required
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             >
                                                 <option value="">Select year</option>
@@ -1085,6 +1172,7 @@ export default function ApplyingStages() {
                                                 name="school"
                                                 value={formData.education.seniorHighSchool.school}
                                                 onChange={(e) => handleEducationChange(e, 'seniorHighSchool')}
+                                                required
                                                 placeholder="Enter senior high school name"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             />
@@ -1096,6 +1184,7 @@ export default function ApplyingStages() {
                                                 name="award"
                                                 value={formData.education.seniorHighSchool.award}
                                                 onChange={(e) => handleEducationChange(e, 'seniorHighSchool')}
+                                                required
                                                 placeholder="Enter senior high school award"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             />
@@ -1106,6 +1195,7 @@ export default function ApplyingStages() {
                                                 name="yearGraduated"
                                                 value={formData.education.seniorHighSchool.yearGraduated}
                                                 onChange={(e) => handleEducationChange(e, 'seniorHighSchool')}
+                                                required
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             >
                                                 <option value="">Select year</option>
@@ -1126,6 +1216,7 @@ export default function ApplyingStages() {
                                                 name="school"
                                                 value={formData.education.college.school}
                                                 onChange={(e) => handleEducationChange(e, 'college')}
+                                                required
                                                 placeholder="Enter college name"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             />
@@ -1137,11 +1228,12 @@ export default function ApplyingStages() {
                                                 name="course"
                                                 value={formData.education.college.course}
                                                 onChange={(e) => handleEducationChange(e, 'college')}
+                                                required
                                                 placeholder="Enter college course"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             />
                                         </div>
-                                        <div>
+                                        {/* <div>
                                             <label className='block text-sm font-medium text-gray-700 mb-2'>College Year Graduated</label>
                                             <select
                                                 name="yearGraduated"
@@ -1154,7 +1246,7 @@ export default function ApplyingStages() {
                                                     <option key={year} value={year}>{year}</option>
                                                 ))}
                                             </select>
-                                        </div>
+                                        </div> */}
                                     </div>
 
                                     <div className='flex mt-10 justify-end space-x-4 p-4'>
@@ -1283,7 +1375,7 @@ export default function ApplyingStages() {
                                         <div>
                                             <label className='block text-sm font-medium text-gray-700 mb-2'>Status of Appointment</label>
                                             <select
-                                                name="appointmentStatus"
+                                                name="statusOfAppointment"
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                                 value={workExperience.appointmentStatus}
                                                 onChange={(event) => handleWorkChange(index, event, 'workExperience')}
@@ -1307,7 +1399,7 @@ export default function ApplyingStages() {
 
                                 <span className='text-lg font-bold mt-8 block'>Skills & Qualifications</span>
                                 <span className='text-base font-bold block my-3'>Skills (Maximum of 6), Qualifications (Includes membership in related associations, hobbies, etc.)</span>
-                                                                {formData.skillsAndQualifications.map((skill, index) => (
+                                {formData.skillsAndQualifications.map((skill, index) => (
                                     <div key={index} className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 ${index > visibleSkillIndex ? 'hidden' : ''}`}>
                                         <div>
                                             <label className='block text-sm font-medium text-gray-700 mb-2'>Skill</label>
@@ -1320,7 +1412,7 @@ export default function ApplyingStages() {
                                                 onChange={(event) => handleSkillChange(index, event)}
                                             />
                                         </div>
-                                
+
                                         <div>
                                             <label className='block text-sm font-medium text-gray-700 mb-2'>Qualification</label>
                                             <input
