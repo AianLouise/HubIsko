@@ -81,7 +81,7 @@ export default function App() {
         <Route path="/scholarship-details/:id" element={<ApplicationDetails />} />
         <Route path="/applying-stages/:scholarshipId" element={<ApplyingStages />} />
         <Route path="/application-box" element={<ApplicationBox />} />
-        <Route path="/inboxed-application-detail/:id" element={<InboxedApplicationDetail />} />
+        <Route path="/application-detail/:id" element={<InboxedApplicationDetail />} />
         <Route path="/student-info" element={<StudentInfo />} />
         <Route path="/profile-preview" element={<ProfilePreview />} />
         <Route path="/post-details" element={<PostDetails />} />

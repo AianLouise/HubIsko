@@ -54,7 +54,14 @@ export default function ScholarshipListing() {
   }
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+        </svg>
+      </div>
+    );
   }
 
   return (
@@ -182,13 +189,13 @@ export default function ScholarshipListing() {
                       <p className='w-full text-sm hidden lg:block'>{scholarship.deadline}</p>
                     </div>
                   </div>
-                      <Link
-                        to={`/scholarship-details/${scholarship.id}`}
-                        key={scholarship._id}
-                        className='bg-blue-600 text-white p-2 flex justify-center items-center rounded-md my-4 text-sm lg:text-base font-medium hover:bg-blue-800 transition ease-in-out'
-                      >
-                        More Details for Application
-                      </Link>
+                  <Link
+                    to={`/scholarship-details/${scholarship.id}`}
+                    key={scholarship._id}
+                    className='bg-blue-600 text-white p-2 flex justify-center items-center rounded-md my-4 text-sm lg:text-base font-medium hover:bg-blue-800 transition ease-in-out'
+                  >
+                    More Details for Application
+                  </Link>
                 </div>
               </div>
             ))}

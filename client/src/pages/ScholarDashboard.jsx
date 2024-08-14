@@ -99,28 +99,30 @@ export default function ScholarDashboard() {
                     </Link>
                   </div>
                 ) : (
-                  applications.map((application) => (
-                    <Link key={application._id} to={`/inboxed-application-detail/${application._id}`}>
-                      <div className='flex items-center justify-between hover:bg-slate-200 p-2 rounded-md'>
-                        <div className='flex flex-row gap-2'>
-                          <div className='bg-blue-600 w-12 h-12 rounded-md'>
-                            <img src={application.scholarshipProgram.scholarshipImage} alt="Scholarship" className='w-full h-full object-cover rounded-md' />
-                          </div>
-                          <div className='flex flex-col'>
-                            <div className='flex items-center gap-2'>
-                              <span className='font-bold'>{application.scholarshipProgram.organizationName}</span>
-                              <div className='bg-blue-600 w-2 h-2 rounded-full'></div>
-                              <span className='text-blue-600 text-sm'>New</span>
+                  <div className="overflow-y-auto h-64">
+                    {applications.map(application => (
+                      <Link key={application._id} to={`/application-detail/${application._id}`}>
+                        <div className='flex items-center justify-between hover:bg-slate-200 p-2 rounded-md'>
+                          <div className='flex flex-row gap-2'>
+                            <div className='bg-blue-600 w-12 h-12 rounded-md'>
+                              <img src={application.scholarshipProgram.scholarshipImage} alt="Scholarship" className='w-full h-full object-cover rounded-md' />
                             </div>
-                            <span>{application.scholarshipProgram.title}</span>
+                            <div className='flex flex-col'>
+                              <div className='flex items-center gap-2'>
+                                <span className='font-bold'>{application.scholarshipProgram.organizationName}</span>
+                                <div className='bg-blue-600 w-2 h-2 rounded-full'></div>
+                                <span className='text-blue-600 text-sm'>New</span>
+                              </div>
+                              <span>{application.scholarshipProgram.title}</span>
+                            </div>
+                          </div>
+                          <div className='flex flex-row items-center gap-2'>
+                            <div className='bg-yellow-400 rounded-full w-2 h-2'></div><span>Pending</span>
                           </div>
                         </div>
-                        <div className='flex flex-row items-center gap-2'>
-                          <div className='bg-yellow-400 rounded-full w-2 h-2'></div><span>Pending</span>
-                        </div>
-                      </div>
-                    </Link>
-                  ))
+                      </Link>
+                    ))}
+                  </div>
                 )}
               </div>
             </div>
