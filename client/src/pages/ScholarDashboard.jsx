@@ -49,7 +49,14 @@ export default function ScholarDashboard() {
 
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+        </svg>
+      </div>
+    );
   }
 
   return (
@@ -73,7 +80,7 @@ export default function ScholarDashboard() {
 
             <div className="bg-white shadow rounded-lg col-span-1 md:col-span-2">
               <div className='flex justify-between "font-semibold text-xl w-full bg-blue-600 p-4 rounded-t-lg text-white'>
-                <h2 >Application Archive</h2>
+                <h2 >Scholarships</h2>
 
                 <Link to={`/application-box`}>
                   <button className='bg-white text-blue-600 font-bold px-2 rounded-md hover:bg-slate-200'>See all</button>
@@ -93,7 +100,7 @@ export default function ScholarDashboard() {
                   </div>
                 ) : (
                   applications.map((application) => (
-                    <Link key={application._id} to={`/inboxed-application-detail/${application.name}`}>
+                    <Link key={application._id} to={`/inboxed-application-detail/${application._id}`}>
                       <div className='flex items-center justify-between hover:bg-slate-200 p-2 rounded-md'>
                         <div className='flex flex-row gap-2'>
                           <div className='bg-blue-600 w-12 h-12 rounded-md'>
@@ -116,8 +123,6 @@ export default function ScholarDashboard() {
                   ))
                 )}
               </div>
-
-
             </div>
           </div>
 

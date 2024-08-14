@@ -38,7 +38,8 @@ export const createScholarshipApplication = async (req, res) => {
             documents,
             termsAndConditions,
             scholarshipProgram,
-            applicant
+            applicant,
+            applicationStatus
         } = req.body;
 
         const newApplication = new ScholarshipApplication({
@@ -71,7 +72,8 @@ export const createScholarshipApplication = async (req, res) => {
             documents,
             termsAndConditions,
             scholarshipProgram,
-            applicant
+            applicant,
+            applicationStatus
         });
 
         await newApplication.save();
@@ -97,6 +99,26 @@ export const getScholarshipApplications = async (req, res) => {
         console.error('Error fetching scholarship applications:', error);
         res.status(500).json({
             message: 'Error fetching scholarship applications',
+            error: error.message
+        });
+    }
+};
+
+
+export const getApplicationDetailsById = async (req, res) => {
+    try {
+        const { id } = req.params; // Extract applicationId from the URL parameters
+        const application = await ScholarshipApplication.findById(id).populate('scholarshipProgram');
+
+        if (!application) {
+            return res.status(404).json({ message: 'Application not found' });
+        }
+
+        res.status(200).json(application);
+    } catch (error) {
+        console.error('Error fetching application details by ID:', error);
+        res.status(500).json({
+            message: 'Error fetching application details by ID',
             error: error.message
         });
     }

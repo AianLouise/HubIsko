@@ -306,6 +306,9 @@ const scholarshipApplicationSchema = new mongoose.Schema({
         ref: 'Applicant',
         required: true
     },
+    applicationStatus: {
+        type: String,
+    }
 }, { timestamps: true });
 
 const ScholarshipApplication = mongoose.model('ScholarshipApplication', scholarshipApplicationSchema);

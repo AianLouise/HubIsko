@@ -179,10 +179,11 @@ export default function ApplyingStages() {
             passportPhoto: null
         },
         termsAndConditions: {
-            agreed: false
+            agreed: true
         },
         scholarshipProgram: '',
-        applicant: currentUser._id
+        applicant: currentUser._id,
+        applicationStatus: 'Pending'
     });
 
     const [scholarship, setScholarship] = useState(null);
