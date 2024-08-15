@@ -2,40 +2,52 @@ import mongoose from 'mongoose';
 
 // Schema for Scholarship Program
 const scholarshipProgramSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  amount: { type: String, required: true },
-  slotsFilled: { type: Number, default: 0 },
-  totalSlots: { type: Number, required: true },
-  duration: { type: String, required: true },
-  category: { type: String, required: true },
-  type: { type: String, required: true },
-  academicRequirements: { type: [String], required: true }, // Changed to array of strings
-  fieldOfStudy: { type: String, required: true },
-  levelOfEducation: { type: String, required: true },
-  location: { type: String, required: true },
-  applicationStartDate: { type: Date, required: true },
-  applicationEndDate: { type: Date, required: true },
-  notificationDate: { type: Date, required: true },
-  coverage: { type: String, required: true },
-  contactPerson: { type: String, required: true },
-  providerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  organizationName: { type: String }, // Changed to camelCase
-  scholarshipImage: { type: String },
-  scholarshipBanner: { type: String },
-  status: { 
-    type: String, 
-    enum: ['Draft', 'Pending Approval', 'Active', 'Closed', 'Archived', 'Cancelled', 'Completed'], 
-    default: 'Draft' 
-  },
-  approvedScholars: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Scholar' }],
-  details: [
+  title: { type: String },
+  category: { type: String },
+  fieldOfStudy: { type: String },
+  numberOfScholarships: { type: String },
+  amount: { type: String },
+  applicationDeadline: { type: String },
+  minGPA: { type: String },
+  nationality: { type: String },
+  otherEligibility: { type: String },
+  startDate: { type: String },
+  endDate: { type: String },
+  selectionProcess: { type: String },
+  selectionCriteria: { type: String },
+  renewalPolicy: { type: String },
+  renewalDuration: { type: String },
+  disbursementSchedule: { type: String },
+  disbursementMethod: { type: String },
+  contactEmail: { type: String },
+  contactPhone: { type: String },
+  providerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  organizationName: { type: String }, // Added organizationName field
+  requiredDocuments: [
     {
-      title: { type: String, required: true },
-      content: { type: String, required: true }
+      id: { type: String },
+      name: { type: String },
+      required: { type: Boolean },
+      editable: { type: Boolean }
     }
-  ],
-  datePosted: { type: Date, default: Date.now } // Added field for date posted
+  ], // Array of objects for required documents
+  documentGuidelines: { type: String }, // Guidelines for documents
+  scholarshipImage: { type: String }, // URL or path to scholarship image
+  bannerImage: { type: String }, // URL or path to banner image
+  sections: [
+    {
+      title: { type: String },
+      content: { type: String }
+    }
+  ], // Array of sections with title and content
+  faqTitle: { type: String }, // Added FAQ title field
+  faqDescription: { type: String }, // Added FAQ description field
+  providerRequirements: [
+    {
+      id: { type: String, required: true },
+      url: { type: String, required: true }
+    }
+  ], // Array of provider requirements with id and url
 });
 
 // Models

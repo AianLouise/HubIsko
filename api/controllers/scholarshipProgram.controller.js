@@ -15,92 +15,100 @@ export const createScholarshipProgram = async (req, res) => {
     // Extract data from request body
     const {
       title,
-      description,
-      amount,
-      totalSlots,
-      duration,
       category,
-      type,
-      academicRequirements,
       fieldOfStudy,
-      levelOfEducation,
-      location,
-      applicationStartDate,
-      applicationEndDate,
-      notificationDate,
-      coverage,
-      contactPerson,
+      numberOfScholarships,
+      amount,
+      applicationDeadline,
+      minGPA,
+      nationality,
+      otherEligibility,
+      startDate,
+      endDate,
+      selectionProcess,
+      selectionCriteria,
+      renewalPolicy,
+      renewalDuration,
+      disbursementSchedule,
+      disbursementMethod,
+      contactEmail,
+      contactPhone,
       providerId,
-      organizationName, // Added field for organization name
-      scholarshipImage, // Added field for scholarship image
-      scholarshipBanner,  // Added field for scholarship banner
-      status = 'Pending Approval',
-      details // Extract details from request body
+      organizationName,
+      requiredDocuments,
+      documentGuidelines,
+      scholarshipImage,
+      bannerImage,
+      sections,
+      faqTitle,          
+      faqDescription,
+      providerRequirements  
     } = req.body;
 
     // Validate required fields
-    if (!title || !description || totalSlots === undefined || !duration || !amount || !category || !type || !academicRequirements || !fieldOfStudy || !levelOfEducation || !location || !applicationStartDate || !applicationEndDate || !notificationDate || !coverage || !contactPerson || !providerId) {
-      console.error('Validation Error: Missing required fields');
-      return res.status(400).json({
-        message: 'Title, description, application instructions, number of scholarships, duration, category, type, academic requirements, field of study, level of education, location, application start date, application end date, notification date, coverage, contact person, and provider ID are required fields.',
-      });
-    }
+      if (
+          !title || !category || !fieldOfStudy ||
+          numberOfScholarships === undefined || !amount || !applicationDeadline ||
+          !minGPA || !nationality || !otherEligibility ||
+          !startDate || !endDate || !selectionProcess || !selectionCriteria ||
+          !renewalPolicy || !renewalDuration || !disbursementSchedule ||
+          !disbursementMethod || !contactEmail || !contactPhone ||
+          !providerId || !organizationName || !faqTitle || !faqDescription || // Include FAQ validation
+          !scholarshipImage || !bannerImage || !providerRequirements// Include scholarshipImage and bannerImage validation
+        ) {
+          console.error('Validation Error: Missing required fields');
+          return res.status(400).json({
+            message: 'Title, category, field of study, number of scholarships, amount, application deadline, minimum GPA, nationality, other eligibility criteria, start date, end date, selection process, selection criteria, renewal policy, renewal duration, disbursement schedule, disbursement method, contact email, contact phone, provider ID, organization name, FAQ title, FAQ description, scholarship image, banner image, and providerRequirements are required fields.',
+          });
+        }
 
     // Validate date fields
-    const parsedApplicationStartDate = new Date(applicationStartDate);
-    const parsedApplicationEndDate = new Date(applicationEndDate);
-    const parsedNotificationDate = new Date(notificationDate);
+    const parsedStartDate = new Date(startDate);
+    const parsedEndDate = new Date(endDate);
+    const parsedApplicationDeadline = new Date(applicationDeadline);
 
-    if (isNaN(parsedApplicationStartDate.getTime()) || isNaN(parsedApplicationEndDate.getTime()) || isNaN(parsedNotificationDate.getTime())) {
+    if (
+      isNaN(parsedStartDate.getTime()) ||
+      isNaN(parsedEndDate.getTime()) ||
+      isNaN(parsedApplicationDeadline.getTime())
+    ) {
       console.error('Validation Error: Invalid date format');
       return res.status(400).json({
-        message: 'Invalid date format for application start date, application end date, or notification date.',
-      });
-    }
-
-    // Validate academicRequirements field
-    if (!Array.isArray(academicRequirements)) {
-      console.error('Validation Error: Academic requirements should be an array');
-      return res.status(400).json({
-        message: 'Academic requirements should be an array.',
-      });
-    }
-
-    // Validate details field
-    if (!Array.isArray(details)) {
-      console.error('Validation Error: Details should be an array');
-      return res.status(400).json({
-        message: 'Details should be an array.',
+        message: 'Invalid date format for start date, end date, or application deadline.',
       });
     }
 
     // Create a new Scholarship document
     const newScholarship = new Scholarship({
       title,
-      description,
-      amount,
-      totalSlots,
-      duration,
       category,
-      type,
-      academicRequirements,
       fieldOfStudy,
-      levelOfEducation,
-      location,
-      applicationStartDate: parsedApplicationStartDate,
-      applicationEndDate: parsedApplicationEndDate,
-      notificationDate: parsedNotificationDate,
-      coverage,
-      contactPerson,
-      providerId, // Assign the provider ID
-      organizationName, // Added field for organization name
-      scholarshipImage, // Added field for scholarship image
-      scholarshipBanner, // Added field for scholarship banner
-      status, // Default status
-      details: details.map(detail => ({
-        title: detail.title,
-        content: detail.content
-      }))
+      numberOfScholarships,
+      amount,
+      applicationDeadline: parsedApplicationDeadline,
+      minGPA,
+      nationality,
+      otherEligibility,
+      startDate: parsedStartDate,
+      endDate: parsedEndDate,
+      selectionProcess,
+      selectionCriteria,
+      renewalPolicy,
+      renewalDuration,
+      disbursementSchedule,
+      disbursementMethod,
+      contactEmail,
+      contactPhone,
+      providerId,
+      organizationName,
+      requiredDocuments,
+      documentGuidelines,
+      scholarshipImage,
+      bannerImage,
+      sections,        
+      faqTitle,       
+      faqDescription,   
+      providerRequirements
     });
 
     // Save the Scholarship document to the database
@@ -120,6 +128,11 @@ export const createScholarshipProgram = async (req, res) => {
     });
   }
 };
+
+
+
+
+
 
 
 export const getScholarshipProgramsByProviderId = async (req, res) => {

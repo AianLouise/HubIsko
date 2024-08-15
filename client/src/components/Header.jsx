@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getDownloadURL, getStorage, ref } from 'firebase/storage';
+// import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import { useDispatch } from 'react-redux';
 import { signOut } from '../redux/user/userSlice';
 import { IoIosNotifications } from "react-icons/io";
@@ -13,22 +13,22 @@ import { BsThreeDots } from "react-icons/bs";
 export default function Header() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.user);
-  const [logoUrl, setLogoUrl] = useState('');
+  // const [logoUrl, setLogoUrl] = useState('');
 
-  useEffect(() => {
-    async function fetchLogoUrl() {
-      const storage = getStorage();
-      const logoRef = ref(storage, '/System Files/logo.jpg'); // Ensure this path is correct
-      try {
-        const url = await getDownloadURL(logoRef);
-        setLogoUrl(url);
-      } catch (error) {
-        console.error('Error fetching logo URL:', error);
-      }
-    }
+  // useEffect(() => {
+  //   async function fetchLogoUrl() {
+  //     const storage = getStorage();
+  //     const logoRef = ref(storage, '/System Files/logo.jpg'); // Ensure this path is correct
+  //     try {
+  //       const url = await getDownloadURL(logoRef);
+  //       setLogoUrl(url);
+  //     } catch (error) {
+  //       console.error('Error fetching logo URL:', error);
+  //     }
+  //   }
 
-    fetchLogoUrl();
-  }, []);
+  //   fetchLogoUrl();
+  // }, []);
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
