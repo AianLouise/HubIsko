@@ -51,6 +51,7 @@ import ScholarshipsData from "./pages/Admin/ScholarshipsData";
 import ScholarshipsDataDetails from "./pages/Admin/ScholarshipsDataDetails";
 import ScholarshipsDataDisplay from "./pages/Admin/ScholarshipsDataDisplay";
 import ViewScholarshipDetails from "./pages/Scholarship-Provider/ViewScholarshipDetails";
+import InboxApplication from "./pages/Admin/InboxApplication";
 
 
 
@@ -108,6 +109,7 @@ export default function App() {
           <Route path="scholarships-data" element={<ScholarshipsData />} />
           <Route path="scholarships-data-details" element={<ScholarshipsDataDetails />} />
           <Route path="scholarships-data-display" element={<ScholarshipsDataDisplay />} />
+          <Route path="inbox-application" element={<InboxApplication />} />
           {/* Add other routes here */}
         </Route>
 

@@ -11,7 +11,7 @@ import { BsBuildingFill } from "react-icons/bs";
 import { BsInboxFill } from "react-icons/bs";
 import { HiDocument } from "react-icons/hi2";
 import { FaGoogleScholar } from "react-icons/fa6";
-import { FaFileCircleQuestion } from "react-icons/fa6";
+import { MdForum } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 
 export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
@@ -42,6 +42,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
 
         if (location.pathname.startsWith('/inbox')
             || location.pathname.startsWith('/scholarships-data')
+            || location.pathname.startsWith('/inbox-application')
         
         ) {
             setIsInboxDropdownOpen(true);
@@ -153,12 +154,15 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                         className={`flex gap-2 justify-between items-center text-gray-800 py-2 px-4 rounded-md ${
                                             location.pathname.startsWith('/inbox') 
                                             || location.pathname.startsWith('/scholarships-data')
+                                            || location.pathname.startsWith('/inbox-application')
+
                                             
                                             ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                         <div className="flex items-center gap-2">
                                         <BsInboxFill className={`w-5 h-5 text-blue-600 
                                             ${location.pathname.startsWith('/inbox') 
                                             || location.pathname.startsWith('/scholarships-data')
+                                            || location.pathname.startsWith('/inbox-application')
                                             
                                             ? 'text-white' : ''} `}/>
                                         Inbox
@@ -166,6 +170,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                 <div className={`bg-blue-600 rounded-full text-center flex items-center justify-center p-3 w-4 h-4 text-sm 
                                             ${location.pathname.startsWith('/inbox')
                                             || location.pathname.startsWith('/scholarships-data') 
+                                            || location.pathname.startsWith('/inbox-application')
                                             
                                     ? 'text-blue-600 bg-white' : 'text-white'} `}>1</div>
                             </Link>
@@ -182,15 +187,15 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                 </Link>
                             </li>
                             <li>
-                                <a href="#" className="flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
-                                <HiDocument className="w-5 h-5 text-blue-600" />
+                                <Link to={'/inbox-application'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${ location.pathname === '/inbox-application' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200' }`}>
+                                <HiDocument className={`w-5 h-5 text-blue-600 ${ location.pathname === '/inbox-application' ? ' text-white' : '' }`} />
                                 Applications
-                                </a>
+                                </Link>
                             </li>
                             <li>
                                 <a href="#" className="flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
-                                <FaFileCircleQuestion className="w-5 h-5 text-blue-600" />
-                                Requests
+                                <MdForum className="w-5 h-5 text-blue-600" />
+                                Forums
                                 </a>
                             </li>
                             </ul>
