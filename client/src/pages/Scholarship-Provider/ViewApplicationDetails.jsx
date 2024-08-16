@@ -88,7 +88,7 @@ export default function ViewApplicationDetails() {
                 <div className="max-w-6xl px-24 mx-auto my-20">
                     <div className="border shadow rounded-md h-auto p-10">
                         <div className="flex justify-between items-center">
-                            <span className="text-2xl">Submitted details for: {application.scholarshipProgram.title}</span>
+                            <span className="text-2xl">Submitted Application for: {application.scholarshipProgram.title}</span>
                         </div>
                         <div className="mt-4">
                             {/* Application Status */}
