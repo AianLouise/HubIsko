@@ -5,6 +5,7 @@ import { FaHandHolding, FaRegCalendarXmark, FaArrowRightLong } from "react-icons
 import { MdOutlineRefresh } from "react-icons/md";
 import { BsGlobe2 } from "react-icons/bs";
 import { useParams, Link } from 'react-router-dom';
+import { FaEnvelope, FaPhone, FaUser } from 'react-icons/fa';
 
 export default function Forums() {
     const { id } = useParams();
@@ -69,7 +70,7 @@ export default function Forums() {
                         <div className='flex flex-col gap-2 w-1/2'>
                             <div className='flex flex-row divide-x-2 divide-blue-200 mb-2'>
                                 <span className='text-2xl font-bold text-gray-600 pr-4'>{organizationName}</span>
-                                <span className='text-2xl font-medium text-gray-400 pl-4'>{new Date(scholarship.applicationStartDate).toLocaleDateString()}</span>
+                                <span className='text-2xl font-medium text-gray-400 pl-4'>{new Date(scholarship.startDate).toLocaleDateString()}</span>
                             </div>
                             <h1 className='text-4xl font-bold text-gray-800'>{scholarship.title}</h1>
 
@@ -90,21 +91,21 @@ export default function Forums() {
                             </span>
                             <span className='flex gap-2 bg-white border px-4 py-2 rounded-md shadow items-center'>
                                 <FaRegCalendarXmark className='text-red-500' />
-                                Deadline: {new Date(scholarship.applicationEndDate).toLocaleDateString()}
+                                Deadline: {new Date(scholarship.endDate).toLocaleDateString()}
                             </span>
                         </div>
                         <div className='flex justify-center items-center w-full h-52 rounded-md my-4 shadow border'>
-                            {scholarship.scholarshipBanner ? (
-                                <img src={scholarship.scholarshipBanner} alt="Scholarship Banner" className='w-full h-full object-cover' />
+                            {scholarship.bannerImage ? (
+                                <img src={scholarship.bannerImage} alt="Scholarship Banner" className='w-full h-full object-cover' />
                             ) : 'Scholarship Banner'}
                         </div>
 
                         <div>
-                            {scholarship.details && scholarship.details.length > 0 ? (
-                                scholarship.details.map((detail, index) => (
+                            {scholarship.sections && scholarship.sections.length > 0 ? (
+                                scholarship.sections.map((section, index) => (
                                     <div key={index} className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
-                                        <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>{detail.title}</span>
-                                        <span className='text-sm p-4'>{detail.content}</span>
+                                        <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>{section.title}</span>
+                                        <span className='text-sm p-4'>{section.content}</span>
                                     </div>
                                 ))
                             ) : (
@@ -114,8 +115,8 @@ export default function Forums() {
 
                         {/* FAQ Section */}
                         <div className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
-                            <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>Frequently Asked Questions</span>
-                            <span className='text-sm p-4'>{scholarship.additionalInformation}</span>
+                            <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>{scholarship.faqTitle}</span>
+                            <span className='text-sm p-4'>{scholarship.faqDescription}</span>
 
                             <div className='border mx-8'></div>
                             <div className='items-center justify-center flex -translate-y-5'>
@@ -125,23 +126,29 @@ export default function Forums() {
                             {/* Contact Section */}
                             <div className='flex gap-6 justify-center mb-8'>
                                 <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'>
-                                    <div className='bg-blue-600 w-12 h-12 rounded-md'></div>
+                                    <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
+                                    <FaEnvelope className='text-white' />
+                                    </div>
                                     <div className='flex flex-col justify-center'>
                                         <span className='text-slate-600 text-left'>Email Us!</span>
-                                        <span className=''>{scholarship.contactPerson.email}</span>
+                                        <span className=''>{scholarship.contactEmail}</span>
                                     </div>
                                 </button>
 
                                 <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'>
-                                    <div className='bg-blue-600 w-12 h-12 rounded-md'></div>
+                                    <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
+                                    <FaPhone className='text-white' />
+                                    </div>
                                     <div className='flex flex-col justify-center'>
                                         <span className='text-slate-600 text-left'>Call us!</span>
-                                        <span className=''>{scholarship.contactPerson.phone}</span>
+                                        <span className=''>{scholarship.contactPhone}</span>
                                     </div>
                                 </button>
 
                                 <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'>
-                                    <div className='bg-blue-600 w-12 h-12 rounded-md'></div>
+                                    <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
+                                    <FaUser className='text-white' />
+                                    </div>
                                     <div className='flex flex-col justify-center text-left'>
                                         <span className='text-slate-600 '>Visit our profile!</span>
                                         <span className=''>{organizationName}</span>

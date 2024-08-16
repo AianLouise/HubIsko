@@ -308,6 +308,10 @@ const scholarshipApplicationSchema = new mongoose.Schema({
     },
     applicationStatus: {
         type: String,
+    },
+    appliedOn: {
+        type: Date,
+        default: Date.now
     }
 }, { timestamps: true });
 

@@ -5,8 +5,7 @@ import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 export default function ViewScholarshipDetails() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('details');
-    const [programDetails, setProgramDetails] = useState(null);
-    const [applications, setApplications] = useState([]);
+    const [scholarshipProgram, setProgramDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { id } = useParams();
@@ -38,10 +37,36 @@ export default function ViewScholarshipDetails() {
             setLoading(false);
         }
     };
+    const [applications, setApplications] = useState([]);
+
+    const fetchApplications = async () => {
+        try {
+            const response = await fetch(`/api/scholarshipProgram/scholarship-applications/${id}`);
+            const contentType = response.headers.get("content-type");
+            if (!response.ok) {
+                const errorText = await response.text(); // Read response as text
+                throw new Error(`Network response was not ok: ${errorText}`);
+            }
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                const data = await response.json();
+                setApplications(data);
+            } else {
+                throw new Error("Received non-JSON response");
+            }
+        } catch (error) {
+            console.error('Error fetching program applications:', error);
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         fetchProgramDetails();
+        fetchApplications();
     }, [id]);
+
+
 
     if (loading) {
         return (
@@ -64,8 +89,12 @@ export default function ViewScholarshipDetails() {
                 <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
                 <div className="container mx-auto p-6">
                     <div className="flex flex-col items-center mb-6">
-                        <img src={programDetails.scholarshipImage} alt="Scholarship Program" className="w-32 h-32 rounded-full mb-4 shadow-lg" />
-                        <h1 className="text-4xl font-bold text-center text-blue-600">{programDetails.title}</h1>
+                        <img
+                            src={scholarshipProgram.scholarshipImage}
+                            alt="Scholarship Program"
+                            className="w-32 h-32 object-cover rounded-full mb-4 shadow-lg"
+                        />
+                        <h1 className="text-4xl font-bold text-center text-blue-600">{scholarshipProgram.title}</h1>
                     </div>
 
                     {/* Tabs for different sections */}
@@ -93,34 +122,76 @@ export default function ViewScholarshipDetails() {
 
                     {/* Content Area */}
                     <div className="content">
-                        {activeTab === 'details' && programDetails && (
-                            <div>
+                        {activeTab === 'details' && scholarshipProgram && (
+                            <div className="p-6 bg-white rounded-lg shadow-md">
+                                <div className="flex items-center mb-4">
+                                    <span className={`px-3 py-1 rounded-full text-white ${scholarshipProgram.status === 'Active' ? 'bg-green-500' :
+                                        scholarshipProgram.status === 'Inactive' ? 'bg-red-500' :
+                                            'bg-yellow-500'
+                                        }`}>
+                                        {scholarshipProgram.status}
+                                    </span>
+                                </div>
                                 <h2 className="text-2xl font-bold mb-4">Program Details</h2>
-                                <p className="text-gray-700">
-                                    <strong>Scholarship Title:</strong> {programDetails.title}<br />
-                                    <strong>Description:</strong> {programDetails.description}<br />
-                                    <strong>Amount:</strong> {programDetails.amount}<br />
-                                    <strong>Slots Filled:</strong> {programDetails.slotsFilled}<br />
-                                    <strong>Total Slots:</strong> {programDetails.totalSlots}<br />
-                                    <strong>Duration:</strong> {programDetails.duration}<br />
-                                    <strong>Category:</strong> {programDetails.category}<br />
-                                    <strong>Type:</strong> {programDetails.type}<br />
-                                    <strong>Academic Requirements:</strong> {programDetails.academicRequirements}<br />
-                                    <strong>Field of Study:</strong> {programDetails.fieldOfStudy}<br />
-                                    <strong>Level of Education:</strong> {programDetails.levelOfEducation}<br />
-                                    <strong>Location:</strong> {programDetails.location}<br />
-                                    <strong>Application Start Date:</strong> {new Date(programDetails.applicationStartDate).toLocaleDateString()}<br />
-                                    <strong>Application End Date:</strong> {new Date(programDetails.applicationEndDate).toLocaleDateString()}<br />
-                                    <strong>Notification Date:</strong> {new Date(programDetails.notificationDate).toLocaleDateString()}<br />
-                                    <strong>Coverage:</strong> {programDetails.coverage}<br />
-                                    <strong>Contact Person:</strong> {programDetails.contactPerson}<br />
-                                    <strong>Status:</strong> {programDetails.status}<br />
-                                    <strong>Date Posted:</strong> {new Date(programDetails.datePosted).toLocaleDateString()}
-                                </p>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="bg-gray-100 p-4 rounded-lg">
+                                        <strong>Scholarship Title:</strong> {scholarshipProgram.title}
+                                    </div>
+                                    <div className="bg-gray-100 p-4 rounded-lg">
+                                        <strong>Amount:</strong> {scholarshipProgram.amount}
+                                    </div>
+                                    <div className="bg-gray-100 p-4 rounded-lg">
+                                        <strong>Slots Filled:</strong> {scholarshipProgram.numberOfScholarshipsSlotFilled}
+                                    </div>
+                                    <div className="bg-gray-100 p-4 rounded-lg">
+                                        <strong>Total Slots:</strong> {scholarshipProgram.numberOfScholarships}
+                                    </div>
+                                    <div className="bg-gray-100 p-4 rounded-lg">
+                                        <strong>Duration:</strong> {scholarshipProgram.renewalDuration}
+                                    </div>
+                                    <div className="bg-gray-100 p-4 rounded-lg">
+                                        <strong>Category:</strong> {scholarshipProgram.category}
+                                    </div>
+                                    <div className="bg-gray-100 p-4 rounded-lg">
+                                        <strong>Type:</strong> {scholarshipProgram.selectionProcess}
+                                    </div>
+                                    <div className="bg-gray-100 p-4 rounded-lg">
+                                        <strong>Academic Requirements:</strong> {scholarshipProgram.minGPA}
+                                    </div>
+                                    <div className="bg-gray-100 p-4 rounded-lg">
+                                        <strong>Field of Study:</strong> {scholarshipProgram.fieldOfStudy}
+                                    </div>
+                                    <div className="bg-gray-100 p-4 rounded-lg">
+                                        <strong>Level of Education:</strong> {scholarshipProgram.selectionCriteria}
+                                    </div>
+                                    <div className="bg-gray-100 p-4 rounded-lg">
+                                        <strong>Location:</strong> {scholarshipProgram.nationality}
+                                    </div>
+                                    <div className="bg-gray-100 p-4 rounded-lg">
+                                        <strong>Application Start Date:</strong> {new Date(scholarshipProgram.startDate).toLocaleDateString()}
+                                    </div>
+                                    <div className="bg-gray-100 p-4 rounded-lg">
+                                        <strong>Application End Date:</strong> {new Date(scholarshipProgram.endDate).toLocaleDateString()}
+                                    </div>
+                                    <div className="bg-gray-100 p-4 rounded-lg">
+                                        <strong>Notification Date:</strong> {new Date(scholarshipProgram.applicationDeadline).toLocaleDateString()}
+                                    </div>
+                                    <div className="bg-gray-100 p-4 rounded-lg">
+                                        <strong>Coverage:</strong> {scholarshipProgram.renewalPolicy}
+                                    </div>
+                                    <div className="bg-gray-100 p-4 rounded-lg">
+                                        <strong>Contact Person:</strong> {scholarshipProgram.contactEmail}
+                                    </div>
+                                    <div className="bg-gray-100 p-4 rounded-lg">
+                                        <strong>Status:</strong> {scholarshipProgram.status}
+                                    </div>
+                                    <div className="bg-gray-100 p-4 rounded-lg">
+                                        <strong>Date Posted:</strong> {new Date(scholarshipProgram.startDate).toLocaleDateString()}
+                                    </div>
+                                </div>
                                 {/* Additional details can be included here */}
                             </div>
                         )}
-
                         {activeTab === 'edit' && (
                             <div className="p-6 bg-white rounded-lg shadow-md">
                                 <h2 className="text-2xl font-bold mb-4 text-blue-600">Edit Program</h2>
@@ -198,21 +269,33 @@ export default function ViewScholarshipDetails() {
                         {activeTab === 'applications' && (
                             <div className="p-6 bg-white rounded-lg shadow-md">
                                 <h2 className="text-2xl font-bold mb-4 text-blue-600">Scholar Applications</h2>
-                                <p className="text-gray-700">
+                                <p className="text-gray-700 mb-5">
                                     Manage and review applications from scholars here.
                                 </p>
-                                <ul className="list-disc pl-5">
-                                    {applications.map((application) => (
-                                        <li key={application.id} className="mb-4">
-                                            <strong>{application.scholarName}</strong><br />
-                                            <span className="text-gray-600">Status: {application.status}</span><br />
-                                            <span className="text-gray-600">Applied On: {new Date(application.appliedOn).toLocaleDateString()}</span><br />
-                                            <Link to={`/applications/${application.id}`} className="text-blue-600 hover:underline">
-                                                View Details
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
+                                <table className="min-w-full bg-white rounded-lg shadow-md">
+                                    <thead>
+                                        <tr>
+                                            <th className="py-2 px-4 border-b">Name</th>
+                                            <th className="py-2 px-4 border-b">Status</th>
+                                            <th className="py-2 px-4 border-b">Applied On</th>
+                                            <th className="py-2 px-4 border-b">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {applications.map(application => (
+                                            <tr key={application._id} className="hover:bg-gray-100 text-center">
+                                                <td className="py-2 px-4 border-b">{`${application.firstName} ${application.lastName}`}</td>
+                                                <td className="py-2 px-4 border-b">{application.applicationStatus}</td>
+                                                <td className="py-2 px-4 border-b">{new Date(application.appliedOn).toLocaleDateString()}</td>
+                                                <td className="py-2 px-4 border-b">
+                                                    <Link to={`/applications/${application._id}`} className="text-blue-600 hover:underline">
+                                                        View Details
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
                         )}
                     </div>

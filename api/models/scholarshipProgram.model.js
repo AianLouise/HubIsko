@@ -6,6 +6,7 @@ const scholarshipProgramSchema = new mongoose.Schema({
   category: { type: String },
   fieldOfStudy: { type: String },
   numberOfScholarships: { type: String },
+  numberOfScholarshipsSlotFilled: { type: String ,default: '0'},
   amount: { type: String },
   applicationDeadline: { type: String },
   minGPA: { type: String },
@@ -48,6 +49,14 @@ const scholarshipProgramSchema = new mongoose.Schema({
       url: { type: String, required: true }
     }
   ], // Array of provider requirements with id and url
+  status: { type: String, default: 'Pending Approval' }, // Added status field
+  approvedScholars: [
+    {
+      scholarId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      dateApproved: { type: Date, default: Date.now }
+    }
+  ], // Array of approved scholars with scholarId and dateApproved
+  dateCreated: { type: Date, default: Date.now } // Added dateCreated field
 });
 
 // Models

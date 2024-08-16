@@ -51,6 +51,7 @@ import ScholarshipsData from "./pages/Admin/ScholarshipsData";
 import ScholarshipsDataDetails from "./pages/Admin/ScholarshipsDataDetails";
 import ScholarshipsDataDisplay from "./pages/Admin/ScholarshipsDataDisplay";
 import ViewScholarshipDetails from "./pages/Scholarship-Provider/ViewScholarshipDetails";
+import ViewApplicationDetails from "./pages/Scholarship-Provider/ViewApplicationDetails";
 
 
 
@@ -126,6 +127,9 @@ export default function App() {
         <Route element={<ProviderPrivateRoute allowedRoles={['scholarship_provider']} />}>
           <Route path="/provider-dashboard" element={<ProviderDashboard />} />
         </Route>
+
+        <Route path="/applications/:id" element={<ViewApplicationDetails />} />
+
 
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
