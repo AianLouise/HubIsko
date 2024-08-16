@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import OAuth from '../components/OAuth';
-import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -20,25 +19,8 @@ export default function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [logoUrl, setLogoUrl] = useState('');
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchLogoUrl = async () => {
-      const storage = getStorage();
-      const logoRef = ref(storage, '/System Files/logo.jpg'); // Update the path to your logo
-      try {
-        const url = await getDownloadURL(logoRef);
-        setLogoUrl(url);
-      } catch (error) {
-        console.error('Failed to fetch logo:', error);
-        // Handle any errors or set a default logo if needed
-      }
-    };
-
-    fetchLogoUrl();
-  }, []);
 
   useEffect(() => {
     if (error) {
