@@ -829,14 +829,14 @@ export default function ApplyingStages() {
 
                                 <div className='flex gap-5'>
                                 <button
-                                className={`border text-center rounded-xl px-16 py-4 ${selectedTab === 'Parents' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
+                                className={`border text-center rounded-xl px-16 py-4 ${selectedTab === 'Parents' ? 'bg-white text-blue-600 shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
                                 onClick={() => handleTabClick('Parents')}
                                 >
                                 I am guided by my Parents
                                 </button>
 
                                 <button
-                                className={`border text-center rounded-xl px-16 py-4 ${selectedTab === 'Guardians' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
+                                className={`border text-center rounded-xl px-16 py-4 ${selectedTab === 'Guardians' ? 'bg-white text-blue-600 shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
                                 onClick={() => handleTabClick('Guardians')}
                                 >
                                 I am guided by my Guardian(s)
