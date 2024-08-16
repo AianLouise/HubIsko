@@ -81,7 +81,7 @@ export default function Scholarships() {
                   <div
                     className='w-full h-36 rounded-t-md'
                     style={{
-                      backgroundImage: `url(${scholarship.scholarshipBanner})`,
+                      backgroundImage: `url(${scholarship.bannerImage})`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center'
                     }}
@@ -89,8 +89,8 @@ export default function Scholarships() {
                   <div className='p-4'>
                     <div className='flex justify-between items-center'>
                       <h1 className='text-lg font-bold text-gray-800'>{scholarship.title}</h1>
-                      <span className={`text-lg ${scholarship.slotsFilled === scholarship.totalSlots ? 'text-red-600' : ''} ${scholarship.status === 'Pending Approval' ? 'text-yellow-500' : ''} ${scholarship.status === 'Active' ? 'text-green-500' : ''} ${scholarship.status === 'Closed' ? 'text-gray-500' : ''} ${scholarship.status === 'Archived' ? 'text-blue-500' : ''} ${scholarship.status === 'Cancelled' ? 'text-red-500' : ''} ${scholarship.status === 'Completed' ? 'text-purple-500' : ''}`}>
-                        {scholarship.status === 'Pending Approval' ? 'Pending Approval' : `${scholarship.slotsFilled}/${scholarship.totalSlots}`}
+                      <span className={`text-lg ${scholarship.numberOfScholarshipsSlotFilled === scholarship.numberOfScholarships ? 'text-red-600' : ''} ${scholarship.status === 'Pending Approval' ? 'text-yellow-500' : ''} ${scholarship.status === 'Active' ? 'text-green-500' : ''} ${scholarship.status === 'Closed' ? 'text-gray-500' : ''} ${scholarship.status === 'Archived' ? 'text-blue-500' : ''} ${scholarship.status === 'Cancelled' ? 'text-red-500' : ''} ${scholarship.status === 'Completed' ? 'text-purple-500' : ''}`}>
+                        {scholarship.status === 'Pending Approval' ? 'Pending Approval' : `${scholarship.numberOfScholarshipsSlotFilled}/${scholarship.numberOfScholarships}`}
                       </span>
                     </div>
                     <span className='text-slate-600'>{scholarship.amount}</span>

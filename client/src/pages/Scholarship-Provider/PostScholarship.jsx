@@ -20,9 +20,6 @@ export default function PostScholarship() {
   // Firebase storage reference
   const storage = getStorage();
 
-  const [scholarshipImage, setScholarshipImage] = useState('https://via.placeholder.com/150');
-  const fileInputRef = useRef(null);
-
   const [formData, setFormData] = useState({
     title: '',
     category: '',
@@ -62,13 +59,20 @@ export default function PostScholarship() {
     });
   };
 
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedBanner, setSelectedBanner] = useState(null);
-  const [imageError, setImageError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [scholarshipImage, setScholarshipImage] = useState('https://via.placeholder.com/150');
+  const fileInputRef = useRef(null);
 
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setScholarshipImage(reader.result);
+        setErrorMessage(''); // Clear error message on successful image upload
+      };
+      reader.readAsDataURL(file);
+
       // Create a reference for the image in Firebase Storage
       const imageRef = ref(storage, `images/${file.name}`);
       try {
@@ -77,10 +81,14 @@ export default function PostScholarship() {
         // Get the download URL
         const imageUrl = await getDownloadURL(imageRef);
         setScholarshipImage(imageUrl); // Use the URL from Firebase Storage
-        setImageError(false);
+
+        // Update the form data
+        setFormData((prevData) => ({
+          ...prevData,
+          scholarshipImage: imageUrl,
+        }));
       } catch (error) {
         console.error("Error uploading image:", error);
-        setImageError(true);
       }
     }
   };
@@ -91,10 +99,18 @@ export default function PostScholarship() {
 
   const [bannerImage, setBannerImage] = useState('https://via.placeholder.com/600x200');
   const bannerFileInputRef = useRef(null);
+  const [errorMessage2, setErrorMessage2] = useState('');
 
   const handleBannerImageChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        bannerImage(reader.result);
+        setErrorMessage2(''); // Clear error message on successful image upload
+      };
+      reader.readAsDataURL(file);
+
       // Create a reference for the banner image in Firebase Storage
       const bannerRef = ref(storage, `banners/${file.name}`);
       try {
@@ -103,7 +119,12 @@ export default function PostScholarship() {
         // Get the download URL
         const bannerUrl = await getDownloadURL(bannerRef);
         setBannerImage(bannerUrl); // Use the URL from Firebase Storage
-        setSelectedBanner(file);
+
+        // Update the form data
+        setFormData((prevData) => ({
+          ...prevData,
+          bannerImage: bannerUrl,
+        }));
       } catch (error) {
         console.error("Error uploading banner image:", error);
       }
@@ -115,7 +136,37 @@ export default function PostScholarship() {
   };
 
   const handleNextPage = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
+    const form = document.querySelector('form');
+    if (form.reportValidity()) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+
+    if (!validateDocuments()) {
+      return; // Prevent moving to the next page if validation fails
+    }
+
+    // if (formData.scholarshipImage === '') {
+    //   setImageError(true);
+    //   return;
+    // }
+  };
+
+  const handleNextPageImage = () => {
+    const form = document.querySelector('form');
+
+    if (formData.scholarshipImage === '') {
+      setErrorMessage('Please upload an image.');
+    } else if (formData.bannerImage === '') {
+      setErrorMessage2('Please upload an image.');
+    } else {
+      if (form.reportValidity()) {
+        setCurrentPage((prevPage) => prevPage + 1);
+      }
+
+      if (!validateDocuments()) {
+        return; // Prevent moving to the next page if validation fails
+      }
+    }
   };
 
   const handlePreviousPage = () => {
@@ -201,11 +252,12 @@ export default function PostScholarship() {
 
   const [documents, setDocuments] = useState([
     { id: 'transcript', name: 'Transcript of Records', required: false, editable: false },
-    { id: 'resume', name: 'Resume/CV', required: false, editable: false },
     { id: 'recommendation', name: 'Recommendation Letters', required: false, editable: false },
     { id: 'essay', name: 'Personal Statement/Essay', required: false, editable: false },
     { id: 'enrollment', name: 'Proof of Enrollment', required: false, editable: false },
   ]);
+
+  const [documentError, setDocumentError] = useState(false);
 
   const handleDocumentChange = (index, field, value) => {
     const updatedDocuments = [...documents];
@@ -223,6 +275,16 @@ export default function PostScholarship() {
   const handleAddDocument = () => {
     const newDocument = { id: Date.now(), name: '', required: false, editable: true };
     setDocuments([...documents, newDocument]);
+  };
+
+  const validateDocuments = () => {
+    const isAnyDocumentSelected = documents.some(doc => doc.required);
+    if (!isAnyDocumentSelected) {
+      setDocumentError(true);
+      return false;
+    }
+    setDocumentError(false);
+    return true;
   };
 
   const [requirements, setRequirements] = useState([
@@ -582,9 +644,12 @@ export default function PostScholarship() {
                         placeholder="Document Name"
                         className="border border-gray-300 rounded-md p-2 flex-grow"
                         readOnly={!doc.editable}
+                        required
                       />
                     </div>
                   ))}
+
+                  {documentError && <p className="text-red-600 mt-2">At least one document must be selected.</p>}
 
                   <button
                     type="button"
@@ -604,6 +669,7 @@ export default function PostScholarship() {
                     placeholder="Provide any additional instructions or guidelines for document submission"
                     rows="4"
                     onChange={handleChange}
+                    required
                   ></textarea>
                 </div>
 
@@ -631,22 +697,24 @@ export default function PostScholarship() {
                 <main className='flex-grow bg-[#f8f8fb] font-medium'>
                   <div className='border-b mb-8 py-8'>
                     <div className='flex flex-row items-center mx-auto max-w-6xl gap-10 px-24'>
-                      <div className='bg-blue-600 w-36 h-36 my-8 rounded-md flex justify-center items-center relative overflow-hidden'>
-                        <img
-                          src={scholarshipImage || 'placeholder-image-url'}
-                          alt='Scholarship Logo'
-                          className='w-full h-full object-cover rounded-md'
-                          onClick={handleImageClick}
-                          style={{ cursor: 'pointer', opacity: scholarshipImage ? 1 : 0.3 }}
-                        />
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleImageChange}
-                          ref={fileInputRef}
-                          style={{ display: 'none' }}
-                        />
-                        {imageError && <p className="text-red-600 mt-1 ml-2">Image is required.</p>}
+                      <div className='flex flex-col items-center'>
+                        <div className='bg-blue-600 w-36 h-36 my-2 rounded-md flex justify-center items-center relative overflow-hidden'>
+                          <img
+                            src={scholarshipImage || 'placeholder-image-url'}
+                            alt='Scholarship Logo'
+                            className='w-full h-full object-cover rounded-md'
+                            onClick={handleImageClick}
+                            style={{ cursor: 'pointer', opacity: scholarshipImage ? 1 : 0.3 }}
+                          />
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            ref={fileInputRef}
+                            style={{ display: 'none' }}
+                          />
+                        </div>
+                        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                       </div>
 
                       <div className='flex flex-col gap-2 w-1/2'>
@@ -667,7 +735,7 @@ export default function PostScholarship() {
                       </div>
                     </div>
 
-                    <div className='max-w-6xl px-24 mx-auto mb-20'>
+                    <div className='max-w-6xl px-24 mx-auto mb-20 mt-3'>
                       <div className='flex gap-2'>
                         <span className='flex gap-1 bg-white border px-4 py-2 rounded-md shadow'>
                           <MdOutlineRefresh className='w-6 h-6 text-blue-600' />
@@ -694,6 +762,7 @@ export default function PostScholarship() {
                           style={{ display: 'none' }}
                         />
                       </div>
+                      {errorMessage2 && <p className="text-red-500 text-center">{errorMessage2}</p>}
 
                       <div>
                         {sections.map(section => (
@@ -704,6 +773,7 @@ export default function PostScholarship() {
                                 value={section.title}
                                 onChange={(e) => handleEdit(section.id, 'title', e.target.value)}
                                 className='font-bold text-xl text-white bg-blue-600 flex-grow'
+                                required
                               />
                               <button onClick={() => handleDelete(section.id)} className='text-white bg-red-500 ml-4 p-2 rounded-md'>
                                 Delete
@@ -713,6 +783,7 @@ export default function PostScholarship() {
                               value={section.content}
                               onChange={(e) => handleEdit(section.id, 'content', e.target.value)}
                               className='text-sm p-4'
+                              required
                             />
                           </div>
                         ))}
@@ -728,11 +799,13 @@ export default function PostScholarship() {
                           value={formData.faqTitle}
                           onChange={(e) => handleFormDataChange('faqTitle', e.target.value)}
                           className="font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md"
+                          required
                         />
                         <textarea
                           value={formData.faqDescription}
                           onChange={(e) => handleFormDataChange('faqDescription', e.target.value)}
                           className="text-sm p-4"
+                          required
                         />
 
                         <div className='border mx-8'></div>
@@ -803,7 +876,7 @@ export default function PostScholarship() {
                   <button
                     type="button"
                     className="bg-blue-500 text-white py-2 px-4 rounded-md w-32"
-                    onClick={handleNextPage}
+                    onClick={handleNextPageImage}
                   >
                     Next
                   </button>
