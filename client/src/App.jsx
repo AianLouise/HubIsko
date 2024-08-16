@@ -68,36 +68,9 @@ export default function App() {
         <Route path="/verify-your-email" element={<VerifyYourEmail />} />
         <Route path="/resend-verification-email" element={<VerifyYourEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/CoRH" element={<CompleteOrReturnHome />} />
 
-        <Route path="/forums" element={<Forums />} />
-        <Route path="/others-profile" element={<OthersProfile />} />
-        <Route path="/forums/post/:postId" element={<ForumDetail />} />
-        <Route path="/forums/create-post" element={<CreateForumPost />} />
-
-
-
-        <Route path="/scholarship-listing" element={<ScholarshipListing />} />
-        <Route path="/scholarship-details/:id" element={<ApplicationDetails />} />
-        <Route path="/applying-stages/:scholarshipId" element={<ApplyingStages />} />
-        <Route path="/application-box" element={<ApplicationBox />} />
-        <Route path="/application-detail/:id" element={<InboxedApplicationDetail />} />
-        <Route path="/student-info" element={<StudentInfo />} />
-        <Route path="/profile-preview" element={<ProfilePreview />} />
-        <Route path="/post-details" element={<PostDetails />} />
-        <Route path="/scholarships" element={<Scholarships />} />
-        <Route path="/view-scholarships/:id" element={<ViewScholarshipDetails />} />
-
-        <Route path="/scholar-applications" element={<ScholarApplications />} />
-        <Route path="/provider-forums" element={<ProviderForums />} />
-        <Route path="/provider-forums/post/:postId" element={<ProviderForumDetail />} />
-        <Route path="/preview-profile" element={<PreviewProfile />} />
-        <Route path="/post-scholarship" element={<PostScholarship />} />
-
-
-
-        <Route path="/" element={<Layout />}>
+        {/* Admin Routes */}
+        <Route element={<ProviderPrivateRoute allowedRoles={['admin']} />}>
           <Route path="admin-home" element={<AdminHome />} />
           <Route path="accounts" element={<Accounts />} />
           <Route path="students" element={<Students />} />
@@ -112,31 +85,45 @@ export default function App() {
           {/* Add other routes here */}
         </Route>
 
+        {/* Provider Routes */}
+        <Route element={<ProviderPrivateRoute allowedRoles={['scholarship_provider']} />}>
+          <Route path="/provider-dashboard" element={<ProviderDashboard />} />
+          <Route path="/post-scholarship" element={<PostScholarship />} />
+          <Route path="/scholar-applications" element={<ScholarApplications />} />
+          <Route path="/scholarships" element={<Scholarships />} />
+          <Route path="/provider-forums" element={<ProviderForums />} />
+          <Route path="/provider-forums/post/:postId" element={<ProviderForumDetail />} />
+          <Route path="/applications/:id" element={<ViewApplicationDetails />} />
+          <Route path="/view-scholarships/:id" element={<ViewScholarshipDetails />} />
+        </Route>
 
-
-
-
-
-        <Route element={<PrivateRoute />}>
+        {/* Scholar Routes */}
+        <Route element={<PrivateRoute allowedRoles={['applicant']} />}>
           <Route path='/profile' element={<Profile />} />
           <Route path="/complete-profile" element={<CompleteProfile />} />
           <Route path="/complete-profile-confirmation" element={<CompleteProfileConfirmation />} />
           <Route path="/scholar-dashboard" element={<ScholarDashboard />} />
+          <Route path="/account-management" element={<AccountManagement />} />
+          <Route path="/password-and-security" element={<PasswordAndSecurity />} />
+          <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/CoRH" element={<CompleteOrReturnHome />} />
+          <Route path="/forums" element={<Forums />} />
+          <Route path="/others-profile" element={<OthersProfile />} />
+          <Route path="/forums/post/:postId" element={<ForumDetail />} />
+          <Route path="/forums/create-post" element={<CreateForumPost />} />
+          <Route path="/scholarship-listing" element={<ScholarshipListing />} />
+          <Route path="/scholarship-details/:id" element={<ApplicationDetails />} />
+          <Route path="/applying-stages/:scholarshipId" element={<ApplyingStages />} />
+          <Route path="/application-box" element={<ApplicationBox />} />
+          <Route path="/application-detail/:id" element={<InboxedApplicationDetail />} />
+          <Route path="/student-info" element={<StudentInfo />} />
+          <Route path="/profile-preview" element={<ProfilePreview />} />
+          <Route path="/post-details" element={<PostDetails />} />
+          <Route path="/preview-profile" element={<PreviewProfile />} />
         </Route>
-
-        <Route element={<ProviderPrivateRoute allowedRoles={['scholarship_provider']} />}>
-          <Route path="/provider-dashboard" element={<ProviderDashboard />} />
-        </Route>
-
-        <Route path="/applications/:id" element={<ViewApplicationDetails />} />
-
 
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
-
-        <Route path="/account-management" element={<AccountManagement />} />
-        <Route path="/password-and-security" element={<PasswordAndSecurity />} />
-        <Route path="/change-password" element={<ChangePassword />} />
-
 
       </Routes>
     </BrowserRouter >
