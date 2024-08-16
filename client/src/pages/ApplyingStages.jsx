@@ -569,6 +569,20 @@ export default function ApplyingStages() {
                                 </div>
 
                                 <div>
+                                    <label className='block text-sm font-medium text-gray-700 mb-2'>Birthplace</label>
+                                    <input
+                                        type="text"
+                                        name="birthplace"
+                                        value={formData.birthplace}
+                                        onChange={handleChange}
+                                        required
+                                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                        placeholder="Enter birthplace"
+                                    />
+                                </div>
+
+
+                                <div>
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>Gender</label>
                                     <select
                                         name="gender"
@@ -678,45 +692,45 @@ export default function ApplyingStages() {
                                     </select>
                                 </div>
 
-                                <div>
-                                    <label className='block text-sm font-medium text-gray-700 mb-2'>Height</label>
+                                <div className='flex flex-col'>
+                                    <label className='block text-sm font-medium text-slate-700 mb-2'>Height and Weight</label>
+                                    <div className='flex gap-2'>
                                     <input
                                         type="number"
                                         name="height"
                                         value={formData.height}
                                         onChange={handleChange}
                                         required
-                                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        placeholder="Enter height in cm"
+                                        className='text-sm standard-input border border-gray-300 rounded-md p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                        placeholder="Height in cm"
                                     />
-                                </div>
-
-                                <div>
-                                    <label className='block text-sm font-medium text-gray-700 mb-2'>Weight</label>
+                                   
                                     <input
                                         type="number"
                                         name="weight"
                                         value={formData.weight}
                                         onChange={handleChange}
                                         required
-                                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        placeholder="Enter weight in kg"
+                                        className='text-sm standard-input border border-gray-300 rounded-md p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                        placeholder="Weight in kg"
                                     />
+                                    </div>
                                 </div>
 
                                 <div>
-                                    <label className='block text-sm font-medium text-gray-700 mb-2'>Birthplace</label>
+                                <label className='block text-sm font-medium text-gray-700 mb-2'>Email</label>
                                     <input
-                                        type="text"
-                                        name="birthplace"
-                                        value={formData.birthplace}
+                                        type="eml"
+                                        name="email"
+                                        value={formData.email}
                                         onChange={handleChange}
                                         required
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        placeholder="Enter birthplace"
+                                        placeholder="Enter email"
                                     />
                                 </div>
 
+                      
                                 <div>
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>Contact Number</label>
                                     <input
