@@ -52,6 +52,7 @@ import ScholarshipsDataDetails from "./pages/Admin/ScholarshipsDataDetails";
 import ScholarshipsDataDisplay from "./pages/Admin/ScholarshipsDataDisplay";
 import ViewScholarshipDetails from "./pages/Scholarship-Provider/ViewScholarshipDetails";
 import ViewApplicationDetails from "./pages/Scholarship-Provider/ViewApplicationDetails";
+import EditProgramPage from "./pages/Scholarship-Provider/EditProgramPage";
 
 
 
@@ -95,6 +96,7 @@ export default function App() {
           <Route path="/provider-forums/post/:postId" element={<ProviderForumDetail />} />
           <Route path="/applications/:id" element={<ViewApplicationDetails />} />
           <Route path="/view-scholarships/:id" element={<ViewScholarshipDetails />} />
+          <Route path="/edit-program/:id" element={<EditProgramPage />} />
         </Route>
 
         {/* Scholar Routes */}

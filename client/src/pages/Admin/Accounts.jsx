@@ -4,11 +4,13 @@ import { BiFilter } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { PiArrowRightFill } from "react-icons/pi";
 import { GoDotFill } from "react-icons/go";
+import Layout from "../../components/Layout";
 
 export default function Accounts() {
 
     return (
         <div className="flex flex-col min-h-screen font-medium text-slate-700">
+            <Layout />
          <main className="flex-grow bg-[#f8f8fb]">
             <div className='border-b mb-8'>
                     <div className={'flex items-center mx-auto justify-between px-24'}>

@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { BiFilter } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import Layout from "../../components/Layout";
 
 
 export default function Students() {
 
     return (
         <div className="flex flex-col min-h-screen">
-            
+            <Layout />
         <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
         <div className='border-b mb-8'>
           <div className={'flex items-center mx-auto justify-between px-24'}>

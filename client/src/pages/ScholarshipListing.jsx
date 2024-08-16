@@ -117,7 +117,7 @@ export default function ScholarshipListing() {
               <FaRedo className='w-5 h-5 text-blue-600 group-hover:rotate-180 transition ease-in-out' />
             </button>
           </div>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-4 text-slate-700'>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-700'>
             {scholarships.map((scholarship) => (
               <div key={scholarship.id} className='border bg-white rounded-lg pt-4 px-4 shadow-sm gap-2 mb-10 hover:-translate-y-1 transition ease-in-out'>
 

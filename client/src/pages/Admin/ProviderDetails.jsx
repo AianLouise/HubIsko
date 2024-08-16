@@ -7,6 +7,7 @@ import { BiCheck } from "react-icons/bi";
 import { FaRegHeart } from "react-icons/fa";
 import { BiCommentDots } from "react-icons/bi";
 import { FaRegEye } from "react-icons/fa";
+import Layout from "../../components/Layout";
 
 export default function ProviderDetails() {
 
@@ -18,6 +19,7 @@ export default function ProviderDetails() {
 
     return(
         <div className="flex flex-col min-h-screen font-medium text-slate-700">
+          <Layout />
         <main className="flex-grow bg-[#f8f8fb] pb-24">
 
         <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex mt-16'>

@@ -8,6 +8,7 @@ import { MdOutlineRefresh } from "react-icons/md";
 import { FaRegCalendarXmark } from "react-icons/fa6";
 import { BsGlobe2 } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa";
+import Layout from "../../components/Layout";
 
 
 export default function ScholarshipsDataDisplay() {
@@ -84,6 +85,7 @@ export default function ScholarshipsDataDisplay() {
 
     return (
         <div className="flex flex-col min-h-screen font-medium text-slate-700">
+            <Layout />
         <main className="flex-grow bg-[#f8f8fb] pb-40">
 
         <div className="flex gap-2 items-center max-w-8xl mx-auto px-24 mt-16">
