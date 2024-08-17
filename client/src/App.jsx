@@ -71,6 +71,8 @@ export default function App() {
         <Route path="/resend-verification-email" element={<VerifyYourEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
+        <Route path="/scholarship-listing" element={<ScholarshipListing />} />
+
         {/* Admin Routes */}
         <Route element={<ProviderPrivateRoute allowedRoles={['admin']} />}>
           <Route path="admin-home" element={<AdminHome />} />
@@ -116,7 +118,7 @@ export default function App() {
           <Route path="/others-profile" element={<OthersProfile />} />
           <Route path="/forums/post/:postId" element={<ForumDetail />} />
           <Route path="/forums/create-post" element={<CreateForumPost />} />
-          <Route path="/scholarship-listing" element={<ScholarshipListing />} />
+
           <Route path="/scholarship-details/:id" element={<ApplicationDetails />} />
           <Route path="/applying-stages/:scholarshipId" element={<ApplyingStages />} />
           <Route path="/application-box" element={<ApplicationBox />} />
