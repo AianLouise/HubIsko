@@ -5,9 +5,20 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { signOut } from '../redux/user/userSlice';
 import { IoIosNotifications } from "react-icons/io";
-import { IoChatbubblesSharp, IoSadOutline } from "react-icons/io5";
+import { IoChatbubblesSharp, IoSadOutline, IoMenu } from "react-icons/io5";
 import { IoClose } from "react-icons/io5";
 import { BsThreeDots } from "react-icons/bs";
+import { GoHomeFill } from 'react-icons/go';
+import { MdDashboard } from "react-icons/md";
+import { FaGoogleScholar, FaDoorOpen } from "react-icons/fa6";
+import { BsChatLeftTextFill } from "react-icons/bs";
+import { IoPersonCircleSharp, IoInformationCircle } from "react-icons/io5";
+import { useLocation } from 'react-router-dom';
+
+
+
+
+
 
 
 export default function Header() {
@@ -32,13 +43,16 @@ export default function Header() {
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   const ShowModal = () => setShowModal(!showModal);
 
   const toggleDropdown = () => setShowDropdown(!showDropdown);
   const toggleNotification = () => setShowNotification(!showNotification);
+  const toggleSidebar = () => setSidebarVisible(!sidebarVisible);
   const [showModal, setShowModal] = useState(false);
 
 
+  const location = useLocation();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -53,19 +67,110 @@ export default function Header() {
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
+  
+
   const toggleDropdown2 = () => {
     setDropdownVisible(!dropdownVisible);
   };
 
   return (
     <div className='border-b bg-[#f8f8fb] shadow-sm'>
-      <div className='flex justify-between text-md max-w-6xl mx-auto p-6 px-20'>
+      <div className='flex justify-between text-md max-w-6xl mx-auto p-6 lg:px-20'>
         <Link to='/' className='flex items-center'>
           <div className='bg-blue-600 w-10 h-10 rounded-md mx-2'></div>
           <h1 className='font-bold text-2xl hover:text-slate-600 ease-in-out transition-colors'>HubIsko</h1>
         </Link>
 
-        <ul className='flex gap-6 font-bold text-slate-600'>
+        <div className='flex items-center gap-4 md:hidden'>
+          <button onClick={toggleNotification} className="flex items-center text-white p-1.5 bg-blue-600 rounded-full"><IoIosNotifications className="w-6 h-6" /></button>
+          <button className="bg-blue-600 text-white rounded-md p-2" onClick={toggleSidebar}><IoMenu className="w-6 h-6" /></button>
+        </div>
+
+        <div className={`fixed shadow-lg inset-0 z-50 flex justify-end transition-transform transform ${sidebarVisible ? 'translate-x-0' : 'translate-x-full'}`}>
+          <div className="bg-white shadow-lg border w-64 p-4 h-full">
+
+            <div className='mb-4 pb-4 border-b flex justify-between items-center'>
+            <span className='font-bold text-slate-700 text-lg'>Sidebar</span>
+            <button className="bg-blue-600 text-white p-1.5 rounded-full" onClick={toggleSidebar}><IoClose className="w-5 h-5" /></button>
+            </div>
+            
+            <ul className='flex flex-col gap-4 p-2 text-white font-medium'>
+
+            <Link to='/'>
+                  <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/' ? 'bg-blue-600' : 'bg-slate-500'}`}>
+                    <GoHomeFill className='w-5 h-5' />Home
+                  </li>
+            </Link>
+
+            {currentUser && currentUser.role === 'applicant' && (
+            <Link to='/scholar-dashboard'>
+              <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/scholar-dashboard' ? 'bg-blue-600' : 'bg-slate-500'}`}>
+              
+            <MdDashboard className='w-5 h-5'/>Scholar Dashboard
+            </li></Link>
+            )}
+
+            <Link to='/scholarship-listing'>
+            <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/scholarship-listing' ? 'bg-blue-600' : 'bg-slate-500'}`}>
+              
+            <FaGoogleScholar className='w-5 h-5'/>Scholarship Listing
+              </li></Link>
+
+            <Link to='/forums'>
+              <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/forums' ? 'bg-blue-600' : 'bg-slate-500'}`}>
+               
+            <BsChatLeftTextFill className='w-5 h-5'/>Forums
+              </li></Link>
+
+            {currentUser ? (
+            
+            <li className='flex flex-col gap-4 text-white font-medium'>
+            <Link to="/profile" 
+            className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/profile' ? 'bg-blue-600' : 'bg-slate-500'}`}>
+
+            <IoPersonCircleSharp className='w-5 h-5'/>Manage Account
+            </Link>
+
+            <Link to='/about'>
+            <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/about' ? 'bg-blue-600' : 'bg-slate-500'}`}>
+              
+            <IoInformationCircle className='w-5 h-5'/>About
+              </li></Link>
+
+            <button onClick={handleSignOut} className="border-2 text-slate-700 px-4 p-2 text-left rounded-md flex items-center gap-2">
+              
+            <FaDoorOpen className='w-5 h-5'/>Sign Out</button>
+            </li>
+
+             ) : (
+                <>
+                <Link to='/login'><li className='border p-2 px-4 text-slate-700 rounded-md hover:bg-slate-200'>Login</li></Link>
+                  <div className="relative">
+                    <li className='bg-blue-600 text-white p-2 px-4 rounded-md hover:bg-blue-800 cursor-pointer' onClick={toggleDropdown2}>
+                      Register
+                    </li>
+                    {dropdownVisible && (
+                      <ul className="text-left absolute bg-white shadow-lg rounded-lg mt-2 w-56 left-1/2 transform -translate-x-1/2 border border-gray-200">
+                        <Link to='/register'>
+                          <li className='p-2 px-4 hover:bg-slate-200 text-slate-700 cursor-pointer'>Register as Student</li>
+                        </Link>
+                        <Link to='/apply-as-provider'>
+                          <li className='p-2 px-4 hover:bg-slate-200 text-slate-700 cursor-pointer'>Register as Scholarship Provider</li>
+                        </Link>
+                      </ul>
+                    )}
+                  </div>
+                </>
+              )}
+
+            </ul>
+            
+ 
+          </div>
+        </div>
+
+
+        <ul className='lg:flex hidden gap-6 font-bold text-slate-600'>
           <Link to='/'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>Home</li></Link>
 
           {currentUser && currentUser.role === 'applicant' && (
@@ -154,6 +259,8 @@ export default function Header() {
           )}
         </ul>
       </div>
+
+      
 
 
       {/* NOTIFICATION MODAL */}

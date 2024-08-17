@@ -5,17 +5,29 @@ import { FaAngleRight } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FaSearch } from "react-icons/fa";
+import { FaFastForward } from "react-icons/fa";
+import { FaTools } from "react-icons/fa";
+import { FaUserLock } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa6";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { VscTriangleRight } from "react-icons/vsc";
+import { useState } from 'react';
 
 
 
 
 
 export default function Home() {
+  
   const { currentUser } = useSelector(state => state.user);
+
+  const [selectedTab, setSelectedTab] = useState('Explore');
+
+  const handleTabClick = (tab) => {
+    setSelectedTab(tab);
+  };
+
 
   return (
     <div className="flex flex-col min-h-screen"> {/* Flex container */}
@@ -86,12 +98,17 @@ export default function Home() {
 
             <div className='m-2 flex flex-col justify-between gap-2 items-center text-center'>
               <div className=' hidden lg:flex flex-row gap-3 font-semibold mb-6'>
-                <button className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Explore Resources</button>
-                <button className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Fast Processing</button>
-                <button className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Organization Tools</button>
-                <button className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Enhanced Security</button>
+                <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 ${selectedTab ==='Explore' ? 'bg-white shadow-md hover:bg-white' : ''}`} onClick={() => handleTabClick('Explore')}>Explore Resources</button>
+                <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 ${selectedTab ==='Fast Processing' ? 'bg-white shadow-md hover:bg-white' : ''}`} onClick={() => handleTabClick('Fast Processing')} >Fast Processing</button>
+                <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 ${selectedTab ==='Organization Tools' ? 'bg-white shadow-md hover:bg-white' : ''}`} onClick={() => handleTabClick('Organization Tools')} >Organization Tools</button>
+                <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 ${selectedTab ==='Enhanced Security' ? 'bg-white shadow-md hover:bg-white' : ''}`} onClick={() => handleTabClick('Enhanced Security')}>Enhanced Security</button>
               </div>
+              
 
+              
+            {selectedTab === 'Explore' && (  
+              
+            <div className='w-full border rounded-md'> 
               <div className='flex lg:hidden flex-row gap-3 font-semibold mb-6 items-center'>
               <VscTriangleRight className='text-6xl text-blue-600 rotate-180' />
               <button className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Explore Resources</button>
@@ -117,8 +134,104 @@ export default function Home() {
                 <div className='hidden lg:flex justify-center items-center w-1/2'>
                   <div className='bg-blue-600 rounded-md w-1/2 h-64 hover:-translate-y-2 transition ease-in-out'></div>
                 </div>
+              </div> 
+            </div>
+            )}
 
+            {selectedTab === 'Fast Processing' && (
+              <div className='w-full border rounded-md'> 
+              <div className='flex lg:hidden flex-row gap-3 font-semibold mb-6 items-center'>
+              <VscTriangleRight className='text-6xl text-blue-600 rotate-180' />
+              <button className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Explore Resources</button>
+              <VscTriangleRight className='text-6xl text-blue-600' />
               </div>
+
+
+              <div className='rounded-xl w-full h-[500px] lg:h-[600px] shadow-md flex flex-row'>
+
+                <div className='flex flex-col justify-center text-left w-[800px] px-10 lg:px-20 pt-16 pb-32 gap-3'>
+                  <FaFastForward className='text-xl lg:text-6xl text-blue-600 my-4' />
+                  <div className='text-2xl lg:text-4xl font-bold'>Fast Processing</div>
+                  <div className='text-sm lg:text-lg font-medium text-slate-500'>Wait no more!</div>
+                  <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi molestiae, aspernatur praesentium sint earum ullam perspiciatis vel fugit temporibus necessitatibus!</span>
+                  <div className='flex flex-row'>
+                    <Link to="" className='flex flex-row gap-2 text-blue-600 text-xl font-medium pt-4 hover:text-slate-700 group'>
+                      Learn More <FaArrowRight className='text-lg mt-1 font-normal group-hover:text-slate-700 group-hover:translate-x-2 transition ease-in-out' />
+                    </Link>
+                  </div>
+                </div>
+
+
+                <div className='hidden lg:flex justify-center items-center w-1/2'>
+                  <div className='bg-blue-600 rounded-md w-1/2 h-64 hover:-translate-y-2 transition ease-in-out'></div>
+                </div>
+              </div> 
+              </div>
+              )}
+
+              {selectedTab === 'Organization Tools' && (
+              <div className='w-full border rounded-md'> 
+              <div className='flex lg:hidden flex-row gap-3 font-semibold mb-6 items-center'>
+              <VscTriangleRight className='text-6xl text-blue-600 rotate-180' />
+              <button className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Explore Resources</button>
+              <VscTriangleRight className='text-6xl text-blue-600' />
+              </div>
+
+
+              <div className='rounded-xl w-full h-[500px] lg:h-[600px] shadow-md flex flex-row'>
+
+                <div className='flex flex-col justify-center text-left w-[800px] px-10 lg:px-20 pt-16 pb-32 gap-3'>
+                  <FaTools className='text-xl lg:text-6xl text-blue-600 my-4' />
+                  <div className='text-2xl lg:text-4xl font-bold'>Organization Tools</div>
+                  <div className='text-sm lg:text-lg font-medium text-slate-500'>Tools that can help with applying!</div>
+                  <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi molestiae, aspernatur praesentium sint earum ullam perspiciatis vel fugit temporibus necessitatibus!</span>
+                  <div className='flex flex-row'>
+                    <Link to="" className='flex flex-row gap-2 text-blue-600 text-xl font-medium pt-4 hover:text-slate-700 group'>
+                      Learn More <FaArrowRight className='text-lg mt-1 font-normal group-hover:text-slate-700 group-hover:translate-x-2 transition ease-in-out' />
+                    </Link>
+                  </div>
+                </div>
+
+
+                <div className='hidden lg:flex justify-center items-center w-1/2'>
+                  <div className='bg-blue-600 rounded-md w-1/2 h-64 hover:-translate-y-2 transition ease-in-out'></div>
+                </div>
+              </div> 
+              </div>
+              )}
+
+              {selectedTab === 'Enhanced Security' && (
+                 <div className='w-full border rounded-md'> 
+                 <div className='flex lg:hidden flex-row gap-3 font-semibold mb-6 items-center'>
+                 <VscTriangleRight className='text-6xl text-blue-600 rotate-180' />
+                 <button className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Explore Resources</button>
+                 <VscTriangleRight className='text-6xl text-blue-600' />
+                 </div>
+   
+   
+                 <div className='rounded-xl w-full h-[500px] lg:h-[600px] shadow-md flex flex-row'>
+   
+                   <div className='flex flex-col justify-center text-left w-[800px] px-10 lg:px-20 pt-16 pb-32 gap-3'>
+                     <FaUserLock className='text-xl lg:text-6xl text-blue-600 my-4' />
+                     <div className='text-2xl lg:text-4xl font-bold'>Enhanced Security</div>
+                     <div className='text-sm lg:text-lg font-medium text-slate-500'>Your data is safe with us!</div>
+                     <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi molestiae, aspernatur praesentium sint earum ullam perspiciatis vel fugit temporibus necessitatibus!</span>
+                     <div className='flex flex-row'>
+                       <Link to="" className='flex flex-row gap-2 text-blue-600 text-xl font-medium pt-4 hover:text-slate-700 group'>
+                         Learn More <FaArrowRight className='text-lg mt-1 font-normal group-hover:text-slate-700 group-hover:translate-x-2 transition ease-in-out' />
+                       </Link>
+                     </div>
+                   </div>
+   
+   
+                   <div className='hidden lg:flex justify-center items-center w-1/2'>
+                     <div className='bg-blue-600 rounded-md w-1/2 h-64 hover:-translate-y-2 transition ease-in-out'></div>
+                   </div>
+                 </div> 
+                 </div>
+                )}
+  
+             
 
 
             </div>
