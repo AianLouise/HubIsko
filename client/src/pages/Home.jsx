@@ -22,11 +22,14 @@ export default function Home() {
   
   const { currentUser } = useSelector(state => state.user);
 
-  const [selectedTab, setSelectedTab] = useState('Explore');
+  const [selectedTab, setSelectedTab] = useState('Explore Resources');
 
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
+    setButtonText(tab);
   };
+
+  const [buttonText, setButtonText] = useState('Explore Resources');
 
 
   return (
@@ -92,13 +95,13 @@ export default function Home() {
             </p>
           </div>
 
-          <div className='text-slate-700 w-full mb-40 border-2rounded-md p-4 '>
+          <div className='text-slate-700 w-full mb-40 rounded-md p-4 '>
 
             <div className='font-bold text-2xl lg:text-4xl w-full text-center mb-10'>Browse Our Features</div>
 
             <div className='m-2 flex flex-col justify-between gap-2 items-center text-center'>
               <div className=' hidden lg:flex flex-row gap-3 font-semibold mb-6'>
-                <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 ${selectedTab ==='Explore' ? 'bg-white shadow-md hover:bg-white' : ''}`} onClick={() => handleTabClick('Explore')}>Explore Resources</button>
+                <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 ${selectedTab ==='Explore Resources' ? 'bg-white shadow-md hover:bg-white' : ''}`} onClick={() => handleTabClick('Explore')}>Explore Resources</button>
                 <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 ${selectedTab ==='Fast Processing' ? 'bg-white shadow-md hover:bg-white' : ''}`} onClick={() => handleTabClick('Fast Processing')} >Fast Processing</button>
                 <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 ${selectedTab ==='Organization Tools' ? 'bg-white shadow-md hover:bg-white' : ''}`} onClick={() => handleTabClick('Organization Tools')} >Organization Tools</button>
                 <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 ${selectedTab ==='Enhanced Security' ? 'bg-white shadow-md hover:bg-white' : ''}`} onClick={() => handleTabClick('Enhanced Security')}>Enhanced Security</button>
@@ -106,13 +109,22 @@ export default function Home() {
               
 
               
-            {selectedTab === 'Explore' && (  
+            {selectedTab === 'Explore Resources' && (  
               
-            <div className='w-full border rounded-md'> 
-              <div className='flex lg:hidden flex-row gap-3 font-semibold mb-6 items-center'>
-              <VscTriangleRight className='text-6xl text-blue-600 rotate-180' />
-              <button className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Explore Resources</button>
-              <VscTriangleRight className='text-6xl text-blue-600' />
+            <div className='w-full lg:border rounded-md'> 
+              <div className='flex w-full lg:hidden flex-row gap-3 font-semibold mb-6 items-center'>
+
+              <button onClick={() => handleTabClick('Enhanced Security')} >
+              <VscTriangleRight className='w-10 h-10 text-blue-600 rotate-180' />
+              </button>
+
+              <div className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>
+                
+                <span>{buttonText}</span></div>
+
+              <button onClick={() => handleTabClick('Fast Processing')}>
+              <VscTriangleRight className='w-10 h-10 text-blue-600' />
+              </button>
               </div>
 
 
@@ -139,11 +151,19 @@ export default function Home() {
             )}
 
             {selectedTab === 'Fast Processing' && (
-              <div className='w-full border rounded-md'> 
+              <div className='w-full lg:border rounded-md'> 
               <div className='flex lg:hidden flex-row gap-3 font-semibold mb-6 items-center'>
-              <VscTriangleRight className='text-6xl text-blue-600 rotate-180' />
-              <button className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Explore Resources</button>
-              <VscTriangleRight className='text-6xl text-blue-600' />
+
+              <button onClick={() => handleTabClick('Explore Resources')} >
+              <VscTriangleRight className='w-10 h-10 text-blue-600 rotate-180' />
+              </button>
+              
+              <button className='border w-[208px] text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>{buttonText}</button>
+
+              <button onClick={() => handleTabClick('Organization Tools')}>
+              <VscTriangleRight className='w-10 h-10 text-blue-600' />
+              </button>
+
               </div>
 
 
@@ -170,11 +190,19 @@ export default function Home() {
               )}
 
               {selectedTab === 'Organization Tools' && (
-              <div className='w-full border rounded-md'> 
+              <div className='w-full lg:border rounded-md'> 
               <div className='flex lg:hidden flex-row gap-3 font-semibold mb-6 items-center'>
-              <VscTriangleRight className='text-6xl text-blue-600 rotate-180' />
-              <button className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Explore Resources</button>
-              <VscTriangleRight className='text-6xl text-blue-600' />
+              
+              <button onClick={() => handleTabClick('Fast Processing')} >
+              <VscTriangleRight className='w-10 h-10 text-blue-600 rotate-180' />
+              </button>
+
+              <button className='border w-[208px] text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>{buttonText}</button>
+             
+              <button onClick={() => handleTabClick('Enhanced Security')}>
+              <VscTriangleRight className='w-10 h-10 text-blue-600' />
+              </button>
+
               </div>
 
 
@@ -201,11 +229,19 @@ export default function Home() {
               )}
 
               {selectedTab === 'Enhanced Security' && (
-                 <div className='w-full border rounded-md'> 
+                 <div className='w-full lg:border rounded-md'> 
                  <div className='flex lg:hidden flex-row gap-3 font-semibold mb-6 items-center'>
-                 <VscTriangleRight className='text-6xl text-blue-600 rotate-180' />
-                 <button className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Explore Resources</button>
-                 <VscTriangleRight className='text-6xl text-blue-600' />
+
+                  <button onClick={() => handleTabClick('Organization Tools')} >
+                 <VscTriangleRight className='w-10 h-10 text-blue-600 rotate-180' />
+                  </button>
+
+
+                 <button className='border w-[208px] text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>{buttonText}</button>
+               
+                <button onClick={() => handleTabClick('Explore Resources')}>
+                 <VscTriangleRight className='w-10 h-10 text-blue-600' />
+                  </button>
                  </div>
    
    
