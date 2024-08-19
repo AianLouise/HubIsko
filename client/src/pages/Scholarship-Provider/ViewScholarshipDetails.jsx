@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
+import { useSelector } from 'react-redux';
 
 export default function ViewScholarshipDetails() {
+    const { currentUser } = useSelector((state) => state.user);
+
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('details');
     const [scholarshipProgram, setProgramDetails] = useState(null);
@@ -92,7 +95,7 @@ export default function ViewScholarshipDetails() {
     return (
         <div className={`flex flex-col min-h-screen`}>
             <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''}`}>
-                <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+            <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} currentPath={`${currentUser.scholarshipProviderDetails.organizationName} / `} />
                 <div className="container mx-auto p-6">
                     <div className="flex flex-col items-center mb-6">
                         <img

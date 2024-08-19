@@ -70,23 +70,22 @@ export default function App() {
         <Route path="/verify-your-email" element={<VerifyYourEmail />} />
         <Route path="/resend-verification-email" element={<VerifyYourEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-
         <Route path="/scholarship-listing" element={<ScholarshipListing />} />
 
         {/* Admin Routes */}
         <Route element={<ProviderPrivateRoute allowedRoles={['admin']} />}>
-          <Route path="admin-home" element={<AdminHome />} />
-          <Route path="accounts" element={<Accounts />} />
-          <Route path="students" element={<Students />} />
-          <Route path="provider-accounts" element={<ProviderAccounts />} />
-          <Route path="verification-details" element={<VerificationDetails />} />
-          <Route path="student-details" element={<StudentDetails />} />
-          <Route path="provider-details" element={<ProviderDetails />} />
-          <Route path="inbox" element={<Inbox />} />
-          <Route path="scholarships-data" element={<ScholarshipsData />} />
-          <Route path="scholarships-data-details" element={<ScholarshipsDataDetails />} />
-          <Route path="scholarships-data-display" element={<ScholarshipsDataDisplay />} />
-          <Route path="inbox-application" element={<InboxApplication />} />
+          <Route path="/admin-home" element={<AdminHome />} />
+          <Route path="/accounts" element={<Accounts />} />
+          <Route path="/students" element={<Students />} />
+          <Route path="/provider-accounts" element={<ProviderAccounts />} />
+          <Route path="/verification-details" element={<VerificationDetails />} />
+          <Route path="/student-details" element={<StudentDetails />} />
+          <Route path="/provider-details" element={<ProviderDetails />} />
+          <Route path="/inbox" element={<Inbox />} />
+          <Route path="/scholarships-data" element={<ScholarshipsData />} />
+          <Route path="/scholarships-data-details" element={<ScholarshipsDataDetails />} />
+          <Route path="/scholarships-data-display" element={<ScholarshipsDataDisplay />} />
+          <Route path="/inbox-application" element={<InboxApplication />} />
           {/* Add other routes here */}
         </Route>
 

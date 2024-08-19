@@ -11,8 +11,9 @@ import { Link } from 'react-router-dom';
 import { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { signOut } from '../redux/user/userSlice';
+import PageHeader from "./pageHeader";
 
-export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
+export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, currentPath }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -37,8 +38,7 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
                     <button className="text-blue-600" onClick={toggleSidebar}>
                         <FontAwesomeIcon icon={faBars} className='w-4 h-4' />
                     </button>
-                    <h1 className="text-lg font-bold text-blue-500">Provider Dashboard</h1>
-                    <h1 className="text-lg font-bold text-blue-500">/ Home</h1>
+                    <PageHeader path={currentPath} />
                 </div>
 
 

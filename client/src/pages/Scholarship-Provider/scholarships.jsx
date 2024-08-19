@@ -6,10 +6,14 @@ import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import { useSelector } from 'react-redux';
 
 export default function Scholarships() {
+  useEffect(() => {
+    document.title = "Scholarship Program";
+  }, []);
+
   const { currentUser } = useSelector((state) => state.user);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
-  
+
   const [scholarships, setScholarships] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -36,7 +40,7 @@ export default function Scholarships() {
   return (
     <div className={`flex flex-col min-h-screen`}>
       <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''} `}>
-        <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+        <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} currentPath={`${currentUser.scholarshipProviderDetails.organizationName} / Home`} />
 
         <div className='border-b mb-8'>
           <div className={'flex gap-2 items-center mx-auto px-24 h-36'}>
@@ -45,7 +49,7 @@ export default function Scholarships() {
           </div>
         </div>
 
-        <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex'>
+        <div className='max-w-8xl mx-auto px-24 py-12 gap-10 flex-col flex'>
           <div className='flex justify-between'>
             <Link to='/post-scholarship'>
               <button className='bg-blue-600 text-white px-8 py-4 shadow rounded-md flex items-center gap-2 hover:bg-blue-800'>
