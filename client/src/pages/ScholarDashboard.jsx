@@ -15,6 +15,10 @@ import { FaAngleRight } from "react-icons/fa";
 
 
 export default function ScholarDashboard() {
+  useEffect(() => {
+    document.title = "Scholar Dashboard | HubIsko";
+  }, []);
+
   const currentUser = useSelector((state) => state.user.currentUser);
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);

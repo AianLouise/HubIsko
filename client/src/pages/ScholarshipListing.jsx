@@ -6,6 +6,10 @@ import { Link } from 'react-router-dom';
 import { BiFilter } from 'react-icons/bi';
 
 export default function ScholarshipListing() {
+  useEffect(() => {
+    document.title = "Scholarship Listing | HubIsko";
+  }, []);
+
   const [scholarships, setScholarships] = useState([]);
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);

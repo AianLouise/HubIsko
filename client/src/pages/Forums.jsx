@@ -9,6 +9,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 
 export default function Forums() {
+  useEffect(() => {
+    document.title = "Forums | HubIsko";
+  }, []);
+
   const [recentPosts, setRecentPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();

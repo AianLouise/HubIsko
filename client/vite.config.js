@@ -13,6 +13,6 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    exclude: ['react-icons']
+    exclude: ['react-icons', 'problematic-dependency'] // Add the problematic dependency here
   }
 });

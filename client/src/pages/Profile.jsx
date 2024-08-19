@@ -25,6 +25,10 @@ import { FaEye } from "react-icons/fa";
 
 
 export default function Profile() {
+  useEffect(() => {
+    document.title = "Account Settings | HubIsko";
+  }, []);
+
   const dispatch = useDispatch();
   const fileRef = useRef(null);
   const [image, setImage] = useState(undefined);
