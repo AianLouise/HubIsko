@@ -7,6 +7,8 @@ import providerRoutes from './routes/provider.route.js';
 import forumRoutes from './routes/forum.route.js';
 import scholarshipProgramRoutes from './routes/scholarshipProgram.route.js';
 import scholarshipApplicationRoutes from './routes/scholarshipApplication.route.js';
+import profileRoutes from './routes/profile.route.js';
+import adminRoutes from './routes/admin.route.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import cors from 'cors';
@@ -35,6 +37,8 @@ app.use("/api/provider", providerRoutes);
 app.use('/api/forums', forumRoutes);
 app.use('/api/scholarshipProgram', scholarshipProgramRoutes);
 app.use('/api/scholarshipApplication', scholarshipApplicationRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/profile', profileRoutes);
 
 
 // Serve static files

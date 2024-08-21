@@ -48,7 +48,6 @@ export const signupAsProvider = async (req, res) => {
       email,
       password: bcrypt.hashSync(password, 8),
       role: 'scholarship_provider',
-      mobileNumber: "0987654321", // Corrected field
       emailVerified: false,
       authProvider: 'email',
       scholarshipProviderDetails: {
@@ -70,7 +69,7 @@ export const signupAsProvider = async (req, res) => {
         proofOfAddress,
         authorizationLetter,
         idProofContactPerson,
-        additionalDocuments
+        additionalDocuments,
       }
     });
 

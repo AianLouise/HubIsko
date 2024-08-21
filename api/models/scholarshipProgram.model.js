@@ -6,7 +6,7 @@ const scholarshipProgramSchema = new mongoose.Schema({
   category: { type: String },
   fieldOfStudy: { type: String },
   numberOfScholarships: { type: String },
-  numberOfScholarshipsSlotFilled: { type: String ,default: '0'},
+  numberOfScholarshipsSlotFilled: { type: String, default: '0' },
   amount: { type: String },
   applicationDeadline: { type: String },
   minGPA: { type: String },
@@ -49,7 +49,11 @@ const scholarshipProgramSchema = new mongoose.Schema({
       url: { type: String, required: true }
     }
   ], // Array of provider requirements with id and url
-  status: { type: String, default: 'Pending Approval' }, // Added status field
+  status: {
+    type: String,
+    enum: ['pending', 'approved', 'declined'],
+    default: 'pending'
+  },
   approvedScholars: [
     {
       scholarId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -62,4 +66,4 @@ const scholarshipProgramSchema = new mongoose.Schema({
 // Models
 const Scholarship = mongoose.model('ScholarshipProgram', scholarshipProgramSchema);
 
-export { Scholarship };
+export default Scholarship;

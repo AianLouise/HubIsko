@@ -1,4 +1,4 @@
-import { Scholarship } from '../models/scholarshipProgram.model.js';
+import Scholarship from '../models/scholarshipProgram.model.js';
 import ScholarshipApplication from '../models/scholarshipApplication.model.js';
 import User from '../models/user.model.js';
 
@@ -379,3 +379,26 @@ export const updateApplicationStatus = async (req, res) => {
       res.status(500).json({ message: 'Failed to update application status', error });
   }
 }
+
+export const addApprovedScholar = async (req, res) => {
+  const { userId, programId } = req.params;
+
+  try {
+    const program = await Scholarship.findById(programId);
+
+    if (!program) {
+      return res.status(404).json({ message: 'Scholarship program not found' });
+    }
+
+    // Add the userId to the approvedScholars array
+    program.approvedScholars.push(userId);
+
+    // Save the updated program
+    await program.save();
+
+    res.status(200).json(program);
+  } catch (error) {
+    console.error('Error adding approved scholar:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};

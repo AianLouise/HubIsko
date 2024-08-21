@@ -92,25 +92,38 @@ export default function ScholarshipListing() {
             <button className='bg-white px-4 py-2 border rounded-md shadow font-medium flex items-center gap-2'>
               <BiFilter className='text-xl text-blue-600' />Filter</button>
           </div>
-          <div className='flex'>
+          <div className='flex space-x-6'>
             {providers.map((provider) => (
-              <Link to='/profile-preview' key={provider._id} className='flex flex-col items-center group'>
-                <button className='flex flex-col items-center group'>
+              <Link to={`/profile-preview/${provider._id}`} key={provider._id} className='flex flex-col items-center group'>
+                <button className='flex flex-col items-center group space-y-2 relative'>
                   <div className='w-16 h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden group-hover:bg-blue-800'>
-                    <img src={provider.profilePicture} alt={`${provider.scholarshipProviderDetails.organizationName}'s profile`} className='w-full h-full object-cover' />
+                    <img
+                      src={provider.profilePicture}
+                      alt={`${provider.scholarshipProviderDetails.organizationName}'s profile`}
+                      className='w-full h-full object-cover'
+                    />
                   </div>
-                  <span className='font-medium'>{provider.scholarshipProviderDetails.organizationName}</span>
-                  <div className='flex gap-2 items-center'>
-                    <div className='bg-blue-600 w-2 h-2 rounded-full'></div>
-                    <span className='text-sm'>1 new</span>
+                  <span
+                    className='font-medium max-w-[100px] text-ellipsis overflow-hidden whitespace-nowrap group-hover:tooltip'
+                    title={provider.scholarshipProviderDetails.organizationName}
+                  >
+                    {provider.scholarshipProviderDetails.organizationName.length > 15
+                      ? `${provider.scholarshipProviderDetails.organizationName.slice(0, 12)}...`
+                      : provider.scholarshipProviderDetails.organizationName}
+                  </span>
+                  {/* Tooltip for the organization name */}
+                  <div className='absolute bottom-20 w-40 p-2 bg-black text-white text-center text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none'>
+                    {provider.scholarshipProviderDetails.organizationName}
                   </div>
                 </button>
               </Link>
             ))}
           </div>
+
+
         </div>
         <div className='flex flex-col mx-auto max-w-6xl justify-center items-center px-10 lg:px-24'>
-          
+
           <div className='flex flex-row w-full items-center gap-4'>
             <input
               type="text"

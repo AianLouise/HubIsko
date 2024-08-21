@@ -17,29 +17,29 @@ export default function SignIn() {
   const { currentUser } = useSelector((state) => state.user);
 
 
-  useEffect(() => {
-    if (currentUser) {
-        if (currentUser.role === 'admin') {
-            navigate('/admin-home');
-        } else if (currentUser.role === 'scholarship_provider') {
-            if (!currentUser.emailVerified) {
-                navigate('/verify-your-email', { state: { email: currentUser.email } });
-            } else {
-                navigate('/provider-dashboard');
-            }
-        } else if (currentUser.role === 'applicant') {
-            if (!currentUser.emailVerified) {
-                navigate('/verify-your-email', { state: { email: currentUser.email } });
-            } else if (!currentUser.applicantDetails.profileComplete) {
-                navigate('/CoRH', { state: { userId: currentUser._id } });
-            } else {
-                navigate('/');
-            }
-        } else {
-            navigate('/');
-        }
-    }
-}, [currentUser, navigate]);
+  //   useEffect(() => {
+  //     if (currentUser) {
+  //         if (currentUser.role === 'admin') {
+  //             navigate('/admin-home');
+  //         } else if (currentUser.role === 'scholarship_provider') {
+  //             if (!currentUser.emailVerified) {
+  //                 navigate('/verify-your-email', { state: { email: currentUser.email } });
+  //             } else {
+  //                 navigate('/provider-dashboard');
+  //             }
+  //         } else if (currentUser.role === 'applicant') {
+  //             if (!currentUser.emailVerified) {
+  //                 navigate('/verify-your-email', { state: { email: currentUser.email } });
+  //             } else if (!currentUser.applicantDetails.profileComplete) {
+  //                 navigate('/CoRH', { state: { userId: currentUser._id } });
+  //             } else {
+  //                 navigate('/');
+  //             }
+  //         } else {
+  //             navigate('/');
+  //         }
+  //     }
+  // }, [currentUser, navigate]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -96,6 +96,16 @@ export default function SignIn() {
     }
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className='bg-[#f8f8fb] flex flex-col md:flex-row items-center text-left p-4 gap-10 min-h-screen'>
       {/* Left Column for Logo or Image */}
@@ -107,7 +117,7 @@ export default function SignIn() {
 
       {/* Right Column for Sign In Form */}
       <div className='w-1/2 flex items-center justify-center'>
-        <div className='flex flex-col items-start justify-center bg-white border rounded-md w-[600px]  h-[800px] shadow-md p-24 relative'>
+        <div className='flex flex-col items-start justify-center bg-white border rounded-md w-[600px] shadow-md px-24 py-16 relative'>
           <div className='flex flex-col justify-center text-left gap-4 mb-8'>
             <div className='flex flex-row gap-2 items-center mb-4'>
               <div className='bg-blue-600 w-10 h-10 rounded-md'></div>
@@ -165,12 +175,35 @@ export default function SignIn() {
               {loading ? 'Loading...' : 'Login'}
             </button>
           </form>
-          <div className='flex w-full p-2  justify-center gap-2 mt-5'>
+          <div className='flex w-full p-2 justify-center gap-2 mt-5'>
             <p>Don't Have an account?</p>
-            <Link to='/register' className='text-blue-500 hover:underline'>
+            <button onClick={openModal} className='text-blue-500 hover:underline'>
               Register
-            </Link>
+            </button>
           </div>
+
+          {isModalOpen && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative">
+                <button onClick={closeModal} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+                <h2 className="text-2xl font-bold mb-4 text-center">Register</h2>
+                <p className="mb-6 text-center">Choose your registration type:</p>
+                <div className="flex flex-col gap-4">
+                  <Link to="/register" className="bg-blue-500 text-white py-2 px-4 rounded text-center hover:bg-blue-600 transition duration-200">
+                    Register as Student
+                  </Link>
+                  <Link to="/apply-as-provider" className="bg-green-500 text-white py-2 px-4 rounded text-center hover:bg-green-600 transition duration-200">
+                    Register as Scholarship Provider
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
+
           {showErrorNotification && (
             <div className="fixed top-5 right-5 bg-red-500 text-white px-4 py-2 rounded-md shadow-md opacity-95">
               {error.message || 'Something went wrong!'}

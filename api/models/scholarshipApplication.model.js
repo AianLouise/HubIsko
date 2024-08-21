@@ -308,6 +308,8 @@ const scholarshipApplicationSchema = new mongoose.Schema({
     },
     applicationStatus: {
         type: String,
+        enum: ['pending', 'approved', 'rejected', 'completed'], // Add your desired choices here
+        default: 'pending', // Set your desired default value here
     },
     appliedOn: {
         type: Date,

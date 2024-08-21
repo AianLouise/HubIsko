@@ -3,6 +3,25 @@ import { Link, useParams } from 'react-router-dom';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import { useSelector } from 'react-redux';
 
+const toSentenceCase = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
+
+const getStatusColor = (status) => {
+    switch (status.toLowerCase()) {
+        case 'pending':
+            return 'bg-yellow-500';
+        case 'approved':
+            return 'bg-green-500';
+        case 'rejected':
+            return 'bg-red-500';
+        case 'completed':
+            return 'bg-blue-500';
+        default:
+            return 'bg-gray-500';
+    }
+};
+
 export default function ViewScholarshipDetails() {
     const { currentUser } = useSelector((state) => state.user);
 
@@ -47,17 +66,17 @@ export default function ViewScholarshipDetails() {
         try {
             const response = await fetch(`/api/scholarshipProgram/scholarship-applications/${id}`);
             const contentType = response.headers.get("content-type");
-            const errorText = await response.text(); // Read response as text
 
             if (!response.ok) {
-                if (response.status === 404 && errorText.includes("No applications found for this scholarship program")) {
+                const responseText = await response.text(); // Read response as text
+                if (response.status === 404 && responseText.includes("No applications found for this scholarship program")) {
                     setApplications([]);
                     setError(null); // No error, just no applications
                 } else {
-                    throw new Error(`Network response was not ok: ${errorText}`);
+                    throw new Error(`Network response was not ok: ${responseText}`);
                 }
             } else if (contentType && contentType.indexOf("application/json") !== -1) {
-                const data = await response.json();
+                const data = await response.json(); // Parse the JSON directly
                 setApplications(data);
             } else {
                 throw new Error("Received non-JSON response");
@@ -95,15 +114,15 @@ export default function ViewScholarshipDetails() {
     return (
         <div className={`flex flex-col min-h-screen`}>
             <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''}`}>
-            <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} currentPath={`${currentUser.scholarshipProviderDetails.organizationName} / `} />
+                <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} currentPath={`${currentUser.scholarshipProviderDetails.organizationName} / `} />
                 <div className="container mx-auto p-6">
                     <div className="flex flex-col items-center mb-6">
                         <img
-                            src={scholarshipProgram.scholarshipImage}
+                            src={scholarshipProgram?.scholarshipImage || 'default-image-path.jpg'}
                             alt="Scholarship Program"
                             className="w-32 h-32 object-cover rounded-full mb-4 shadow-lg"
                         />
-                        <h1 className="text-4xl font-bold text-center text-blue-600">{scholarshipProgram.title}</h1>
+                        <h1 className="text-4xl font-bold text-center text-blue-600">{scholarshipProgram?.title}</h1>
                     </div>
 
                     {/* Tabs for different sections */}
@@ -258,7 +277,7 @@ export default function ViewScholarshipDetails() {
                             </div>
                         )}
 
-                                              {activeTab === 'validation' && (
+                        {activeTab === 'validation' && (
                             <div className="p-6 bg-white rounded-lg shadow-md">
                                 <h2 className="text-2xl font-bold mb-4 text-blue-600">Validation Page</h2>
                                 <p className="text-gray-700">
@@ -370,10 +389,10 @@ export default function ViewScholarshipDetails() {
                                 <table className="min-w-full bg-white rounded-lg shadow-md">
                                     <thead>
                                         <tr>
-                                            <th className="py-2 px-4 border-b">Name</th>
-                                            <th className="py-2 px-4 border-b">Status</th>
-                                            <th className="py-2 px-4 border-b">Applied On</th>
-                                            <th className="py-2 px-4 border-b">Actions</th>
+                                            <th className="py-2 px-4 border-b text-center">Name</th>
+                                            <th className="py-2 px-4 border-b text-center">Status</th>
+                                            <th className="py-2 px-4 border-b text-center">Applied On</th>
+                                            <th className="py-2 px-4 border-b text-center">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -392,25 +411,16 @@ export default function ViewScholarshipDetails() {
                                         ) : (
                                             applications.map(application => (
                                                 <tr key={application._id} className="hover:bg-gray-100">
-                                                    <td className="py-2 px-4 border-b">{`${application.firstName} ${application.lastName}`}</td>
-                                                    <td className="py-2 px-4 border-b">{application.applicationStatus}</td>
-                                                    <td className="py-2 px-4 border-b">{new Date(application.appliedOn).toLocaleDateString()}</td>
-                                                    <td className="py-2 px-4 border-b">
-                                                        <Link to={`/applications/${application.id}`} className="text-blue-600 hover:underline mr-4">
+                                                    <td className="py-2 px-4 border-b text-center">{`${application.firstName} ${application.lastName}`}</td>
+                                                    <td className="py-2 px-4 border-b text-center">
+                                                        <span className={`inline-block w-3 h-3 mr-2 rounded-full ${getStatusColor(application.applicationStatus)}`}></span>
+                                                        {toSentenceCase(application.applicationStatus)}
+                                                    </td>
+                                                    <td className="py-2 px-4 border-b text-center">{new Date(application.appliedOn).toLocaleDateString()}</td>
+                                                    <td className="py-2 px-4 border-b text-center">
+                                                        <Link to={`/applications/${application._id}`} className="text-blue-600 hover:underline">
                                                             View Details
                                                         </Link>
-                                                        <button
-                                                            onClick={() => onApprove(application._id)}
-                                                            className="text-green-600 hover:underline mr-4"
-                                                        >
-                                                            Approve
-                                                        </button>
-                                                        <button
-                                                            onClick={() => onReject(application._id)}
-                                                            className="text-red-600 hover:underline"
-                                                        >
-                                                            Reject
-                                                        </button>
                                                     </td>
                                                 </tr>
                                             ))

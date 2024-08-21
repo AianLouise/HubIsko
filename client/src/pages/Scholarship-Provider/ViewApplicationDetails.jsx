@@ -37,16 +37,20 @@ export default function ViewApplicationDetails() {
     }, [applicationId]);
 
     const getStatusClass = (status) => {
-        switch (status) {
-            case 'Approved':
-                return 'bg-green-100 border-green-400 text-green-700';
-            case 'Pending':
-                return 'bg-yellow-100 border-yellow-400 text-yellow-700';
-            case 'Rejected':
-                return 'bg-red-100 border-red-400 text-red-700';
+        switch (status.toLowerCase()) {
+            case 'approved':
+                return 'bg-green-400 text-green-900';
+            case 'pending':
+                return 'bg-yellow-400 text-yellow-900';
+            case 'rejected':
+                return 'bg-red-400 text-red-900';
             default:
-                return 'bg-blue-100 border-blue-400 text-blue-700';
+                return 'bg-blue-400 text-blue-900';
         }
+    };
+
+    const toSentenceCase = (str) => {
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     };
 
     const updateApplicationStatus = async (status) => {
@@ -69,6 +73,34 @@ export default function ViewApplicationDetails() {
         } catch (error) {
             console.error(`Error updating application status: ${error}`);
         }
+    };
+
+    const addApprovedScholar = async (user) => {
+        try {
+            const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${application.scholarshipProgram}/approve-scholar/${application.applicant}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const updatedProgram = await response.json();
+                alert(`Scholar approved successfully!`);
+            } else {
+                alert(`Failed to approve scholar.`);
+            }
+        } catch (error) {
+            console.error(`Error approving scholar: ${error}`);
+        }
+    };
+
+    const handleApprove = async () => {
+        const userId = application.userId; // Assuming application object has userId
+        const programId = application.programId; // Assuming application object has programId
+
+        await updateApplicationStatus('Approved');
+        await addApprovedScholar(userId, programId);
     };
 
     if (!application || !currentUser) {
@@ -94,7 +126,7 @@ export default function ViewApplicationDetails() {
                             {/* Application Status */}
                             <div className={`border px-4 py-3 rounded relative mb-4 ${getStatusClass(application.applicationStatus)}`} role="alert">
                                 <strong className="font-bold">Application Status:</strong>
-                                <span className="block sm:inline"> {application.applicationStatus}</span>
+                                <span className="block sm:inline"> {toSentenceCase(application.applicationStatus)}</span>
                             </div>
 
                             <div className="mt-4 p-4 bg-white shadow rounded">
@@ -207,13 +239,13 @@ export default function ViewApplicationDetails() {
                             {/* Approve/Reject Buttons in your component */}
                             <div className="mt-6 flex justify-end gap-4">
                                 <button
-                                    onClick={() => updateApplicationStatus('Approved')}
+                                    onClick={handleApprove}
                                     className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-md"
                                 >
                                     Approve
                                 </button>
                                 <button
-                                    onClick={() => updateApplicationStatus('Rejected')}
+                                    onClick={() => updateApplicationStatus('rejected')}
                                     className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-md"
                                 >
                                     Reject

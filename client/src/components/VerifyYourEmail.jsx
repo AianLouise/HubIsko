@@ -43,9 +43,6 @@ export default function VerifyYourEmail() {
   }, [isButtonDisabled]);
 
   const handleResendEmail = async () => {
-    setIsButtonDisabled(true);
-    localStorage.setItem('lastResendTime', Date.now());
-
     try {
       const response = await fetch('/api/auth/resend-verification-email', {
         method: 'POST',
@@ -68,6 +65,8 @@ export default function VerifyYourEmail() {
       } else {
         const data = await response.json();
         setMessage(data.message);
+        setIsButtonDisabled(true);
+        localStorage.setItem('lastResendTime', Date.now());
       }
     } catch (error) {
       setMessage(error.message || 'An error occurred');

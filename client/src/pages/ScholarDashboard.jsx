@@ -50,7 +50,24 @@ export default function ScholarDashboard() {
     fetchApplications();
   }, [currentUser]);
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'pending':
+        return 'bg-yellow-400';
+      case 'approved':
+        return 'bg-green-400';
+      case 'rejected':
+        return 'bg-red-400';
+      case 'completed':
+        return 'bg-blue-400';
+      default:
+        return 'bg-gray-400';
+    }
+  };
 
+  const toSentenceCase = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
 
   if (loading) {
     return (
@@ -121,7 +138,8 @@ export default function ScholarDashboard() {
                             </div>
                           </div>
                           <div className='flex flex-row items-center gap-2'>
-                            <div className='bg-yellow-400 rounded-full w-2 h-2'></div><span>Pending</span>
+                          <div className={`rounded-full w-2 h-2 ${getStatusColor(application.applicationStatus)}`}></div>
+                          <span>{toSentenceCase(application.applicationStatus)}</span>
                           </div>
                         </div>
                       </Link>

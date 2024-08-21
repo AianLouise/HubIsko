@@ -5,11 +5,27 @@ import Layout from "../../components/Layout";
 
 
 export default function Students() {
+  const [applicants, setApplicants] = useState([]);
 
-    return (
-        <div className="flex flex-col min-h-screen">
-            <Layout />
-        <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
+  const fetchAllApplicants = async () => {
+    try {
+      const response = await fetch('/api/admin/all-applicants');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setApplicants(data.applicants);
+    } catch (error) {
+      console.error('Error fetching all applicants:', error);
+    }
+  };
+
+  fetchAllApplicants();
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Layout />
+      <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
         <div className='border-b mb-8'>
           <div className={'flex items-center mx-auto justify-between px-24'}>
             <div className='flex flex-col gap-2 w-1/2'>
@@ -48,24 +64,28 @@ export default function Students() {
                   <th className='border border-gray-200 p-2'>Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr className="divide-x">
-                  <td className='p-2'>1</td>
-                  <td className='p-2'>John Doe</td>
-                  <td className='p-2'>sample@email.com</td>
-                  <td className='p-2'>12/12/2021</td>
-                  <td className='py-4'>
-                    <Link to={'/student-details'} className='bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white'>View Details</Link>
-                  </td>
-                </tr>
+                           <tbody>
+                  {applicants.map((applicant, index) => (
+                      <tr key={applicant._id} className="divide-x">
+                          <td className='p-2'>{index + 1}</td>
+                          <td className='p-2'>
+                            {`${applicant.applicantDetails.firstName} ${applicant.applicantDetails.middleName} ${applicant.applicantDetails.lastName}`}
+                        </td>
+                          <td className='p-2'>{applicant.email}</td>
+                          <td className='p-2'>{applicant.dateVerified || 'N/A'}</td>
+                          <td className='py-4'>
+                              <Link to={`/student-details/${applicant._id}`} className='bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white'>View Details</Link>
+                          </td>
+                      </tr>
+                  ))}
               </tbody>
             </table>
 
           </div>
 
 
-            </div>
-        </main>
         </div>
-    );
+      </main>
+    </div>
+  );
 }

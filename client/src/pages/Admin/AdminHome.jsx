@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
 import { Link } from "react-router-dom";
 import { BiDotsHorizontal } from "react-icons/bi";
@@ -11,6 +11,40 @@ export default function AdminHome() {
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
+
+    const [totalAccounts, setTotalAccounts] = useState(0);
+    const [totalScholarships, setTotalScholarships] = useState(0);
+
+    useEffect(() => {
+        const fetchTotalAccounts = async () => {
+            try {
+                const response = await fetch('/api/admin/total-accounts');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setTotalAccounts(data.totalAccounts);
+            } catch (error) {
+                console.error('Error fetching total accounts:', error);
+            }
+        };
+
+        const fetchTotalScholarships = async () => {
+            try {
+                const response = await fetch('/api/admin/total-scholarships');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setTotalScholarships(data.totalScholarships);
+            } catch (error) {
+                console.error('Error fetching total scholarships:', error);
+            }
+        };
+
+        fetchTotalAccounts();
+        fetchTotalScholarships();
+    }, []);
 
 
     return (
@@ -26,17 +60,17 @@ export default function AdminHome() {
                         <div className='bg-blue-600 w-36 h-36 my-8 rounded-md'></div>
                     </div>
                 </div>
-                <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex'>
+                <div className='max-w-8xl mx-auto px-24 py-12 gap-10 flex-col flex'>
 
                     <div className="grid grid-cols-3 gap-10">
                         <Link to={'/accounts'} className="bg-white flex flex-col gap-2 p-4 shadow border rounded-md h-[200px] justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
                             <h1 className="text-2xl font-semibold text-slate-600">Total Accounts</h1>
-                            <span className="text-6xl font-bold text-left text-blue-600">100</span>
+                            <span className="text-6xl font-bold text-left text-blue-600">{totalAccounts}</span>
                         </Link>
 
                         <Link to={'/scholarships-data'} className="bg-white flex flex-col gap-2 p-4 shadow border rounded-md h-[200px] justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
                             <h1 className="text-2xl font-semibold text-slate-600">Total Scholarships</h1>
-                            <span className="text-6xl font-bold text-left text-blue-600">20</span>
+                            <span className="text-6xl font-bold text-left text-blue-600">{totalScholarships}</span>
                         </Link>
 
                         <Link to={'/inbox'} className="bg-white flex flex-col gap-2 p-4 shadow border rounded-md h-[200px] justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">

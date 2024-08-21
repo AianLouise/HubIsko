@@ -54,6 +54,7 @@ import ViewScholarshipDetails from "./pages/Scholarship-Provider/ViewScholarship
 import InboxApplication from "./pages/Admin/InboxApplication";
 import ViewApplicationDetails from "./pages/Scholarship-Provider/ViewApplicationDetails";
 import EditProgramPage from "./pages/Scholarship-Provider/EditProgramPage";
+import EditStudentInfo from "./pages/Admin/EditStudentInfo";
 
 
 
@@ -79,13 +80,14 @@ export default function App() {
           <Route path="/students" element={<Students />} />
           <Route path="/provider-accounts" element={<ProviderAccounts />} />
           <Route path="/verification-details" element={<VerificationDetails />} />
-          <Route path="/student-details" element={<StudentDetails />} />
+          <Route path="/student-details/:id" element={<StudentDetails />} />
           <Route path="/provider-details" element={<ProviderDetails />} />
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/scholarships-data" element={<ScholarshipsData />} />
           <Route path="/scholarships-data-details" element={<ScholarshipsDataDetails />} />
           <Route path="/scholarships-data-display" element={<ScholarshipsDataDisplay />} />
           <Route path="/inbox-application" element={<InboxApplication />} />
+          <Route path="/edit-student-info/:id" element={<EditStudentInfo />} />
           {/* Add other routes here */}
         </Route>
 
@@ -123,7 +125,7 @@ export default function App() {
           <Route path="/application-box" element={<ApplicationBox />} />
           <Route path="/application-detail/:id" element={<InboxedApplicationDetail />} />
           <Route path="/student-info" element={<StudentInfo />} />
-          <Route path="/profile-preview" element={<ProfilePreview />} />
+          <Route path="/profile-preview/:id" element={<ProfilePreview />} />
           <Route path="/post-details" element={<PostDetails />} />
           <Route path="/preview-profile" element={<PreviewProfile />} />
         </Route>
