@@ -14,6 +14,7 @@ import { FaGoogleScholar, FaDoorOpen } from "react-icons/fa6";
 import { BsChatLeftTextFill } from "react-icons/bs";
 import { IoPersonCircleSharp, IoInformationCircle } from "react-icons/io5";
 import { useLocation } from 'react-router-dom';
+import { useRef } from 'react';
 
 
 
@@ -42,9 +43,31 @@ export default function Header() {
   // }, []);
 
   const [showDropdown, setShowDropdown] = useState(false);
+  const showDropdownRef = useRef(null);
+  
   const [showNotification, setShowNotification] = useState(false);
+  const notificationRef = useRef(null);
+
+  
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const ShowModal = () => setShowModal(!showModal);
+
+  const handleClickOutside = (event) => {
+    if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+      setShowNotification(false);
+    }
+    if (showDropdownRef.current && !showDropdownRef.current.contains(event.target)) {
+      setShowDropdown(false);
+      }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
 
   const toggleDropdown = () => setShowDropdown(!showDropdown);
   const toggleNotification = () => setShowNotification(!showNotification);
@@ -66,8 +89,6 @@ export default function Header() {
   };
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
-
-  
 
   const toggleDropdown2 = () => {
     setDropdownVisible(!dropdownVisible);
@@ -190,34 +211,32 @@ export default function Header() {
 
           {currentUser && currentUser.role === 'applicant' && (
             <div>
-              <button onClick={toggleNotification} className='relative w-full border rounded-full p-3 hover:bg-slate-200 focus:bg-blue-600 group'>
+              <button  onClick={toggleNotification} className='relative w-full border rounded-full p-3 hover:bg-slate-200 focus:bg-blue-600 group'>
                 <IoIosNotifications className='w-4 h-4 text-blue-600 group-focus:text-white' />
                 {showNotification && (
-                  <div className="absolute mt-2 translate-x-4 border bg-white text-gray-800 shadow-lg rounded-md p-4 w-96 z-50">
-                    <div className='flex flex-col justify-start'>
-                      <span className='text-2xl text-left border-b py-2 w-full'>Notification Inbox </span>
-                      <div className='flex gap-2 pt-4'>
-                        <button className='border rounded-md p-2 px-4 hover:bg-slate-200 focus:bg-blue-600 focus:text-white'>All</button>
-                        <button className='border rounded-md p-2 px-4 hover:bg-slate-200 focus:bg-blue-600 focus:text-white'>Unread</button>
-
-                      </div>
-                      <div className='flex flex-col items-start p-2 mt-4'>
-                        <span>New Notifications</span>
-                        <div className='flex flex-col gap-2 mt-2'>
-                          <div className='flex flex-row text-sm w-full gap-4'>
-                            <div className='bg-blue-600 w-24 h-auto rounded-full'></div>
-                            <div className='flex flex-col text-left'>
-                              <span className='font-bold'>HubIsko</span>
-                              <span>Application for the scholarship has been approved ... see more</span>
+                        <div ref={notificationRef} className="absolute top-full left-0 mt-2 border bg-white text-gray-800 shadow-lg rounded-md p-4 w-96 z-50">
+                        <div className='flex flex-col justify-start'>
+                            <span className='text-2xl text-left border-b py-2 w-full'>Notification Inbox</span>
+                            <div className='flex gap-2 pt-4'>
+                            <button className='border rounded-md p-2 px-4 hover:bg-slate-200 focus:bg-blue-600 focus:text-white'>All</button>
+                            <button className='border rounded-md p-2 px-4 hover:bg-slate-200 focus:bg-blue-600 focus:text-white'>Unread</button>
                             </div>
-                          </div>
-
-                          <button onClick={ShowModal} className='bg-blue-600 text-white rounded-md p-2 mt-4 font-medium hover:bg-blue-800 transition ease-in-out'>See All Notifications</button>
-
+                            <div className='flex flex-col items-start p-2 mt-4'>
+                            <span>New Notifications</span>
+                            <div className='flex flex-col gap-2 mt-2'>
+                                <div className='flex flex-row text-sm w-full gap-4'>
+                                <div className='bg-blue-600 w-24 h-auto rounded-full'></div>
+                                <div className='flex flex-col text-left'>
+                                    <span className='font-bold'>HubIsko</span>
+                                    <span>Application for the scholarship has been approved ... see more</span>
+                                </div>
+                                </div>
+                                <button onClick={ShowModal} className='bg-blue-600 text-white rounded-md p-2 mt-4 font-medium hover:bg-blue-800 transition ease-in-out'>See All Notifications</button>
+                            </div>
+                            </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>)}
+                        </div>
+                    )}
               </button>
             </div>
 
@@ -225,10 +244,10 @@ export default function Header() {
 
 
           {currentUser ? (
-            <div className="relative"> {/* This div wraps both the image and the dropdown */}
+            <div ref={showDropdownRef} className="relative"> {/* This div wraps both the image and the dropdown */}
               <img src={currentUser.profilePicture} alt='profile' className='h-11 w-11 p-2 rounded-full object-cover cursor-pointer' onClick={toggleDropdown} />
               {showDropdown && (
-                <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
+                <div className="absolute transform mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
                   {/* Dropdown items here */}
                   <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Manage Account</Link>
                   <Link to='/about'><li className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>About</li></Link>
