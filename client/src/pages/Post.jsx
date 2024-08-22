@@ -23,9 +23,9 @@ export default function ForumDetail() {
     const [post, setPost] = useState(null);
     const [commentContent, setCommentContent] = useState('');
     const [selectedFiles, setSelectedFiles] = useState([]);
-    
+
     const { currentUser } = useSelector(state => state.user);
-    
+
     const isLoggedIn = !!currentUser; // Check if currentUser is not null or undefined
 
     useEffect(() => {
@@ -246,12 +246,12 @@ export default function ForumDetail() {
 
     const handleLikeClick = () => {
         if (!isLoggedIn) {
-          setNotification('You must be logged in to like a post.');
-          setTimeout(() => setNotification(''), 3000); // Clear notification after 3 seconds
+            setNotification('You must be logged in to like a post.');
+            setTimeout(() => setNotification(''), 3000); // Clear notification after 3 seconds
         } else {
-          handleLike(postId);
+            handleLike(postId);
         }
-      };
+    };
 
     if (!post) {
         return (
@@ -280,13 +280,41 @@ export default function ForumDetail() {
                     </div>
                     <div className='border shadow p-4 rounded-md bg-white'>
                         <div className='flex gap-4'>
-                            <Link to={'/others-profile'}>
-                                <img
-                                    src={post.author.profilePicture}
-                                    alt={`${post.author.username}'s profile`}
-                                    className='w-12 h-12 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
-                                />
-                            </Link>
+                            {
+                                post.author.role === 'scholarship_provider' ? (
+                                    <Link to={`/profile-preview/${post.author._id}`}>
+                                        <img
+                                            src={post.author.profilePicture}
+                                            alt={`${post.author.username}'s profile`}
+                                            className='w-12 h-12 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
+                                        />
+                                    </Link>
+                                ) : post.author.role === 'applicant' ? (
+                                    <Link to={`/others-profile/${post.author._id}`}>
+                                        <img
+                                            src={post.author.profilePicture}
+                                            alt={`${post.author.username}'s profile`}
+                                            className='w-12 h-12 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
+                                        />
+                                    </Link>
+                                ) : post.author.role === 'admin' ? (
+                                    <Link to={`/admin-profile/${post.author._id}`}>
+                                        <img
+                                            src={post.author.profilePicture}
+                                            alt={`${post.author.username}'s profile`}
+                                            className='w-12 h-12 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
+                                        />
+                                    </Link>
+                                ) : (
+                                    <Link to={`/other-profile/${post.author._id}`}>
+                                        <img
+                                            src={post.author.profilePicture}
+                                            alt={`${post.author.username}'s profile`}
+                                            className='w-12 h-12 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
+                                        />
+                                    </Link>
+                                )
+                            }
                             <div className='flex flex-col'>
                                 <span className='font-bold text-lg'>{post.author.username}</span>
                                 <span className='text-sm text-slate-500'>

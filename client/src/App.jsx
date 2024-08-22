@@ -74,7 +74,7 @@ export default function App() {
         <Route path="/scholarship-listing" element={<ScholarshipListing />} />
 
         <Route path="/forums" element={<Forums />} />
-        <Route path="/others-profile" element={<OthersProfile />} />
+        <Route path="/others-profile/:id" element={<OthersProfile />} />
         <Route path="/forums/post/:postId" element={<ForumDetail />} />
 
         <Route path="/scholarship-details/:id" element={<ApplicationDetails />} />

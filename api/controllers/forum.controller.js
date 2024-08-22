@@ -1,5 +1,6 @@
 import ForumPost from '../models/forumPost.model.js';
 import Comment from '../models/comment.model.js';
+import User from '../models/user.model.js';
 
 export const createPost = async (req, res) => {
   const { title, content, author, attachments } = req.body;
@@ -39,7 +40,7 @@ export const getPosts = async (req, res) => {
 export const getPostById = async (req, res) => {
   try {
     const post = await ForumPost.findById(req.params.postId)
-      .populate('author', ['username', 'email', 'profilePicture']) // Include profilePicture
+      .populate('author', ['username', 'email', 'profilePicture', 'role']) // Include profilePicture
       .populate({
         path: 'comments',
         populate: [
@@ -224,3 +225,18 @@ export const addReplyToComment = async (req, res) => {
   }
 };
 
+export const getUserById = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId).select('-password'); // Exclude password field
+
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+};
