@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { IoMdArrowDropdown } from 'react-icons/io';
 
 export default function InboxedApplicationDetail() {
 
@@ -67,9 +68,22 @@ export default function InboxedApplicationDetail() {
             <Header />
             <main className="flex-grow bg-[#f8f8fb] font-medium">
                 <div className="max-w-6xl px-24 mx-auto my-20">
+                    
+                    <div className='my-8 flex gap-2 items-center'>
+                    <Link to={'/application-box'} className='bg-white border rounded-md px-6 py-2 shadow hover:bg-slate-200'>
+                     <span>Inbox</span>
+                    </Link>
+
+                           <IoMdArrowDropdown className='-rotate-90 text-4xl text-blue-600' />
+
+                    <div className='bg-white border rounded-md px-6 py-2 shadow'>
+                    <span className='text-blue-600'>{application.scholarshipProgram.title}</span>
+                    </div>
+                    </div>
+
                     <div className="border shadow rounded-md h-auto p-10">
                         <div className="flex justify-between items-center">
-                            <span className="text-2xl">Submitted details for: {application.scholarshipProgram.title}</span>
+                            <span className="text-2xl">Submitted details for: <span className='text-blue-600 font-bold'>{application.scholarshipProgram.title}</span></span>
                             <Link to="/edit-documents">
                                 <button className="border bg-blue-600 rounded-md px-4 py-2 text-white hover:bg-blue-800">Edit</button>
                             </Link>
@@ -81,7 +95,7 @@ export default function InboxedApplicationDetail() {
                                 <span className="block sm:inline"> {application.applicationStatus}</span>
                             </div>
 
-                            <div className="mt-4 p-4 bg-white shadow rounded">
+                            <div className="mt-4 p-4 py-6 bg-white border shadow rounded">
                                 <div className="mb-4">
                                     <p className="text-lg font-semibold"><strong>Applicant Name:</strong> {`${application.firstName} ${application.middleName} ${application.lastName}`}</p>
                                     {/* <p><strong>Email:</strong> {application.email}</p> */}
@@ -90,8 +104,8 @@ export default function InboxedApplicationDetail() {
 
                                 {/* Personal Details */}
                                 <div className="mb-4">
-                                    <h3 className="text-md font-bold mb-2">Personal Details</h3>
-                                    <div className="p-4 rounded-lg shadow-sm">
+                                    <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Personal Details</h3>
+                                    <div className="px-4 pt-2 rounded-lg space-y-1">
                                         <p className="text-sm"><strong>Birthdate:</strong> {application.birthdate}</p>
                                         <p className="text-sm"><strong>Gender:</strong> {application.gender}</p>
                                         <p className="text-sm"><strong>Blood Type:</strong> {application.bloodType}</p>
@@ -114,10 +128,10 @@ export default function InboxedApplicationDetail() {
                             </div>
 
                             {/* Education Details */}
-                            <div className="mt-4 p-4 bg-white shadow rounded">
-                                <div className="mb-4">
-                                    <h3 className="text-md font-bold mt-4 mb-2">Educational Background</h3>
-                                    <div className="p-4 rounded-lg shadow-sm">
+                            <div className="mt-4 p-4 py-6 bg-white shadow border rounded">
+                                <div className="my-2">
+                                    <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Educational Background</h3>
+                                    <div className="px-4 pt-2 rounded-lg space-y-1">
                                         <p className="text-sm mb-2"><strong>Elementary:</strong> {application.education?.elementary?.school} ({application.education?.elementary?.yearGraduated})</p>
                                         <p className="text-sm mb-2"><strong>Junior High School:</strong> {application.education?.juniorHighSchool?.school} ({application.education?.juniorHighSchool?.yearGraduated})</p>
                                         <p className="text-sm mb-2"><strong>Senior High School:</strong> {application.education?.seniorHighSchool?.school} ({application.education?.seniorHighSchool?.yearGraduated})</p>
@@ -126,10 +140,10 @@ export default function InboxedApplicationDetail() {
                                 </div>
                             </div>
 
-                            <div className="mt-4 p-4 bg-white shadow rounded">
-                                <div className="mb-4">
-                                    <h3 className="text-md font-bold mt-4 mb-2">Family Details</h3>
-                                    <div className="p-4 rounded-lg shadow-s">
+                            <div className="mt-4 p-4 py-6 bg-white shadow rounded border">
+                                <div className="my-2">
+                                    <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Family Details</h3>
+                                    <div className="px-4 pt-2 rounded-lg shadow-s">
                                         <p className="text-sm mb-2"><strong>Father:</strong> {`${application.father?.firstName} ${application.father?.middleName} ${application.father?.lastName}`} (Occupation: {application.father?.occupation})</p>
                                         <p className="text-sm mb-2"><strong>Mother:</strong> {`${application.mother?.firstName} ${application.mother?.middleName} ${application.mother?.lastName}`} (Occupation: {application.mother?.occupation})</p>
                                         <p className="text-sm"><strong>Guardian:</strong> {application.guardian ? `${application.guardian?.firstName} ${application.guardian?.middleName} ${application.guardian?.lastName}` : "N/A"}</p>
@@ -138,10 +152,10 @@ export default function InboxedApplicationDetail() {
                             </div>
 
                             {application.workExperience && application.workExperience.length > 0 && (
-                                <div className="mt-4 p-4 bg-white shadow rounded">
-                                    <div className="mb-4">
-                                        <h3 className="text-md font-bold mt-4 mb-2">Work Experiences</h3>
-                                        <div className="p-4 rounded-lg shadow-sm">
+                                <div className="mt-4 p-4 bg-white border shadow rounded">
+                                    <div className="my-2">
+                                        <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Work Experiences</h3>
+                                        <div className="px-4 pt-2 rounded-lg">
                                             {application.workExperience.map((item, index) => (
                                                 (item.companyName || item.position || item.startDate || item.monthlySalary || item.statusOfAppointment) && (
                                                     <div key={index} className="mb-4">
@@ -159,10 +173,10 @@ export default function InboxedApplicationDetail() {
                             )}
 
                             {application.skillsAndQualifications && application.skillsAndQualifications.length > 0 && (
-                                <div className="mt-4 p-4 bg-white shadow rounded">
-                                    <div className="mb-4">
-                                        <h3 className="text-md font-bold mt-4 mb-2">Skills and Qualifications</h3>
-                                        <div className="p-4 rounded-lg shadow-sm">
+                                <div className="mt-4 p-4 bg-white border shadow rounded">
+                                    <div className="my-2">
+                                        <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Skills and Qualifications</h3>
+                                        <div className="px-4 pt-2 rounded-lg">
                                             {application.skillsAndQualifications.map((item, index) => (
                                                 (item.skills || item.qualifications) && (
                                                     <div key={index} className="mb-4">
@@ -177,9 +191,9 @@ export default function InboxedApplicationDetail() {
                             )}
 
                             <div className="mt-4 p-4 bg-white shadow rounded">
-                                <div className="mb-4">
-                                    <h3 className="text-md font-bold mt-4 mb-2">Documents</h3>
-                                    <div className="p-4 rounded-lg shadow-sm">
+                                <div className="my-2">
+                                    <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Documents</h3>
+                                    <div className="px-4 pt-2 rounded-lg shadow-sm">
                                         <p className="text-sm mb-2"><strong>Identification Card:</strong> {application.documents?.identificationCard}</p>
                                         <p className="text-sm mb-2"><strong>Proof of Address:</strong> {application.documents?.proofOfAddress}</p>
                                         <p className="text-sm mb-2"><strong>Academic Transcripts:</strong> {application.documents?.academicTranscripts}</p>

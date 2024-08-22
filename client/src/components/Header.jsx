@@ -152,10 +152,10 @@ export default function Header() {
                     {dropdownVisible && (
                       <ul className="text-left absolute bg-white shadow-lg rounded-lg mt-2 w-56 left-1/2 transform -translate-x-1/2 border border-gray-200">
                         <Link to='/register'>
-                          <li className='p-2 px-4 hover:bg-slate-200 text-slate-700 cursor-pointer'>Register as Student</li>
+                          <li className='p-2 px-4 hover:bg-blue-400 text-slate-700 cursor-pointer'>Register as Student</li>
                         </Link>
                         <Link to='/apply-as-provider'>
-                          <li className='p-2 px-4 hover:bg-slate-200 text-slate-700 cursor-pointer'>Register as Scholarship Provider</li>
+                          <li className='p-2 px-4 hover:bg-blue-400 text-slate-700 cursor-pointer'>Register as Scholarship Provider</li>
                         </Link>
                       </ul>
                     )}

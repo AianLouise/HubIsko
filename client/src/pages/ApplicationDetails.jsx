@@ -164,10 +164,10 @@ export default function Forums() {
                                     <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
                                         <FaUser className='text-white' />
                                     </div>
-                                    <div className='flex flex-col justify-center text-left'>
+                                    <Link to={'/profile-preview/:id'} className='flex flex-col justify-center text-left'>
                                         <span className='text-slate-600 '>Visit our profile!</span>
                                         <span className=''>{organizationName}</span>
-                                    </div>
+                                    </Link>
                                 </button>
                             </div>
                         </div>

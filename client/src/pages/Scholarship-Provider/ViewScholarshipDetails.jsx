@@ -252,14 +252,17 @@ export default function ViewScholarshipDetails() {
                                     </button>
                                 </form>
                                 <h2 className="text-2xl font-bold mt-8 mb-4 text-blue-600">Previous Announcements</h2>
-                                <table className="min-w-full bg-white rounded-lg shadow-md">
+
+                                
+                                <div className='bg-white rounded-lg shadow-md border'>
+                                <table className="min-w-full">
                                     <thead>
-                                        <tr>
+                                        <tr className='text-left'>
                                             <th className="py-2 px-4 border-b">Date</th>
                                             <th className="py-2 px-4 border-b">Announcement</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody className=''>
                                         <tr className="hover:bg-gray-100">
                                             <td className="py-2 px-4 border-b">2023-10-01</td>
                                             <td className="py-2 px-4 border-b">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.</td>
@@ -274,13 +277,14 @@ export default function ViewScholarshipDetails() {
                                         </tr>
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
                         )}
 
                         {activeTab === 'validation' && (
-                            <div className="p-6 bg-white rounded-lg shadow-md">
+                            <div className="p-6 bg-white rounded-lg shadow-md space-y-4">
                                 <h2 className="text-2xl font-bold mb-4 text-blue-600">Validation Page</h2>
-                                <p className="text-gray-700">
+                                <p className="text-slate-600">
                                     Create validation requirements for the school year and review the documents uploaded by scholars.
                                 </p>
                                 <form className="mb-6">
@@ -330,14 +334,17 @@ export default function ViewScholarshipDetails() {
                         )}
 
                         {activeTab === 'scholars' && (
-                            <div className="p-6 bg-white rounded-lg shadow-md">
+                            <div className="p-6 bg-white rounded-lg shadow-md space-y-4">
                                 <h2 className="text-2xl font-bold mb-4 text-blue-600">View Scholars</h2>
+                                
                                 <p className="text-gray-700">
                                     Here is the list of scholars enrolled in the program.
                                 </p>
-                                <table className="min-w-full bg-white rounded-lg shadow-md">
+
+                                <div className='rounded-lg shadow-md border'>
+                                <table className="min-w-full">
                                     <thead>
-                                        <tr>
+                                        <tr className='text-blue-600'>
                                             <th className="py-2 px-4 border-b">Name</th>
                                             <th className="py-2 px-4 border-b">Course</th>
                                             <th className="py-2 px-4 border-b">Year</th>
@@ -350,7 +357,7 @@ export default function ViewScholarshipDetails() {
                                             <td className="py-2 px-4 border-b">Computer Science</td>
                                             <td className="py-2 px-4 border-b">Year 2</td>
                                             <td className="py-2 px-4 border-b">
-                                                <Link to={`/scholars/john-doe`} className="text-blue-600 hover:underline">
+                                                <Link to={`/scholars/john-doe`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
                                                     View Details
                                                 </Link>
                                             </td>
@@ -360,7 +367,7 @@ export default function ViewScholarshipDetails() {
                                             <td className="py-2 px-4 border-b">Engineering</td>
                                             <td className="py-2 px-4 border-b">Year 3</td>
                                             <td className="py-2 px-4 border-b">
-                                                <Link to={`/scholars/jane-smith`} className="text-blue-600 hover:underline">
+                                                <Link to={`/scholars/jane-smith`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
                                                     View Details
                                                 </Link>
                                             </td>
@@ -370,13 +377,14 @@ export default function ViewScholarshipDetails() {
                                             <td className="py-2 px-4 border-b">Physics</td>
                                             <td className="py-2 px-4 border-b">Year 1</td>
                                             <td className="py-2 px-4 border-b">
-                                                <Link to={`/scholars/emily-johnson`} className="text-blue-600 hover:underline">
+                                                <Link to={`/scholars/emily-johnson`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
                                                     View Details
                                                 </Link>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
                         )}
 
@@ -386,9 +394,11 @@ export default function ViewScholarshipDetails() {
                                 <p className="text-gray-700 mb-5">
                                     Manage and review applications from scholars here.
                                 </p>
-                                <table className="min-w-full bg-white rounded-lg shadow-md">
+
+                                <div className='bg-white rounded-lg shadow-md border'>
+                                <table className="min-w-full">
                                     <thead>
-                                        <tr>
+                                        <tr className='text-blue-600'>
                                             <th className="py-2 px-4 border-b text-center">Name</th>
                                             <th className="py-2 px-4 border-b text-center">Status</th>
                                             <th className="py-2 px-4 border-b text-center">Applied On</th>
@@ -418,7 +428,7 @@ export default function ViewScholarshipDetails() {
                                                     </td>
                                                     <td className="py-2 px-4 border-b text-center">{new Date(application.appliedOn).toLocaleDateString()}</td>
                                                     <td className="py-2 px-4 border-b text-center">
-                                                        <Link to={`/applications/${application._id}`} className="text-blue-600 hover:underline">
+                                                        <Link to={`/applications/${application._id}`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
                                                             View Details
                                                         </Link>
                                                     </td>
@@ -427,6 +437,7 @@ export default function ViewScholarshipDetails() {
                                         )}
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
                         )}
                     </div>

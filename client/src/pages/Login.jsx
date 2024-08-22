@@ -196,7 +196,7 @@ export default function SignIn() {
                   <Link to="/register" className="bg-blue-500 text-white py-2 px-4 rounded text-center hover:bg-blue-600 transition duration-200">
                     Register as Student
                   </Link>
-                  <Link to="/apply-as-provider" className="bg-green-500 text-white py-2 px-4 rounded text-center hover:bg-green-600 transition duration-200">
+                  <Link to="/apply-as-provider" className="bg-blue-800 text-white py-2 px-4 rounded text-center hover:bg-blue-900 transition duration-200">
                     Register as Scholarship Provider
                   </Link>
                 </div>

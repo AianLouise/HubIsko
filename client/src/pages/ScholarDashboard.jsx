@@ -94,7 +94,7 @@ export default function ScholarDashboard() {
             <div className="flex flex-col items-center h-[350px] max-h-[350px] bg-white shadow rounded-lg">
 
               <h2 className="font-bold text-xl mb-2 w-full p-4 rounded-t-lg border-b-2">Current Applications</h2>
-              <div className='text-8xl mt-20 font-bold text-blue-600'>00</div>
+              <div className='text-8xl mt-20 font-bold text-blue-600'>{applications.length}</div>
               {/* Application items */}
 
             </div>
