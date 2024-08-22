@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BiFilter } from 'react-icons/bi';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 export default function ScholarApplications() {
   const { currentUser } = useSelector((state) => state.user);
@@ -95,7 +96,9 @@ export default function ScholarApplications() {
                     </td>
                     <td className='border border-gray-200 p-2'>
                       <div className='flex justify-center gap-2'>
-                        <button className='bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600'>Review Application</button>
+                        <Link to={`/view-scholarships/${application.scholarshipProgram._id}`} className='bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600'>
+                          Review Application
+                        </Link>
                       </div>
                     </td>
                   </tr>
