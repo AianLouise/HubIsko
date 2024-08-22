@@ -55,6 +55,7 @@ import InboxApplication from "./pages/Admin/InboxApplication";
 import ViewApplicationDetails from "./pages/Scholarship-Provider/ViewApplicationDetails";
 import EditProgramPage from "./pages/Scholarship-Provider/EditProgramPage";
 import EditStudentInfo from "./pages/Admin/EditStudentInfo";
+import ApplicationForm from "./pages/ApplicationForm";
 
 
 
@@ -78,6 +79,8 @@ export default function App() {
         <Route path="/forums/post/:postId" element={<ForumDetail />} />
 
         <Route path="/scholarship-details/:id" element={<ApplicationDetails />} />
+        <Route path="/application-form" element={<ApplicationForm />} />
+        
 
         {/* Admin Routes */}
         <Route element={<ProviderPrivateRoute allowedRoles={['admin']} />}>
