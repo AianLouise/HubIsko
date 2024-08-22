@@ -12,12 +12,42 @@ import { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { signOut } from '../redux/user/userSlice';
 import PageHeader from "./pageHeader";
+import { IoIosNotifications } from "react-icons/io";
+import { IoMenu } from "react-icons/io5";
+import { useEffect } from "react";
 
 export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, currentPath }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
 
+    const [showNotification, setShowNotification] = useState(false);
+    const notificationRef = useRef(null);
+
+    const toggleNotification = () => setShowNotification(!showNotification);
+
     const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+
+    const handleClickOutside = (event) => {
+        if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+          setShowNotification(false);
+        }
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setDropdownOpen(false);
+          }
+      };
+
+      useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+          document.removeEventListener('mousedown', handleClickOutside);
+        };
+      }, []);
+    
+
+    const ShowModal = () => {
+        setShowNotification(false);
+    };
+
 
     const dispatch = useDispatch();
     const currentUser = useSelector((state) => state.user.currentUser);
@@ -42,10 +72,39 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
                 </div>
 
 
-                <div className="flex gap-2 items-center">
-                    <span className="text-base">{currentUser.username}</span>
+                <div className="flex gap-4 items-center">
+                <div className="relative">
+                    <button onClick={toggleNotification} className='relative w-full border rounded-full p-3 hover:bg-slate-200 focus:bg-blue-600 group'>
+                        <IoIosNotifications className='w-4 h-4 text-blue-600 group-focus:text-white' />
+                    </button>
+                    {showNotification && (
+                        <div ref={notificationRef} className="absolute top-full right-0 mt-2 border bg-white text-gray-800 shadow-lg rounded-md p-4 w-96 z-50">
+                        <div className='flex flex-col justify-start'>
+                            <span className='text-2xl text-left border-b py-2 w-full'>Notification Inbox</span>
+                            <div className='flex gap-2 pt-4'>
+                            <button className='border rounded-md p-2 px-4 hover:bg-slate-200 focus:bg-blue-600 focus:text-white'>All</button>
+                            <button className='border rounded-md p-2 px-4 hover:bg-slate-200 focus:bg-blue-600 focus:text-white'>Unread</button>
+                            </div>
+                            <div className='flex flex-col items-start p-2 mt-4'>
+                            <span>New Notifications</span>
+                            <div className='flex flex-col gap-2 mt-2'>
+                                <div className='flex flex-row text-sm w-full gap-4'>
+                                <div className='bg-blue-600 w-24 h-auto rounded-full'></div>
+                                <div className='flex flex-col text-left'>
+                                    <span className='font-bold'>HubIsko</span>
+                                    <span>Application for the scholarship has been approved ... see more</span>
+                                </div>
+                                </div>
+                                <button onClick={ShowModal} className='bg-blue-600 text-white rounded-md p-2 mt-4 font-medium hover:bg-blue-800 transition ease-in-out'>See All Notifications</button>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    )}
+                    </div>
+
                     <div className="relative" ref={dropdownRef}>
-                    <img src={currentUser.profilePicture || 'https://via.placeholder.com/40'} alt="Profile" className="h-8 w-8 rounded-full" onClick={toggleDropdown} />
+                    <img src={currentUser.profilePicture || 'https://via.placeholder.com/40'} alt="Profile" className="h-10 w-10 rounded-full" onClick={toggleDropdown} />
                     {dropdownOpen && (
                         <div className="absolute mt-2 right-0 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50 font-medium">
                         <ul>
