@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateUserSuccess } from '../redux/user/userSlice'; // Adjust the import path as needed
 import { useNavigate } from 'react-router-dom';
 import { regions, provinces, cities, barangays, regionByCode, provincesByCode, provinceByName } from "select-philippines-address";
+import { storage } from '../firebase'; // Import Firebase storage
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Import necessary Firebase functions
 
 // regions().then((region) => console.log(region));
 // regionByCode("01").then((region) => console.log(region.region_name));
@@ -17,6 +19,7 @@ export default function CompleteProfile() {
   const { currentUser } = useSelector((state) => state.user);
 
   const [formData, setFormData] = useState({
+    profilePicture: '',
     firstName: '',
     middleName: '',
     lastName: '',
@@ -124,13 +127,27 @@ export default function CompleteProfile() {
     document.body.classList.add('modal-open'); // Add class to body to prevent scrolling
   };
 
-  const handleConfirmSubmit = () => {
+  const handleConfirmSubmit = async () => {
+    let profilePictureUrl = '';
+
+    if (formData.profilePicture) {
+      const storageRef = ref(storage, `profilePictures/${formData.profilePicture.name}`);
+      await uploadBytes(storageRef, formData.profilePicture);
+      profilePictureUrl = await getDownloadURL(storageRef);
+    }
+
+    const updatedFormData = {
+      ...formData,
+      profilePicture: profilePictureUrl,
+    };
+    console.log('Updated form data:', updatedFormData);
+
     fetch('/api/user/complete-profile', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(updatedFormData),
     })
       .then((response) => {
         if (response.ok) {
@@ -145,15 +162,23 @@ export default function CompleteProfile() {
           ...currentUser,
           applicantDetails: {
             ...currentUser.applicantDetails,
-            profileComplete: true
-          }
+            profileComplete: true,
+            profilePicture: profilePictureUrl,
+          },
+          profilePicture: profilePictureUrl, // Update the profilePicture in currentUser
         }));
         navigate('/complete-profile-confirmation');
       })
       .catch((error) => console.error('Error:', error));
   };
 
-
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFormData({
+      ...formData,
+      profilePicture: file,
+    });
+  };
 
   return (
     <div>
@@ -166,6 +191,34 @@ export default function CompleteProfile() {
         </div>
 
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4'>
+          <div className='col-span-1 md:col-span-2 lg:col-span-4 text-center'>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Profile Picture</label>
+            <div className='flex justify-center'>
+              <div className='relative'>
+                <input
+                  type="file"
+                  name="profilePicture"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className='absolute inset-0 w-full h-full opacity-0 cursor-pointer'
+                />
+                <div className='w-24 h-24 rounded-full border border-gray-300 flex items-center justify-center overflow-hidden'>
+                  <img
+                    src={
+                      formData.profilePicture
+                        ? URL.createObjectURL(formData.profilePicture)
+                        : currentUser.profilePicture
+                          ? currentUser.profilePicture
+                          : 'default-profile-picture-url'
+                    }
+                    alt="Profile"
+                    className='w-full h-full object-cover'
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
             <input
