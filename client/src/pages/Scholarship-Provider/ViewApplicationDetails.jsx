@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import ApplicationForm from '../ApplicationForm';
@@ -16,6 +16,7 @@ export default function ViewApplicationDetails() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { id } = useParams();
+    const navigate = useNavigate();
 
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
@@ -110,9 +111,9 @@ export default function ViewApplicationDetails() {
         );
     }
 
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
+    // if (error) {
+    //     return <div>Error: {error}</div>;
+    // }
 
 
 
@@ -121,19 +122,21 @@ export default function ViewApplicationDetails() {
 
             <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''}`}>
             <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} currentPath={`${currentUser.scholarshipProviderDetails.organizationName} / `} />
-            
-          
-            <div className="max-w-6xl px-24 mx-auto my-20">
-
-            <div className='my-8 flex gap-2 items-center font-medium'>
-                    <Link to={'/application-box'} className='bg-white border rounded-md px-6 py-2 shadow hover:bg-slate-200'>
-                     <span>Scholarship</span>
-                    </Link>
-
-                           <IoMdArrowDropdown className='-rotate-90 text-4xl text-blue-600' />
-
-                    <div className='bg-white border rounded-md px-6 py-2 shadow'>
-                    <span className='text-blue-600'>Name</span>
+                <div className="max-w-6xl px-24 mx-auto my-20">
+                    <div className='my-8 flex gap-2 items-center font-medium'>
+                        <Link
+                            to="#"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                navigate(-1);
+                            }}
+                            className='bg-white border rounded-md px-6 py-2 shadow hover:bg-slate-200'
+                        >
+                            <span>Scholarship</span>
+                        </Link>
+                        <IoMdArrowDropdown className='-rotate-90 text-4xl text-blue-600' />
+                        <div className='bg-white border rounded-md px-6 py-2 shadow'>
+                            <span className='text-blue-600'>Name</span>
                     </div>
                     </div>  
                 
