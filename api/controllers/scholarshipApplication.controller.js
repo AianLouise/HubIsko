@@ -39,7 +39,6 @@ export const createScholarshipApplication = async (req, res) => {
             termsAndConditions,
             scholarshipProgram,
             applicant,
-            applicationStatus
         } = req.body;
 
         const newApplication = new ScholarshipApplication({
@@ -73,7 +72,6 @@ export const createScholarshipApplication = async (req, res) => {
             termsAndConditions,
             scholarshipProgram,
             applicant,
-            applicationStatus
         });
 
         await newApplication.save();

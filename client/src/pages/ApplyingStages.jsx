@@ -190,7 +190,6 @@ export default function ApplyingStages() {
         },
         scholarshipProgram: '',
         applicant: currentUser._id,
-        applicationStatus: 'pending'
     });
 
     const [scholarship, setScholarship] = useState(null);
