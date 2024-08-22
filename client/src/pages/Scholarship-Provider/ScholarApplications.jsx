@@ -52,6 +52,7 @@ export default function ScholarApplications() {
                   <th className='border border-gray-200 p-2'>Name</th>
                   <th className='border border-gray-200 p-2'>Email</th>
                   <th className='border border-gray-200 p-2'>Date</th>
+                  <th className='border border-gray-200 p-2'>Scholarship Applied</th>
                   <th className='border border-gray-200 p-2'>Status</th>
                   <th className='border border-gray-200 p-2'>Actions</th>
                 </tr>
