@@ -4,12 +4,27 @@ import Footer from '../components/Footer';
 import { FaHandHolding, FaRegCalendarXmark, FaArrowRightLong } from "react-icons/fa6";
 import { MdOutlineRefresh } from "react-icons/md";
 import { BsGlobe2 } from "react-icons/bs";
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaPhone, FaUser } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 
 export default function Forums() {
     const { id } = useParams();
     const [scholarship, setScholarship] = useState(null);
+
+    const { currentUser } = useSelector(state => state.user);
+    const isLoggedIn = Boolean(currentUser);
+    const [notification, setNotification] = useState('');
+    const navigate = useNavigate();
+
+    const handleApplyClick = () => {
+        if (!isLoggedIn) {
+            setNotification('You must be logged in to apply for scholarships.');
+            setTimeout(() => setNotification(''), 3000); // Clear notification after 3 seconds
+        } else {
+            navigate(`/applying-stages/${scholarship.id}`);
+        }
+    };
 
     useEffect(() => {
         const fetchScholarship = async () => {
@@ -127,7 +142,7 @@ export default function Forums() {
                             <div className='flex gap-6 justify-center mb-8'>
                                 <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'>
                                     <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
-                                    <FaEnvelope className='text-white' />
+                                        <FaEnvelope className='text-white' />
                                     </div>
                                     <div className='flex flex-col justify-center'>
                                         <span className='text-slate-600 text-left'>Email Us!</span>
@@ -137,7 +152,7 @@ export default function Forums() {
 
                                 <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'>
                                     <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
-                                    <FaPhone className='text-white' />
+                                        <FaPhone className='text-white' />
                                     </div>
                                     <div className='flex flex-col justify-center'>
                                         <span className='text-slate-600 text-left'>Call us!</span>
@@ -147,7 +162,7 @@ export default function Forums() {
 
                                 <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'>
                                     <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
-                                    <FaUser className='text-white' />
+                                        <FaUser className='text-white' />
                                     </div>
                                     <div className='flex flex-col justify-center text-left'>
                                         <span className='text-slate-600 '>Visit our profile!</span>
@@ -174,8 +189,13 @@ export default function Forums() {
                                 </button>
 
 
-                                <Link  to={`/applying-stages/${scholarship.id}`}  className='bg-white flex items-center border justify-between shadow rounded-md p-4 w-1/2 h-22 hover:-translate-y-2 hover:bg-slate-200 transition ease-in-out group'>
-
+                                {notification && (
+                                    <div className='fixed top-4 right-4 bg-red-500 text-white p-3 rounded-md shadow-lg' role='alert'>
+                                        <strong className='font-bold'>Not Logged In!</strong>
+                                        <span className='block sm:inline'> {notification}</span>
+                                    </div>
+                                )}
+                                <div onClick={handleApplyClick} className='cursor-pointer bg-white flex items-center border justify-between shadow rounded-md p-4 w-1/2 h-22 hover:-translate-y-2 hover:bg-slate-200 transition ease-in-out group'>
                                     <div className='flex flex-row gap-4 '>
                                         <div className='bg-blue-600 w-14 h-14 rounded-md'></div>
                                         <div className='flex flex-col text-left'>
@@ -183,10 +203,8 @@ export default function Forums() {
                                             <span className='text-slate-600'>We'll guide you step by step!</span>
                                         </div>
                                     </div>
-
                                     <FaArrowRightLong className='w-8 h-8 mr-4 group-hover:translate-x-2 group-hover:text-blue-600 transition ease-in-out' />
-
-                                </Link>
+                                </div>
                             </div>
                         </div>
                     </div>

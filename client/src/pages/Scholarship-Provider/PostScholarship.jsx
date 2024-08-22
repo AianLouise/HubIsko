@@ -388,16 +388,105 @@ export default function PostScholarship() {
 
                 <div>
                   <label className="block text-gray-700">Field of Study</label>
-                  <input
-                    type="text"
+                  <select
                     name="fieldOfStudy"
                     value={formData.fieldOfStudy}
                     onChange={handleChange}
-                    placeholder="Enter the field of study"
                     className="w-full p-2 border border-gray-300 rounded"
                     required
-                  />
+                  >
+                    <option value="" disabled>Select the field of study</option>
+                    <option value="Open for All Courses">Open for All Courses</option>
+                    <option value="Bachelor of Science in Accounting">Bachelor of Science in Accounting</option>
+                    <option value="Bachelor of Science in Aerospace Engineering">Bachelor of Science in Aerospace Engineering</option>
+                    <option value="Bachelor of Science in Agribusiness Management">Bachelor of Science in Agribusiness Management</option>
+                    <option value="Bachelor of Science in Agricultural Engineering">Bachelor of Science in Agricultural Engineering</option>
+                    <option value="Bachelor of Science in Agriculture">Bachelor of Science in Agriculture</option>
+                    <option value="Bachelor of Science in Animation">Bachelor of Science in Animation</option>
+                    <option value="Bachelor of Science in Applied Physics">Bachelor of Science in Applied Physics</option>
+                    <option value="Bachelor of Science in Architecture">Bachelor of Science in Architecture</option>
+                    <option value="Bachelor of Science in Astronomy">Bachelor of Science in Astronomy</option>
+                    <option value="Bachelor of Science in Automotive Engineering">Bachelor of Science in Automotive Engineering</option>
+                    <option value="Bachelor of Science in Aviation">Bachelor of Science in Aviation</option>
+                    <option value="Bachelor of Science in Behavioral Science">Bachelor of Science in Behavioral Science</option>
+                    <option value="Bachelor of Science in Biochemistry">Bachelor of Science in Biochemistry</option>
+                    <option value="Bachelor of Science in Biology">Bachelor of Science in Biology</option>
+                    <option value="Bachelor of Science in Biomedical Engineering">Bachelor of Science in Biomedical Engineering</option>
+                    <option value="Bachelor of Science in Biotechnology">Bachelor of Science in Biotechnology</option>
+                    <option value="Bachelor of Science in Business Administration">Bachelor of Science in Business Administration</option>
+                    <option value="Bachelor of Science in Chemical Engineering">Bachelor of Science in Chemical Engineering</option>
+                    <option value="Bachelor of Science in Chemistry">Bachelor of Science in Chemistry</option>
+                    <option value="Bachelor of Science in Civil Engineering">Bachelor of Science in Civil Engineering</option>
+                    <option value="Bachelor of Science in Communications">Bachelor of Science in Communications</option>
+                    <option value="Bachelor of Science in Community Development">Bachelor of Science in Community Development</option>
+                    <option value="Bachelor of Science in Computer Engineering">Bachelor of Science in Computer Engineering</option>
+                    <option value="Bachelor of Science in Computer Science">Bachelor of Science in Computer Science</option>
+                    <option value="Bachelor of Science in Criminology">Bachelor of Science in Criminology</option>
+                    <option value="Bachelor of Science in Dentistry">Bachelor of Science in Dentistry</option>
+                    <option value="Bachelor of Science in Digital Marketing">Bachelor of Science in Digital Marketing</option>
+                    <option value="Bachelor of Science in Economics">Bachelor of Science in Economics</option>
+                    <option value="Bachelor of Science in Education">Bachelor of Science in Education</option>
+                    <option value="Bachelor of Science in Electrical Engineering">Bachelor of Science in Electrical Engineering</option>
+                    <option value="Bachelor of Science in Electronics Engineering">Bachelor of Science in Electronics Engineering</option>
+                    <option value="Bachelor of Science in Emergency Management">Bachelor of Science in Emergency Management</option>
+                    <option value="Bachelor of Science in Environmental Science">Bachelor of Science in Environmental Science</option>
+                    <option value="Bachelor of Science in Fashion Design">Bachelor of Science in Fashion Design</option>
+                    <option value="Bachelor of Science in Finance">Bachelor of Science in Finance</option>
+                    <option value="Bachelor of Science in Fisheries">Bachelor of Science in Fisheries</option>
+                    <option value="Bachelor of Science in Food Technology">Bachelor of Science in Food Technology</option>
+                    <option value="Bachelor of Science in Forestry">Bachelor of Science in Forestry</option>
+                    <option value="Bachelor of Science in Geodetic Engineering">Bachelor of Science in Geodetic Engineering</option>
+                    <option value="Bachelor of Science in Geology">Bachelor of Science in Geology</option>
+                    <option value="Bachelor of Science in Hotel and Restaurant Management">Bachelor of Science in Hotel and Restaurant Management</option>
+                    <option value="Bachelor of Science in Information Systems">Bachelor of Science in Information Systems</option>
+                    <option value="Bachelor of Science in Information Technology">Bachelor of Science in Information Technology</option>
+                    <option value="Bachelor of Science in Interior Design">Bachelor of Science in Interior Design</option>
+                    <option value="Bachelor of Science in International Relations">Bachelor of Science in International Relations</option>
+                    <option value="Bachelor of Science in Journalism">Bachelor of Science in Journalism</option>
+                    <option value="Bachelor of Science in Law">Bachelor of Science in Law</option>
+                    <option value="Bachelor of Science in Library Science">Bachelor of Science in Library Science</option>
+                    <option value="Bachelor of Science in Management">Bachelor of Science in Management</option>
+                    <option value="Bachelor of Science in Marine Biology">Bachelor of Science in Marine Biology</option>
+                    <option value="Bachelor of Science in Marine Engineering">Bachelor of Science in Marine Engineering</option>
+                    <option value="Bachelor of Science in Marketing">Bachelor of Science in Marketing</option>
+                    <option value="Bachelor of Science in Mass Communication">Bachelor of Science in Mass Communication</option>
+                    <option value="Bachelor of Science in Mathematics">Bachelor of Science in Mathematics</option>
+                    <option value="Bachelor of Science in Mechanical Engineering">Bachelor of Science in Mechanical Engineering</option>
+                    <option value="Bachelor of Science in Medical Technology">Bachelor of Science in Medical Technology</option>
+                    <option value="Bachelor of Science in Medicine">Bachelor of Science in Medicine</option>
+                    <option value="Bachelor of Science in Metallurgical Engineering">Bachelor of Science in Metallurgical Engineering</option>
+                    <option value="Bachelor of Science in Microbiology">Bachelor of Science in Microbiology</option>
+                    <option value="Bachelor of Science in Midwifery">Bachelor of Science in Midwifery</option>
+                    <option value="Bachelor of Science in Mining Engineering">Bachelor of Science in Mining Engineering</option>
+                    <option value="Bachelor of Science in Music">Bachelor of Science in Music</option>
+                    <option value="Bachelor of Science in Nursing">Bachelor of Science in Nursing</option>
+                    <option value="Bachelor of Science in Nutrition and Dietetics">Bachelor of Science in Nutrition and Dietetics</option>
+                    <option value="Bachelor of Science in Occupational Therapy">Bachelor of Science in Occupational Therapy</option>
+                    <option value="Bachelor of Science in Oceanography">Bachelor of Science in Oceanography</option>
+                    <option value="Bachelor of Science in Optometry">Bachelor of Science in Optometry</option>
+                    <option value="Bachelor of Science in Pharmacy">Bachelor of Science in Pharmacy</option>
+                    <option value="Bachelor of Science in Philosophy">Bachelor of Science in Philosophy</option>
+                    <option value="Bachelor of Science in Physical Therapy">Bachelor of Science in Physical Therapy</option>
+                    <option value="Bachelor of Science in Physics">Bachelor of Science in Physics</option>
+                    <option value="Bachelor of Science in Political Science">Bachelor of Science in Political Science</option>
+                    <option value="Bachelor of Science in Psychology">Bachelor of Science in Psychology</option>
+                    <option value="Bachelor of Science in Public Administration">Bachelor of Science in Public Administration</option>
+                    <option value="Bachelor of Science in Public Health">Bachelor of Science in Public Health</option>
+                    <option value="Bachelor of Science in Real Estate Management">Bachelor of Science in Real Estate Management</option>
+                    <option value="Bachelor of Science in Respiratory Therapy">Bachelor of Science in Respiratory Therapy</option>
+                    <option value="Bachelor of Science in Social Work">Bachelor of Science in Social Work</option>
+                    <option value="Bachelor of Science in Sociology">Bachelor of Science in Sociology</option>
+                    <option value="Bachelor of Science in Software Engineering">Bachelor of Science in Software Engineering</option>
+                    <option value="Bachelor of Science in Speech Pathology">Bachelor of Science in Speech Pathology</option>
+                    <option value="Bachelor of Science in Sports Science">Bachelor of Science in Sports Science</option>
+                    <option value="Bachelor of Science in Statistics">Bachelor of Science in Statistics</option>
+                    <option value="Bachelor of Science in Tourism Management">Bachelor of Science in Tourism Management</option>
+                    <option value="Bachelor of Science in Veterinary Medicine">Bachelor of Science in Veterinary Medicine</option>
+                    <option value="Bachelor of Science in Zoology">Bachelor of Science in Zoology</option>
+                    <option value="Other">Other</option>
+                  </select>
                 </div>
+
 
                 <div>
                   <label className="block text-gray-700">Number of Scholarships Available</label>
@@ -668,6 +757,7 @@ export default function PostScholarship() {
                     className="border border-gray-300 rounded-md p-2"
                     placeholder="Provide any additional instructions or guidelines for document submission"
                     rows="4"
+                    value={formData.documentGuidelines}
                     onChange={handleChange}
                     required
                   ></textarea>
@@ -815,7 +905,7 @@ export default function PostScholarship() {
 
                         {/* Contact Section */}
                         <div className='flex gap-6 justify-center mb-8'>
-                          <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'>
+                          <button type='button' className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'>
                             <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
                               <FaEnvelope className='text-white' />
                             </div>
@@ -825,7 +915,7 @@ export default function PostScholarship() {
                             </div>
                           </button>
 
-                          <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'>
+                          <button type='button' className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'>
                             <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
                               <FaPhone className='text-white' />
                             </div>
@@ -835,7 +925,10 @@ export default function PostScholarship() {
                             </div>
                           </button>
 
-                          <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'>
+                          <button
+                            type="button"
+                            className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'
+                          >
                             <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
                               <FaUser className='text-white' />
                             </div>

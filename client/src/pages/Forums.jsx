@@ -7,14 +7,23 @@ import { FaRegEye } from "react-icons/fa6";
 import { BiCommentDots } from "react-icons/bi";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
+import { useSelector } from 'react-redux';
+
+
 
 export default function Forums() {
   useEffect(() => {
     document.title = "Forums | HubIsko";
   }, []);
 
+  const { currentUser } = useSelector(state => state.user);
+
+  const isLoggedIn = !!currentUser;
+
   const [recentPosts, setRecentPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [notification, setNotification] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,6 +63,17 @@ export default function Forums() {
     navigate(`/forums/post/${postId}`);
   };
 
+ 
+
+  const handleCreatePostClick = () => {
+    if (!isLoggedIn) {
+      setNotification('You must be logged in to create a new post.');
+      setTimeout(() => setNotification(''), 3000); // Clear notification after 3 seconds
+    } else {
+      navigate('/forums/create-post');
+    }
+  };
+
   return (
     <div className='flex flex-col min-h-screen'>
       <Header />
@@ -81,12 +101,18 @@ export default function Forums() {
                 <option value="My Posts">My posts</option>
               </select>
 
-              <Link to="/forums/create-post">
-                <button className='flex gap-2 items-center justify-center bg-blue-600 p-3 rounded-md border hover:bg-blue-800 transition ease-in-out'>
-                  <FaPlus className='w-5 h-5 text-white' />
-                  <span className='font-medium text-white'>Create a New post</span>
-                </button>
-              </Link>
+              {notification && (
+                <div className="fixed top-4 right-4 bg-red-500 text-white p-3 rounded-md shadow-lg">
+                  {notification}
+                </div>
+              )}
+              <button
+                onClick={handleCreatePostClick}
+                className="flex gap-2 items-center justify-center bg-blue-600 p-3 rounded-md border hover:bg-blue-800 transition ease-in-out"
+              >
+                <FaPlus className="w-5 h-5 text-white" />
+                <span className="font-medium text-white">Create a New post</span>
+              </button>
             </div>
 
             <div>

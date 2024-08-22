@@ -73,13 +73,19 @@ export default function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/scholarship-listing" element={<ScholarshipListing />} />
 
+        <Route path="/forums" element={<Forums />} />
+        <Route path="/others-profile" element={<OthersProfile />} />
+        <Route path="/forums/post/:postId" element={<ForumDetail />} />
+
+        <Route path="/scholarship-details/:id" element={<ApplicationDetails />} />
+
         {/* Admin Routes */}
         <Route element={<ProviderPrivateRoute allowedRoles={['admin']} />}>
           <Route path="/admin-home" element={<AdminHome />} />
           <Route path="/accounts" element={<Accounts />} />
           <Route path="/students" element={<Students />} />
           <Route path="/provider-accounts" element={<ProviderAccounts />} />
-          <Route path="/verification-details" element={<VerificationDetails />} />
+          <Route path="/verification-details/:id" element={<VerificationDetails />} />
           <Route path="/student-details/:id" element={<StudentDetails />} />
           <Route path="/provider-details" element={<ProviderDetails />} />
           <Route path="/inbox" element={<Inbox />} />
@@ -115,12 +121,10 @@ export default function App() {
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/about" element={<About />} />
           <Route path="/CoRH" element={<CompleteOrReturnHome />} />
-          <Route path="/forums" element={<Forums />} />
-          <Route path="/others-profile" element={<OthersProfile />} />
-          <Route path="/forums/post/:postId" element={<ForumDetail />} />
+
           <Route path="/forums/create-post" element={<CreateForumPost />} />
 
-          <Route path="/scholarship-details/:id" element={<ApplicationDetails />} />
+          
           <Route path="/applying-stages/:scholarshipId" element={<ApplyingStages />} />
           <Route path="/application-box" element={<ApplicationBox />} />
           <Route path="/application-detail/:id" element={<InboxedApplicationDetail />} />

@@ -152,6 +152,10 @@ const scholarshipProviderSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
+  registrationCertificate: {
+    type: String,
+    default: '',
+  },
   tin: {
     type: String,
     default: '',
@@ -165,10 +169,6 @@ const scholarshipProviderSchema = new mongoose.Schema({
     default: '',
   },
   idProofContactPerson: {
-    type: String,
-    default: '',
-  },
-  additionalDocuments: {
     type: String,
     default: '',
   },

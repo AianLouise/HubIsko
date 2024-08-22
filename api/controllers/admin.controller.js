@@ -50,20 +50,20 @@ export const getTotalScholarships = async (req, res) => {
 };
 
 export const getTotalScholarshipProviders = async (req, res) => {
-    try {
-      const totalScholarshipProviders = await User.countDocuments({ role: 'scholarship_provider' });
-      res.json({
-        totalScholarshipProviders,
-      });
-    } catch (error) {
-      res.status(500).json({
-        message: 'Error retrieving total scholarship providers',
-        error: error.message,
-      });
-    }
-  };    
+  try {
+    const totalScholarshipProviders = await User.countDocuments({ role: 'scholarship_provider' });
+    res.json({
+      totalScholarshipProviders,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error retrieving total scholarship providers',
+      error: error.message,
+    });
+  }
+};
 
-  export const getTotalApplicants = async (req, res) => {
+export const getTotalApplicants = async (req, res) => {
   try {
     const totalApplicants = await User.countDocuments({ role: 'applicant' });
     res.json({
@@ -133,12 +133,13 @@ export const getPendingScholarshipProviders = async (req, res) => {
     });
 
     if (!providers.length) {
-      return res.status(404).json({
+      return res.json({
         message: 'No pending scholarship providers found',
       });
     }
 
     res.json({
+      message: 'Pending scholarship providers retrieved successfully',
       providers,
     });
   } catch (error) {
@@ -156,17 +157,68 @@ export const getPendingScholarshipPrograms = async (req, res) => {
     });
 
     if (!programs.length) {
-      return res.status(404).json({
+      return res.json({
         message: 'No pending scholarship programs found',
       });
     }
 
     res.json({
+      message: 'Pending scholarship programs retrieved successfully',
       programs,
     });
   } catch (error) {
     res.status(500).json({
       message: 'Error retrieving pending scholarship programs',
+      error: error.message,
+    });
+  }
+};
+
+export const getScholarshipProviderById = async (req, res) => {
+  try {
+    const { id } = req.params; // Extract the id from the request parameters
+
+    const provider = await User.findById(id); // Find the provider by ID
+
+    if (!provider) {
+      return res.status(404).json({
+        message: 'Scholarship provider not found',
+      });
+    }
+
+    res.json({
+      provider,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error retrieving scholarship provider details',
+      error: error.message,
+    });
+  }
+};
+
+export const verifyScholarshipProviderStatus = async (req, res) => {
+  try {
+    const { id } = req.params; // Extract the user ID from the request parameters
+
+    const user = await User.findById(id); // Find the user by ID
+
+    if (!user) {
+      return res.status(404).json({
+        message: 'User not found',
+      });
+    }
+
+    user.scholarshipProviderDetails.status = 'verified'; // Update the status to 'verified'
+    await user.save(); // Save the changes
+
+    res.json({
+      message: 'Scholarship provider status verified successfully',
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error verifying scholarship provider status',
       error: error.message,
     });
   }

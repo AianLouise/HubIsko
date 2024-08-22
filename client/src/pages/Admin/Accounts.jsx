@@ -181,7 +181,6 @@ export default function Accounts() {
                                 placeholder="Search for a request"
                                 className="border rounded-md p-2"
                             />
-
                             <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-800 text-white p-2 rounded-md">
                                 <BiFilter className="w-6 h-6" />
                                 <span>Filter</span>
@@ -199,23 +198,30 @@ export default function Accounts() {
                                 </tr>
                             </thead>
                             <tbody className="text-center">
-                                {providers.map(provider => (
-                                    <tr key={provider._id} className="divide-x">
-                                        <td className='p-2'>{provider.scholarshipProviderDetails.organizationName}</td>
-                                        <td className='p-2'>{provider.email}</td>
-                                        <td className='p-2'>Scholarship Provider</td>
-                                        <td>
-                                            <Link to={`/verification-details/${provider._id}`} className="bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white">View Details</Link>
-                                        </td>
-                                        <td className='p-2 flex gap-2 justify-center items-center'>
-                                            <button className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-800">Verify</button>
-                                            <button className="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-700">Decline</button>
-                                        </td>
+                                {providers && providers.length > 0 ? (
+                                    providers.map(provider => (
+                                        <tr key={provider._id} className="divide-x">
+                                            <td className='p-2'>{provider.scholarshipProviderDetails.organizationName}</td>
+                                            <td className='p-2'>{provider.email}</td>
+                                            <td className='p-2'>Scholarship Provider</td>
+                                            <td>
+                                                <Link to={`/verification-details/${provider._id}`} className="bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white">View Details</Link>
+                                            </td>
+                                            <td className='p-2 flex gap-2 justify-center items-center'>
+                                                <button className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-800">Verify</button>
+                                                <button className="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-700">Decline</button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="5" className="p-4 text-gray-600">No pending scholarship verification requests for scholarship providers.</td>
                                     </tr>
-                                ))}
+                                )}
                             </tbody>
                         </table>
                     </div>
+
 
                     <div className="flex flex-col">
                         <span className="font-bold text-xl border-b w-full pb-2">Request for Scholarship Program Verification</span>
@@ -244,20 +250,26 @@ export default function Accounts() {
                                 </tr>
                             </thead>
                             <tbody className="text-center">
-                                {programs.map(program => (
-                                    <tr key={program._id} className="divide-x">
-                                        <td className='p-2'>{program.title}</td>
-                                        <td className='p-2'>{program.organizationName}</td>
-                                        <td className='p-2'>{program.contactEmail}</td>
-                                        <td>
-                                            <Link to={`/verification-details/${program._id}`} className="bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white">View Details</Link>
-                                        </td>
-                                        <td className='p-2 flex gap-2 justify-center items-center'>
-                                            <button className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-800">Verify</button>
-                                            <button className="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-700">Decline</button>
-                                        </td>
+                                {programs && programs.length > 0 ? (
+                                    programs.map(program => (
+                                        <tr key={program._id} className="divide-x">
+                                            <td className='p-2'>{program.title}</td>
+                                            <td className='p-2'>{program.organizationName}</td>
+                                            <td className='p-2'>{program.contactEmail}</td>
+                                            <td>
+                                                <Link to={`/verification-details/${program._id}`} className="bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white">View Details</Link>
+                                            </td>
+                                            <td className='p-2 flex gap-2 justify-center items-center'>
+                                                <button className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-800">Verify</button>
+                                                <button className="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-700">Decline</button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="5" className="p-4 text-gray-600">No pending scholarship verification requests for scholarship programs.</td>
                                     </tr>
-                                ))}
+                                )}
                             </tbody>
                         </table>
                     </div>

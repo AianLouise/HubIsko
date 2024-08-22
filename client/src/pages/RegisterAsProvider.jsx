@@ -66,7 +66,7 @@ export default function RegisterAsProvider() {
 
   const navigate = useNavigate();
 
- const handleLogin = () => {
+  const handleLogin = () => {
     navigate('/login');
   };
 
@@ -84,7 +84,8 @@ export default function RegisterAsProvider() {
     if (!file) return;
 
     const currentDate = new Date().toISOString().split('T')[0];
-    const formattedFileName = `provider-documents/${formData.organizationName}_${name}_${currentDate}`;
+    const fileExtension = file.name.split('.').pop();
+    const formattedFileName = `provider-documents/${formData.organizationName}/${formData.organizationName}_${name}_${currentDate}.${fileExtension}`;
     const storageRef = ref(storage, formattedFileName);
 
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -228,7 +229,19 @@ export default function RegisterAsProvider() {
                 </div>
                 <div className="mb-4">
                   <label htmlFor="organizationType" className="block text-sm font-medium text-gray-700">Organization Type</label>
-                  <input type="text" name="organizationType" id="organizationType" value={formData.organizationType} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Type of organization (e.g., Non-profit, Educational Institution, Corporate, Government)" />
+                  <select
+                    name="organizationType"
+                    id="organizationType"
+                    value={formData.organizationType}
+                    onChange={handleChange}
+                    className="mt-1 p-2 w-full border rounded-md"
+                  >
+                    <option value="" disabled>Select organization type</option>
+                    <option value="Non-profit">Non-profit</option>
+                    <option value="Educational Institution">Educational Institution</option>
+                    <option value="Corporate">Corporate</option>
+                    <option value="Government">Government</option>
+                  </select>
                   {errors.organizationType && <p className="text-red-500 text-sm">{errors.organizationType}</p>}
                 </div>
                 <div className="mb-4">
@@ -293,7 +306,7 @@ export default function RegisterAsProvider() {
             <div className='bg-white p-8 shadow rounded-md border'>
               <h2 className="text-2xl font-bold mb-6">Enter Account Information</h2>
               <div className='grid grid-cols-2 gap-4'>
-                               <div className="mb-4 col-span-2">
+                <div className="mb-4 col-span-2">
                   <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
                   <input type="text" name="username" id="username" value={formData.username} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Enter your username" />
                   {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
@@ -419,7 +432,7 @@ export default function RegisterAsProvider() {
       )}
 
       {showModal && (
-               <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-8 rounded-md shadow-lg text-center">
             <h2 className="text-2xl font-bold mb-4">Thank You!</h2>
             <p className="mb-4">Your registration was successful.</p>

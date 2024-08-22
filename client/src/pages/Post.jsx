@@ -23,8 +23,10 @@ export default function ForumDetail() {
     const [post, setPost] = useState(null);
     const [commentContent, setCommentContent] = useState('');
     const [selectedFiles, setSelectedFiles] = useState([]);
-
+    
     const { currentUser } = useSelector(state => state.user);
+    
+    const isLoggedIn = !!currentUser; // Check if currentUser is not null or undefined
 
     useEffect(() => {
         fetchPostDetails();
@@ -240,6 +242,17 @@ export default function ForumDetail() {
         };
     }, [modalIsOpen]);
 
+    const [notification, setNotification] = useState('');
+
+    const handleLikeClick = () => {
+        if (!isLoggedIn) {
+          setNotification('You must be logged in to like a post.');
+          setTimeout(() => setNotification(''), 3000); // Clear notification after 3 seconds
+        } else {
+          handleLike(postId);
+        }
+      };
+
     if (!post) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -387,7 +400,12 @@ export default function ForumDetail() {
                         <div className='border-t mt-4'>
                             <div className='flex flex-row justify-between mt-3 gap-2'>
                                 <div className='flex flex-row gap-2'>
-                                    <div className='flex flex-row gap-1 px-2' onClick={() => handleLike(postId)}>
+                                    {notification && (
+                                        <div className="fixed top-4 right-4 bg-red-500 text-white p-3 rounded-md shadow-lg">
+                                            {notification}
+                                        </div>
+                                    )}
+                                    <div className='flex flex-row gap-1 px-2' onClick={handleLikeClick}>
                                         {isLiked ? (
                                             <>
                                                 <FaHeart className='w-6 h-6 font-bold text-blue-600' />
@@ -421,84 +439,88 @@ export default function ForumDetail() {
 
 
                     <div className='border-t'>
-                        <form onSubmit={handleCommentSubmit} className="bg-white p-8 rounded-md shadow mb-8 mx-auto">
-                            <textarea
-                                className="w-full p-4 border rounded-md mb-4 focus:outline-blue-200 resize-none"
-                                placeholder="Write your reply..."
-                                value={commentContent}
-                                onChange={(e) => setCommentContent(e.target.value)}
-                                required
-                            />
-                            <div className='w-full flex justify-end items-center'>
-                                <button
-                                    type="button"
-                                    className='bg-blue-600 p-3 rounded-md mx-2 hover:bg-blue-800 flex items-center justify-center'
-                                    onClick={handleAttachmentClick}
-                                >
-                                    <AiOutlinePaperClip className='w-6 h-6 text-white' />
-                                </button>
-                                <input
-                                    type="file"
-                                    id="fileInput"
-                                    className="hidden"
-                                    multiple
-                                    onChange={handleFileChange}
+                        {isLoggedIn ? (
+                            <form onSubmit={handleCommentSubmit} className="bg-white p-8 rounded-md shadow mb-8 mx-auto">
+                                <textarea
+                                    className="w-full p-4 border rounded-md mb-4 focus:outline-blue-200 resize-none"
+                                    placeholder="Write your reply..."
+                                    value={commentContent}
+                                    onChange={(e) => setCommentContent(e.target.value)}
+                                    required
                                 />
-                                <button
-                                    type="submit"
-                                    className={`bg-blue-600 text-white p-3 rounded-md mx-2 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-800 transition ease-in-out'}`}
-                                    disabled={loading}
-                                >
-                                    {loading ? 'Adding...' : 'Add Reply'}
-                                </button>
-                            </div>
-                            {selectedFiles.length > 0 && (
-                                <div className="mt-4">
-                                    <h4 className="font-medium mb-2">Attached Files:</h4>
-                                    <ul className="grid grid-cols-2 gap-4">
-                                        {selectedFiles.map((fileObj, index) => (
-                                            <li key={index} className="flex flex-col items-center justify-center space-y-2 p-2 border rounded-md shadow-sm h-40">
-                                                {fileObj.file.type.startsWith('image/') ? (
-                                                    <>
-                                                        <img
-                                                            src={fileObj.url}
-                                                            alt={fileObj.file.name}
-                                                            className="w-24 h-24 object-cover rounded-md shadow"
-                                                        />
-                                                        <span className="text-sm text-gray-600 text-center">{fileObj.file.name}</span>
-                                                    </>
-                                                ) : fileObj.file.type === 'application/pdf' ? (
-                                                    <div className="flex flex-col items-center justify-center h-full">
-                                                        <AiFillFilePdf className="w-8 h-8 text-red-600" />
-                                                        <a href={fileObj.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-center">
-                                                            {fileObj.file.name}
-                                                        </a>
-                                                    </div>
-                                                ) : fileObj.file.type === 'application/msword' || fileObj.file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ? (
-                                                    <div className="flex flex-col items-center justify-center h-full">
-                                                        <AiFillFileWord className="w-8 h-8 text-blue-600" />
-                                                        <a href={fileObj.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-center">
-                                                            {fileObj.file.name}
-                                                        </a>
-                                                    </div>
-                                                ) : (
-                                                    <a href={fileObj.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-center">
-                                                        {fileObj.file.name}
-                                                    </a>
-                                                )}
-                                                <button
-                                                    type="button"
-                                                    className="text-red-600 hover:text-red-800"
-                                                    onClick={() => handleRemoveFile(index)}
-                                                >
-                                                    Remove
-                                                </button>
-                                            </li>
-                                        ))}
-                                    </ul>
+                                <div className='w-full flex justify-end items-center'>
+                                    <button
+                                        type="button"
+                                        className='bg-blue-600 p-3 rounded-md mx-2 hover:bg-blue-800 flex items-center justify-center'
+                                        onClick={handleAttachmentClick}
+                                    >
+                                        <AiOutlinePaperClip className='w-6 h-6 text-white' />
+                                    </button>
+                                    <input
+                                        type="file"
+                                        id="fileInput"
+                                        className="hidden"
+                                        multiple
+                                        onChange={handleFileChange}
+                                    />
+                                    <button
+                                        type="submit"
+                                        className={`bg-blue-600 text-white p-3 rounded-md mx-2 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-800 transition ease-in-out'}`}
+                                        disabled={loading}
+                                    >
+                                        {loading ? 'Adding...' : 'Add Reply'}
+                                    </button>
                                 </div>
-                            )}
-                        </form>
+                                {selectedFiles.length > 0 && (
+                                    <div className="mt-4">
+                                        <h4 className="font-medium mb-2">Attached Files:</h4>
+                                        <ul className="grid grid-cols-2 gap-4">
+                                            {selectedFiles.map((fileObj, index) => (
+                                                <li key={index} className="flex flex-col items-center justify-center space-y-2 p-2 border rounded-md shadow-sm h-40">
+                                                    {fileObj.file.type.startsWith('image/') ? (
+                                                        <>
+                                                            <img
+                                                                src={fileObj.url}
+                                                                alt={fileObj.file.name}
+                                                                className="w-24 h-24 object-cover rounded-md shadow"
+                                                            />
+                                                            <span className="text-sm text-gray-600 text-center">{fileObj.file.name}</span>
+                                                        </>
+                                                    ) : fileObj.file.type === 'application/pdf' ? (
+                                                        <div className="flex flex-col items-center justify-center h-full">
+                                                            <AiFillFilePdf className="w-8 h-8 text-red-600" />
+                                                            <a href={fileObj.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-center">
+                                                                {fileObj.file.name}
+                                                            </a>
+                                                        </div>
+                                                    ) : fileObj.file.type === 'application/msword' || fileObj.file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ? (
+                                                        <div className="flex flex-col items-center justify-center h-full">
+                                                            <AiFillFileWord className="w-8 h-8 text-blue-600" />
+                                                            <a href={fileObj.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-center">
+                                                                {fileObj.file.name}
+                                                            </a>
+                                                        </div>
+                                                    ) : (
+                                                        <a href={fileObj.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-center">
+                                                            {fileObj.file.name}
+                                                        </a>
+                                                    )}
+                                                    <button
+                                                        type="button"
+                                                        className="text-red-600 hover:text-red-800"
+                                                        onClick={() => handleRemoveFile(index)}
+                                                    >
+                                                        Remove
+                                                    </button>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                            </form>
+                        ) : (
+                            <p className="text-red-500 bg-white p-8 rounded-md shadow mb-8 mx-auto text-center">You must be logged in to reply to this post.</p>
+                        )}
 
                         <div onClick={toggleDropdown} className='mt-4 px-4 py-2 border flex bg-white rounded-md w-48 shadow cursor-pointer hover:bg-slate-200 group'>
                             <div className='flex flex-row justify-between w-full'>

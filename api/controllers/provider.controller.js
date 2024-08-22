@@ -35,11 +35,11 @@ export const signupAsProvider = async (req, res) => {
       country,
       website,
       agreeTerms,
+      registrationCertificate,
       tin,
       proofOfAddress,
       authorizationLetter,
       idProofContactPerson,
-      additionalDocuments
     } = req.body;
 
     // Create new user object with document fields
@@ -65,11 +65,11 @@ export const signupAsProvider = async (req, res) => {
         country,
         website,
         agreeTerms,
+        registrationCertificate,
         tin,
         proofOfAddress,
         authorizationLetter,
         idProofContactPerson,
-        additionalDocuments,
       }
     });
 
@@ -140,11 +140,11 @@ export const signupAsProvider = async (req, res) => {
       postalCode: savedUser.scholarshipProviderDetails.postalCode,
       country: savedUser.scholarshipProviderDetails.country,
       website: savedUser.scholarshipProviderDetails.website,
+      registrationCertificate: savedUser.scholarshipProviderDetails.registrationCertificate,
       tin: savedUser.scholarshipProviderDetails.tin,
       proofOfAddress: savedUser.scholarshipProviderDetails.proofOfAddress,
       authorizationLetter: savedUser.scholarshipProviderDetails.authorizationLetter,
       idProofContactPerson: savedUser.scholarshipProviderDetails.idProofContactPerson,
-      additionalDocuments: savedUser.scholarshipProviderDetails.additionalDocuments,
       message: 'User created successfully. Please check your email to verify your account.'
     });
   } catch (error) {
