@@ -41,27 +41,27 @@ export const createScholarshipProgram = async (req, res) => {
       scholarshipImage,
       bannerImage,
       sections,
-      faqTitle,          
+      faqTitle,
       faqDescription,
-      providerRequirements  
+      providerRequirements
     } = req.body;
 
     // Validate required fields
-      if (
-          !title || !category || !fieldOfStudy ||
-          numberOfScholarships === undefined || !amount || !applicationDeadline ||
-          !minGPA || !nationality || !otherEligibility ||
-          !startDate || !endDate || !selectionProcess || !selectionCriteria ||
-          !renewalPolicy || !renewalDuration || !disbursementSchedule ||
-          !disbursementMethod || !contactEmail || !contactPhone ||
-          !providerId || !organizationName || !faqTitle || !faqDescription || // Include FAQ validation
-          !scholarshipImage || !bannerImage || !providerRequirements// Include scholarshipImage and bannerImage validation
-        ) {
-          console.error('Validation Error: Missing required fields');
-          return res.status(400).json({
-            message: 'Title, category, field of study, number of scholarships, amount, application deadline, minimum GPA, nationality, other eligibility criteria, start date, end date, selection process, selection criteria, renewal policy, renewal duration, disbursement schedule, disbursement method, contact email, contact phone, provider ID, organization name, FAQ title, FAQ description, scholarship image, banner image, and providerRequirements are required fields.',
-          });
-        }
+    if (
+      !title || !category || !fieldOfStudy ||
+      numberOfScholarships === undefined || !amount || !applicationDeadline ||
+      !minGPA || !nationality || !otherEligibility ||
+      !startDate || !endDate || !selectionProcess || !selectionCriteria ||
+      !renewalPolicy || !renewalDuration || !disbursementSchedule ||
+      !disbursementMethod || !contactEmail || !contactPhone ||
+      !providerId || !organizationName || !faqTitle || !faqDescription || // Include FAQ validation
+      !scholarshipImage || !bannerImage || !providerRequirements// Include scholarshipImage and bannerImage validation
+    ) {
+      console.error('Validation Error: Missing required fields');
+      return res.status(400).json({
+        message: 'Title, category, field of study, number of scholarships, amount, application deadline, minimum GPA, nationality, other eligibility criteria, start date, end date, selection process, selection criteria, renewal policy, renewal duration, disbursement schedule, disbursement method, contact email, contact phone, provider ID, organization name, FAQ title, FAQ description, scholarship image, banner image, and providerRequirements are required fields.',
+      });
+    }
 
     // Validate date fields
     const parsedStartDate = new Date(startDate);
@@ -106,9 +106,9 @@ export const createScholarshipProgram = async (req, res) => {
       documentGuidelines,
       scholarshipImage,
       bannerImage,
-      sections,        
-      faqTitle,       
-      faqDescription,   
+      sections,
+      faqTitle,
+      faqDescription,
       providerRequirements
     });
 
@@ -364,19 +364,19 @@ export const updateApplicationStatus = async (req, res) => {
   const { applicationStatus } = req.body;
 
   try {
-      const application = await ScholarshipApplication.findByIdAndUpdate(
-          id, 
-          { applicationStatus },
-          { new: true }  // This option returns the updated document
-      );
+    const application = await ScholarshipApplication.findByIdAndUpdate(
+      id,
+      { applicationStatus },
+      { new: true }  // This option returns the updated document
+    );
 
-      if (!application) {
-          return res.status(404).json({ message: 'Application not found' });
-      }
+    if (!application) {
+      return res.status(404).json({ message: 'Application not found' });
+    }
 
-      res.status(200).json(application);
+    res.status(200).json(application);
   } catch (error) {
-      res.status(500).json({ message: 'Failed to update application status', error });
+    res.status(500).json({ message: 'Failed to update application status', error });
   }
 }
 
@@ -399,6 +399,35 @@ export const addApprovedScholar = async (req, res) => {
     res.status(200).json(program);
   } catch (error) {
     console.error('Error adding approved scholar:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+export const getAllApplicationsForProvider = async (req, res) => {
+  const { providerId } = req.params;
+
+  try {
+    // Fetch all scholarship programs for the provider
+    const programs = await Scholarship.find({ providerId: providerId });
+
+    if (!programs.length) {
+      return res.status(404).json({ message: 'No scholarship programs found for this provider' });
+    }
+
+    // Fetch all applications for each scholarship program and populate the scholarshipProgram field
+    const applications = await Promise.all(
+      programs.map(async (program) => {
+        const programApplications = await ScholarshipApplication.find({ scholarshipProgram: program._id }).populate('scholarshipProgram');
+        return programApplications;
+      })
+    );
+
+    // Flatten the array of arrays
+    const allApplications = applications.flat();
+
+    res.status(200).json(allApplications);
+  } catch (error) {
+    console.error('Error fetching applications for provider:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
