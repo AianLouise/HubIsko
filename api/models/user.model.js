@@ -124,7 +124,15 @@ const scholarshipProviderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  streetAddress: {
+  addressDetails: {
+    type: String,
+    required: true,
+  },
+  region: {
+    type: String,
+    required: true,
+  },
+  province: {
     type: String,
     required: true,
   },
@@ -132,15 +140,7 @@ const scholarshipProviderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  state: {
-    type: String,
-    required: true,
-  },
-  postalCode: {
-    type: String,
-    required: true,
-  },
-  country: {
+  barangay: {
     type: String,
     required: true,
   },

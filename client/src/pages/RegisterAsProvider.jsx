@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowRightLong } from "react-icons/fa6";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL, uploadBytes } from "firebase/storage";
 import { storage } from "../firebase";
 import { FaBuilding, FaUser, FaFileAlt, FaCheckCircle } from 'react-icons/fa';
+import { regions, provinces, cities, barangays, regionByCode, provincesByCode, provinceByName } from "select-philippines-address";
 
 export default function RegisterAsProvider() {
   const [formData, setFormData] = useState({
@@ -14,11 +15,11 @@ export default function RegisterAsProvider() {
     contactPersonName: '',
     contactPersonPosition: '',
     contactPersonNumber: '',
-    streetAddress: '',
+    addressDetails: '',
+    region: '',
+    province: '',
     city: '',
-    state: '',
-    postalCode: '',
-    country: '',
+    barangay: '',
     website: '',
     username: '',
     password: '',
@@ -29,7 +30,8 @@ export default function RegisterAsProvider() {
     proofOfAddress: '',
     authorizationLetter: '',
     idProofContactPerson: '',
-    additionalDocuments: ''
+    additionalDocuments: '',
+    profilePicture: null,
   });
 
   const [errors, setErrors] = useState({});
@@ -56,7 +58,7 @@ export default function RegisterAsProvider() {
         setCountdown((prevCountdown) => {
           if (prevCountdown === 1) {
             clearInterval(timer);
-            handleHome();
+            handleLogin();
           }
           return prevCountdown - 1;
         });
@@ -157,17 +159,28 @@ export default function RegisterAsProvider() {
       return; // Stop submission if there are validation errors
     }
 
-    // Log all form data to the console
-    console.log('Form Data:', formData);
-
     try {
+      // Upload profile picture to Firebase Storage
+      const profilePictureRef = ref(storage, `profilePictures/${formData.profilePicture.name}`);
+      const snapshot = await uploadBytes(profilePictureRef, formData.profilePicture);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      // Update formData with the download URL
+      const updatedFormData = {
+        ...formData,
+        profilePicture: downloadURL,
+      };
+
+      // Log all form data to the console
+      console.log('Form Data:', updatedFormData);
+
       // Send form data to the API endpoint
       const response = await fetch('/api/provider/signupAsProvider', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(updatedFormData),
       });
 
       if (!response.ok) {
@@ -184,6 +197,57 @@ export default function RegisterAsProvider() {
       console.error('Error:', error);
       // Handle error (e.g., show error message to the user)
     }
+  };
+
+  const handleImageChange = (e) => {
+    setFormData({
+      ...formData,
+      profilePicture: e.target.files[0],
+    });
+  };
+
+  const [regionList, setRegionList] = useState([]);
+  const [provinceList, setProvinceList] = useState([]);
+  const [cityList, setCityList] = useState([]);
+  const [barangayList, setBarangayList] = useState([]);
+
+  useEffect(() => {
+    regions().then(setRegionList);
+  }, []);
+
+  const handleRegionChange = (e) => {
+    const regionCode = e.target.value;
+    const selectedRegion = regionList.find(region => region.region_code === regionCode);
+    const regionName = selectedRegion ? selectedRegion.region_name : '';
+
+    setFormData({ ...formData, region: regionName, regionCode: regionCode, province: '', city: '', barangay: '' });
+    provinces(regionCode).then(setProvinceList);
+    setCityList([]);
+    setBarangayList([]);
+  };
+
+  const handleProvinceChange = (e) => {
+    const provinceCode = e.target.value;
+    const selectedProvince = provinceList.find(province => province.province_code === provinceCode);
+    const provinceName = selectedProvince ? selectedProvince.province_name : '';
+
+    setFormData({ ...formData, province: provinceName, provinceCode: provinceCode, city: '', barangay: '' });
+    cities(provinceCode).then(setCityList);
+    setBarangayList([]);
+  };
+
+  const handleCityChange = (e) => {
+    const cityCode = e.target.value;
+    const selectedCity = cityList.find(city => city.city_code === cityCode);
+    const cityName = selectedCity ? selectedCity.city_name : '';
+
+    setFormData({ ...formData, city: cityName, cityCode: cityCode });
+    barangays(cityCode).then(setBarangayList);
+  };
+
+  const handleBarangayChange = (e) => {
+    const barangayCode = e.target.value;
+    setFormData({ ...formData, barangay: barangayCode });
   };
 
   return (
@@ -222,6 +286,39 @@ export default function RegisterAsProvider() {
             <div className='bg-white p-8 shadow rounded-md border'>
               <h2 className="text-2xl font-bold mb-6">Enter Organization Information</h2>
               <div className='grid grid-cols-2 gap-4'>
+                <div className="mb-4 col-span-2">
+                  <label htmlFor="profilePicture" className="block text-sm font-medium text-gray-700 text-center mb-2">
+                    Organization Image
+                  </label>
+                  <div className="flex flex-col items-center">
+                    <input
+                      type="file"
+                      name="profilePicture"
+                      id="profilePicture"
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
+                    {formData.profilePicture ? (
+                      <div className="flex justify-center mt-4">
+                        <img
+                          src={URL.createObjectURL(formData.profilePicture)}
+                          alt="Organization"
+                          className="w-32 h-32 object-cover rounded-full border-2 border-gray-300 cursor-pointer"
+                          onClick={() => document.getElementById('profilePicture').click()}
+                        />
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => document.getElementById('profilePicture').click()}
+                        className="mt-1 p-2 w-48 border rounded-md bg-blue-500 text-white hover:bg-blue-600 transition duration-300"
+                      >
+                        Upload Organization Image
+                      </button>
+                    )}
+                    {errors.profilePicture && <p className="text-red-500 text-sm mt-2">{errors.profilePicture}</p>}
+                  </div>
+                </div>
                 <div className="mb-4">
                   <label htmlFor="organizationName" className="block text-sm font-medium text-gray-700">Organization Name</label>
                   <input type="text" name="organizationName" id="organizationName" value={formData.organizationName} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Full legal name of the organization" />
@@ -244,6 +341,7 @@ export default function RegisterAsProvider() {
                   </select>
                   {errors.organizationType && <p className="text-red-500 text-sm">{errors.organizationType}</p>}
                 </div>
+
                 <div className="mb-4">
                   <label htmlFor="registrationNumber" className="block text-sm font-medium text-gray-700">Registration Number</label>
                   <input type="text" name="registrationNumber" id="registrationNumber" value={formData.registrationNumber} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Official registration or incorporation number" />
@@ -270,26 +368,100 @@ export default function RegisterAsProvider() {
                 <hr className="col-span-2" />
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700">Physical Address</label>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="mb-4">
-                      <label htmlFor="streetAddress" className="block text-sm font-medium text-gray-700">Street Address</label>
-                      <input type="text" name="streetAddress" id="streetAddress" value={formData.streetAddress} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Full street address of the organization" />
+                  <div className='grid grid-cols-2 gap-4'>
+                    <div className='col-span-1'>
+                      <label className='block text-sm font-medium text-gray-700 mb-2'>
+                        Region
+                      </label>
+                      <select
+                        name="region"
+                        value={formData.regionCode}
+                        onChange={handleRegionChange}
+                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                        required
+                      >
+                        <option value="">Select Region</option>
+                        {regionList.map((region) => (
+                          <option key={region.region_code} value={region.region_code}>
+                            {region.region_name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
-                    <div className="mb-4">
-                      <label htmlFor="city" className="block text-sm font-medium text-gray-700">City</label>
-                      <input type="text" name="city" id="city" value={formData.city} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="City" />
+
+                    <div className='col-span-1'>
+                      <label className='block text-sm font-medium text-gray-700 mb-2'>
+                        Province
+                      </label>
+                      <select
+                        name="province"
+                        value={formData.provinceCode}
+                        onChange={handleProvinceChange}
+                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                        required
+                      >
+                        <option value="">Select Province</option>
+                        {provinceList.map((province) => (
+                          <option key={province.province_code} value={province.province_code}>
+                            {province.province_name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
-                    <div className="mb-4">
-                      <label htmlFor="state" className="block text-sm font-medium text-gray-700">State/Province</label>
-                      <input type="text" name="state" id="state" value={formData.state} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="State or province" />
+
+                    <div className='col-span-1'>
+                      <label className='block text-sm font-medium text-gray-700 mb-2'>
+                        City
+                      </label>
+                      <select
+                        name="city"
+                        value={formData.cityCode || ''}
+                        onChange={handleCityChange}
+                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                        required
+                      >
+                        <option value="">Select City</option>
+                        {cityList.map((city) => (
+                          <option key={city.city_code} value={city.city_code}>
+                            {city.city_name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
-                    <div className="mb-4">
-                      <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700">Postal Code</label>
-                      <input type="text" name="postalCode" id="postalCode" value={formData.postalCode} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Postal or ZIP code" />
+
+                    <div className='col-span-1'>
+                      <label className='block text-sm font-medium text-gray-700 mb-2'>
+                        Barangay
+                      </label>
+                      <select
+                        name="barangay"
+                        value={formData.barangay}
+                        onChange={handleBarangayChange}
+                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                        required
+                      >
+                        <option value="">Select Barangay</option>
+                        {barangayList.map((barangay) => (
+                          <option key={barangay.brgy_code} value={barangay.brgy_name}>
+                            {barangay.brgy_name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
-                    <div className="mb-4">
-                      <label htmlFor="country" className="block text-sm font-medium text-gray-700">Country</label>
-                      <input type="text" name="country" id="country" value={formData.country} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Country" />
+
+                    <div className='col-span-1'>
+                      <label className='block text-sm font-medium text-gray-700 mb-2'>
+                        House No./Unit No./Bldg/Floor, Street, Subdivision
+                      </label>
+                      <input
+                        type="text"
+                        name="addressDetails"
+                        value={formData.addressDetails}
+                        onChange={handleChange}
+                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                        placeholder="Enter House No./Unit No./Bldg/Floor, Street, Subdivision"
+                        required
+                      />
                     </div>
                   </div>
                 </div>
