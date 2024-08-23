@@ -80,23 +80,47 @@ export default function Forums() {
       <main className='flex-grow bg-[#f8f8fb] no-scrollbar'>
 
         <div className='border-b mb-8 py-8'>
-          <div className='flex items-center mx-auto max-w-6xl justify-between px-24'>
-            <div className='flex flex-col gap-2 w-1/2'>
+          <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl justify-between lg:px-24'>
+
+            {/* Mobile na Icon */}
+          <div className='bg-blue-600 w-36 h-36 my-8 rounded-md flex lg:hidden items-center justify-center'>
+              <FontAwesomeIcon icon={faComments} className='text-white text-6xl' />
+            </div>
+
+            <div className='flex flex-col gap-2 text-center lg:text-left lg:w-1/2'>
               <h1 className='text-4xl font-bold text-gray-800'>Welcome to the forums!</h1>
               <p className='text-lg text-slate-500 font-medium'>Join or Browse the discussions!</p>
             </div>
-            <div className='bg-blue-600 w-36 h-36 my-8 rounded-md flex items-center justify-center'>
+            <div className='bg-blue-600 w-36 h-36 my-8 rounded-md hidden lg:flex items-center justify-center'>
               <FontAwesomeIcon icon={faComments} className='text-white text-6xl' />
             </div>
           </div>
         </div>
 
         {/* Header */}
-        <div className='max-w-6xl mx-auto px-24'>
-          <div className='flex flex-row justify-between'>
-            <div className='flex flex-row items-center justify-center gap-4'>
+        <div className='max-w-6xl mx-auto lg:px-24'>
+          <div className='flex flex-col gap-2 lg:gap-0 lg:flex-row justify-between'>
+            
+            {/* Mobile Search Bar */}
+            <div className='block mx-2 lg:hidden'>
+                <input
+                  type="text"
+                  placeholder='Search Posts'
+                  name=""
+                  id=""
+                  className='border-2 p-2 px-6 w-full lg:w-0 text-lg font-medium rounded-md focus:outline-blue-400' />
+              </div>
 
-              <select name="Gender" id="Gender" className='bg-white border rounded-lg p-3 w-60 font-bold text-left'>
+              <div className='block lg:hidden mx-2 mt-5'>
+                <div className='border-b'></div>
+                <div className='text-slate-500 font-medium text-center -translate-y-3'>
+                  <span className='bg-[#f8f8fb] px-4'>OR</span>
+                </div>
+              </div>
+
+            <div className='flex flex-row lg:items-center lg:justify-center gap-4'>
+
+              <select name="Gender" id="Gender" className='bg-white border rounded-lg p-3 w-60 font-bold text-left hidden lg:block'>
                 <option value="All posts">All posts</option>
                 <option value="My Posts">My posts</option>
               </select>
@@ -106,16 +130,19 @@ export default function Forums() {
                   {notification}
                 </div>
               )}
+
+              
               <button
                 onClick={handleCreatePostClick}
-                className="flex gap-2 items-center justify-center bg-blue-600 p-3 rounded-md border hover:bg-blue-800 transition ease-in-out"
+                className="flex gap-2 w-full lg:w-[187.062px] mx-2 lg:mx-0 lg:items-center lg:justify-center bg-blue-600 p-3 rounded-md border hover:bg-blue-800 transition ease-in-out"
               >
                 <FaPlus className="w-5 h-5 text-white" />
                 <span className="font-medium text-white">Create a New post</span>
               </button>
+
             </div>
 
-            <div>
+            <div className='hidden lg:block'>
               <input
                 type="text"
                 placeholder='Search Posts'
@@ -127,7 +154,7 @@ export default function Forums() {
         </div>
 
         {/* Forum Posts */}
-        <div className='max-w-6xl px-24 mx-auto mt-20'>
+        <div className='max-w-6xl lg:px-24 px-2 mx-auto mt-10 lg:mt-20'>
 
 
           <div className='flex gap-2 items-center pb-2 font-bold text-lg border-b mb-8'>
@@ -135,7 +162,7 @@ export default function Forums() {
             Featured Posts
           </div>
 
-          <div className='grid grid-cols-2 gap-2'>
+          <div className='grid lg:grid-cols-2 gap-2'>
 
             <div className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow'>
               <div className='flex flex-row gap-4 mb-2'>
@@ -219,7 +246,7 @@ export default function Forums() {
             <span className='font-bold text-lg'>Recent posts</span>
           </div>
 
-          <div className='grid grid-cols-2 gap-6 mb-4'>
+          <div className='grid lg:grid-cols-2 gap-6 mb-4'>
             {recentPosts.map((post) => (
               <div key={post._id} className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow cursor-pointer hover:bg-slate-100 hover:-translate-y-1 transition ease-in-out' onClick={() => handlePostClick(post._id)}>
                 <div className='flex flex-row gap-3'>
