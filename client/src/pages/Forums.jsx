@@ -134,7 +134,7 @@ export default function Forums() {
               
               <button
                 onClick={handleCreatePostClick}
-                className="flex gap-2 w-full lg:w-[187.062px] mx-2 lg:mx-0 lg:items-center lg:justify-center bg-blue-600 p-3 rounded-md border hover:bg-blue-800 transition ease-in-out"
+                className="flex gap-2 w-full lg:w-[187.062px] mx-2 lg:mx-0 items-center lg:justify-center bg-blue-600 p-3 rounded-md border hover:bg-blue-800 transition ease-in-out"
               >
                 <FaPlus className="w-5 h-5 text-white" />
                 <span className="font-medium text-white">Create a New post</span>

@@ -573,7 +573,7 @@ export default function RegisterAsProvider() {
 
 
           <div className='flex justify-between mt-8'>
-            {activeStep > 0 && <Link to={'/login'} className="bg-white border-2 hover:bg-slate-200 text-gray px-6 py-2 rounded-md">Go back to Login</Link>}
+            {activeStep === 1 && <Link to={'/login'} className="bg-white border-2 hover:bg-slate-200 text-gray px-6 py-2 rounded-md">Go back to Login</Link>}
             {activeStep > 1 && <button type="button" onClick={handlePrevious} className="bg-gray-300 text-gray px-6 py-2 rounded-md">Previous</button>}
             {activeStep < maxStep && activeStep !== 1 && <button type="button" onClick={handleNext} className="bg-blue-600 text-white px-6 py-2 rounded-md">Next</button>}
             {activeStep === 1 && <div className="flex-grow"></div>}
