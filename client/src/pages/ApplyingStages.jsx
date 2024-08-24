@@ -275,6 +275,7 @@ export default function ApplyingStages() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
         // Upload files to Firebase and get the file URLs
         const uploadedFilePaths = await Promise.all(Object.entries(formData.documents).map(async ([docType, fileObj]) => {
@@ -318,6 +319,8 @@ export default function ApplyingStages() {
         } catch (error) {
             console.error('Error:', error);
             // Handle error (e.g., show an error message)
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -1223,8 +1226,8 @@ export default function ApplyingStages() {
                                 <span className='text-lg font-bold'>Education Information</span>
                             </div>
 
-                            <div className='px-4'>
-                                <div className='px-4'>
+                            <div className=''>
+                                <div className='p-4'>
                                     {/* Elementary */}
                                     <span className='text-lg font-bold mt-8 block'>Elementary</span>
                                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
@@ -1399,13 +1402,13 @@ export default function ApplyingStages() {
                                             </select>
                                         </div> */}
                                     </div>
+                                </div>
 
-                                    <div className='flex mt-10 justify-end space-x-4 p-4'>
-                                        {activeStep > 1 && (
-                                            <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
-                                        )}
-                                        <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleNext}>Next</button>
-                                    </div>
+                                <div className='flex mt-10 justify-end space-x-4 p-4'>
+                                    {activeStep > 1 && (
+                                        <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                                    )}
+                                    <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleNext}>Next</button>
                                 </div>
                             </div>
                         </div>
@@ -1669,7 +1672,20 @@ export default function ApplyingStages() {
 
                                 <div className='flex mt-4 justify-end space-x-4'>
                                     <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
-                                    <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleSubmit}>Submit</button>
+                                    <button
+                                        className={`bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800 ${loading ? 'cursor-not-allowed' : ''}`}
+                                        onClick={handleSubmit}
+                                        disabled={loading}
+                                    >
+                                        {loading ? (
+                                            <svg className="animate-spin h-5 w-5 text-white inline-block" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                                            </svg>
+                                        ) : (
+                                            'Submit'
+                                        )}
+                                    </button>
                                 </div>
                             </div>
                         </div>

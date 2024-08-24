@@ -94,7 +94,28 @@ export default function ViewScholarshipDetails() {
         fetchApplications();
     }, [id]);
 
+    const [scholars, setScholars] = useState([]);
 
+    useEffect(() => {
+        if (activeTab === 'scholars') {
+            const fetchScholars = async () => {
+                try {
+                    const response = await fetch(`/api/scholarshipProgram/${id}/approved-scholar-info`);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const data = await response.json();
+                    setScholars(data);
+                } catch (error) {
+                    console.error('Error fetching scholars:', error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            fetchScholars();
+        }
+    }, [activeTab, id]);
 
     if (loading) {
         return (
@@ -352,36 +373,18 @@ export default function ViewScholarshipDetails() {
                                             </tr>
                                         </thead>
                                         <tbody className='text-center'>
-                                            <tr className="hover:bg-gray-100">
-                                                <td className="py-2 px-4 border-b"><strong>John Doe</strong></td>
-                                                <td className="py-2 px-4 border-b">Computer Science</td>
-                                                <td className="py-2 px-4 border-b">Year 2</td>
-                                                <td className="py-2 px-4 border-b">
-                                                    <Link to={`/scholars/john-doe`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
-                                                        View Details
-                                                    </Link>
-                                                </td>
-                                            </tr>
-                                            <tr className="hover:bg-gray-100">
-                                                <td className="py-2 px-4 border-b"><strong>Jane Smith</strong></td>
-                                                <td className="py-2 px-4 border-b">Engineering</td>
-                                                <td className="py-2 px-4 border-b">Year 3</td>
-                                                <td className="py-2 px-4 border-b">
-                                                    <Link to={`/scholars/jane-smith`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
-                                                        View Details
-                                                    </Link>
-                                                </td>
-                                            </tr>
-                                            <tr className="hover:bg-gray-100">
-                                                <td className="py-2 px-4 border-b"><strong>Emily Johnson</strong></td>
-                                                <td className="py-2 px-4 border-b">Physics</td>
-                                                <td className="py-2 px-4 border-b">Year 1</td>
-                                                <td className="py-2 px-4 border-b">
-                                                    <Link to={`/scholars/emily-johnson`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
-                                                        View Details
-                                                    </Link>
-                                                </td>
-                                            </tr>
+                                            {scholars.map((scholar) => (
+                                                <tr key={scholar._id} className="hover:bg-gray-100">
+                                                    <td className="py-2 px-4 border-b"><strong>{scholar.applicationDetails.firstName} {scholar.applicationDetails.lastName}</strong></td>
+                                                    <td className="py-2 px-4 border-b">{scholar.applicationDetails.education.college.course}</td>
+                                                    <td className="py-2 px-4 border-b">{scholar.applicationDetails.education.college.yearGraduated || 'N/A'}</td>
+                                                    <td className="py-2 px-4 border-b">
+                                                        <Link to={`/scholars/${scholar.applicationDetails.firstName.toLowerCase().replace(' ', '-')}`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
+                                                            View Details
+                                                        </Link>
+                                                    </td>
+                                                </tr>
+                                            ))}
                                         </tbody>
                                     </table>
                                 </div>

@@ -47,10 +47,11 @@ export default function ViewApplicationDetails() {
         fetchApplicationDetails();
     }, [applicationId]);
 
-    const handleApprove = async (applicationId, applicant) => {
+        const handleApprove = async (applicationId, applicant, scholarshipId) => {
         console.log(`Starting approval process for application ID: ${applicationId}`);
-
+    
         try {
+            // Approve the application
             const response = await fetch(`/api/scholarshipProgram/applications/${applicationId}/status`, {
                 method: 'PATCH',
                 headers: {
@@ -58,14 +59,28 @@ export default function ViewApplicationDetails() {
                 },
                 body: JSON.stringify({ applicationStatus: 'Approved' })
             });
-
+    
             if (!response.ok) {
                 throw new Error('Approval failed');
             }
-
+    
             const data = await response.json();
             console.log('Application approved:', data);
-
+    
+            // Update the approvedScholar field in the scholarshipProgram table
+            const updateScholarResponse = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipId}/approve-scholar/${applicant}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+    
+            if (!updateScholarResponse.ok) {
+                throw new Error('Updating approved scholar failed');
+            }
+    
+            console.log('Approved scholar updated successfully');
+    
             // Create a notification
             const notificationResponse = await fetch(`/api/notification/notifications/create`, {
                 method: 'POST',
@@ -75,22 +90,22 @@ export default function ViewApplicationDetails() {
                 body: JSON.stringify({
                     applicantId: applicant, // Pass the applicant's ID as recipientId
                     senderId: currentUser._id, // Pass the current user's ID as senderId
-                    scholarshipProgramId: application.scholarshipProgram._id // Pass the scholarship program ID
+                    scholarshipProgramId: scholarshipId // Pass the scholarship program ID
                 })
             });
-
+    
             if (!notificationResponse.ok) {
                 throw new Error('Notification creation failed');
             }
-
+    
             console.log('Notification created successfully');
-
+    
             // Fetch updated application details to reflect the new status
             await fetchApplicationDetails();
-
+    
             setSuccessMessage('Application approved successfully!');
             setShowSnackbar(true);
-
+    
         } catch (error) {
             console.error('Error approving application:', error);
             setError('Failed to approve application.');
@@ -220,7 +235,7 @@ export default function ViewApplicationDetails() {
                                 <div className="flex justify-end gap-4">
                                     <button
                                         className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-md"
-                                        onClick={() => handleApprove(application._id, application.applicant)}
+                                        onClick={() => handleApprove(application._id, application.applicant, application.scholarshipProgram._id)}
                                     >
                                         Approve
                                     </button>

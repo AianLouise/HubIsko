@@ -365,31 +365,31 @@ export const updateApplicationStatus = async (req, res) => {
   const { applicationStatus, rejectionNote, allowResubmission } = req.body;
 
   try {
-      const updateFields = { applicationStatus };
+    const updateFields = { applicationStatus };
 
-      // If the status is 'Rejected', add rejectionNote and allowResubmission to the update
-      if (applicationStatus === 'Rejected') {
-          updateFields.rejectionNote = rejectionNote || 'No specific reason provided';
-          updateFields.allowResubmission = allowResubmission || false;
-      } else if (applicationStatus === 'Approved') {
-          // If the application is approved, clear the rejection note and resubmission flag
-          updateFields.rejectionNote = null;
-          updateFields.allowResubmission = false;
-      }
+    // If the status is 'Rejected', add rejectionNote and allowResubmission to the update
+    if (applicationStatus === 'Rejected') {
+      updateFields.rejectionNote = rejectionNote || 'No specific reason provided';
+      updateFields.allowResubmission = allowResubmission || false;
+    } else if (applicationStatus === 'Approved') {
+      // If the application is approved, clear the rejection note and resubmission flag
+      updateFields.rejectionNote = null;
+      updateFields.allowResubmission = false;
+    }
 
-      const application = await ScholarshipApplication.findByIdAndUpdate(
-          id,
-          updateFields,
-          { new: true }  // Return the updated document
-      );
+    const application = await ScholarshipApplication.findByIdAndUpdate(
+      id,
+      updateFields,
+      { new: true }  // Return the updated document
+    );
 
-      if (!application) {
-          return res.status(404).json({ message: 'Application not found' });
-      }
+    if (!application) {
+      return res.status(404).json({ message: 'Application not found' });
+    }
 
-      res.status(200).json(application);
+    res.status(200).json(application);
   } catch (error) {
-      res.status(500).json({ message: 'Failed to update application status', error });
+    res.status(500).json({ message: 'Failed to update application status', error });
   }
 };
 
@@ -451,24 +451,72 @@ export const getRequiredDocuments = async (req, res) => {
   const { programId } = req.params;
 
   try {
-      const scholarshipProgram = await Scholarship.findById(programId);
+    const scholarshipProgram = await Scholarship.findById(programId);
 
-      if (!scholarshipProgram) {
-          return res.status(404).json({ message: 'Scholarship program not found' });
-      }
+    if (!scholarshipProgram) {
+      return res.status(404).json({ message: 'Scholarship program not found' });
+    }
 
-      const requiredDocuments = scholarshipProgram.requiredDocuments;
+    const requiredDocuments = scholarshipProgram.requiredDocuments;
 
-      if (!requiredDocuments || requiredDocuments.length === 0) {
-          return res.status(404).json({ message: 'No required documents found' });
-      }
+    if (!requiredDocuments || requiredDocuments.length === 0) {
+      return res.status(404).json({ message: 'No required documents found' });
+    }
 
-      res.status(200).json(requiredDocuments);
+    res.status(200).json(requiredDocuments);
   } catch (error) {
-      console.error('Error fetching required documents:', error);
-      res.status(500).json({
-          message: 'Error fetching required documents',
-          error: error.message
-      });
+    console.error('Error fetching required documents:', error);
+    res.status(500).json({
+      message: 'Error fetching required documents',
+      error: error.message
+    });
+  }
+};
+
+export const getApprovedScholarInfo = async (req, res) => {
+  const { programId } = req.params;
+
+  try {
+    // Fetch the scholarship program by ID
+    const scholarshipProgram = await Scholarship.findById(programId);
+
+    if (!scholarshipProgram) {
+      return res.status(404).json({ message: 'Scholarship program not found' });
+    }
+
+    // Extract the approvedScholars array
+    const approvedScholars = scholarshipProgram.approvedScholars;
+
+    if (!approvedScholars || approvedScholars.length === 0) {
+      return res.status(404).json({ message: 'No approved scholars found' });
+    }
+
+    // Find details of each approved scholar's application using their _id
+    const scholarDetails = await Promise.all(
+      approvedScholars.map(async (scholar) => {
+        const application = await ScholarshipApplication.findOne({ applicant: scholar._id });
+        if (!application) {
+          console.warn(`Scholarship application not found for scholar ID: ${scholar._id}`);
+          return null; // Skip this scholar if application not found
+        }
+
+        return {
+          ...scholar,
+          applicationDetails: application
+        };
+      })
+    );
+
+    // Filter out any null values (in case of errors or missing data)
+    const filteredScholarDetails = scholarDetails.filter(details => details !== null);
+
+    // Return the list of approved scholars with application details
+    res.status(200).json(filteredScholarDetails);
+  } catch (error) {
+    console.error('Error fetching approved scholars:', error);
+    res.status(500).json({
+      message: 'Error fetching approved scholars',
+      error: error.message
+    });
   }
 };
