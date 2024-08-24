@@ -9,7 +9,7 @@ import { FaInfoCircle, FaUsers, FaGraduationCap, FaEllipsisH, FaFileContract, Fa
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from 'uuid';
 
-export default function ApplyingStages() {
+export default function ResubmitApplication() {
 
     const [selectedTab, setSelectedTab] = useState('About');
 
@@ -17,9 +17,9 @@ export default function ApplyingStages() {
         setSelectedTab(tab);
     };
 
+    const currentUser = useSelector((state) => state.user.currentUser);
     const navigate = useNavigate();
     const storage = getStorage();
-    const currentUser = useSelector((state) => state.user.currentUser);
 
     const [activeStep, setActiveStep] = useState(1);
     const maxStep = 6;
@@ -32,6 +32,10 @@ export default function ApplyingStages() {
             // Optional: Display an error message or highlight missing fields
             console.log('Please complete all required fields before proceeding.');
         }
+    };
+
+    const handlePrevious = () => {
+        setActiveStep((prevStep) => Math.max(1, prevStep - 1));
     };
 
     const validateCurrentStep = () => {
@@ -66,13 +70,13 @@ export default function ApplyingStages() {
             return (
                 formData.education.elementary.school.trim() !== '' &&
                 formData.education.elementary.award.trim() !== '' &&
-                formData.education.elementary.yearGraduated.trim() !== '' &&
+                // formData.education.elementary.yearGraduated.trim() !== '' &&
                 formData.education.juniorHighSchool.school.trim() !== '' &&
                 formData.education.juniorHighSchool.award.trim() !== '' &&
-                formData.education.juniorHighSchool.yearGraduated.trim() !== '' &&
+                // formData.education.juniorHighSchool.yearGraduated.trim() !== '' &&
                 formData.education.seniorHighSchool.school.trim() !== '' &&
                 formData.education.seniorHighSchool.award.trim() !== '' &&
-                formData.education.seniorHighSchool.yearGraduated.trim() !== '' &&
+                // formData.education.seniorHighSchool.yearGraduated.trim() !== '' &&
                 formData.education.college.school.trim() !== '' &&
                 formData.education.college.course.trim() !== ''
             );
@@ -81,9 +85,6 @@ export default function ApplyingStages() {
         return true;
     };
 
-    const handlePrevious = () => {
-        setActiveStep((prevStep) => Math.max(1, prevStep - 1));
-    };
 
     const getHideorActive = (step) => {
         if (step === activeStep) {
@@ -93,13 +94,12 @@ export default function ApplyingStages() {
         }
     };
 
-    const { scholarshipId } = useParams();
-
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
         middleName: '',
         birthdate: '',
+        birthplace: '',
         gender: '',
         bloodType: '',
         civilStatus: '',
@@ -109,7 +109,6 @@ export default function ApplyingStages() {
         religion: '',
         height: '',
         weight: '',
-        birthplace: '',
         email: '',
         contactNumber: '',
         addressDetails: '',
@@ -186,21 +185,125 @@ export default function ApplyingStages() {
         applicant: currentUser._id,
     });
 
+    const [application, setApplication] = useState(null);
+    const { id: applicationId } = useParams();
     const [scholarship, setScholarship] = useState(null);
+    const scholarshipId = application?.scholarshipProgram?._id;
 
     useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        if (scholarshipId) {
-            setFormData((prevFormData) => ({
-                ...prevFormData,
-                scholarshipProgram: scholarshipId, // Set the scholarshipProgram field with the id from the URL
-            }));
-        }
+        const fetchApplicationDetails = async () => {
+            try {
+                const response = await fetch(`/api/scholarshipApplication/get-applications-details/${applicationId}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                setApplication(data);
+                setFormData({
+                    firstName: data.firstName || '',
+                    lastName: data.lastName || '',
+                    middleName: data.middleName || '',
+                    birthdate: data.birthdate || '',
+                    gender: data.gender || '',
+                    bloodType: data.bloodType || '',
+                    civilStatus: data.civilStatus || '',
+                    maidenName: data.maidenName || '',
+                    spouseName: data.spouseName || '',
+                    spouseOccupation: data.spouseOccupation || '',
+                    religion: data.religion || '',
+                    height: data.height || '',
+                    weight: data.weight || '',
+                    birthplace: data.birthplace || '',
+                    email: data.email || '',
+                    contactNumber: data.contactNumber || '',
+                    addressDetails: data.addressDetails || '',
+                    town: data.town || '',
+                    barangay: data.barangay || '',
+                    province: data.province || '',
+                    father: data.father || {
+                        firstName: '',
+                        lastName: '',
+                        middleName: '',
+                        birthdate: '',
+                        occupation: '',
+                        yearlyIncome: '',
+                        contactNo: ''
+                    },
+                    mother: data.mother || {
+                        firstName: '',
+                        lastName: '',
+                        middleName: '',
+                        birthdate: '',
+                        occupation: '',
+                        yearlyIncome: '',
+                        contactNo: ''
+                    },
+                    guardian: data.guardian || {
+                        firstName: '',
+                        lastName: '',
+                        middleName: '',
+                        birthdate: '',
+                        occupation: '',
+                        yearlyIncome: '',
+                        contactNo: ''
+                    },
+                    education: data.education || {
+                        elementary: {
+                            school: '',
+                            award: '',
+                            yearGraduated: '',
+                        },
+                        juniorHighSchool: {
+                            school: '',
+                            award: '',
+                            yearGraduated: '',
+                        },
+                        seniorHighSchool: {
+                            school: '',
+                            award: '',
+                            yearGraduated: '',
+                        },
+                        college: {
+                            school: '',
+                            course: '',
+                            yearGraduated: ''
+                        }
+                    },
+                    relatives: data.relatives || Array(6).fill({
+                        name: '',
+                        birthdate: '',
+                        relationship: ''
+                    }),
+                    workExperience: data.workExperience || Array(2).fill({
+                        companyName: '',
+                        position: '',
+                        startDate: '',
+                        monthlySalary: '',
+                        statusOfAppointment: ''
+                    }),
+                    skillsAndQualifications: data.skillsAndQualifications || Array(6).fill({
+                        skills: '',
+                        qualifications: ''
+                    }),
+                    documents: data.documents || {},
+                    scholarshipProgram: data.scholarshipProgram || '',
+                    applicant: currentUser._id,
+                });
+            } catch (error) {
+                console.error('Error fetching application details:', error);
+            }
+        };
+
+        fetchApplicationDetails();
+    }, [applicationId, currentUser._id]);
+
+    useEffect(() => {
+        if (!scholarshipId) return;
+
         const fetchScholarship = async () => {
             try {
                 const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipId}`);
                 const data = await response.json();
-                console.log('Fetched Scholarship:', data); // Add this line
                 setScholarship(data);
             } catch (error) {
                 console.error('Error fetching scholarship:', error);
@@ -210,22 +313,40 @@ export default function ApplyingStages() {
         fetchScholarship();
     }, [scholarshipId]);
 
+    useEffect(() => {
+        if (!scholarshipId) return;
 
-    // useEffect(() => {
-    //     const fetchScholarship = async () => {
-    //         try {
-    //             const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipId}`);
-    //             const data = await response.json();
-    //             console.log('Fetched Scholarship:', data); // Add this line
-    //             setScholarship(data);
-    //         } catch (error) {
-    //             console.error('Error fetching scholarship:', error);
-    //         }
-    //     };
+        const fetchRequiredDocuments = async () => {
+            try {
+                const response = await fetch(`/api/scholarshipProgram/${scholarshipId}/required-documents`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                setRequiredDocuments(data);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    //     fetchScholarship();
-    // }, [scholarshipId]);
+        fetchRequiredDocuments();
+    }, [scholarshipId]);
 
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (scholarshipId) {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                scholarshipProgram: scholarshipId, // Set the scholarshipProgram field with the id from the URL
+            }));
+        }
+    }, [scholarshipId]);
+
+    const [requiredDocuments, setRequiredDocuments] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [sameAsParents, setSameAsParents] = useState(false);
 
     const handleChange = (e, parentKey = null) => {
@@ -248,79 +369,35 @@ export default function ApplyingStages() {
         });
     };
 
-    const handleEducationChange = (e, level) => {
-        const { name, value } = e.target;
-        setFormData(prevState => ({
-            ...prevState,
-            education: {
-                ...prevState.education,
-                [level]: {
-                    ...prevState.education[level],
-                    [name]: value
-                }
-            }
-        }));
-    };
 
-    const handleFileChange = (e, docType) => {
-        const file = e.target.files[0];
-        setFormData(prevState => ({
-            ...prevState,
-            documents: {
-                ...prevState.documents,
-                [docType]: { file }
-            }
-        }));
-    };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    // const handleCheckboxChange = (e) => {
+    //     const isChecked = e.target.checked;
+    //     setSameAsParents(isChecked);
+    //     if (isChecked) {
+    //         setFormData(prevState => ({
+    //             ...prevState,
+    //             guardian: {
+    //                 firstName: '',
+    //                 lastName: '',
+    //                 middleName: '',
+    //                 birthdate: '',
+    //                 occupation: '',
+    //                 yearlyIncome: '',
+    //                 contactNo: ''
+    //             }
+    //         }));
+    //     }
+    // };
 
-        // Upload files to Firebase and get the file URLs
-        const uploadedFilePaths = await Promise.all(Object.entries(formData.documents).map(async ([docType, fileObj]) => {
-            if (fileObj) {
-                const file = fileObj.file;
-                const fileExtension = file.name.split('.').pop(); // Extract the file extension
-                const fileNameWithoutExtension = file.name.replace(/\.[^/.]+$/, ""); // Remove the extension from the original file name
-                const fileName = `${currentUser.username}_${fileNameWithoutExtension.replace(/\s+/g, '_')}_${uuidv4()}.${fileExtension}`;
-                const storageRef = ref(storage, `scholarship_application_documents/${fileName}`);
-                await uploadBytes(storageRef, file);
-                const downloadURL = await getDownloadURL(storageRef);
-                return { [docType]: downloadURL }; // Save the download URL in the database
-            }
-            return { [docType]: null };
-        }));
 
-        // Combine the uploaded file URLs with the rest of the form data
-        const updatedFormData = {
-            ...formData,
-            documents: Object.assign({}, ...uploadedFilePaths),
-        };
 
-        // Send scholarship application data to the backend
-        try {
-            const response = await fetch('/api/scholarshipApplication/create-application', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updatedFormData)
-            });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
 
-            const result = await response.json();
-            console.log('Success:', result);
-            // Handle success (e.g., show a success message, redirect, etc.)
-            navigate('/scholar-dashboard'); // Redirect to the scholar dashboard
-        } catch (error) {
-            console.error('Error:', error);
-            // Handle error (e.g., show an error message)
-        }
-    };
+    // if (loading) return <p>Loading...</p>;
+    // if (error) return <p>Error: {error}</p>;
 
+    // Step 1: Personal Information
     // Boolean to check if the selected civil status is 'Married'
     const isMarried = formData.civilStatus === 'Married';
 
@@ -335,24 +412,24 @@ export default function ApplyingStages() {
         }
     }, [formData.civilStatus]);
 
-    const handleCheckboxChange = (e) => {
-        const isChecked = e.target.checked;
-        setSameAsParents(isChecked);
-        if (isChecked) {
-            setFormData(prevState => ({
-                ...prevState,
-                guardian: {
-                    firstName: '',
-                    lastName: '',
-                    middleName: '',
-                    birthdate: '',
-                    occupation: '',
-                    yearlyIncome: '',
-                    contactNo: ''
+    // Step 2: Custodian
+
+    // Step 3: Education
+    const handleEducationChange = (e, level) => {
+        const { name, value } = e.target;
+        setFormData(prevState => ({
+            ...prevState,
+            education: {
+                ...prevState.education,
+                [level]: {
+                    ...prevState.education[level],
+                    [name]: value
                 }
-            }));
-        }
+            }
+        }));
     };
+
+    // Step 4: Others
 
     const [relativeErrorMessage, setRelativeErrorMessage] = useState('');
     const [workExperienceErrorMessage, setWorkExperienceErrorMessage] = useState('');
@@ -456,34 +533,75 @@ export default function ApplyingStages() {
         }
     };
 
-    const [requiredDocuments, setRequiredDocuments] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchRequiredDocuments = async () => {
-            try {
-                const response = await fetch(`/api/scholarshipProgram/${scholarshipId}/required-documents`);
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                setRequiredDocuments(data);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
+    // Step 5: Upload Requirements
+    const handleFileChange = (e, docType) => {
+        const file = e.target.files[0];
+        setFormData(prevState => ({
+            ...prevState,
+            documents: {
+                ...prevState.documents,
+                [docType]: { file }
             }
+        }));
+    };
+
+    // Step 6: Terms and Conditions
+    const handleInputChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setFormData({
+          ...formData,
+          [name]: type === 'checkbox' ? checked : value,
+        });
+      };
+
+    // handleSubmit function
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Upload files to Firebase and get the file URLs
+        const uploadedFilePaths = await Promise.all(Object.entries(formData.documents).map(async ([docType, fileObj]) => {
+            if (fileObj) {
+                const file = fileObj.file;
+                const fileExtension = file.name.split('.').pop(); // Extract the file extension
+                const fileNameWithoutExtension = file.name.replace(/\.[^/.]+$/, ""); // Remove the extension from the original file name
+                const fileName = `${currentUser.username}_${fileNameWithoutExtension.replace(/\s+/g, '_')}_${uuidv4()}.${fileExtension}`;
+                const storageRef = ref(storage, `scholarship_application_documents/${fileName}`);
+                await uploadBytes(storageRef, file);
+                const downloadURL = await getDownloadURL(storageRef);
+                return { [docType]: downloadURL }; // Save the download URL in the database
+            }
+            return { [docType]: null };
+        }));
+
+        // Combine the uploaded file URLs with the rest of the form data
+        const updatedFormData = {
+            ...formData,
+            documents: Object.assign({}, ...uploadedFilePaths),
         };
 
-        fetchRequiredDocuments();
-    }, [scholarshipId]);
+        // Send scholarship application data to the backend
+        try {
+            const response = await fetch('/api/scholarshipApplication/create-application', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedFormData)
+            });
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
+            const result = await response.json();
+            console.log('Success:', result);
+            // Handle success (e.g., show a success message, redirect, etc.)
+            navigate('/scholar-dashboard'); // Redirect to the scholar dashboard
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle error (e.g., show an error message)
+        }
+    };
     return (
         <div className='flex flex-col min-h-screen'>
             <main className='flex-grow font-medium text-slate-700 min-h-screen'>
@@ -1098,15 +1216,15 @@ export default function ApplyingStages() {
                                     <span className='text-lg font-bold mt-8 block'>Guardian's Information</span>
                                     <div className='mt-4'>
                                         {/* <label className='block text-sm font-medium text-gray-700 mb-2'>
-                                        <input
-                                            type="checkbox"
-                                            name="sameAsParents"
-                                            checked={sameAsParents}
-                                            onChange={handleCheckboxChange}
-                                            className='mr-2'
-                                        />
-                                        Same as parents
-                                    </label> */}
+                                <input
+                                    type="checkbox"
+                                    name="sameAsParents"
+                                    checked={sameAsParents}
+                                    onChange={handleCheckboxChange}
+                                    className='mr-2'
+                                />
+                                Same as parents
+                            </label> */}
                                     </div>
                                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
                                         <div>
@@ -1384,20 +1502,6 @@ export default function ApplyingStages() {
                                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                             />
                                         </div>
-                                        {/* <div>
-                                            <label className='block text-sm font-medium text-gray-700 mb-2'>College Year Graduated</label>
-                                            <select
-                                                name="yearGraduated"
-                                                value={formData.education.college.yearGraduated}
-                                                onChange={(e) => handleEducationChange(e, 'college')}
-                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                            >
-                                                <option value="">Select year</option>
-                                                {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
-                                                    <option key={year} value={year}>{year}</option>
-                                                ))}
-                                            </select>
-                                        </div> */}
                                     </div>
 
                                     <div className='flex mt-10 justify-end space-x-4 p-4'>
@@ -1660,6 +1764,8 @@ export default function ApplyingStages() {
                                         id="agree"
                                         name="agree"
                                         className='mr-2'
+                                        checked={formData.agree}
+                                        onChange={handleInputChange}
                                         required
                                     />
                                     <label htmlFor="agree" className='text-sm text-gray-700'>
@@ -1679,5 +1785,5 @@ export default function ApplyingStages() {
             </main>
             <Footer />
         </div>
-    );
+    )
 }

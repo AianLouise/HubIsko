@@ -58,11 +58,15 @@ const scholarshipApplicationSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    email: {
+        type: String,
+        required: false,
+    },
     contactNumber: {
         type: String,
         required: false,
     },
-    address: {
+    addressDetails: {
         type: String,
         required: false,
     },
@@ -276,12 +280,6 @@ const scholarshipApplicationSchema = new mongoose.Schema({
         type: Map,
         of: String,
         required: false,
-    },
-    termsAndConditions: {
-        agreed: {
-            type: Boolean,
-            required: false,
-        }
     },
     scholarshipProgram: {
         type: mongoose.Schema.Types.ObjectId,

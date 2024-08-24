@@ -56,6 +56,7 @@ import ViewApplicationDetails from "./pages/Scholarship-Provider/ViewApplication
 import EditProgramPage from "./pages/Scholarship-Provider/EditProgramPage";
 import EditStudentInfo from "./pages/Admin/EditStudentInfo";
 import ApplicationForm from "./pages/ApplicationForm";
+import ResubmitApplication from "./pages/ResubmitApplication";
 
 
 
@@ -131,6 +132,7 @@ export default function App() {
           <Route path="/applying-stages/:scholarshipId" element={<ApplyingStages />} />
           <Route path="/application-box" element={<ApplicationBox />} />
           <Route path="/application-detail/:id" element={<InboxedApplicationDetail />} />
+          <Route path="/resubmit-application/:id" element={<ResubmitApplication />} />
           <Route path="/student-info" element={<StudentInfo />} />
           <Route path="/profile-preview/:id" element={<ProfilePreview />} />
           <Route path="/post-details" element={<PostDetails />} />

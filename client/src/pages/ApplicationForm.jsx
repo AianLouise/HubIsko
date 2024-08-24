@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 
 export default function ApplicationForm() {
+    const navigate = useNavigate();
 
     const [showModal, setShowModal] = useState(false);
 
@@ -225,8 +226,7 @@ export default function ApplicationForm() {
                                     <button onClick={closeModal} className="border rounded-md w-full py-2 hover:bg-slate-200">Cancel</button>
                                     <button onClick={() => {
                                         closeModal();
-                                        // Implement actual resubmit logic here
-                                        console.log('Application resubmission requested.');
+                                        navigate(`/resubmit-application/${application._id}`); // Navigate to the resubmit application page
                                     }} className="bg-blue-600 text-white rounded-md w-full hover:bg-blue-800">Request Resubmission</button>
                                 </div>
                             </div>
