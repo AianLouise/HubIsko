@@ -2,6 +2,7 @@ import Scholarship from '../models/scholarshipProgram.model.js';
 import ScholarshipApplication from '../models/scholarshipApplication.model.js';
 import User from '../models/user.model.js';
 
+
 export const test = (req, res) => {
   res.json({
     message: 'API is working!',
@@ -364,21 +365,22 @@ export const updateApplicationStatus = async (req, res) => {
   const { applicationStatus } = req.body;
 
   try {
-    const application = await ScholarshipApplication.findByIdAndUpdate(
-      id,
-      { applicationStatus },
-      { new: true }  // This option returns the updated document
-    );
+      const application = await ScholarshipApplication.findByIdAndUpdate(
+          id,
+          { applicationStatus },
+          { new: true }  // Return the updated document
+      );
 
-    if (!application) {
-      return res.status(404).json({ message: 'Application not found' });
-    }
+      if (!application) {
+          return res.status(404).json({ message: 'Application not found' });
+      }
 
-    res.status(200).json(application);
+      res.status(200).json(application);
   } catch (error) {
-    res.status(500).json({ message: 'Failed to update application status', error });
+      res.status(500).json({ message: 'Failed to update application status', error });
   }
-}
+};
+
 
 export const addApprovedScholar = async (req, res) => {
   const { userId, programId } = req.params;
@@ -431,3 +433,4 @@ export const getAllApplicationsForProvider = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+

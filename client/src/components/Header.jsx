@@ -44,11 +44,11 @@ export default function Header() {
 
   const [showDropdown, setShowDropdown] = useState(false);
   const showDropdownRef = useRef(null);
-  
+
   const [showNotification, setShowNotification] = useState(false);
   const notificationRef = useRef(null);
 
-  
+
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const ShowModal = () => setShowModal(!showModal);
 
@@ -58,7 +58,7 @@ export default function Header() {
     }
     if (showDropdownRef.current && !showDropdownRef.current.contains(event.target)) {
       setShowDropdown(false);
-      }
+    }
   };
 
   useEffect(() => {
@@ -94,6 +94,26 @@ export default function Header() {
     setDropdownVisible(!dropdownVisible);
   };
 
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    // Fetch notifications when the component mounts
+    const fetchNotifications = async () => {
+      try {
+        const response = await fetch(`/api/notification/notifications/${currentUser._id}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch notifications');
+        }
+        const data = await response.json();
+        setNotifications(data);
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+      }
+    };
+
+    fetchNotifications();
+  }, [currentUser._id]);
+
   return (
     <div className='border-b bg-[#f8f8fb] shadow-sm'>
       <div className='flex justify-between text-md max-w-6xl mx-auto p-6 lg:px-20'>
@@ -111,61 +131,61 @@ export default function Header() {
           <div className="bg-white shadow-lg border w-64 p-4 h-full">
 
             <div className='mb-4 pb-4 border-b flex justify-between items-center'>
-            <span className='font-bold text-slate-700 text-lg'>Sidebar</span>
-            <button className="bg-blue-600 text-white p-1.5 rounded-full" onClick={toggleSidebar}><IoClose className="w-5 h-5" /></button>
+              <span className='font-bold text-slate-700 text-lg'>Sidebar</span>
+              <button className="bg-blue-600 text-white p-1.5 rounded-full" onClick={toggleSidebar}><IoClose className="w-5 h-5" /></button>
             </div>
-            
+
             <ul className='flex flex-col gap-4 p-2 text-white font-medium'>
 
-            <Link to='/'>
-                  <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/' ? 'bg-blue-600' : 'bg-slate-500'}`}>
-                    <GoHomeFill className='w-5 h-5' />Home
-                  </li>
-            </Link>
+              <Link to='/'>
+                <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/' ? 'bg-blue-600' : 'bg-slate-500'}`}>
+                  <GoHomeFill className='w-5 h-5' />Home
+                </li>
+              </Link>
 
-            {currentUser && currentUser.role === 'applicant' && (
-            <Link to='/scholar-dashboard'>
-              <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/scholar-dashboard' ? 'bg-blue-600' : 'bg-slate-500'}`}>
-              
-            <MdDashboard className='w-5 h-5'/>Scholar Dashboard
-            </li></Link>
-            )}
+              {currentUser && currentUser.role === 'applicant' && (
+                <Link to='/scholar-dashboard'>
+                  <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/scholar-dashboard' ? 'bg-blue-600' : 'bg-slate-500'}`}>
 
-            <Link to='/scholarship-listing'>
-            <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/scholarship-listing' ? 'bg-blue-600' : 'bg-slate-500'}`}>
-              
-            <FaGoogleScholar className='w-5 h-5'/>Scholarship Listing
-              </li></Link>
+                    <MdDashboard className='w-5 h-5' />Scholar Dashboard
+                  </li></Link>
+              )}
 
-            <Link to='/forums'>
-              <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/forums' ? 'bg-blue-600' : 'bg-slate-500'}`}>
-               
-            <BsChatLeftTextFill className='w-5 h-5'/>Forums
-              </li></Link>
+              <Link to='/scholarship-listing'>
+                <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/scholarship-listing' ? 'bg-blue-600' : 'bg-slate-500'}`}>
 
-            {currentUser ? (
-            
-            <li className='flex flex-col gap-4 text-white font-medium'>
-            <Link to="/profile" 
-            className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/profile' ? 'bg-blue-600' : 'bg-slate-500'}`}>
+                  <FaGoogleScholar className='w-5 h-5' />Scholarship Listing
+                </li></Link>
 
-            <IoPersonCircleSharp className='w-5 h-5'/>Manage Account
-            </Link>
+              <Link to='/forums'>
+                <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/forums' ? 'bg-blue-600' : 'bg-slate-500'}`}>
 
-            <Link to='/about'>
-            <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/about' ? 'bg-blue-600' : 'bg-slate-500'}`}>
-              
-            <IoInformationCircle className='w-5 h-5'/>About
-              </li></Link>
+                  <BsChatLeftTextFill className='w-5 h-5' />Forums
+                </li></Link>
 
-            <button onClick={handleSignOut} className="border-2 text-slate-700 px-4 p-2 text-left rounded-md flex items-center gap-2">
-              
-            <FaDoorOpen className='w-5 h-5'/>Sign Out</button>
-            </li>
+              {currentUser ? (
 
-             ) : (
+                <li className='flex flex-col gap-4 text-white font-medium'>
+                  <Link to="/profile"
+                    className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/profile' ? 'bg-blue-600' : 'bg-slate-500'}`}>
+
+                    <IoPersonCircleSharp className='w-5 h-5' />Manage Account
+                  </Link>
+
+                  <Link to='/about'>
+                    <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/about' ? 'bg-blue-600' : 'bg-slate-500'}`}>
+
+                      <IoInformationCircle className='w-5 h-5' />About
+                    </li></Link>
+
+                  <button onClick={handleSignOut} className="border-2 text-slate-700 px-4 p-2 text-left rounded-md flex items-center gap-2">
+
+                    <FaDoorOpen className='w-5 h-5' />Sign Out</button>
+                </li>
+
+              ) : (
                 <>
-                <Link to='/login'><li className='border p-2 px-4 text-slate-700 rounded-md hover:bg-slate-200'>Login</li></Link>
+                  <Link to='/login'><li className='border p-2 px-4 text-slate-700 rounded-md hover:bg-slate-200'>Login</li></Link>
                   <div className="relative">
                     <li className='bg-blue-600 text-white p-2 px-4 rounded-md hover:bg-blue-800 cursor-pointer' onClick={toggleDropdown2}>
                       Register
@@ -185,8 +205,8 @@ export default function Header() {
               )}
 
             </ul>
-            
- 
+
+
           </div>
         </div>
 
@@ -211,34 +231,45 @@ export default function Header() {
 
           {currentUser && currentUser.role === 'applicant' && (
             <div>
-              <button  onClick={toggleNotification} className='relative w-full border rounded-full p-3 hover:bg-slate-200 focus:bg-blue-600 group'>
-                <IoIosNotifications className='w-4 h-4 text-blue-600 group-focus:text-white' />
+              <button onClick={toggleNotification} className="relative w-full border rounded-full p-3 hover:bg-slate-200 focus:bg-blue-600 group">
+                <IoIosNotifications className="w-4 h-4 text-blue-600 group-focus:text-white scale-150" />
                 {showNotification && (
-                        <div ref={notificationRef} className="absolute top-full left-0 mt-2 border bg-white text-gray-800 shadow-lg rounded-md p-4 w-96 z-50">
-                        <div className='flex flex-col justify-start'>
-                            <span className='text-2xl text-left border-b py-2 w-full'>Notification Inbox</span>
-                            <div className='flex gap-2 pt-4'>
-                            <button className='border rounded-md p-2 px-4 hover:bg-slate-200 focus:bg-blue-600 focus:text-white'>All</button>
-                            <button className='border rounded-md p-2 px-4 hover:bg-slate-200 focus:bg-blue-600 focus:text-white'>Unread</button>
-                            </div>
-                            <div className='flex flex-col items-start p-2 mt-4'>
-                            <span>New Notifications</span>
-                            <div className='flex flex-col gap-2 mt-2'>
-                                <div className='flex flex-row text-sm w-full gap-4'>
-                                <div className='bg-blue-600 w-24 h-auto rounded-full'></div>
-                                <div className='flex flex-col text-left'>
-                                    <span className='font-bold'>HubIsko</span>
-                                    <span>Application for the scholarship has been approved ... see more</span>
+                  <div ref={notificationRef} className="absolute top-full left-0 mt-2 border bg-white text-gray-800 shadow-lg rounded-md p-4 w-96 z-50">
+                    <div className="flex flex-col justify-start">
+                      <span className="text-2xl text-left border-b py-2 w-full">Notification Inbox</span>
+                      <div className="flex gap-2 pt-4">
+                        <button className="border rounded-md p-2 px-4 hover:bg-slate-200 focus:bg-blue-600 focus:text-white">All</button>
+                        <button className="border rounded-md p-2 px-4 hover:bg-slate-200 focus:bg-blue-600 focus:text-white">Unread</button>
+                      </div>
+                      <div className="flex flex-col items-start p-2 mt-4">
+                        <span>New Notifications</span>
+                        <div className="flex flex-col gap-2 mt-2">
+                          {notifications.length > 0 ? (
+                            notifications.map((notification) => (
+                              <div key={notification._id} className="flex flex-row text-sm w-full gap-4">
+                                <img
+                                  src={notification.senderId.profilePicture || 'default-avatar.png'} // Fallback to a default avatar if profilePicture is missing
+                                  alt="Sender's Avatar"
+                                  className="w-12 h-12 rounded-full object-cover"
+                                />
+                                <div className="flex flex-col text-left">
+                                  <span className="font-bold">{notification.senderId.scholarshipProviderDetails.organizationName}</span>
+                                  <span>{notification.message} ... see more</span>
                                 </div>
-                                </div>
-                                <button onClick={ShowModal} className='bg-blue-600 text-white rounded-md p-2 mt-4 font-medium hover:bg-blue-800 transition ease-in-out'>See All Notifications</button>
-                            </div>
-                            </div>
+                              </div>
+                            ))
+                          ) : (
+                            <div>No new notifications</div>
+                          )}
+                          <button className="bg-blue-600 text-white rounded-md p-2 mt-4 font-medium hover:bg-blue-800 transition ease-in-out">See All Notifications</button>
                         </div>
-                        </div>
-                    )}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </button>
             </div>
+
 
           )}
 
@@ -279,7 +310,7 @@ export default function Header() {
         </ul>
       </div>
 
-      
+
 
 
       {/* NOTIFICATION MODAL */}
