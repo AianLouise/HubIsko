@@ -253,30 +253,30 @@ export default function ViewScholarshipDetails() {
                                 </form>
                                 <h2 className="text-2xl font-bold mt-8 mb-4 text-blue-600">Previous Announcements</h2>
 
-                                
+
                                 <div className='bg-white rounded-lg shadow-md border'>
-                                <table className="min-w-full">
-                                    <thead>
-                                        <tr className='text-left'>
-                                            <th className="py-2 px-4 border-b">Date</th>
-                                            <th className="py-2 px-4 border-b">Announcement</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className=''>
-                                        <tr className="hover:bg-gray-100">
-                                            <td className="py-2 px-4 border-b">2023-10-01</td>
-                                            <td className="py-2 px-4 border-b">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.</td>
-                                        </tr>
-                                        <tr className="hover:bg-gray-100">
-                                            <td className="py-2 px-4 border-b">2023-09-15</td>
-                                            <td className="py-2 px-4 border-b">Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta.</td>
-                                        </tr>
-                                        <tr className="hover:bg-gray-100">
-                                            <td className="py-2 px-4 border-b">2023-09-01</td>
-                                            <td className="py-2 px-4 border-b">Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    <table className="min-w-full">
+                                        <thead>
+                                            <tr className='text-left'>
+                                                <th className="py-2 px-4 border-b">Date</th>
+                                                <th className="py-2 px-4 border-b">Announcement</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className=''>
+                                            <tr className="hover:bg-gray-100">
+                                                <td className="py-2 px-4 border-b">2023-10-01</td>
+                                                <td className="py-2 px-4 border-b">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.</td>
+                                            </tr>
+                                            <tr className="hover:bg-gray-100">
+                                                <td className="py-2 px-4 border-b">2023-09-15</td>
+                                                <td className="py-2 px-4 border-b">Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta.</td>
+                                            </tr>
+                                            <tr className="hover:bg-gray-100">
+                                                <td className="py-2 px-4 border-b">2023-09-01</td>
+                                                <td className="py-2 px-4 border-b">Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         )}
@@ -336,54 +336,54 @@ export default function ViewScholarshipDetails() {
                         {activeTab === 'scholars' && (
                             <div className="p-6 bg-white rounded-lg shadow-md space-y-4">
                                 <h2 className="text-2xl font-bold mb-4 text-blue-600">View Scholars</h2>
-                                
+
                                 <p className="text-gray-700">
                                     Here is the list of scholars enrolled in the program.
                                 </p>
 
                                 <div className='rounded-lg shadow-md border'>
-                                <table className="min-w-full">
-                                    <thead>
-                                        <tr className='text-blue-600'>
-                                            <th className="py-2 px-4 border-b">Name</th>
-                                            <th className="py-2 px-4 border-b">Course</th>
-                                            <th className="py-2 px-4 border-b">Year</th>
-                                            <th className="py-2 px-4 border-b">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className='text-center'>
-                                        <tr className="hover:bg-gray-100">
-                                            <td className="py-2 px-4 border-b"><strong>John Doe</strong></td>
-                                            <td className="py-2 px-4 border-b">Computer Science</td>
-                                            <td className="py-2 px-4 border-b">Year 2</td>
-                                            <td className="py-2 px-4 border-b">
-                                                <Link to={`/scholars/john-doe`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
-                                                    View Details
-                                                </Link>
-                                            </td>
-                                        </tr>
-                                        <tr className="hover:bg-gray-100">
-                                            <td className="py-2 px-4 border-b"><strong>Jane Smith</strong></td>
-                                            <td className="py-2 px-4 border-b">Engineering</td>
-                                            <td className="py-2 px-4 border-b">Year 3</td>
-                                            <td className="py-2 px-4 border-b">
-                                                <Link to={`/scholars/jane-smith`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
-                                                    View Details
-                                                </Link>
-                                            </td>
-                                        </tr>
-                                        <tr className="hover:bg-gray-100">
-                                            <td className="py-2 px-4 border-b"><strong>Emily Johnson</strong></td>
-                                            <td className="py-2 px-4 border-b">Physics</td>
-                                            <td className="py-2 px-4 border-b">Year 1</td>
-                                            <td className="py-2 px-4 border-b">
-                                                <Link to={`/scholars/emily-johnson`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
-                                                    View Details
-                                                </Link>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    <table className="min-w-full">
+                                        <thead>
+                                            <tr className='text-blue-600'>
+                                                <th className="py-2 px-4 border-b">Name</th>
+                                                <th className="py-2 px-4 border-b">Course</th>
+                                                <th className="py-2 px-4 border-b">Year</th>
+                                                <th className="py-2 px-4 border-b">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className='text-center'>
+                                            <tr className="hover:bg-gray-100">
+                                                <td className="py-2 px-4 border-b"><strong>John Doe</strong></td>
+                                                <td className="py-2 px-4 border-b">Computer Science</td>
+                                                <td className="py-2 px-4 border-b">Year 2</td>
+                                                <td className="py-2 px-4 border-b">
+                                                    <Link to={`/scholars/john-doe`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
+                                                        View Details
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                            <tr className="hover:bg-gray-100">
+                                                <td className="py-2 px-4 border-b"><strong>Jane Smith</strong></td>
+                                                <td className="py-2 px-4 border-b">Engineering</td>
+                                                <td className="py-2 px-4 border-b">Year 3</td>
+                                                <td className="py-2 px-4 border-b">
+                                                    <Link to={`/scholars/jane-smith`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
+                                                        View Details
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                            <tr className="hover:bg-gray-100">
+                                                <td className="py-2 px-4 border-b"><strong>Emily Johnson</strong></td>
+                                                <td className="py-2 px-4 border-b">Physics</td>
+                                                <td className="py-2 px-4 border-b">Year 1</td>
+                                                <td className="py-2 px-4 border-b">
+                                                    <Link to={`/scholars/emily-johnson`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
+                                                        View Details
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         )}
@@ -396,47 +396,47 @@ export default function ViewScholarshipDetails() {
                                 </p>
 
                                 <div className='bg-white rounded-lg shadow-md border'>
-                                <table className="min-w-full">
-                                    <thead>
-                                        <tr className='text-blue-600'>
-                                            <th className="py-2 px-4 border-b text-center">Name</th>
-                                            <th className="py-2 px-4 border-b text-center">Status</th>
-                                            <th className="py-2 px-4 border-b text-center">Submission Date</th>
-                                            <th className="py-2 px-4 border-b text-center">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {error ? (
-                                            <tr>
-                                                <td colSpan="4" className="py-2 px-4 border-b text-center text-red-600">
-                                                    {error}
-                                                </td>
+                                    <table className="min-w-full">
+                                        <thead>
+                                            <tr className='text-blue-600'>
+                                                <th className="py-2 px-4 border-b text-center">Name</th>
+                                                <th className="py-2 px-4 border-b text-center">Status</th>
+                                                <th className="py-2 px-4 border-b text-center">Submission Date</th>
+                                                <th className="py-2 px-4 border-b text-center">Actions</th>
                                             </tr>
-                                        ) : applications.length === 0 ? (
-                                            <tr>
-                                                <td colSpan="4" className="py-2 px-4 border-b text-center">
-                                                    No applications found for this scholarship program.
-                                                </td>
-                                            </tr>
-                                        ) : (
-                                            applications.map(application => (
-                                                <tr key={application._id} className="hover:bg-gray-100">
-                                                    <td className="py-2 px-4 border-b text-center">{`${application.firstName} ${application.lastName}`}</td>
-                                                    <td className="py-2 px-4 border-b text-center">
-                                                        <span className={`inline-block w-3 h-3 mr-2 rounded-full ${getStatusColor(application.applicationStatus)}`}></span>
-                                                        {toSentenceCase(application.applicationStatus)}
-                                                    </td>
-                                                    <td className="py-2 px-4 border-b text-center">{new Date(application.submissionDate).toLocaleDateString()}</td>
-                                                    <td className="py-2 px-4 border-b text-center">
-                                                        <Link to={`/applications/${application._id}`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
-                                                            View Details
-                                                        </Link>
+                                        </thead>
+                                        <tbody>
+                                            {error ? (
+                                                <tr>
+                                                    <td colSpan="4" className="py-2 px-4 border-b text-center text-red-600">
+                                                        {error}
                                                     </td>
                                                 </tr>
-                                            ))
-                                        )}
-                                    </tbody>
-                                </table>
+                                            ) : applications.length === 0 ? (
+                                                <tr>
+                                                    <td colSpan="4" className="py-2 px-4 border-b text-center">
+                                                        No applications found for this scholarship program.
+                                                    </td>
+                                                </tr>
+                                            ) : (
+                                                applications.map(application => (
+                                                    <tr key={application._id} className="hover:bg-gray-100">
+                                                        <td className="py-2 px-4 border-b text-center">{`${application.firstName} ${application.lastName}`}</td>
+                                                        <td className="py-2 px-4 border-b text-center">
+                                                            <span className={`inline-block w-3 h-3 mr-2 rounded-full ${getStatusColor(application.applicationStatus)}`}></span>
+                                                            {toSentenceCase(application.applicationStatus)}
+                                                        </td>
+                                                        <td className="py-2 px-4 border-b text-center">{new Date(application.submissionDate).toLocaleDateString()}</td>
+                                                        <td className="py-2 px-4 border-b text-center">
+                                                            <Link to={`/applications/${application._id}`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
+                                                                View Details
+                                                            </Link>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            )}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         )}

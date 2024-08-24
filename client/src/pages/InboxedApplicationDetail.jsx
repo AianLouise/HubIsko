@@ -7,10 +7,10 @@ import { IoMdArrowDropdown } from 'react-icons/io';
 import ApplicationForm from './ApplicationForm';
 
 export default function InboxedApplicationDetail() {
-
     const currentUser = useSelector((state) => state.user.currentUser);
     const [application, setApplication] = useState(null);
-    const { id: applicationId } = useParams(); 
+    const [showModal, setShowModal] = useState(false); // For resubmit modal
+    const { id: applicationId } = useParams();
 
     useEffect(() => {
         const fetchApplicationDetails = async () => {
@@ -29,6 +29,8 @@ export default function InboxedApplicationDetail() {
         fetchApplicationDetails();
     }, [applicationId]);
 
+
+
     if (!application || !currentUser) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -45,41 +47,39 @@ export default function InboxedApplicationDetail() {
             <Header />
             <main className="flex-grow bg-[#f8f8fb] font-medium">
                 <div className="max-w-6xl px-24 mx-auto my-20">
-                    
                     <div className='my-8 flex gap-2 items-center'>
-                    <Link to={'/application-box'} className='bg-white border rounded-md px-6 py-2 shadow hover:bg-slate-200'>
-                     <span>Inbox</span>
-                    </Link>
-
-                           <IoMdArrowDropdown className='-rotate-90 text-4xl text-blue-600' />
-
-                    <div className='bg-white border rounded-md px-6 py-2 shadow'>
-                    <span className='text-blue-600'>{application.scholarshipProgram.title}</span>
-                    </div>
+                        <Link to={'/application-box'} className='bg-white border rounded-md px-6 py-2 shadow hover:bg-slate-200'>
+                            <span>Inbox</span>
+                        </Link>
+                        <IoMdArrowDropdown className='-rotate-90 text-4xl text-blue-600' />
+                        <div className='bg-white border rounded-md px-6 py-2 shadow'>
+                            <span className='text-blue-600'>{application.scholarshipProgram.title}</span>
+                        </div>
                     </div>
 
                     <ApplicationForm application={application} />
 
+                    {/* {application.applicationStatus === 'Rejected' && (
+                        <div className="mt-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
+                            <p>Your application has been rejected.</p>
+                            {application.rejectionNote && (
+                                <div className="mt-2">
+                                    <strong>Reason:</strong> {application.rejectionNote}
+                                </div>
+                            )}
+                            <button
+                                className="mt-4 bg-blue-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-blue-800"
+                                onClick={handleResubmit}
+                            >
+                                Resubmit Application
+                            </button>
+                        </div>
+                    )} */}
                 </div>
-            </main >
+            </main>
             <Footer />
 
-            {/* {
-                showModal && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50">
-                        <div className="bg-white flex-col gap-2 flex text-left p-8 w-1/4 shadow rounded-md border">
-                            <h1 className='text-2xl text-center font-bold text-blue-600'>Request to Review?</h1>
-                            <span className='text-md text-slate-600 text-center'>
-                                After you request a review you'll have to <span className="text-blue-600">wait after 1 week</span> to request again.
-                            </span>
-                            <div className="justify-between w-full flex gap-2 font-medium mt-4">
-                                <button onClick={closeModal} className="border rounded-md w-full py-2 hover:bg-slate-200">Cancel</button>
-                                <button onClick={closeModal} className="bg-blue-600 text-white rounded-md w-full hover:bg-blue-800">Request</button>
-                            </div>
-                        </div>
-                    </div>
-                )
-            } */}
-        </div >
-    )
+          
+        </div>
+    );
 }

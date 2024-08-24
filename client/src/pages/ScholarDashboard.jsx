@@ -52,13 +52,13 @@ export default function ScholarDashboard() {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'pending':
+      case 'Pending':
         return 'bg-yellow-400';
-      case 'approved':
+      case 'Approved':
         return 'bg-green-400';
-      case 'rejected':
+      case 'Rejected':
         return 'bg-red-400';
-      case 'completed':
+      case 'Completed':
         return 'bg-blue-400';
       default:
         return 'bg-gray-400';
