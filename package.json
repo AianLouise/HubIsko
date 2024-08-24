@@ -31,6 +31,7 @@
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.25.1",
     "select-philippines-address": "^1.0.6",
-    "use-postal-ph": "^1.1.7"
+    "use-postal-ph": "^1.1.7",
+    "uuid": "^10.0.0"
   }
 }

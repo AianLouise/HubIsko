@@ -7,13 +7,14 @@ import Footer from '../components/Footer';
 import { FaArrowRightLong } from "react-icons/fa6";
 import { FaInfoCircle, FaUsers, FaGraduationCap, FaEllipsisH, FaFileContract, FaUpload } from "react-icons/fa";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function ApplyingStages() {
 
     const [selectedTab, setSelectedTab] = useState('About');
 
     const handleTabClick = (tab) => {
-      setSelectedTab(tab);
+        setSelectedTab(tab);
     };
 
     const navigate = useNavigate();
@@ -179,12 +180,7 @@ export default function ApplyingStages() {
             skills: '',
             qualifications: ''
         }),
-        documents: {
-            identificationCard: null,
-            proofOfAddress: null,
-            academicTranscripts: null,
-            passportPhoto: null
-        },
+        documents: {},
         termsAndConditions: {
             agreed: true
         },
@@ -268,7 +264,16 @@ export default function ApplyingStages() {
         }));
     };
 
-
+    const handleFileChange = (e, docType) => {
+        const file = e.target.files[0];
+        setFormData(prevState => ({
+            ...prevState,
+            documents: {
+                ...prevState.documents,
+                [docType]: { file }
+            }
+        }));
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -279,8 +284,8 @@ export default function ApplyingStages() {
                 const file = fileObj.file;
                 const fileExtension = file.name.split('.').pop(); // Extract the file extension
                 const fileNameWithoutExtension = file.name.replace(/\.[^/.]+$/, ""); // Remove the extension from the original file name
-                const fileName = `${currentUser.username}_${fileNameWithoutExtension}_${format(new Date(), 'yyyyMMdd')}.${fileExtension}`;
-                const storageRef = ref(storage, `scholarship_documents/${fileName}`);
+                const fileName = `${currentUser.username}_${fileNameWithoutExtension.replace(/\s+/g, '_')}_${uuidv4()}.${fileExtension}`;
+                const storageRef = ref(storage, `scholarship_application_documents/${fileName}`);
                 await uploadBytes(storageRef, file);
                 const downloadURL = await getDownloadURL(storageRef);
                 return { [docType]: downloadURL }; // Save the download URL in the database
@@ -452,6 +457,34 @@ export default function ApplyingStages() {
             setSkillErrorMessage("Maximum of 6 skills and qualifications can be added."); // Change 6 to the desired maximum number of skills
         }
     };
+
+    const [requiredDocuments, setRequiredDocuments] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchRequiredDocuments = async () => {
+            try {
+                const response = await fetch(`/api/scholarshipProgram/${scholarshipId}/required-documents`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                setRequiredDocuments(data);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchRequiredDocuments();
+    }, [scholarshipId]);
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
 
     return (
         <div className='flex flex-col min-h-screen'>
@@ -701,30 +734,30 @@ export default function ApplyingStages() {
                                 <div className='flex flex-col'>
                                     <label className='block text-sm font-medium text-slate-700 mb-2'>Height and Weight</label>
                                     <div className='flex gap-2'>
-                                    <input
-                                        type="number"
-                                        name="height"
-                                        value={formData.height}
-                                        onChange={handleChange}
-                                        required
-                                        className='text-sm standard-input border border-gray-300 rounded-md p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        placeholder="Height in cm"
-                                    />
-                                   
-                                    <input
-                                        type="number"
-                                        name="weight"
-                                        value={formData.weight}
-                                        onChange={handleChange}
-                                        required
-                                        className='text-sm standard-input border border-gray-300 rounded-md p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        placeholder="Weight in kg"
-                                    />
+                                        <input
+                                            type="number"
+                                            name="height"
+                                            value={formData.height}
+                                            onChange={handleChange}
+                                            required
+                                            className='text-sm standard-input border border-gray-300 rounded-md p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            placeholder="Height in cm"
+                                        />
+
+                                        <input
+                                            type="number"
+                                            name="weight"
+                                            value={formData.weight}
+                                            onChange={handleChange}
+                                            required
+                                            className='text-sm standard-input border border-gray-300 rounded-md p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            placeholder="Weight in kg"
+                                        />
                                     </div>
                                 </div>
 
                                 <div>
-                                <label className='block text-sm font-medium text-gray-700 mb-2'>Email</label>
+                                    <label className='block text-sm font-medium text-gray-700 mb-2'>Email</label>
                                     <input
                                         type="eml"
                                         name="email"
@@ -736,7 +769,7 @@ export default function ApplyingStages() {
                                     />
                                 </div>
 
-                      
+
                                 <div>
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>Contact Number</label>
                                     <input
@@ -823,250 +856,250 @@ export default function ApplyingStages() {
 
                             <div className='mt-2'>
 
-                            <div className='flex flex-col items-center gap-4 border-b pb-4'>
-                                <span className='text-xl font-bold'>Please Select:</span>
+                                <div className='flex flex-col items-center gap-4 border-b pb-4'>
+                                    <span className='text-xl font-bold'>Please Select:</span>
 
-                                <div className='flex gap-5'>
-                                <button
-                                className={`border text-center rounded-xl px-16 py-4 ${selectedTab === 'Parents' ? 'bg-white text-blue-600 shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
-                                onClick={() => handleTabClick('Parents')}
-                                >
-                                I am guided by my Parents
-                                </button>
+                                    <div className='flex gap-5'>
+                                        <button
+                                            className={`border text-center rounded-xl px-16 py-4 ${selectedTab === 'Parents' ? 'bg-white text-blue-600 shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
+                                            onClick={() => handleTabClick('Parents')}
+                                        >
+                                            I am guided by my Parents
+                                        </button>
 
-                                <button
-                                className={`border text-center rounded-xl px-16 py-4 ${selectedTab === 'Guardians' ? 'bg-white text-blue-600 shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
-                                onClick={() => handleTabClick('Guardians')}
-                                >
-                                I am guided by my Guardian(s)
-                                </button>
+                                        <button
+                                            className={`border text-center rounded-xl px-16 py-4 ${selectedTab === 'Guardians' ? 'bg-white text-blue-600 shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
+                                            onClick={() => handleTabClick('Guardians')}
+                                        >
+                                            I am guided by my Guardian(s)
+                                        </button>
+                                    </div>
                                 </div>
+
+
+
                             </div>
 
-                                
-                             
-                            </div>
-                            
                             {selectedTab === 'Parents' && (
                                 <div className='p-4'>
-                                       <span className='text-lg font-bold'>Father's Information</span>
-                                                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
-                                                    <div>
-                                                        <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
-                                                        <input
-                                                            type="text"
-                                                            name="firstName"
-                                                            value={formData.father.firstName}
-                                                            onChange={(e) => handleChange(e, 'father')}
-                                                            required
-                                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                                            placeholder="Enter first name"
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
-                                                        <input
-                                                            type="text"
-                                                            name="lastName"
-                                                            value={formData.father.lastName}
-                                                            onChange={(e) => handleChange(e, 'father')}
-                                                            required
-                                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                                            placeholder="Enter last name"
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
-                                                        <input
-                                                            type="text"
-                                                            name="middleName"
-                                                            value={formData.father.middleName}
-                                                            onChange={(e) => handleChange(e, 'father')}
-                                                            required
-                                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                                            placeholder="Enter middle name"
-                                                        />
-                                                    </div>
-                                                </div>
-
-                                                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4'>
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
-                                        <input
-                                            type="date"
-                                            name="birthdate"
-                                            value={formData.father.birthdate}
-                                            onChange={(e) => handleChange(e, 'father')}
-                                            required
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                            placeholder="Enter birthdate"
-                                        />
+                                    <span className='text-lg font-bold'>Father's Information</span>
+                                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
+                                            <input
+                                                type="text"
+                                                name="firstName"
+                                                value={formData.father.firstName}
+                                                onChange={(e) => handleChange(e, 'father')}
+                                                required
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                placeholder="Enter first name"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
+                                            <input
+                                                type="text"
+                                                name="lastName"
+                                                value={formData.father.lastName}
+                                                onChange={(e) => handleChange(e, 'father')}
+                                                required
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                placeholder="Enter last name"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
+                                            <input
+                                                type="text"
+                                                name="middleName"
+                                                value={formData.father.middleName}
+                                                onChange={(e) => handleChange(e, 'father')}
+                                                required
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                placeholder="Enter middle name"
+                                            />
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation</label>
-                                        <input
-                                            type="text"
-                                            name="occupation"
-                                            value={formData.father.occupation}
-                                            onChange={(e) => handleChange(e, 'father')}
-                                            required
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                            placeholder="Enter occupation"
-                                        />
+
+                                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4'>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
+                                            <input
+                                                type="date"
+                                                name="birthdate"
+                                                value={formData.father.birthdate}
+                                                onChange={(e) => handleChange(e, 'father')}
+                                                required
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                placeholder="Enter birthdate"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation</label>
+                                            <input
+                                                type="text"
+                                                name="occupation"
+                                                value={formData.father.occupation}
+                                                onChange={(e) => handleChange(e, 'father')}
+                                                required
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                placeholder="Enter occupation"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Yearly Income</label>
+                                            <select
+                                                name="yearlyIncome"
+                                                value={formData.father.yearlyIncome}
+                                                onChange={(e) => handleChange(e, 'father')}
+                                                required
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            >
+                                                <option value="" disabled>Select yearly income</option>
+                                                <option value="100000">Below ₱100,000</option>
+                                                <option value="200000">₱100,000 - ₱200,000</option>
+                                                <option value="300000">₱200,000 - ₱300,000</option>
+                                                <option value="400000">₱300,000 - ₱400,000</option>
+                                                <option value="500000">₱400,000 - ₱500,000</option>
+                                                <option value="600000">₱500,000 - ₱600,000</option>
+                                                <option value="700000">₱600,000 - ₱700,000</option>
+                                                <option value="800000">₱700,000 - ₱800,000</option>
+                                                <option value="900000">₱800,000 - ₱900,000</option>
+                                                <option value="1000000">₱900,000 - ₱1,000,000</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No.</label>
+                                            <input
+                                                type="text"
+                                                name="contactNo"
+                                                value={formData.father.contactNo}
+                                                onChange={(e) => handleChange(e, 'father')}
+                                                required
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                placeholder="Enter contact number"
+                                            />
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Yearly Income</label>
-                                        <select
-                                            name="yearlyIncome"
-                                            value={formData.father.yearlyIncome}
-                                            onChange={(e) => handleChange(e, 'father')}
-                                            required
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        >
-                                            <option value="" disabled>Select yearly income</option>
-                                            <option value="100000">Below ₱100,000</option>
-                                            <option value="200000">₱100,000 - ₱200,000</option>
-                                            <option value="300000">₱200,000 - ₱300,000</option>
-                                            <option value="400000">₱300,000 - ₱400,000</option>
-                                            <option value="500000">₱400,000 - ₱500,000</option>
-                                            <option value="600000">₱500,000 - ₱600,000</option>
-                                            <option value="700000">₱600,000 - ₱700,000</option>
-                                            <option value="800000">₱700,000 - ₱800,000</option>
-                                            <option value="900000">₱800,000 - ₱900,000</option>
-                                            <option value="1000000">₱900,000 - ₱1,000,000</option>
-                                        </select>
+
+
+
+
+
+                                    <span className='text-lg font-bold mt-8 block'>Mother's Information</span>
+                                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
+                                            <input
+                                                type="text"
+                                                name="firstName"
+                                                value={formData.mother.firstName}
+                                                onChange={(e) => handleChange(e, 'mother')}
+                                                required
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                placeholder="Enter first name"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
+                                            <input
+                                                type="text"
+                                                name="lastName"
+                                                value={formData.mother.lastName}
+                                                onChange={(e) => handleChange(e, 'mother')}
+                                                required
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                placeholder="Enter last name"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
+                                            <input
+                                                type="text"
+                                                name="middleName"
+                                                value={formData.mother.middleName}
+                                                onChange={(e) => handleChange(e, 'mother')}
+                                                required
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                placeholder="Enter middle name"
+                                            />
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No.</label>
-                                        <input
-                                            type="text"
-                                            name="contactNo"
-                                            value={formData.father.contactNo}
-                                            onChange={(e) => handleChange(e, 'father')}
-                                            required
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                            placeholder="Enter contact number"
-                                        />
+
+                                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4'>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
+                                            <input
+                                                type="date"
+                                                name="birthdate"
+                                                value={formData.mother.birthdate}
+                                                onChange={(e) => handleChange(e, 'mother')}
+                                                required
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                placeholder="Enter birthdate"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation</label>
+                                            <input
+                                                type="text"
+                                                name="occupation"
+                                                value={formData.mother.occupation}
+                                                onChange={(e) => handleChange(e, 'mother')}
+                                                required
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                placeholder="Enter occupation"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Yearly Income</label>
+                                            <select
+                                                name="yearlyIncome"
+                                                value={formData.mother.yearlyIncome}
+                                                onChange={(e) => handleChange(e, 'mother')}
+                                                required
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                            >
+                                                <option value="" disabled>Select yearly income</option>
+                                                <option value="100000">Below ₱100,000</option>
+                                                <option value="200000">₱100,000 - ₱200,000</option>
+                                                <option value="300000">₱200,000 - ₱300,000</option>
+                                                <option value="400000">₱300,000 - ₱400,000</option>
+                                                <option value="500000">₱400,000 - ₱500,000</option>
+                                                <option value="600000">₱500,000 - ₱600,000</option>
+                                                <option value="700000">₱600,000 - ₱700,000</option>
+                                                <option value="800000">₱700,000 - ₱800,000</option>
+                                                <option value="900000">₱800,000 - ₱900,000</option>
+                                                <option value="1000000">₱900,000 - ₱1,000,000</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No.</label>
+                                            <input
+                                                type="text"
+                                                name="contactNo"
+                                                value={formData.mother.contactNo}
+                                                onChange={(e) => handleChange(e, 'mother')}
+                                                required
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                placeholder="Enter contact number"
+                                            />
+                                        </div>
                                     </div>
-                                </div>
 
 
-
-                                                
-
-                                                <span className='text-lg font-bold mt-8 block'>Mother's Information</span>
-                                                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
-                                                    <div>
-                                                        <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
-                                                        <input
-                                                            type="text"
-                                                            name="firstName"
-                                                            value={formData.mother.firstName}
-                                                            onChange={(e) => handleChange(e, 'mother')}
-                                                            required
-                                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                                            placeholder="Enter first name"
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
-                                                        <input
-                                                            type="text"
-                                                            name="lastName"
-                                                            value={formData.mother.lastName}
-                                                            onChange={(e) => handleChange(e, 'mother')}
-                                                            required
-                                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                                            placeholder="Enter last name"
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
-                                                        <input
-                                                            type="text"
-                                                            name="middleName"
-                                                            value={formData.mother.middleName}
-                                                            onChange={(e) => handleChange(e, 'mother')}
-                                                            required
-                                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                                            placeholder="Enter middle name"
-                                                        />
-                                                    </div>
-                                                </div>
-
-                                                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4'>
-                                                    <div>
-                                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
-                                                        <input
-                                                            type="date"
-                                                            name="birthdate"
-                                                            value={formData.mother.birthdate}
-                                                            onChange={(e) => handleChange(e, 'mother')}
-                                                            required
-                                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                                            placeholder="Enter birthdate"
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation</label>
-                                                        <input
-                                                            type="text"
-                                                            name="occupation"
-                                                            value={formData.mother.occupation}
-                                                            onChange={(e) => handleChange(e, 'mother')}
-                                                            required
-                                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                                            placeholder="Enter occupation"
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Yearly Income</label>
-                                                        <select
-                                                            name="yearlyIncome"
-                                                            value={formData.mother.yearlyIncome}
-                                                            onChange={(e) => handleChange(e, 'mother')}
-                                                            required
-                                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                                        >
-                                                            <option value="" disabled>Select yearly income</option>
-                                                            <option value="100000">Below ₱100,000</option>
-                                                            <option value="200000">₱100,000 - ₱200,000</option>
-                                                            <option value="300000">₱200,000 - ₱300,000</option>
-                                                            <option value="400000">₱300,000 - ₱400,000</option>
-                                                            <option value="500000">₱400,000 - ₱500,000</option>
-                                                            <option value="600000">₱500,000 - ₱600,000</option>
-                                                            <option value="700000">₱600,000 - ₱700,000</option>
-                                                            <option value="800000">₱700,000 - ₱800,000</option>
-                                                            <option value="900000">₱800,000 - ₱900,000</option>
-                                                            <option value="1000000">₱900,000 - ₱1,000,000</option>
-                                                        </select>
-                                                    </div>
-                                                    <div>
-                                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No.</label>
-                                                        <input
-                                                            type="text"
-                                                            name="contactNo"
-                                                            value={formData.mother.contactNo}
-                                                            onChange={(e) => handleChange(e, 'mother')}
-                                                            required
-                                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                                            placeholder="Enter contact number"
-                                                        />
-                                                    </div>
-                                                </div>
-
-                                                
                                 </div>
                             )}
 
 
 
                             {selectedTab === 'Guardians' && (
-                            <div className='p-4'>
-                        
-                                <span className='text-lg font-bold mt-8 block'>Guardian's Information</span>
-                                <div className='mt-4'>
-                                    {/* <label className='block text-sm font-medium text-gray-700 mb-2'>
+                                <div className='p-4'>
+
+                                    <span className='text-lg font-bold mt-8 block'>Guardian's Information</span>
+                                    <div className='mt-4'>
+                                        {/* <label className='block text-sm font-medium text-gray-700 mb-2'>
                                         <input
                                             type="checkbox"
                                             name="sameAsParents"
@@ -1076,115 +1109,115 @@ export default function ApplyingStages() {
                                         />
                                         Same as parents
                                     </label> */}
-                                </div>
-                                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
-                                        <input
-                                            type="text"
-                                            name="firstName"
-                                            value={formData.guardian.firstName}
-                                            onChange={(e) => handleChange(e, 'guardian')}
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                            disabled={sameAsParents}
-                                            placeholder="Enter first name"
-                                        />
                                     </div>
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
-                                        <input
-                                            type="text"
-                                            name="lastName"
-                                            value={formData.guardian.lastName}
-                                            onChange={(e) => handleChange(e, 'guardian')}
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                            disabled={sameAsParents}
-                                            placeholder="Enter last name"
-                                        />
+                                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
+                                            <input
+                                                type="text"
+                                                name="firstName"
+                                                value={formData.guardian.firstName}
+                                                onChange={(e) => handleChange(e, 'guardian')}
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                disabled={sameAsParents}
+                                                placeholder="Enter first name"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
+                                            <input
+                                                type="text"
+                                                name="lastName"
+                                                value={formData.guardian.lastName}
+                                                onChange={(e) => handleChange(e, 'guardian')}
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                disabled={sameAsParents}
+                                                placeholder="Enter last name"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
+                                            <input
+                                                type="text"
+                                                name="middleName"
+                                                value={formData.guardian.middleName}
+                                                onChange={(e) => handleChange(e, 'guardian')}
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                disabled={sameAsParents}
+                                                placeholder="Enter middle name"
+                                            />
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
-                                        <input
-                                            type="text"
-                                            name="middleName"
-                                            value={formData.guardian.middleName}
-                                            onChange={(e) => handleChange(e, 'guardian')}
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                            disabled={sameAsParents}
-                                            placeholder="Enter middle name"
-                                        />
+                                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4'>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
+                                            <input
+                                                type="date"
+                                                name="birthdate"
+                                                value={formData.guardian.birthdate}
+                                                onChange={(e) => handleChange(e, 'guardian')}
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                disabled={sameAsParents}
+                                                placeholder="Enter birthdate"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation</label>
+                                            <input
+                                                type="text"
+                                                name="occupation"
+                                                value={formData.guardian.occupation}
+                                                onChange={(e) => handleChange(e, 'guardian')}
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                disabled={sameAsParents}
+                                                placeholder="Enter occupation"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Yearly Income</label>
+                                            <select
+                                                name="yearlyIncome"
+                                                value={formData.guardian.yearlyIncome}
+                                                onChange={(e) => handleChange(e, 'guardian')}
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                disabled={sameAsParents}
+                                            >
+                                                <option value="" disabled>Select yearly income</option>
+                                                <option value="100000">Below ₱100,000</option>
+                                                <option value="200000">₱100,000 - ₱200,000</option>
+                                                <option value="300000">₱200,000 - ₱300,000</option>
+                                                <option value="400000">₱300,000 - ₱400,000</option>
+                                                <option value="500000">₱400,000 - ₱500,000</option>
+                                                <option value="600000">₱500,000 - ₱600,000</option>
+                                                <option value="700000">₱600,000 - ₱700,000</option>
+                                                <option value="800000">₱700,000 - ₱800,000</option>
+                                                <option value="900000">₱800,000 - ₱900,000</option>
+                                                <option value="1000000">₱900,000 - ₱1,000,000</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No.</label>
+                                            <input
+                                                type="text"
+                                                name="contactNo"
+                                                value={formData.guardian.contactNo}
+                                                onChange={(e) => handleChange(e, 'guardian')}
+                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                disabled={sameAsParents}
+                                                placeholder="Enter contact number"
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4'>
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
-                                        <input
-                                            type="date"
-                                            name="birthdate"
-                                            value={formData.guardian.birthdate}
-                                            onChange={(e) => handleChange(e, 'guardian')}
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                            disabled={sameAsParents}
-                                            placeholder="Enter birthdate"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation</label>
-                                        <input
-                                            type="text"
-                                            name="occupation"
-                                            value={formData.guardian.occupation}
-                                            onChange={(e) => handleChange(e, 'guardian')}
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                            disabled={sameAsParents}
-                                            placeholder="Enter occupation"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Yearly Income</label>
-                                        <select
-                                            name="yearlyIncome"
-                                            value={formData.guardian.yearlyIncome}
-                                            onChange={(e) => handleChange(e, 'guardian')}
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                            disabled={sameAsParents}
-                                        >
-                                            <option value="" disabled>Select yearly income</option>
-                                            <option value="100000">Below ₱100,000</option>
-                                            <option value="200000">₱100,000 - ₱200,000</option>
-                                            <option value="300000">₱200,000 - ₱300,000</option>
-                                            <option value="400000">₱300,000 - ₱400,000</option>
-                                            <option value="500000">₱400,000 - ₱500,000</option>
-                                            <option value="600000">₱500,000 - ₱600,000</option>
-                                            <option value="700000">₱600,000 - ₱700,000</option>
-                                            <option value="800000">₱700,000 - ₱800,000</option>
-                                            <option value="900000">₱800,000 - ₱900,000</option>
-                                            <option value="1000000">₱900,000 - ₱1,000,000</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No.</label>
-                                        <input
-                                            type="text"
-                                            name="contactNo"
-                                            value={formData.guardian.contactNo}
-                                            onChange={(e) => handleChange(e, 'guardian')}
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                            disabled={sameAsParents}
-                                            placeholder="Enter contact number"
-                                        />
-                                    </div>
-                                </div>
 
-                            </div>
-                            )}
-                            
-                            <div className='flex mt-10 justify-end space-x-4 p-4'>
-                                    {activeStep > 1 && (
-                                        <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
-                                    )}
-                                    <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleNext}>Next</button>
                                 </div>
+                            )}
+
+                            <div className='flex mt-10 justify-end space-x-4 p-4'>
+                                {activeStep > 1 && (
+                                    <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                                )}
+                                <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleNext}>Next</button>
+                            </div>
                         </div>
 
                         <div className={`${getHideorActive(3)} max-w-8xl mx-auto bg-white shadow-lg rounded-lg`}>
@@ -1564,64 +1597,44 @@ export default function ApplyingStages() {
                         </div>
 
                         <div className={`${getHideorActive(5)} max-w-8xl mx-auto bg-white shadow-lg rounded-lg`}>
-                            <div className="bg-blue-600 text-white p-4 rounded-t-lg">
-                                <span className='text-lg font-bold'>Upload Requirements</span>
-                            </div>
-
-                            <div className='p-4'>
-                                <div className='mb-4'>
-                                    <p className='text-sm text-gray-700'>
-                                        Please upload the following documents:
-                                    </p>
-                                    <ul className='list-disc list-inside mt-2 text-sm text-gray-700'>
-                                        <li>Document 1: Identification Card</li>
-                                        <li>Document 2: Proof of Address</li>
-                                        <li>Document 3: Academic Transcripts</li>
-                                        <li>Document 4: Passport-sized Photo</li>
-                                    </ul>
-                                </div>
-
-                                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Identification Card</label>
-                                        <input
-                                            type="file"
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        />
+                            {scholarship && (
+                                <div className="scholarship-info mb-4 p-6 bg-white rounded-lg shadow-md">
+                                    <div className="bg-blue-600 text-white p-4 rounded-t-lg">
+                                        <span className='text-lg font-bold'>Upload Requirements</span>
                                     </div>
 
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Proof of Address</label>
-                                        <input
-                                            type="file"
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        />
-                                    </div>
+                                    <div className='p-4'>
+                                        <p className='text-sm text-gray-700'>
+                                            Please upload the following documents:
+                                        </p>
+                                        <ul className='list-disc list-inside mt-2 text-sm text-gray-700'>
+                                            {requiredDocuments.map(doc => (
+                                                <li key={doc.id}>{doc.name}</li>
+                                            ))}
+                                        </ul>
 
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Academic Transcripts</label>
-                                        <input
-                                            type="file"
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        />
-                                    </div>
+                                        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
+                                            {requiredDocuments.map(doc => (
+                                                <div key={doc.id}>
+                                                    <label className='block text-sm font-medium text-gray-700 mb-2'>{doc.name}</label>
+                                                    <input
+                                                        type="file"
+                                                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                        onChange={(e) => handleFileChange(e, doc.name)}
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
 
-                                    <div>
-                                        <label className='block text-sm font-medium text-gray-700 mb-2'>Passport-sized Photo</label>
-                                        <input
-                                            type="file"
-                                            className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        />
+                                        <div className='flex mt-4 justify-end space-x-4'>
+                                            {activeStep > 1 && (
+                                                <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                                            )}
+                                            <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleNext}>Next</button>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div className='flex mt-4 justify-end space-x-4'>
-                                    {activeStep > 1 && (
-                                        <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
-                                    )}
-                                    <button className='bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800' onClick={handleNext}>Next</button>
-                                </div>
-                            </div>
+                            )}
                         </div>
 
                         <div className={`${getHideorActive(6)} max-w-8xl mx-auto bg-white shadow-lg rounded-lg`}>

@@ -447,3 +447,28 @@ export const getAllApplicationsForProvider = async (req, res) => {
   }
 };
 
+export const getRequiredDocuments = async (req, res) => {
+  const { programId } = req.params;
+
+  try {
+      const scholarshipProgram = await Scholarship.findById(programId);
+
+      if (!scholarshipProgram) {
+          return res.status(404).json({ message: 'Scholarship program not found' });
+      }
+
+      const requiredDocuments = scholarshipProgram.requiredDocuments;
+
+      if (!requiredDocuments || requiredDocuments.length === 0) {
+          return res.status(404).json({ message: 'No required documents found' });
+      }
+
+      res.status(200).json(requiredDocuments);
+  } catch (error) {
+      console.error('Error fetching required documents:', error);
+      res.status(500).json({
+          message: 'Error fetching required documents',
+          error: error.message
+      });
+  }
+};

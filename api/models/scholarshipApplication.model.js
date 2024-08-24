@@ -273,22 +273,9 @@ const scholarshipApplicationSchema = new mongoose.Schema({
         }
     }],
     documents: {
-        identificationCard: {
-            type: String,
-            required: false,
-        },
-        proofOfAddress: {
-            type: String,
-            required: false,
-        },
-        academicTranscripts: {
-            type: String,
-            required: false,
-        },
-        passportPhoto: {
-            type: String,
-            required: false,
-        }
+        type: Map,
+        of: String,
+        required: false,
     },
     termsAndConditions: {
         agreed: {

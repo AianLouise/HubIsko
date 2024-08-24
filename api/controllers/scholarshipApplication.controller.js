@@ -1,4 +1,5 @@
 import ScholarshipApplication from '../models/scholarshipApplication.model.js';
+import Scholarship from '../models/scholarshipProgram.model.js';
 
 export const test = (req, res) => {
     res.json({

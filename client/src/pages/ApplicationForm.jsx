@@ -203,10 +203,12 @@ export default function ApplicationForm() {
                         <div className="my-2">
                             <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Documents</h3>
                             <div className="px-4 pt-2 rounded-lg shadow-sm">
-                                <p className="text-sm mb-2"><strong>Identification Card:</strong> {application.documents?.identificationCard}</p>
-                                <p className="text-sm mb-2"><strong>Proof of Address:</strong> {application.documents?.proofOfAddress}</p>
-                                <p className="text-sm mb-2"><strong>Academic Transcripts:</strong> {application.documents?.academicTranscripts}</p>
-                                <p className="text-sm"><strong>Passport Photo:</strong> {application.documents?.passportPhoto}</p>
+                                {application.documents && Object.entries(application.documents).map(([key, value], index) => (
+                                    <div key={index} className="flex items-center mb-2">
+                                        <strong className="w-1/3 text-sm">{key.replace(/_/g, ' ')}:</strong>
+                                        <a href={value} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline text-sm w-2/3 truncate">{value}</a>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
