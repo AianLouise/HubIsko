@@ -311,10 +311,15 @@ const scholarshipApplicationSchema = new mongoose.Schema({
         enum: ['Pending', 'Approved', 'Rejected', 'Completed'], // Updated to sentence case
         default: 'Pending', // Updated to sentence case
     },
-    appliedOn: {
-        type: Date,
-        default: Date.now
-    }
+    submissionDate: { 
+        type: Date, default: Date.now 
+    },
+    rejectionNote: { 
+        type: String 
+    }, // Field to store rejection note
+    allowResubmission: { 
+        type: Boolean, default: false 
+    }, // Field to allow resubmission
 }, { timestamps: true });
 
 const ScholarshipApplication = mongoose.model('ScholarshipApplication', scholarshipApplicationSchema);

@@ -16,12 +16,6 @@ import { IoPersonCircleSharp, IoInformationCircle } from "react-icons/io5";
 import { useLocation } from 'react-router-dom';
 import { useRef } from 'react';
 
-
-
-
-
-
-
 export default function Header() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.user);
@@ -96,11 +90,13 @@ export default function Header() {
 
   const [notifications, setNotifications] = useState([]);
 
+  const userId = currentUser ? currentUser._id : null;
+
   useEffect(() => {
     // Fetch notifications when the component mounts
     const fetchNotifications = async () => {
       try {
-        const response = await fetch(`/api/notification/notifications/${currentUser._id}`);
+        const response = await fetch(`/api/notification/notifications/${userId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch notifications');
         }
@@ -112,7 +108,7 @@ export default function Header() {
     };
 
     fetchNotifications();
-  }, [currentUser._id]);
+  }, [userId]);
 
   return (
     <div className='border-b bg-[#f8f8fb] shadow-sm'>

@@ -362,12 +362,24 @@ export const getApplicantDetails = async (req, res) => {
 
 export const updateApplicationStatus = async (req, res) => {
   const { id } = req.params;
-  const { applicationStatus } = req.body;
+  const { applicationStatus, rejectionNote, allowResubmission } = req.body;
 
   try {
+      const updateFields = { applicationStatus };
+
+      // If the status is 'Rejected', add rejectionNote and allowResubmission to the update
+      if (applicationStatus === 'Rejected') {
+          updateFields.rejectionNote = rejectionNote || 'No specific reason provided';
+          updateFields.allowResubmission = allowResubmission || false;
+      } else if (applicationStatus === 'Approved') {
+          // If the application is approved, clear the rejection note and resubmission flag
+          updateFields.rejectionNote = null;
+          updateFields.allowResubmission = false;
+      }
+
       const application = await ScholarshipApplication.findByIdAndUpdate(
           id,
-          { applicationStatus },
+          updateFields,
           { new: true }  // Return the updated document
       );
 
@@ -380,6 +392,7 @@ export const updateApplicationStatus = async (req, res) => {
       res.status(500).json({ message: 'Failed to update application status', error });
   }
 };
+
 
 
 export const addApprovedScholar = async (req, res) => {

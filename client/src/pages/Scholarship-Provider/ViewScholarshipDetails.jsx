@@ -401,7 +401,7 @@ export default function ViewScholarshipDetails() {
                                         <tr className='text-blue-600'>
                                             <th className="py-2 px-4 border-b text-center">Name</th>
                                             <th className="py-2 px-4 border-b text-center">Status</th>
-                                            <th className="py-2 px-4 border-b text-center">Applied On</th>
+                                            <th className="py-2 px-4 border-b text-center">Submission Date</th>
                                             <th className="py-2 px-4 border-b text-center">Actions</th>
                                         </tr>
                                     </thead>
@@ -426,7 +426,7 @@ export default function ViewScholarshipDetails() {
                                                         <span className={`inline-block w-3 h-3 mr-2 rounded-full ${getStatusColor(application.applicationStatus)}`}></span>
                                                         {toSentenceCase(application.applicationStatus)}
                                                     </td>
-                                                    <td className="py-2 px-4 border-b text-center">{new Date(application.appliedOn).toLocaleDateString()}</td>
+                                                    <td className="py-2 px-4 border-b text-center">{new Date(application.submissionDate).toLocaleDateString()}</td>
                                                     <td className="py-2 px-4 border-b text-center">
                                                         <Link to={`/applications/${application._id}`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
                                                             View Details

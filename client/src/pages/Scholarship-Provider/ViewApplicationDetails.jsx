@@ -19,26 +19,31 @@ export default function ViewApplicationDetails() {
     const [successMessage, setSuccessMessage] = useState('');
     const [showSnackbar, setShowSnackbar] = useState(false);
 
+    const [rejectionNote, setRejectionNote] = useState('');
+
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
-    useEffect(() => {
-        const fetchApplicationDetails = async () => {
-            setLoading(true);
-            try {
-                const response = await fetch(`/api/scholarshipApplication/get-applications-details/${applicationId}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                setApplication(data);
-            } catch (error) {
-                console.error('Error fetching application details:', error);
-                setError(error.message);
-            } finally {
-                setLoading(false);
+    const fetchApplicationDetails = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch(`/api/scholarshipApplication/get-applications-details/${applicationId}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-        };
+            const data = await response.json();
+            setApplication(data);
+            if (data.applicationStatus === 'Rejected') {
+                setRejectionNote(data.rejectionNote || '');
+            }
+        } catch (error) {
+            console.error('Error fetching application details:', error);
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         fetchApplicationDetails();
     }, [applicationId]);
 
@@ -92,17 +97,58 @@ export default function ViewApplicationDetails() {
         }
     };
 
-    const fetchApplicationDetails = async () => {
+    const handleReject = async (applicationId, applicant) => {
+        console.log(`Starting rejection process for application ID: ${applicationId}`);
+
         try {
-            const response = await fetch(`/api/scholarshipApplication/get-applications-details/${applicationId}`);
+            const response = await fetch(`/api/scholarshipProgram/applications/${applicationId}/status`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    applicationStatus: 'Rejected',
+                    rejectionNote: rejectionNote, // Include rejection note in the request
+                    allowResubmission: true // Allow applicant to resubmit the application
+                })
+            });
+
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error('Rejection failed');
             }
+
             const data = await response.json();
-            setApplication(data);
+            console.log('Application rejected:', data);
+
+            // Create a notification
+            const notificationResponse = await fetch(`/api/notification/notifications/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    applicantId: applicant, // Pass the applicant's ID as recipientId
+                    senderId: currentUser._id, // Pass the current user's ID as senderId
+                    scholarshipProgramId: application.scholarshipProgram._id, // Pass the scholarship program ID
+                    message: `Your application has been rejected. Reason: ${rejectionNote}. Please update and resubmit your application.` // Notification message
+                })
+            });
+
+            if (!notificationResponse.ok) {
+                throw new Error('Notification creation failed');
+            }
+
+            console.log('Notification created successfully');
+
+            // Fetch updated application details to reflect the new status
+            await fetchApplicationDetails();
+
+            setSuccessMessage('Application rejected successfully with a resubmission option.');
+            setShowSnackbar(true);
+
         } catch (error) {
-            console.error('Error fetching application details:', error);
-            setError(error.message);
+            console.error('Error rejecting application:', error);
+            setError('Failed to reject application.');
         }
     };
 
@@ -154,22 +200,41 @@ export default function ViewApplicationDetails() {
                             <div className="mt-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
                                 This application has already been approved.
                             </div>
+                        ) : application.applicationStatus === 'Rejected' ? (
+                            <div className="mt-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
+                                <p>This application has been rejected.</p>
+                                {rejectionNote && (
+                                    <div className="mt-2">
+                                        <strong>Reason:</strong> {rejectionNote}
+                                    </div>
+                                )}
+                            </div>
                         ) : (
-                            <div className="mt-6 flex justify-end gap-4">
-                                <button
-                                    className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-md"
-                                    onClick={() => handleApprove(application._id, application.applicant)}
-                                >
-                                    Approve
-                                </button>
-                                <button
-                                    className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-md"
-                                >
-                                    Reject
-                                </button>
+                            <div className="mt-6 flex flex-col gap-4">
+                                <textarea
+                                    className="border rounded-md p-2 w-full"
+                                    placeholder="Enter the reason for rejection (optional)"
+                                    value={rejectionNote}
+                                    onChange={(e) => setRejectionNote(e.target.value)}
+                                />
+                                <div className="flex justify-end gap-4">
+                                    <button
+                                        className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-md"
+                                        onClick={() => handleApprove(application._id, application.applicant)}
+                                    >
+                                        Approve
+                                    </button>
+                                    <button
+                                        className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-md"
+                                        onClick={() => handleReject(application._id, application.applicant)}
+                                    >
+                                        Reject with Note
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>
+
                 </div>
             </main>
 
@@ -177,7 +242,7 @@ export default function ViewApplicationDetails() {
                 <Snackbar
                     message={successMessage}
                     onClose={closeSnackbar}
-                    onAction={() => navigate('/applications')}
+                    onAction={() =>  navigate(-1)}
                     actionText="Go to Application List"
                 />
             )}
