@@ -96,7 +96,7 @@ const scholarshipApplicationSchema = new mongoose.Schema({
             required: false,
         },
         birthdate: {
-            type: Date,
+            type: String,
             required: false,
         },
         occupation: {
@@ -126,7 +126,7 @@ const scholarshipApplicationSchema = new mongoose.Schema({
             required: false,
         },
         birthdate: {
-            type: Date,
+            type: String,
             required: false,
         },
         occupation: {
@@ -156,7 +156,7 @@ const scholarshipApplicationSchema = new mongoose.Schema({
             required: false,
         },
         birthdate: {
-            type: Date,
+            type: String,
             required: false,
         },
         occupation: {
@@ -236,7 +236,7 @@ const scholarshipApplicationSchema = new mongoose.Schema({
             required: false,
         },
         birthdate: {
-            type: Date,
+            type: String,
             required: false,
         },
         relationship: {
@@ -250,7 +250,7 @@ const scholarshipApplicationSchema = new mongoose.Schema({
             required: false,
         },
         startDate: {
-            type: Date,
+            type: String,
             required: false,
         },
         position: {
@@ -296,14 +296,14 @@ const scholarshipApplicationSchema = new mongoose.Schema({
         enum: ['Pending', 'Approved', 'Rejected', 'Completed'], // Updated to sentence case
         default: 'Pending', // Updated to sentence case
     },
-    submissionDate: { 
-        type: Date, default: Date.now 
+    submissionDate: {
+        type: Date, default: Date.now
     },
-    rejectionNote: { 
-        type: String 
+    rejectionNote: {
+        type: String
     }, // Field to store rejection note
-    allowResubmission: { 
-        type: Boolean, default: false 
+    allowResubmission: {
+        type: Boolean, default: false
     }, // Field to allow resubmission
 }, { timestamps: true });
 

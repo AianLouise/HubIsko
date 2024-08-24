@@ -122,3 +122,92 @@ export const getApplicationDetailsById = async (req, res) => {
         });
     }
 };
+
+export const resubmitApplication = async (req, res) => {
+    try {
+        const { id } = req.params; // Extract applicationId from the URL parameters
+        const {
+            firstName,
+            lastName,
+            middleName,
+            birthdate,
+            gender,
+            bloodType,
+            civilStatus,
+            maidenName,
+            spouseName,
+            spouseOccupation,
+            religion,
+            height,
+            weight,
+            birthplace,
+            email,
+            contactNumber,
+            addressDetails,
+            town,
+            barangay,
+            province,
+            father,
+            mother,
+            guardian,
+            education,
+            relatives,
+            workExperience,
+            skillsAndQualifications,
+            documents,
+            scholarshipProgram,
+            applicant,
+        } = req.body;
+
+        const updatedApplication = await ScholarshipApplication.findByIdAndUpdate(
+            id,
+            {
+                firstName,
+                lastName,
+                middleName,
+                birthdate,
+                gender,
+                bloodType,
+                civilStatus,
+                maidenName,
+                spouseName,
+                spouseOccupation,
+                religion,
+                height,
+                weight,
+                birthplace,
+                email,
+                contactNumber,
+                addressDetails,
+                town,
+                barangay,
+                province,
+                father,
+                mother,
+                guardian,
+                education,
+                relatives,
+                workExperience,
+                skillsAndQualifications,
+                documents,
+                scholarshipProgram,
+                applicant,
+            },
+            { new: true }
+        );
+
+        if (!updatedApplication) {
+            return res.status(404).json({ message: 'Application not found' });
+        }
+
+        res.status(200).json({
+            message: 'Scholarship application resubmitted successfully',
+            application: updatedApplication
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error resubmitting scholarship application',
+            error: error.message
+        });
+    }
+};

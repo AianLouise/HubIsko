@@ -555,9 +555,9 @@ export default function ResubmitApplication() {
       };
 
     // handleSubmit function
-    const handleSubmit = async (e) => {
+       const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         // Upload files to Firebase and get the file URLs
         const uploadedFilePaths = await Promise.all(Object.entries(formData.documents).map(async ([docType, fileObj]) => {
             if (fileObj) {
@@ -572,27 +572,27 @@ export default function ResubmitApplication() {
             }
             return { [docType]: null };
         }));
-
+    
         // Combine the uploaded file URLs with the rest of the form data
         const updatedFormData = {
             ...formData,
             documents: Object.assign({}, ...uploadedFilePaths),
         };
-
+    
         // Send scholarship application data to the backend
         try {
-            const response = await fetch('/api/scholarshipApplication/create-application', {
+            const response = await fetch(`/api/scholarshipApplication/resubmit/${applicationId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(updatedFormData)
             });
-
+    
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
+    
             const result = await response.json();
             console.log('Success:', result);
             // Handle success (e.g., show a success message, redirect, etc.)
@@ -602,6 +602,7 @@ export default function ResubmitApplication() {
             // Handle error (e.g., show an error message)
         }
     };
+
     return (
         <div className='flex flex-col min-h-screen'>
             <main className='flex-grow font-medium text-slate-700 min-h-screen'>

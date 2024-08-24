@@ -6,157 +6,126 @@ import { FaAngleRight } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-
-
-
 export default function ApplicationBox() {
-    useEffect(() => {
-        document.title = "Scholar Dashboard | HubIsko";
-      }, []);
-    
-      const currentUser = useSelector((state) => state.user.currentUser);
-      const [applications, setApplications] = useState([]);
-      const [loading, setLoading] = useState(true);
-    
-      useEffect(() => {
-        // Fetch the user's applications from the backend
-        const fetchApplications = async () => {
-          try {
-            const userId = currentUser._id; // Assuming currentUser contains the user object with an id
-            const response = await fetch(`/api/scholarshipApplication/get-applications/${userId}`, {
-              headers: {
-                'Content-Type': 'application/json'
-              }
-            });
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-    
-            setApplications(data);
-    
-          } catch (error) {
-            console.error('Error fetching applications:', error);
-          } finally {
-            setLoading(false);
+  useEffect(() => {
+    document.title = "Scholar Dashboard | HubIsko";
+  }, []);
+
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch the user's applications from the backend
+    const fetchApplications = async () => {
+      try {
+        const userId = currentUser._id; // Assuming currentUser contains the user object with an id
+        const response = await fetch(`/api/scholarshipApplication/get-applications/${userId}`, {
+          headers: {
+            'Content-Type': 'application/json'
           }
-        };
-    
-        fetchApplications();
-      }, [currentUser]);
-    
-      const getStatusColor = (status) => {
-        switch (status) {
-          case 'pending':
-            return 'bg-yellow-400';
-          case 'approved':
-            return 'bg-green-400';
-          case 'rejected':
-            return 'bg-red-400';
-          case 'completed':
-            return 'bg-blue-400';
-          default:
-            return 'bg-gray-400';
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-      };
-    
-      const toSentenceCase = (str) => {
-        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-      };
+        const data = await response.json();
 
-    return(
-        <div className='flex flex-col min-h-screen'>
-            <Header />
-                <main className="flex-grow bg-[#f8f8fb] font-medium">
+        setApplications(data);
 
-                    <div className="max-w-6xl px-24 mx-auto">
+      } catch (error) {
+        console.error('Error fetching applications:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-                            <div className="border bg-white flex flex-col gap-8 rounded-md p-4 shadow mt-20">
-                                <div className="flex justify-between items-center">
-                               <span className="text-xl">Application Inbox</span>
-                               <input 
-                                type="text" 
-                                placeholder='Search' 
-                                name="" 
-                                id="" 
-                                className='border-2 py-2 px-4 font-medium rounded-md focus:outline-blue-400'/>
-                                </div>
-                                
-                           
-                                <div className="flex flex-col">
-                                    
-                                    {/* IF WALA */}
-                                    {/* <div className="text-center flex flex-col items-center gap-2">
-                                        <span className="text-slate-600">You have no applications yet</span>
-                                        <Link to={'/scholarship-listing'}>
-                                        <button className='flex gap-2 items-center bg-blue-600 rounded-md px-4 py-2 text-white fond-medium hover:bg-blue-800 group transition ease-in-out'>
-                                        Go to Scholarship List
-                                        <FaAngleRight className='w-5 h-5  group-hover:translate-x-2 transition ease-in-out' />
-                                        </button>
-                                        </Link>
-                                    </div> */}
+    fetchApplications();
+  }, [currentUser]);
 
-                                    {/* IF MERON */}
-                                    {/* <Link to={`/inboxed-application-detail`}>
-                                    <div className="flex justify-between items-center hover:bg-slate-200 p-2 rounded-md">
-                                    <div className="flex gap-2">
-                                    <div className="bg-blue-600 w-12 h-12 rounded-md"></div>
-                                    <div className="flex flex-col">
-                                        <span className="text-slate-600">DepEd</span>
-                                        <span>This is a sample scholarship title</span>
-                                    </div>
-                                    </div>
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Pending':
+        return 'bg-yellow-400';
+      case 'Approved':
+        return 'bg-green-400';
+      case 'Rejected':
+        return 'bg-red-400';
+      case 'Completed':
+        return 'bg-blue-400';
+      default:
+        return 'bg-gray-400';
+    }
+  };
 
-                                    <span>Applied: July 28, 2024</span>
-                                    </div>
-                                    </Link> */}
+  const toSentenceCase = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
 
-                                    <div className="space-y-4 text-slate-800">
-                                            {applications.length === 0 ? (
-                                            <div className='h-full flex flex-col gap-2 justify-center items-center mt-20'>
-                                                <span className='text-xl font-medium text-slate-500'>You have no Applications yet.</span>
-                                                <Link to={'/scholarship-listing'}>
-                                                <button className='flex gap-2 items-center bg-blue-600 rounded-md px-4 py-2 text-white fond-medium hover:bg-blue-800 group transition ease-in-out'>
-                                                    Go to Scholarship List
-                                                    <FaAngleRight className='w-5 h-5 group-hover:translate-x-2 transition ease-in-out' />
-                                                </button>
-                                                </Link>
-                                            </div>
-                                            ) : (
-                                            <div className="overflow-y-auto h-64">
-                                                {applications.map(application => (
-                                                <Link key={application._id} to={`/application-detail/${application._id}`}>
-                                                    <div className='flex items-center justify-between hover:bg-slate-200 p-2 rounded-md'>
-                                                    <div className='flex flex-row gap-2'>
-                                                        <div className='bg-blue-600 w-12 h-12 rounded-md'>
-                                                        <img src={application.scholarshipProgram.scholarshipImage} alt="Scholarship" className='w-full h-full object-cover rounded-md' />
-                                                        </div>
-                                                        <div className='flex flex-col'>
-                                                        <div className='flex items-center gap-2'>
-                                                            <span className='font-bold'>{application.scholarshipProgram.organizationName}</span>
-                                                            <div className='bg-blue-600 w-2 h-2 rounded-full'></div>
-                                                            <span className='text-blue-600 text-sm'>New</span>
-                                                        </div>
-                                                        <span>{application.scholarshipProgram.title}</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className='flex flex-row items-center gap-2'>
-                                                    <div className={`rounded-full w-2 h-2 ${getStatusColor(application.applicationStatus)}`}></div>
-                                                    <span>{toSentenceCase(application.applicationStatus)}</span>
-                                                    </div>
-                                                    </div>
-                                                </Link>
-                                                ))}
-                                            </div>
-                                            )}
-                                        </div>
+  return (
+    <div className='flex flex-col min-h-screen'>
+      <Header />
+      <main className="flex-grow bg-[#f8f8fb] font-medium">
+        <div className="max-w-6xl px-24 mx-auto">
+          <div className="border bg-white flex flex-col gap-8 rounded-md p-4 shadow mt-20">
+            <div className="flex justify-between items-center">
+              <span className="text-xl">Application Inbox</span>
+              <input
+                type="text"
+                placeholder='Search'
+                name=""
+                id=""
+                className='border-2 py-2 px-4 font-medium rounded-md focus:outline-blue-400' />
+            </div>
 
-                                </div>
-                                
+            <div className="flex flex-col">
+              <div className="space-y-4 text-slate-800">
+                {applications.length === 0 ? (
+                  <div className='h-full flex flex-col gap-2 justify-center items-center mt-20'>
+                    <span className='text-xl font-medium text-slate-500'>You have no Applications yet.</span>
+                    <Link to={'/scholarship-listing'}>
+                      <button className='flex gap-2 items-center bg-blue-600 rounded-md px-4 py-2 text-white fond-medium hover:bg-blue-800 group transition ease-in-out'>
+                        Go to Scholarship List
+                        <FaAngleRight className='w-5 h-5 group-hover:translate-x-2 transition ease-in-out' />
+                      </button>
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="overflow-y-auto h-64">
+                    {applications.map(application => (
+                      <Link key={application._id} to={`/application-detail/${application._id}`}>
+                        <div className='flex items-center justify-between hover:bg-slate-200 p-2 rounded-md'>
+                          <div className='flex flex-row gap-2'>
+                            <div className='bg-blue-600 w-12 h-12 rounded-md'>
+                              {application.scholarshipProgram && application.scholarshipProgram.scholarshipImage ? (
+                                <img src={application.scholarshipProgram.scholarshipImage} alt="Scholarship" className='w-full h-full object-cover rounded-md' />
+                              ) : (
+                                <div className='w-full h-full flex items-center justify-center text-white'>No Image</div>
+                              )}
                             </div>
-                    </div>
-                </main>
-            <Footer />
+                            <div className='flex flex-col'>
+                              <div className='flex items-center gap-2'>
+                                <span className='font-bold'>{application.scholarshipProgram?.organizationName}</span>
+                                <div className='bg-blue-600 w-2 h-2 rounded-full'></div>
+                                <span className='text-blue-600 text-sm'>New</span>
+                              </div>
+                              <span>{application.scholarshipProgram?.title}</span>
+                            </div>
+                          </div>
+                          <div className='flex flex-row items-center gap-2'>
+                            <div className={`rounded-full w-2 h-2 ${getStatusColor(application.applicationStatus)}`}></div>
+                            <span>{toSentenceCase(application.applicationStatus)}</span>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
-    );
+      </main>
+      <Footer />
+    </div>
+  );
 }
