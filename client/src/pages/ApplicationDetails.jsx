@@ -7,6 +7,7 @@ import { BsGlobe2 } from "react-icons/bs";
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaPhone, FaUser } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
+import { CgClose } from 'react-icons/cg';
 
 export default function Forums() {
     const { id } = useParams();
@@ -20,7 +21,6 @@ export default function Forums() {
     const handleApplyClick = () => {
         if (!isLoggedIn) {
             setNotification('You must be logged in to apply for scholarships.');
-            setTimeout(() => setNotification(''), 3000); // Clear notification after 3 seconds
         } else {
             navigate(`/applying-stages/${scholarship.id}`);
         }
@@ -189,12 +189,6 @@ export default function Forums() {
                                 </button>
 
 
-                                {notification && (
-                                    <div className='fixed top-4 right-4 bg-red-500 text-white p-3 rounded-md shadow-lg' role='alert'>
-                                        <strong className='font-bold'>Not Logged In!</strong>
-                                        <span className='block sm:inline'> {notification}</span>
-                                    </div>
-                                )}
                                 <div onClick={handleApplyClick} className='cursor-pointer bg-white flex items-center border justify-between shadow rounded-md p-4 w-1/2 h-22 hover:-translate-y-2 hover:bg-slate-200 transition ease-in-out group'>
                                     <div className='flex flex-row gap-4 '>
                                         <div className='bg-blue-600 w-14 h-14 rounded-md'></div>
@@ -211,6 +205,47 @@ export default function Forums() {
                 </div>
             </main>
             <Footer />
+            
+            {notification && (
+                <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
+                    <div className='p-6 pb-10 bg-white rounded-md text-center shadow-lg font-medium'>
+                    
+                    <button onClick={() => setNotification('')} className='flex w-full justify-end items-end'>
+                        <div className='border rounded-full p-1 hover:bg-slate-200'>
+                            <CgClose className='w-4 h-4' />
+                            </div>
+                    </button>
+                    <strong className='font-bold text-red-500 text-lg'>Not Logged In!</strong>
+             
+                    <div className='text-slate-400 ' role='alert'>
+                            <span className='block sm:inline font-medium'> {notification}</span>
+                            </div>
+
+                            <div className='flex flex-col justify-center w-full gap-2 mt-4'>
+                                <Link to='/login' className='bg-blue-600 text-white text-center rounded-md w-full hover:bg-blue-800 py-2'>Login</Link>
+
+                               
+                               <div className=''>
+                                <div className='border mt-5'></div>
+                                <div className='w-full -translate-y-4 text-center'>
+                                <span className='bg-white px-5 text-slate-500 font-medium'>or</span>
+                                </div>
+                                </div>
+
+                                <div className='w-full flex gap-2 justify-between'>
+                                <Link to='/register' className='bg-blue-600 text-white text-center rounded-md w-full hover:bg-blue-800 py-2'>Register as Student</Link>
+                                <Link to='/register-provider' className='bg-blue-800  text-white text-center rounded-md w-full hover:bg-blue-900 py-2'>Register as Provider</Link>
+                                </div>             
+                               
+                                
+                            
+                               
+                             
+                            </div>
+
+                    </div>
+                            </div>
+                        )}
         </div>
     );
 }
