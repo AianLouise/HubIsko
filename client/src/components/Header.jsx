@@ -282,8 +282,8 @@ export default function Header() {
 
 
           {currentUser ? (
-            <div ref={showDropdownRef} className="relative"> {/* This div wraps both the image and the dropdown */}
-              <img src={currentUser.profilePicture} alt='profile' className='h-11 w-11 p-2 rounded-full object-cover cursor-pointer' onClick={toggleDropdown} />
+            <div ref={showDropdownRef} className="relative "> {/* This div wraps both the image and the dropdown */}
+              <img src={currentUser.profilePicture} alt='profile' className='h-10 w-10 rounded-full object-cover cursor-pointer' onClick={toggleDropdown} />
               {showDropdown && (
                 <div className="absolute transform mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
                   {/* Dropdown items here */}

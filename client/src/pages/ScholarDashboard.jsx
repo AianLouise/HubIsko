@@ -14,7 +14,7 @@ export default function ScholarDashboard() {
   }, []);
 
   const currentUser = useSelector((state) => state.user.currentUser);
-  const [applications, setApplications] = useState([]);
+  const [approvedApplications, setApprovedApplications] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,7 +32,9 @@ export default function ScholarDashboard() {
         }
         const data = await response.json();
 
-        setApplications(data);
+        // Filter applications to only include those with "Approved" status
+        const approved = data.filter(app => app.applicationStatus === 'Approved');
+        setApprovedApplications(approved);
 
       } catch (error) {
         console.error('Error fetching applications:', error);
@@ -80,24 +82,24 @@ export default function ScholarDashboard() {
       <main className="flex-grow bg-[#f8f8fb]"> {/* Main content grows to fill available space */}
         <div className='py-12 max-w-6xl mx-auto justify-between px-24'>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[350px]">
-            {/* Overview of current applications */}
+            {/* Overview of approved applications */}
             <div className="flex flex-col items-center h-[350px] max-h-[350px] bg-white shadow rounded-lg">
-              <h2 className="font-bold text-xl mb-2 w-full p-4 rounded-t-lg border-b-2">Current Applications</h2>
-              <div className='text-8xl mt-20 font-bold text-blue-600'>{applications.length}</div>
+              <h2 className="font-bold text-xl mb-2 w-full p-4 rounded-t-lg border-b-2">Approved Applications</h2>
+              <div className='text-8xl mt-20 font-bold text-blue-600'>{approvedApplications.length}</div>
             </div>
 
             <div className="bg-white shadow rounded-lg col-span-1 md:col-span-2">
               <div className='flex justify-between "font-semibold text-xl w-full bg-blue-600 p-4 rounded-t-lg text-white'>
-                <h2>Scholarships</h2>
+                <h2>Approved Scholarships</h2>
                 <Link to={`/application-box`}>
                   <button className='bg-white text-blue-600 font-bold px-2 rounded-md hover:bg-slate-200'>See all</button>
                 </Link>
               </div>
 
               <div className="space-y-4 p-4 text-slate-800">
-                {applications.length === 0 ? (
+                {approvedApplications.length === 0 ? (
                   <div className='h-full flex flex-col gap-2 justify-center items-center mt-20'>
-                    <span className='text-xl font-medium text-slate-500'>You have no Applications yet.</span>
+                    <span className='text-xl font-medium text-slate-500'>You have no approved applications yet.</span>
                     <Link to={'/scholarship-listing'}>
                       <button className='flex gap-2 items-center bg-blue-600 rounded-md px-4 py-2 text-white fond-medium hover:bg-blue-800 group transition ease-in-out'>
                         Go to Scholarship List
@@ -107,7 +109,7 @@ export default function ScholarDashboard() {
                   </div>
                 ) : (
                   <div className="overflow-y-auto h-64">
-                    {applications.map(application => (
+                    {approvedApplications.map(application => (
                       <Link key={application._id} to={`/application-detail/${application._id}`}>
                         <div className='flex items-center justify-between hover:bg-slate-200 p-2 rounded-md'>
                           <div className='flex flex-row gap-2'>
