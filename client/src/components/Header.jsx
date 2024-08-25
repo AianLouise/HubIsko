@@ -15,6 +15,7 @@ import { BsChatLeftTextFill } from "react-icons/bs";
 import { IoPersonCircleSharp, IoInformationCircle } from "react-icons/io5";
 import { useLocation } from 'react-router-dom';
 import { useRef } from 'react';
+import NewLogo from '../assets/NewLogoClean.png';
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -114,7 +115,7 @@ export default function Header() {
     <div className='border-b bg-[#f8f8fb] shadow-sm'>
       <div className='flex justify-between text-md max-w-6xl mx-auto p-6 lg:px-20'>
         <Link to='/' className='flex items-center'>
-          <div className='bg-blue-600 w-10 h-10 rounded-md mx-2'></div>
+          <img src={NewLogo} alt='HubIsko Logo' className='w-10 h-auto mx-2' />
           <h1 className='font-bold text-2xl hover:text-slate-600 ease-in-out transition-colors'>HubIsko</h1>
         </Link>
 
