@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Notification from '../models/notification.model.js';
 import Scholarship from '../models/scholarshipProgram.model.js';
 
@@ -35,6 +36,11 @@ export const createNotification = async (req, res) => {
 // Controller to fetch notifications for a specific recipient
 export const getNotifications = async (req, res) => {
     const { recipientId } = req.params;
+
+    // Validate recipientId
+    if (!mongoose.Types.ObjectId.isValid(recipientId)) {
+        return res.status(400).json({ message: 'Invalid recipient ID' });
+    }
 
     try {
         // Find notifications where the recipientId matches the user's ID
