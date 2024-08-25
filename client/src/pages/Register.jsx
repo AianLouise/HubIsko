@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import OAuth from '../components/OAuth';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import NewLogo from '../assets/NewLogo.png';
+import SmallLogo from '../assets/NewLogoClean.png';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -87,20 +89,25 @@ export default function SignUp() {
   };
 
   return (
-    <div className='bg-[#f8f8fb] flex flex-col md:flex-row items-center justify-center p-4 gap-10 min-h-screen'>
-      {/* Left Column for Graphic or Welcome Message */}
-      <div className='flex-1 flex justify-center items-center'>
-        <Link to='/'>
-          <div className='bg-blue-600 w-56 h-56 rounded-md'></div>
-        </Link>
-      </div>
+    <div className='bg-[#f8f8fb] flex flex-col md:flex-row items-center text-left gap-10 min-h-screen'>
+
+    {/* Left Column for Logo or Image */}
+    <div className='w-1/2 flex justify-center items-center z-10 mx-auto'>
+      <img src={NewLogo} alt='HubIsko Logo' className='w-80 h-auto bg-white p-4 rounded-full' />
+    </div>
+
+    <div className='absolute w-full h-full'>
+      <div className=' bg-blue-600 rounded-full w-full h-full -translate-x-[1100px]'></div>
+    </div>
+
+
 
       {/* Right Column for Sign Up Form */}
-      <div className='flex flex-1 justify-center'>
+      <div className='w-1/2 flex items-center justify-center'>
         <div className='bg-white w-[600px] h-[850px] flex flex-col items-start justify-center shadow-md p-20'>
           <div className='flex flex-col justify-center text-left gap-4 mb-2 w-full'>
             <div className='flex flex-row gap-2 items-center mb-4'>
-              <div className='bg-blue-600 w-10 h-10 rounded-md'></div>
+            <img src={SmallLogo} alt='HubIsko Logo' className='w-12 h-auto' />
               <span className='font-bold text-lg'>HubIsko</span>
             </div>
             <h1 className='text-4xl font-bold'>Create your account</h1>
@@ -159,10 +166,10 @@ export default function SignUp() {
               {loading ? 'Loading...' : 'Register'}
             </button>
           </form>
-          <div className='flex text-center justify-center items-center gap-2 mt-5 w-full'>
+          <div className='flex text-center justify-center items-center gap-2 mt-5 w-full z-10'>
             <p>Already have an account?</p>
             <Link to='/login'>
-              <span className='text-blue-500'>Login</span>
+              <span className='text-blue-500 hover:underline'>Login</span>
             </Link>
           </div>
         </div>

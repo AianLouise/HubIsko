@@ -5,7 +5,7 @@ import { signInStart, signInSuccess, signInFail } from '../redux/user/userSlice'
 import OAuth from '../components/OAuth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import NewLogo from '../assets/NewLogo2.png';
+import NewLogo from '../assets/NewLogo.png';
 import SmallLogo from '../assets/NewLogoClean.png';
 
 export default function SignIn() {
@@ -109,10 +109,15 @@ export default function SignIn() {
   };
 
   return (
-    <div className='bg-[#f8f8fb] flex flex-col md:flex-row items-center text-left p-4 gap-10 min-h-screen'>
+    <div className='bg-[#f8f8fb] flex flex-col md:flex-row items-center text-left gap-10 min-h-screen'>
+
       {/* Left Column for Logo or Image */}
-      <div className='w-1/2 flex justify-center items-center'>
-        <img src={NewLogo} alt='HubIsko Logo' className='w-80 h-auto' />
+      <div className='w-1/2 flex justify-center items-center z-10 mx-auto'>
+        <img src={NewLogo} alt='HubIsko Logo' className='w-80 h-auto bg-white p-4 rounded-full' />
+      </div>
+
+      <div className='absolute w-full h-full'>
+        <div className=' bg-blue-600 rounded-full w-full h-full -translate-x-[1100px]'></div>
       </div>
 
         {/* <img src='../assets/logo.png' alt='HubIsko Logo' className='w-56 h-56' /> */}
