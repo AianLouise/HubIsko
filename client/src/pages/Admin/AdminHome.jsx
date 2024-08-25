@@ -5,15 +5,14 @@ import { BiDotsHorizontal } from "react-icons/bi";
 import { BsInboxFill } from "react-icons/bs";
 
 export default function AdminHome() {
-
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [totalAccounts, setTotalAccounts] = useState(0);
+    const [totalScholarships, setTotalScholarships] = useState(0);
+    const [loading, setLoading] = useState(true);
 
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
-
-    const [totalAccounts, setTotalAccounts] = useState(0);
-    const [totalScholarships, setTotalScholarships] = useState(0);
 
     useEffect(() => {
         const fetchTotalAccounts = async () => {
@@ -42,10 +41,25 @@ export default function AdminHome() {
             }
         };
 
-        fetchTotalAccounts();
-        fetchTotalScholarships();
+        const fetchData = async () => {
+            await fetchTotalAccounts();
+            await fetchTotalScholarships();
+            setLoading(false);
+        };
+
+        fetchData();
     }, []);
 
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -61,7 +75,6 @@ export default function AdminHome() {
                     </div>
                 </div>
                 <div className='max-w-8xl mx-auto px-24 py-12 gap-10 flex-col flex'>
-
                     <div className="grid grid-cols-3 gap-10">
                         <Link to={'/accounts'} className="bg-white flex flex-col gap-2 p-4 shadow border rounded-md h-[200px] justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
                             <h1 className="text-2xl font-semibold text-slate-600">Total Accounts</h1>
@@ -82,7 +95,7 @@ export default function AdminHome() {
                     <span className="border-b pb-2">Activities</span>
 
                     <div className="">
-                        <div className="bg-white shadow border rounded-md   group">
+                        <div className="bg-white shadow border rounded-md group">
                             <div className="border-b flex justify-between px-6 items-center py-4 relative">
                                 <span className="">History</span>
                                 <button onClick={toggleDropdown} className="hover:bg-slate-200 rounded-md">
@@ -96,9 +109,6 @@ export default function AdminHome() {
                                     </div>
                                 )}
                             </div>
-
-
-
 
                             <div className="divide-y">
                                 <div className="flex justify-between items-center p-4">
@@ -139,19 +149,9 @@ export default function AdminHome() {
                                         <span className="text-blue-600">1 hour ago</span>
                                     </div>
                                 </div>
-
-
-
-
                             </div>
-
                         </div>
                     </div>
-
-
-
-
-
                 </div>
             </main>
         </div>

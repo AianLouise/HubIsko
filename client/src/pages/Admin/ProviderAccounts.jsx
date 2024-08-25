@@ -3,10 +3,9 @@ import { BiFilter } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import Layout from "../../components/Layout";
 
-
 export default function ProviderAccounts() {
-
   const [providers, setProviders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAllProviders = async () => {
@@ -19,11 +18,24 @@ export default function ProviderAccounts() {
         setProviders(data.providers);
       } catch (error) {
         console.error('Error fetching all providers:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchAllProviders();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+        </svg>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -40,14 +52,12 @@ export default function ProviderAccounts() {
         </div>
 
         <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex'>
-
           <div className='flex items-center gap-4'>
             <input
               type="text"
               className='border border-gray-300 rounded-md p-2 pr-8'
               placeholder='Search for students...'
             />
-
             <button className='bg-blue-600 px-4 py-2 rounded-md flex gap-2 text-white'>
               <BiFilter className='w-6 h-6' />
               <span>Filter</span>
@@ -55,7 +65,6 @@ export default function ProviderAccounts() {
           </div>
 
           {/* TABLE */}
-
           <div className='overflow-x-auto rounded-md bg-white shadow'>
             <table className='w-full border-2 border-gray-200'>
               <thead>
@@ -81,10 +90,7 @@ export default function ProviderAccounts() {
                 ))}
               </tbody>
             </table>
-
           </div>
-
-
         </div>
       </main>
     </div>
