@@ -59,6 +59,10 @@ import ApplicationForm from "./pages/ApplicationForm";
 import ResubmitApplication from "./pages/ResubmitApplication";
 import Settings from "./pages/Scholarship-Provider/Settings";
 import ProviderProfile from "./pages/Scholarship-Provider/Profile";
+import NotificationsPage from "./components/notification";
+import NotificationDetailPage from "./components/NotificationDetailPage";
+import ApplicantAllNotification from "./pages/ApplicantAllNotification";
+import ApplicantDetailedNotification from "./pages/ApplicantDetailedNotification";
 
 
 
@@ -83,7 +87,8 @@ export default function App() {
 
         <Route path="/scholarship-details/:id" element={<ApplicationDetails />} />
         <Route path="/application-form" element={<ApplicationForm />} />
-        
+        {/* <Route path="/notifications" element={<NotificationsPage />} />
+        <Route path="/notifications/:notificationId" element={<NotificationDetailPage />} /> */}
 
         {/* Admin Routes */}
         <Route element={<ProviderPrivateRoute allowedRoles={['admin']} />}>
@@ -141,6 +146,8 @@ export default function App() {
           <Route path="/profile-preview/:id" element={<ProfilePreview />} />
           <Route path="/post-details" element={<PostDetails />} />
           <Route path="/preview-profile" element={<PreviewProfile />} />
+          <Route path="/notifications" element={<ApplicantAllNotification />} />
+          <Route path="/notifications/:notificationId" element={<ApplicantDetailedNotification />} />
         </Route>
 
         <Route path="/unauthorized" element={<UnauthorizedPage />} />

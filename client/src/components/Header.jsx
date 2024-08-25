@@ -69,6 +69,14 @@ export default function Header() {
   const toggleSidebar = () => setSidebarVisible(!sidebarVisible);
   const [showModal, setShowModal] = useState(false);
 
+  const handleSeeAllNotifications = () => {
+    navigate('/notifications');
+  };
+
+  const handleNotificationClick = (notificationId) => {
+    navigate(`/notifications/${notificationId}`);
+  };
+
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -218,16 +226,16 @@ export default function Header() {
           <Link to='/scholarship-listing'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>Scholarship Listing</li></Link>
           <Link to='/forums'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>Forums</li></Link>
 
-          {currentUser && currentUser.role === 'applicant' && (
+          {/* {currentUser && currentUser.role === 'applicant' && (
             <button className='border rounded-full p-3 hover:bg-slate-200'>
               <IoChatbubblesSharp className='w-4 h-4 text-blue-600' />
             </button>
 
 
-          )}
+          )} */}
 
           {currentUser && currentUser.role === 'applicant' && (
-            <div>
+            <div className='font-semibold'>
               <button onClick={toggleNotification} className="relative w-full border rounded-full p-3 hover:bg-slate-200 focus:bg-blue-600 group">
                 <IoIosNotifications className="w-4 h-4 text-blue-600 group-focus:text-white scale-150" />
                 {showNotification && (
@@ -243,9 +251,13 @@ export default function Header() {
                         <div className="flex flex-col gap-2 mt-2 max-h-64 overflow-y-auto">
                           {notifications.length > 0 ? (
                             notifications.map((notification) => (
-                              <div key={notification._id} className="flex flex-row text-sm w-full gap-4">
+                              <div
+                                key={notification._id}
+                                className="flex flex-row text-sm w-full gap-4 cursor-pointer"
+                                onClick={() => handleNotificationClick(notification._id)}
+                              >
                                 <img
-                                  src={notification.senderId.profilePicture || 'default-avatar.png'} // Fallback to a default avatar if profilePicture is missing
+                                  src={notification.senderId.profilePicture || 'default-avatar.png'}
                                   alt="Sender's Avatar"
                                   className="w-12 h-12 rounded-full object-cover"
                                 />
@@ -258,16 +270,14 @@ export default function Header() {
                           ) : (
                             <div>No new notifications</div>
                           )}
-                          <button className="bg-blue-600 text-white rounded-md p-2 mt-4 font-medium hover:bg-blue-800 transition ease-in-out">See All Notifications</button>
                         </div>
                       </div>
+                      <button onClick={handleSeeAllNotifications} className="bg-blue-600 text-white rounded-md p-2 mt-4 font-medium hover:bg-blue-800 transition ease-in-out">See All Notifications</button>
                     </div>
                   </div>
                 )}
               </button>
             </div>
-
-
           )}
 
 
