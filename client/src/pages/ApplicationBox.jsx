@@ -65,16 +65,21 @@ export default function ApplicationBox() {
     <div className='flex flex-col min-h-screen'>
       <Header />
       <main className="flex-grow bg-[#f8f8fb] font-medium">
-        <div className="max-w-6xl px-24 mx-auto">
-          <div className="border bg-white flex flex-col gap-8 rounded-md p-4 shadow mt-20">
+        <div className="max-w-6xl p-2 lg:px-24 mx-auto">
+
+        <div className="w-full block lg:hidden text-center p-4">
+        <strong className="text-xl text-center">Application Inbox</strong>
+        </div>
+      
+          <div className="border bg-white flex flex-col gap-8 rounded-md p-4 shadow lg:mt-20">
             <div className="flex justify-between items-center">
-              <span className="text-xl">Application Inbox</span>
+              <span className="text-xl hidden lg:block">Application Inbox</span>
               <input
                 type="text"
-                placeholder='Search'
+                placeholder='Search inbox...'
                 name=""
                 id=""
-                className='border-2 py-2 px-4 font-medium rounded-md focus:outline-blue-400' />
+                className='border-2 py-2 px-4 w-full lg:w-[300px] font-medium rounded-md focus:outline-blue-400' />
             </div>
 
             <div className="flex flex-col">
@@ -93,25 +98,25 @@ export default function ApplicationBox() {
                   <div className="overflow-y-auto h-64">
                     {applications.map(application => (
                       <Link key={application._id} to={`/application-detail/${application._id}`}>
-                        <div className='flex items-center justify-between hover:bg-slate-200 p-2 rounded-md'>
+                        <div className='flex items-center justify-between hover:bg-slate-200 bg-slate-200 lg:bg-none p-2 rounded-md'>
                           <div className='flex flex-row gap-2'>
-                            <div className='bg-blue-600 w-12 h-12 rounded-md'>
+                            <div className='bg-blue-600 w-8 h-8 lg:w-12 lg:h-12 rounded-full'>
                               {application.scholarshipProgram && application.scholarshipProgram.scholarshipImage ? (
-                                <img src={application.scholarshipProgram.scholarshipImage} alt="Scholarship" className='w-full h-full object-cover rounded-md' />
+                                <img src={application.scholarshipProgram.scholarshipImage} alt="Scholarship" className='w-full h-full object-cover rounded-full' />
                               ) : (
                                 <div className='w-full h-full flex items-center justify-center text-white'>No Image</div>
                               )}
                             </div>
                             <div className='flex flex-col'>
                               <div className='flex items-center gap-2'>
-                                <span className='font-bold'>{application.scholarshipProgram?.organizationName}</span>
-                                <div className='bg-blue-600 w-2 h-2 rounded-full'></div>
-                                <span className='text-blue-600 text-sm'>New</span>
+                                <span className='font-bold text-sm lg:text-lg'>{application.scholarshipProgram?.organizationName}</span>
+                                <div className='bg-blue-600 w-2 h-2 rounded-full  hidden lg:block'></div>
+                                <span className='text-blue-600 text-sm  hidden lg:block'>New</span>
                               </div>
-                              <span>{application.scholarshipProgram?.title}</span>
+                              <span className="text-sm lg:text-base">{application.scholarshipProgram?.title}</span>
                             </div>
                           </div>
-                          <div className='flex flex-row items-center gap-2'>
+                          <div className='flex flex-row items-center text-sm lg:text-lg gap-2'>
                             <div className={`rounded-full w-2 h-2 ${getStatusColor(application.applicationStatus)}`}></div>
                             <span>{toSentenceCase(application.applicationStatus)}</span>
                           </div>

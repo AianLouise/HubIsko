@@ -17,7 +17,7 @@ export default function StudentInfo() {
       <Header />
       <AccountManagement />
       <main className="flex-grow bg-[#f8f8fb] ">
-        <div className="max-w-6xl px-24 mx-auto mt-10">
+        <div className="max-w-6xl lg:px-24 px-4 mx-auto lg:mt-10">
           {currentUser.applicantDetails.profileComplete ? (
             <div className="bg-white shadow rounded-lg col-span-1 md:col-span-2">
               <h2 className="font-semibold text-xl w-full bg-blue-600 p-4 rounded-t-lg text-white">Profile Management</h2>
@@ -41,7 +41,7 @@ export default function StudentInfo() {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center mt-40">
+            <div className="flex flex-col items-center justify-center mt-20 lg:mt-40">
               <span className="text-2xl font-medium">Your account isn't verified yet.</span>
               <span className="text-slate-600">Complete your profile first to gain access to your student info.</span>
               <Link to={'/complete-profile'}>

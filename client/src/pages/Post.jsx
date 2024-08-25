@@ -269,7 +269,7 @@ export default function ForumDetail() {
             <Header />
             <main className='flex-grow bg-[#f8f8fb] no-scrollbar font-medium text-slate-700'>
 
-                <div className='flex flex-col gap-8 mx-auto max-w-6xl px-24'>
+                <div className='flex flex-col gap-8 mx-auto max-w-6xl p-2 lg:px-24'>
 
                     <div className='flex gap-1 mt-10 items-center'>
                         <Link to='/Forums'>

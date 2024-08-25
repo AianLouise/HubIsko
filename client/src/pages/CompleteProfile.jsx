@@ -183,9 +183,9 @@ export default function CompleteProfile() {
   return (
     <div>
       <div className=" flex justify-center pt-8 rounded-md">
-        <h2 className="text-xl font-medium text-slate-600">Please fill out the areas to complete your profile</h2>
+        <h2 className="text-base lg:text-xl font-medium text-slate-600">Please fill out the areas to complete your profile</h2>
       </div>
-      <form onSubmit={handleSubmit} className="max-w-6xl mx-auto space-y-6 bg-white border rounded-lg shadow-lg mt-4 mb-10">
+      <form onSubmit={handleSubmit} className="max-w-6xl mx-auto space-y-6 text-sm lg:text-base bg-white px-4 lg:px-0 lg:border rounded-lg shadow-lg mt-4 mb-10">
         <div className="bg-blue-600 text-white p-4 rounded-t-lg">
           <span className='text-lg font-bold'>Basic Information</span>
         </div>
@@ -536,9 +536,12 @@ export default function CompleteProfile() {
             </select>
           </div>
 
-          <div className='col-span-1'>
-            <label className='block text-sm font-medium text-gray-700 mb-2'>
+          <div className='w-full flex flex-col lg:col-span-1'>
+            <label className='hidden lg:block text-sm font-medium text-gray-700 mb-2'>
               House No./Unit No./Bldg/Floor, Street, Subdivision
+            </label>
+            <label className='block lg:hidden text-sm font-medium text-gray-700 mb-2'>
+              Full Address
             </label>
             <input
               type="text"

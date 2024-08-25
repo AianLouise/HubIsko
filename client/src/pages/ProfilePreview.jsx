@@ -70,15 +70,15 @@ export default function ProfilePreview() {
       <Header />
       <main className='flex-grow bg-[#f8f8fb] no-scrollbar font-medium'>
         <div className='border-b mb-8 py-8'>
-          <div className='flex flex-row items-center mx-auto max-w-6xl gap-10 px-24'>
+          <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl lg:gap-10 p-2 lg:px-24'>
             <img
               src={user.profilePicture}
               alt="Profile"
-              className='w-36 h-36 my-8 rounded-md object-cover'
+              className='w-36 h-36 my-8 rounded-full lg:rounded-md object-cover'
             />
-            <div className='flex flex-col items-start gap-2 w-1/2 '>
-              <span className='text-xl font-medium text-gray-600'>Organization</span>
-              <span className='text-4xl font-bold text-gray-800'>
+            <div className='flex flex-col items-start gap-2 p-2 lg:w-1/2 '>
+              <span className='text-xl font-medium bg-slate-200 px-4 rounded-md lg:bg-[#f8f8fb] lg:px-0 text-gray-600'>Organization</span>
+              <span className='text-2xl lg:text-4xl font-bold text-gray-800'>
                 {user.scholarshipProviderDetails.organizationName || 'Organization Name'}
               </span>
               <span className='text-xl font-medium text-gray-600'>Followers: {user.followers}</span>
@@ -86,22 +86,22 @@ export default function ProfilePreview() {
           </div>
         </div>
 
-        <div className='flex flex-col gap-4 max-w-6xl px-24 mx-auto'>
-          <div className='flex flex-row gap-4 justify-between font-semibold mb-6'>
+        <div className='flex flex-col gap-4 max-w-6xl lg:px-24 mx-auto'>
+          <div className='grid grid-cols-3 lg:flex lg:flex-row gap-4 justify-between font-semibold mb-6 px-2'>
             <button
-              className={`border text-center rounded-xl w-1/2 px-16 py-4 ${selectedTab === 'About' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
+              className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'About' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
               onClick={() => handleTabClick('About')}
             >
               About
             </button>
             <button
-              className={`border text-center rounded-xl w-1/2 px-16 py-4 ${selectedTab === 'Scholarships' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
+              className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'Scholarships' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
               onClick={() => handleTabClick('Scholarships')}
             >
               Scholarships
             </button>
             <button
-              className={`border text-center rounded-xl w-1/2 px-16 py-4 ${selectedTab === 'Posts' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
+              className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'Posts' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
               onClick={() => handleTabClick('Posts')}
             >
               Posts

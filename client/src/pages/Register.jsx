@@ -92,7 +92,7 @@ export default function SignUp() {
     <div className='bg-[#f8f8fb] flex flex-col md:flex-row items-center text-left gap-10 min-h-screen'>
 
     {/* Left Column for Logo or Image */}
-    <div className='w-1/2 flex justify-center items-center z-10 mx-auto'>
+    <div className='w-1/2 hidden lg:flex justify-center items-center z-10 mx-auto'>
       <img src={NewLogo} alt='HubIsko Logo' className='w-80 h-auto bg-white p-4 rounded-full' />
     </div>
 
@@ -103,15 +103,15 @@ export default function SignUp() {
 
 
       {/* Right Column for Sign Up Form */}
-      <div className='w-1/2 flex items-center justify-center'>
-        <div className='bg-white w-[600px] h-[850px] flex flex-col items-start justify-center shadow-md p-20'>
+      <div className='lg:w-1/2 w-full flex items-center justify-center'>
+        <div className='bg-white w-full lg:w-[600px] lg:h-[850px] flex flex-col items-start justify-center shadow-md p-8 lg:p-20'>
           <div className='flex flex-col justify-center text-left gap-4 mb-2 w-full'>
             <div className='flex flex-row gap-2 items-center mb-4'>
             <img src={SmallLogo} alt='HubIsko Logo' className='w-12 h-auto' />
               <span className='font-bold text-lg'>HubIsko</span>
             </div>
-            <h1 className='text-4xl font-bold'>Create your account</h1>
-            <span className='text-medium text-slate-500'>You can sign up with:</span>
+            <h1 className='text-2xl lg:text-4xl font-bold'>Create your account</h1>
+            <span className='text-sm lg:text-medium text-slate-500'>You can sign up with:</span>
             <OAuth />
             <div>
               <div className='border-b-2 mt-4'></div>
