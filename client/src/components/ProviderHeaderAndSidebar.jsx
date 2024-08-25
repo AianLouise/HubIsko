@@ -74,7 +74,7 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
 
                 <div className="flex gap-4 items-center">
                 <div className="relative">
-                    <button onClick={toggleNotification} className='relative w-full border rounded-full p-3 hover:bg-slate-200 focus:bg-blue-600 group'>
+                    <button onClick={toggleNotification} className='relative w-full border rounded-full p-1 scale-150 hover:bg-slate-200 focus:bg-blue-600 group'>
                         <IoIosNotifications className='w-4 h-4 text-blue-600 group-focus:text-white' />
                     </button>
                     {showNotification && (
@@ -104,7 +104,7 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
                     </div>
 
                     <div className="relative" ref={dropdownRef}>
-                    <img src={currentUser.profilePicture || 'https://via.placeholder.com/40'} alt="Profile" className="h-10 w-10 rounded-full" onClick={toggleDropdown} />
+                    <img src={currentUser.profilePicture || 'https://via.placeholder.com/40'} alt="Profile" className="h-9 w-9 rounded-full" onClick={toggleDropdown} />
                     {dropdownOpen && (
                         <div className="absolute mt-2 right-0 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50 font-medium">
                         <ul>
@@ -136,7 +136,7 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
                             <li>
                            <Link to={'/provider-dashboard'} className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
                             <FaHouse className="w-4 h-4 text-blue-600" />
-                                Home
+                            Dashboard
                             </Link>
                             </li>
 

@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 
 export default function Scholarships() {
   useEffect(() => {
-    document.title = "Scholarship Program";
+    document.title = "Scholarship Program | HubIsko";
   }, []);
 
   const { currentUser } = useSelector((state) => state.user);
@@ -40,7 +40,7 @@ export default function Scholarships() {
   return (
     <div className={`flex flex-col min-h-screen`}>
       <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''} `}>
-        <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} currentPath={`${currentUser.scholarshipProviderDetails.organizationName} / Home`} />
+        <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} currentPath={`${currentUser.scholarshipProviderDetails.organizationName} / Scholarship Program`} />
 
         <div className='border-b mb-8'>
           <div className={'flex gap-2 items-center mx-auto px-24 h-36'}>

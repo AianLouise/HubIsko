@@ -5,6 +5,9 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 export default function ScholarApplications() {
+  useEffect(() => {
+    document.title = "Applications | HubIsko";
+  }, []);
   const { currentUser } = useSelector((state) => state.user);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);

@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 export default function ProviderDashboard() {
   useEffect(() => {
-    document.title = "Home | HubIsko";
+    document.title = "Dashboard | HubIsko";
   }, []);
 
   const { currentUser, loading, error } = useSelector((state) => state.user);
