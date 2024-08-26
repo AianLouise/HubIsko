@@ -72,7 +72,6 @@ export default function Students() {
                   <th className='border border-gray-200'>#No</th>
                   <th className='border border-gray-200 p-2'>Name</th>
                   <th className='border border-gray-200 p-2'>Email</th>
-                  <th className='border border-gray-200 p-2'>Date Verified</th>
                   <th className='border border-gray-200 p-2'>Actions</th>
                 </tr>
               </thead>
@@ -84,7 +83,6 @@ export default function Students() {
                       {`${applicant.applicantDetails.firstName} ${applicant.applicantDetails.middleName} ${applicant.applicantDetails.lastName}`}
                     </td>
                     <td className='p-2'>{applicant.email}</td>
-                    <td className='p-2'>{applicant.dateVerified || 'N/A'}</td>
                     <td className='py-4'>
                       <Link to={`/student-details/${applicant._id}`} className='bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white'>View Details</Link>
                     </td>

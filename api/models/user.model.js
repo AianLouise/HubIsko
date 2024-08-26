@@ -171,12 +171,7 @@ const scholarshipProviderSchema = new mongoose.Schema({
   idProofContactPerson: {
     type: String,
     default: '',
-  },
-  status: {
-    type: String,
-    enum: ['pending', 'verified', 'rejected'],
-    default: 'pending',
-  },
+  }
 }, { _id: false }); // Disable automatic _id generation for embedded sub-schema
 
 // Base schema (User schema)
@@ -220,6 +215,11 @@ const userSchema = new mongoose.Schema({
     enum: ['applicant', 'scholarship_provider', 'admin'],
     default: 'applicant',
   },
+  status: {
+    type: String,
+    enum: ['Pending Verification', 'Verified', 'Rejected'],
+    default: 'Pending Verification',
+},
   applicantDetails: applicantSchema, // Embedded schema for applicant details
   scholarshipProviderDetails: scholarshipProviderSchema, // Embedded schema for scholarship provider details
 }, { timestamps: true });

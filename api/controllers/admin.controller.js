@@ -223,3 +223,63 @@ export const verifyScholarshipProviderStatus = async (req, res) => {
     });
   }
 };
+
+export const searchPendingVerificationProviders = async (req, res) => {
+  try {
+    const pendingProviders = await User.find({
+      role: 'scholarship_provider',
+      status: 'Pending Verification',
+    });
+
+    res.status(200).json(pendingProviders);
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error searching for pending verification scholarship providers',
+      error: error.message,
+    });
+  }
+};
+
+export const searchPendingApprovalPrograms = async (req, res) => {
+  try {
+    const pendingPrograms = await ScholarshipProgram.find({
+      status: 'Pending Approval',
+    });
+
+    res.status(200).json(pendingPrograms);
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error searching for pending approval scholarship programs',
+      error: error.message,
+    });
+  }
+};
+
+export const countApprovedScholars = async (req, res) => {
+  try {
+    const approvedScholarsCount = await ScholarshipProgram.aggregate([
+      { $unwind: "$approvedScholars" },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+
+    res.status(200).json({ count: approvedScholarsCount[0]?.count || 0 });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error counting approved scholars',
+      error: error.message,
+    });
+  }
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({}); // Fetch all users from the database
+
+    res.status(200).json({ users });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error fetching users',
+      error: error.message,
+    });
+  }
+};

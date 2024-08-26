@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllApplicants, getAllProviders, getApplicantById, getPendingScholarshipPrograms, getPendingScholarshipProviders, getScholarshipProviderById, getTotalApplicants, getTotalScholarshipProviders, getTotalScholarships, getTotalUnverifiedAccounts, getTotalUserAccounts, test, verifyScholarshipProviderStatus } from '../controllers/admin.controller.js';
+import { countApprovedScholars, getAllApplicants, getAllProviders, getAllUsers, getApplicantById, getPendingScholarshipPrograms, getPendingScholarshipProviders, getScholarshipProviderById, getTotalApplicants, getTotalScholarshipProviders, getTotalScholarships, getTotalUnverifiedAccounts, getTotalUserAccounts, searchPendingApprovalPrograms, searchPendingVerificationProviders, test, verifyScholarshipProviderStatus } from '../controllers/admin.controller.js';
 
 const router = express.Router();
 
@@ -16,5 +16,9 @@ router.get('/pending-scholarship-providers', getPendingScholarshipProviders);
 router.get('/pending-scholarship-programs', getPendingScholarshipPrograms);
 router.get('/scholarship-provider/:id', getScholarshipProviderById);
 router.put('/verify-scholarship-provider-status/:id', verifyScholarshipProviderStatus);
+router.get('/search-pending-verification-providers', searchPendingVerificationProviders);
+router.get('/search-pending-approval-programs', searchPendingApprovalPrograms);
+router.get('/count-approved-scholars', countApprovedScholars);
+router.get('/all-users', getAllUsers);
 
 export default router;

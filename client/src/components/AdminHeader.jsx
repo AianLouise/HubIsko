@@ -43,7 +43,8 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
         }
 
         if (location.pathname.startsWith('/inbox')
-            || location.pathname.startsWith('/scholarships-data')
+            || location.pathname.startsWith('/scholarship-program-applications')
+            || location.pathname.startsWith('/scholarship-provider-applications')
 
         ) {
             setIsInboxDropdownOpen(true);
@@ -129,12 +130,12 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                         onClick={toggleAccountsDropdown}
 
                                         className={`flex gap-2 items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/accounts')
-                                                || location.pathname.startsWith('/students')
-                                                || location.pathname.startsWith('/provider-accounts')
-                                                || location.pathname.startsWith('/verification-details')
-                                                || location.pathname.startsWith('/student-details')
-                                                || location.pathname.startsWith('/provider-details')
-                                                ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                            || location.pathname.startsWith('/students')
+                                            || location.pathname.startsWith('/provider-accounts')
+                                            || location.pathname.startsWith('/verification-details')
+                                            || location.pathname.startsWith('/student-details')
+                                            || location.pathname.startsWith('/provider-details')
+                                            ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                         <BsFillPersonFill className={`w-5 h-5 text-blue-600 
                                  ${location.pathname.startsWith('/accounts')
                                                 || location.pathname.startsWith('/students')
@@ -180,20 +181,23 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                     <Link to={'/inbox'}
                                         onClick={toggleInboxDropdown}
                                         className={`flex gap-2 justify-between items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/inbox')
-                                                || location.pathname.startsWith('/scholarships-data')
+                                            || location.pathname.startsWith('/scholarship-program-applications')
+                                            || location.pathname.startsWith('/scholarship-provider-applications')
 
-                                                ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                            ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                         <div className="flex items-center gap-2">
                                             <BsInboxFill className={`w-5 h-5 text-blue-600 
                                             ${location.pathname.startsWith('/inbox')
-                                                    || location.pathname.startsWith('/scholarships-data')
+                                                    || location.pathname.startsWith('/scholarship-program-applications')
+                                                    || location.pathname.startsWith('/scholarship-provider-applications')
 
                                                     ? 'text-white' : ''} `} />
-                                            Inbox
+                                            Application Inbox
                                         </div>
                                         <div className={`bg-blue-600 rounded-full text-center flex items-center justify-center p-3 w-4 h-4 text-sm 
                                             ${location.pathname.startsWith('/inbox')
-                                                || location.pathname.startsWith('/scholarships-data')
+                                                || location.pathname.startsWith('/scholarship-program-applications')
+                                                || location.pathname.startsWith('/scholarship-provider-applications')
 
                                                 ? 'text-blue-600 bg-white' : 'text-white'} `}>1</div>
                                     </Link>
@@ -204,16 +208,16 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
 
                                         <ul className="ml-4 my-2 space-y-2">
                                             <li>
-                                                <Link to={'/scholarships-data'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarships-data' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                                    <FaGoogleScholar className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarships-data' ? ' text-white' : ''}`} />
-                                                    Scholarships
+                                                <Link to={'/scholarship-program-applications'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-program-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                                    <FaGoogleScholar className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-program-applications' ? ' text-white' : ''}`} />
+                                                    Scholarship Program Applications
                                                 </Link>
                                             </li>
                                             <li>
-                                                <a href="#" className="flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
-                                                    <HiDocument className="w-5 h-5 text-blue-600" />
-                                                    Applications
-                                                </a>
+                                                <Link to={'/scholarship-provider-applications'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-provider-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                                    <HiDocument className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-provider-applications' ? ' text-white' : ''}`} />
+                                                    Scholarship Provider Applications
+                                                </Link>
                                             </li>
                                             <li>
                                                 <a href="#" className="flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">

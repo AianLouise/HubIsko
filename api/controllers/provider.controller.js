@@ -72,6 +72,7 @@ export const signupAsProvider = async (req, res) => {
         proofOfAddress,
         authorizationLetter,
         idProofContactPerson,
+        status: 'pending',
       }
     });
 
@@ -130,6 +131,7 @@ export const signupAsProvider = async (req, res) => {
       id: savedUser._id,
       email: savedUser.email,
       role: savedUser.role,
+      profilePicture: savedUser.profilePicture,
       organizationName: savedUser.scholarshipProviderDetails.organizationName,
       organizationType: savedUser.scholarshipProviderDetails.organizationType,
       registrationNumber: savedUser.scholarshipProviderDetails.registrationNumber,

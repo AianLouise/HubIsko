@@ -9,10 +9,13 @@ import { Link } from 'react-router-dom';
 
 export default function RegisterAsProvider() {
   const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    profilePicture: '',
     organizationName: '',
     organizationType: '',
     registrationNumber: '',
-    email: '',
     contactPersonName: '',
     contactPersonPosition: '',
     contactPersonNumber: '',
@@ -22,8 +25,6 @@ export default function RegisterAsProvider() {
     city: '',
     barangay: '',
     website: '',
-    username: '',
-    password: '',
     confirmPassword: '',
     agreeTerms: false,
     registrationCertificate: '',
@@ -31,8 +32,6 @@ export default function RegisterAsProvider() {
     proofOfAddress: '',
     authorizationLetter: '',
     idProofContactPerson: '',
-    additionalDocuments: '',
-    profilePicture: null,
   });
 
   const [errors, setErrors] = useState({});
@@ -162,7 +161,7 @@ export default function RegisterAsProvider() {
 
     try {
       // Upload profile picture to Firebase Storage
-      const profilePictureRef = ref(storage, `profilePictures/${formData.profilePicture.name}`);
+      const profilePictureRef = ref(storage, `profilePictures/${formData.profilePicture}`);
       const snapshot = await uploadBytes(profilePictureRef, formData.profilePicture);
       const downloadURL = await getDownloadURL(snapshot.ref);
 

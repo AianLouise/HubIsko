@@ -47,7 +47,6 @@ import VerificationDetails from "./pages/Admin/VerificationDetails";
 import StudentDetails from "./pages/Admin/StudentDetails";
 import ProviderDetails from "./pages/Admin/ProviderDetails";
 import Inbox from "./pages/Admin/Inbox";
-import ScholarshipsData from "./pages/Admin/ScholarshipsData";
 import ScholarshipsDataDetails from "./pages/Admin/ScholarshipsDataDetails";
 import ScholarshipsDataDisplay from "./pages/Admin/ScholarshipsDataDisplay";
 import ViewScholarshipDetails from "./pages/Scholarship-Provider/ViewScholarshipDetails";
@@ -63,6 +62,8 @@ import NotificationsPage from "./components/notification";
 import NotificationDetailPage from "./components/NotificationDetailPage";
 import ApplicantAllNotification from "./pages/ApplicantAllNotification";
 import ApplicantDetailedNotification from "./pages/ApplicantDetailedNotification";
+import ScholarshipProviderApplications from "./pages/Admin/ScholarshipProviderApplications";
+import ScholarshipProgramApplications from "./pages/Admin/ScholarshipProgramApplications";
 
 
 
@@ -98,9 +99,10 @@ export default function App() {
           <Route path="/provider-accounts" element={<ProviderAccounts />} />
           <Route path="/verification-details/:id" element={<VerificationDetails />} />
           <Route path="/student-details/:id" element={<StudentDetails />} />
-          <Route path="/provider-details" element={<ProviderDetails />} />
+          <Route path="/provider-details/:id" element={<ProviderDetails />} />
           <Route path="/inbox" element={<Inbox />} />
-          <Route path="/scholarships-data" element={<ScholarshipsData />} />
+          <Route path="/scholarship-program-applications" element={<ScholarshipProgramApplications />} />
+          <Route path="/scholarship-provider-applications" element={<ScholarshipProviderApplications />} />
           <Route path="/scholarships-data-details" element={<ScholarshipsDataDetails />} />
           <Route path="/scholarships-data-display" element={<ScholarshipsDataDisplay />} />
           <Route path="/inbox-application" element={<InboxApplication />} />

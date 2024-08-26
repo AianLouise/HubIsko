@@ -8,12 +8,12 @@ const Layout = () => {
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   return (
-      <div className={`flex flex-col ${sidebarOpen ? 'ml-64' : ''} transition-all duration-200`}>
-          <AdminHeader sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
-          <div>
-              
+    <div className={`flex flex-col ${sidebarOpen ? 'ml-64' : ''} transition-all duration-200`}>
+      <AdminHeader sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+      <div>
+
         <Outlet className={`flex flex-col ${sidebarOpen ? 'ml-64' : ''} transition-all duration-200`} />
-          </div>
+      </div>
     </div>
   );
 };
