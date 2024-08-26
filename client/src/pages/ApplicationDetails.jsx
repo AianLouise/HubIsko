@@ -72,7 +72,7 @@ export default function Forums() {
             <Header />
             <main className='flex-grow bg-[#f8f8fb] font-medium'>
                 <div key={scholarship._id} className='border-b mb-8 py-8'>
-                    <div className='flex flex-row items-center mx-auto max-w-6xl gap-10 px-24'>
+                    <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl gap-2 lg:gap-10 lg:px-24 p-4'>
                         <div className='bg-blue-600 w-36 h-36 my-8 rounded-md'>
                             {scholarship.scholarshipImage && (
                                 <img
@@ -81,16 +81,18 @@ export default function Forums() {
                                     className='w-full h-full object-cover rounded-md'
                                 />
                             )}
+                               
                         </div>
-                        <div className='flex flex-col gap-2 w-1/2'>
+                        <h1 className='text-4xl block lg:hidden font-bold text-gray-800 mb-8'>{scholarship.title}</h1>
+                        <div className='flex flex-col lg:gap-2 lg:w-1/2'>
                             <div className='flex flex-row divide-x-2 divide-blue-200 mb-2'>
-                                <span className='text-2xl font-bold text-gray-600 pr-4'>{organizationName}</span>
-                                <span className='text-2xl font-medium text-gray-400 pl-4'>{new Date(scholarship.startDate).toLocaleDateString()}</span>
+                                <span className='text-lg lg:text-2xl font-bold text-gray-600 pr-4'>{organizationName}</span>
+                                <span className='text-lg lg:text-2xl font-medium text-gray-400 pl-4'>{new Date(scholarship.startDate).toLocaleDateString()}</span>
                             </div>
-                            <h1 className='text-4xl font-bold text-gray-800'>{scholarship.title}</h1>
+                            <h1 className='text-4xl hidden lg:block font-bold text-gray-800'>{scholarship.title}</h1>
 
-                            <div className='flex text-blue-600 font-bold'>
-                                <div className='flex flex-row gap-2 px-2 text-xl'>
+                            <div className='flex text-blue-600 font-bold items-center justify-center lg:justify-start'>
+                                <div className='flex flex-row gap-2 px-10 py-2 lg:py-0 lg:px-2 text-xl bg-slate-200 rounded-md lg:bg-[#f8f8fb] '>
                                     <FaHandHolding className='' />
                                     Php 80,000 - Php 100,000
                                 </div>
@@ -98,7 +100,7 @@ export default function Forums() {
                         </div>
                     </div>
 
-                    <div className='max-w-6xl px-24 mx-auto mb-20'>
+                    <div className='max-w-6xl lg:px-24 p-4 mx-auto mb-20'>
                         <div className='flex gap-2'>
                             <span className='flex gap-1 bg-white border px-4 py-2 rounded-md shadow'>
                                 <MdOutlineRefresh className='w-6 h-6 text-blue-600' />
@@ -139,7 +141,7 @@ export default function Forums() {
                             </div>
 
                             {/* Contact Section */}
-                            <div className='flex gap-6 justify-center mb-8'>
+                            <div className='grid grid-rows-1 lg:flex gap-6 justify-center mb-8'>
                                 <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'>
                                     <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
                                         <FaEnvelope className='text-white' />
@@ -175,23 +177,23 @@ export default function Forums() {
                         {/* Ready to Apply Section */}
                         <div className='flex flex-col items-center justify-center border-t my-10'>
                             <span className='font-bold text-slate-700 py-8 text-2xl'>Ready to Apply?</span>
-                            <div className='flex gap-4 w-full'>
-                                <button className='bg-white flex border justify-between items-center shadow rounded-md p-4 w-1/2 h-22 hover:-translate-y-2 hover:bg-slate-200 transition ease-in-out group'>
+                            <div className='grid grid-rows-1 lg:flex gap-4 w-full'>
+                                <button className='bg-white flex border justify-between items-center shadow rounded-md p-4 lg:w-1/2 h-22 hover:-translate-y-2 hover:bg-slate-200 transition ease-in-out group'>
                                     <div className='flex flex-row gap-4 '>
-                                        <div className='bg-blue-600 w-14 h-14 rounded-md'></div>
+                                        <div className='bg-blue-600 hidden lg:block w-14 h-14 rounded-md'></div>
                                         <div className='flex flex-col text-left'>
                                             <span className='text-lg text-left'>Apply in Organization's website!</span>
                                             <span className='text-slate-600'>They'll offer more information!</span>
                                         </div>
                                     </div>
-                                    <BsGlobe2 className='w-8 h-8 ml-4 group-hover:w-12 group-hover:h-12 group-hover:text-blue-600 transition-all ease-in-out' />
+                                    <BsGlobe2 className='w-8 h-8 ml-4 lg:group-hover:w-12 lg:group-hover:h-12 group-hover:text-blue-600 transition-all ease-in-out' />
 
                                 </button>
 
 
-                                <div onClick={handleApplyClick} className='cursor-pointer bg-white flex items-center border justify-between shadow rounded-md p-4 w-1/2 h-22 hover:-translate-y-2 hover:bg-slate-200 transition ease-in-out group'>
+                                <div onClick={handleApplyClick} className='cursor-pointer bg-white flex items-center border justify-between shadow rounded-md p-4 lg:w-1/2 h-22 hover:-translate-y-2 hover:bg-slate-200 transition ease-in-out group'>
                                     <div className='flex flex-row gap-4 '>
-                                        <div className='bg-blue-600 w-14 h-14 rounded-md'></div>
+                                        <div className='bg-blue-600 hidden lg:block  w-14 h-14 rounded-md'></div>
                                         <div className='flex flex-col text-left'>
                                             <span className='text-lg'>Apply now in Hubisko!</span>
                                             <span className='text-slate-600'>We'll guide you step by step!</span>

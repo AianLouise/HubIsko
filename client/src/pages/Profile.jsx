@@ -131,7 +131,7 @@ const handleDeleteAccount = async () => {
       <Header />
       <AccountManagement/>
       {/* max-w-6xl px-24 mx-auto flex justify-between items-center */}
-      <div className='max-w-[950px] mx-auto flex flex-col gap-10 pt-10 '>
+      <div className='max-w-[950px] mx-auto flex flex-col gap-10 pt-10 text-sm lg:text-base'>
       <div className='bg-white shadow p-10 py-4 border rounded-md'>
         <h1 className='text-xl font-bold my-7 text-slate-700'>Profile Information</h1>
         <form onSubmit={handleSubmit} className='flex flex-col w-full gap-4 text-slate-700'>
@@ -252,7 +252,7 @@ const handleDeleteAccount = async () => {
           
         <div className='w-full flex justify-end my-4'>
 
-          <button className='bg-blue-600 px-14 font-medium text-white p-3 rounded-lg hover:bg-blue-800 disabled:bg-white disabled:border-2 transition ease-in-out'>
+          <button className='bg-blue-600 px-14 font-medium w-full lg:w-[200px] text-white p-3 rounded-lg hover:bg-blue-800 disabled:bg-white disabled:border-2 transition ease-in-out'>
             {loading ? 'Loading...' : 'Update'}
           </button>
           
@@ -309,7 +309,7 @@ const handleDeleteAccount = async () => {
       </div>
       </div>
   
-      <div className='w-full flex flex-row gap-4 justify-end my-4 mt-8'>
+      <div className='w-full flex flex-col lg:flex-row gap-4 justify-end my-4 mt-8'>
           
       <button className='flex flex-row items-center gap-2 border px-6 rounded-md p-3 font-medium hover:text-white hover:bg-blue-600 transition ease-in-out'>
       <FaEye />
@@ -335,7 +335,7 @@ const handleDeleteAccount = async () => {
         <div className='font-medium text-slate-500'>I confirm that I want my account deleted.</div>
         </div>
         
-        <div className=' w-full flex flex-row gap-2 justify-end mt-4'>
+        <div className=' w-full flex flex-col lg:flex-row gap-2 justify-end mt-4'>
             <button className='bg-white border-2 font-medium text-slate-700 p-2 px-4 rounded-md hover:bg-slate-200 transition ease-in-out'>Learn More</button>
             <button onClick={handleDeleteAccount} className='bg-red-500 font-medium text-white p-2 px-4 rounded-md hover:bg-red-700 transition ease-in-out'>Delete Account</button>
         </div>

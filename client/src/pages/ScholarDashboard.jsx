@@ -80,8 +80,8 @@ export default function ScholarDashboard() {
     <div className="flex flex-col min-h-screen"> {/* Flex container */}
       <Header />
       <main className="flex-grow bg-[#f8f8fb]"> {/* Main content grows to fill available space */}
-        <div className='py-12 max-w-6xl mx-auto justify-between px-24'>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[350px]">
+        <div className='py-12 max-w-6xl mx-auto justify-between p-4 lg:px-24'>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:max-h-[350px]">
             {/* Overview of approved applications */}
             <div className="flex flex-col items-center h-[350px] max-h-[350px] bg-white shadow rounded-lg">
               <h2 className="font-bold text-xl mb-2 w-full p-4 rounded-t-lg border-b-2">Approved Applications</h2>
@@ -92,16 +92,16 @@ export default function ScholarDashboard() {
               <div className='flex justify-between "font-semibold text-xl w-full bg-blue-600 p-4 rounded-t-lg text-white'>
                 <h2>Approved Scholarships</h2>
                 <Link to={`/application-box`}>
-                  <button className='bg-white text-blue-600 font-bold px-2 rounded-md hover:bg-slate-200'>See all</button>
+                  <button className='bg-white text-blue-600 text-base lg:text-lg font-bold px-2 rounded-md hover:bg-slate-200'>See all</button>
                 </Link>
               </div>
 
               <div className="space-y-4 p-4 text-slate-800">
                 {approvedApplications.length === 0 ? (
-                  <div className='h-full flex flex-col gap-2 justify-center items-center mt-20'>
+                  <div className='h-full flex flex-col gap-2 justify-center items-center lg:mt-20'>
                     <span className='text-xl font-medium text-slate-500'>You have no approved applications yet.</span>
                     <Link to={'/scholarship-listing'}>
-                      <button className='flex gap-2 items-center bg-blue-600 rounded-md px-4 py-2 text-white fond-medium hover:bg-blue-800 group transition ease-in-out'>
+                      <button className='flex gap-2 items-center text-base lg:text-lg bg-blue-600 rounded-md px-4 py-2 text-white fond-medium hover:bg-blue-800 group transition ease-in-out'>
                         Go to Scholarship List
                         <FaAngleRight className='w-5 h-5 group-hover:translate-x-2 transition ease-in-out' />
                       </button>
@@ -148,7 +148,7 @@ export default function ScholarDashboard() {
           </div>
 
           {/* POSTS */}
-          <div className='grid grid-cols-3 sm:grid-rows-1 gap-8'>
+          <div className='grid lg:grid-cols-3 grid-rows-1 gap-8'>
             <div className='bg-white border p-4 rounded-md flex flex-col hover:-translate-y-1 hover:shadow-lg transition ease-in-out'>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, vel.
               <span className='text-sm flex items-end justify-end w-full text-slate-600'>Posted: July 7,2024</span>

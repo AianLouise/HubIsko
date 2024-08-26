@@ -10,10 +10,10 @@ export default function AccountManagement() {
  
     <div className='sticky top-0 z-10'> 
       <div className="bg-white p-4 shadow">
-        <div className="max-w-6xl px-24 mx-auto flex justify-between items-center">
+        <div className="max-w-6xl lg:px-24 px-2 mx-auto flex flex-col lg:flex-row lg:justify-between justify-center lg:gap-0 gap-4 items-center">
           <h1 className="text-xl font-bold text-slate-800">Account Settings</h1>
           <nav>
-            <ul className="flex divide-x-2">
+            <ul className="flex divide-x-2 text-sm lg:text-base">
               <li>
                 <NavLink to="/profile" className={getActiveLinkClass}>Profile</NavLink>
               </li>
