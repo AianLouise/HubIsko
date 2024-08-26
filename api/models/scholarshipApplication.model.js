@@ -70,15 +70,19 @@ const scholarshipApplicationSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
-    town: {
-        type: String,
-        required: false,
-    },
-    barangay: {
+    region: {
         type: String,
         required: false,
     },
     province: {
+        type: String,
+        required: false,
+    },
+    city: {
+        type: String,
+        required: false,
+    },
+    barangay: {
         type: String,
         required: false,
     },

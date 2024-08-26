@@ -15,6 +15,7 @@ export default function ScholarDashboard() {
 
   const currentUser = useSelector((state) => state.user.currentUser);
   const [approvedApplications, setApprovedApplications] = useState([]);
+  const [pendingApplications, setPendingApplications] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,9 +33,11 @@ export default function ScholarDashboard() {
         }
         const data = await response.json();
 
-        // Filter applications to only include those with "Approved" status
+        // Filter applications to include those with "Approved" and "Pending" status
         const approved = data.filter(app => app.applicationStatus === 'Approved');
+        const pending = data.filter(app => app.applicationStatus === 'Pending');
         setApprovedApplications(approved);
+        setPendingApplications(pending);
 
       } catch (error) {
         console.error('Error fetching applications:', error);
@@ -45,6 +48,8 @@ export default function ScholarDashboard() {
 
     fetchApplications();
   }, [currentUser]);
+
+  const allApplications = [...approvedApplications, ...pendingApplications];
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -84,22 +89,30 @@ export default function ScholarDashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:max-h-[350px]">
             {/* Overview of approved applications */}
             <div className="flex flex-col items-center h-[350px] max-h-[350px] bg-white shadow rounded-lg">
-              <h2 className="font-bold text-xl mb-2 w-full p-4 rounded-t-lg border-b-2">Approved Applications</h2>
-              <div className='text-8xl mt-20 font-bold text-blue-600'>{approvedApplications.length}</div>
+              {/* Approved Applications */}
+              <div className="flex-1 flex flex-col items-center border-b-2 w-full">
+                <h2 className="font-bold text-xl mb-2 w-full p-4 rounded-t-lg border-b-2 text-center">Approved Applications</h2>
+                <div className='text-7xl font-bold text-blue-600'>{approvedApplications.length}</div>
+              </div>
+              {/* Pending Applications */}
+              <div className="flex-1 flex flex-col items-center w-full">
+                <h2 className="font-bold text-xl mb-2 w-full p-4 rounded-t-lg border-b-2 text-center">Pending Applications</h2>
+                <div className='text-7xl font-bold text-yellow-600'>{pendingApplications.length}</div>
+              </div>
             </div>
 
             <div className="bg-white shadow rounded-lg col-span-1 md:col-span-2">
-              <div className='flex justify-between "font-semibold text-xl w-full bg-blue-600 p-4 rounded-t-lg text-white'>
-                <h2>Approved Scholarships</h2>
+              <div className='flex justify-between font-semibold text-xl w-full bg-blue-600 p-4 rounded-t-lg text-white'>
+                <h2>Scholarships</h2>
                 <Link to={`/application-box`}>
                   <button className='bg-white text-blue-600 text-base lg:text-lg font-bold px-2 rounded-md hover:bg-slate-200'>See all</button>
                 </Link>
               </div>
 
               <div className="space-y-4 p-4 text-slate-800">
-                {approvedApplications.length === 0 ? (
+                {allApplications.length === 0 ? (
                   <div className='h-full flex flex-col gap-2 justify-center items-center lg:mt-20'>
-                    <span className='text-xl font-medium text-slate-500'>You have no approved applications yet.</span>
+                    <span className='text-xl font-medium text-slate-500'>You have no applications yet.</span>
                     <Link to={'/scholarship-listing'}>
                       <button className='flex gap-2 items-center text-base lg:text-lg bg-blue-600 rounded-md px-4 py-2 text-white fond-medium hover:bg-blue-800 group transition ease-in-out'>
                         Go to Scholarship List
@@ -109,7 +122,7 @@ export default function ScholarDashboard() {
                   </div>
                 ) : (
                   <div className="overflow-y-auto h-64">
-                    {approvedApplications.map(application => (
+                    {allApplications.map(application => (
                       <Link key={application._id} to={`/application-detail/${application._id}`}>
                         <div className='flex items-center justify-between hover:bg-slate-200 p-2 rounded-md'>
                           <div className='flex flex-row gap-2'>

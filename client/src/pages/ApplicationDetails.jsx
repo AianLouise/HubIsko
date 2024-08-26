@@ -41,27 +41,27 @@ export default function Forums() {
         fetchScholarship();
     }, [id]);
 
-    const [organizationName, setOrganizationName] = useState('');
+    // const [organizationName, setOrganizationName] = useState('');
 
-    const fetchOrganizationName = async () => {
-        try {
-            const response = await fetch(`/api/scholarshipProgram/organization/${scholarship.providerId}`);
-            const data = await response.json();
-            if (response.ok) {
-                setOrganizationName(data.organizationName);
-            } else {
-                console.error(data.message);
-            }
-        } catch (error) {
-            console.error('Error fetching organization name:', error);
-        }
-    };
+    // const fetchOrganizationName = async () => {
+    //     try {
+    //         const response = await fetch(`/api/scholarshipProgram/organization/${scholarship.providerId}`);
+    //         const data = await response.json();
+    //         if (response.ok) {
+    //             setOrganizationName(data.organizationName);
+    //         } else {
+    //             console.error(data.message);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching organization name:', error);
+    //     }
+    // };
 
-    useEffect(() => {
-        if (scholarship) {
-            fetchOrganizationName();
-        }
-    }, [scholarship]);
+    // useEffect(() => {
+    //     if (scholarship) {
+    //         fetchOrganizationName();
+    //     }
+    // }, [scholarship]);
 
     if (!scholarship) {
         return <div>Loading...</div>;

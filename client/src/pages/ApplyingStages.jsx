@@ -8,6 +8,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { FaInfoCircle, FaUsers, FaGraduationCap, FaEllipsisH, FaFileContract, FaUpload } from "react-icons/fa";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from 'uuid';
+import { regions, provinces, cities, barangays, regionByCode, provincesByCode, provinceByName } from "select-philippines-address";
 
 export default function ApplyingStages() {
 
@@ -24,6 +25,14 @@ export default function ApplyingStages() {
     const [activeStep, setActiveStep] = useState(1);
     const maxStep = 6;
 
+    const getHideorActive = (step) => {
+        if (step === activeStep) {
+            return 'flex flex-col gap-2 border shadow bg-white w-full h-[auto] rounded-md';
+        } else {
+            return 'hidden flex flex-col gap-2 border shadow bg-white w-full h-[auto] rounded-md';
+        }
+    };
+
     const handleNext = () => {
         if (validateCurrentStep()) {
             setActiveStep((prevStep) => (prevStep < maxStep ? prevStep + 1 : prevStep));
@@ -32,6 +41,10 @@ export default function ApplyingStages() {
             // Optional: Display an error message or highlight missing fields
             console.log('Please complete all required fields before proceeding.');
         }
+    };
+
+    const handlePrevious = () => {
+        setActiveStep((prevStep) => Math.max(1, prevStep - 1));
     };
 
     const validateCurrentStep = () => {
@@ -43,7 +56,13 @@ export default function ApplyingStages() {
                 formData.gender.trim() !== '' &&
                 formData.bloodType.trim() !== '' &&
                 formData.civilStatus.trim() !== '' &&
-                formData.contactNumber.trim() !== ''
+                formData.contactNumber.trim() !== '' &&
+                formData.email.trim() !== '' &&
+                formData.region.trim() !== '' &&
+                formData.province.trim() !== '' &&
+                formData.city.trim() !== '' &&
+                formData.barangay.trim() !== '' &&
+                formData.addressDetails.trim() !== '' 
             );
         } else if (activeStep === 2) {
             return (
@@ -81,18 +100,6 @@ export default function ApplyingStages() {
         return true;
     };
 
-    const handlePrevious = () => {
-        setActiveStep((prevStep) => Math.max(1, prevStep - 1));
-    };
-
-    const getHideorActive = (step) => {
-        if (step === activeStep) {
-            return 'flex flex-col gap-2 border shadow bg-white w-full h-[auto] rounded-md';
-        } else {
-            return 'hidden flex flex-col gap-2 border shadow bg-white w-full h-[auto] rounded-md';
-        }
-    };
-
     const { scholarshipId } = useParams();
 
     const [formData, setFormData] = useState({
@@ -112,10 +119,11 @@ export default function ApplyingStages() {
         birthplace: '',
         email: '',
         contactNumber: '',
-        addressDetails: '',
-        town: '',
-        barangay: '',
+        addressDetails: '', // Updated field name
+        region: '',
         province: '',
+        city: '',
+        barangay: '',
         father: {
             firstName: '',
             lastName: '',
@@ -324,6 +332,29 @@ export default function ApplyingStages() {
         }
     };
 
+    const [agree, setAgree] = useState(false);
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+
+        if (!agree) {
+            return;
+        }
+
+        handleSubmit(e);
+    };
+
+    useEffect(() => {
+        // Select all input and select elements within the component
+        const inputs = document.querySelectorAll('.education-form input, .education-form select');
+
+        // Set the required attribute and focus styles for each element
+        inputs.forEach(input => {
+            input.required = true;
+            input.classList.add('focus:outline-none', 'focus:ring-2', 'focus:ring-blue-600');
+        });
+    }, []);
+
     // Boolean to check if the selected civil status is 'Married'
     const isMarried = formData.civilStatus === 'Married';
 
@@ -484,6 +515,55 @@ export default function ApplyingStages() {
         fetchRequiredDocuments();
     }, [scholarshipId]);
 
+    const [regionList, setRegionList] = useState([]);
+    const [provinceList, setProvinceList] = useState([]);
+    const [cityList, setCityList] = useState([]);
+    const [barangayList, setBarangayList] = useState([]);
+
+    useEffect(() => {
+        regions().then(setRegionList);
+    }, []);
+
+    const handleRegionChange = (e) => {
+        const regionCode = e.target.value;
+        const selectedRegion = regionList.find(region => region.region_code === regionCode);
+        const regionName = selectedRegion ? selectedRegion.region_name : '';
+
+        setFormData({ ...formData, region: regionName, regionCode: regionCode, province: '', city: '', barangay: '' });
+        provinces(regionCode).then(setProvinceList);
+        setCityList([]);
+        setBarangayList([]);
+    };
+
+    const handleProvinceChange = (e) => {
+        const provinceCode = e.target.value;
+        const selectedProvince = provinceList.find(province => province.province_code === provinceCode);
+        const provinceName = selectedProvince ? selectedProvince.province_name : '';
+
+        setFormData({ ...formData, province: provinceName, provinceCode: provinceCode, city: '', barangay: '' });
+        cities(provinceCode).then(setCityList);
+        setBarangayList([]);
+    };
+
+    const handleCityChange = (e) => {
+        const cityCode = e.target.value;
+        const selectedCity = cityList.find(city => city.city_code === cityCode);
+        const cityName = selectedCity ? selectedCity.city_name : '';
+
+        setFormData({ ...formData, city: cityName, cityCode: cityCode });
+        barangays(cityCode).then(setBarangayList);
+    };
+
+    const handleBarangayChange = (e) => {
+        const barangayCode = e.target.value;
+        setFormData({ ...formData, barangay: barangayCode });
+    };
+
+    const validateForm = () => {
+        const { regionCode, provinceCode, cityCode, barangay, addressDetails } = formData;
+        return regionCode && provinceCode && cityCode && barangay && addressDetails;
+    };
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
 
@@ -513,6 +593,7 @@ export default function ApplyingStages() {
                                         <button
                                             className={`w-12 h-12 shadow rounded-md flex items-center justify-center ${activeStep === step ? 'bg-blue-600' : 'border'}`}
                                             onClick={() => setActiveStep(step)}
+                                            disabled={activeStep !== step}
                                         >
                                             {step === 1 && <FaInfoCircle className={activeStep === step ? 'text-white' : 'text-blue-600'} />}
                                             {step === 2 && <FaUsers className={activeStep === step ? 'text-white' : 'text-blue-600'} />}
@@ -785,61 +866,102 @@ export default function ApplyingStages() {
                                 </div>
                             </div>
 
-                            <div className='grid grid-cols-2 gap-4 p-4'>
+                            <div className='grid grid-cols-2 gap-4 px-4'>
                                 <div className='col-span-1'>
                                     <label className='block text-sm font-medium text-gray-700 mb-2'>
+                                        Region
+                                    </label>
+                                    <select
+                                        name="region"
+                                        value={formData.regionCode}
+                                        onChange={handleRegionChange}
+                                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                        required
+                                    >
+                                        <option value="">Select Region</option>
+                                        {regionList.map((region) => (
+                                            <option key={region.region_code} value={region.region_code}>
+                                                {region.region_name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className='col-span-1'>
+                                    <label className='block text-sm font-medium text-gray-700 mb-2'>
+                                        Province
+                                    </label>
+                                    <select
+                                        name="province"
+                                        value={formData.provinceCode}
+                                        onChange={handleProvinceChange}
+                                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                        required
+                                    >
+                                        <option value="">Select Province</option>
+                                        {provinceList.map((province) => (
+                                            <option key={province.province_code} value={province.province_code}>
+                                                {province.province_name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className='col-span-1'>
+                                    <label className='block text-sm font-medium text-gray-700 mb-2'>
+                                        City
+                                    </label>
+                                    <select
+                                        name="city"
+                                        value={formData.cityCode || ''}
+                                        onChange={handleCityChange}
+                                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                        required
+                                    >
+                                        <option value="">Select City</option>
+                                        {cityList.map((city) => (
+                                            <option key={city.city_code} value={city.city_code}>
+                                                {city.city_name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className='col-span-1'>
+                                    <label className='block text-sm font-medium text-gray-700 mb-2'>
+                                        Barangay
+                                    </label>
+                                    <select
+                                        name="barangay"
+                                        value={formData.barangay}
+                                        onChange={handleBarangayChange}
+                                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                        required
+                                    >
+                                        <option value="">Select Barangay</option>
+                                        {barangayList.map((barangay) => (
+                                            <option key={barangay.brgy_code} value={barangay.brgy_name}>
+                                                {barangay.brgy_name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className='w-full flex flex-col lg:col-span-1'>
+                                    <label className='hidden lg:block text-sm font-medium text-gray-700 mb-2'>
                                         House No./Unit No./Bldg/Floor, Street, Subdivision
+                                    </label>
+                                    <label className='block lg:hidden text-sm font-medium text-gray-700 mb-2'>
+                                        Full Address
                                     </label>
                                     <input
                                         type="text"
                                         name="addressDetails"
                                         value={formData.addressDetails}
                                         onChange={handleChange}
-                                        required
                                         className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        placeholder="Enter address details"
-                                    />
-                                </div>
-                                <div className='col-span-1'>
-                                    <label className='block text-sm font-medium text-gray-700 mb-2'>
-                                        Town
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="town"
-                                        value={formData.town}
-                                        onChange={handleChange}
+                                        placeholder="Enter House No./Unit No./Bldg/Floor, Street, Subdivision"
                                         required
-                                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        placeholder="Enter town"
-                                    />
-                                </div>
-                                <div className='col-span-1'>
-                                    <label className='block text-sm font-medium text-gray-700 mb-2'>
-                                        Barangay
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="barangay"
-                                        value={formData.barangay}
-                                        onChange={handleChange}
-                                        required
-                                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        placeholder="Enter barangay"
-                                    />
-                                </div>
-                                <div className='col-span-1'>
-                                    <label className='block text-sm font-medium text-gray-700 mb-2'>
-                                        Province
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="province"
-                                        value={formData.province}
-                                        onChange={handleChange}
-                                        required
-                                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                        placeholder="Enter province"
                                     />
                                 </div>
                             </div>
@@ -1227,7 +1349,7 @@ export default function ApplyingStages() {
                             </div>
 
                             <div className=''>
-                                <div className='p-4'>
+                                <div className='p-4 education-form'>
                                     {/* Elementary */}
                                     <span className='text-lg font-bold mt-8 block'>Elementary</span>
                                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
@@ -1240,7 +1362,7 @@ export default function ApplyingStages() {
                                                 onChange={(e) => handleEducationChange(e, 'elementary')}
                                                 required
                                                 placeholder="Enter elementary school name"
-                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                className='standard-input border border-gray-300 rounded-md p-2 w-full'
                                             />
                                         </div>
                                         <div>
@@ -1252,7 +1374,7 @@ export default function ApplyingStages() {
                                                 onChange={(e) => handleEducationChange(e, 'elementary')}
                                                 required
                                                 placeholder="Enter elementary award"
-                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                className='standard-input border border-gray-300 rounded-md p-2 w-full'
                                             />
                                         </div>
                                         <div>
@@ -1262,7 +1384,7 @@ export default function ApplyingStages() {
                                                 value={formData.education.elementary.yearGraduated}
                                                 onChange={(e) => handleEducationChange(e, 'elementary')}
                                                 required
-                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                className='standard-input border border-gray-300 rounded-md p-2 w-full'
                                             >
                                                 <option value="">Select year</option>
                                                 {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
@@ -1284,7 +1406,7 @@ export default function ApplyingStages() {
                                                 onChange={(e) => handleEducationChange(e, 'juniorHighSchool')}
                                                 required
                                                 placeholder="Enter junior high school name"
-                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                className='standard-input border border-gray-300 rounded-md p-2 w-full'
                                             />
                                         </div>
                                         <div>
@@ -1296,7 +1418,7 @@ export default function ApplyingStages() {
                                                 onChange={(e) => handleEducationChange(e, 'juniorHighSchool')}
                                                 required
                                                 placeholder="Enter junior high school award"
-                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                className='standard-input border border-gray-300 rounded-md p-2 w-full'
                                             />
                                         </div>
                                         <div>
@@ -1306,7 +1428,7 @@ export default function ApplyingStages() {
                                                 value={formData.education.juniorHighSchool.yearGraduated}
                                                 onChange={(e) => handleEducationChange(e, 'juniorHighSchool')}
                                                 required
-                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                className='standard-input border border-gray-300 rounded-md p-2 w-full'
                                             >
                                                 <option value="">Select year</option>
                                                 {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
@@ -1328,7 +1450,7 @@ export default function ApplyingStages() {
                                                 onChange={(e) => handleEducationChange(e, 'seniorHighSchool')}
                                                 required
                                                 placeholder="Enter senior high school name"
-                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                className='standard-input border border-gray-300 rounded-md p-2 w-full'
                                             />
                                         </div>
                                         <div>
@@ -1340,7 +1462,7 @@ export default function ApplyingStages() {
                                                 onChange={(e) => handleEducationChange(e, 'seniorHighSchool')}
                                                 required
                                                 placeholder="Enter senior high school award"
-                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                className='standard-input border border-gray-300 rounded-md p-2 w-full'
                                             />
                                         </div>
                                         <div>
@@ -1350,7 +1472,7 @@ export default function ApplyingStages() {
                                                 value={formData.education.seniorHighSchool.yearGraduated}
                                                 onChange={(e) => handleEducationChange(e, 'seniorHighSchool')}
                                                 required
-                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                className='standard-input border border-gray-300 rounded-md p-2 w-full'
                                             >
                                                 <option value="">Select year</option>
                                                 {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
@@ -1372,7 +1494,7 @@ export default function ApplyingStages() {
                                                 onChange={(e) => handleEducationChange(e, 'college')}
                                                 required
                                                 placeholder="Enter college name"
-                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                className='standard-input border border-gray-300 rounded-md p-2 w-full'
                                             />
                                         </div>
                                         <div>
@@ -1384,7 +1506,7 @@ export default function ApplyingStages() {
                                                 onChange={(e) => handleEducationChange(e, 'college')}
                                                 required
                                                 placeholder="Enter college course"
-                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                className='standard-input border border-gray-300 rounded-md p-2 w-full'
                                             />
                                         </div>
                                         {/* <div>
@@ -1393,14 +1515,14 @@ export default function ApplyingStages() {
                                                 name="yearGraduated"
                                                 value={formData.education.college.yearGraduated}
                                                 onChange={(e) => handleEducationChange(e, 'college')}
-                                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                                className='standard-input border border-gray-300 rounded-md p-2 w-full'
                                             >
                                                 <option value="">Select year</option>
                                                 {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
-                                                    <option key={year} value={year}>{year}</option>
+                                                <option key={year} value={year}>{year}</option>
                                                 ))}
                                             </select>
-                                        </div> */}
+                                            </div> */}
                                     </div>
                                 </div>
 
@@ -1599,7 +1721,7 @@ export default function ApplyingStages() {
 
                         <div className={`${getHideorActive(5)} max-w-8xl mx-auto bg-white shadow-lg rounded-lg`}>
                             {scholarship && (
-                                <div className="scholarship-info mb-4 p-6 bg-white rounded-lg shadow-md">
+                                <div className="scholarship-info bg-white rounded-lg shadow-md">
                                     <div className="bg-blue-600 text-white p-4 rounded-t-lg">
                                         <span className='text-lg font-bold'>Upload Requirements</span>
                                     </div>
@@ -1663,6 +1785,8 @@ export default function ApplyingStages() {
                                         id="agree"
                                         name="agree"
                                         className='mr-2'
+                                        checked={agree}
+                                        onChange={(e) => setAgree(e.target.checked)}
                                         required
                                     />
                                     <label htmlFor="agree" className='text-sm text-gray-700'>
@@ -1671,10 +1795,10 @@ export default function ApplyingStages() {
                                 </div>
 
                                 <div className='flex mt-4 justify-end space-x-4'>
-                                    <button className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
+                                    <button type="button" className='bg-white border px-8 py-2 rounded-md hover:bg-slate-200' onClick={handlePrevious}>Previous</button>
                                     <button
+                                        type="submit"
                                         className={`bg-blue-600 text-white px-8 py-2 rounded-md hover:bg-blue-800 ${loading ? 'cursor-not-allowed' : ''}`}
-                                        onClick={handleSubmit}
                                         disabled={loading}
                                     >
                                         {loading ? (
