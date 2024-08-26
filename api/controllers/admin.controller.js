@@ -315,3 +315,44 @@ export const rejectScholarshipProvider = async (req, res) => {
     });
   }
 };
+
+export const getScholarshipProgramDetailsById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const scholarshipProgram = await ScholarshipProgram.findById(id);
+    if (!scholarshipProgram) {
+      return res.status(404).json({ message: 'Scholarship program not found' });
+    }
+    res.status(200).json({ scholarshipProgram });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error retrieving scholarship program details',
+      error: error.message,
+    });
+  }
+};
+
+export const verifyScholarshipProgram = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Assuming you have a ScholarshipProgram model
+    const scholarshipProgram = await ScholarshipProgram.findById(id);
+
+    if (!scholarshipProgram) {
+      return res.status(404).json({ message: 'Scholarship program not found' });
+    }
+
+    // Update the verification logic to include status change
+    scholarshipProgram.verified = true;
+    scholarshipProgram.status = 'Approved';
+    await scholarshipProgram.save();
+
+    res.status(200).json({ message: 'Scholarship program verified successfully', scholarshipProgram });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error verifying scholarship program',
+      error: error.message,
+    });
+  }
+};

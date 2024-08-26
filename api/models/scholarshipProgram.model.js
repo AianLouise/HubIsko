@@ -49,16 +49,16 @@ const scholarshipProgramSchema = new mongoose.Schema({
       url: { type: String, required: true }
     }
   ], // Array of provider requirements with id and url
-    status: {
+  status: {
     type: String,
     enum: [
-      'Pending Approval', 
-      'Approved', 
-      'Declined', 
-      'Active', 
-      'Closed', 
-      'Archived', 
-      'Cancelled', 
+      'Pending Approval',
+      'Approved',
+      'Declined',
+      'Active',
+      'Closed',
+      'Archived',
+      'Cancelled',
       'Completed'
     ],
     default: 'Pending Approval'

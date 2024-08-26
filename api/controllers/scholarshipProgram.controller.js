@@ -238,7 +238,7 @@ export const getScholarshipProviders = async (req, res) => {
   try {
     // Find all users with the role 'scholarship_provider'
     const providers = await User.find({ role: 'scholarship_provider' })
-      .select('scholarshipProviderDetails.organizationName name profilePicture');
+      .select('scholarshipProviderDetails.organizationName name profilePicture status');
 
     if (!providers || providers.length === 0) {
       return res.status(404).json({ error: 'No scholarship providers found' });

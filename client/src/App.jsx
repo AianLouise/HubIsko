@@ -105,7 +105,7 @@ export default function App() {
           <Route path="/scholarship-program-applications" element={<ScholarshipProgramApplications />} />
           <Route path="/scholarship-provider-applications" element={<ScholarshipProviderApplications />} />
           <Route path="/scholarships-data-details/:id" element={<ScholarshipsDataDetails />} />
-          <Route path="/scholarships-data-display" element={<ScholarshipsDataDisplay />} />
+          <Route path="/scholarships-data-display/:id" element={<ScholarshipsDataDisplay />} />
           <Route path="/scholarship-provider-details/:id" element={<ScholarshipProviderDetails />} />
           <Route path="/inbox-application" element={<InboxApplication />} />
           <Route path="/edit-student-info/:id" element={<EditStudentInfo />} />

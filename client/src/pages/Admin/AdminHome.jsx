@@ -109,12 +109,12 @@ export default function AdminHome() {
                             <span className="text-6xl font-bold text-left text-blue-600">{totalScholars}</span>
                         </Link>
 
-                        <Link to={'/pending-providers'} className="bg-white flex flex-col gap-2 p-4 shadow border rounded-md h-[200px] justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
+                        <Link to={'/scholarship-provider-applications'} className="bg-white flex flex-col gap-2 p-4 shadow border rounded-md h-[200px] justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
                             <h1 className="text-2xl font-semibold text-slate-600 text-center">Pending Scholarship Provider Applications</h1>
                             <span className="text-6xl font-bold text-blue-600 text-center">{pendingProviders}</span>
                         </Link>
 
-                        <Link to={'/pending-programs'} className="bg-white flex flex-col gap-2 p-4 shadow border rounded-md h-[200px] justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
+                        <Link to={'/scholarship-program-applications'} className="bg-white flex flex-col gap-2 p-4 shadow border rounded-md h-[200px] justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
                             <h1 className="text-2xl font-semibold text-slate-600 text-center">Pending Scholarship Program Applications</h1>
                             <span className="text-6xl font-bold text-blue-600 text-center">{pendingPrograms}</span>
                         </Link>

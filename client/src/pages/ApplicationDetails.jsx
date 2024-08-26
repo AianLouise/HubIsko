@@ -81,12 +81,12 @@ export default function Forums() {
                                     className='w-full h-full object-cover rounded-md'
                                 />
                             )}
-                               
+
                         </div>
                         <h1 className='text-4xl block lg:hidden font-bold text-gray-800 mb-8'>{scholarship.title}</h1>
                         <div className='flex flex-col lg:gap-2 lg:w-1/2'>
                             <div className='flex flex-row divide-x-2 divide-blue-200 mb-2'>
-                                <span className='text-lg lg:text-2xl font-bold text-gray-600 pr-4'>{organizationName}</span>
+                                <span className='text-lg lg:text-2xl font-bold text-gray-600 pr-4'>{scholarship.organizationName}</span>
                                 <span className='text-lg lg:text-2xl font-medium text-gray-400 pl-4'>{new Date(scholarship.startDate).toLocaleDateString()}</span>
                             </div>
                             <h1 className='text-4xl hidden lg:block font-bold text-gray-800'>{scholarship.title}</h1>
@@ -168,7 +168,7 @@ export default function Forums() {
                                     </div>
                                     <Link to={'/profile-preview/:id'} className='flex flex-col justify-center text-left'>
                                         <span className='text-slate-600 '>Visit our profile!</span>
-                                        <span className=''>{organizationName}</span>
+                                        <span className=''>{scholarship.organizationName}</span>
                                     </Link>
                                 </button>
                             </div>
@@ -207,47 +207,41 @@ export default function Forums() {
                 </div>
             </main>
             <Footer />
-            
+
             {notification && (
                 <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
                     <div className='p-6 pb-10 bg-white rounded-md text-center shadow-lg font-medium'>
-                    
-                    <button onClick={() => setNotification('')} className='flex w-full justify-end items-end'>
-                        <div className='border rounded-full p-1 hover:bg-slate-200'>
-                            <CgClose className='w-4 h-4' />
+
+                        <button onClick={() => setNotification('')} className='flex w-full justify-end items-end'>
+                            <div className='border rounded-full p-1 hover:bg-slate-200'>
+                                <CgClose className='w-4 h-4' />
                             </div>
-                    </button>
-                    <strong className='font-bold text-red-500 text-lg'>Not Logged In!</strong>
-             
-                    <div className='text-slate-400 ' role='alert'>
+                        </button>
+                        <strong className='font-bold text-red-500 text-lg'>Not Logged In!</strong>
+
+                        <div className='text-slate-400 ' role='alert'>
                             <span className='block sm:inline font-medium'> {notification}</span>
-                            </div>
+                        </div>
 
-                            <div className='flex flex-col justify-center w-full gap-2 mt-4'>
-                                <Link to='/login' className='bg-blue-600 text-white text-center rounded-md w-full hover:bg-blue-800 py-2'>Login</Link>
+                        <div className='flex flex-col justify-center w-full gap-2 mt-4'>
+                            <Link to='/login' className='bg-blue-600 text-white text-center rounded-md w-full hover:bg-blue-800 py-2'>Login</Link>
 
-                               
-                               <div className=''>
+
+                            <div className=''>
                                 <div className='border mt-5'></div>
                                 <div className='w-full -translate-y-4 text-center'>
-                                <span className='bg-white px-5 text-slate-500 font-medium'>or</span>
+                                    <span className='bg-white px-5 text-slate-500 font-medium'>or</span>
                                 </div>
-                                </div>
+                            </div>
 
-                                <div className='w-full flex gap-2 justify-between'>
+                            <div className='w-full flex gap-2 justify-between'>
                                 <Link to='/register' className='bg-blue-600 text-white text-center rounded-md w-full hover:bg-blue-800 py-2'>Register as Student</Link>
                                 <Link to='/register-provider' className='bg-blue-800  text-white text-center rounded-md w-full hover:bg-blue-900 py-2'>Register as Provider</Link>
-                                </div>             
-                               
-                                
-                            
-                               
-                             
                             </div>
-
+                        </div>
                     </div>
-                            </div>
-                        )}
+                </div>
+            )}
         </div>
     );
 }
