@@ -219,7 +219,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ['Pending Verification', 'Verified', 'Rejected'],
     default: 'Pending Verification',
-},
+  },
   applicantDetails: applicantSchema, // Embedded schema for applicant details
   scholarshipProviderDetails: scholarshipProviderSchema, // Embedded schema for scholarship provider details
 }, { timestamps: true });

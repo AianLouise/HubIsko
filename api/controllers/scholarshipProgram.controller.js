@@ -309,18 +309,23 @@ export const getScholarshipProgramById = async (req, res) => {
 
 export const getOrganizationName = async (req, res) => {
   try {
-    const { providerId } = req.params;
-    const user = await User.findById(providerId);
+    const organizationId = req.params.organizationId;
 
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+    // Check if organizationId is defined and is a valid ObjectId
+    if (!organizationId || !mongoose.Types.ObjectId.isValid(organizationId)) {
+      return res.status(400).json({ error: 'Invalid organization ID' });
     }
 
-    const organizationName = user.scholarshipProviderDetails.organizationName;
-    res.status(200).json({ organizationName });
+    const organization = await User.findById(organizationId);
+
+    if (!organization) {
+      return res.status(404).json({ error: 'Organization not found' });
+    }
+
+    res.json({ name: organization.name });
   } catch (error) {
     console.error('Error fetching organization name:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 

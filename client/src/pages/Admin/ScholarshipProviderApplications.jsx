@@ -128,7 +128,7 @@ export default function ScholarshipProviderApplications() {
                                         <td className="p-2 text-yellow-500">{provider.status}</td>
                                         <td className="p-4">
                                             <Link
-                                                to={`/scholarships-data-details/${provider._id}`}
+                                                to={`/scholarship-provider-details/${provider._id}`}
                                                 className="bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white"
                                             >
                                                 View Details
