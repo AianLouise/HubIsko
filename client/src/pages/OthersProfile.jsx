@@ -40,7 +40,7 @@ export default function OthersProfile() {
           </div>
         </div>
 
-        <div className='flex flex-col gap-4 max-w-6xl lg:px-24 mx-auto px-2 lg:px-0'>
+        <div className='flex flex-col gap-4 max-w-6xl lg:px-24 mx-auto px-2'>
           <div className='grid grid-cols-3 lg:flex lg:flex-row gap-4 justify-between font-semibold mb-6'>
             <button className='border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Profile</button>
             <button className='border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>Posts</button>
