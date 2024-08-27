@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 export default function AccountManagement() {
   // Example of a function to determine if a link is active
   const getActiveLinkClass = ({ isActive }) => 
-    isActive ? "text-blue-700 font-semibold px-2" : "text-blue-500 hover:text-blue-700 px-2 py-2 hover:bg-blue-600 hover:rounded-md hover:text-white";
+    isActive ? "text-white bg-blue-600 px-2 py-2 rounded-md font-semibold" : "text-blue-500 hover:text-blue-700 px-2 py-2 hover:bg-slate-200 hover:rounded-md";
   
   return (
  
