@@ -168,12 +168,16 @@ export const google = async (req, res, next) => {
           birthplace: "",
           contactNumber: "",
           address: {
-            region: "",
-            province: "",
-            city: "",
-            barangay: "",
-            addressDetails: "",
-          },
+            region: '',
+            regionCode: '',
+            province: '',
+            provinceCode: '',
+            city: '',
+            cityCode: '',
+            barangay: '',
+            barangayCode: '',
+            addressDetails: '',
+          }
         },
         profilePicture: photo,
       });
