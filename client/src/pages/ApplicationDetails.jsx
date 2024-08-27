@@ -8,6 +8,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaPhone, FaUser } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { CgClose } from 'react-icons/cg';
+import NewLogo from '../assets/NewLogoClean.png';
 
 export default function Forums() {
     const { id } = useParams();
@@ -16,13 +17,28 @@ export default function Forums() {
     const { currentUser } = useSelector(state => state.user);
     const isLoggedIn = Boolean(currentUser);
     const [notification, setNotification] = useState('');
+    const [notification2, setNotification2] = useState('');
     const navigate = useNavigate();
 
-    const handleApplyClick = () => {
+    const handleApplyClick = async () => {
         if (!isLoggedIn) {
             setNotification('You must be logged in to apply for scholarships.');
         } else {
-            navigate(`/applying-stages/${scholarship.id}`);
+            try {
+                const response = await fetch(`/api/scholarshipProgram/${scholarship.id}/has-applied/${currentUser._id}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                if (data.hasApplied) {
+                    setNotification2('You have already applied for this scholarship.');
+                } else {
+                    navigate(`/applying-stages/${scholarship.id}`);
+                }
+            } catch (error) {
+                console.error('Error checking application status:', error);
+                setNotification2('An error occurred while checking your application status. Please try again later.');
+            }
         }
     };
 
@@ -193,7 +209,9 @@ export default function Forums() {
 
                                 <div onClick={handleApplyClick} className='cursor-pointer bg-white flex items-center border justify-between shadow rounded-md p-4 lg:w-1/2 h-22 hover:-translate-y-2 hover:bg-slate-200 transition ease-in-out group'>
                                     <div className='flex flex-row gap-4 '>
-                                        <div className='bg-blue-600 hidden lg:block  w-14 h-14 rounded-md'></div>
+                                        <div className='hidden lg:flex justify-center items-center w-14 h-14 rounded-md'>
+                                            <img src={NewLogo} alt="New Logo" className='w-full h-full object-cover rounded-md' />
+                                        </div>
                                         <div className='flex flex-col text-left'>
                                             <span className='text-lg'>Apply now in Hubisko!</span>
                                             <span className='text-slate-600'>We'll guide you step by step!</span>
@@ -239,6 +257,25 @@ export default function Forums() {
                                 <Link to='/register-provider' className='bg-blue-800  text-white text-center rounded-md w-full hover:bg-blue-900 py-2'>Register as Provider</Link>
                             </div>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {notification2 && (
+                <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
+                    <div className='p-6 pb-10 bg-white rounded-md text-center shadow-lg font-medium'>
+                        <button onClick={() => setNotification2('')} className='flex w-full justify-end items-end'>
+                            <div className='border rounded-full p-1 hover:bg-slate-200'>
+                                <CgClose className='w-4 h-4' />
+                            </div>
+                        </button>
+                        <strong className='font-bold text-red-500 text-lg'>Already Applied!</strong>
+                        <div className='text-slate-400 ' role='alert'>
+                            <span className='block sm:inline font-medium'>{notification2}</span>
+                        </div>
+                        <Link to='/scholar-dashboard' className='mt-4 inline-block bg-blue-600 text-white text-center rounded-md w-full hover:bg-blue-800 py-2'>
+                            Go to Scholar Dashboard
+                        </Link>
                     </div>
                 </div>
             )}

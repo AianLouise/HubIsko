@@ -101,9 +101,14 @@ export default function Header() {
 
   const userId = currentUser ? currentUser._id : null;
 
-  useEffect(() => {
+   useEffect(() => {
     // Fetch notifications when the component mounts
     const fetchNotifications = async () => {
+      if (!userId) {
+        console.warn('User is not logged in. Skipping fetch notifications.');
+        return;
+      }
+  
       try {
         const response = await fetch(`/api/notification/notifications/${userId}`);
         if (!response.ok) {
@@ -115,7 +120,7 @@ export default function Header() {
         console.error('Error fetching notifications:', error);
       }
     };
-
+  
     fetchNotifications();
   }, [userId]);
 
@@ -170,7 +175,7 @@ export default function Header() {
 
               {currentUser ? (
 
-                <li className='flex flex-col gap-4 text-white font-medium'>
+                <ul className='flex flex-col gap-4 text-white font-medium'>
                   <Link to="/profile"
                     className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/profile' ? 'bg-blue-600' : 'bg-slate-500'}`}>
 
@@ -186,7 +191,7 @@ export default function Header() {
                   <button onClick={handleSignOut} className="border-2 text-slate-700 px-4 p-2 text-left rounded-md flex items-center gap-2">
 
                     <FaDoorOpen className='w-5 h-5' />Sign Out</button>
-                </li>
+                </ul>
 
               ) : (
                 <>
@@ -288,7 +293,7 @@ export default function Header() {
                 <div className="absolute transform mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
                   {/* Dropdown items here */}
                   <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Manage Account</Link>
-                  <Link to='/about'><li className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>About</li></Link>
+                  <Link to='/about' className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>About</Link>
                   <button onClick={handleSignOut} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign Out</button>
                 </div>
               )}
@@ -296,7 +301,11 @@ export default function Header() {
 
           ) : (
             <>
-              <Link to='/login'><li className='border p-2 px-4 rounded-full hover:bg-slate-200'>Login</li></Link>
+              <Link to='/login'>
+                <li className='border p-2 px-4 rounded-full hover:bg-slate-200'>
+                  Login
+                </li>
+              </Link>
               <div className="relative">
                 <li className='bg-blue-600 text-white p-2 px-4 rounded-full hover:bg-blue-800 cursor-pointer' onClick={toggleDropdown2}>
                   Register
@@ -304,10 +313,14 @@ export default function Header() {
                 {dropdownVisible && (
                   <ul className="absolute bg-white shadow-lg rounded-lg mt-2 w-64 left-1/2 transform -translate-x-1/2 border border-gray-200">
                     <Link to='/register'>
-                      <li className='p-2 px-4 hover:bg-gray-100 text-center cursor-pointer'>Register as Student</li>
+                      <li className='p-2 px-4 hover:bg-gray-100 text-center cursor-pointer'>
+                        Register as Student
+                      </li>
                     </Link>
                     <Link to='/apply-as-provider'>
-                      <li className='p-2 px-4 hover:bg-gray-100 text-center cursor-pointer'>Register as Scholarship Provider</li>
+                      <li className='p-2 px-4 hover:bg-gray-100 text-center cursor-pointer'>
+                        Register as Scholarship Provider
+                      </li>
                     </Link>
                   </ul>
                 )}

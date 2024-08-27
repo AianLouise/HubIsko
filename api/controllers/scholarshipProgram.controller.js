@@ -525,3 +525,23 @@ export const getApprovedScholarInfo = async (req, res) => {
     });
   }
 };
+
+export const hasUserApplied = async (req, res) => {
+  const { programId, userId } = req.params; // Extracting from URL parameters
+
+  try {
+    const existingApplication = await ScholarshipApplication.findOne({
+      scholarshipProgram: programId,
+      applicant: userId
+    });
+
+    if (existingApplication) {
+      return res.status(200).json({ hasApplied: true });
+    } else {
+      return res.status(200).json({ hasApplied: false });
+    }
+  } catch (error) {
+    console.error('Error checking if user has applied:', error);
+    return res.status(500).json({ error: 'Error checking application status' });
+  }
+};

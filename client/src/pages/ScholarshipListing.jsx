@@ -99,7 +99,7 @@ export default function ScholarshipListing() {
             </div>
           </div>
         </div>
-        
+
         <div className='flex flex-col gap-4 justify-center items-left px-10 lg:mx-auto lg:max-w-6xl lg:px-24 my-8'>
           <div className='flex gap-2 items-center justify-between'>
             <span className='text-xl font-bold text-slate-600'>Organizations</span>
@@ -158,7 +158,11 @@ export default function ScholarshipListing() {
           </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 w-full gap-4 text-slate-700'>
-            {filteredScholarships.length === 0 ? (
+            {scholarships.length === 0 ? (
+              <div className='col-span-full text-center text-gray-500 py-20'>
+                No scholarships available at the moment.
+              </div>
+            ) : filteredScholarships.length === 0 ? (
               <div className='col-span-full text-center text-gray-500 py-20'>
                 No scholarships found for the query "{searchQuery}"
               </div>
