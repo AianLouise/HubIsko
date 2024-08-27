@@ -4,6 +4,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { CgClose } from "react-icons/cg";
 import { GoHomeFill } from "react-icons/go";
 import { BsFillPersonFill } from "react-icons/bs";
+import { MdForum } from "react-icons/md";
 import { BsFlagFill } from "react-icons/bs";
 import { useState, useEffect } from "react";
 import { PiStudentFill } from "react-icons/pi";
@@ -236,6 +237,13 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                     <BsFlagFill className="w-5 h-5 text-blue-600" />
                                     Events
                                 </a>
+                            </li>
+
+                                                        <li>
+                              <a href="/admin-forums" className="flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
+                                <MdForum className="w-5 h-5 text-blue-600" /> {/* Updated icon */}
+                                Forums
+                              </a>
                             </li>
 
                         </ul>

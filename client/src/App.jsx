@@ -66,6 +66,9 @@ import ScholarshipProviderApplications from "./pages/Admin/ScholarshipProviderAp
 import ScholarshipProgramApplications from "./pages/Admin/ScholarshipProgramApplications";
 import ScholarshipProviderDetails from "./pages/Admin/ScholarshipProviderDetails";
 import ProviderCreateForumPost from "./pages/Scholarship-Provider/ProviderCreateForumPost";
+import AdminForums from "./pages/Admin/AdminForums";
+import AdminForumDetail from "./pages/Admin/AdminForumDetail";
+import AdminCreateForumPost from "./pages/Admin/AdminCreateForumPost";
 
 
 export default function App() {
@@ -110,6 +113,10 @@ export default function App() {
           <Route path="/scholarship-provider-details/:id" element={<ScholarshipProviderDetails />} />
           <Route path="/inbox-application" element={<InboxApplication />} />
           <Route path="/edit-student-info/:id" element={<EditStudentInfo />} />
+
+          <Route path="/admin-forums" element={<AdminForums />} />
+          <Route path="/admin-forums/post/:postId" element={<AdminForumDetail />} />
+          <Route path="/admin-create-forum-post" element={<AdminCreateForumPost />} />
           {/* Add other routes here */}
         </Route>
 
