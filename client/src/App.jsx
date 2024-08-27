@@ -65,6 +65,7 @@ import ApplicantDetailedNotification from "./pages/ApplicantDetailedNotification
 import ScholarshipProviderApplications from "./pages/Admin/ScholarshipProviderApplications";
 import ScholarshipProgramApplications from "./pages/Admin/ScholarshipProgramApplications";
 import ScholarshipProviderDetails from "./pages/Admin/ScholarshipProviderDetails";
+import ScholarshipDashboardDetails from "./pages/ScholarshipDashboardDetails";
 
 
 
@@ -89,6 +90,7 @@ export default function App() {
 
         <Route path="/scholarship-details/:id" element={<ApplicationDetails />} />
         <Route path="/application-form" element={<ApplicationForm />} />
+        <Route path="/scholarship-dashboard-details" element={<ScholarshipDashboardDetails />} />
         {/* <Route path="/notifications" element={<NotificationsPage />} />
         <Route path="/notifications/:notificationId" element={<NotificationDetailPage />} /> */}
 
