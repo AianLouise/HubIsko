@@ -103,11 +103,8 @@ export default function CompleteProfile() {
 
   const handleBarangayChange = (e) => {
     const barangayCode = e.target.value;
-    const selectedBarangay = barangayList.find(barangay => barangay.brgy_code === barangayCode);
 
     setFormData({ ...formData, barangay: barangayCode });
-    // Log the selected barangay code to the console
-    console.log('Selected Barangay Code:', barangayCode);
   };
 
   const handleChange = (e) => {
