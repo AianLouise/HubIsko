@@ -16,10 +16,13 @@ import { IoIosNotifications } from "react-icons/io";
 import { IoMenu } from "react-icons/io5";
 import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
 
 export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, currentPath }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const location = useLocation();
 
     const [showNotification, setShowNotification] = useState(false);
     const notificationRef = useRef(null);
@@ -43,6 +46,14 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+    useEffect(() => {
+        toggleSidebar(false);
+
+        if (location.pathname === '/provider-dashboard' || location.pathname === '/scholarships' || location.pathname === '/scholar-applications' || location.pathname === '/provider-forums') {
+            toggleSidebar(true);
+        }
+    }, [location]);
 
 
     const ShowModal = () => {
