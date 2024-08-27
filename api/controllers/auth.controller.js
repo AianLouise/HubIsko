@@ -9,7 +9,7 @@ export const signup = async (req, res, next) => {
   const hashedPassword = bcryptjs.hashSync(password, 10);
 
   // Create a new user instance with profileComplete set to false
-   const newUser = new User({
+  const newUser = new User({
     email,
     username,
     password: hashedPassword,
@@ -78,19 +78,19 @@ export const signup = async (req, res, next) => {
       to: email,
       subject: 'Verify Your Email',
       html: `
-        <div style="max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px; font-family: Arial, sans-serif; background-color: #f9f9f9; border-radius: 10px;">
-          <h2 style="color: #0056b3; text-align: center; margin-bottom: 20px;">Welcome to HubIsko!</h2>
-          <img src="cid:hubisko-logo" alt="HubIsko Logo" style="display: block; margin: auto; width: 100px; border-radius: 50%; filter: grayscale(50%);"/>
-          <p style="font-size: 16px; color: #333; text-align: center;">Hello,</p>
-          <p style="font-size: 16px; color: #333; text-align: center;">Thank you for signing up with HubIsko. Please click the button below to verify your email address and get started:</p>
-          <div style="text-align: center; margin: 20px 0;">
-            <a href="${verificationUrl}" style="background-color: #0056b3; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-size: 16px; display: inline-block;">Verify Email</a>
-          </div>
-          <p style="font-size: 16px; color: #333; text-align: center;">If the button above does not work, please copy and paste the following link into your browser:</p>
-          <p style="font-size: 16px; color: #0056b3; text-align: center;"><a href="${verificationUrl}" style="color: #0056b3;">${verificationUrl}</a></p>
-          <p style="font-size: 16px; color: #333; text-align: center;">Best,</p>
-          <p style="font-size: 16px; color: #333; text-align: center;">The HubIsko Team</p>
+       <div style="max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 30px; font-family: Arial, sans-serif; background-color: #ffffff; border-radius: 10px;">
+        <h2 style="color: #0047ab; text-align: center; margin-bottom: 25px; font-size: 24px;">Welcome to HubIsko!</h2>
+        <img src="https://firebasestorage.googleapis.com/v0/b/hubisko-21f8a.appspot.com/o/System%2FNewLogo.png?alt=media&token=9bcfb221-c954-44ef-9d4f-130f1d880a8e" alt="HubIsko Logo" style="display: block; margin: auto; width: 120px; border-radius: 50%;"/>
+        <p style="font-size: 18px; color: #333; text-align: center; margin-top: 25px;">Hello,</p>
+        <p style="font-size: 16px; color: #555; text-align: center; line-height: 1.5;">Thank you for signing up with HubIsko. Please click the button below to verify your email address and get started:</p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${verificationUrl}" style="background-color: #0047ab; color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 5px; font-size: 18px; display: inline-block;">Verify Email</a>
         </div>
+        <p style="font-size: 16px; color: #555; text-align: center; line-height: 1.5;">If the button above does not work, please copy and paste the following link into your browser:</p>
+        <p style="font-size: 16px; color: #0047ab; text-align: center;"><a href="${verificationUrl}" style="color: #0047ab; text-decoration: underline;">${verificationUrl}</a></p>
+        <p style="font-size: 16px; color: #333; text-align: center; margin-top: 30px;">Best regards,</p>
+        <p style="font-size: 16px; color: #333; text-align: center;">The HubIsko Team</p>
+      </div>
       `
     });
 
@@ -136,7 +136,7 @@ export const google = async (req, res, next) => {
       // Generate a unique username
       const username = `${firstName}${lastName}`.toLowerCase().replace(/\s+/g, '') + Math.floor(Math.random() * 90 + 10);
 
-            // Create a new user
+      // Create a new user
       const newUser = new User({
         email,
         dateOfBirth: '',
@@ -283,19 +283,19 @@ export const resendVerificationEmail = async (req, res, next) => {
         to: email,
         subject: 'Verify Your Email',
         html: `
-          <div style="max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px; font-family: Arial, sans-serif; background-color: #f9f9f9; border-radius: 10px;">
-            <h2 style="color: #0056b3; text-align: center; margin-bottom: 20px;">Welcome to HubIsko!</h2>
-            <img src="cid:hubisko-logo" alt="HubIsko Logo" style="display: block; margin: auto; width: 100px; border-radius: 50%; filter: grayscale(50%);"/>
-            <p style="font-size: 16px; color: #333; text-align: center;">Hello,</p>
-            <p style="font-size: 16px; color: #333; text-align: center;">Thank you for signing up with HubIsko. Please click the button below to verify your email address and get started:</p>
-            <div style="text-align: center; margin: 20px 0;">
-              <a href="${verificationUrl}" style="background-color: #0056b3; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-size: 16px; display: inline-block;">Verify Email</a>
+            <div style="max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 30px; font-family: Arial, sans-serif; background-color: #ffffff; border-radius: 10px;">
+              <h2 style="color: #0047ab; text-align: center; margin-bottom: 25px; font-size: 24px;">Welcome to HubIsko!</h2>
+              <img src="https://firebasestorage.googleapis.com/v0/b/hubisko-21f8a.appspot.com/o/System%2FNewLogo.png?alt=media&token=9bcfb221-c954-44ef-9d4f-130f1d880a8e" alt="HubIsko Logo" style="display: block; margin: auto; width: 120px; border-radius: 50%;"/>
+              <p style="font-size: 18px; color: #333; text-align: center; margin-top: 25px;">Hello,</p>
+              <p style="font-size: 16px; color: #555; text-align: center; line-height: 1.5;">Thank you for signing up with HubIsko. Please click the button below to verify your email address and get started:</p>
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="${verificationUrl}" style="background-color: #0047ab; color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 5px; font-size: 18px; display: inline-block;">Verify Email</a>
+              </div>
+              <p style="font-size: 16px; color: #555; text-align: center; line-height: 1.5;">If the button above does not work, please copy and paste the following link into your browser:</p>
+              <p style="font-size: 16px; color: #0047ab; text-align: center;"><a href="${verificationUrl}" style="color: #0047ab; text-decoration: underline;">${verificationUrl}</a></p>
+              <p style="font-size: 16px; color: #333; text-align: center; margin-top: 30px;">Best regards,</p>
+              <p style="font-size: 16px; color: #333; text-align: center;">The HubIsko Team</p>
             </div>
-            <p style="font-size: 16px; color: #333; text-align: center;">If the button above does not work, please copy and paste the following link into your browser:</p>
-            <p style="font-size: 16px; color: #0056b3; text-align: center;"><a href="${verificationUrl}" style="color: #0056b3;">${verificationUrl}</a></p>
-            <p style="font-size: 16px; color: #333; text-align: center;">Best,</p>
-            <p style="font-size: 16px; color: #333; text-align: center;">The HubIsko Team</p>
-          </div>
         `
       });
 
