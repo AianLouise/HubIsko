@@ -8,6 +8,7 @@ import { BiCommentDots } from "react-icons/bi";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
+import ForumsIcon from '../assets/ForumsIconwTexture.png';
 
 
 
@@ -79,21 +80,21 @@ export default function Forums() {
       <Header />
       <main className='flex-grow bg-[#f8f8fb] no-scrollbar'>
 
-        <div className='border-b mb-8 py-8'>
+        <div className='border-b mb-8 pt-12'>
           <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl justify-between lg:px-24'>
 
             {/* Mobile na Icon */}
-          <div className='bg-blue-600 w-36 h-36 my-8 rounded-md flex lg:hidden items-center justify-center'>
+          <div className='bg-blue-600 w-36 h-36 rounded-md flex lg:hidden items-center justify-center'>
               <FontAwesomeIcon icon={faComments} className='text-white text-6xl' />
             </div>
 
-            <div className='flex flex-col gap-2 text-center lg:text-left lg:w-1/2'>
+            <div className='flex flex-col gap-2 text-center lg:text-left lg:w-1/2 pb-8 lg:pb-0'>
               <h1 className='text-4xl font-bold text-gray-800'>Welcome to the forums!</h1>
               <p className='text-lg text-slate-500 font-medium'>Join or Browse the discussions!</p>
             </div>
-            <div className='bg-blue-600 w-36 h-36 my-8 rounded-md hidden lg:flex items-center justify-center'>
-              <FontAwesomeIcon icon={faComments} className='text-white text-6xl' />
-            </div>
+
+            <img src={ForumsIcon} alt='Forums Icon' className='hidden lg:block rounded-md items-center justify-center w-[400px] h-auto' />
+          
           </div>
         </div>
 
