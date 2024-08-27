@@ -258,7 +258,7 @@ export default function Header() {
                             notifications.map((notification) => (
                               <div
                                 key={notification._id}
-                                className="flex flex-row text-sm w-full gap-4 cursor-pointer"
+                                className="flex flex-row hover:bg-slate-200 rounded-md px-2 text-sm w-full gap-4 cursor-pointer"
                                 onClick={() => handleNotificationClick(notification._id)}
                               >
                                 <img
@@ -268,7 +268,8 @@ export default function Header() {
                                 />
                                 <div className="flex flex-col text-left">
                                   <span className="font-bold">{notification.senderId.scholarshipProviderDetails.organizationName}</span>
-                                  <span className="text-sm">{notification.message} ... see more</span>
+                                  <span className="text-sm">{notification.message} <br />
+                                     <span className='text-blue-600'>... see more</span></span>
                                 </div>
                               </div>
                             ))
