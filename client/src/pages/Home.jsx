@@ -13,8 +13,8 @@ import { FaCheck } from "react-icons/fa6";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { VscTriangleRight } from "react-icons/vsc";
 import { useState } from 'react';
-
-
+import { FaBuildingCircleArrowRight } from "react-icons/fa6";
+import { MdEmail } from "react-icons/md";
 
 
 
@@ -385,7 +385,7 @@ export default function Home() {
                     <button className='bg-blue-600 rounded-md text-white px-14 py-2 text-sm font-medium'>Apply Now!</button>
                   </div>
 
-                  <div className='hidden lg:block bg-blue-600 w-24 h-20 rounded-md'></div>
+                  <MdEmail className='w-24 h-auto text-blue-600' />
                 </div>
               </div>
             </div>
@@ -401,7 +401,10 @@ export default function Home() {
                   <a href="/apply-as-provider" className="mt-4 bg-blue-600 text-white p-2 rounded-md lg:rounded-full font-medium px-3 lg:px-4 flex flex-row items-center gap-2 cursor-pointer">
                     Apply as a Provider <FaAngleRight />
                   </a>
-                  <div className='lg:block hidden bg-blue-600 w-24 h-20 rounded-md'></div>
+                  
+                  <div className='lg:block hidden rounded-md'>
+                    <FaBuildingCircleArrowRight className='w-24 h-20 text-blue-600' />
+                  </div>
                 </div>
               </div>
             </div>

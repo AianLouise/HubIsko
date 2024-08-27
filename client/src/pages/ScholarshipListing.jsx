@@ -4,6 +4,7 @@ import Footer from '../components/Footer';
 import { FaSearch, FaRedo, FaHandHolding, FaGraduationCap, FaInfoCircle } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { BiFilter } from 'react-icons/bi';
+import ListingIcon from '../assets/ListingIconwTexture.png'
 
 export default function ScholarshipListing() {
   useEffect(() => {
@@ -82,21 +83,21 @@ export default function ScholarshipListing() {
     <div className="flex flex-col min-h-screen">
       <Header />
       <main className="flex-grow bg-[#f8f8fb]">
-        <div className='sm:flex sm:flex-col lg:block border-b mb-8 py-8'>
+        <div className='sm:flex sm:flex-col lg:block border-b mb-8 pt-8'>
           <div className='flex justify-center items-center w-full lg:mx-auto lg:max-w-6xl lg:justify-between lg:px-24'>
             <div className='flex flex-col gap-2 text-center items-center lg:items-baseline lg:text-left lg:w-1/2'>
-              <div className='block lg:hidden bg-blue-600 w-36 h-36 my-8 rounded-md items-center justify-center'>
+              <div className='block lg:hidden bg-blue-600 w-36 h-36 rounded-md items-center justify-center'>
                 <FaGraduationCap className='text-white text-8xl my-auto mx-auto mt-6' />
               </div>
-              <div className='w-full lg:w-1/2 text-3xl font-bold text-gray-800'>
-                <span className='hidden lg:block'>Available <br /> Scholarships</span>
+              <div className='w-full text-3xl font-bold text-gray-800'>
+                <span className='hidden lg:block'>Available Scholarships</span>
                 <span className='block lg:hidden'>Available Scholarships</span>
               </div>
-              <p className='w-full lg:w-1/2 text-lg text-slate-500 font-medium'>Browse them below!</p>
+              <p className='w-full lg:w-1/2 text-lg text-slate-500 font-medium pb-8 lg:pb-0'>Browse them below!</p>
             </div>
-            <div className='hidden lg:block bg-blue-600 w-36 h-36 my-8 rounded-md items-center justify-center'>
-              <FaGraduationCap className='text-white text-8xl my-auto mx-auto mt-6' />
-            </div>
+            
+              <img src={ListingIcon} alt='Listing Icon' className='hidden lg:block rounded-md items-center justify-center w-[400px] h-auto' />
+            
           </div>
         </div>
 
