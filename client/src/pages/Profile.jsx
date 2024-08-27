@@ -145,6 +145,8 @@ const handleCloseModal2 = () => {
           <form className='flex flex-col'>
             <label htmlFor='name' className='font-semibold text-gray-600'>Name</label>
             <input type='text' id='name' className='border rounded-md p-2 mb-4' />
+            
+            <span className="text-slate-500 text-sm my-2">You'll have a 30 days cooldown after you changed your name</span>
             <button type='submit' className='bg-blue-600 text-white font-semibold rounded-md py-2'>Save</button>
           </form>
         </div>
