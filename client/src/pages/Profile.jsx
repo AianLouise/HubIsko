@@ -84,14 +84,14 @@ const handleCloseModal2 = () => {
           <div className="mb-20">
           
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-2 justify-between font-medium">
-          <button onClick={handleModal2} className="flex gap-1 items-center bg-blue-600 text-white px-6 py-2 rounded-md">
+          <button onClick={handleModal2} className="flex gap-1 items-center bg-blue-600 text-white px-6 py-4 lg:py-2 rounded-md">
             <BiPlus className="w-6 h-6" />
             <span>Create a Post</span>
           </button>
 
           {/* Searchbar */}
           <div className="flex items-center gap-2">
-            <input type="text" placeholder="Search Posts" className="border-2 border-slate-500 rounded-md p-2 w-full lg:w-[300px]" />
+            <input type="text" placeholder="Search Posts" className="border-2 border-slate-500 rounded-md py-4 px-6 lg:px-0 lg:p-2 w-full lg:w-[300px]" />
           </div>
 
           </div>
