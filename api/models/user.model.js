@@ -23,7 +23,7 @@ const applicantSchema = new mongoose.Schema({
     required: false,
   },
   birthdate: {
-    type: Date,
+    type: String,
     required: false,
   },
   gender: {
@@ -75,11 +75,23 @@ const applicantSchema = new mongoose.Schema({
       type: String,
       required: false,
     },
+    regionCode: {
+      type: String,
+      required: false,
+    },
     province: {
       type: String,
       required: false,
     },
+    provinceCode: {
+      type: String,
+      required: false,
+    },
     city: {
+      type: String,
+      required: false,
+    },
+    cityCode: {
       type: String,
       required: false,
     },
