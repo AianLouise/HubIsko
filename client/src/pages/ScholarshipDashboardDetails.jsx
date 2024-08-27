@@ -7,6 +7,7 @@ import { FaAngleRight } from 'react-icons/fa';
 import { FaRegHeart, FaRegEye } from 'react-icons/fa';
 import { BiCommentDots } from 'react-icons/bi';
 import { BsArrowLeft } from 'react-icons/bs';
+import ApplicationForm from './ApplicationForm';
 
 
 export default function ScholarshipDashboardDetails() {
@@ -36,7 +37,7 @@ return (
 
             <div className="tabs flex justify-center border-b mb-6">
                         {[
-                            { label: 'View Scholars', value: 'scholars' },
+                            { label: 'Application Details', value: 'scholars' },
                             { label: 'Post Announcement', value: 'announcement' },
                             { label: 'Validation', value: 'validation' },
                         ].map((tab) => (
@@ -57,44 +58,10 @@ return (
                 {activeTab === 'scholars' && (
                     <div className='flex flex-col gap-4'>
                         <div className='flex justify-between items-center gap-4'>
-                            <span className='text-2xl font-bold'>Scholars <span className='text-blue-600'>(0)</span></span>
-                          
-                            <div className='flex gap-4'>
-                                <input type="text" placeholder='Search Scholar' className='border p-2 rounded-md' />
-                            </div>
+                            <span className='text-2xl font-bold'>Application Detail</span>
                         </div>
 
-                        <div className="overflow-y-auto bg-white p-4 rounded-md shadow border max-h-[800] h-64">
-                        <table className="min-w-full divide-y divide-gray-200">
-                                <thead className='text-left'>
-                                    <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">University</th>
-
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody className="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td className="px-6 py-4 whitespace-nowrap">John Doe</td>
-                                        <td className="px-6 py-4 whitespace-nowrap">SampleEmail.com</td>
-                                        <td className="px-6 py-4 whitespace-nowrap">School ng Mang Tomas</td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                        <button className='flex gap-2 items-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition ease-in-out'>
-                                            View Profile
-                                            <FaAngleRight className='w-5 h-5' />
-                                            </button>
-                                        </td>
-
-                                   
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <ApplicationForm />
                     </div> 
                     )}
 

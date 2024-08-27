@@ -90,7 +90,8 @@ export default function App() {
 
         <Route path="/scholarship-details/:id" element={<ApplicationDetails />} />
         <Route path="/application-form" element={<ApplicationForm />} />
-        <Route path="/scholarship-dashboard-details" element={<ScholarshipDashboardDetails />} />
+
+        <Route path="/scholarship-dashboard-details/:id" element={<ScholarshipDashboardDetails />} />
         {/* <Route path="/notifications" element={<NotificationsPage />} />
         <Route path="/notifications/:notificationId" element={<NotificationDetailPage />} /> */}
 
