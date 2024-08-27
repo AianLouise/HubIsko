@@ -40,17 +40,17 @@ export default function RegisterAsProvider() {
   const [countdown, setCountdown] = useState(10);
   const [uploadProgress, setUploadProgress] = useState({});
 
-  useEffect(() => {
-    let intervalId;
-    if (showModal && countdown > 0) {
-      intervalId = setInterval(() => {
-        setCountdown(prevCountdown => prevCountdown - 1);
-      }, 1000);
-    } else if (countdown === 0) {
-      window.location.href = '/';
-    }
-    return () => clearInterval(intervalId);
-  }, [showModal, countdown]);
+  // useEffect(() => {
+  //   let intervalId;
+  //   if (showModal && countdown > 0) {
+  //     intervalId = setInterval(() => {
+  //       setCountdown(prevCountdown => prevCountdown - 1);
+  //     }, 1000);
+  //   } else if (countdown === 0) {
+  //     window.location.href = '/';
+  //   }
+  //   return () => clearInterval(intervalId);
+  // }, [showModal, countdown]);
 
   useEffect(() => {
     if (showModal) {
@@ -118,50 +118,98 @@ export default function RegisterAsProvider() {
   const [activeStep, setActiveStep] = useState(1);
   const maxStep = 4;
 
+  const validateStep = () => {
+    const newErrors = {};
+
+    if (activeStep === 1) {
+      if (!formData.profilePicture) newErrors.profilePicture = 'Organization image is required';
+      if (!formData.organizationName) newErrors.organizationName = 'Organization name is required';
+      if (!formData.organizationType) newErrors.organizationType = 'Organization type is required';
+      if (!formData.registrationNumber) newErrors.registrationNumber = 'Registration number is required';
+      if (!formData.contactPersonName) newErrors.contactPersonName = 'Contact person name is required';
+      if (!formData.contactPersonPosition) newErrors.contactPersonPosition = 'Contact person position is required';
+      if (!formData.contactPersonNumber) newErrors.contactPersonNumber = 'Contact person number is required';
+      if (!formData.regionCode) newErrors.regionCode = 'Region is required';
+      if (!formData.provinceCode) newErrors.provinceCode = 'Province is required';
+      if (!formData.cityCode) newErrors.cityCode = 'City is required';
+      if (!formData.barangay) newErrors.barangay = 'Barangay is required';
+      if (!formData.addressDetails) newErrors.addressDetails = 'Address details are required';
+      if (!formData.website) newErrors.website = 'Website is required';
+    } else if (activeStep === 2) {
+      // Add validation for step 2
+      if (!formData.username) newErrors.username = 'Account username is required';
+      if (!formData.email) newErrors.email = 'Account email is required';
+      if (!formData.password) newErrors.password = 'Account password is required';
+      if (!formData.confirmPassword) newErrors.confirmPassword = 'Confirm password is required';
+      if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
+    } else if (activeStep === 3) {
+      // Add validation for step 3
+      if (!formData.registrationCertificate) newErrors.registrationCertificate = 'Registration Certificate is required';
+      if (!formData.tin) newErrors.tin = 'TIN is required';
+      if (!formData.proofOfAddress) newErrors.proofOfAddress = 'Proof of Address is required';
+      if (!formData.authorizationLetter) newErrors.authorizationLetter = 'Authorization Letter is required';
+      if (!formData.idProofContactPerson) newErrors.idProofContactPerson = 'ID Proof of Contact Person is required';
+    } else if (activeStep === 4) {
+      // Add validation for step 4
+      if (!formData.termsAccepted) newErrors.termsAccepted = 'You must accept the terms and conditions';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleNext = () => {
-    setActiveStep(prevStep => (prevStep < maxStep ? prevStep + 1 : prevStep));
+    if (validateStep()) {
+      setActiveStep(prevStep => (prevStep < maxStep ? prevStep + 1 : prevStep));
+    }
   };
 
   const handlePrevious = () => {
     setActiveStep(prevStep => Math.max(1, prevStep - 1));
   };
 
-  const validateForm = () => {
-    let errors = {};
-    if (!formData.organizationName) errors.organizationName = 'Organization Name is required.';
-    if (!formData.organizationType) errors.organizationType = 'Organization Type is required.';
-    if (!formData.registrationNumber) errors.registrationNumber = 'Registration Number is required.';
-    if (!formData.email) errors.email = 'Email is required.';
-    if (!formData.username) errors.username = 'Username is required.';
-    if (!formData.password) errors.password = 'Password is required.';
-    if (formData.password !== formData.confirmPassword) errors.confirmPassword = 'Passwords do not match.';
-    if (!formData.agreeTerms) errors.agreeTerms = 'You must agree to the terms and conditions.';
-    if (activeStep === 3) {
-      // Check for required files in step 3
-      if (!formData.registrationCertificate) errors.registrationCertificate = 'Registration Certificate is required.';
-      if (!formData.tin) errors.tin = 'TIN is required.';
-      if (!formData.proofOfAddress) errors.proofOfAddress = 'Proof of Address is required.';
-      if (!formData.authorizationLetter) errors.authorizationLetter = 'Authorization Letter is required.';
-      if (!formData.idProofContactPerson) errors.idProofContactPerson = 'ID Proof of Contact Person is required.';
-    }
-    return errors;
-  };
+  // const validateForm = () => {
+  //   let errors = {};
+  //   if (!formData.organizationName) errors.organizationName = 'Organization Name is required.';
+  //   if (!formData.organizationType) errors.organizationType = 'Organization Type is required.';
+  //   if (!formData.registrationNumber) errors.registrationNumber = 'Registration Number is required.';
+  //   if (!formData.email) errors.email = 'Email is required.';
+  //   if (!formData.username) errors.username = 'Username is required.';
+  //   if (!formData.password) errors.password = 'Password is required.';
+  //   if (formData.password !== formData.confirmPassword) errors.confirmPassword = 'Passwords do not match.';
+  //   if (!formData.agreeTerms) errors.agreeTerms = 'You must agree to the terms and conditions.';
+  //   if (activeStep === 3) {
+  //     // Check for required files in step 3
+  //     if (!formData.registrationCertificate) errors.registrationCertificate = 'Registration Certificate is required.';
+  //     if (!formData.tin) errors.tin = 'TIN is required.';
+  //     if (!formData.proofOfAddress) errors.proofOfAddress = 'Proof of Address is required.';
+  //     if (!formData.authorizationLetter) errors.authorizationLetter = 'Authorization Letter is required.';
+  //     if (!formData.idProofContactPerson) errors.idProofContactPerson = 'ID Proof of Contact Person is required.';
+  //   }
+  //   return errors;
+  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
 
     // Perform form validation
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+    const newErrors = {};
+
+    // Add validation for step 4
+    if (!formData.agreeTerms) newErrors.agreeTerms = 'You must agree to the Terms and Conditions';
+
+    // Other validation logic...
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       setLoading(false);
       return; // Stop submission if there are validation errors
     }
 
     try {
       // Upload profile picture to Firebase Storage
-      const profilePictureRef = ref(storage, `profilePictures/${formData.profilePicture}`);
+      const profilePictureRef = ref(storage, `profilePictures/${formData.profilePicture.name}`);
       const snapshot = await uploadBytes(profilePictureRef, formData.profilePicture);
       const downloadURL = await getDownloadURL(snapshot.ref);
 
@@ -261,7 +309,8 @@ export default function RegisterAsProvider() {
               <span className={`text-xl font-bold ${activeStep === step ? 'text-blue-600' : 'text-gray-400'}`}>{step}</span>
               <button
                 className={`w-12 h-12 shadow rounded-md flex items-center justify-center ${activeStep === step ? 'bg-blue-600' : 'border'}`}
-                onClick={() => setActiveStep(step)}
+                onClick={() => activeStep === step && setActiveStep(step)}
+                disabled={activeStep !== step}
               >
                 {step === 1 && <FaBuilding className={activeStep === step ? 'text-white' : 'text-blue-600'} />}
                 {step === 2 && <FaUser className={activeStep === step ? 'text-white' : 'text-blue-600'} />}
@@ -354,14 +403,17 @@ export default function RegisterAsProvider() {
                     <div className="mb-4">
                       <label htmlFor="contactPersonName" className="block text-sm font-medium text-gray-700">Name</label>
                       <input type="text" name="contactPersonName" id="contactPersonName" value={formData.contactPersonName} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Full name of the individual responsible for the registration" />
+                      {errors.contactPersonName && <p className="text-red-500 text-sm">{errors.contactPersonName}</p>}
                     </div>
                     <div className="mb-4">
                       <label htmlFor="contactPersonPosition" className="block text-sm font-medium text-gray-700">Position</label>
                       <input type="text" name="contactPersonPosition" id="contactPersonPosition" value={formData.contactPersonPosition} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Job title or position within the organization" />
+                      {errors.contactPersonPosition && <p className="text-red-500 text-sm">{errors.contactPersonPosition}</p>}
                     </div>
                     <div className="mb-4">
                       <label htmlFor="contactPersonNumber" className="block text-sm font-medium text-gray-700">Contact Number</label>
                       <input type="text" name="contactPersonNumber" id="contactPersonNumber" value={formData.contactPersonNumber} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Direct contact number for the contact person" />
+                      {errors.contactPersonNumber && <p className="text-red-500 text-sm">{errors.contactPersonNumber}</p>}
                     </div>
                   </div>
                 </div>
@@ -387,6 +439,7 @@ export default function RegisterAsProvider() {
                           </option>
                         ))}
                       </select>
+                      {errors.regionCode && <p className="text-red-500 text-sm">{errors.regionCode}</p>}
                     </div>
 
                     <div className='col-span-1'>
@@ -407,6 +460,7 @@ export default function RegisterAsProvider() {
                           </option>
                         ))}
                       </select>
+                      {errors.provinceCode && <p className="text-red-500 text-sm">{errors.provinceCode}</p>}
                     </div>
 
                     <div className='col-span-1'>
@@ -427,6 +481,7 @@ export default function RegisterAsProvider() {
                           </option>
                         ))}
                       </select>
+                      {errors.cityCode && <p className="text-red-500 text-sm">{errors.cityCode}</p>}
                     </div>
 
                     <div className='col-span-1'>
@@ -447,6 +502,7 @@ export default function RegisterAsProvider() {
                           </option>
                         ))}
                       </select>
+                      {errors.barangay && <p className="text-red-500 text-sm">{errors.barangay}</p>}
                     </div>
 
                     <div className='col-span-1'>
@@ -462,6 +518,7 @@ export default function RegisterAsProvider() {
                         placeholder="Enter House No./Unit No./Bldg/Floor, Street, Subdivision"
                         required
                       />
+                      {errors.addressDetails && <p className="text-red-500 text-sm">{errors.addressDetails}</p>}
                     </div>
                   </div>
                 </div>
@@ -469,6 +526,7 @@ export default function RegisterAsProvider() {
                 <div className="mb-4 col-span-2">
                   <label htmlFor="website" className="block text-sm font-medium text-gray-700">Website</label>
                   <input type="text" name="website" id="website" value={formData.website} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Official website URL of the organization" />
+                  {errors.website && <p className="text-red-500 text-sm">{errors.website}</p>}
                 </div>
               </div>
             </div>
@@ -531,35 +589,91 @@ export default function RegisterAsProvider() {
                   <input type="file" name="idProofContactPerson" id="idProofContactPerson" onChange={handleFileChange} className="mt-1 p-2 w-full border rounded-md" />
                   {errors.idProofContactPerson && <p className="text-red-500 text-sm">{errors.idProofContactPerson}</p>}
                 </div>
-                <div className="mb-4">
-                  <label htmlFor="additionalDocuments" className="block text-sm font-medium text-gray-700">Additional Documents</label>
-                  <input type="file" name="additionalDocuments" id="additionalDocuments" onChange={handleFileChange} className="mt-1 p-2 w-full border rounded-md" />
-                </div>
               </div>
             </div>
           )}
 
-          {activeStep === 4 && (
+                  {activeStep === 4 && (
             <div className='bg-white p-8 shadow rounded-md border'>
               <h2 className="text-2xl font-bold mb-6">Agree to Terms and Conditions</h2>
               <div className="mb-4">
                 <div className="bg-gray-100 p-4 rounded-md mb-4 max-h-60 overflow-y-scroll" style={{ maxHeight: '300px', overflowY: 'auto' }}>
-                  <h3 className="text-lg font-semibold mb-2">Sample Terms and Conditions</h3>
-                  <p className="text-sm text-gray-700 mb-2">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisi vel consectetur euismod, nisl nisi consectetur nisl, euismod consectetur nisi nisl euismod. Nisi vel consectetur euismod, nisl nisi consectetur nisl, euismod consectetur nisi nisl euismod. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisi vel consectetur euismod, nisl nisi consectetur nisl, euismod consectetur nisi nisl euismod.
-                  </p>
-                  <p className="text-sm text-gray-700 mb-2">
-                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla at consequat nisi. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor.
-                  </p>
-                  <p className="text-sm text-gray-700 mb-2">
-                    Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat.
-                  </p>
-                  <p className="text-sm text-gray-700 mb-2">
-                    Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Pellentesque sed dolor. Aliquam congue fermentum nisl. Mauris accumsan nulla vel diam. Sed in lacus ut enim adipiscing aliquet. Nulla venenatis. In pede mi, aliquet sit amet, euismod in, auctor ut, ligula. Aliquam dapibus tincidunt metus.
-                  </p>
-                  <p className="text-sm text-gray-700 mb-2">
-                    Praesent justo dolor, lobortis quis, lobortis dignissim, pulvinar ac, lorem. Vestibulum sed ante. Donec sagittis euismod purus. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.
-                  </p>
+                  <p><strong>1. Introduction</strong></p>
+                  <p>Welcome to HubIsko. These Terms and Conditions govern your registration and use of our services as a scholarship provider. By registering as a scholarship provider, you agree to comply with and be bound by these Terms. If you do not agree with any part of these Terms, please do not proceed with registration.</p>
+          
+                  <p className="mt-4"><strong>2. Eligibility</strong></p>
+                  <p>To register as a scholarship provider on HubIsko, you must:</p>
+                  <ul>
+                    <li>Be a legitimate organization, institution, or individual with the authority to offer scholarships.</li>
+                    <li>Provide accurate and complete information during the registration process.</li>
+                    <li>Agree to comply with all applicable laws and regulations related to scholarships.</li>
+                  </ul>
+          
+                  <p className="mt-4"><strong>3. Account Responsibilities</strong></p>
+                  <p>Upon successful registration, you will be granted access to an account to manage your scholarships. You are responsible for:</p>
+                  <ul>
+                    <li>Maintaining the confidentiality of your account credentials.</li>
+                    <li>Ensuring that all information provided through your account is accurate, current, and complete.</li>
+                    <li>Reporting any unauthorized use of your account to us immediately.</li>
+                  </ul>
+          
+                  <p className="mt-4"><strong>4. Scholarship Program Creation</strong></p>
+                  <p>When creating a scholarship program, you agree to:</p>
+                  <ul>
+                    <li>Provide accurate and complete information about the scholarship program, including but not limited to title, description, eligibility criteria, and deadlines.</li>
+                    <li>Ensure that your scholarship programs comply with all relevant laws and regulations.</li>
+                    <li>Obtain and provide all necessary documentation and approvals for the scholarship program.</li>
+                  </ul>
+          
+                  <p className="mt-4"><strong>5. Content and Conduct</strong></p>
+                  <p>You agree that:</p>
+                  <ul>
+                    <li>All content you provide, including scholarship descriptions and requirements, must be truthful and not misleading.</li>
+                    <li>You will not use the Platform to engage in any unlawful, fraudulent, or harmful activities.</li>
+                    <li>You will respect the privacy and rights of applicants and other users of the Platform.</li>
+                  </ul>
+          
+                  <p className="mt-4"><strong>6. Platform Use</strong></p>
+                  <p>We reserve the right to:</p>
+                  <ul>
+                    <li>Modify or discontinue any aspect of the Platform, including but not limited to features, functionality, and availability.</li>
+                    <li>Remove or reject any content or scholarship program that violates these Terms or our content policies.</li>
+                  </ul>
+          
+                  <p className="mt-4"><strong>7. Fees and Payments</strong></p>
+                  <p>If applicable, you agree to:</p>
+                  <ul>
+                    <li>Pay any fees associated with using the Platform as a scholarship provider.</li>
+                    <li>Comply with our payment terms and conditions, which will be provided separately.</li>
+                  </ul>
+          
+                  <p className="mt-4"><strong>8. Termination</strong></p>
+                  <p>We may terminate your account and access to the Platform if you:</p>
+                  <ul>
+                    <li>Violate these Terms or any other policies of the Platform.</li>
+                    <li>Fail to comply with applicable laws and regulations.</li>
+                    <li>Engage in behavior that we deem inappropriate or harmful to the Platform or its users.</li>
+                  </ul>
+          
+                  <p className="mt-4"><strong>9. Limitation of Liability</strong></p>
+                  <p>To the maximum extent permitted by law, HubIsko shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the Platform or any scholarship programs you create.</p>
+          
+                  <p className="mt-4"><strong>10. Indemnification</strong></p>
+                  <p>You agree to indemnify and hold harmless HubIsko, its affiliates, officers, directors, employees, and agents from any claims, damages, liabilities, costs, and expenses arising out of your use of the Platform or violation of these Terms.</p>
+          
+                  <p className="mt-4"><strong>11. Changes to Terms</strong></p>
+                  <p>We may update these Terms from time to time. We will notify you of any significant changes by posting the revised Terms on the Platform. Your continued use of the Platform after such changes indicates your acceptance of the updated Terms.</p>
+          
+                  <p className="mt-4"><strong>12. Governing Law</strong></p>
+                  <p>These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law principles. Any disputes arising from these Terms shall be resolved in the courts of [Your Jurisdiction].</p>
+          
+                  <p className="mt-4"><strong>13. Contact Us</strong></p>
+                  <p>If you have any questions or concerns about these Terms or your registration as a scholarship provider, please contact us at:</p>
+                  <p>HubIsko</p>
+                  <p>[Your Contact Information]</p>
+                  <p>Email: contact@hubisko.com</p>
+                  <p>Phone: [Your Phone Number]</p>
+                  <p>Address: [Your Address]</p>
                 </div>
                 <label className="inline-flex items-center">
                   <input type="checkbox" name="agreeTerms" checked={formData.agreeTerms} onChange={handleChange} className="form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out" />
