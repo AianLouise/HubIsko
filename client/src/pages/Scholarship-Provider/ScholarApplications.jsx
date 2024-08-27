@@ -101,7 +101,7 @@ export default function ScholarApplications() {
                       <td className="border border-gray-200 p-2">{index + 1}</td>
                       <td className="border border-gray-200 p-2">{`${application.firstName} ${application.lastName}`}</td>
                       <td className="border border-gray-200 p-2">{application.scholarshipProgram.title}</td>
-                      <td className="border border-gray-200 p-2">{new Date(application.appliedOn).toLocaleDateString()}</td>
+                      <td className="border border-gray-200 p-2">{new Date(application.submissionDate).toLocaleDateString()}</td>
                       <td className="border border-gray-200 p-2">
                         <span className={`px-2 py-1 rounded-full text-white ${application.applicationStatus === 'Approved' ? 'bg-green-500' : application.applicationStatus === 'Pending' ? 'bg-yellow-500' : 'bg-red-500'}`}>
                           {application.applicationStatus}

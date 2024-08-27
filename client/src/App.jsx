@@ -65,7 +65,7 @@ import ApplicantDetailedNotification from "./pages/ApplicantDetailedNotification
 import ScholarshipProviderApplications from "./pages/Admin/ScholarshipProviderApplications";
 import ScholarshipProgramApplications from "./pages/Admin/ScholarshipProgramApplications";
 import ScholarshipProviderDetails from "./pages/Admin/ScholarshipProviderDetails";
-
+import ProviderCreateForumPost from "./pages/Scholarship-Provider/ProviderCreateForumPost";
 
 
 export default function App() {
@@ -84,8 +84,9 @@ export default function App() {
         <Route path="/scholarship-listing" element={<ScholarshipListing />} />
 
         <Route path="/forums" element={<Forums />} />
-        <Route path="/others-profile/:id" element={<OthersProfile />} />
+        <Route path="/forums/create-post" element={<CreateForumPost />} />
         <Route path="/forums/post/:postId" element={<ForumDetail />} />
+        <Route path="/others-profile/:id" element={<OthersProfile />} />
 
         <Route path="/scholarship-details/:id" element={<ApplicationDetails />} />
         <Route path="/application-form" element={<ApplicationForm />} />
@@ -118,13 +119,15 @@ export default function App() {
           <Route path="/post-scholarship" element={<PostScholarship />} />
           <Route path="/scholar-applications" element={<ScholarApplications />} />
           <Route path="/scholarships" element={<Scholarships />} />
-          <Route path="/provider-forums" element={<ProviderForums />} />
-          <Route path="/provider-forums/post/:postId" element={<ProviderForumDetail />} />
           <Route path="/applications/:id" element={<ViewApplicationDetails />} />
           <Route path="/view-scholarships/:id" element={<ViewScholarshipDetails />} />
           <Route path="/edit-program/:id" element={<EditProgramPage />} />
           <Route path="/provider-settings" element={<Settings />} />
           <Route path="/provider-profile" element={<ProviderProfile />} />
+
+          <Route path="/provider-forums" element={<ProviderForums />} />
+          <Route path="/provider-forums/post/:postId" element={<ProviderForumDetail />} />
+          <Route path="/provider-create-forum-post" element={<ProviderCreateForumPost />} />
         </Route>
 
         {/* Scholar Routes */}
@@ -138,9 +141,6 @@ export default function App() {
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/about" element={<About />} />
           <Route path="/CoRH" element={<CompleteOrReturnHome />} />
-
-          <Route path="/forums/create-post" element={<CreateForumPost />} />
-
           
           <Route path="/applying-stages/:scholarshipId" element={<ApplyingStages />} />
           <Route path="/application-box" element={<ApplicationBox />} />

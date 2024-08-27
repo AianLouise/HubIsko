@@ -126,7 +126,12 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
                     </div>
 
                     <div className="relative" ref={dropdownRef}>
-                        <img src={currentUser.profilePicture || 'https://via.placeholder.com/40'} alt="Profile" className="h-9 w-9 rounded-full" onClick={toggleDropdown} />
+                        <img
+                            src={currentUser.profilePicture || 'https://via.placeholder.com/40'}
+                            alt="Profile"
+                            className="h-9 w-9 rounded-full object-cover" // Add object-cover class
+                            onClick={toggleDropdown}
+                        />
                         {dropdownOpen && (
                             <div className="absolute mt-2 right-0 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50 font-medium">
                                 <ul>
