@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 
 export const signup = async (req, res, next) => {
-  const { firstName, lastName, email, username, password, role } = req.body;
+  const { firstName, lastName, email, username, password, role, address } = req.body;
   const hashedPassword = bcryptjs.hashSync(password, 10);
 
   // Create a new user instance with profileComplete set to false
@@ -35,12 +35,16 @@ export const signup = async (req, res, next) => {
       birthplace: "",
       contactNumber: "",
       address: {
-        region: "",
-        province: "",
-        city: "",
-        barangay: "",
-        addressDetails: "",
-      },
+        region: '',
+        regionCode: '',
+        province: '',
+        provinceCode: '',
+        city: '',
+        cityCode: '',
+        barangay: '',
+        barangayCode: '',
+        addressDetails: '',
+      }
     },
   });
 

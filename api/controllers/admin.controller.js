@@ -356,3 +356,30 @@ export const verifyScholarshipProgram = async (req, res) => {
     });
   }
 };
+
+export const updateStudentDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedDetails = req.body;
+
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    // Update user details
+    Object.keys(updatedDetails).forEach(key => {
+      user[key] = updatedDetails[key];
+    });
+
+    await user.save();
+
+    res.status(200).json({ message: 'Student details updated successfully', user });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error updating student details',
+      error: error.message,
+    });
+  }
+};

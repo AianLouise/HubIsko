@@ -36,11 +36,14 @@ export default function CompleteProfile() {
     weight: '',
     birthplace: '',
     contactNumber: '',
-    addressDetails: '', // Updated field name
+    addressDetails: '',
     region: '',
+    regionCode: '',
     province: '',
+    provinceCode: '',
     city: '',
-    barangay: ''
+    cityCode: '',
+    barangay: '',
   });
 
   const [showModal, setShowModal] = useState(false);
@@ -94,12 +97,13 @@ export default function CompleteProfile() {
     const selectedCity = cityList.find(city => city.city_code === cityCode);
     const cityName = selectedCity ? selectedCity.city_name : '';
 
-    setFormData({ ...formData, city: cityName, cityCode: cityCode });
+    setFormData({ ...formData, city: cityName, cityCode: cityCode, barangay: '' });
     barangays(cityCode).then(setBarangayList);
   };
 
   const handleBarangayChange = (e) => {
     const barangayCode = e.target.value;
+
     setFormData({ ...formData, barangay: barangayCode });
   };
 
@@ -522,7 +526,7 @@ export default function CompleteProfile() {
             </label>
             <select
               name="barangay"
-              value={formData.barangay}
+              value={formData.barangay || ''}
               onChange={handleBarangayChange}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               required

@@ -198,7 +198,11 @@ export default function Accounts() {
                                             <td className="p-2">{account.role}</td>
                                             <td className="p-2">{account.status}</td>
                                             <td className="p-4">
-                                                <Link to={`/account-details/${account._id}`} className="bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white">View Details</Link>
+                                                {account.role === 'applicant' ? (
+                                                    <Link to={`/student-details/${account._id}`} className="bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white">View Details</Link>
+                                                ) : account.role === 'scholarship_provider' ? (
+                                                    <Link to={`/provider-details/${account._id}`} className="bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white">View Details</Link>
+                                                ) : null}
                                             </td>
                                         </tr>
                                     ))
