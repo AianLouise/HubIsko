@@ -1,8 +1,12 @@
+import mongoose from 'mongoose';
 import User from '../models/user.model.js';
+import ScholarshipApplication from '../models/scholarshipApplication.model.js';
+import ScholarshipProgram from '../models/scholarshipProgram.model.js';
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator';
+
 
 export const test = (req, res) => {
   res.json({
@@ -153,5 +157,27 @@ export const signupAsProvider = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: 'Error signing up as provider', error: error.message });
+  }
+};
+
+export const countScholarshipApplications = async (req, res) => {
+  const { userId } = req.params; // Extract userId from request parameters
+  try {
+    // Correctly instantiate ObjectId with the new keyword
+    const providerId = new mongoose.Types.ObjectId(userId);
+
+    // Find all scholarship programs associated with the provider
+    const scholarshipPrograms = await ScholarshipProgram.find({ providerId });
+    
+    // Extract the IDs of these scholarship programs
+    const scholarshipProgramIds = scholarshipPrograms.map(program => program._id);
+
+    // Count the applications for these scholarship programs
+    const count = await ScholarshipApplication.countDocuments({ scholarshipProgram: { $in: scholarshipProgramIds } });
+
+    // Return both the scholarship programs and the count of applications
+    res.json({ scholarshipPrograms, count });
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving scholarship programs and counting applications', error: error.message });
   }
 };
