@@ -1,350 +1,185 @@
-import { useSelector } from 'react-redux';
-import { useRef, useState, useEffect } from 'react';
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from 'firebase/storage';
-import { app } from '../firebase';
-import { useDispatch } from 'react-redux';
-import {
-  updateUserStart,
-  updateUserSuccess,
-  updateUserFail,
-  deleteUserStart,
-  deleteUserSuccess,
-  deleteUserFail,
-  signOut
-} from '../redux/user/userSlice';
-import Header from '../components/Header';
-import AccountManagement from './AccountManagement';
-
-import { IoPerson } from "react-icons/io5";
-import { FaEye } from "react-icons/fa";
-
+import {React, useState, useEffect} from "react";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import AccountManagement from "./AccountManagement";
+import { RiEditFill } from "react-icons/ri";
+import { CgClose } from "react-icons/cg";
+import { FaRegHeart } from "react-icons/fa";
+import { BiCommentDots } from "react-icons/bi";
+import { FaRegEye } from "react-icons/fa";
+import { BiPlus } from "react-icons/bi";
 
 export default function Profile() {
-  useEffect(() => {
-    document.title = "Account Settings | HubIsko";
-  }, []);
 
-  const dispatch = useDispatch();
-  const fileRef = useRef(null);
-  const [image, setImage] = useState(undefined);
-  const [imagePercent, setImagePercent] = useState(0);
-  const [imageError, setImageError] = useState(false);
-  const [formData, setFormData] = useState({});
-  const [updateSuccess, setUpdateSuccess] = useState(false);
+const [ShowModal, setShowModal] = useState(false);
+const [ShowModal2, setShowModal2] = useState(false);
+const [selectedTab, setSelectedTab] = useState('About');
 
 
-  const { currentUser, loading, error } = useSelector((state) => state.user);
+const handleTabClick = (tab) => {
+  setSelectedTab(tab);
+}
 
-  useEffect(() => {
-    if (image) {
-      handleFileUpload(image);
-    }
-  }, [image]);
+const handleModal = () => {
+  setShowModal(true);
+}
+const handleCloseModal = () => { 
+  setShowModal(false);
+}
 
-  const handleFileUpload = async (image) => {
-    const storage = getStorage(app);
-    const fileName = new Date().getTime() + image.name;
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, image);
-    uploadTask.on(
-      'state_changed',
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setImagePercent(Math.round(progress));
-      },
-      (error) => {
-        setImageError(true);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
-          setFormData({ ...formData, profilePicture: downloadURL })
-        );
-      }
-    );
-  };
+const handleModal2 = () => {
+  setShowModal2(true);
+}
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      dispatch(updateUserStart());
-      const res = await fetch(`/api/user/update/${currentUser._id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      if (data.success === false) {
-        dispatch(updateUserFail(data));
-        return;
-      }
-      dispatch(updateUserSuccess(data));
-      setUpdateSuccess(true);
-    } catch (error) {
-      dispatch(updateUserFail(error));
-    }
-  };
-
-const handleDeleteAccount = async () => {
-    try {
-      dispatch(deleteUserStart());
-      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-        method: 'DELETE',
-      });
-      const data = await res.json();
-      if (data.success === false) {
-        console.log(data);
-        dispatch(deleteUserFail(data));
-        return;
-      }
-      dispatch(deleteUserSuccess());
-    } catch (error) {
-      dispatch(deleteUserFail(error));
-    }
-  };
-
-  const handleSignOut = async () => {
-    try {
-      await fetch('/api/auth/signout');
-      dispatch(signOut());
-    } catch (error) {
-      console.log(error);
-    }
-  };
+const handleCloseModal2 = () => {
+  setShowModal2(false);
+}
 
 
 
-  return (
-    <>
-    <div className='bg-[#f8f8fb]'>
-      <Header />
-      <AccountManagement/>
-      {/* max-w-6xl px-24 mx-auto flex justify-between items-center */}
-      <div className='max-w-[950px] mx-auto flex flex-col gap-10 pt-10 text-sm lg:text-base'>
-      <div className='bg-white shadow p-10 py-4 border rounded-md'>
-        <h1 className='text-xl font-bold my-7 text-slate-700'>Profile Information</h1>
-        <form onSubmit={handleSubmit} className='flex flex-col w-full gap-4 text-slate-700'>
-          <input
-            type='file'
-            ref={fileRef}
-            hidden
-            accept='image/*'
-            onChange={(e) => setImage(e.target.files[0])}
-          />
-          {/* 
-      firebase storage rules:  
-      allow read;
-      allow write: if
-      request.resource.size < 2 * 1024 * 1024 &&
-      request.resource.contentType.matches('image/.*') */}
-          <div className='flex flex-row items-center gap-8 border-b pb-4'>
-          <img
-            src={formData.profilePicture || currentUser.profilePicture}
-            alt='profile'
-            className='h-24 w-24 cursor-pointer border-4 border-blue-300 hover:border-blue-600 p-1 rounded-full object-cover mt-2 transition ease-in-out'
-            onClick={() => fileRef.current.click()}
-          />
-
-            <div className='flex flex-col'>
-              <span className='text-xl font-bold'>Profile Photo</span>
-              <span className='opacity-70'>Click to upload a photo.</span>
-            </div>
-          
-          </div>
-
-          <p className='text-sm self-center'>
-            {imageError ? (
-              <span className='text-red-700'>
-                Error uploading image (file size must be less than 2 MB)
+ return(
+  <div className="flex flex-col min-h-screen">
+    <Header />
+    <AccountManagement />
+    <main className="flex-grow bg-[#f8f8fb]">
+    <div className='border-b mb-8 py-8'>
+          <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl gap-4 lg:gap-10 px-4 lg:px-24'>
+            <div className='bg-blue-600 w-36 h-36 my-8 rounded-md border-blue-800 hover:border-4 hover:cursor-pointer'></div>
+            <div className='flex flex-col items-center lg:items-start gap-2 w-full lg:w-1/2'>
+              <span className='text-xl font-medium text-gray-600'>Student</span>
+              <div className="flex gap-4 items-center group">
+              <button onClick={handleModal} className='text-4xl font-bold text-gray-800 border-blue-600 border-2 lg:bg-slate-200 px-4 py-2 rounded-md hover:bg-slate-300 cursor-pointer transition ease-in-out'>Name: Name</button>
+              <span className="text-2xl hidden lg:hidden lg:group-hover:flex items-center gap-2 font-bold text-blue-600 group-hover:text-blue-600 transition ease-in-out" >
+              <RiEditFill className="w-8 h-8" />
+                <span>Click to Edit</span>
               </span>
-            ) : imagePercent > 0 && imagePercent < 100 ? (
-              <span className='text-slate-700'>{`Uploading: ${imagePercent} %`}</span>
-            ) : imagePercent === 100 ? (
-              <span className='text-green-700'>Image uploaded successfully</span>
-            ) : (
-              ''
-            )}
-          </p>
-          <div className='grid grid-cols-2 gap-x-10 gap-y-10'>
-          <div className='flex flex-col gap-1'>
-            <span className='font-medium text-slate-500'>Username</span>
-
-          <input
-            defaultValue={currentUser.username}
-            type='text'
-            id='username'
-            placeholder='Username'
-            className='bg-slate-100 rounded-lg p-3'
-            onChange={handleChange}
-          />
-
-          </div>
-          <div className='flex flex-col gap-1'>
-          <span className='font-medium text-slate-500'>Name</span>
-          <input
-            defaultValue={currentUser.name}
-            type='text'
-            id='Name'
-            placeholder='Name'
-            className='bg-slate-100 rounded-lg p-3 w-full'
-          />
-          </div>
-
-          <div className='flex flex-col gap-1'>
-            <span className='font-medium text-slate-500'>Gender</span>
-            
-            <select name="Gender" id="Gender" className='bg-slate-100 rounded-lg p-3'>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Others">Others</option>
-            </select>
-            
-          </div>
-
-          <div className='flex flex-col gap-1'>
-            <span className='font-medium text-slate-500'>Birthday</span>
-
-          <input
-            
-            type='Date'
-            id='Bday'
-            placeholder='Bday'
-            className='bg-slate-100 rounded-lg p-3'
-           
-          />
-          </div>
-
-          <div className='flex flex-col gap-1'>
-            <span className='font-medium text-slate-500'>Email</span>
-          <input
-            defaultValue={currentUser.email}
-            type='email'
-            id='email'
-            placeholder='Email'
-            className='bg-slate-100 rounded-lg p-3'
-            onChange={handleChange}
-          />
-          </div>
-
-          <div className='flex flex-col gap-1'>
-            <span className='font-medium text-slate-500'>Location</span>
-          <input
-           
-            type='text'
-            id='Location'
-            placeholder='Location'
-            className='bg-slate-100 rounded-lg p-3'
-            
-          />
+              </div>
+              <span className='text-xl font-medium text-gray-600'>Followers:</span>
+            </div>
           </div>
         </div>
-          
-        <div className='w-full flex justify-end my-4'>
 
-          <button className='bg-blue-600 px-14 font-medium w-full lg:w-[200px] text-white p-3 rounded-lg hover:bg-blue-800 disabled:bg-white disabled:border-2 transition ease-in-out'>
-            {loading ? 'Loading...' : 'Update'}
+        <div className='flex flex-col gap-4 max-w-6xl lg:px-24 mx-auto px-2'>
+          <div className='grid grid-cols-2 lg:flex lg:flex-row gap-4 justify-between font-semibold mb-6'>
+            <button className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'About' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
+              onClick={() => handleTabClick('About')}
+            >
+              About
+            </button>
+
+            <button className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'Posts' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
+              onClick={() => handleTabClick('Posts')}
+            >
+              Posts
+            </button>
+        </div>
+
+        {selectedTab === 'About' && (
+              <div className='border-2 rounded-md p-10 flex flex-col bg-white h-auto mb-20'>
+                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi, a. Libero id ad corrupti deserunt nisi repellendus quisquam dolores ipsum.
+              </div>
+        )}
+
+        {selectedTab === 'Posts' && (
+          <div className="mb-20">
+          
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-2 justify-between font-medium">
+          <button onClick={handleModal2} className="flex gap-1 items-center bg-blue-600 text-white px-6 py-2 rounded-md">
+            <BiPlus className="w-6 h-6" />
+            <span>Create a Post</span>
           </button>
-          
+
+          {/* Searchbar */}
+          <div className="flex items-center gap-2">
+            <input type="text" placeholder="Search Posts" className="border-2 border-slate-500 rounded-md p-2 w-full lg:w-[300px]" />
+          </div>
+
+          </div>
+    
+              <div className='w-full flex justify-center border-t-2 mt-14'>
+              <span className='text-2xl bg-[#f8f8fb] -translate-y-5 px-8 font-medium text-slate-500'>Your Forum Posts</span>
+            </div>
+
+              <div className='grid lg:grid-cols-3 grid-rows-1 gap-8'>
+              <div className='bg-white border p-4 rounded-md flex flex-col hover:-translate-y-1 hover:shadow-lg transition ease-in-out'>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, vel.
+                <span className='text-sm flex items-end justify-end w-full text-slate-600'>Posted: July 7,2024</span>
+                <div className='border-t mt-2'>
+                  <div className='flex flex-row justify-between mt-2 gap-2'>
+                    <div className='flex flex-row gap-2'>
+                      <div className='flex flex-row gap-1 px-2'>
+                        <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
+                        <span>123</span>
+                      </div>
+                      <div className='flex flex-row gap-1'>
+                        <BiCommentDots className='w-6 h-6 text-blue-600' />
+                        <span>10</span>
+                      </div>
+                    </div>
+                    <div className='flex flex-row gap-1 pr-2'>
+                      <FaRegEye className='w-6 h-6 text-blue-600' />
+                      <span>1.2k</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+              </div>
+        )}
+
+         
         </div>
+    </main>
+    <Footer />
+    
+    {ShowModal && (
+      <div className='fixed z-20 top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center'>
+        <div className='bg-white p-8 rounded-lg shadow-md w-full max-w-md'>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className='text-2xl font-bold'>Edit Name</h2>
+            <button className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-800">
+            <CgClose onClick={handleCloseModal}/>
+            </button>
+          </div>
+          
+          <form className='flex flex-col'>
+            <label htmlFor='name' className='font-semibold text-gray-600'>Name</label>
+            <input type='text' id='name' className='border rounded-md p-2 mb-4' />
+            <button type='submit' className='bg-blue-600 text-white font-semibold rounded-md py-2'>Save</button>
+          </form>
+        </div>
+      </div>
+    )}
 
-      </form>
-
-        <p className='text-red-700 mt-5'>{error && 'Something went wrong!'}</p>
-        <p className='text-green-700 mt-5'>
-          {updateSuccess && 'User is updated successfully!'}
-        </p>
+    {ShowModal2 && (
+      <div className='fixed z-20 top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center'>
+        <div className='bg-white p-8 rounded-lg shadow-md w-full max-w-md'>
+          <div className="flex flex-row items-center justify-between mb-4">
+            <h2 className='text-2xl font-bold'>Create a Post</h2>
+            <button className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-800">
+            <CgClose onClick={handleCloseModal2}/>
+            </button>
+          </div>
+          
+          <form className='flex flex-col'>
+            <label htmlFor='title' className='font-semibold text-gray-600'>Title</label>
+            <input type='text' id='title' className='border rounded-md p-2 mb-4' />
+            <label htmlFor='content' className='font-semibold text-gray-600'>Content</label>
+            <textarea id='content' className='border rounded-md p-2 mb-4' />
+            <button type='submit' className='bg-blue-600 text-white font-semibold rounded-md py-2'>Create Post</button>
+          </form>
+        </div>
       </div>
 
-    {/* PASSWORD AND SECURITY */}
-      <div className='bg-white shadow w-full border flex flex-col p-10 h-auto rounded-md text-slate-700'>
-      <h1 className='font-bold text-xl mb-8'>Password and Security</h1>
+    )}
+
+    
+
+
       
-      <div className='grid grid-cols-2 gap-8'>
 
-      <div className='flex flex-col gap-1'>
-            <span className='font-medium text-slate-500'>Enter your password</span>
-          <input
-           
-            type='Password'
-            id='Password'
-            placeholder='Password'
-            className='bg-slate-100 rounded-lg p-3'
-            
-          />
-      </div>
-
-      <div className='flex flex-col gap-1'>
-            <span className='font-medium text-slate-500'>Enter new password</span>
-          <input
-           
-            type='Password'
-            id='NewPassword'
-            placeholder='New Password'
-            className='bg-slate-100 rounded-lg p-3'
-            
-          />
-      </div>
-
-      <div className='flex flex-col gap-1'>
-            <span className='font-medium text-slate-500'>Confirm Password</span>
-          <input
-           
-            type='Password'
-            id='ConfirmPassword'
-            placeholder='Confirm Password'
-            className='bg-slate-100 rounded-lg p-3'
-            
-          />
-      </div>
-      </div>
-  
-      <div className='w-full flex flex-col lg:flex-row gap-4 justify-end my-4 mt-8'>
-          
-      <button className='flex flex-row items-center gap-2 border px-6 rounded-md p-3 font-medium hover:text-white hover:bg-blue-600 transition ease-in-out'>
-      <FaEye />
-          Show Passwords
-      </button>
-
-          <button className='bg-blue-600 px-10 font-medium text-white p-3 rounded-lg hover:bg-blue-800 disabled:bg-white disabled:border-2 transition ease-in-out'>
-            {loading ? 'Loading...' : 'Change Password'}
-          </button>
-      </div>
-      </div>
+  </div>
 
 
-      {/* DELETE ACCOUNT */}
-        <div className='bg-white shadow w-full border flex flex-col p-10 h-auto rounded-md mb-10 text-slate-700'>
-        <h1 className='font-bold text-xl mb-8'>Delete your Account</h1>
-
-        <div className='flex flex-col gap-4'>
-        <span className='font-medium text-slate-500'>When you decide to delete your account, your information will be permanently lost in our website. You can cancel the deletion within 30 days.</span>
-        
-        <div className='flex flex-row gap-4 items-center pl-2'>
-        <input type="checkbox" className='w-6 h-6 checked:bg-blue-100 hover:bg-blue-600'/>
-        <div className='font-medium text-slate-500'>I confirm that I want my account deleted.</div>
-        </div>
-        
-        <div className=' w-full flex flex-col lg:flex-row gap-2 justify-end mt-4'>
-            <button className='bg-white border-2 font-medium text-slate-700 p-2 px-4 rounded-md hover:bg-slate-200 transition ease-in-out'>Learn More</button>
-            <button onClick={handleDeleteAccount} className='bg-red-500 font-medium text-white p-2 px-4 rounded-md hover:bg-red-700 transition ease-in-out'>Delete Account</button>
-        </div>
-
-
-      </div>
-      </div>
-    </div>
-    </div>
-    </>
-  );
+ );
 }
