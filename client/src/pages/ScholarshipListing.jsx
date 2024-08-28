@@ -201,7 +201,7 @@ export default function ScholarshipListing() {
                           <div className='flex text-blue-600 text-center justify-center font-bold'>
                             <div className='flex flex-row bg-white gap-2 px-2'>
                               <FaHandHolding className='text-xl' />
-                              Php 80,000 - Php 100,000
+                              {scholarship.amount}
                             </div>
                           </div>
                         </div>
@@ -223,9 +223,9 @@ export default function ScholarshipListing() {
                               <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
                               <p className='font-medium'>Eligibility: </p>
                             </div>
-                            <p className='text-sm lg:hidden'>{truncateText(scholarship.eligibility, 50)}</p>
+                            <p className='text-sm lg:hidden'>{truncateText(scholarship.otherEligibility, 50)}</p>
                           </div>
-                          <p className='w-full text-sm hidden lg:block'>{truncateText(scholarship.eligibility, 50)}</p>
+                          <p className='w-full text-sm hidden lg:block'>{truncateText(scholarship.otherEligibility, 50)}</p>
                         </div>
                         <div className='flex lg:flex-row lg:gap-4'>
                           <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
@@ -233,9 +233,9 @@ export default function ScholarshipListing() {
                               <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
                               <p className='font-medium'>Deadline: </p>
                             </div>
-                            <p className='text-sm lg:hidden'>{scholarship.deadline}</p>
+                            <p className='text-sm lg:hidden'>{scholarship.endDate}</p>
                           </div>
-                          <p className='w-full text-sm hidden lg:block'>{scholarship.deadline}</p>
+                          <p className='w-full text-sm hidden lg:block'>{scholarship.endDate}</p>
                         </div>
                       </div>
                       <Link

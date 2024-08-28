@@ -19,7 +19,7 @@ export default function CompleteProfile() {
   const { currentUser } = useSelector((state) => state.user);
 
   const [formData, setFormData] = useState({
-    profilePicture: '',
+    profilePicture: currentUser.profilePicture,
     firstName: '',
     middleName: '',
     lastName: '',
@@ -209,15 +209,14 @@ export default function CompleteProfile() {
                 <div className='w-24 h-24 rounded-full border border-gray-300 flex items-center justify-center overflow-hidden'>
                   <img
                     src={
-                      formData.profilePicture
+                      formData.profilePicture instanceof Blob
                         ? URL.createObjectURL(formData.profilePicture)
-                        : currentUser.profilePicture
-                          ? currentUser.profilePicture
-                          : 'default-profile-picture-url'
+                        : currentUser.profilePicture || 'default-profile-picture-url'
                     }
                     alt="Profile"
-                    className='w-full h-full object-cover'
+                    className="w-full h-full object-cover"
                   />
+
                 </div>
               </div>
             </div>
