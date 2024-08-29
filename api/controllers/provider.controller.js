@@ -103,7 +103,9 @@ export const signupAsProvider = async (req, res) => {
       },
     });
 
-    const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
+    const verificationUrl = `https://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`;
+
+    // const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
 
     console.log('Sending verification email to:', email);
 
