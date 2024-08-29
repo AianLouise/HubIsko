@@ -47,9 +47,9 @@ export default function ViewApplicationDetails() {
         fetchApplicationDetails();
     }, [applicationId]);
 
-        const handleApprove = async (applicationId, applicant, scholarshipId) => {
+    const handleApprove = async (applicationId, applicant, scholarshipId) => {
         console.log(`Starting approval process for application ID: ${applicationId}`);
-    
+
         try {
             // Approve the application
             const response = await fetch(`/api/scholarshipProgram/applications/${applicationId}/status`, {
@@ -59,14 +59,14 @@ export default function ViewApplicationDetails() {
                 },
                 body: JSON.stringify({ applicationStatus: 'Approved' })
             });
-    
+
             if (!response.ok) {
                 throw new Error('Approval failed');
             }
-    
+
             const data = await response.json();
             console.log('Application approved:', data);
-    
+
             // Update the approvedScholar field in the scholarshipProgram table
             const updateScholarResponse = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipId}/approve-scholar/${applicant}`, {
                 method: 'PATCH',
@@ -74,13 +74,13 @@ export default function ViewApplicationDetails() {
                     'Content-Type': 'application/json',
                 }
             });
-    
+
             if (!updateScholarResponse.ok) {
                 throw new Error('Updating approved scholar failed');
             }
-    
+
             console.log('Approved scholar updated successfully');
-    
+
             // Create a notification
             const notificationResponse = await fetch(`/api/notification/notifications/create`, {
                 method: 'POST',
@@ -93,19 +93,19 @@ export default function ViewApplicationDetails() {
                     scholarshipProgramId: scholarshipId // Pass the scholarship program ID
                 })
             });
-    
+
             if (!notificationResponse.ok) {
                 throw new Error('Notification creation failed');
             }
-    
+
             console.log('Notification created successfully');
-    
+
             // Fetch updated application details to reflect the new status
             await fetchApplicationDetails();
-    
+
             setSuccessMessage('Application approved successfully!');
             setShowSnackbar(true);
-    
+
         } catch (error) {
             console.error('Error approving application:', error);
             setError('Failed to approve application.');
@@ -257,7 +257,7 @@ export default function ViewApplicationDetails() {
                 <Snackbar
                     message={successMessage}
                     onClose={closeSnackbar}
-                    onAction={() =>  navigate(-1)}
+                    onAction={() => navigate(-1)}
                     actionText="Go to Application List"
                 />
             )}
