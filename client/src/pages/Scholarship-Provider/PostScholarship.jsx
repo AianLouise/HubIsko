@@ -6,6 +6,7 @@ import { FaHandHolding, FaRegCalendarXmark, FaArrowRightLong } from "react-icons
 import { MdOutlineRefresh } from "react-icons/md";
 import { BsGlobe2 } from "react-icons/bs";
 import { FaEnvelope, FaPhone, FaUser } from 'react-icons/fa';
+import { BsEyeFill } from 'react-icons/bs';
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -327,11 +328,11 @@ export default function PostScholarship() {
     <div className={`flex flex-col min-h-screen`}>
       <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''}`}>
         <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col gap-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 mt-10">
+          <div className="flex flex-col gap-2 border-b-4 pb-4">
             <div className="flex justify-between items-center">
-              <h1 className="text-3xl font-bold text-gray-800">
-                {currentPage === 1 && 'Basic Information'}
+              <h1 className="text-3xl font-bold text-blue-600">
+                {currentPage === 1 && 'Scholarship Information'}
                 {currentPage === 2 && 'Documents Needed'}
                 {currentPage === 3 && 'Customize Applicant View'}
                 {currentPage === 4 && 'Upload Documents for Review'}
@@ -339,7 +340,7 @@ export default function PostScholarship() {
                 {/* Add more pages as needed */}
               </h1>
             </div>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-slate-500">
               {currentPage === 1 && 'Fill out the basic information below'}
               {currentPage === 2 && 'Specify the documents that applicants need to submit'}
               {currentPage === 3 && 'Customize the page that applicants will see'}
@@ -351,11 +352,12 @@ export default function PostScholarship() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-8">
             {currentPage === 1 && (
               <>
-                <h2 className="text-2xl font-bold mb-4">Scholarship Details</h2>
-
+            <div className='bg-white p-8 py-12 flex flex-col rounded-md border shadow'>
+              <h2 className="text-2xl font-bold mb-4 border-b-2 pb-4">Scholarship Details</h2>
+              <div className='flex flex-col gap-4 px-4 space-y-1 mt-4'>
                 <div>
                   <label className="block text-gray-700">Title of Scholarship</label>
                   <input
@@ -525,9 +527,13 @@ export default function PostScholarship() {
                     required
                   />
                 </div>
+                </div>
+                </div>
+                
 
-                <h2 className="text-2xl font-bold mb-4">Eligibility Criteria</h2>
-
+              <div className='bg-white p-8 py-12 flex flex-col rounded-md border shadow'>
+              <h2 className="text-2xl font-bold mb-4 border-b-2 pb-4"> Eligibility Criteria</h2>
+              <div className='flex flex-col gap-4 px-4 space-y-1 mt-4'>
                 <div>
                   <label className="block text-gray-700">Minimum GPA/Grade Requirement</label>
                   <input
@@ -567,8 +573,12 @@ export default function PostScholarship() {
                     required
                   ></textarea>
                 </div>
-
+                </div>
+                </div>
+              
+              <div className='bg-white p-8 py-12 flex flex-col rounded-md border shadow'>
                 <h2 className="text-2xl font-bold mb-4">Scholarship Duration</h2>
+                <div className='flex flex-col gap-4 px-4 space-y-1 mt-4'>
 
                 <div>
                   <label className="block text-gray-700">Start Date</label>
@@ -593,8 +603,12 @@ export default function PostScholarship() {
                     required
                   />
                 </div>
+                </div>
+                </div>
 
+                <div className='bg-white p-8 py-12 flex flex-col rounded-md border shadow'>
                 <h2 className="text-2xl font-bold mb-4">Selection Criteria (Optional)</h2>
+                <div className='flex flex-col gap-4 px-4 space-y-1 mt-4'>
 
                 <div>
                   <label className="block text-gray-700">Selection Process</label>
@@ -617,8 +631,12 @@ export default function PostScholarship() {
                     className="w-full p-2 border border-gray-300 rounded"
                   ></textarea>
                 </div>
+                </div>
+                </div>
 
+                <div className='bg-white p-8 py-12 flex flex-col rounded-md border shadow'>
                 <h2 className="text-2xl font-bold mb-4">Renewal Policy (Optional)</h2>
+                <div className='flex flex-col gap-4 px-4 space-y-1 mt-4'>
 
                 <div>
                   <label className="block text-gray-700">Renewal Policy</label>
@@ -642,8 +660,13 @@ export default function PostScholarship() {
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
+                </div>
+                </div>
 
+
+                <div className='bg-white p-8 py-12 flex flex-col rounded-md border shadow'>
                 <h2 className="text-2xl font-bold mb-4">Disbursement Details (Optional)</h2>
+                <div className='flex flex-col gap-4 px-4 space-y-1 mt-4'>
 
                 <div>
                   <label className="block text-gray-700">Disbursement Schedule</label>
@@ -670,8 +693,13 @@ export default function PostScholarship() {
                     <option value="Tuition Payment to Institution">Tuition Payment to Institution</option>
                   </select>
                 </div>
+                </div>
+                </div>
 
+
+                <div className='bg-white p-8 py-12 flex flex-col rounded-md border shadow'>
                 <h2 className="text-2xl font-bold mb-4">Contact Information (Optional)</h2>
+                <div className='flex flex-col gap-4 px-4 space-y-1 mt-4'>
 
                 <div>
                   <label className="block text-gray-700">Contact Email</label>
@@ -696,11 +724,12 @@ export default function PostScholarship() {
                     className="w-full p-2 border border-gray-300 rounded"
                   />
                 </div>
-
-                <div className="flex gap-4 justify-center items-center">
+                </div>
+                </div>
+                <div className="flex gap-4 justify-end font-medium items-center">
                   <button
                     type="button"
-                    className="bg-blue-500 text-white py-2 px-4 rounded-md w-32"
+                    className="bg-blue-500 hover:bg-blue-800 text-white py-2 px-4 rounded-md w-32"
                     onClick={handleNextPage}
                   >
                     Next
@@ -712,9 +741,13 @@ export default function PostScholarship() {
 
             {currentPage === 2 && (
               <>
-                <div className="flex flex-col gap-4">
-                  <h2 className="text-xl font-semibold text-gray-800">Required Documents</h2>
-                  <p className="text-lg text-gray-600">Specify the documents that applicants need to submit.</p>
+                <div className="bg-white p-8 rounded-md shadow border flex flex-col gap-4">
+                  <div className='flex justify-between items-center'>
+                  <h2 className="text-2xl font-bold text-gray-800">Required Documents</h2>
+                  {documentError && <p className="bg-red-600 text-white font-medium py-2 px-4 rounded-md mt-2">At least one document must be selected.</p>}
+                  </div>
+           
+                  <p className="text-lg text-slate-600">Specify the documents that applicants need to submit.</p>
 
                   {documents.map((doc, index) => (
                     <div key={doc.id} className="flex items-center gap-2">
@@ -738,19 +771,19 @@ export default function PostScholarship() {
                     </div>
                   ))}
 
-                  {documentError && <p className="text-red-600 mt-2">At least one document must be selected.</p>}
-
+                  <div className='flex w-full justify-center'>
                   <button
                     type="button"
                     onClick={handleAddDocument}
-                    className="bg-green-500 text-white py-2 px-4 rounded-md mt-2"
+                    className="bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded-md mt-2 hover:w-full w-[300px] transition-all ease-in-out duration-500 font-medium"
                   >
-                    Add Document
+                    Add Requirement
                   </button>
+                  </div>
                 </div>
 
-                <div className="flex flex-col gap-4 mt-4">
-                  <h2 className="text-xl font-semibold text-gray-800">Document Instructions</h2>
+                <div className="bg-white p-8 rounded-md shadow border flex flex-col gap-4">
+                  <h2 className="text-xl font-bold text-gray-800">Document Instructions</h2>
                   <textarea
                     id="documentGuidelines"
                     name="documentGuidelines"
@@ -766,14 +799,14 @@ export default function PostScholarship() {
                 <div className="flex gap-4 justify-center items-center mt-4">
                   <button
                     type="button"
-                    className="bg-gray-500 text-white py-2 px-4 rounded-md w-32"
+                    className="bg-gray-500 hover:bg-slate-700 text-white py-2 px-4 rounded-md w-32"
                     onClick={handlePreviousPage}
                   >
                     Previous
                   </button>
                   <button
                     type="button"
-                    className="bg-blue-500 text-white py-2 px-4 rounded-md w-32"
+                    className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-md w-32"
                     onClick={handleNextPage}
                   >
                     Next
@@ -788,14 +821,16 @@ export default function PostScholarship() {
                   <div className='border-b mb-8 py-8'>
                     <div className='flex flex-row items-center mx-auto max-w-6xl gap-10 px-24'>
                       <div className='flex flex-col items-center'>
+                      <span className='text-sm bg-blue-600 text-white px-6 rounded-md py-2'>Click to Upload an Image</span>
                         <div className='bg-blue-600 w-36 h-36 my-2 rounded-md flex justify-center items-center relative overflow-hidden'>
                           <img
                             src={scholarshipImage || 'placeholder-image-url'}
                             alt='Scholarship Logo'
-                            className='w-full h-full object-cover rounded-md'
+                            className='w-full h-full border-blue-500 hover:border-blue-800 border-4 object-cover rounded-md'
                             onClick={handleImageClick}
                             style={{ cursor: 'pointer', opacity: scholarshipImage ? 1 : 0.3 }}
                           />
+                          
                           <input
                             type="file"
                             accept="image/*"
@@ -803,6 +838,7 @@ export default function PostScholarship() {
                             ref={fileInputRef}
                             style={{ display: 'none' }}
                           />
+                       
                         </div>
                         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                       </div>
@@ -836,11 +872,14 @@ export default function PostScholarship() {
                           Deadline: {new Date(formData.endDate).toLocaleDateString('en-US')}
                         </span>
                       </div>
+
+                      <div className='flex flex-col mt-8 border-b-2'>
+                      <span className='text-sm bg-blue-600 text-white px-6 rounded-md py-2 w-[300px] text-center'>Click to Upload an Image</span>
                       <div className='flex justify-center items-center w-full h-52 rounded-md my-4 shadow border relative overflow-hidden'>
                         <img
                           src={bannerImage || 'placeholder-image-url'}
                           alt='Scholarship Banner'
-                          className='w-full h-full object-cover rounded-md'
+                          className='w-full h-full border-blue-500 hover:border-blue-800 border-4 object-cover rounded-md'
                           onClick={handleBannerImageClick}
                           style={{ cursor: 'pointer', opacity: bannerImage ? 1 : 0.3 }}
                         />
@@ -853,8 +892,15 @@ export default function PostScholarship() {
                         />
                       </div>
                       {errorMessage2 && <p className="text-red-500 text-center">{errorMessage2}</p>}
+                      </div>
 
-                      <div>
+                      <div className='mt-12 flex flex-col justify-center items-center gap-2'>
+                        <h2 className='font-bold text-xl text-slate-700'>Description or Frequently Asked Questions!</h2>
+                        <span className='text-slate-500'>You can freely edit the title and description of the sections by just clicking!</span>
+                      </div>
+
+                      <div className='mb-20'>
+
                         {sections.map(section => (
                           <div key={section.id} className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
                             <div className='flex justify-between items-center bg-blue-600 p-4 rounded-t-md'>
@@ -862,13 +908,14 @@ export default function PostScholarship() {
                                 type='text'
                                 value={section.title}
                                 onChange={(e) => handleEdit(section.id, 'title', e.target.value)}
-                                className='font-bold text-xl text-white bg-blue-600 flex-grow'
+                                className='font-bold text-xl text-white bg-blue-600 focus:bg-white focus:text-blue-600 flex-grow'
                                 required
                               />
-                              <button onClick={() => handleDelete(section.id)} className='text-white bg-red-500 ml-4 p-2 rounded-md'>
+                              <button onClick={() => handleDelete(section.id)} className='text-white bg-red-500 hover:bg-red-700 border-2 ml-4 px-6 py-2 rounded-md'>
                                 Delete
                               </button>
                             </div>
+
                             <textarea
                               value={section.content}
                               onChange={(e) => handleEdit(section.id, 'content', e.target.value)}
@@ -877,9 +924,12 @@ export default function PostScholarship() {
                             />
                           </div>
                         ))}
-                        <button type="button" onClick={handleAdd} className='mt-4 p-2 bg-green-500 text-white rounded-md'>
+
+                        <div className='flex justify-center'>
+                        <button type="button" onClick={handleAdd} className='mt-4 px-6 py-2 w-[200px] hover:w-full hover:bg-blue-800 transition-all ease-in-out duration-500  bg-blue-600 text-white rounded-md'>
                           Add Section
                         </button>
+                        </div>
                       </div>
 
                       {/* FAQ Section */}
@@ -979,9 +1029,11 @@ export default function PostScholarship() {
 
             {currentPage === 4 && (
               <>
-                <h2 className="text-xl font-semibold text-gray-800 mb-2">Required Documents</h2>
+
+                <div className="bg-white p-8 rounded-md shadow border">
+                <h2 className="text-2xl font-bold text-gray-800 mb-2">Required Documents</h2>
                 <p className="text-lg text-gray-600 mb-4">Specify the documents that prove you can offer this scholarship program.</p>
-                <div className="space-y-4">
+                <div className="space-y-4 px-4 py-8">
                   {requirements.map((req) => (
                     <div key={req.id} className="flex items-center justify-between gap-4 border-b border-gray-200 pb-4">
                       <label htmlFor={req.id} className="text-lg font-medium text-gray-700 w-1/2">
@@ -995,12 +1047,22 @@ export default function PostScholarship() {
                         onChange={(e) => handleFileChange(e, req.id)}
                       />
                       {req.url && (
-                        <a href={req.url} className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
+                        <a href={req.url} className="flex gap-2 justify-center items-center text-white bg-blue-600 px-6 py-2 rounded-md w-[300px] hover:bg-blue-800" target="_blank" rel="noopener noreferrer">
+                          <BsEyeFill className="inline-block" />
                           View Uploaded File
                         </a>
                       )}
                     </div>
                   ))}
+
+                    <button className='bg-blue-600 rounded-md px-6 py-2 font-medium text-white w-[220px] hover:bg-blue-800 hover:w-full hover:text-center transition-all ease-in-out duration-500'>
+                      Add another document
+                    </button>
+
+                </div>
+                  
+    
+                
                 </div>
 
                 <div className="flex gap-4 justify-center items-center mt-8">
@@ -1024,7 +1086,10 @@ export default function PostScholarship() {
 
             {currentPage === 5 && (
               <>
-                <h2 className="text-2xl font-bold mb-6 text-center">Terms and Conditions</h2>
+                <div className="flex flex-col gap-2 text-center">
+                <h2 className="text-2xl font-bold">Terms and Conditions</h2>
+                <span className='text-slate-500'>Please read the terms and conditions with utmost consideration.</span>
+                </div>
 
                 <div className="bg-white shadow-md p-6 rounded-lg mb-6 border border-gray-200">
                   <h3 className="text-xl font-semibold mb-4">Agreement for Scholarship Providers</h3>
