@@ -8,20 +8,61 @@ import Layout from "../../components/Layout";
 export default function ApplicationInbox() {
   useEffect(() => {
     document.title = "Application Inbox | HubIsko";
-}, []);
+  }, []);
 
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [totalAccounts, setTotalAccounts] = useState(0);
+  const [totalScholarships, setTotalScholarships] = useState(0);
+  const [totalScholars, setTotalScholars] = useState(0);
+  const [pendingProviders, setPendingProviders] = useState(0);
+  const [pendingPrograms, setPendingPrograms] = useState(0); // New State for Pending Programs
+  const [activities, setActivities] = useState([]); // State for Activities
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate a fetch call
     const fetchData = async () => {
       try {
-        // Simulate network delay
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
+        // Fetch total number of accounts
+        const accountsResponse = await fetch('/api/admin/total-accounts');
+        const accountsData = await accountsResponse.json();
+        setTotalAccounts(accountsData.totalAccounts);
+
+        // Fetch total number of scholarships
+        const scholarshipsResponse = await fetch('/api/admin/total-scholarships');
+        const scholarshipsData = await scholarshipsResponse.json();
+        setTotalScholarships(scholarshipsData.totalScholarships);
+
+        // Fetch total number of approved scholars
+        const scholarsResponse = await fetch('/api/admin/count-approved-scholars');
+        const scholarsData = await scholarsResponse.json();
+        setTotalScholars(scholarsData.count);
+
+        // Fetch total number of pending providers
+        const pendingProvidersResponse = await fetch('/api/admin/search-pending-verification-providers');
+        const pendingProvidersData = await pendingProvidersResponse.json();
+        setPendingProviders(pendingProvidersData.length);
+
+        // Fetch total number of pending programs
+        const pendingProgramsResponse = await fetch('/api/admin/search-pending-approval-programs');
+        const pendingProgramsData = await pendingProgramsResponse.json();
+        setPendingPrograms(pendingProgramsData.length);
+
+        // Fetch recent activities
+        // const activitiesResponse = await fetch('/api/admin/recent-activities');
+        // const activitiesData = await activitiesResponse.json();
+        // setActivities(activitiesData.activities);
+
+        // Dummy data for activities
+        setActivities([
+          { id: 1, actor: "DepEd", action: "Posted a Scholarship", time: "1 hour ago" },
+          { id: 2, actor: "John Doe", action: "Sent an Application to DepEd", time: "2 hours ago" },
+          { id: 3, actor: "TESDA", action: "Approved an Application", time: "3 hours ago" },
+          { id: 4, actor: "CHED", action: "Posted a Scholarship", time: "4 hours ago" },
+        ]);
+
         setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
       }
     };
 
@@ -71,14 +112,14 @@ export default function ApplicationInbox() {
         </div>
         <div className="max-w-8xl mx-auto px-24 gap-10 flex-col flex">
           <div className="grid grid-cols-3 gap-8">
-            
+
             <Link to="/scholarship-program-applications" className="bg-white rounded-md shadow p-4 flex flex-col justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
               <span className="text-slate-500">Scholarship Program Applications</span>
-              <span className="text-4xl">10</span>
+              <span className="text-4xl">{pendingPrograms}</span>
             </Link>
             <Link to="/scholarship-provider-applications" className="bg-white rounded-md shadow p-4 flex flex-col justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
               <span className="text-slate-500">Scholarship Provider Applications</span>
-              <span className="text-4xl">25</span>
+              <span className="text-4xl">{pendingProviders}</span>
             </Link>
             <Link to="/requests" className="bg-white rounded-md shadow p-4 flex flex-col justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
               <span className="text-slate-500">Requests</span>

@@ -18,6 +18,7 @@ export default function ScholarshipsProviderDetails() {
     const closeSnackbar = () => setShowSnackbar(false);
     const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
     const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+    const [rejectReason, setRejectReason] = useState('');
 
     const fetchProviderDetails = async () => {
         try {
@@ -66,18 +67,37 @@ export default function ScholarshipsProviderDetails() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                body: JSON.stringify({ rejectReason: rejectReason })
             });
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            console.log(`Rejected provider with id: ${providerId}`);
+
+            const data = await response.json();
+            console.log('Decline reason updated:', data);
             setSuccessMessage('Application rejected successfully!');
             setShowSnackbar(true);
             setIsRejectModalOpen(false);
             fetchProviderDetails(); // Refetch provider details
         } catch (error) {
-            console.error("Error rejecting scholarship provider:", error);
+            console.error('Error declining scholarship provider:', error);
+        } finally {
+            handleModalClose();
         }
+    };
+
+    const handleRejectClick = () => {
+        setIsRejectModalOpen(true);
+    };
+
+    const handleModalClose = () => {
+        setIsRejectModalOpen(false);
+        setRejectReason('');
+    };
+
+    const handleReasonChange = (e) => {
+        setRejectReason(e.target.value);
     };
 
     if (loading) return <p>Loading...</p>;
@@ -232,11 +252,42 @@ export default function ScholarshipsProviderDetails() {
                 </div>
             </main>
 
+            {isRejectModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+                        <h2 className="text-xl font-bold mb-4">Reason for Decline</h2>
+                        <textarea
+                            className="w-full p-2 border border-gray-300 rounded-md"
+                            rows="4"
+                            value={rejectReason}
+                            onChange={handleReasonChange}
+                            placeholder="What are the reasons for declining this scholarship?"
+                        />
+                        <div className="flex justify-end gap-4 mt-4">
+                            <button
+                                type="button"
+                                className="border px-4 py-2 rounded-md hover:bg-slate-200"
+                                onClick={handleModalClose}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700"
+                                onClick={() => handleReject(provider._id)}
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {showSnackbar && (
                 <Snackbar
                     message={successMessage}
                     onClose={closeSnackbar}
-                    onAction={() => navigate(-1)}
+                    onAction={() => navigate('/scholarship-provider-applications')}
                     actionText="Go to Application List"
                 />
             )}

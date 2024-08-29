@@ -227,10 +227,22 @@ const userSchema = new mongoose.Schema({
     enum: ['applicant', 'scholarship_provider', 'admin'],
     default: 'applicant',
   },
-  status: {
+   status: {
     type: String,
-    enum: ['Pending Verification', 'Verified', 'Rejected'],
+    enum: [
+      'Pending Verification',
+      'Verified',
+      'Rejected',
+      'Active',
+      'Inactive',
+      'Suspended',
+      'Pending Approval'
+    ],
     default: 'Pending Verification',
+  },
+  rejectReason: {
+    type: String,
+    default: '',
   },
   applicantDetails: applicantSchema, // Embedded schema for applicant details
   scholarshipProviderDetails: scholarshipProviderSchema, // Embedded schema for scholarship provider details

@@ -303,10 +303,18 @@ export const approveScholarshipProvider = async (req, res) => {
 export const rejectScholarshipProvider = async (req, res) => {
   try {
     const { id } = req.params;
-    const provider = await User.findByIdAndUpdate(id, { status: 'Rejected' }, { new: true });
+    const { rejectReason } = req.body;
+
+    const provider = await User.findByIdAndUpdate(
+      id,
+      { status: 'Rejected', rejectReason: rejectReason },
+      { new: true }
+    );
+
     if (!provider) {
       return res.status(404).json({ message: 'Scholarship provider not found' });
     }
+
     res.status(200).json({ message: 'Scholarship provider rejected successfully', provider });
   } catch (error) {
     res.status(500).json({
