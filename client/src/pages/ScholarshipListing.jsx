@@ -129,7 +129,7 @@ export default function ScholarshipListing() {
                         : provider.scholarshipProviderDetails.organizationName}
                     </span>
                     {/* Tooltip for the organization name */}
-                    <div className='absolute bottom-20 w-40 p-2 bg-black text-white text-center text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none'>
+                    <div className='absolute top-full w-40 p-2 bg-white border-2 border-blue-500 shadow-lg text-center text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none'>
                       {provider.scholarshipProviderDetails.organizationName}
                     </div>
                   </button>
