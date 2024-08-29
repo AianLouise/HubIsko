@@ -10,7 +10,6 @@ export default function ScholarshipProgramApplications() {
     useEffect(() => {
         document.title = "Scholarship Program Applications | HubIsko";
     }, []);
-    
     const [programs, setPrograms] = useState([]);
 
     useEffect(() => {
@@ -120,22 +119,32 @@ export default function ScholarshipProgramApplications() {
                                 </tr>
                             </thead>
                             <tbody className="text-center rounded-b-lg">
-                                {programs.map((program) => (
-                                    <tr key={program._id} className="divide-x hover:bg-gray-100">
-                                        <td className="p-2">{program.organizationName}</td>
-                                        <td className="p-2">{program.title}</td>
-                                        <td className="p-2">{program.contactEmail}</td>
-                                        <td className="p-2 text-yellow-500">{program.status}</td>
-                                        <td className="p-4">
-                                            <Link
-                                                to={`/scholarships-data-details/${program._id}`}
-                                                className="bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white"
-                                            >
-                                                View Details
-                                            </Link>
+                                {programs.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="5" className="p-4">
+                                            <div className="flex justify-center items-center h-32">
+                                                <span className="text-xl font-semibold">No scholarship program application found.</span>
+                                            </div>
                                         </td>
                                     </tr>
-                                ))}
+                                ) : (
+                                    programs.map((program) => (
+                                        <tr key={program._id} className="divide-x hover:bg-gray-100">
+                                            <td className="p-2">{program.organizationName}</td>
+                                            <td className="p-2">{program.title}</td>
+                                            <td className="p-2">{program.contactEmail}</td>
+                                            <td className="p-2 text-yellow-500">{program.status}</td>
+                                            <td className="p-4">
+                                                <Link
+                                                    to={`/scholarships-data-details/${program._id}`}
+                                                    className="bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white"
+                                                >
+                                                    View Details
+                                                </Link>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
                             </tbody>
                         </table>
                         <div className="mt-8"></div> {/* Added space after the table */}

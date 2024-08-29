@@ -99,7 +99,7 @@ export default function ScholarshipProviderApplications() {
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-4">
+                                        <div className="flex flex-col gap-4">
                         <h1 className="text-xl font-semibold border-b pb-4">Scholarships</h1>
                         <div className="flex gap-4 mt-5">
                             <input
@@ -112,7 +112,7 @@ export default function ScholarshipProviderApplications() {
                                 <span>Filter</span>
                             </button>
                         </div>
-
+                    
                         <table className="w-full mt-4 rounded-md border border-gray-200 bg-white">
                             <thead className="bg-slate-100 rounded-t-md">
                                 <tr>
@@ -124,22 +124,32 @@ export default function ScholarshipProviderApplications() {
                                 </tr>
                             </thead>
                             <tbody className="text-center rounded-b-md">
-                                {providers.map((provider) => (
-                                    <tr key={provider._id} className="divide-x hover:bg-gray-100">
-                                        <td className="p-2">{provider.scholarshipProviderDetails.organizationName}</td>
-                                        <td className="p-2">{provider.scholarshipProviderDetails.organizationType}</td>
-                                        <td className="p-2">{provider.email}</td>
-                                        <td className="p-2 text-yellow-500">{provider.status}</td>
-                                        <td className="p-4">
-                                            <Link
-                                                to={`/scholarship-provider-details/${provider._id}`}
-                                                className="bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white"
-                                            >
-                                                View Details
-                                            </Link>
+                                {providers.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="5" className="p-4">
+                                            <div className="flex justify-center items-center h-32">
+                                                <span className="text-xl font-semibold">No scholarship provider application found.</span>
+                                            </div>
                                         </td>
                                     </tr>
-                                ))}
+                                ) : (
+                                    providers.map((provider) => (
+                                        <tr key={provider._id} className="divide-x hover:bg-gray-100">
+                                            <td className="p-2">{provider.scholarshipProviderDetails.organizationName}</td>
+                                            <td className="p-2">{provider.scholarshipProviderDetails.organizationType}</td>
+                                            <td className="p-2">{provider.email}</td>
+                                            <td className="p-2 text-yellow-500">{provider.status}</td>
+                                            <td className="p-4">
+                                                <Link
+                                                    to={`/scholarship-provider-details/${provider._id}`}
+                                                    className="bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white"
+                                                >
+                                                    View Details
+                                                </Link>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
                             </tbody>
                         </table>
                         <div className="mt-8"></div> {/* Added space after the table */}
