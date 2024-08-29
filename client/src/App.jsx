@@ -68,7 +68,8 @@ import AdminForumDetail from "./pages/Admin/AdminForumDetail";
 import AdminCreateForumPost from "./pages/Admin/AdminCreateForumPost";
 import ScholarshipDashboardDetails from "./pages/ScholarshipDashboardDetails";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
-import ScholarshipProgramDetails from "./pages/Admin/ScholarshipProgramDetails";
+import ScholarshipProgramDetails from "./pages/Admin/ScholarshipProgramApplicationDetails";
+import ScholarshipPrograms from "./pages/Admin/ScholarshipPrograms";
 
 
 export default function App() {
@@ -115,6 +116,7 @@ export default function App() {
           <Route path="/edit-student-info/:id" element={<EditStudentInfo />} />
 
           <Route path="/scholarship-program-applications/:id" element={<ScholarshipProgramDetails />} />
+          <Route path="/scholarship-programs" element={<ScholarshipPrograms />} />
 
           <Route path="/admin-forums" element={<AdminForums />} />
           <Route path="/admin-forums/post/:postId" element={<AdminForumDetail />} />

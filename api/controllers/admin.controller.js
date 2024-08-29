@@ -417,3 +417,19 @@ export const updateStudentDetails = async (req, res) => {
     });
   }
 };
+
+export const getAllScholarshipPrograms = async (req, res) => {
+  try {
+    const scholarshipPrograms = await ScholarshipProgram.find(); // Assuming you have a ScholarshipProgram model
+    res.status(200).json({
+      success: true,
+      data: scholarshipPrograms,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching scholarship programs',
+      error: error.message,
+    });
+  }
+};

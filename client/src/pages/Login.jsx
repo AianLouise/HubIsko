@@ -73,7 +73,7 @@ export default function SignIn() {
 
       // Navigate based on user's role and verification status
       if (data.role === 'admin') {
-        navigate('/admin-home');
+        navigate('/admin-dashboard');
       } else if (data.role === 'scholarship_provider') {
         if (!data.emailVerified) {
           navigate('/verify-your-email', { state: { email: formData.email } });

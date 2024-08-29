@@ -11,7 +11,7 @@ import { PiStudentFill } from "react-icons/pi";
 import { BsBuildingFill } from "react-icons/bs";
 import { BsInboxFill } from "react-icons/bs";
 import { HiDocument } from "react-icons/hi2";
-import { FaGoogleScholar } from "react-icons/fa6";
+import { FaGoogleScholar, FaGraduationCap } from "react-icons/fa6";
 import { FaFileCircleQuestion } from "react-icons/fa6";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -141,8 +141,8 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                         <ul className="space-y-2">
                             <li>
                                 <Link to={'/admin-dashboard'}
-                                    className={`flex gap-2 items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/admin-home') ? 'bg-blue-600 text-white' : ''}`} >
-                                    <GoHomeFill className={`w-5 h-5 text-blue-600 ${location.pathname.startsWith('/admin-home') ? 'text-white' : ''}`} />
+                                    className={`flex gap-2 items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/admin-dashboard') ? 'bg-blue-600 text-white' : ''}`} >
+                                    <GoHomeFill className={`w-5 h-5 text-blue-600 ${location.pathname.startsWith('/admin-dashboard') ? 'text-white' : ''}`} />
                                     Dashboard
                                 </Link>
                             </li>
@@ -197,6 +197,14 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
 
 
                                 </div>
+                            </li>
+                            
+                            <li>
+                                <Link to={'/scholarship-programs'}
+                                    className={`flex gap-2 items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/scholarship-programs') ? 'bg-blue-600 text-white' : ''}`} >
+                                    <FaGraduationCap className={`w-5 h-5 text-blue-600 ${location.pathname.startsWith('/scholarship-programs') ? 'text-white' : ''}`} />
+                                    Scholarship Programs
+                                </Link>
                             </li>
 
                             <li>
