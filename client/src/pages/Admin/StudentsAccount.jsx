@@ -4,6 +4,10 @@ import { Link } from "react-router-dom";
 import Layout from "../../components/Layout";
 
 export default function Students() {
+  useEffect(() => {
+    document.title = "Students | HubIsko";
+}, []);
+
   const [applicants, setApplicants] = useState([]);
   const [loading, setLoading] = useState(true);
 

@@ -7,6 +7,10 @@ import { FaGoogleScholar } from "react-icons/fa6";
 import axios from "axios";
 
 export default function ScholarshipProgramApplications() {
+    useEffect(() => {
+        document.title = "Scholarship Program Applications | HubIsko";
+    }, []);
+    
     const [programs, setPrograms] = useState([]);
 
     useEffect(() => {

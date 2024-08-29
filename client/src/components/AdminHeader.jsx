@@ -71,6 +71,29 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
         }
     };
 
+    // Breadcrumbs based on current location
+    const generateBreadcrumb = () => {
+        const pathnames = location.pathname.split('/').filter(x => x);
+
+        const capitalizeWords = (str) => {
+            return str.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+        };
+
+        return (
+            <>
+                <h1 className="text-lg font-bold text-blue-500">Admin</h1>
+                {pathnames.map((value, index) => {
+                    const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
+                    return (
+                        <span key={index} className="text-lg font-bold text-blue-500">
+                            /&nbsp;<Link to={routeTo}>{capitalizeWords(value)}</Link>
+                        </span>
+                    );
+                })}
+            </>
+        );
+    };
+
     return (
         <header className="bg-white text-gray-800 p-4 flex justify-between items-center shadow border-b w-full">
             <div className="max-w-8xl w-full mx-auto px-20 flex justify-between items-center">
@@ -78,8 +101,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                     <button className="text-blue-600" onClick={toggleSidebar}>
                         <FontAwesomeIcon icon={faBars} className='w-4 h-4' />
                     </button>
-                    <h1 className="text-lg font-bold text-blue-500">Admin Dashboard</h1>
-                    <h1 className="text-lg font-bold text-blue-500">/ Home</h1>
+                    {generateBreadcrumb()}
                 </div>
                 <div className="flex gap-2 items-center">
                     <span className="text-base">{currentUser.username}</span>
@@ -118,7 +140,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                     <nav>
                         <ul className="space-y-2">
                             <li>
-                                <Link to={'/admin-home'}
+                                <Link to={'/admin-dashboard'}
                                     className={`flex gap-2 items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/admin-home') ? 'bg-blue-600 text-white' : ''}`} >
                                     <GoHomeFill className={`w-5 h-5 text-blue-600 ${location.pathname.startsWith('/admin-home') ? 'text-white' : ''}`} />
                                     Dashboard
@@ -164,7 +186,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link to={'/provider-accounts'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/provider-accounts' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                                <Link to={'/scholarship-provider'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/provider-accounts' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                                     <BsBuildingFill className={`w-5 h-5 text-blue-600 ${location.pathname === '/provider-accounts' ? ' text-white' : ''}`} />
                                                     Scholarship Providers
                                                 </Link>
@@ -179,7 +201,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
 
                             <li>
                                 <div>
-                                    <Link to={'/inbox'}
+                                    <Link to={'/application-inbox'}
                                         onClick={toggleInboxDropdown}
                                         className={`flex gap-2 justify-between items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/inbox')
                                             || location.pathname.startsWith('/scholarship-program-applications')
@@ -239,11 +261,11 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                 </a>
                             </li>
 
-                                                        <li>
-                              <a href="/admin-forums" className="flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
-                                <MdForum className="w-5 h-5 text-blue-600" /> {/* Updated icon */}
-                                Forums
-                              </a>
+                            <li>
+                                <a href="/admin-forums" className="flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
+                                    <MdForum className="w-5 h-5 text-blue-600" /> {/* Updated icon */}
+                                    Forums
+                                </a>
                             </li>
 
                         </ul>

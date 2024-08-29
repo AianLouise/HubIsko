@@ -4,6 +4,10 @@ import { Link } from "react-router-dom";
 import Layout from "../../components/Layout";
 
 export default function ProviderAccounts() {
+  useEffect(() => {
+    document.title = "Scholarship Provider | HubIsko";
+}, []);
+
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
 

@@ -5,7 +5,11 @@ import { PiArrowRightFill } from "react-icons/pi";
 import { GoDotFill } from "react-icons/go";
 import Layout from "../../components/Layout";
 
-export default function Inbox() {
+export default function ApplicationInbox() {
+  useEffect(() => {
+    document.title = "Application Inbox | HubIsko";
+}, []);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

@@ -7,6 +7,10 @@ import { HiDocument } from "react-icons/hi2";
 import axios from "axios";
 
 export default function ScholarshipProviderApplications() {
+    useEffect(() => {
+        document.title = "Scholarship Provider Applications | HubIsko";
+    }, []);
+
     const [providers, setProviders] = useState([]);
 
     useEffect(() => {

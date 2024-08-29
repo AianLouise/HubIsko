@@ -37,16 +37,15 @@ import ProviderForums from "./pages/Scholarship-Provider/ProviderForums";
 import ProviderForumDetail from "./pages/Scholarship-Provider/ProviderForumDetail";
 import PreviewProfile from "./pages/Scholarship-Provider/PreviewProfile";
 import PostScholarship from "./pages/Scholarship-Provider/PostScholarship";
-import AdminHome from "./pages/Admin/AdminHome";
 import CreateForumPost from "./pages/CreateForumPost";
 import Accounts from "./pages/Admin/Accounts";
 import Layout from "./components/Layout";
-import Students from "./pages/Admin/Students";
+import Students from "./pages/Admin/StudentsAccount";
 import ProviderAccounts from "./pages/Admin/ProviderAccounts";
 import VerificationDetails from "./pages/Admin/VerificationDetails";
 import StudentDetails from "./pages/Admin/StudentDetails";
 import ProviderDetails from "./pages/Admin/ProviderDetails";
-import Inbox from "./pages/Admin/Inbox";
+import ApplicationInbox from "./pages/Admin/ApplicationInbox";
 import ScholarshipsDataDetails from "./pages/Admin/ScholarshipsDataDetails";
 import ScholarshipsDataDisplay from "./pages/Admin/ScholarshipsDataDisplay";
 import ViewScholarshipDetails from "./pages/Scholarship-Provider/ViewScholarshipDetails";
@@ -70,6 +69,7 @@ import AdminForums from "./pages/Admin/AdminForums";
 import AdminForumDetail from "./pages/Admin/AdminForumDetail";
 import AdminCreateForumPost from "./pages/Admin/AdminCreateForumPost";
 import ScholarshipDashboardDetails from "./pages/ScholarshipDashboardDetails";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
 
 
 
@@ -102,14 +102,14 @@ export default function App() {
 
         {/* Admin Routes */}
         <Route element={<ProviderPrivateRoute allowedRoles={['admin']} />}>
-          <Route path="/admin-home" element={<AdminHome />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/accounts" element={<Accounts />} />
           <Route path="/students" element={<Students />} />
-          <Route path="/provider-accounts" element={<ProviderAccounts />} />
+          <Route path="/scholarship-provider" element={<ProviderAccounts />} />
           <Route path="/verification-details/:id" element={<VerificationDetails />} />
           <Route path="/student-details/:id" element={<StudentDetails />} />
           <Route path="/provider-details/:id" element={<ProviderDetails />} />
-          <Route path="/inbox" element={<Inbox />} />
+          <Route path="/application-inbox" element={<ApplicationInbox />} />
           <Route path="/scholarship-program-applications" element={<ScholarshipProgramApplications />} />
           <Route path="/scholarship-provider-applications" element={<ScholarshipProviderApplications />} />
           <Route path="/scholarships-data-details/:id" element={<ScholarshipsDataDetails />} />

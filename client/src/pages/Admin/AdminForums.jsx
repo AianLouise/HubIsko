@@ -10,90 +10,94 @@ import { faComments } from '@fortawesome/free-solid-svg-icons';
 import ForumsIcon from '../../assets/ForumsIconwTexture.png';
 
 export default function AdminForums() {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
+  useEffect(() => {
+    document.title = "Forums | HubIsko";
+  }, []);
 
-    const toggleDropdown = () => {
-        setDropdownOpen(!dropdownOpen);
-    };
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    const { currentUser } = useSelector((state) => state.user);
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
 
-    const [sidebarOpen, setSidebarOpen] = useState(false);
-  
-    const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
-  
-    const isLoggedIn = !!currentUser;
-  
-    const [recentPosts, setRecentPosts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [notification, setNotification] = useState('');
-    const navigate = useNavigate();
-  
-    useEffect(() => {
-      fetchRecentPosts();
-    }, []);
-  
-    const fetchRecentPosts = async () => {
-      setLoading(true); // Set loading to true before fetching
-      try {
-        const response = await fetch('/api/forums/posts');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        setRecentPosts(data);
-      } catch (error) {
-        console.error('Error fetching recent posts:', error);
-      } finally {
-        setLoading(false); // Set loading to false after fetching
+  const { currentUser } = useSelector((state) => state.user);
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
+  const isLoggedIn = !!currentUser;
+
+  const [recentPosts, setRecentPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [notification, setNotification] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchRecentPosts();
+  }, []);
+
+  const fetchRecentPosts = async () => {
+    setLoading(true); // Set loading to true before fetching
+    try {
+      const response = await fetch('/api/forums/posts');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-    };
-  
-    if (loading) {
-      return (
-        <div className="flex justify-center items-center h-screen">
-          <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-          </svg>
-        </div>
-      );
+      const data = await response.json();
+      setRecentPosts(data);
+    } catch (error) {
+      console.error('Error fetching recent posts:', error);
+    } finally {
+      setLoading(false); // Set loading to false after fetching
     }
-  
-    // Function to handle clicking on a post
-    const handlePostClick = (postId) => {
-      // Navigate to post details page (assuming route '/post/:postId' is defined)
-      navigate(`/admin-forums/post/${postId}`);
-    };
-  
-  
-  
-    const handleCreatePostClick = () => {
-      if (!isLoggedIn) {
-        setNotification('You must be logged in to create a new post.');
-        setTimeout(() => setNotification(''), 3000); // Clear notification after 3 seconds
-      } else {
-        navigate('/admin-create-forum-post');
-      }
-    };
+  };
 
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                </svg>
-            </div>
-        );
-    }
-
+  if (loading) {
     return (
-        <div className="flex flex-col min-h-screen">
-            <Layout />
-            <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
-            <div className='border-b mb-8 pt-12'>
+      <div className="flex justify-center items-center h-screen">
+        <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+        </svg>
+      </div>
+    );
+  }
+
+  // Function to handle clicking on a post
+  const handlePostClick = (postId) => {
+    // Navigate to post details page (assuming route '/post/:postId' is defined)
+    navigate(`/admin-forums/post/${postId}`);
+  };
+
+
+
+  const handleCreatePostClick = () => {
+    if (!isLoggedIn) {
+      setNotification('You must be logged in to create a new post.');
+      setTimeout(() => setNotification(''), 3000); // Clear notification after 3 seconds
+    } else {
+      navigate('/admin-create-forum-post');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+        </svg>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Layout />
+      <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
+        <div className='border-b mb-8 pt-12'>
           <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl justify-between lg:px-24'>
 
             {/* Mobile na Icon */}
@@ -264,11 +268,11 @@ export default function AdminForums() {
             {recentPosts.map((post) => (
               <div key={post._id} className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow cursor-pointer hover:bg-slate-100 hover:-translate-y-1 transition ease-in-out' onClick={() => handlePostClick(post._id)}>
                 <div className='flex flex-row gap-3'>
-                                 <img
-                  src={post.author.profilePicture || 'default-profile-pic-url'} // Use a default profile picture if not available
-                  alt={`${post.author.username}'s profile`}
-                  className='w-12 h-12 rounded-full object-cover' // Add object-cover class
-                />
+                  <img
+                    src={post.author.profilePicture || 'default-profile-pic-url'} // Use a default profile picture if not available
+                    alt={`${post.author.username}'s profile`}
+                    className='w-12 h-12 rounded-full object-cover' // Add object-cover class
+                  />
                   <div className='flex flex-col'>
                     <span className='font-medium'>{post.author.username}</span>
                     <span className='text-sm text-slate-500'>
@@ -308,7 +312,7 @@ export default function AdminForums() {
           </div>
 
         </div>
-            </main>
-        </div>
-    );
+      </main>
+    </div>
+  );
 }

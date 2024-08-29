@@ -7,6 +7,10 @@ import { GoDotFill } from "react-icons/go";
 import Layout from "../../components/Layout";
 
 export default function Accounts() {
+    useEffect(() => {
+        document.title = "Accounts | HubIsko";
+    }, []);
+
     const [totalAccounts, setTotalAccounts] = useState(0);
     const [totalUnverifiedAccounts, setTotalUnverifiedAccounts] = useState(0);
     const [totalApplicants, setTotalApplicants] = useState(0);

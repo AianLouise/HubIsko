@@ -4,7 +4,11 @@ import { Link } from "react-router-dom";
 import { BiDotsHorizontal } from "react-icons/bi";
 import { BsInboxFill } from "react-icons/bs";
 
-export default function AdminHome() {
+export default function AdminDashboard() {
+    useEffect(() => {
+        document.title = "Admin Dashboard | HubIsko";
+    }, []);
+
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [totalAccounts, setTotalAccounts] = useState(0);
     const [totalScholarships, setTotalScholarships] = useState(0);
