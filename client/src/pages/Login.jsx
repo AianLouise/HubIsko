@@ -113,15 +113,17 @@ export default function SignIn() {
 
       {/* Left Column for Logo or Image */}
       <div className='w-1/2 hidden lg:flex justify-center items-center z-10 mx-auto'>
-        <img src={NewLogo} alt='HubIsko Logo' className='w-80 h-auto bg-white p-4 rounded-full' />
+        <Link to="/">
+          <img src={NewLogo} alt='HubIsko Logo' className='w-80 h-auto bg-white p-4 rounded-full transition-transform duration-300 ease-in-out transform hover:scale-110' />
+        </Link>
       </div>
-
+      
       <div className='absolute w-full h-full'>
-        <div className=' bg-blue-600 rounded-full w-full h-full -translate-x-[1100px]'></div>
+        <div className='bg-blue-600 rounded-full w-full h-full -translate-x-[1100px]'></div>
       </div>
 
-        {/* <img src='../assets/logo.png' alt='HubIsko Logo' className='w-56 h-56' /> */}
-   
+      {/* <img src='../assets/logo.png' alt='HubIsko Logo' className='w-56 h-56' /> */}
+
 
       {/* Right Column for Sign In Form */}
       <div className='lg:w-1/2 w-full flex items-center justify-center'>
