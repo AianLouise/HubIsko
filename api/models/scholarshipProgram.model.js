@@ -63,6 +63,13 @@ const scholarshipProgramSchema = new mongoose.Schema({
     ],
     default: 'Pending Approval'
   },
+  declineReason: {
+    type: String,
+    required: function () {
+      return this.status === 'Declined';
+    },
+    default: ''
+  },
   approvedScholars: [
     {
       scholarId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

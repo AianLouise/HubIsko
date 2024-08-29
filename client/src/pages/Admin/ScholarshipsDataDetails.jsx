@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { IoMdArrowDropdown } from "react-icons/io";
-import Layout from "../../components/Layout";
 
 export default function ScholarshipsDataDetails() {
-    const { id } = useParams(); // Get the scholarship ID from the URL parameters
+    const { id } = useParams();
     const [scholarshipDetails, setScholarshipDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    
 
     useEffect(() => {
         const fetchScholarshipDetails = async () => {
@@ -40,19 +37,8 @@ export default function ScholarshipsDataDetails() {
 
     return (
         <div className="flex flex-col min-h-screen font-medium text-slate-700">
-            <Layout />
-            <main className="flex-grow bg-[#f8f8fb] pb-24">
-                <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex mt-16'>
-                    <div className="flex gap-2 items-center">
-                        <Link to={'/scholarships-data'} className="border shadow px-6 py-2 bg-white rounded-md hover:bg-slate-200">
-                            <span>Scholarships</span>
-                        </Link>
-                        <IoMdArrowDropdown className='-rotate-90 w-8 h-8 text-blue-600' />
-                        <div className="border shadow px-6 py-2 bg-white rounded-md">
-                            <span className="text-blue-600">{scholarshipDetails.title}'s Application</span>
-                        </div>
-                    </div>
-
+            <main className="flex-grow bg-[#f8f8fb] pb-5">
+                <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex'>
                     <div className="bg-white p-8 rounded-md shadow-md w-full">
                         <div className="text-lg font-bold bg-slate-200 border-2 px-4 py-2 rounded-md">Scholarship Program Information</div>
                         <div className="grid grid-cols-3 gap-8 my-4 border-b pb-4">
@@ -164,12 +150,6 @@ export default function ScholarshipsDataDetails() {
                         <div className="grid grid-cols gap-8 my-4 border-b pb-4">
                             <div className="text-lg font-bold bg-slate-200 border-2 px-4 py-2 rounded-md">Document Guidelines</div>
                             <p className="text-sm font-medium text-slate-700">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Suscipit autem, est amet obcaecati possimus a quidem, ipsa consequatur impedit pariatur sunt quasi vel hic. Culpa nulla doloremque ipsam voluptas consequuntur?</p>
-                        </div>
-
-                        <div className="flex justify-end gap-4 mt-4">
-                            <Link to={`/scholarships-data-display/${scholarshipDetails._id}`} className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-800">
-                                Next
-                            </Link>
                         </div>
                     </div>
                 </div>

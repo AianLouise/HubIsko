@@ -12,16 +12,20 @@ export default function ScholarshipProgramApplications() {
     }, []);
     const [programs, setPrograms] = useState([]);
 
-    useEffect(() => {
-        const fetchPendingApprovalPrograms = async () => {
-            try {
-                const response = await axios.get("/api/admin/search-pending-approval-programs");
-                setPrograms(response.data);
-            } catch (error) {
-                console.error("Error fetching pending approval programs:", error);
+    const fetchPendingApprovalPrograms = async () => {
+        try {
+            const response = await fetch("/api/admin/search-pending-approval-programs");
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-        };
+            const data = await response.json();
+            setPrograms(data);
+        } catch (error) {
+            console.error("Error fetching pending approval programs:", error);
+        }
+    };
 
+    useEffect(() => {
         fetchPendingApprovalPrograms();
     }, []);
 
@@ -111,8 +115,8 @@ export default function ScholarshipProgramApplications() {
                         <table className="w-full mt-4 border border-gray-200 bg-white rounded-lg">
                             <thead className="bg-slate-100 rounded-t-lg">
                                 <tr>
-                                    <th className="border border-gray-200 p-2">Organization</th>
                                     <th className="border border-gray-200 p-2">Scholarship Program Name</th>
+                                    <th className="border border-gray-200 p-2">Organization</th>
                                     <th className="border border-gray-200 p-2">Email</th>
                                     <th className="border border-gray-200 p-2">Status</th>
                                     <th className="border border-gray-200 p-2">Details</th>
@@ -130,13 +134,13 @@ export default function ScholarshipProgramApplications() {
                                 ) : (
                                     programs.map((program) => (
                                         <tr key={program._id} className="divide-x hover:bg-gray-100">
-                                            <td className="p-2">{program.organizationName}</td>
                                             <td className="p-2">{program.title}</td>
+                                            <td className="p-2">{program.organizationName}</td>
                                             <td className="p-2">{program.contactEmail}</td>
                                             <td className="p-2 text-yellow-500">{program.status}</td>
                                             <td className="p-4">
                                                 <Link
-                                                    to={`/scholarships-data-details/${program._id}`}
+                                                    to={`/scholarship-program-applications/${program._id}`}
                                                     className="bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white"
                                                 >
                                                     View Details

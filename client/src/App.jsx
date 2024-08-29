@@ -46,8 +46,6 @@ import VerificationDetails from "./pages/Admin/VerificationDetails";
 import StudentDetails from "./pages/Admin/StudentDetails";
 import ProviderDetails from "./pages/Admin/ProviderDetails";
 import ApplicationInbox from "./pages/Admin/ApplicationInbox";
-import ScholarshipsDataDetails from "./pages/Admin/ScholarshipsDataDetails";
-import ScholarshipsDataDisplay from "./pages/Admin/ScholarshipsDataDisplay";
 import ViewScholarshipDetails from "./pages/Scholarship-Provider/ViewScholarshipDetails";
 import InboxApplication from "./pages/Admin/InboxApplication";
 import ViewApplicationDetails from "./pages/Scholarship-Provider/ViewApplicationDetails";
@@ -70,7 +68,7 @@ import AdminForumDetail from "./pages/Admin/AdminForumDetail";
 import AdminCreateForumPost from "./pages/Admin/AdminCreateForumPost";
 import ScholarshipDashboardDetails from "./pages/ScholarshipDashboardDetails";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
-
+import ScholarshipProgramDetails from "./pages/Admin/ScholarshipProgramDetails";
 
 
 export default function App() {
@@ -112,11 +110,11 @@ export default function App() {
           <Route path="/application-inbox" element={<ApplicationInbox />} />
           <Route path="/scholarship-program-applications" element={<ScholarshipProgramApplications />} />
           <Route path="/scholarship-provider-applications" element={<ScholarshipProviderApplications />} />
-          <Route path="/scholarships-data-details/:id" element={<ScholarshipsDataDetails />} />
-          <Route path="/scholarships-data-display/:id" element={<ScholarshipsDataDisplay />} />
           <Route path="/scholarship-provider-details/:id" element={<ScholarshipProviderDetails />} />
           <Route path="/inbox-application" element={<InboxApplication />} />
           <Route path="/edit-student-info/:id" element={<EditStudentInfo />} />
+
+          <Route path="/scholarship-program-applications/:id" element={<ScholarshipProgramDetails />} />
 
           <Route path="/admin-forums" element={<AdminForums />} />
           <Route path="/admin-forums/post/:postId" element={<AdminForumDetail />} />

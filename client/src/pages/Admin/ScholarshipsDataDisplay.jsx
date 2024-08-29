@@ -9,72 +9,29 @@ import { FaEnvelope, FaPhone, FaUser } from 'react-icons/fa';
 import { FaRegCalendarXmark } from "react-icons/fa6";
 import { BsGlobe2 } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa";
-import Layout from "../../components/Layout";
-
 
 export default function ScholarshipsDataDisplay() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [declineReason, setDeclineReason] = useState('');
     const [loading, setLoading] = useState(true);
-
-    const handleDeclineClick = () => {
-        setIsModalOpen(true);
-    };
-
-    const handleModalClose = () => {
-        setIsModalOpen(false);
-        setDeclineReason('');
-    };
-
-    const handleReasonChange = (e) => {
-        setDeclineReason(e.target.value);
-    };
-
-    const handleSubmit = () => {
-        // Handle the submit logic here
-        console.log('Decline reason:', declineReason);
-        handleModalClose();
-    };
-
-       const handleVerifyClick = async () => {
-      try {
-        const response = await fetch(`/api/admin/scholarships/${scholarshipDetails._id}/verify`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-    
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-    
-        const data = await response.json();
-        console.log('Scholarship program verified successfully', data);
-      } catch (error) {
-        console.error('Error verifying scholarship program', error);
-      }
-    };
 
     const { id } = useParams();
     const [scholarshipDetails, setScholarshipDetails] = useState(null);
 
-    useEffect(() => {
-        const fetchScholarshipDetails = async () => {
-            try {
-                const response = await fetch(`/api/admin/scholarship-program/${id}`);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                setScholarshipDetails(data.scholarshipProgram);
-            } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
+    const fetchScholarshipDetails = async () => {
+        try {
+            const response = await fetch(`/api/admin/scholarship-program/${id}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-        };
+            const data = await response.json();
+            setScholarshipDetails(data.scholarshipProgram);
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         fetchScholarshipDetails();
     }, [id]);
 
@@ -84,30 +41,7 @@ export default function ScholarshipsDataDisplay() {
 
     return (
         <div className="flex flex-col min-h-screen font-medium text-slate-700">
-            <Layout />
-            <main className="flex-grow bg-[#f8f8fb] pb-40">
-
-                <div className="flex gap-2 items-center max-w-8xl mx-auto px-24 mt-16">
-                    <Link to={'/scholarships-data'} className="border shadow px-6 py-2 bg-white rounded-md hover:bg-slate-200">
-                        <span>Scholarships</span>
-                    </Link>
-
-                    <IoMdArrowDropdown className='-rotate-90 w-8 h-8 text-blue-600' />
-
-                    <Link to={'/scholarships-data-details'} className="border shadow px-6 py-2 bg-white rounded-md hover:bg-slate-200">
-                        <span className="">{scholarshipDetails.title}'s Application</span>
-                    </Link>
-
-
-                    <IoMdArrowDropdown className='-rotate-90 w-8 h-8 text-blue-600' />
-
-                    <div className="border shadow px-6 py-2 bg-white rounded-md">
-                        <span className="text-blue-600">{scholarshipDetails.title}'s Scholarship Listing View</span>
-                    </div>
-
-
-                </div>
-
+            <main className="flex-grow bg-[#f8f8fb]">
                 <div className='flex flex-row items-center mx-auto max-w-8xl gap-10 px-24'>
                     <div className='bg-blue-600 w-36 h-36 my-8 rounded-md'>
                         {scholarshipDetails.scholarshipImage && (
@@ -240,67 +174,7 @@ export default function ScholarshipsDataDisplay() {
                         </div>
                     </div>
                 </div>
-
-
-                {/* BUTTONS */}
-
-                <div className="flex justify-end gap-4 px-24">
-
-                    <button
-                        type="button"
-                        onClick={handleDeclineClick}
-                        className="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-700"
-
-                    >
-                        Decline
-                    </button>
-
-                    <button
-                        type="button"
-                        className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-800"
-                        onClick={handleVerifyClick}
-                    >
-                        Verify
-                    </button>
-
-                </div>
-
             </main>
-
-
-
-            {isModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-                        <h2 className="text-xl font-bold mb-4">Reason for Decline</h2>
-                        <textarea
-                            className="w-full p-2 border border-gray-300 rounded-md"
-                            rows="4"
-                            value={declineReason}
-                            onChange={handleReasonChange}
-                            placeholder="What are the reasons for declining this scholarship?"
-                        />
-                        <div className="flex justify-end gap-4 mt-4">
-                            <button
-                                type="button"
-                                className="border px-4 py-2 rounded-md hover:bg-slate-200"
-                                onClick={handleModalClose}
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                type="button"
-                                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700"
-                                onClick={handleSubmit}
-                            >
-                                Submit
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-
         </div>
     );
 
