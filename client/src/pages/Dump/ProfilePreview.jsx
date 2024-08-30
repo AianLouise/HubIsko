@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 import { FaHandHolding, FaInfoCircle, FaRegHeart, FaRegEye } from "react-icons/fa";
 import { BiCommentDots } from "react-icons/bi";
 import { Link, useParams } from 'react-router-dom';

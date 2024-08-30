@@ -16,7 +16,7 @@ import { FaFilePdf, FaFileWord } from 'react-icons/fa';
 Modal.setAppElement('#root');
 
 
-export default function ForumDetail() {
+export default function ForumPost() {
     const [loading, setLoading] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
     const { postId } = useParams();

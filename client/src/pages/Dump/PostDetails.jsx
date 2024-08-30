@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 import { FaRegHeart, FaRegEye } from "react-icons/fa";
 import moment from 'moment';
 import { BiCommentDots } from "react-icons/bi";

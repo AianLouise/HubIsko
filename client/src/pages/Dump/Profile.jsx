@@ -1,7 +1,7 @@
 import {React, useState, useEffect} from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import AccountManagement from "./AccountManagement";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import AccountManagement from "../AccountManagement";
 import { RiEditFill } from "react-icons/ri";
 import { CgClose } from "react-icons/cg";
 import { FaRegHeart } from "react-icons/fa";
