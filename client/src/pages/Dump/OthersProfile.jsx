@@ -36,7 +36,6 @@ export default function OthersProfile() {
               <span className='text-xl font-medium text-gray-600'>Student</span>
               <span className='text-4xl font-bold text-gray-800'>{user.username}</span>
               <span className='text-xl font-medium text-gray-600'>Followers: {user.followers}</span>
-            </div>
           </div>
         </div>
 

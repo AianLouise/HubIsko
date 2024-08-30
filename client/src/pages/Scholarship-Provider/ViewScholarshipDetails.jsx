@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import { useSelector } from 'react-redux';
+import { FaCheckCircle, FaTimesCircle, FaExclamationCircle } from 'react-icons/fa';
 
 const toSentenceCase = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
@@ -152,7 +153,6 @@ export default function ViewScholarshipDetails() {
                             { label: 'Program Details', value: 'details' },
                             { label: 'Edit Program', value: 'edit' },
                             { label: 'Post Announcement', value: 'announcement' },
-                            { label: 'Validation', value: 'validation' },
                             { label: 'View Scholars', value: 'scholars' },
                             { label: 'Scholar Applications', value: 'applications' },
                         ].map((tab) => (
@@ -174,10 +174,26 @@ export default function ViewScholarshipDetails() {
                         {activeTab === 'details' && scholarshipProgram && (
                             <div className="p-6 bg-white rounded-lg shadow-md">
                                 <div className="flex items-center mb-4">
-                                    <span className={`px-3 py-1 rounded-full text-white ${scholarshipProgram.status === 'Active' ? 'bg-green-500' :
-                                        scholarshipProgram.status === 'Inactive' ? 'bg-red-500' :
-                                            'bg-yellow-500'
+                                    <span className={`flex items-center px-3 py-1 rounded-full text-white font-semibold ${scholarshipProgram.status === 'Active' ? 'bg-green-500' :
+                                            scholarshipProgram.status === 'Inactive' ? 'bg-red-500' :
+                                                scholarshipProgram.status === 'Pending Approval' ? 'bg-yellow-500' :
+                                                    scholarshipProgram.status === 'Approved' ? 'bg-blue-500' :
+                                                        scholarshipProgram.status === 'Declined' ? 'bg-gray-500' :
+                                                            scholarshipProgram.status === 'Closed' ? 'bg-purple-500' :
+                                                                scholarshipProgram.status === 'Archived' ? 'bg-brown-500' :
+                                                                    scholarshipProgram.status === 'Cancelled' ? 'bg-orange-500' :
+                                                                        scholarshipProgram.status === 'Completed' ? 'bg-teal-500' :
+                                                                            'bg-yellow-500'
                                         }`}>
+                                        {scholarshipProgram.status === 'Active' && <FaCheckCircle className="mr-2" />}
+                                        {scholarshipProgram.status === 'Inactive' && <FaTimesCircle className="mr-2" />}
+                                        {scholarshipProgram.status === 'Pending Approval' && <FaExclamationCircle className="mr-2" />}
+                                        {scholarshipProgram.status === 'Approved' && <FaCheckCircle className="mr-2" />}
+                                        {scholarshipProgram.status === 'Declined' && <FaTimesCircle className="mr-2" />}
+                                        {scholarshipProgram.status === 'Closed' && <FaExclamationCircle className="mr-2" />}
+                                        {scholarshipProgram.status === 'Archived' && <FaExclamationCircle className="mr-2" />}
+                                        {scholarshipProgram.status === 'Cancelled' && <FaTimesCircle className="mr-2" />}
+                                        {scholarshipProgram.status === 'Completed' && <FaCheckCircle className="mr-2" />}
                                         {scholarshipProgram.status}
                                     </span>
                                 </div>
@@ -302,58 +318,6 @@ export default function ViewScholarshipDetails() {
                             </div>
                         )}
 
-                        {activeTab === 'validation' && (
-                            <div className="p-6 bg-white rounded-lg shadow-md space-y-4">
-                                <h2 className="text-2xl font-bold mb-4 text-blue-600">Validation Page</h2>
-                                <p className="text-slate-600">
-                                    Create validation requirements for the school year and review the documents uploaded by scholars.
-                                </p>
-                                <form className="mb-6">
-                                    <h3 className="text-xl font-bold mb-4 text-blue-600">Create Validation Requirement</h3>
-                                    <div className="mb-4">
-                                        <label className="block text-gray-700 font-bold mb-2" htmlFor="schoolYear">
-                                            School Year
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="schoolYear"
-                                            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                            placeholder="Enter school year (e.g., 2024-2025)"
-                                        />
-                                    </div>
-                                    <div className="mb-4">
-                                        <label className="block text-gray-700 font-bold mb-2" htmlFor="requirement">
-                                            Requirement
-                                        </label>
-                                        <input
-                                            type="text"
-                                            id="requirement"
-                                            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                            placeholder="Enter requirement (e.g., Transcript, ID Proof)"
-                                        />
-                                    </div>
-                                    <button
-                                        type="submit"
-                                        className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-300"
-                                    >
-                                        Add Requirement
-                                    </button>
-                                </form>
-                                <h3 className="text-xl font-bold mb-4 text-blue-600">Validation Status</h3>
-                                <ul className="list-disc pl-5">
-                                    <li className="mb-2">
-                                        <strong>John Doe:</strong> <span className="text-gray-600">Documents Approved</span>
-                                    </li>
-                                    <li className="mb-2">
-                                        <strong>Jane Smith:</strong> <span className="text-gray-600">Awaiting Documents</span>
-                                    </li>
-                                    <li className="mb-2">
-                                        <strong>Emily Johnson:</strong> <span className="text-gray-600">Documents Rejected</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        )}
-
                         {activeTab === 'scholars' && (
                             <div className="p-6 bg-white rounded-lg shadow-md space-y-4">
                                 <h2 className="text-2xl font-bold mb-4 text-blue-600">View Scholars</h2>
@@ -373,18 +337,24 @@ export default function ViewScholarshipDetails() {
                                             </tr>
                                         </thead>
                                         <tbody className='text-center'>
-                                            {scholars.map((scholar) => (
-                                                <tr key={scholar._id} className="hover:bg-gray-100">
-                                                    <td className="py-2 px-4 border-b"><strong>{scholar.applicationDetails.firstName} {scholar.applicationDetails.lastName}</strong></td>
-                                                    <td className="py-2 px-4 border-b">{scholar.applicationDetails.education.college.course}</td>
-                                                    <td className="py-2 px-4 border-b">{scholar.applicationDetails.education.college.yearGraduated || 'N/A'}</td>
-                                                    <td className="py-2 px-4 border-b">
-                                                        <Link to={`/scholars/${scholar.applicationDetails.firstName.toLowerCase().replace(' ', '-')}`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
-                                                            View Details
-                                                        </Link>
-                                                    </td>
+                                            {scholars.length === 0 ? (
+                                                <tr>
+                                                    <td colSpan="4" className="py-2 px-4 border-b text-gray-500">No scholars found.</td>
                                                 </tr>
-                                            ))}
+                                            ) : (
+                                                scholars.map((scholar) => (
+                                                    <tr key={scholar._id} className="hover:bg-gray-100">
+                                                        <td className="py-2 px-4 border-b"><strong>{scholar.applicationDetails.firstName} {scholar.applicationDetails.lastName}</strong></td>
+                                                        <td className="py-2 px-4 border-b">{scholar.applicationDetails.education.college.course}</td>
+                                                        <td className="py-2 px-4 border-b">{scholar.applicationDetails.education.college.yearGraduated || 'N/A'}</td>
+                                                        <td className="py-2 px-4 border-b">
+                                                            <Link to={`/scholars/${scholar.applicationDetails.firstName.toLowerCase().replace(' ', '-')}`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
+                                                                View Details
+                                                            </Link>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            )}
                                         </tbody>
                                     </table>
                                 </div>

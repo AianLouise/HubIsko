@@ -4,6 +4,7 @@ import { BiFilter } from "react-icons/bi";
 import { PiArrowRightFill } from "react-icons/pi";
 import { GoDotFill } from "react-icons/go";
 import Layout from "../../components/Layout";
+import { BiRightArrowAlt } from "react-icons/bi";
 
 export default function ApplicationInbox() {
   useEffect(() => {
@@ -111,19 +112,28 @@ export default function ApplicationInbox() {
           </div>
         </div>
         <div className="max-w-8xl mx-auto px-24 gap-10 flex-col flex">
-          <div className="grid grid-cols-3 gap-8">
 
-            <Link to="/scholarship-program-applications" className="bg-white rounded-md shadow p-4 flex flex-col justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
-              <span className="text-slate-500">Scholarship Program Applications</span>
-              <span className="text-4xl">{pendingPrograms}</span>
+          <div className="grid grid-cols-3 gap-8">
+            <Link to="/scholarship-program-applications" className="bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:from-blue-600 hover:to-blue-800 hover:-translate-y-2 transition ease-in-out">
+              <span className="text-lg font-semibold">Scholarship Program Applications</span>
+              <span className="text-4xl font-bold">{pendingPrograms}</span>
+              <span className="text-sm flex items-center mt-2 text-gray-200 font-normal">
+                Click to view the list of applications for scholarship program
+              </span>
             </Link>
-            <Link to="/scholarship-provider-applications" className="bg-white rounded-md shadow p-4 flex flex-col justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
-              <span className="text-slate-500">Scholarship Provider Applications</span>
-              <span className="text-4xl">{pendingProviders}</span>
+            <Link to="/scholarship-provider-applications" className="bg-gradient-to-r from-green-500 to-green-700 text-white rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:from-green-600 hover:to-green-800 hover:-translate-y-2 transition ease-in-out">
+              <span className="text-lg font-semibold">Scholarship Provider Applications</span>
+              <span className="text-4xl font-bold">{pendingProviders}</span>
+              <span className="text-sm flex items-center mt-2 text-gray-200 font-normal">
+                Click to view the list of applications for scholarship provider
+              </span>
             </Link>
-            <Link to="/requests" className="bg-white rounded-md shadow p-4 flex flex-col justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
-              <span className="text-slate-500">Requests</span>
-              <span className="text-4xl">5</span>
+            <Link to="/requests" className="bg-gradient-to-r from-purple-500 to-purple-700 text-white rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:from-purple-600 hover:to-purple-800 hover:-translate-y-2 transition ease-in-out">
+              <span className="text-lg font-semibold">Requests</span>
+              <span className="text-4xl font-bold">5</span>
+              <span className="text-sm flex items-center mt-2 text-gray-200 font-normal">
+                Click to view the list of all requests
+              </span>
             </Link>
           </div>
 

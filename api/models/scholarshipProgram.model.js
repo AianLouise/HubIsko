@@ -46,6 +46,7 @@ const scholarshipProgramSchema = new mongoose.Schema({
   providerRequirements: [
     {
       id: { type: String, required: true },
+      name: { type: String, required: true },
       url: { type: String, required: true }
     }
   ], // Array of provider requirements with id and url

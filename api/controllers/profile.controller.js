@@ -40,16 +40,26 @@ export const getScholarshipProgramsByProviderId = async (req, res) => {
 };
 
 // Function to get all forum posts by user ID (author)
+
 export const getForumPostsByUserId = async (req, res) => {
     try {
         const userId = req.params.id; // Get the user ID from the URL
-        const forumPosts = await ForumPost.find({ author: userId }); // Find forum posts by author (user ID)
+
+        // Fetch the user's details
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Find forum posts by author (user ID)
+        const forumPosts = await ForumPost.find({ author: userId });
 
         if (!forumPosts.length) {
             return res.status(404).json({ message: 'No forum posts found for this user' });
         }
 
-        res.json(forumPosts); // Send the forum posts as a JSON response
+        // Send the forum posts, username, and profile picture as a JSON response
+        res.json({ username: user.username, profilePicture: user.profilePicture, forumPosts });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });
     }

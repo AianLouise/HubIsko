@@ -20,6 +20,8 @@ import { useLocation } from 'react-router-dom';
 
 
 export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, currentPath }) {
+    const { currentUser } = useSelector((state) => state.user);
+
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const location = useLocation();
@@ -72,7 +74,6 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
 
 
     const dispatch = useDispatch();
-    const currentUser = useSelector((state) => state.user.currentUser);
 
     const handleSignOut = async () => {
         try {
@@ -83,6 +84,29 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
         }
     };
 
+    const generateBreadcrumb = () => {
+        const pathnames = location.pathname.split('/').filter(x => x);
+
+        const capitalizeWords = (str) => {
+            return str.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+        };
+
+        return (
+            <>
+                <h1 className="text-lg font-bold text-blue-500">{currentUser.scholarshipProviderDetails.organizationName}</h1>
+                {pathnames.map((value, index) => {
+                    const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
+                    return (
+                        <span key={index} className="text-lg font-bold text-blue-500">
+                            /&nbsp;<Link to={routeTo}>{capitalizeWords(value)}</Link>
+                        </span> 
+                    );
+                })}
+            </>
+        );
+    };
+
+
     return (
         <header className="bg-white text-gray-800 p-4 flex justify-between items-center shadow border-b w-full">
             <div className="max-w-8xl w-full mx-auto px-20 flex justify-between items-center">
@@ -90,7 +114,7 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
                     <button className="text-blue-600" onClick={toggleSidebar}>
                         <FontAwesomeIcon icon={faBars} className='w-4 h-4' />
                     </button>
-                    <PageHeader path={currentPath} />
+                    {generateBreadcrumb()}
                 </div>
 
 
