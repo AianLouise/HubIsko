@@ -11,7 +11,7 @@ router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
 router.get("/details", verifyToken, getUserDetails);
 router.post("/complete-profile", verifyToken, CompleteProfile);
-router.post("/change-password/:id", verifyToken, changePassword);
+router.post("/change-password/:id", changePassword);
 
 
 
