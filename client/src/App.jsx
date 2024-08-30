@@ -4,7 +4,7 @@ import Login from "./pages/Login";
 import CompleteOrReturnHome from "./pages/CompleteOrReturnHome";
 import Register from "./pages/Register";
 import About from "./pages/About";
-import Profile from "./pages/Dump/Profile";
+import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import ProviderPrivateRoute from "./components/ProviderPrivateRoute";
 import VerifyEmail from "./components/VerifyEmail";
@@ -65,6 +65,7 @@ import AdminDashboard from "./pages/Admin/AdminDashboard";
 import ScholarshipProgramDetails from "./pages/Admin/ScholarshipProgramApplicationDetails";
 import ScholarshipPrograms from "./pages/Admin/ScholarshipPrograms";
 import Profiles from "./pages/Profiles";
+import PasswordAndSecurity2 from "./pages/PasswordAndSecurity2";
 // import NotificationsPage from "./components/notification";
 // import NotificationDetailPage from "./components/NotificationDetailPage";
 // import PreviewProfile from "./pages/Scholarship-Provider/PreviewProfile";
@@ -152,7 +153,7 @@ export default function App() {
           <Route path="/complete-profile-confirmation" element={<CompleteProfileConfirmation />} />
           <Route path="/scholar-dashboard" element={<ScholarDashboard />} />
           <Route path="/account-management" element={<AccountManagement />} />
-          <Route path="/password-and-security" element={<PasswordAndSecurity />} />
+          <Route path="/password-and-security" element={<PasswordAndSecurity2 />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/about" element={<About />} />
           <Route path="/CoRH" element={<CompleteOrReturnHome />} />
