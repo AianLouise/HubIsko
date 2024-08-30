@@ -3,11 +3,14 @@ import Layout from "../../components/Layout";
 import { Link } from "react-router-dom";
 import { BiDotsHorizontal } from "react-icons/bi";
 import { BsInboxFill } from "react-icons/bs";
+import { useSelector } from "react-redux";
 
 export default function AdminDashboard() {
     useEffect(() => {
         document.title = "Admin Dashboard | HubIsko";
     }, []);
+
+    const { currentUser } = useSelector((state) => state.user);
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [totalAccounts, setTotalAccounts] = useState(0);
@@ -17,6 +20,8 @@ export default function AdminDashboard() {
     const [pendingPrograms, setPendingPrograms] = useState(0); // New State for Pending Programs
     const [activities, setActivities] = useState([]); // State for Activities
     const [loading, setLoading] = useState(true);
+
+    const [currentDate, setCurrentDate] = useState(new Date());
 
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
@@ -70,6 +75,12 @@ export default function AdminDashboard() {
         };
 
         fetchData();
+
+        const intervalId = setInterval(() => {
+            setCurrentDate(new Date());
+        }, 1000);
+
+        return () => clearInterval(intervalId);
     }, []);
 
     if (loading) {
@@ -83,17 +94,35 @@ export default function AdminDashboard() {
         );
     }
 
+    const formattedDate = currentDate.toLocaleDateString();
+    const formattedTime = currentDate.toLocaleTimeString();
+
+
+
     return (
         <div className="flex flex-col min-h-screen">
             <Layout />
             <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
                 <div className='border-b mb-8'>
-                    <div className={'flex items-center mx-auto justify-between px-24'}>
+                    <div className='flex items-center mx-auto justify-between px-8 lg:px-24 py-6 bg-white shadow-md rounded-lg'>
                         <div className='flex flex-col gap-2 w-1/2'>
-                            <h1 className='text-4xl font-bold text-slate-800'>Welcome Admin!</h1>
+                            <h1 className='text-4xl font-bold text-slate-800'>Welcome {currentUser.username}!</h1>
                             <p className='text-lg text-slate-500 font-medium'>Here is your dashboard!</p>
+                            <p className='text-sm text-slate-400'>{`Today is ${formattedDate}, ${formattedTime}`}</p>
                         </div>
-                        <div className='bg-blue-600 w-36 h-36 my-8 rounded-md'></div>
+                        <div className='flex items-center gap-4'>
+                            <div className='bg-blue-600 w-36 h-36 my-8 rounded-md flex items-center justify-center'>
+                                <img
+                                    src={currentUser ? currentUser.profilePicture : 'defaultProfilePicture.jpg'}
+                                    alt='Admin Profile'
+                                    className='w-32 h-32 rounded-full object-cover'
+                                />
+                            </div>
+                            <div className='flex flex-col'>
+                                <p className='text-lg font-medium text-slate-800'>Admin Name</p>
+                                <p className='text-sm text-slate-500'>admin@example.com</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className='max-w-8xl mx-auto px-24 py-12 gap-10 flex-col flex'>
