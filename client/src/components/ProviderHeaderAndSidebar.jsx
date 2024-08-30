@@ -99,7 +99,7 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
                     return (
                         <span key={index} className="text-lg font-bold text-blue-500">
                             /&nbsp;<Link to={routeTo}>{capitalizeWords(value)}</Link>
-                        </span>
+                        </span> 
                     );
                 })}
             </>

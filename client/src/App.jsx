@@ -13,7 +13,7 @@ import ScholarshipListing from "./pages/ScholarshipListing";
 import ForgotPassword from "./components/ForgotPassword";
 import CompleteProfile from "./pages/CompleteProfile";
 import ResetPassword from "./components/ResetPassword";
-import ProviderDashboard from "./pages/Scholarship-Provider/providerDashboard";
+import ProviderDashboard from "./pages/Scholarship-Provider/ProviderDashboard";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import ScholarDashboard from "./pages/ScholarDashboard";
 import RegisterAsProvider from "./pages/RegisterAsProvider";
@@ -70,6 +70,7 @@ import ScholarshipDashboardDetails from "./pages/ScholarshipDashboardDetails";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import ScholarshipProgramDetails from "./pages/Admin/ScholarshipProgramApplicationDetails";
 import ScholarshipPrograms from "./pages/Admin/ScholarshipPrograms";
+import Profiles from "./pages/Profiles";
 
 
 export default function App() {
@@ -98,6 +99,8 @@ export default function App() {
         <Route path="/scholarship-dashboard-details/:id" element={<ScholarshipDashboardDetails />} />
         {/* <Route path="/notifications" element={<NotificationsPage />} />
         <Route path="/notifications/:notificationId" element={<NotificationDetailPage />} /> */}
+
+        <Route path="/profile/:id" element={<Profiles />} />
 
         {/* Admin Routes */}
         <Route element={<ProviderPrivateRoute allowedRoles={['admin']} />}>
@@ -152,7 +155,7 @@ export default function App() {
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/about" element={<About />} />
           <Route path="/CoRH" element={<CompleteOrReturnHome />} />
-          
+
           <Route path="/applying-stages/:scholarshipId" element={<ApplyingStages />} />
           <Route path="/application-box" element={<ApplicationBox />} />
           <Route path="/application-detail/:id" element={<InboxedApplicationDetail />} />

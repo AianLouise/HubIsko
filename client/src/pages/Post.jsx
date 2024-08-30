@@ -280,41 +280,13 @@ export default function ForumDetail() {
                     </div>
                     <div className='border shadow p-4 rounded-md bg-white'>
                         <div className='flex gap-4'>
-                            {
-                                post.author.role === 'scholarship_provider' ? (
-                                    <Link to={`/profile-preview/${post.author._id}`}>
-                                        <img
-                                            src={post.author.profilePicture}
-                                            alt={`${post.author.username}'s profile`}
-                                            className='w-12 h-12 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
-                                        />
-                                    </Link>
-                                ) : post.author.role === 'applicant' ? (
-                                    <Link to={`/others-profile/${post.author._id}`}>
-                                        <img
-                                            src={post.author.profilePicture}
-                                            alt={`${post.author.username}'s profile`}
-                                            className='w-12 h-12 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
-                                        />
-                                    </Link>
-                                ) : post.author.role === 'admin' ? (
-                                    <Link to={`/admin-profile/${post.author._id}`}>
-                                        <img
-                                            src={post.author.profilePicture}
-                                            alt={`${post.author.username}'s profile`}
-                                            className='w-12 h-12 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
-                                        />
-                                    </Link>
-                                ) : (
-                                    <Link to={`/other-profile/${post.author._id}`}>
-                                        <img
-                                            src={post.author.profilePicture}
-                                            alt={`${post.author.username}'s profile`}
-                                            className='w-12 h-12 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
-                                        />
-                                    </Link>
-                                )
-                            }
+                            <Link to={`/profile/${post.author._id}`}>
+                                <img
+                                    src={post.author.profilePicture}
+                                    alt={`${post.author.username}'s profile`}
+                                    className='w-12 h-12 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
+                                />
+                            </Link>
                             <div className='flex flex-col'>
                                 <span className='font-bold text-lg'>{post.author.username}</span>
                                 <span className='text-sm text-slate-500'>
