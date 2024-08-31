@@ -32,10 +32,11 @@ const StepTemplate = ({ steps, formData, setFormData, currentPage, setCurrentPag
           {React.cloneElement(steps[currentPage].content, { formData, setFormData, errors })}
         </div>
       </div>
-      <div className="navigation-buttons flex justify-between mt-4">
+      <div className="navigation-buttons flex justify-between pb-5">
         {currentPage > 0 && (
           <button
-            className="btn-prev bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300"
+          type='button'
+            className="btn-prev bg-gray-200 text-gray-700 px-6 py-2 rounded hover:bg-gray-300"
             onClick={prevStep}
           >
             Previous
@@ -43,7 +44,8 @@ const StepTemplate = ({ steps, formData, setFormData, currentPage, setCurrentPag
         )}
         {currentPage < steps.length - 1 && (
           <button
-            className="btn-next bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ml-auto"
+            type='button'
+            className="btn-next bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 ml-auto"
             onClick={nextStep}
           >
             Next
@@ -51,7 +53,7 @@ const StepTemplate = ({ steps, formData, setFormData, currentPage, setCurrentPag
         )}
         {currentPage === steps.length - 1 && (
           <button
-            className="btn-submit bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ml-auto"
+            className="btn-submit bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600 ml-auto"
             type="submit"
           >
             Submit

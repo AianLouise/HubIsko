@@ -47,39 +47,6 @@ export const createScholarshipProgram = async (req, res) => {
       providerRequirements
     } = req.body;
 
-    // Validate required fields
-    if (
-      !title || !category || !fieldOfStudy ||
-      numberOfScholarships === undefined || !amount || !applicationDeadline ||
-      !minGPA || !nationality || !otherEligibility ||
-      !startDate || !endDate || !selectionProcess || !selectionCriteria ||
-      !renewalPolicy || !renewalDuration || !disbursementSchedule ||
-      !disbursementMethod || !contactEmail || !contactPhone ||
-      !providerId || !organizationName || !faqTitle || !faqDescription || // Include FAQ validation
-      !scholarshipImage || !bannerImage || !providerRequirements// Include scholarshipImage and bannerImage validation
-    ) {
-      console.error('Validation Error: Missing required fields');
-      return res.status(400).json({
-        message: 'Title, category, field of study, number of scholarships, amount, application deadline, minimum GPA, nationality, other eligibility criteria, start date, end date, selection process, selection criteria, renewal policy, renewal duration, disbursement schedule, disbursement method, contact email, contact phone, provider ID, organization name, FAQ title, FAQ description, scholarship image, banner image, and providerRequirements are required fields.',
-      });
-    }
-
-    // Validate date fields
-    const parsedStartDate = new Date(startDate);
-    const parsedEndDate = new Date(endDate);
-    const parsedApplicationDeadline = new Date(applicationDeadline);
-
-    if (
-      isNaN(parsedStartDate.getTime()) ||
-      isNaN(parsedEndDate.getTime()) ||
-      isNaN(parsedApplicationDeadline.getTime())
-    ) {
-      console.error('Validation Error: Invalid date format');
-      return res.status(400).json({
-        message: 'Invalid date format for start date, end date, or application deadline.',
-      });
-    }
-
     // Create a new Scholarship document
     const newScholarship = new Scholarship({
       title,
@@ -87,12 +54,12 @@ export const createScholarshipProgram = async (req, res) => {
       fieldOfStudy,
       numberOfScholarships,
       amount,
-      applicationDeadline: parsedApplicationDeadline,
+      applicationDeadline: new Date(applicationDeadline),
       minGPA,
       nationality,
       otherEligibility,
-      startDate: parsedStartDate,
-      endDate: parsedEndDate,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
       selectionProcess,
       selectionCriteria,
       renewalPolicy,
@@ -130,6 +97,128 @@ export const createScholarshipProgram = async (req, res) => {
     });
   }
 };
+
+// export const createScholarshipProgram = async (req, res) => {
+//   try {
+//     // Log the request body for debugging
+//     console.log('Request Body:', req.body);
+
+//     // Extract data from request body
+//     const {
+//       title,
+//       category,
+//       fieldOfStudy,
+//       numberOfScholarships,
+//       amount,
+//       applicationDeadline,
+//       minGPA,
+//       nationality,
+//       otherEligibility,
+//       startDate,
+//       endDate,
+//       selectionProcess,
+//       selectionCriteria,
+//       renewalPolicy,
+//       renewalDuration,
+//       disbursementSchedule,
+//       disbursementMethod,
+//       contactEmail,
+//       contactPhone,
+//       providerId,
+//       organizationName,
+//       requiredDocuments,
+//       documentGuidelines,
+//       scholarshipImage,
+//       bannerImage,
+//       sections,
+//       faqTitle,
+//       faqDescription,
+//       providerRequirements
+//     } = req.body;
+
+//     // Validate required fields
+//     if (
+//       !title || !category || !fieldOfStudy ||
+//       numberOfScholarships === undefined || !amount || !applicationDeadline ||
+//       !minGPA || !nationality || !otherEligibility ||
+//       !startDate || !endDate || !selectionProcess || !selectionCriteria ||
+//       !renewalPolicy || !renewalDuration || !disbursementSchedule ||
+//       !disbursementMethod || !contactEmail || !contactPhone ||
+//       !providerId || !organizationName || !faqTitle || !faqDescription || // Include FAQ validation
+//       !scholarshipImage || !bannerImage || !providerRequirements// Include scholarshipImage and bannerImage validation
+//     ) {
+//       console.error('Validation Error: Missing required fields');
+//       return res.status(400).json({
+//         message: 'Title, category, field of study, number of scholarships, amount, application deadline, minimum GPA, nationality, other eligibility criteria, start date, end date, selection process, selection criteria, renewal policy, renewal duration, disbursement schedule, disbursement method, contact email, contact phone, provider ID, organization name, FAQ title, FAQ description, scholarship image, banner image, and providerRequirements are required fields.',
+//       });
+//     }
+
+//     // Validate date fields
+//     const parsedStartDate = new Date(startDate);
+//     const parsedEndDate = new Date(endDate);
+//     const parsedApplicationDeadline = new Date(applicationDeadline);
+
+//     if (
+//       isNaN(parsedStartDate.getTime()) ||
+//       isNaN(parsedEndDate.getTime()) ||
+//       isNaN(parsedApplicationDeadline.getTime())
+//     ) {
+//       console.error('Validation Error: Invalid date format');
+//       return res.status(400).json({
+//         message: 'Invalid date format for start date, end date, or application deadline.',
+//       });
+//     }
+
+//     // Create a new Scholarship document
+//     const newScholarship = new Scholarship({
+//       title,
+//       category,
+//       fieldOfStudy,
+//       numberOfScholarships,
+//       amount,
+//       applicationDeadline: parsedApplicationDeadline,
+//       minGPA,
+//       nationality,
+//       otherEligibility,
+//       startDate: parsedStartDate,
+//       endDate: parsedEndDate,
+//       selectionProcess,
+//       selectionCriteria,
+//       renewalPolicy,
+//       renewalDuration,
+//       disbursementSchedule,
+//       disbursementMethod,
+//       contactEmail,
+//       contactPhone,
+//       providerId,
+//       organizationName,
+//       requiredDocuments,
+//       documentGuidelines,
+//       scholarshipImage,
+//       bannerImage,
+//       sections,
+//       faqTitle,
+//       faqDescription,
+//       providerRequirements
+//     });
+
+//     // Save the Scholarship document to the database
+//     const savedScholarship = await newScholarship.save();
+
+//     // Send success response
+//     res.status(201).json({
+//       message: 'Scholarship program created successfully!',
+//       data: savedScholarship,
+//     });
+//   } catch (error) {
+//     // Handle errors
+//     console.error('Error creating scholarship program:', error);
+//     res.status(500).json({
+//       message: 'An error occurred while creating the scholarship program.',
+//       error: error.message,
+//     });
+//   }
+// };
 
 export const getScholarshipProgramsByProviderId = async (req, res) => {
   try {

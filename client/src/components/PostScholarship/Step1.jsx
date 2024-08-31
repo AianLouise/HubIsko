@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const Step1 = ({ formData, setFormData }) => {
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
+
+    useEffect(() => {
+        // Scroll to the top of the page when the component is mounted
+        window.scrollTo(0, 0);
+    }, []);
 
     return (
         <div className="flex flex-col gap-8">

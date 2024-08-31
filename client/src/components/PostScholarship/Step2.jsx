@@ -8,6 +8,11 @@ const Step2 = ({ formData, setFormData }) => {
         { id: 'enrollment', name: 'Proof of Enrollment', required: false },
     ]);
 
+    useEffect(() => {
+        // Scroll to the top of the page when the component is mounted
+        window.scrollTo(0, 0);
+    }, []);
+
     const [errors, setErrors] = useState({});
 
     useEffect(() => {

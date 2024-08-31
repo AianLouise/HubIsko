@@ -181,8 +181,8 @@ export default function PostScholarship() {
     setIsLoading(true);
 
     const providerRequirements = requirements
-        .filter(req => req.url !== '')
-        .map(req => ({ id: req.id, name: req.name, url: req.url }));
+      .filter(req => req.url !== '')
+      .map(req => ({ id: req.id, name: req.name, url: req.url }));
 
     const updatedFormData = {
       ...formData,
