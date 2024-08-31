@@ -111,7 +111,7 @@ export default function ScholarshipListing() {
             {providers
               .filter((provider) => provider.status === 'Verified')
               .map((provider) => (
-                <Link to={`/profile-preview/${provider._id}`} key={provider._id} className='flex flex-col items-center group'>
+                <Link to={`/profile/${provider._id}`} key={provider._id} className='flex flex-col items-center group'>
                   <button className='flex flex-col items-center group space-y-2 relative'>
                     <div className='w-16 h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden group-hover:bg-blue-800'>
                       <img
