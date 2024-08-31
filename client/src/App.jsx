@@ -13,7 +13,7 @@ import ScholarshipListing from "./pages/ScholarshipListing";
 import ForgotPassword from "./components/ForgotPassword";
 import CompleteProfile from "./pages/CompleteProfile";
 import ResetPassword from "./components/ResetPassword";
-import ProviderDashboard from "./pages/Scholarship-Provider/ProviderDashboard";
+// import ProviderDashboard from "./pages/Scholarship-Provider/ProviderDashboard";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import ScholarDashboard from "./pages/ScholarDashboard";
 import RegisterAsProvider from "./pages/RegisterAsProvider";
@@ -131,7 +131,7 @@ export default function App() {
 
         {/* Provider Routes */}
         <Route element={<ProviderPrivateRoute allowedRoles={['scholarship_provider']} />}>
-          <Route path="/provider-dashboard" element={<ProviderDashboard />} />
+          {/* <Route path="/provider-dashboard" element={<ProviderDashboard />} /> */}
           <Route path="/post-scholarship" element={<PostScholarship />} />
           <Route path="/scholar-applications" element={<ScholarApplications />} />
           <Route path="/scholarships" element={<Scholarships />} />
