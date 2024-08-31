@@ -7,15 +7,15 @@ export default {
   theme: {
 
     extend: {
-
-      keyframes:{
-        lineUp: {
-          "50%":{
-            
-          }
-        }
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
+        },
       },
-
+      animation: {
+        fadeIn: 'fadeIn 0.5s ease-in-out',
+      },
     },
     screens: {
       'sm': '640px',
@@ -35,13 +35,13 @@ export default {
     }
   },
   plugins: [
-    function({addUtilities}){
+    function ({ addUtilities }) {
       const newUtilities = {
-        ".no-scrollbar::-webkit-scrollbar":{
+        ".no-scrollbar::-webkit-scrollbar": {
           display: "none",
         },
-        ".no-scrollbar":{
-          "-ms-overflow-style":"none",
+        ".no-scrollbar": {
+          "-ms-overflow-style": "none",
           "scrollbar-width": "none",
         },
       };
