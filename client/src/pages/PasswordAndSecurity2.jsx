@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import AccountManagement from './AccountManagement';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import CustomNotification from '../components/CustomNotification'; // Import the renamed component
+import CustomNotification from '../components/CustomNotification';
 
 export default function PasswordAndSecurity() {
     useEffect(() => {
@@ -52,8 +52,30 @@ export default function PasswordAndSecurity() {
         setPasswordStrength(strength);
     };
 
+    const validatePassword = (password) => {
+        const minLength = 6;
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasSpecialChar = /[!@#$%^&*]/.test(password);
+
+        if (password.length < minLength) {
+            return 'Password must be at least 6 characters long';
+        }
+        if (!hasUpperCase) {
+            return 'Password must contain at least one uppercase letter';
+        }
+        if (!hasSpecialChar) {
+            return 'Password must contain at least one special character (!@#$%^&*)';
+        }
+        return '';
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const validationError = validatePassword(formData.newPassword);
+        if (validationError) {
+            setNotification({ message: validationError, type: 'error' });
+            return;
+        }
         if (formData.newPassword !== formData.confirmNewPassword) {
             setNotification({ message: 'New passwords do not match', type: 'error' });
             return;
@@ -158,7 +180,7 @@ export default function PasswordAndSecurity() {
                         <div className='text-sm text-slate-500 mt-1'>
                             Password Requirements:
                             <ul className='list-disc list-inside'>
-                                <li>Minimum 8 characters</li>
+                                <li>Minimum 6 characters</li>
                                 <li>At least one uppercase letter</li>
                                 <li>At least one special character (!@#$%^&*)</li>
                             </ul>
