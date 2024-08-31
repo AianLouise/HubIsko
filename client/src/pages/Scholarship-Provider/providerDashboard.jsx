@@ -13,10 +13,10 @@ export default function ProviderDashboard() {
   const orgName = currentUser?.scholarshipProviderDetails.organizationName;
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const userId = currentUser?._id;
+  const providerId = currentUser?._id;
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
-  
   const [applicationsCount, setApplicationsCount] = useState(0);
   const [activeApplicationsCount, setActiveApplicationsCount] = useState(0); // Assuming you have a way to get active applications count
 
@@ -36,9 +36,28 @@ export default function ProviderDashboard() {
     }
   }, [userId]);
 
+  const [activities, setActivities] = useState([]);
+
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const response = await fetch(`/api/scholarshipActivity/scholarship-activity-logs/provider/${providerId}`);
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          setActivities(data);
+        } else {
+          console.error('Fetched activities data is not an array:', data);
+        }
+      } catch (error) {
+        console.error('Error fetching activities:', error);
+      }
+    };
+
+    fetchActivities();
+  }, [providerId]);
+
   return (
     <div className={`flex flex-col min-h-screen`}>
-
       <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''} `}>
         <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} currentPath={`${currentUser.scholarshipProviderDetails.organizationName} / Dashboard`} />
 
@@ -79,7 +98,6 @@ export default function ProviderDashboard() {
         </div>
 
         <div className='max-w-8xl mx-auto px-24 py-12 gap-10 flex-col flex'>
-
           <div className='grid grid-cols-2 gap-10'>
             <div className="flex divide-x bg-white p-6 rounded-md shadow-md transition-all">
               <div className='flex flex-col w-1/2 items-center'>
@@ -131,18 +149,12 @@ export default function ProviderDashboard() {
           <div className="bg-white p-6 rounded-md shadow-md transition-all">
             <h2 className="text-2xl font-bold text-slate-700 mb-4">Recent Activity</h2>
             <ul className="list-disc pl-5 text-slate-700">
-              <li className="mb-2 flex items-center">
-                <span className="inline-block w-2 h-2 bg-blue-600 rounded-full mr-2"></span>
-                New application received for Scholarship A
-              </li>
-              <li className="mb-2 flex items-center">
-                <span className="inline-block w-2 h-2 bg-green-600 rounded-full mr-2"></span>
-                Scholarship B has been updated
-              </li>
-              <li className="flex items-center">
-                <span className="inline-block w-2 h-2 bg-purple-600 rounded-full mr-2"></span>
-                New scholarship posted: Scholarship C
-              </li>
+              {activities.map(activity => (
+                <li key={activity._id} className="mb-2 flex items-center">
+                  <span className={`inline-block w-2 h-2 rounded-full mr-2 ${getActivityColor(activity.action)}`}></span>
+                  {activity.details} for {activity.scholarshipProgramId.title}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -150,3 +162,16 @@ export default function ProviderDashboard() {
     </div>
   );
 }
+
+const getActivityColor = (action) => {
+  switch (action) {
+    case 'new_application':
+      return 'bg-blue-600';
+    case 'update_scholarship':
+      return 'bg-green-600';
+    case 'new_scholarship':
+      return 'bg-purple-600';
+    default:
+      return 'bg-gray-600';
+  }
+};
