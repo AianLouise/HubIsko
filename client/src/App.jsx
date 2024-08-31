@@ -33,7 +33,7 @@ import Scholarships from "./pages/Scholarship-Provider/scholarships";
 import ScholarApplications from "./pages/Scholarship-Provider/ScholarApplications";
 import ProviderForums from "./pages/Scholarship-Provider/ProviderForums";
 import ProviderForumDetail from "./pages/Scholarship-Provider/ProviderForumDetail";
-import PostScholarship from "./pages/Scholarship-Provider/PostScholarship";
+import PostScholarship from "./pages/Scholarship-Provider/PostScholarship2";
 import ForumCreatePost from "./pages/ForumCreatePost";
 import Accounts from "./pages/Admin/Accounts";
 import Students from "./pages/Admin/StudentsAccount";
