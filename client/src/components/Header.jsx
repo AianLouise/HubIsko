@@ -124,6 +124,13 @@ export default function Header() {
     fetchNotifications();
   }, [userId]);
 
+  const truncateMessage = (message, maxLength) => {
+    if (message.length > maxLength) {
+      return message.substring(0, maxLength) + '...';
+    }
+    return message;
+  };
+
   return (
     <div className='border-b bg-[#f8f8fb] shadow-sm'>
       <div className='flex justify-between text-md max-w-6xl mx-auto p-6 lg:px-20'>
@@ -258,7 +265,7 @@ export default function Header() {
                             notifications.map((notification) => (
                               <div
                                 key={notification._id}
-                                className="flex flex-row hover:bg-slate-200 rounded-md px-2 text-sm w-full gap-4 cursor-pointer"
+                                className="flex flex-row hover:bg-slate-200 rounded-md p-2 text-sm w-full gap-4 cursor-pointer"
                                 onClick={() => handleNotificationClick(notification._id)}
                               >
                                 <img
@@ -268,8 +275,8 @@ export default function Header() {
                                 />
                                 <div className="flex flex-col text-left">
                                   <span className="font-bold">{notification.senderId.scholarshipProviderDetails.organizationName}</span>
-                                  <span className="text-sm">{notification.message} <br />
-                                    <span className='text-blue-600'>... see more</span></span>
+                                  <span className="text-sm">{truncateMessage(notification.message, 50)}
+                                    <span className='text-blue-600 font-semibold'>  See More</span></span>
                                 </div>
                               </div>
                             ))
