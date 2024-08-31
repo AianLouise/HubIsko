@@ -137,7 +137,7 @@ export default function ProviderDashboard() {
 
               <button className="flex justify-between items-center bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2 hover:bg-slate-200 group ease-in-out">
                 <div>
-                  <h2 className="text-xl font-semibold text-slate-700">Active Applications</h2>
+                  <h2 className="text-xl font-semibold text-slate-700">Total Scholarship Programs</h2>
                   <p className="text-2xl font-bold text-left">{activeApplicationsCount}</p>
                 </div>
 
