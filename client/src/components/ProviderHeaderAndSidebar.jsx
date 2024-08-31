@@ -17,9 +17,12 @@ import { IoMenu } from "react-icons/io5";
 import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import Logo from '../assets/NewLogoClean.png';
 
 
 export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, currentPath }) {
+    const { currentUser } = useSelector((state) => state.user);
+
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const location = useLocation();
@@ -72,7 +75,6 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
 
 
     const dispatch = useDispatch();
-    const currentUser = useSelector((state) => state.user.currentUser);
 
     const handleSignOut = async () => {
         try {
@@ -83,6 +85,29 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
         }
     };
 
+    const generateBreadcrumb = () => {
+        const pathnames = location.pathname.split('/').filter(x => x);
+
+        const capitalizeWords = (str) => {
+            return str.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+        };
+
+        return (
+            <>
+                <h1 className="text-lg font-bold text-blue-500">{currentUser.scholarshipProviderDetails.organizationName}</h1>
+                {pathnames.map((value, index) => {
+                    const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
+                    return (
+                        <span key={index} className="text-lg font-bold text-blue-500">
+                            /&nbsp;<Link to={routeTo}>{capitalizeWords(value)}</Link>
+                        </span>
+                    );
+                })}
+            </>
+        );
+    };
+
+
     return (
         <header className="bg-white text-gray-800 p-4 flex justify-between items-center shadow border-b w-full">
             <div className="max-w-8xl w-full mx-auto px-20 flex justify-between items-center">
@@ -90,7 +115,7 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
                     <button className="text-blue-600" onClick={toggleSidebar}>
                         <FontAwesomeIcon icon={faBars} className='w-4 h-4' />
                     </button>
-                    <PageHeader path={currentPath} />
+                    {generateBreadcrumb()}
                 </div>
 
 
@@ -149,7 +174,7 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
                 <aside className="fixed font-medium inset-y-0 left-0 transform translate-x-0 w-64 transition-transform duration-300 ease-in-out bg-white shadow-lg p-4 z-50">
                     <div className='flex justify-between mb-8'>
                         <div className='flex items-center gap-2'>
-                            <div className='bg-blue-600 w-6 h-6 rounded-md'></div>
+                            <img src={Logo} alt='Logo' className='w-6 h-6 rounded-md' />
                             <span className='font-bold text-blue-600 text-2xl'>HubIsko</span>
                         </div>
                         <button onClick={toggleSidebar} className='border border-blue-600 rounded-full items-center justify-center flex w-8 hover:bg-slate-200 transition hover:border-none'>

@@ -16,6 +16,7 @@ import { FaFileCircleQuestion } from "react-icons/fa6";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from '../redux/user/userSlice';
+import Logo from '../assets/NewLogoClean.png';
 
 export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
     const [isAccountsDropdownOpen, setIsAccountsDropdownOpen] = useState(false);
@@ -126,9 +127,9 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
 
                     <div className="flex justify-between items-center pb-2 mb-4 border-b">
 
-                        <div className="flex gap-2 items-center">
-                            <div className="bg-blue-600 w-8 h-8 rounded-md"></div>
-                            <span className="font-bold">HubIsko</span>
+                    <div className='flex items-center gap-2'>
+                            <img src={Logo} alt='Logo' className='w-6 h-6 rounded-md' />
+                            <span className='font-bold text-blue-600 text-2xl'>HubIsko</span>
                         </div>
 
                         <button onClick={toggleSidebar} className="text-blue-600 border p-2 rounded-full hover:bg-slate-200">

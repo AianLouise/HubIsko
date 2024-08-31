@@ -71,9 +71,9 @@ export const forgotPassword = async (req, res, next) => {
     user.resetPasswordToken = resetToken;
     await user.save();
 
-    const resetUrl = `https://hubisko.onrender.com/reset-password?token=${resetToken}`;
+    // const resetUrl = `https://hubisko.onrender.com/reset-password?token=${resetToken}`;
 
-    // const resetUrl = `http://localhost:5173/reset-password?token=${resetToken}`;
+    const resetUrl = `http://localhost:5173/reset-password?token=${resetToken}`;
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -189,27 +189,27 @@ export const CompleteProfile = async (req, res, next) => {
 };
 
 export const changePassword = async (req, res, next) => {
-  const userId = req.params.id;
+  const { id } = req.params;
   const { oldPassword, newPassword } = req.body;
 
   try {
-    const user = await User.findById(userId);
-    if (!user) {
-      return next(errorHandler(404, 'User not found'));
-    }
+      const user = await User.findById(id);
+      if (!user) {
+          return next(errorHandler(404, 'User not found'));
+      }
 
-    const isMatch = await bcryptjs.compare(oldPassword, user.password);
-    if (!isMatch) {
-      return next(errorHandler(400, 'Old password does not match'));
-    }
+      const isMatch = await bcryptjs.compare(oldPassword, user.password);
+      if (!isMatch) {
+          return next(errorHandler(400, 'Current password is incorrect'));
+      }
 
-    const hashedNewPassword = bcryptjs.hashSync(newPassword, 10);
-    user.password = hashedNewPassword;
-    await user.save();
+      const salt = await bcryptjs.genSalt(10);
+      user.password = await bcryptjs.hash(newPassword, salt);
+      await user.save();
 
-    res.status(200).json({ message: 'Password successfully changed' });
+      res.status(200).send('Password successfully changed');
   } catch (error) {
-    next(error);
+      next(errorHandler(500, 'Server error'));
   }
 };
 

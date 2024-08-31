@@ -1,10 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import OAuth from '../components/OAuth';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import NewLogo from '../assets/NewLogo.png';
 import SmallLogo from '../assets/NewLogoClean.png';
+
+const PasswordRequirements = ({ requirements }) => {
+  return (
+    <ul className="list-none p-0">
+      {requirements.map((req, index) => (
+        <li
+          key={index}
+          className={`flex items-center gap-2 text-sm ${req.met ? 'text-green-500' : 'text-red-500'} animate-fadeIn`}
+        >
+          <FontAwesomeIcon icon={req.met ? faCheck : faTimes} />
+          {req.text}
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+const ConfirmPasswordRequirements = ({ requirements }) => {
+  return (
+    <ul className="list-none p-0">
+      {requirements.map((req, index) => (
+        <li
+          key={index}
+          className={`flex items-center gap-2 text-sm ${req.met ? 'text-green-500' : 'text-red-500'} animate-fadeIn`}
+        >
+          <FontAwesomeIcon icon={req.met ? faCheck : faTimes} />
+          {req.text}
+        </li>
+      ))}
+    </ul>
+  );
+};
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -19,19 +51,31 @@ export default function SignUp() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const [passwordRequirements, setPasswordRequirements] = useState([
+    { text: 'Password must be at least 6 characters', met: false },
+    { text: 'Password must contain at least one uppercase letter', met: false },
+    { text: 'Password must contain at least one special character', met: false },
+  ]);
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [confirmPasswordRequirements, setConfirmPasswordRequirements] = useState([
+    { text: 'Passwords must match', met: false },
+  ]);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (error) {
+    if (errors.global) {
       const timer = setTimeout(() => {
-        setError('');
+        setErrors((prevErrors) => ({ ...prevErrors, global: '' }));
       }, 5000);
       return () => clearTimeout(timer);
     }
-  }, [error]);
+  }, [errors.global]);
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
@@ -39,13 +83,53 @@ export default function SignUp() {
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
+    validateField(id, value);
+  };
+
+  const validateField = (field, value) => {
+    let error = '';
+    let updatedRequirements = [...passwordRequirements];
+
+    switch (field) {
+      case 'email':
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          error = 'Email is invalid';
+        }
+        break;
+      case 'password':
+        updatedRequirements[0].met = value.length >= 6;
+        updatedRequirements[1].met = /[A-Z]/.test(value);
+        updatedRequirements[2].met = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+
+        if (!updatedRequirements[0].met) {
+          error = 'Password must be at least 6 characters';
+        } else if (!updatedRequirements[1].met) {
+          error = 'Password must contain at least one uppercase letter';
+        } else if (!updatedRequirements[2].met) {
+          error = 'Password must contain at least one special character';
+        }
+        break;
+      case 'confirmPassword':
+        if (value !== formData.password) {
+          error = 'Passwords do not match';
+        }
+        break;
+      default:
+        if (!value) {
+          error = 'This field is required';
+        }
+        break;
+    }
+
+    setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
+    setPasswordRequirements(updatedRequirements);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
     setLoading(true);
-    setError('');
+    setErrors({});
     try {
       const res = await fetch('/api/auth/signup', {
         method: 'POST',
@@ -54,14 +138,16 @@ export default function SignUp() {
       });
       const data = await res.json();
       if (!data.success) {
-        setError(data.message.includes('E11000 duplicate key error collection') ?
-          'Email already exists. Please use a different email.' :
-          data.message || 'An error occurred');
+        setErrors({
+          global: data.message.includes('E11000 duplicate key error collection') ?
+            'Email already exists. Please use a different email.' :
+            data.message || 'An error occurred'
+        });
       } else {
         navigate('/resend-verification-email', { state: { email: formData.email } });
       }
     } catch (error) {
-      setError(error.message || 'An error occurred');
+      setErrors({ global: error.message || 'An error occurred' });
     } finally {
       setLoading(false);
     }
@@ -69,23 +155,30 @@ export default function SignUp() {
 
   const validateForm = () => {
     const { username, email, password, confirmPassword, firstName, lastName } = formData;
+    let valid = true;
     if (!username || !email || !password || !confirmPassword || !firstName || !lastName) {
-      setError('Please fill in all fields');
-      return false;
+      setErrors((prevErrors) => ({ ...prevErrors, global: 'Please fill in all fields' }));
+      valid = false;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError('Email is invalid');
-      return false;
+      setErrors((prevErrors) => ({ ...prevErrors, email: 'Email is invalid' }));
+      valid = false;
     }
     if (password.length < 6) {
-      setError('Password must be at least 6 characters');
-      return false;
+      setErrors((prevErrors) => ({ ...prevErrors, password: 'Password must be at least 6 characters' }));
+      valid = false;
+    } else if (!/[A-Z]/.test(password)) {
+      setErrors((prevErrors) => ({ ...prevErrors, password: 'Password must contain at least one uppercase letter' }));
+      valid = false;
+    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      setErrors((prevErrors) => ({ ...prevErrors, password: 'Password must contain at least one special character' }));
+      valid = false;
     }
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return false;
+      setErrors((prevErrors) => ({ ...prevErrors, confirmPassword: 'Passwords do not match' }));
+      valid = false;
     }
-    return true;
+    return valid;
   };
 
   return (
@@ -93,10 +186,12 @@ export default function SignUp() {
 
       {/* Left Column for Logo or Image */}
       <div className='w-1/2 hidden lg:flex justify-center items-center z-10 mx-auto'>
-        <img src={NewLogo} alt='HubIsko Logo' className='w-80 h-auto bg-white p-4 rounded-full' />
+        <Link to="/">
+          <img src={NewLogo} alt='HubIsko Logo' className='w-80 h-auto bg-white p-4 rounded-full transition-transform duration-300 ease-in-out transform hover:scale-110' />
+        </Link>
       </div>
 
-      <div className='absolute w-full h-full z-0'>
+      <div className='absolute w-full h-full'>
         <div className='bg-blue-600 rounded-full w-full h-full -translate-x-[1100px]'></div>
       </div>
 
@@ -120,17 +215,31 @@ export default function SignUp() {
           </div>
           <form onSubmit={handleSubmit} className='w-full max-w-md flex flex-col gap-4'>
             <div className="flex gap-4 justify-between">
-              <input type="text" id="firstName" placeholder="First Name" className='border bg-white p-3 rounded-lg focus:outline-blue-600' onChange={handleChange} required />
-              <input type="text" id="lastName" placeholder="Last Name" className='border bg-white p-3 rounded-lg focus:outline-blue-600' onChange={handleChange} required />
+              <div className='w-full'>
+                <input type="text" id="firstName" placeholder="First Name" className='border bg-white p-3 rounded-lg focus:outline-blue-600 w-full' onChange={handleChange} required />
+                {errors.firstName && <span className='text-red-500 text-sm'>{errors.firstName}</span>}
+              </div>
+              <div className='w-full'>
+                <input type="text" id="lastName" placeholder="Last Name" className='border bg-white p-3 rounded-lg focus:outline-blue-600 w-full' onChange={handleChange} required />
+                {errors.lastName && <span className='text-red-500 text-sm'>{errors.lastName}</span>}
+              </div>
             </div>
-            <input type="email" id="email" placeholder="Email Address" className='border bg-white p-3 rounded-lg focus:outline-blue-600' onChange={handleChange} required />
-            <input type="text" id="username" placeholder="Username" className='border bg-white p-3 rounded-lg focus:outline-blue-600' onChange={handleChange} required />
-            <div className="relative">
+            <div className='w-full'>
+              <input type="email" id="email" placeholder="Email Address" className='border bg-white p-3 rounded-lg focus:outline-blue-600 w-full' onChange={handleChange} required />
+              {errors.email && <span className='text-red-500 text-sm'>{errors.email}</span>}
+            </div>
+            <div className='w-full'>
+              <input type="text" id="username" placeholder="Username" className='border bg-white p-3 rounded-lg focus:outline-blue-600 w-full' onChange={handleChange} required />
+              {errors.username && <span className='text-red-500 text-sm'>{errors.username}</span>}
+            </div>
+
+            <div className="relative w-full">
               <input
                 type={showPassword ? 'text' : 'password'}
                 id="password"
                 placeholder="Password"
-                className='border bg-white p-3 rounded-lg focus:outline-blue-600 w-full'
+                className='border bg-white p-3 rounded-lg focus:outline-blue-600 w-full pr-10'
+                value={formData.password}
                 onChange={handleChange}
                 required
               />
@@ -142,13 +251,15 @@ export default function SignUp() {
                 <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
               </button>
             </div>
+              {formData.password !== '' && <PasswordRequirements requirements={passwordRequirements} />}
 
-            <div className="relative">
+            <div className="relative w-full">
               <input
                 type={showConfirmPassword ? 'text' : 'password'}
                 id="confirmPassword"
                 placeholder="Confirm Password"
                 className='border bg-white p-3 rounded-lg focus:outline-blue-600 w-full'
+                value={formData.confirmPassword}
                 onChange={handleChange}
                 required
               />
@@ -159,7 +270,9 @@ export default function SignUp() {
               >
                 <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
               </button>
+              {errors.confirmPassword && <span className='text-red-500 text-sm'>{errors.confirmPassword}</span>}
             </div>
+
             <button disabled={loading} className='bg-blue-600 text-white p-3 rounded-lg hover:opacity-95 disabled:opacity-50'>
               {loading ? 'Loading...' : 'Register'}
             </button>
@@ -171,9 +284,9 @@ export default function SignUp() {
             </Link>
           </div>
         </div>
-        {error && (
+        {errors.global && (
           <div className="fixed top-5 right-5 bg-red-500 text-white px-4 py-2 rounded-md shadow-md opacity-95">
-            {error}
+            {errors.global}
           </div>
         )}
       </div>

@@ -45,8 +45,9 @@ const scholarshipProgramSchema = new mongoose.Schema({
   faqDescription: { type: String }, // Added FAQ description field
   providerRequirements: [
     {
-      id: { type: String, required: true },
-      url: { type: String, required: true }
+      id: { type: String },
+      name: { type: String },
+      url: { type: String }
     }
   ], // Array of provider requirements with id and url
   status: {

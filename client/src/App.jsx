@@ -13,7 +13,9 @@ import ScholarshipListing from "./pages/ScholarshipListing";
 import ForgotPassword from "./components/ForgotPassword";
 import CompleteProfile from "./pages/CompleteProfile";
 import ResetPassword from "./components/ResetPassword";
-import ProviderDashboard from "./pages/Scholarship-Provider/providerDashboard";
+
+import ProviderDashboard from "./pages/Scholarship-Provider/ProviderDashboard";
+import ProviderForums from "./pages/Scholarship-Provider/ProviderForums";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import ScholarDashboard from "./pages/ScholarDashboard";
 import RegisterAsProvider from "./pages/RegisterAsProvider";
@@ -23,23 +25,18 @@ import PasswordAndSecurity from "./pages/PasswordAndSecurity";
 import ChangePassword from "./components/ChangePassword";
 import Forums from "./pages/Forums";
 import ApplicationDetails from "./pages/ApplicationDetails";
-import OthersProfile from "./pages/OthersProfile";
-import ForumDetail from "./pages/Post";
+// import OthersProfile from "./pages/Dump/OthersProfile";
+import ForumPost from "./pages/ForumPost";
 import ApplyingStages from "./pages/ApplyingStages";
 import ApplicationBox from "./pages/ApplicationBox";
 import InboxedApplicationDetail from "./pages/InboxedApplicationDetail";
 import StudentInfo from "./pages/StudentInfo";
-import ProfilePreview from "./pages/ProfilePreview";
-import PostDetails from "./pages/PostDetails";
 import Scholarships from "./pages/Scholarship-Provider/scholarships";
 import ScholarApplications from "./pages/Scholarship-Provider/ScholarApplications";
-import ProviderForums from "./pages/Scholarship-Provider/ProviderForums";
 import ProviderForumDetail from "./pages/Scholarship-Provider/ProviderForumDetail";
-import PreviewProfile from "./pages/Scholarship-Provider/PreviewProfile";
-import PostScholarship from "./pages/Scholarship-Provider/PostScholarship";
-import CreateForumPost from "./pages/CreateForumPost";
+import PostScholarship from "./pages/Scholarship-Provider/PostScholarship2";
+import ForumCreatePost from "./pages/ForumCreatePost";
 import Accounts from "./pages/Admin/Accounts";
-import Layout from "./components/Layout";
 import Students from "./pages/Admin/StudentsAccount";
 import ProviderAccounts from "./pages/Admin/ProviderAccounts";
 import VerificationDetails from "./pages/Admin/VerificationDetails";
@@ -55,8 +52,6 @@ import ApplicationForm from "./pages/ApplicationForm";
 import ResubmitApplication from "./pages/ResubmitApplication";
 import Settings from "./pages/Scholarship-Provider/Settings";
 import ProviderProfile from "./pages/Scholarship-Provider/Profile";
-import NotificationsPage from "./components/notification";
-import NotificationDetailPage from "./components/NotificationDetailPage";
 import ApplicantAllNotification from "./pages/ApplicantAllNotification";
 import ApplicantDetailedNotification from "./pages/ApplicantDetailedNotification";
 import ScholarshipProviderApplications from "./pages/Admin/ScholarshipProviderApplications";
@@ -70,6 +65,14 @@ import ScholarshipDashboardDetails from "./pages/ScholarshipDashboardDetails";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import ScholarshipProgramDetails from "./pages/Admin/ScholarshipProgramApplicationDetails";
 import ScholarshipPrograms from "./pages/Admin/ScholarshipPrograms";
+import Profiles from "./pages/Profiles";
+import PasswordAndSecurity2 from "./pages/PasswordAndSecurity2";
+// import NotificationsPage from "./components/notification";
+// import NotificationDetailPage from "./components/NotificationDetailPage";
+// import PreviewProfile from "./pages/Scholarship-Provider/PreviewProfile";
+// import ProfilePreview from "./pages/Dump/ProfilePreview";
+// import PostDetails from "./pages/Dump/PostDetails";
+// import Layout from "./components/Layout";
 
 
 export default function App() {
@@ -88,18 +91,21 @@ export default function App() {
         <Route path="/scholarship-listing" element={<ScholarshipListing />} />
 
         <Route path="/forums" element={<Forums />} />
-        <Route path="/forums/create-post" element={<CreateForumPost />} />
-        <Route path="/forums/post/:postId" element={<ForumDetail />} />
-        <Route path="/others-profile/:id" element={<OthersProfile />} />
+        <Route path="/forums/create-post" element={<ForumCreatePost />} />
+        <Route path="/forums/post/:postId" element={<ForumPost />} />
 
         <Route path="/scholarship-details/:id" element={<ApplicationDetails />} />
         <Route path="/application-form" element={<ApplicationForm />} />
 
         <Route path="/scholarship-dashboard-details/:id" element={<ScholarshipDashboardDetails />} />
+
+        <Route path="/profile/:id" element={<Profiles />} />
+
+        {/* <Route path="/others-profile/:id" element={<OthersProfile />} /> */}
+        {/* Admin Routes */}
         {/* <Route path="/notifications" element={<NotificationsPage />} />
         <Route path="/notifications/:notificationId" element={<NotificationDetailPage />} /> */}
 
-        {/* Admin Routes */}
         <Route element={<ProviderPrivateRoute allowedRoles={['admin']} />}>
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/accounts" element={<Accounts />} />
@@ -148,21 +154,21 @@ export default function App() {
           <Route path="/complete-profile-confirmation" element={<CompleteProfileConfirmation />} />
           <Route path="/scholar-dashboard" element={<ScholarDashboard />} />
           <Route path="/account-management" element={<AccountManagement />} />
-          <Route path="/password-and-security" element={<PasswordAndSecurity />} />
+          <Route path="/password-and-security" element={<PasswordAndSecurity2 />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/about" element={<About />} />
           <Route path="/CoRH" element={<CompleteOrReturnHome />} />
-          
+
           <Route path="/applying-stages/:scholarshipId" element={<ApplyingStages />} />
           <Route path="/application-box" element={<ApplicationBox />} />
           <Route path="/application-detail/:id" element={<InboxedApplicationDetail />} />
           <Route path="/resubmit-application/:id" element={<ResubmitApplication />} />
           <Route path="/student-info" element={<StudentInfo />} />
-          <Route path="/profile-preview/:id" element={<ProfilePreview />} />
-          <Route path="/post-details" element={<PostDetails />} />
-          <Route path="/preview-profile" element={<PreviewProfile />} />
           <Route path="/notifications" element={<ApplicantAllNotification />} />
           <Route path="/notifications/:notificationId" element={<ApplicantDetailedNotification />} />
+          {/* <Route path="/profile-preview/:id" element={<ProfilePreview />} /> */}
+          {/* <Route path="/post-details" element={<PostDetails />} /> */}
+          {/* <Route path="/preview-profile" element={<PreviewProfile />} /> */}
         </Route>
 
         <Route path="/unauthorized" element={<UnauthorizedPage />} />

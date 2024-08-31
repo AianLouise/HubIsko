@@ -1,5 +1,5 @@
 import React from 'react'
-import NotificationsPage from '../components/notification'
+import NotificationsPage from '../components/AllNotifications'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import NotificationDetailPage from '../components/NotificationDetailPage'

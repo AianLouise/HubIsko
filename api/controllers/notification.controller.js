@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import Notification from '../models/notification.model.js';
 import Scholarship from '../models/scholarshipProgram.model.js';
+import User from '../models/user.model.js';
 
 export const createNotification = async (req, res) => {
     const { applicantId, senderId, scholarshipProgramId } = req.body;
@@ -57,5 +58,22 @@ export const getNotifications = async (req, res) => {
     } catch (error) {
         console.error('Error fetching notifications:', error);
         res.status(500).json({ message: 'Error fetching notifications' });
+    }
+};
+
+export const getNotificationById = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const notification = await Notification.findById(id).populate('senderId'); // Assuming senderId is a reference to the User model
+
+        if (!notification) {
+            return res.status(404).json({ message: 'Notification not found' });
+        }
+
+        res.status(200).json(notification);
+    } catch (error) {
+        console.error('Error fetching notification:', error);
+        res.status(500).json({ message: 'Error fetching notification' });
     }
 };

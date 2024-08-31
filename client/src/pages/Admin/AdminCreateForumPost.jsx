@@ -3,7 +3,7 @@ import { BiFilter } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import Layout from "../../components/Layout";
 import ForumDetail from "../../components/ForumDetail";
-import CreateForumPost from "../CreateForumPost";
+import CreateForumPost from "../ForumCreatePost";
 
 export default function AdminForumDetail() {
 

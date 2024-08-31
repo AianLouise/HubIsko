@@ -212,7 +212,7 @@ export default function ScholarDashboard() {
 
               <div className="space-y-4 p-4 text-slate-800">
                 {allApplications.length === 0 ? (
-                  <div className='h-full flex flex-col gap-2 justify-center items-center lg:mt-20'>
+                  <div className='h-full flex flex-col gap-2 justify-center items-center'>
                     <span className='text-xl font-medium text-slate-500'>You have no applications yet.</span>
                     <Link to={'/scholarship-listing'}>
                       <button className='flex gap-2 items-center text-base lg:text-lg bg-blue-600 rounded-md px-4 py-2 text-white fond-medium hover:bg-blue-800 group transition ease-in-out'>
