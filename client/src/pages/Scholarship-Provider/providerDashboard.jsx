@@ -3,6 +3,7 @@ import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import { BiDotsHorizontal } from 'react-icons/bi';
 import { BiSolidRightArrow } from "react-icons/bi";
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 export default function ProviderDashboard() {
   useEffect(() => {
@@ -120,17 +121,19 @@ export default function ProviderDashboard() {
             </div>
 
             <div className="flex flex-col gap-8">
-              <button className="flex justify-between items-center bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2 hover:bg-slate-200 group ease-in-out">
-                <div>
-                  <h2 className="text-xl font-semibold text-slate-700">Total Applications</h2>
-                  <p className="text-2xl font-bold text-left">{applicationsCount}</p>
-                </div>
+              <Link to="/scholar-applications">
+                <div className="flex justify-between items-center bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2 hover:bg-slate-200 group ease-in-out">
+                  <div>
+                    <h2 className="text-xl font-semibold text-slate-700">Total Applications</h2>
+                    <p className="text-2xl font-bold text-left">{applicationsCount}</p>
+                  </div>
 
-                <div className='hidden items-center text-blue-600 font-medium gap-2 group-hover:flex ease-in-out transition'>
-                  <span>View</span>
-                  <BiSolidRightArrow className=' w-6 h-6' />
+                  <div className='hidden items-center text-blue-600 font-medium gap-2 group-hover:flex ease-in-out transition'>
+                    <span>View</span>
+                    <BiSolidRightArrow className=' w-6 h-6' />
+                  </div>
                 </div>
-              </button>
+              </Link>
 
               <button className="flex justify-between items-center bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2 hover:bg-slate-200 group ease-in-out">
                 <div>
