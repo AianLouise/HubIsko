@@ -10,6 +10,7 @@ import scholarshipApplicationRoutes from './routes/scholarshipApplication.route.
 import profileRoutes from './routes/profile.route.js';
 import adminRoutes from './routes/admin.route.js';
 import notificationRoutes from './routes/notification.route.js';
+import ActivityLogRoutes from './routes/activityLog.route.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import cors from 'cors';
@@ -41,6 +42,7 @@ app.use('/api/scholarshipApplication', scholarshipApplicationRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/notification', notificationRoutes);
+app.use('/api/activity', ActivityLogRoutes);
 
 
 // Serve static files
