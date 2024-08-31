@@ -13,7 +13,9 @@ import ScholarshipListing from "./pages/ScholarshipListing";
 import ForgotPassword from "./components/ForgotPassword";
 import CompleteProfile from "./pages/CompleteProfile";
 import ResetPassword from "./components/ResetPassword";
-import ProviderDashboard from "./pages/Scholarship-Provider/ProviderDashboard";
+
+import ProviderDashboard from "./pages/Scholarship-Provider/ProviderDashboard2";
+import ProviderForums from "./pages/Scholarship-Provider/ProviderForums";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import ScholarDashboard from "./pages/ScholarDashboard";
 import RegisterAsProvider from "./pages/RegisterAsProvider";
@@ -31,7 +33,6 @@ import InboxedApplicationDetail from "./pages/InboxedApplicationDetail";
 import StudentInfo from "./pages/StudentInfo";
 import Scholarships from "./pages/Scholarship-Provider/scholarships";
 import ScholarApplications from "./pages/Scholarship-Provider/ScholarApplications";
-import ProviderForums from "./pages/Scholarship-Provider/ProviderForums";
 import ProviderForumDetail from "./pages/Scholarship-Provider/ProviderForumDetail";
 import PostScholarship from "./pages/Scholarship-Provider/PostScholarship2";
 import ForumCreatePost from "./pages/ForumCreatePost";
