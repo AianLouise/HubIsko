@@ -1,4 +1,4 @@
-import ScholarshipActivityLog from '../models/ScholarshipActivityLog.model.js';
+import ScholarshipActivityLog from '../models/scholarshipActivityLog.model.js';
 
 // Create a new scholarship activity log
 export const createScholarshipActivityLog = async (req, res) => {
