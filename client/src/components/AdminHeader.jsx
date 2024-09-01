@@ -38,6 +38,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
             || location.pathname.startsWith('/verification-details')
             || location.pathname.startsWith('/student-details')
             || location.pathname.startsWith('/provider-details')
+            || location.pathname.startsWith('/scholarship-provider')
         ) {
             setIsAccountsDropdownOpen(true);
         } else {
@@ -159,6 +160,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                             || location.pathname.startsWith('/verification-details')
                                             || location.pathname.startsWith('/student-details')
                                             || location.pathname.startsWith('/provider-details')
+                                            || location.pathname.startsWith('/scholarship-provider')
                                             ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                         <BsFillPersonFill className={`w-5 h-5 text-blue-600 
                                  ${location.pathname.startsWith('/accounts')
@@ -167,6 +169,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                                 || location.pathname.startsWith('/verification-details')
                                                 || location.pathname.startsWith('/student-details')
                                                 || location.pathname.startsWith('/provider-details')
+                                                || location.pathname.startsWith('/scholarship-provider')
                                                 ? 'text-white' : ''} `} />
                                         Accounts
                                     </Link>
@@ -187,8 +190,8 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link to={'/scholarship-provider'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/provider-accounts' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                                    <BsBuildingFill className={`w-5 h-5 text-blue-600 ${location.pathname === '/provider-accounts' ? ' text-white' : ''}`} />
+                                                <Link to={'/scholarship-provider'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-provider' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                                    <BsBuildingFill className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-provider' ? ' text-white' : ''}`} />
                                                     Scholarship Providers
                                                 </Link>
                                             </li>
