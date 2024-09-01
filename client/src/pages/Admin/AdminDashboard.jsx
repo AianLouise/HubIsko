@@ -101,7 +101,6 @@ export default function AdminDashboard() {
 
     return (
         <div className="flex flex-col min-h-screen">
-            <Layout />
             <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
                 <div className='border-b mb-8'>
                     <div className='flex items-center mx-auto justify-between px-8 lg:px-24 py-6 bg-white shadow-md rounded-lg'>

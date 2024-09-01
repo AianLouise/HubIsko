@@ -95,7 +95,7 @@ export default function AdminForums() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Layout />
+      
       <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
         <div className='border-b mb-8 pt-12'>
           <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl justify-between lg:px-24'>

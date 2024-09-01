@@ -9,7 +9,7 @@ export default function AdminForumDetail() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Layout />
+   
       <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
        
         <CreateForumPost />

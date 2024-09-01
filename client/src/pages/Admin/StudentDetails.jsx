@@ -69,7 +69,7 @@ export default function StudentDetails() {
 
   return (
     <div className="flex flex-col min-h-screen font-medium text-slate-700">
-      <Layout />
+    
       <main className="flex-grow bg-[#f8f8fb] pb-24">
 
         <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex mt-16'>

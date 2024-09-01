@@ -28,7 +28,7 @@ export default function ScholarshipProviderApplications() {
 
     return (
         <div className="flex flex-col min-h-screen font-medium text-slate-700">
-            <Layout />
+           
             <main className="flex-grow bg-[#f8f8fb]">
                 <div className="border-b mb-8">
                     <div className="flex items-center justify-between px-6 lg:px-24 mx-auto">
