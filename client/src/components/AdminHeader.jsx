@@ -44,7 +44,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
             setIsAccountsDropdownOpen(false);
         }
 
-        if (location.pathname.startsWith('/inbox')
+        if (location.pathname.startsWith('/application-inbox')
             || location.pathname.startsWith('/scholarship-program-applications')
             || location.pathname.startsWith('/scholarship-provider-applications')
 
@@ -212,14 +212,14 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                 <div>
                                     <Link to={'/application-inbox'}
                                         onClick={toggleInboxDropdown}
-                                        className={`flex gap-2 justify-between items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/inbox')
+                                        className={`flex gap-2 justify-between items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/application-inbox')
                                             || location.pathname.startsWith('/scholarship-program-applications')
                                             || location.pathname.startsWith('/scholarship-provider-applications')
 
                                             ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                         <div className="flex items-center gap-2">
                                             <BsInboxFill className={`w-5 h-5 text-blue-600 
-                                            ${location.pathname.startsWith('/inbox')
+                                            ${location.pathname.startsWith('/application-inbox')
                                                     || location.pathname.startsWith('/scholarship-program-applications')
                                                     || location.pathname.startsWith('/scholarship-provider-applications')
 
@@ -227,7 +227,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                             Application Inbox
                                         </div>
                                         <div className={`bg-blue-600 rounded-full text-center flex items-center justify-center p-3 w-4 h-4 text-sm 
-                                            ${location.pathname.startsWith('/inbox')
+                                            ${location.pathname.startsWith('/application-inbox')
                                                 || location.pathname.startsWith('/scholarship-program-applications')
                                                 || location.pathname.startsWith('/scholarship-provider-applications')
 
