@@ -1,8 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Step1 = ({ formData, setFormData }) => {
+    const [title, setTitle] = useState(formData.title || '');
+    const maxTitleLength = 50;
+
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        if (name === 'title' && value.length <= maxTitleLength) {
+            setTitle(value);
+        }
+        if (name === 'numberOfScholarships' && (value <= 0 || isNaN(value))) {
+            return; // Prevent negative values
+        }
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const getTodayDate = () => {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const dd = String(today.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
     };
 
     useEffect(() => {
@@ -21,12 +39,14 @@ const Step1 = ({ formData, setFormData }) => {
                         <input
                             type="text"
                             name="title"
-                            value={formData.title || ''}
+                            value={title}
                             onChange={handleChange}
                             placeholder="Enter the title of the scholarship"
                             className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            maxLength={maxTitleLength}
                             required
                         />
+                        <p className="text-sm text-gray-500 mt-1">{title.length}/{maxTitleLength} characters</p>
                     </div>
 
                     <div>
@@ -72,6 +92,7 @@ const Step1 = ({ formData, setFormData }) => {
                             onChange={handleChange}
                             placeholder="Enter the number of available slots"
                             className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            min="0"
                             required
                         />
                     </div>
@@ -99,6 +120,7 @@ const Step1 = ({ formData, setFormData }) => {
                             value={formData.applicationStartDate || ''}
                             onChange={handleChange}
                             className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            min={getTodayDate()}
                             required
                         />
                     </div>
@@ -112,6 +134,7 @@ const Step1 = ({ formData, setFormData }) => {
                             value={formData.applicationDeadline || ''}
                             onChange={handleChange}
                             className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            min={getTodayDate()}
                             required
                         />
                     </div>
@@ -289,10 +312,10 @@ const Step1 = ({ formData, setFormData }) => {
                             value={formData.startDate || ''}
                             onChange={handleChange}
                             className="w-full p-2 border border-gray-300 rounded"
+                            min={getTodayDate()}
                             required
                         />
                     </div>
-
                     <div>
                         <label className="block text-gray-700">End Date</label>
                         <p className="text-sm text-gray-500 mb-2">Please select the end date for the scholarship.</p>
@@ -302,6 +325,7 @@ const Step1 = ({ formData, setFormData }) => {
                             value={formData.endDate || ''}
                             onChange={handleChange}
                             className="w-full p-2 border border-gray-300 rounded"
+                            min={getTodayDate()}
                             required
                         />
                     </div>
