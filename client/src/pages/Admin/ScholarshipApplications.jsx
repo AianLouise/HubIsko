@@ -6,7 +6,7 @@ import Layout from "../../components/Layout";
 import { HiDocument } from "react-icons/hi2";
 import axios from "axios";
 
-export default function ScholarshipProviderApplications() {
+export default function ScholarshipApplications() {
     useEffect(() => {
         document.title = "Scholarship Provider Applications | HubIsko";
     }, []);

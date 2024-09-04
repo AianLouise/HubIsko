@@ -308,8 +308,8 @@ export default function ForumPost() {
                         <div>
                             {post.attachments && post.attachments.length > 0 && (
                                 <div className='mt-10'>
-                                    <div className={`grid gap-2 ${post.attachments.length === 1 ? 'grid-cols-1' : post.attachments.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
-                                        {post.attachments.slice(0, 3).map((attachment, index) => {
+                                    <div className={`grid gap-2 ${post.attachments.length === 1 ? 'grid-cols-1' : post.attachments.length === 2 ? 'grid-cols-2' : post.attachments.length === 3 ? 'grid-cols-3' : post.attachments.length === 4 ? 'grid-cols-2' : 'grid-cols-2'}`}>
+                                        {post.attachments.slice(0, 4).map((attachment, index) => {
                                             const url = new URL(attachment);
                                             const pathname = url.pathname;
                                             const isImage = pathname.match(/\.(jpeg|jpg|gif|png)$/i);
@@ -319,7 +319,7 @@ export default function ForumPost() {
                                                     <img
                                                         src={attachment}
                                                         alt={`Attachment ${index + 1}`}
-                                                        className='object-cover rounded-md cursor-pointer'
+                                                        className={`object-cover w-full border-4 rounded-md cursor-pointer ${post.attachments.length < 4  ? 'h-full' : 'h-96'}`}
                                                         onClick={() => openModal(index)}
                                                         onLoad={() => console.log(`Image ${index + 1} loaded successfully.`)}
                                                         onError={(e) => {
@@ -328,12 +328,12 @@ export default function ForumPost() {
                                                             e.target.src = 'fallback-image-url';
                                                         }}
                                                     />
-                                                    {index === 2 && post.attachments.length > 3 && (
+                                                    {index === 3 && post.attachments.length > 4 && (
                                                         <div
-                                                            className='absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-lg font-bold cursor-pointer'
+                                                            className='absolute inset-0 bg-black bg-opacity-50 flex rounded-md items-center justify-center text-white text-lg font-bold cursor-pointer'
                                                             onClick={() => openModal(index)}
                                                         >
-                                                            +{post.attachments.length - 3} more
+                                                            +{post.attachments.length - 4} more
                                                         </div>
                                                     )}
                                                 </div>
