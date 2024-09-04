@@ -75,6 +75,7 @@ import PasswordAndSecurity2 from "./pages/PasswordAndSecurity2";
 // import PostDetails from "./pages/Dump/PostDetails";
 import Layout from "./components/Layout";
 import PublicRoute from "./components/PublicRoute";
+import ScholarshipApplication from "./pages/ScholarshipApplicationForm";
 
 
 export default function App() {
@@ -102,6 +103,8 @@ export default function App() {
         <Route path="/scholarship-dashboard-details/:id" element={<ScholarshipDashboardDetails />} />
 
         <Route path="/profile/:id" element={<Profiles />} />
+
+        <Route path="/scholarship-application" element={<ScholarshipApplication />} />
 
         {/* <Route path="/others-profile/:id" element={<OthersProfile />} /> */}
         {/* Admin Routes */}
