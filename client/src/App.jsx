@@ -73,21 +73,22 @@ import PasswordAndSecurity2 from "./pages/PasswordAndSecurity2";
 // import ProfilePreview from "./pages/Dump/ProfilePreview";
 // import PostDetails from "./pages/Dump/PostDetails";
 import Layout from "./components/Layout";
+import PublicRoute from "./components/PublicRoute";
 
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/apply-as-provider" element={<RegisterAsProvider />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/verify-your-email" element={<VerifyYourEmail />} />
-        <Route path="/resend-verification-email" element={<VerifyYourEmail />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/" element={<PublicRoute><Home /></PublicRoute>} />
+        <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+        <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+        <Route path="/apply-as-provider" element={<PublicRoute><RegisterAsProvider /></PublicRoute>} />
+        <Route path="/reset-password" element={<PublicRoute><ResetPassword /></PublicRoute>} />
+        <Route path="/verify-email" element={<PublicRoute><VerifyEmail /></PublicRoute>} />
+        <Route path="/verify-your-email" element={<PublicRoute><VerifyYourEmail /></PublicRoute>} />
+        <Route path="/resend-verification-email" element={<PublicRoute><VerifyYourEmail /></PublicRoute>} />
+        <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
         <Route path="/scholarship-listing" element={<ScholarshipListing />} />
 
         <Route path="/forums" element={<Forums />} />
@@ -107,28 +108,28 @@ export default function App() {
         <Route path="/notifications/:notificationId" element={<NotificationDetailPage />} /> */}
 
         <Route element={<ProviderPrivateRoute allowedRoles={['admin']} />}>
-        <Route element={<Layout />} path="/">
-          <Route path="admin-dashboard" element={<AdminDashboard />} />
-          <Route path="accounts" element={<Accounts />} />
-          <Route path="students" element={<Students />} />
-          <Route path="scholarship-provider" element={<ProviderAccounts />} />
-          <Route path="verification-details/:id" element={<VerificationDetails />} />
-          <Route path="student-details/:id" element={<StudentDetails />} />
-          <Route path="provider-details/:id" element={<ProviderDetails />} />
-          <Route path="application-inbox" element={<ApplicationInbox />} />
-          <Route path="scholarship-program-applications" element={<ScholarshipProgramApplications />} />
-          <Route path="scholarship-provider-applications" element={<ScholarshipProviderApplications />} />
-          <Route path="scholarship-provider-details/:id" element={<ScholarshipProviderDetails />} />
-          <Route path="inbox-application" element={<InboxApplication />} />
-          <Route path="edit-student-info/:id" element={<EditStudentInfo />} />
+          <Route element={<Layout />} path="/">
+            <Route path="admin-dashboard" element={<AdminDashboard />} />
+            <Route path="accounts" element={<Accounts />} />
+            <Route path="students" element={<Students />} />
+            <Route path="scholarship-provider" element={<ProviderAccounts />} />
+            <Route path="verification-details/:id" element={<VerificationDetails />} />
+            <Route path="student-details/:id" element={<StudentDetails />} />
+            <Route path="provider-details/:id" element={<ProviderDetails />} />
+            <Route path="application-inbox" element={<ApplicationInbox />} />
+            <Route path="scholarship-program-applications" element={<ScholarshipProgramApplications />} />
+            <Route path="scholarship-provider-applications" element={<ScholarshipProviderApplications />} />
+            <Route path="scholarship-provider-details/:id" element={<ScholarshipProviderDetails />} />
+            <Route path="inbox-application" element={<InboxApplication />} />
+            <Route path="edit-student-info/:id" element={<EditStudentInfo />} />
 
-          <Route path="scholarship-program-applications/:id" element={<ScholarshipProgramDetails />} />
-          <Route path="scholarship-programs" element={<ScholarshipPrograms />} />
+            <Route path="scholarship-program-applications/:id" element={<ScholarshipProgramDetails />} />
+            <Route path="scholarship-programs" element={<ScholarshipPrograms />} />
 
-          <Route path="admin-forums" element={<AdminForums />} />
-          <Route path="admin-forums/post/:postId" element={<AdminForumDetail />} />
-          <Route path="admin-create-forum-post" element={<AdminCreateForumPost />} />
-        </Route>
+            <Route path="admin-forums" element={<AdminForums />} />
+            <Route path="admin-forums/post/:postId" element={<AdminForumDetail />} />
+            <Route path="admin-create-forum-post" element={<AdminCreateForumPost />} />
+          </Route>
           {/* Add other routes here */}
         </Route>
 
