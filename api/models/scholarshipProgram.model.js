@@ -9,7 +9,7 @@ const scholarshipProgramSchema = new mongoose.Schema({
   numberOfScholarships: { type: String },
   numberOfScholarshipsSlotFilled: { type: String, default: '0' },
   amount: { type: String },
-  applicationStart: { type: String },
+  applicationStartDate: { type: String },
   applicationDeadline: { type: String },
   minGPA: { type: String },
   nationality: { type: String },

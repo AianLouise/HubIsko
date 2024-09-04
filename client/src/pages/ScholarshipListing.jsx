@@ -116,7 +116,7 @@ export default function ScholarshipListing() {
             {providers
               .filter((provider) => provider.status === 'Verified')
               .map((provider) => (
-                <Link to={`/profile-preview/${provider._id}`} key={provider._id} className='flex flex-col items-center group'>
+                <Link to={`/profile/${provider._id}`} key={provider._id} className='flex flex-col items-center group'>
                   <button className='flex flex-col items-center group space-y-2 relative'>
                     <div className='w-16 h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden group-hover:bg-blue-800'>
                       <img
@@ -203,9 +203,9 @@ export default function ScholarshipListing() {
                       <div className='mt-4'>
                         <div className='border-b-2'></div>
                         <div className='-translate-y-4'>
-                          <div className='flex text-blue-600 text-center justify-center font-bold'>
-                            <div className='flex flex-row bg-white gap-2 px-2'>
-                              <FaHandHolding className='text-xl' />
+                          <div className='flex text-blue-600 text-left justify-center font-bold'>
+                            <div className='flex flex-row bg-white gap-2 px-2 items-center'>
+                              <FaHandHolding className='text-xl flex-shrink-0' />
                               {scholarship.amount}
                             </div>
                           </div>

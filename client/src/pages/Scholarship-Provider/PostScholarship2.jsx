@@ -19,7 +19,7 @@ const PostScholarship = () => {
         fieldOfStudy: '',
         numberOfScholarships: '',
         amount: '',
-        applicationStart: '',
+        applicationStartDate: '',
         applicationDeadline: '',
         minGPA: '',
         nationality: '',
@@ -69,7 +69,7 @@ const PostScholarship = () => {
                 if (!formData.category) errors.category = 'Scholarship Category is required';
                 if (!formData.numberOfScholarships) errors.numberOfScholarships = 'Number of Scholarships Available is required';
                 if (!formData.amount) errors.amount = 'Scholarship Amount is required';
-                if (!formData.applicationStart) errors.applicationStart = 'Application Start Date is required';
+                if (!formData.applicationStartDate) errors.applicationStartDate = 'Application Start Date is required';
                 if (!formData.applicationDeadline) errors.applicationDeadline = 'Application Deadline is required';
                 if (!formData.fieldOfStudy) errors.fieldOfStudy = 'Field of Study is required';
                 if (!formData.minGPA) errors.minGPA = 'Minimum GPA/Grade Requirement is required';

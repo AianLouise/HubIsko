@@ -116,7 +116,7 @@ const Step1 = ({ formData, setFormData }) => {
                         <p className="text-sm text-gray-500 mb-2">Please select the start date for scholarship applications.</p>
                         <input
                             type="date"
-                            name="applicationStart"
+                            name="applicationStartDate"
                             value={formData.applicationStartDate || ''}
                             onChange={handleChange}
                             className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -124,7 +124,6 @@ const Step1 = ({ formData, setFormData }) => {
                             required
                         />
                     </div>
-
                     <div>
                         <label className="block text-gray-700 font-semibold mb-2">Application Deadline</label>
                         <p className="text-sm text-gray-500 mb-2">Please select the deadline date for scholarship applications.</p>
@@ -134,7 +133,7 @@ const Step1 = ({ formData, setFormData }) => {
                             value={formData.applicationDeadline || ''}
                             onChange={handleChange}
                             className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            min={getTodayDate()}
+                            min={formData.applicationStartDate || getTodayDate()}
                             required
                         />
                     </div>
@@ -325,7 +324,7 @@ const Step1 = ({ formData, setFormData }) => {
                             value={formData.endDate || ''}
                             onChange={handleChange}
                             className="w-full p-2 border border-gray-300 rounded"
-                            min={getTodayDate()}
+                            min={formData.startDate || getTodayDate()}
                             required
                         />
                     </div>
