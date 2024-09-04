@@ -47,7 +47,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
 
         if (location.pathname.startsWith('/application-inbox')
             || location.pathname.startsWith('/scholarship-program-applications')
-            || location.pathname.startsWith('/scholarship-provider-applications')
+            || location.pathname.startsWith('/scholarship-applications')
 
         ) {
             setIsInboxDropdownOpen(true);
@@ -220,14 +220,14 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                         onClick={toggleInboxDropdown}
                                         className={`flex gap-2 justify-between items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/application-inbox')
                                             || location.pathname.startsWith('/scholarship-program-applications')
-                                            || location.pathname.startsWith('/scholarship-provider-applications')
+                                            || location.pathname.startsWith('/scholarship-applications')
 
                                             ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                         <div className="flex items-center gap-2">
                                             <BsInboxFill className={`w-5 h-5 text-blue-600 
                                             ${location.pathname.startsWith('/application-inbox')
                                                     || location.pathname.startsWith('/scholarship-program-applications')
-                                                    || location.pathname.startsWith('/scholarship-provider-applications')
+                                                    || location.pathname.startsWith('/scholarship-applications')
 
                                                     ? 'text-white' : ''} `} />
                                             Application Inbox
@@ -235,7 +235,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                         <div className={`bg-blue-600 rounded-full text-center flex items-center justify-center p-3 w-4 h-4 text-sm 
                                             ${location.pathname.startsWith('/application-inbox')
                                                 || location.pathname.startsWith('/scholarship-program-applications')
-                                                || location.pathname.startsWith('/scholarship-provider-applications')
+                                                || location.pathname.startsWith('/scholarship-applications')
 
                                                 ? 'text-blue-600 bg-white' : 'text-white'} `}>1</div>
                                     </Link>
@@ -252,8 +252,8 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link to={'/scholarship-provider-applications'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-provider-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                                    <HiDocument className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-provider-applications' ? ' text-white' : ''}`} />
+                                                <Link to={'/scholarship-applications'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                                    <HiDocument className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-applications' ? ' text-white' : ''}`} />
                                                     Scholarship Provider Applications
                                                 </Link>
                                             </li>
