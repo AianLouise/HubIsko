@@ -102,15 +102,16 @@ export default function Forums() {
                         <h1 className='text-4xl block lg:hidden font-bold text-gray-800 mb-8'>{scholarship.title}</h1>
                         <div className='flex flex-col lg:gap-2 lg:w-1/2'>
                             <div className='flex flex-row divide-x-2 divide-blue-200 mb-2'>
-                                <span className='text-lg lg:text-2xl font-bold text-gray-600 pr-4'>{scholarship.organizationName}</span>
-                                <span className='text-lg lg:text-2xl font-medium text-gray-400 pl-4'>{new Date(scholarship.startDate).toLocaleDateString()}</span>
+                                <span className='text-lg lg:text-xl font-bold text-gray-600 pr-4'>{scholarship.organizationName}</span>
+                                {/* need date posted */}
+                                <span className='text-lg lg:text-xl font-medium text-gray-400 pl-4'>{new Date(scholarship.startDate).toLocaleDateString()}</span>
                             </div>
                             <h1 className='text-4xl hidden lg:block font-bold text-gray-800'>{scholarship.title}</h1>
 
                             <div className='flex text-blue-600 font-bold items-center justify-center lg:justify-start'>
                                 <div className='flex flex-row gap-2 px-10 py-2 lg:py-0 lg:px-2 text-xl bg-slate-200 rounded-md lg:bg-[#f8f8fb] '>
                                     <FaHandHolding className='' />
-                                    Php 80,000 - Php 100,000
+                                    {scholarship.amount}
                                 </div>
                             </div>
                         </div>
@@ -118,6 +119,7 @@ export default function Forums() {
 
                     <div className='max-w-6xl lg:px-24 p-4 mx-auto mb-20'>
                         <div className='flex gap-2'>
+                            {/* need to add the last update date */}
                             <span className='flex gap-1 bg-white border px-4 py-2 rounded-md shadow'>
                                 <MdOutlineRefresh className='w-6 h-6 text-blue-600' />
                                 Last update: {new Date(scholarship.applicationEndDate).toLocaleDateString()}

@@ -446,12 +446,14 @@ export default function ScholarshipsDataDetails() {
 
                         <div className="bg-white p-8 py-12 flex flex-col rounded-md border shadow">
                             <h2 className="text-2xl font-bold mb-4">Uploaded Provider Requirements</h2>
-                            {scholarshipDetails.providerRequirements && scholarshipDetails.providerRequirements.map((doc) => (
-                                <div className="flex items-center mt-4 p-4 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 transition-colors duration-200" key={doc._id}>
-                                    <span className="text-sm font-medium text-gray-700">{doc.name}</span>
-                                    <a href={doc.url} target="_blank" rel="noopener noreferrer" className="ml-auto text-indigo-600 hover:underline">View Document</a>
-                                </div>
-                            ))}
+                            {scholarshipDetails.providerRequirements && scholarshipDetails.providerRequirements
+                                .filter(doc => doc.url) // Filter documents that have a URL
+                                .map((doc) => (
+                                    <div className="flex items-center mt-4 p-4 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 transition-colors duration-200" key={doc._id}>
+                                        <span className="text-sm font-medium text-gray-700">{doc.name}</span>
+                                        <a href={doc.url} target="_blank" rel="noopener noreferrer" className="ml-auto text-indigo-600 hover:underline">View Document</a>
+                                    </div>
+                                ))}
                         </div>
                     </div>
                 </div>

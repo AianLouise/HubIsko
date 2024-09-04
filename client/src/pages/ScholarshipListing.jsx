@@ -58,6 +58,11 @@ export default function ScholarshipListing() {
     return text.substring(0, maxLength) + '...';
   }
 
+  const formatDate = (dateString) => {
+    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-US', options);
+  };
+
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearchChange = (event) => {
@@ -95,9 +100,9 @@ export default function ScholarshipListing() {
               </div>
               <p className='w-full lg:w-1/2 text-lg text-slate-500 font-medium pb-8 lg:pb-0'>Browse them below!</p>
             </div>
-            
-              <img src={ListingIcon} alt='Listing Icon' className='hidden lg:block rounded-md items-center justify-center w-[400px] h-auto' />
-            
+
+            <img src={ListingIcon} alt='Listing Icon' className='hidden lg:block rounded-md items-center justify-center w-[400px] h-auto' />
+
           </div>
         </div>
 
@@ -191,7 +196,7 @@ export default function ScholarshipListing() {
                       </div>
                       <div className='flex flex-col ml-6'>
                         <h2 className='lg:text-xl font-semibold'>{scholarship.title}</h2>
-                        <p className='text-sm lg:text-base'>{truncateText(scholarship.title, 50)}</p>
+                        <p className='text-sm lg:text-base'>{truncateText(scholarship.organizationName, 50)}</p>
                       </div>
                     </div>
                     <div className='p-4 flex flex-col gap-2'>
@@ -223,9 +228,12 @@ export default function ScholarshipListing() {
                               <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
                               <p className='font-medium'>Eligibility: </p>
                             </div>
+                            <p className='text-sm lg:hidden'>{truncateText(scholarship.fieldOfStudy, 50)}</p>
                             <p className='text-sm lg:hidden'>{truncateText(scholarship.otherEligibility, 50)}</p>
                           </div>
-                          <p className='w-full text-sm hidden lg:block'>{truncateText(scholarship.otherEligibility, 50)}</p>
+                          <p className='w-full text-sm hidden lg:block'>
+                            {truncateText(scholarship.fieldOfStudy, 50)}, {truncateText(scholarship.otherEligibility, 50)}
+                          </p>
                         </div>
                         <div className='flex lg:flex-row lg:gap-4'>
                           <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
@@ -233,9 +241,9 @@ export default function ScholarshipListing() {
                               <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
                               <p className='font-medium'>Deadline: </p>
                             </div>
-                            <p className='text-sm lg:hidden'>{scholarship.endDate}</p>
+                            <p className='text-sm lg:hidden'>{formatDate(scholarship.endDate)}</p>
                           </div>
-                          <p className='w-full text-sm hidden lg:block'>{scholarship.endDate}</p>
+                          <p className='w-full text-sm hidden lg:block'>{formatDate(scholarship.endDate)}</p>
                         </div>
                       </div>
                       <Link
