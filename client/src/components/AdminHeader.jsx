@@ -112,8 +112,11 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                         {dropdownOpen && (
                             <div className="absolute mt-2 right-0 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50 font-medium">
                                 <ul>
-                                    <li className="p-2 hover:bg-gray-100 cursor-pointer">Profile</li>
-                                    <li className="p-2 hover:bg-gray-100 cursor-pointer">Settings</li>
+                                    <li className="p-2 hover:bg-gray-100 cursor-pointer">
+                                    <Link to={'/admin-settings'}>
+                                    Settings
+                                    </Link>
+                                    </li>
                                     <li className="p-2 hover:bg-gray-100 cursor-pointer" onClick={handleSignOut}>Sign out</li>
                                 </ul>
                             </div>

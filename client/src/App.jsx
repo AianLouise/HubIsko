@@ -61,6 +61,7 @@ import ProviderCreateForumPost from "./pages/Scholarship-Provider/ProviderCreate
 import AdminForums from "./pages/Admin/AdminForums";
 import AdminForumDetail from "./pages/Admin/AdminForumDetail";
 import AdminCreateForumPost from "./pages/Admin/AdminCreateForumPost";
+import AdminSettings from "./pages/Admin/AdminSettings";
 import ScholarshipDashboardDetails from "./pages/ScholarshipDashboardDetails";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import ScholarshipProgramDetails from "./pages/Admin/ScholarshipProgramApplicationDetails";
@@ -109,6 +110,7 @@ export default function App() {
         <Route element={<ProviderPrivateRoute allowedRoles={['admin']} />}>
         <Route element={<Layout />} path="/">
           <Route path="admin-dashboard" element={<AdminDashboard />} />
+          <Route path="admin-settings" element={<AdminSettings />} />
           <Route path="accounts" element={<Accounts />} />
           <Route path="students" element={<Students />} />
           <Route path="scholarship-provider" element={<ProviderAccounts />} />
