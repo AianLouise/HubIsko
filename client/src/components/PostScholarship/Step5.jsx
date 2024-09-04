@@ -8,7 +8,7 @@ const Step5 = ({ formData, setFormData }) => {
 
     return (
         <div className="bg-white p-8 rounded-md shadow border">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Terms and Conditions for Scholarship Providers</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Terms and Conditions</h2>
             <p className="text-sm text-gray-600 mb-4">
                 Please read the following terms and conditions carefully before submitting your scholarship program. By submitting your scholarship program, you agree to comply with these terms and conditions.
             </p>

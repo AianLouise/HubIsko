@@ -55,7 +55,7 @@ const Step2 = ({ formData, setFormData }) => {
             <div className="bg-white p-8 rounded-md shadow border flex flex-col gap-4">
                 <div className='flex justify-between items-center'>
                     <h2 className="text-2xl font-bold text-gray-800">Required Documents</h2>
-                    {errors && <p className="bg-red-600 text-white font-medium py-2 px-4 rounded-md mt-2">At least one document must be selected.</p>}
+                    {/* {errors && <p className="bg-red-600 text-white font-medium py-2 px-4 rounded-md mt-2">At least one document must be selected.</p>} */}
                 </div>
 
                 <p className="text-slate-600">Specify the documents that applicants need to submit.</p>
