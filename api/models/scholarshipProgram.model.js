@@ -3,11 +3,13 @@ import mongoose from 'mongoose';
 // Schema for Scholarship Program
 const scholarshipProgramSchema = new mongoose.Schema({
   title: { type: String },
+  description: { type: String },
   category: { type: String },
   fieldOfStudy: { type: String },
   numberOfScholarships: { type: String },
   numberOfScholarshipsSlotFilled: { type: String, default: '0' },
   amount: { type: String },
+  applicationStart: { type: String },
   applicationDeadline: { type: String },
   minGPA: { type: String },
   nationality: { type: String },

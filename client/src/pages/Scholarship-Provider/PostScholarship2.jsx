@@ -14,10 +14,12 @@ const PostScholarship = () => {
 
     const [formData, setFormData] = useState({
         title: '',
+        description: '',
         category: '',
         fieldOfStudy: '',
         numberOfScholarships: '',
         amount: '',
+        applicationStart: '',
         applicationDeadline: '',
         minGPA: '',
         nationality: '',
@@ -115,6 +117,13 @@ const PostScholarship = () => {
             title: 'Confirmation',
             description: 'Confirm your submission and finish the process',
             content: <Step5 formData={formData} setFormData={setFormData} />,
+            validate: (formData) => {
+                const errors = {};
+                if (!formData.agree) {
+                    errors.agree = 'Agree is required';
+                }
+                return errors;
+            },
         }
     ];
 

@@ -58,7 +58,7 @@ const Step2 = ({ formData, setFormData }) => {
                     {errors && <p className="bg-red-600 text-white font-medium py-2 px-4 rounded-md mt-2">At least one document must be selected.</p>}
                 </div>
 
-                <p className="text-lg text-slate-600">Specify the documents that applicants need to submit.</p>
+                <p className="text-slate-600">Specify the documents that applicants need to submit.</p>
 
                 {documents.map((doc, index) => (
                     <div key={doc.id} className="flex items-center gap-2">
@@ -95,19 +95,20 @@ const Step2 = ({ formData, setFormData }) => {
                 </div>
             </div>
 
-            <div className="bg-white p-8 rounded-md shadow border flex flex-col gap-4">
-                <h2 className="text-xl font-bold text-gray-800">Document Instructions</h2>
-                <textarea
-                    id="documentGuidelines"
-                    name="documentGuidelines"
-                    className="border border-gray-300 rounded-md p-2"
-                    placeholder="Provide any additional instructions or guidelines for document submission"
-                    rows="4"
-                    value={formData.documentGuidelines || ''}
-                    onChange={handleChange}
-                    required
-                ></textarea>
-            </div>
+                              <div className="bg-white p-8 rounded-md shadow border flex flex-col gap-4">
+                        <h2 className="text-xl font-bold text-gray-800">Document Instructions</h2>
+                        <p className="text-sm text-gray-500 mb-2">Please provide any additional instructions or guidelines for document submission.</p>
+                        <textarea
+                            id="documentGuidelines"
+                            name="documentGuidelines"
+                            className="border border-gray-300 rounded-md p-2"
+                            placeholder="Enter detailed instructions for document submission"
+                            rows="4"
+                            value={formData.documentGuidelines || ''}
+                            onChange={handleChange}
+                            required
+                        ></textarea>
+                    </div>
         </div>
     );
 };
