@@ -100,10 +100,10 @@ export default function ProviderDashboard() {
           </div>
           
           <div className='flex items-center w-[200px]'>
-          <button className='flex gap-2 font-medium px-6 py-2 rounded-md text-left bg-white hover:bg-slate-200 text-blue-600 shadow'>
+          <Link to={'/provider-settings'} className='flex gap-2 font-medium px-6 py-2 rounded-md text-left bg-white hover:bg-slate-200 text-blue-600 shadow'>
             <BiCog className='w-6 h-6' />
             See Settings
-          </button>
+          </Link>
           </div>
         </div>
 
