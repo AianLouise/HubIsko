@@ -156,17 +156,17 @@ export default function CreateForumPost() {
                     {selectedFiles.length > 0 && (
                         <div className="mt-4">
                             <h4 className="font-medium mb-2">Attached Files:</h4>
-                            <ul className="grid grid-cols-2 gap-4">
+                            <ul className="grid grid-cols-4 gap-4">
                                 {selectedFiles.map((fileObj, index) => (
-                                    <li key={index} className="flex flex-col items-center justify-center space-y-2 p-2 border rounded-md shadow-sm h-40">
+                                    <li key={index} className="flex flex-col items-center justify-between space-y-2 p-2 h-64">
                                         {fileObj.file.type.startsWith('image/') ? (
                                             <>
                                                 <img
                                                     src={fileObj.url}
                                                     alt={fileObj.file.name}
-                                                    className="w-24 h-24 object-cover rounded-md shadow"
+                                                    className="w-36 h-36 object-cover rounded-md border-2"
                                                 />
-                                                <span className="text-sm text-gray-600 text-center">{fileObj.file.name}</span>
+                                                <span className="text-sm font-bold text-slate-600 text-center">{fileObj.file.name}</span>
                                             </>
                                         ) : fileObj.file.type === 'application/pdf' ? (
                                             <div className="flex flex-col items-center justify-center h-full">
@@ -189,7 +189,7 @@ export default function CreateForumPost() {
                                         )}
                                         <button
                                             type="button"
-                                            className="text-red-600 hover:text-red-800 flex items-center"
+                                            className="text-white px-4 py-2 rounded-md bg-red-600 hover:text-red-800 flex items-center"
                                             onClick={() => handleRemoveFile(index)}
                                         >
                                             <FaTrashAlt className="mr-1" /> Remove

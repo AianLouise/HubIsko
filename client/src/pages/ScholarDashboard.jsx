@@ -71,6 +71,41 @@ export default function ScholarDashboard() {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
 
+  const [filter, setFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortOrder, setSortOrder] = useState('recent');
+
+  const getFilteredApplications = () => {
+    let applications;
+    switch (filter) {
+      case 'approved':
+        applications = approvedApplications;
+        break;
+      case 'pending':
+        applications = pendingApplications;
+        break;
+      default:
+        applications = allApplications;
+    }
+
+    if (searchQuery) {
+      applications = applications.filter(application =>
+        application.scholarshipProgram?.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        application.scholarshipProgram?.organizationName.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    if (sortOrder === 'recent') {
+      applications.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    } else {
+      applications.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+    }
+
+    return applications;
+  };
+
+  const filteredApplications = getFilteredApplications();
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -85,20 +120,20 @@ export default function ScholarDashboard() {
   return (
     <div className="flex flex-col min-h-screen"> {/* Flex container */}
       <Header />
-      <main className="flex-grow bg-[#f8f8fb]"> {/* Main content grows to fill available space */}
-      <div className='flex flex-col gap-4 py-12 max-w-6xl mx-auto justify-between p-4 lg:px-24'>
+      <main className="flex-grow bg-[#f8f8fb] pb-24"> {/* Main content grows to fill available space */}
+        <div className='flex flex-col gap-4 py-12 max-w-6xl mx-auto justify-between p-4 lg:px-24'>
 
-      <div className='flex flex-col border-b'>
-        <div className='flex justify-between items-center'>
-        <span className='font-bold text-2xl'>Scholarship Announcements <span className='text-blue-500'>(0)</span> </span>
+          <div className='flex flex-col border-b'>
+            <div className='flex justify-between items-center'>
+              <span className='font-bold text-2xl'>Scholarship Announcements <span className='text-blue-500'>(0)</span> </span>
 
-        <button className='flex gap-2 bg-white hover:bg-slate-200 px-6 py-2 border shadow rounded-md'>
-          <BiFilter className='w-6 h-6 text-blue-600' />
-          <span>Recent</span>
-        </button>
-      </div>
+              <button className='flex gap-2 bg-white hover:bg-slate-200 px-6 py-2 border shadow rounded-md'>
+                <BiFilter className='w-6 h-6 text-blue-600' />
+                <span>Recent</span>
+              </button>
+            </div>
 
-      <div className='grid grid-cols-3 gap-10 my-10'> 
+            <div className='grid grid-cols-3 gap-10 my-10'>
               <div className='bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out'>
 
                 <div className='flex gap-2'>
@@ -129,12 +164,12 @@ export default function ScholarDashboard() {
                     </div>
                   </div>
                 </div>
-        </div>
-           
-      </div>
+              </div>
 
-        {/* If no Scholarship yet */}
-        {/* <div className='flex flex-col items-center justify-center gap-2 my-20 text-slate-500 font-medium'>
+            </div>
+
+            {/* If no Scholarship yet */}
+            {/* <div className='flex flex-col items-center justify-center gap-2 my-20 text-slate-500 font-medium'>
           You currently have no scholarship announcements.
           <button className='flex gap-2 items-center text-base lg:text-lg bg-blue-600 rounded-md px-6 py-2 text-white fond-medium hover:bg-blue-800 group transition ease-in-out'>
             Why?
@@ -142,76 +177,92 @@ export default function ScholarDashboard() {
         </div> */}
 
 
-      </div>
-      <span className='font-bold text-2xl'>Scholarship Applications</span>
+          </div>
+          <span className='font-bold text-2xl'>Scholarship Applications</span>
 
-      <div className='mb-2'>
-          <span className='font-medium text-slate-500'>Recent Scholarship Activities</span>
+          <div className='mb-2'>
+            <span className='font-medium text-slate-500'>Recent Scholarship Activities</span>
 
-          <div className='grid grid-cols-3 gap-4 text-sm mt-2'>
-            
-            <div className='border border-blue-400 shadow rounded-md p-2 py-4 flex items-center justify-center flex-col gap-2 font-medium'>
-              <div>
+            <div className='grid grid-cols-3 gap-4 text-sm mt-2'>
+
+              <div className='border border-blue-400 shadow rounded-md p-2 py-4 flex items-center justify-center flex-col gap-2 font-medium'>
+                <div>
                   <span className='py-2'>You Applied for:</span>
                   <span className='text-blue-600 px-2 py-2 rounded-md'>Scholarship Title</span>
+                </div>
               </div>
-            </div>
 
-            <div className='border border-yellow-400  shadow rounded-md flex items-center justify-center flex-col gap-2 font-medium'>
-              <div>
-              <span className='py-2'>Requested review:</span>
+              <div className='border border-yellow-400  shadow rounded-md flex items-center justify-center flex-col gap-2 font-medium'>
+                <div>
+                  <span className='py-2'>Requested review:</span>
                   <span className=' text-yellow-600 px-2 py-2 rounded-md'>Scholarship Title</span>
+                </div>
               </div>
-            </div>
 
-            <div className='border border-green-400  shadow rounded-md flex items-center justify-center flex-col gap-2 font-medium'>
-              <div>
+              <div className='border border-green-400  shadow rounded-md flex items-center justify-center flex-col gap-2 font-medium'>
+                <div>
                   <span className='py-2'>Approved Application:</span>
                   <span className=' text-green-600 px-2 py-2 rounded-md'>Scholarship Title</span>
+                </div>
               </div>
+
             </div>
-
           </div>
-      </div>
 
-        <div className="flex flex-row justify-between items-center mt-4">
-          <div className='flex gap-4'>
-            <button className="flex gap-2 font-medium items-center bg-blue-600 text-white shadow px-6 py-2 rounded-md text-md">
+          <div className="flex flex-row justify-between items-center mt-4">
+            <div className='flex gap-4'>
+              <button
+                className={`flex gap-2 font-medium items-center ${filter === 'all' ? 'bg-blue-600 text-white' : 'bg-white hover:bg-slate-200'} shadow px-6 py-2 rounded-md text-md`}
+                onClick={() => setFilter('all')}
+              >
                 <h2 className="rounded-t-lg text-center">All Applications</h2>
-                <div className='text-white'>(0)</div>
+                <div className='font-bold '>({allApplications.length})</div>
               </button>
 
-              <button className="flex gap-2 items-center bg-white hover:bg-slate-200 shadow px-6 py-2 rounded-md border text-md">
+              <button
+                className={`flex gap-2 items-center ${filter === 'approved' ? 'bg-blue-600 text-white' : 'bg-white hover:bg-slate-200'} shadow px-6 py-2 rounded-md border text-md`}
+                onClick={() => setFilter('approved')}
+              >
                 <h2 className="font-bold rounded-t-lg text-center">Approved</h2>
                 <div className='font-bold text-green-600'>({approvedApplications.length})</div>
               </button>
-             
-              <button className="flex gap-2 items-center bg-white hover:bg-slate-200 shadow px-6 py-2 rounded-md border text-md">
+
+              <button
+                className={`flex gap-2 items-center ${filter === 'pending' ? 'bg-blue-600 text-white' : 'bg-white hover:bg-slate-200'} shadow px-6 py-2 rounded-md border text-md`}
+                onClick={() => setFilter('pending')}
+              >
                 <h2 className="font-bold rounded-t-lg text-center">Pending</h2>
                 <div className='font-bold text-yellow-600'>({pendingApplications.length})</div>
               </button>
-          </div>
+            </div>
 
-    
-          <div className="flex gap-2 items-center bg-white shadow px-6 py-2 rounded-md border text-md">
-            <input type="text" 
-            placeholder="Search Applications" 
-            className="w-full bg-transparent outline-none" />
+            <div className="flex gap-2 items-center bg-white shadow px-6 py-2 rounded-md border text-md">
+              <input
+                type="text"
+                placeholder="Search Applications"
+                className="w-full bg-transparent outline-none"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
           </div>
-      </div>
 
           <div className="grid gap-4 lg:max-h-[350px]">
             {/* Overview of approved applications */}
             <div className="bg-white shadow rounded-lg col-span-1 md:col-span-2">
               <div className='flex items-center justify-between font-semibold text-xl w-full p-4 rounded-t-lg border-b'>
                 <h2 className='font-bold text-xl'>Inbox</h2>
-                <button className='flex items-center gap-2 bg-blue-600 text-base text-white shadow rounded-md px-6 py-2'>
+                <button
+                  className='flex items-center gap-2 bg-blue-600 text-base text-white shadow rounded-md px-6 py-2'
+                  onClick={() => setSortOrder(sortOrder === 'recent' ? 'oldest' : 'recent')}
+                >
                   <BiFilter className='w-6 h-6' />
-                  Recent</button>
+                  {sortOrder === 'recent' ? 'Recent' : 'Oldest'}
+                </button>
               </div>
 
-              <div className="space-y-4 p-4 text-slate-800">
-                {allApplications.length === 0 ? (
+              <div className="space-y-4 p-4 text-slate-800 h-96">
+                {filteredApplications.length === 0 ? (
                   <div className='h-full flex flex-col gap-2 justify-center items-center'>
                     <span className='text-xl font-medium text-slate-500'>You have no applications yet.</span>
                     <Link to={'/scholarship-listing'}>
@@ -227,10 +278,10 @@ export default function ScholarDashboard() {
                       <thead className="">
                         <tr>
                           <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Organization
+                            Title
                           </th>
                           <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Title
+                            Organization
                           </th>
                           <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Status
@@ -241,7 +292,7 @@ export default function ScholarDashboard() {
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
-                        {allApplications.map(application => (
+                        {filteredApplications.map(application => (
                           <tr key={application._id} className="hover:bg-slate-200">
                             <td className="px-6 py-4 whitespace-nowrap flex gap-2 items-center">
                               <div className='bg-blue-600 w-12 h-12 rounded-md'>
@@ -252,10 +303,10 @@ export default function ScholarDashboard() {
                                 )}
                               </div>
 
-                              <span className='font-bold'>{application.scholarshipProgram?.organizationName}</span>
+                              <span className='font-bold'>{application.scholarshipProgram?.title}</span>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <span>{application.scholarshipProgram?.title}</span>
+                              <span>{application.scholarshipProgram?.organizationName}</span>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className='flex flex-row items-center gap-2'>
@@ -271,7 +322,6 @@ export default function ScholarDashboard() {
                                 </button>
                               </Link>
                             </td>
-
                           </tr>
                         ))}
                       </tbody>
@@ -282,7 +332,7 @@ export default function ScholarDashboard() {
             </div>
           </div>
 
-     
+
         </div>
       </main>
       <Footer />

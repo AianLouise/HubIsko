@@ -38,15 +38,16 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
             || location.pathname.startsWith('/verification-details')
             || location.pathname.startsWith('/student-details')
             || location.pathname.startsWith('/provider-details')
+            || location.pathname.startsWith('/scholarship-provider')
         ) {
             setIsAccountsDropdownOpen(true);
         } else {
             setIsAccountsDropdownOpen(false);
         }
 
-        if (location.pathname.startsWith('/inbox')
+        if (location.pathname.startsWith('/application-inbox')
             || location.pathname.startsWith('/scholarship-program-applications')
-            || location.pathname.startsWith('/scholarship-provider-applications')
+            || location.pathname.startsWith('/scholarship-applications')
 
         ) {
             setIsInboxDropdownOpen(true);
@@ -111,8 +112,11 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                         {dropdownOpen && (
                             <div className="absolute mt-2 right-0 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50 font-medium">
                                 <ul>
-                                    <li className="p-2 hover:bg-gray-100 cursor-pointer">Profile</li>
-                                    <li className="p-2 hover:bg-gray-100 cursor-pointer">Settings</li>
+                                    <li className="p-2 hover:bg-gray-100 cursor-pointer">
+                                    <Link to={'/admin-settings'}>
+                                    Settings
+                                    </Link>
+                                    </li>
                                     <li className="p-2 hover:bg-gray-100 cursor-pointer" onClick={handleSignOut}>Sign out</li>
                                 </ul>
                             </div>
@@ -159,6 +163,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                             || location.pathname.startsWith('/verification-details')
                                             || location.pathname.startsWith('/student-details')
                                             || location.pathname.startsWith('/provider-details')
+                                            || location.pathname.startsWith('/scholarship-provider')
                                             ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                         <BsFillPersonFill className={`w-5 h-5 text-blue-600 
                                  ${location.pathname.startsWith('/accounts')
@@ -167,6 +172,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                                 || location.pathname.startsWith('/verification-details')
                                                 || location.pathname.startsWith('/student-details')
                                                 || location.pathname.startsWith('/provider-details')
+                                                || location.pathname.startsWith('/scholarship-provider')
                                                 ? 'text-white' : ''} `} />
                                         Accounts
                                     </Link>
@@ -187,8 +193,8 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link to={'/scholarship-provider'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/provider-accounts' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                                    <BsBuildingFill className={`w-5 h-5 text-blue-600 ${location.pathname === '/provider-accounts' ? ' text-white' : ''}`} />
+                                                <Link to={'/scholarship-provider'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-provider' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                                    <BsBuildingFill className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-provider' ? ' text-white' : ''}`} />
                                                     Scholarship Providers
                                                 </Link>
                                             </li>
@@ -212,24 +218,24 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                 <div>
                                     <Link to={'/application-inbox'}
                                         onClick={toggleInboxDropdown}
-                                        className={`flex gap-2 justify-between items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/inbox')
+                                        className={`flex gap-2 justify-between items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/application-inbox')
                                             || location.pathname.startsWith('/scholarship-program-applications')
-                                            || location.pathname.startsWith('/scholarship-provider-applications')
+                                            || location.pathname.startsWith('/scholarship-applications')
 
                                             ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                         <div className="flex items-center gap-2">
                                             <BsInboxFill className={`w-5 h-5 text-blue-600 
-                                            ${location.pathname.startsWith('/inbox')
+                                            ${location.pathname.startsWith('/application-inbox')
                                                     || location.pathname.startsWith('/scholarship-program-applications')
-                                                    || location.pathname.startsWith('/scholarship-provider-applications')
+                                                    || location.pathname.startsWith('/scholarship-applications')
 
                                                     ? 'text-white' : ''} `} />
                                             Application Inbox
                                         </div>
                                         <div className={`bg-blue-600 rounded-full text-center flex items-center justify-center p-3 w-4 h-4 text-sm 
-                                            ${location.pathname.startsWith('/inbox')
+                                            ${location.pathname.startsWith('/application-inbox')
                                                 || location.pathname.startsWith('/scholarship-program-applications')
-                                                || location.pathname.startsWith('/scholarship-provider-applications')
+                                                || location.pathname.startsWith('/scholarship-applications')
 
                                                 ? 'text-blue-600 bg-white' : 'text-white'} `}>1</div>
                                     </Link>
@@ -246,8 +252,8 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link to={'/scholarship-provider-applications'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-provider-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                                    <HiDocument className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-provider-applications' ? ' text-white' : ''}`} />
+                                                <Link to={'/scholarship-applications'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                                    <HiDocument className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-applications' ? ' text-white' : ''}`} />
                                                     Scholarship Provider Applications
                                                 </Link>
                                             </li>
@@ -271,10 +277,10 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                             </li>
 
                             <li>
-                                <a href="/admin-forums" className="flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
-                                    <MdForum className="w-5 h-5 text-blue-600" /> {/* Updated icon */}
+                            <Link to={"/admin-forums"} className={`flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/admin-forums' ? 'bg-blue-600 text-white' : ''}`}>
+                                    <MdForum className={`w-5 h-5 text-blue-600 ${location.pathname =='/admin-forums' ? 'text-white':''}`} /> {/* Updated icon */}
                                     Forums
-                                </a>
+                            </Link>
                             </li>
 
                         </ul>

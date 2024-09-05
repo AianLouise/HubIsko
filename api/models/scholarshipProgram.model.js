@@ -1,13 +1,16 @@
+import { da } from 'date-fns/locale';
 import mongoose from 'mongoose';
 
 // Schema for Scholarship Program
 const scholarshipProgramSchema = new mongoose.Schema({
   title: { type: String },
+  description: { type: String },
   category: { type: String },
   fieldOfStudy: { type: String },
   numberOfScholarships: { type: String },
   numberOfScholarshipsSlotFilled: { type: String, default: '0' },
   amount: { type: String },
+  applicationStartDate: { type: String },
   applicationDeadline: { type: String },
   minGPA: { type: String },
   nationality: { type: String },
@@ -77,6 +80,8 @@ const scholarshipProgramSchema = new mongoose.Schema({
       dateApproved: { type: Date, default: Date.now }
     }
   ], // Array of approved scholars with scholarId and dateApproved
+  datePosted: { type: Date, default: Date.now }, // Added datePosted field
+  dateUpdated: { type: Date, default: Date.now }, // Added date
   dateCreated: { type: Date, default: Date.now } // Added dateCreated field
 });
 

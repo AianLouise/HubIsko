@@ -108,7 +108,7 @@ const Step4 = ({ formData, setFormData }) => {
     return (
         <div className="bg-white p-8 rounded-md shadow border">
             <h2 className="text-2xl font-bold text-gray-800 mb-2">Required Documents</h2>
-            <p className="text-lg text-gray-600 mb-4">Specify the documents that prove you can offer this scholarship program.</p>
+            <p className="text-gray-600 mb-4">This is where the provider uploads documents to prove they can offer this scholarship program. Please select the predefined documents you have and upload them. You can also add additional documents if needed.</p>
             <div className="space-y-4 px-4 py-8">
                 {providerRequirements.map((req) => (
                     <div key={req.id} className="flex flex-col gap-4 border-b border-gray-200 pb-4">

@@ -14,10 +14,12 @@ const PostScholarship = () => {
 
     const [formData, setFormData] = useState({
         title: '',
+        description: '',
         category: '',
         fieldOfStudy: '',
         numberOfScholarships: '',
         amount: '',
+        applicationStartDate: '',
         applicationDeadline: '',
         minGPA: '',
         nationality: '',
@@ -62,17 +64,21 @@ const PostScholarship = () => {
             content: <Step1 formData={formData} setFormData={setFormData} />,
             validate: (formData) => {
                 const errors = {};
-                if (!formData.title) errors.title = 'Title is required';
-                if (!formData.category) errors.category = 'Category is required';
-                if (!formData.fieldOfStudy) errors.fieldOfStudy = 'Field of Study is required';
-                if (!formData.numberOfScholarships) errors.numberOfScholarships = 'Number of Scholarships is required';
-                if (!formData.amount) errors.amount = 'Amount is required';
+                if (!formData.title) errors.title = 'Title of Scholarship is required';
+                if (!formData.description) errors.description = 'Description is required';
+                if (!formData.category) errors.category = 'Scholarship Category is required';
+                if (!formData.numberOfScholarships) errors.numberOfScholarships = 'Number of Scholarships Available is required';
+                if (!formData.amount) errors.amount = 'Scholarship Amount is required';
+                if (!formData.applicationStartDate) errors.applicationStartDate = 'Application Start Date is required';
                 if (!formData.applicationDeadline) errors.applicationDeadline = 'Application Deadline is required';
-                if (!formData.minGPA) errors.minGPA = 'Minimum GPA is required';
-                if (!formData.nationality) errors.nationality = 'Nationality is required';
+                if (!formData.fieldOfStudy) errors.fieldOfStudy = 'Field of Study is required';
+                if (!formData.minGPA) errors.minGPA = 'Minimum GPA/Grade Requirement is required';
+                if (!formData.nationality) errors.nationality = 'Nationality Requirements is required';
                 if (!formData.otherEligibility) errors.otherEligibility = 'Other Eligibility is required';
                 if (!formData.startDate) errors.startDate = 'Start Date is required';
                 if (!formData.endDate) errors.endDate = 'End Date is required';
+                if (!formData.contactEmail) errors.selectionProcess = 'Contact Email is required';
+                if (!formData.contactPhone) errors.contactPhone = 'Contact Phone is required';
                 return errors;
             },
         },
@@ -103,18 +109,43 @@ const PostScholarship = () => {
                 if (!formData.bannerImage) {
                     errors.bannerImage = 'Banner Image is required';
                 }
+                if (formData.sections) {
+                    formData.sections.forEach((section, index) => {
+                        if (!section.title || section.title.trim() === '') {
+                            errors[`sectionTitle${index}`] = `Title for section ${index + 1} is required`;
+                        }
+                        if (!section.content || section.content.trim() === '') {
+                            errors[`sectionContent${index}`] = `Content for section ${index + 1} is required`;
+                        }
+                    });
+                }
                 return errors;
             },
         },
         {
             title: 'Upload Documents for Review',
             description: 'Upload documents so that the HubIsko can review and decide if the provider can offer this scholarship program',
-            content: <Step4 formData={formData} setFormData={setFormData} />,
+            content: <Step4 formData={formData} setFormData={setFormData} setNotification={setNotification} />,
+            validate: (formData) => {
+                const errors = {};
+                const hasUploadedDocument = formData.providerRequirements && formData.providerRequirements.some(req => req.url);
+                if (!hasUploadedDocument) {
+                    errors.providerRequirements = 'At least one document must be uploaded.';
+                }
+                return errors;
+            },
         },
         {
-            title: 'Confirmation',
-            description: 'Confirm your submission and finish the process',
+            title: 'Terms and Conditions',
+            description: 'Please read and agree to the terms and conditions before submitting your scholarship program.',
             content: <Step5 formData={formData} setFormData={setFormData} />,
+            validate: (formData) => {
+                const errors = {};
+                if (!formData.agree) {
+                    errors.agree = 'Agree is required';
+                }
+                return errors;
+            },
         }
     ];
 
@@ -143,9 +174,11 @@ const PostScholarship = () => {
             } else {
                 const errorText = await response.text();
                 console.error('Failed to post scholarship:', response.statusText, errorText);
+                setNotification('Failed to submit scholarship program application.');
             }
         } catch (error) {
             console.error('Error submitting scholarship:', error);
+            setNotification('Error submitting scholarship program application.');
         } finally {
             setIsLoading(false);
         }
@@ -167,7 +200,7 @@ const PostScholarship = () => {
                         </p>
                     </div>
                     {notification && (
-                        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded absolute top-4 right-4" role="alert">
+                        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded fixed top-4 right-4 z-50" role="alert">
                             <span className="block sm:inline">{notification}</span>
                         </div>
                     )}
@@ -178,6 +211,7 @@ const PostScholarship = () => {
                             setFormData={setFormData}
                             currentPage={currentPage}
                             setCurrentPage={setCurrentPage}
+                            setNotification={setNotification} // Pass setNotification to StepTemplate
                         />
                     </form>
                 </div>

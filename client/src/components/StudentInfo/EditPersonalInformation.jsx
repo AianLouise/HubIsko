@@ -97,9 +97,9 @@ export default function EditPersonalInformation() {
         : "w-full bg-slate-200 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600";
 
     return (
-        <div className="bg-white p-6 rounded-md shadow-md">
-            <div className="flex justify-between items-center px-4 pb-4 rounded-t-md border-b">
-                <span className="text-base lg:text-xl font-bold">Student Information</span>
+        <div className="bg-white lg:gap-8 w-full border shadow rounded-md">
+        <div className="flex justify-between items-center p-4 lg:px-12 lg:py-4 rounded-t-md border-b">
+          <span className="text-base lg:text-xl font-bold">Your Personal Information</span>
                 <div className="flex gap-2">
                     <button
                         onClick={isEditing ? handleSave : toggleEdit}
@@ -119,7 +119,7 @@ export default function EditPersonalInformation() {
                     )}
                 </div>
             </div>
-            <div className="grid grid-cols-4 gap-4 pt-2">
+            <div className="grid grid-cols-4 gap-4 pt-2 lg:px-12 lg:py-8">
                 {/* First Row: First Name, Last Name, Middle Name, Name Extension */}
                 <div className="flex flex-col gap-2">
                     <label className="text-slate-400">First Name</label>

@@ -22,6 +22,7 @@ const StepTemplate = ({ steps, formData, setFormData, currentPage, setCurrentPag
 
   const nextStep = () => {
     if (validateStep() && currentPage < steps.length - 1) {
+      console.log('Form Data:', formData); // Log the form data to the console
       setCurrentPage(currentPage + 1);
     }
   };

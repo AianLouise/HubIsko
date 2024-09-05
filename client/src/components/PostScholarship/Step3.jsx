@@ -157,10 +157,10 @@ const Step3 = ({ formData, setFormData }) => {
 
                         <div className='flex flex-col gap-2 w-1/2'>
                             <div className='flex flex-row divide-x-2 divide-blue-200 mb-2'>
-                                <span className='text-2xl font-bold text-gray-600 pr-4'>
+                                <span className='text-xl font-bold text-gray-600 pr-4'>
                                     {currentUser ? currentUser.scholarshipProviderDetails.organizationName : 'Scholarship Provider'}
                                 </span>
-                                <span className='text-2xl font-medium text-gray-400 pl-4'>{new Date().toLocaleDateString('en-US')}</span>
+                                <span className='text-xl font-medium text-gray-400 pl-4'>{new Date().toLocaleDateString('en-US')}</span>
                             </div>
                             <h1 className='text-4xl font-bold text-gray-800'>{formData.title}</h1>
 
