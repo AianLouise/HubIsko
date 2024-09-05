@@ -112,6 +112,9 @@ const ScholarshipApplicationForm = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [notification, setNotification] = useState(null);
     const [activeStep, setActiveStep] = useState(1);
+    const [visibleRelativeIndex, setVisibleRelativeIndex] = useState(0);
+    const [visibleWorkExperienceIndex, setVisibleWorkExperienceIndex] = useState(0);
+    const [visibleSkillIndex, setVisibleSkillIndex] = useState(0);
     const navigate = useNavigate();
     const storage = getStorage();
 
@@ -173,9 +176,9 @@ const ScholarshipApplicationForm = () => {
         return <div>Loading...</div>;
     }
 
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
+    // if (error) {
+    //     return <div>Error: {error}</div>;
+    // }
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -188,7 +191,81 @@ const ScholarshipApplicationForm = () => {
             content: <Step1 formData={formData} setFormData={setFormData} />,
             validate: (formData) => {
                 const errors = {};
-                // Add validation logic for Step 1
+
+                // Validate first name
+                if (!formData.firstName || formData.firstName.trim() === '') {
+                    errors.firstName = 'First name is required';
+                }
+
+                // Validate last name
+                if (!formData.lastName || formData.lastName.trim() === '') {
+                    errors.lastName = 'Last name is required';
+                }
+
+                // Validate birthdate
+                if (!formData.birthdate) {
+                    errors.birthdate = 'Birthdate is required';
+                } else {
+                    const today = new Date().toISOString().split('T')[0];
+                    if (formData.birthdate > today) {
+                        errors.birthdate = 'Birthdate cannot be in the future';
+                    }
+                }
+
+                // Validate gender
+                if (!formData.gender || formData.gender.trim() === '') {
+                    errors.gender = 'Gender is required';
+                }
+
+                // Validate blood type
+                if (!formData.bloodType || formData.bloodType.trim() === '') {
+                    errors.bloodType = 'Blood type is required';
+                }
+
+                // Validate civil status
+                if (!formData.civilStatus || formData.civilStatus.trim() === '') {
+                    errors.civilStatus = 'Civil status is required';
+                }
+
+                // Validate email
+                if (!formData.email || formData.email.trim() === '') {
+                    errors.email = 'Email is required';
+                } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+                    errors.email = 'Email is invalid';
+                }
+
+                // Validate contact number
+                if (!formData.contactNumber || formData.contactNumber.trim() === '') {
+                    errors.contactNumber = 'Contact number is required';
+                } else if (!/^\d+$/.test(formData.contactNumber)) {
+                    errors.contactNumber = 'Contact number is invalid';
+                }
+
+                // Validate address details
+                if (!formData.addressDetails || formData.addressDetails.trim() === '') {
+                    errors.addressDetails = 'Address details are required';
+                }
+
+                // Validate region
+                if (!formData.region || formData.region.trim() === '') {
+                    errors.region = 'Region is required';
+                }
+
+                // Validate province
+                if (!formData.province || formData.province.trim() === '') {
+                    errors.province = 'Province is required';
+                }
+
+                // Validate city
+                if (!formData.city || formData.city.trim() === '') {
+                    errors.city = 'City is required';
+                }
+
+                // Validate barangay
+                if (!formData.barangay || formData.barangay.trim() === '') {
+                    errors.barangay = 'Barangay is required';
+                }
+
                 return errors;
             },
         },
@@ -198,7 +275,96 @@ const ScholarshipApplicationForm = () => {
             content: <Step2 formData={formData} setFormData={setFormData} />,
             validate: (formData) => {
                 const errors = {};
-                // Add validation logic for Step 2
+
+                // Check if the user has provided input for guardian or parents
+                const hasGuardianInput = formData.guardian.firstName.trim() !== '' || formData.guardian.lastName.trim() !== '';
+                const hasParentInput = formData.father.firstName.trim() !== '' || formData.mother.firstName.trim() !== '';
+
+                if (hasGuardianInput) {
+                    // Validate guardian details
+                    if (!formData.guardian.firstName || formData.guardian.firstName.trim() === '') {
+                        errors.guardianFirstName = 'Guardian\'s first name is required';
+                    }
+                    if (!formData.guardian.lastName || formData.guardian.lastName.trim() === '') {
+                        errors.guardianLastName = 'Guardian\'s last name is required';
+                    }
+                    if (!formData.guardian.birthdate) {
+                        errors.guardianBirthdate = 'Guardian\'s birthdate is required';
+                    } else {
+                        const today = new Date().toISOString().split('T')[0];
+                        if (formData.guardian.birthdate > today) {
+                            errors.guardianBirthdate = 'Guardian\'s birthdate cannot be in the future';
+                        }
+                    }
+                    if (!formData.guardian.occupation || formData.guardian.occupation.trim() === '') {
+                        errors.guardianOccupation = 'Guardian\'s occupation is required';
+                    }
+                    if (!formData.guardian.yearlyIncome || formData.guardian.yearlyIncome.trim() === '') {
+                        errors.guardianYearlyIncome = 'Guardian\'s yearly income is required';
+                    }
+                    if (!formData.guardian.contactNo || formData.guardian.contactNo.trim() === '') {
+                        errors.guardianContactNo = 'Guardian\'s contact number is required';
+                    } else if (!/^\d+$/.test(formData.guardian.contactNo)) {
+                        errors.guardianContactNo = 'Guardian\'s contact number is invalid';
+                    }
+                } else if (hasParentInput) {
+                    // Validate father details
+                    if (!formData.father.firstName || formData.father.firstName.trim() === '') {
+                        errors.fatherFirstName = 'Father\'s first name is required';
+                    }
+                    if (!formData.father.lastName || formData.father.lastName.trim() === '') {
+                        errors.fatherLastName = 'Father\'s last name is required';
+                    }
+                    if (!formData.father.birthdate) {
+                        errors.fatherBirthdate = 'Father\'s birthdate is required';
+                    } else {
+                        const today = new Date().toISOString().split('T')[0];
+                        if (formData.father.birthdate > today) {
+                            errors.fatherBirthdate = 'Father\'s birthdate cannot be in the future';
+                        }
+                    }
+                    if (!formData.father.occupation || formData.father.occupation.trim() === '') {
+                        errors.fatherOccupation = 'Father\'s occupation is required';
+                    }
+                    if (!formData.father.yearlyIncome || formData.father.yearlyIncome.trim() === '') {
+                        errors.fatherYearlyIncome = 'Father\'s yearly income is required';
+                    }
+                    if (!formData.father.contactNo || formData.father.contactNo.trim() === '') {
+                        errors.fatherContactNo = 'Father\'s contact number is required';
+                    } else if (!/^\d+$/.test(formData.father.contactNo)) {
+                        errors.fatherContactNo = 'Father\'s contact number is invalid';
+                    }
+
+                    // Validate mother details
+                    if (!formData.mother.firstName || formData.mother.firstName.trim() === '') {
+                        errors.motherFirstName = 'Mother\'s first name is required';
+                    }
+                    if (!formData.mother.lastName || formData.mother.lastName.trim() === '') {
+                        errors.motherLastName = 'Mother\'s last name is required';
+                    }
+                    if (!formData.mother.birthdate) {
+                        errors.motherBirthdate = 'Mother\'s birthdate is required';
+                    } else {
+                        const today = new Date().toISOString().split('T')[0];
+                        if (formData.mother.birthdate > today) {
+                            errors.motherBirthdate = 'Mother\'s birthdate cannot be in the future';
+                        }
+                    }
+                    if (!formData.mother.occupation || formData.mother.occupation.trim() === '') {
+                        errors.motherOccupation = 'Mother\'s occupation is required';
+                    }
+                    if (!formData.mother.yearlyIncome || formData.mother.yearlyIncome.trim() === '') {
+                        errors.motherYearlyIncome = 'Mother\'s yearly income is required';
+                    }
+                    if (!formData.mother.contactNo || formData.mother.contactNo.trim() === '') {
+                        errors.motherContactNo = 'Mother\'s contact number is required';
+                    } else if (!/^\d+$/.test(formData.mother.contactNo)) {
+                        errors.motherContactNo = 'Mother\'s contact number is invalid';
+                    }
+                } else {
+                    errors.general = 'Please provide details for either parents or a guardian';
+                }
+
                 return errors;
             },
         },
@@ -208,17 +374,169 @@ const ScholarshipApplicationForm = () => {
             content: <Step3 formData={formData} setFormData={setFormData} />,
             validate: (formData) => {
                 const errors = {};
-                // Add validation logic for Step 3
+
+                // Validate elementary education details
+                if (!formData.education.elementary.school || formData.education.elementary.school.trim() === '') {
+                    errors.elementarySchool = 'Elementary school name is required';
+                }
+                if (!formData.education.elementary.yearGraduated || formData.education.elementary.yearGraduated.trim() === '') {
+                    errors.elementaryYearGraduated = 'Elementary year graduated is required';
+                } else if (!/^\d{4}$/.test(formData.education.elementary.yearGraduated)) {
+                    errors.elementaryYearGraduated = 'Elementary year graduated must be a valid year';
+                }
+
+                // Validate junior high school education details
+                if (!formData.education.juniorHighSchool.school || formData.education.juniorHighSchool.school.trim() === '') {
+                    errors.juniorHighSchool = 'Junior high school name is required';
+                }
+                if (!formData.education.juniorHighSchool.yearGraduated || formData.education.juniorHighSchool.yearGraduated.trim() === '') {
+                    errors.juniorHighSchoolYearGraduated = 'Junior high school year graduated is required';
+                } else if (!/^\d{4}$/.test(formData.education.juniorHighSchool.yearGraduated)) {
+                    errors.juniorHighSchoolYearGraduated = 'Junior high school year graduated must be a valid year';
+                }
+
+                // Validate senior high school education details
+                if (!formData.education.seniorHighSchool.school || formData.education.seniorHighSchool.school.trim() === '') {
+                    errors.seniorHighSchool = 'Senior high school name is required';
+                }
+                if (!formData.education.seniorHighSchool.yearGraduated || formData.education.seniorHighSchool.yearGraduated.trim() === '') {
+                    errors.seniorHighSchoolYearGraduated = 'Senior high school year graduated is required';
+                } else if (!/^\d{4}$/.test(formData.education.seniorHighSchool.yearGraduated)) {
+                    errors.seniorHighSchoolYearGraduated = 'Senior high school year graduated must be a valid year';
+                }
+
+                // Validate college education details
+                if (!formData.education.college.school || formData.education.college.school.trim() === '') {
+                    errors.collegeSchool = 'College school name is required';
+                }
+                if (!formData.education.college.course || formData.education.college.course.trim() === '') {
+                    errors.collegeCourse = 'College course is required';
+                }
+                // if (!formData.education.college.yearGraduated || formData.education.college.yearGraduated.trim() === '') {
+                //     errors.collegeYearGraduated = 'College year graduated is required';
+                // } else if (!/^\d{4}$/.test(formData.education.college.yearGraduated)) {
+                //     errors.collegeYearGraduated = 'College year graduated must be a valid year';
+                // }
+
                 return errors;
             },
         },
         {
             title: 'Others',
             description: 'Provide other relevant information',
-            content: <Step4 formData={formData} setFormData={setFormData} setNotification={setNotification} />,
+            content: <Step4 formData={formData} setFormData={setFormData} setNotification={setNotification} visibleRelativeIndex={visibleRelativeIndex}
+                setVisibleRelativeIndex={setVisibleRelativeIndex} visibleSkillIndex={visibleSkillIndex} setVisibleSkillIndex={setVisibleSkillIndex} visibleWorkExperienceIndex={visibleWorkExperienceIndex} setVisibleWorkExperienceIndex={setVisibleWorkExperienceIndex} />,
             validate: (formData) => {
                 const errors = {};
-                // Add validation logic for Step 4
+
+                // Validate relatives
+                formData.relatives.forEach((relative, index) => {
+                    if (index === 0) {
+                        // Validate the first relative's details
+                        if (!relative.name || relative.name.trim() === '') {
+                            errors[`relativeName${index}`] = `Relative ${index + 1}'s name is required`;
+                        }
+                        if (!relative.birthdate) {
+                            errors[`relativeBirthdate${index}`] = `Relative ${index + 1}'s birthdate is required`;
+                        } else {
+                            const today = new Date().toISOString().split('T')[0];
+                            if (relative.birthdate > today) {
+                                errors[`relativeBirthdate${index}`] = `Relative ${index + 1}'s birthdate cannot be in the future`;
+                            }
+                        }
+                        if (!relative.relationship || relative.relationship.trim() === '') {
+                            errors[`relativeRelationship${index}`] = `Relative ${index + 1}'s relationship is required`;
+                        }
+                    } else {
+                        // Validate the rest of the relatives' details only if they have been filled out
+                        if (relative.name && relative.name.trim() !== '') {
+                            if (!relative.birthdate) {
+                                errors[`relativeBirthdate${index}`] = `Relative ${index + 1}'s birthdate is required`;
+                            } else {
+                                const today = new Date().toISOString().split('T')[0];
+                                if (relative.birthdate > today) {
+                                    errors[`relativeBirthdate${index}`] = `Relative ${index + 1}'s birthdate cannot be in the future`;
+                                }
+                            }
+                            if (!relative.relationship || relative.relationship.trim() === '') {
+                                errors[`relativeRelationship${index}`] = `Relative ${index + 1}'s relationship is required`;
+                            }
+                        }
+                    }
+                });
+
+                // Validate work experience
+                formData.workExperience.forEach((work, index) => {
+                    if (index === 0) {
+                        // Validate the first work experience's details
+                        if (!work.companyName || work.companyName.trim() === '') {
+                            errors[`workCompanyName${index}`] = `Work experience ${index + 1}'s company name is required`;
+                        }
+                        if (!work.position || work.position.trim() === '') {
+                            errors[`workPosition${index}`] = `Work experience ${index + 1}'s position is required`;
+                        }
+                        if (!work.startDate) {
+                            errors[`workStartDate${index}`] = `Work experience ${index + 1}'s start date is required`;
+                        } else {
+                            const today = new Date().toISOString().split('T')[0];
+                            if (work.startDate > today) {
+                                errors[`workStartDate${index}`] = `Work experience ${index + 1}'s start date cannot be in the future`;
+                            }
+                        }
+                        if (!work.monthlySalary || work.monthlySalary.trim() === '') {
+                            errors[`workMonthlySalary${index}`] = `Work experience ${index + 1}'s monthly salary is required`;
+                        }
+                        if (!work.statusOfAppointment || work.statusOfAppointment.trim() === '') {
+                            errors[`workStatusOfAppointment${index}`] = `Work experience ${index + 1}'s status of appointment is required`;
+                        }
+                    } else {
+                        // Validate the rest of the work experiences' details only if they have been filled out
+                        if (work.companyName && work.companyName.trim() !== '') {
+                            if (!work.position || work.position.trim() === '') {
+                                errors[`workPosition${index}`] = `Work experience ${index + 1}'s position is required`;
+                            }
+                            if (!work.startDate) {
+                                errors[`workStartDate${index}`] = `Work experience ${index + 1}'s start date is required`;
+                            } else {
+                                const today = new Date().toISOString().split('T')[0];
+                                if (work.startDate > today) {
+                                    errors[`workStartDate${index}`] = `Work experience ${index + 1}'s start date cannot be in the future`;
+                                }
+                            }
+                            if (!work.monthlySalary || work.monthlySalary.trim() === '') {
+                                errors[`workMonthlySalary${index}`] = `Work experience ${index + 1}'s monthly salary is required`;
+                            }
+                            if (!work.statusOfAppointment || work.statusOfAppointment.trim() === '') {
+                                errors[`workStatusOfAppointment${index}`] = `Work experience ${index + 1}'s status of appointment is required`;
+                            }
+                        }
+                    }
+                });
+
+                // Validate skills and qualifications
+                formData.skillsAndQualifications.forEach((skill, index) => {
+                    if (index === 0) {
+                        // Validate the first skill and qualification's details
+                        if (!skill.skills || skill.skills.trim() === '') {
+                            errors[`skills${index}`] = `Skill ${index + 1} is required`;
+                        }
+                        if (!skill.qualifications || skill.qualifications.trim() === '') {
+                            errors[`qualifications${index}`] = `Qualification ${index + 1} is required`;
+                        }
+                    } else {
+                        // Validate the rest of the skills and qualifications' details only if they have been filled out
+                        if (skill.skills && skill.skills.trim() !== '') {
+                            if (!skill.qualifications || skill.qualifications.trim() === '') {
+                                errors[`qualifications${index}`] = `Qualification ${index + 1} is required`;
+                            }
+                        } else if (skill.qualifications && skill.qualifications.trim() !== '') {
+                            if (!skill.skills || skill.skills.trim() === '') {
+                                errors[`skills${index}`] = `Skill ${index + 1} is required`;
+                            }
+                        }
+                    }
+                });
+
                 return errors;
             },
         },

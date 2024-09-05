@@ -71,6 +71,8 @@ const Step2 = ({ formData, setFormData, errors }) => {
     }
   };
 
+  const today = new Date().toISOString().split('T')[0]; // Get today's date
+
   return (
     <div>
       <div className='max-w-8xl mx-auto bg-white shadow-lg rounded-lg'>
@@ -86,14 +88,14 @@ const Step2 = ({ formData, setFormData, errors }) => {
             <div className='flex gap-5'>
               <button
                 className={`border text-center rounded-xl px-16 py-4 ${selectedTab === 'Parents' ? 'bg-white text-blue-600 shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
-                onClick={() => handleTabClick('Parents')}
+                onClick={() => handleTabClick('Parents')} type='button'
               >
                 I am guided by my Parents
               </button>
 
               <button
                 className={`border text-center rounded-xl px-16 py-4 ${selectedTab === 'Guardians' ? 'bg-white text-blue-600 shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
-                onClick={() => handleTabClick('Guardians')}
+                onClick={() => handleTabClick('Guardians')} type='button'
               >
                 I am guided by my Guardian(s)
               </button>
@@ -152,6 +154,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   value={formData.father.birthdate}
                   onChange={(e) => handleChange(e, 'father')}
                   required
+                  max={today} // Set the max attribute to today's date
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter birthdate"
                 />
@@ -193,7 +196,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No.</label>
                 <input
-                  type="text"
+                  type="tel"
                   name="contactNo"
                   value={formData.father.contactNo}
                   onChange={(e) => handleChange(e, 'father')}
@@ -257,6 +260,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   value={formData.mother.birthdate}
                   onChange={(e) => handleChange(e, 'mother')}
                   required
+                  max={today}
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter birthdate"
                 />
@@ -298,7 +302,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No.</label>
                 <input
-                  type="text"
+                  type="tel"
                   name="contactNo"
                   value={formData.mother.contactNo}
                   onChange={(e) => handleChange(e, 'mother')}
@@ -374,6 +378,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   name="birthdate"
                   value={formData.guardian.birthdate}
                   onChange={(e) => handleChange(e, 'guardian')}
+                  max={today}
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter birthdate"
                 />
@@ -413,7 +418,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No.</label>
                 <input
-                  type="text"
+                  type="tel"
                   name="contactNo"
                   value={formData.guardian.contactNo}
                   onChange={(e) => handleChange(e, 'guardian')}

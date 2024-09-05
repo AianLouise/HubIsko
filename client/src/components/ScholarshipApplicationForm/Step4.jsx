@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 
-const Step4 = ({ formData, setFormData, errors }) => {
+const Step4 = ({ formData, setFormData, errors, visibleRelativeIndex, setVisibleRelativeIndex, visibleSkillIndex, setVisibleSkillIndex, visibleWorkExperienceIndex, setVisibleWorkExperienceIndex }) => {
   const [relativeErrorMessage, setRelativeErrorMessage] = useState('');
   const [workExperienceErrorMessage, setWorkExperienceErrorMessage] = useState('');
   const [skillErrorMessage, setSkillErrorMessage] = useState('');
 
-  const [visibleRelativeIndex, setVisibleRelativeIndex] = useState(0);
-  const [visibleSkillIndex, setVisibleSkillIndex] = useState(0);
+
 
   const handleRelativeChange = (index, event) => {
     const { name, value } = event.target;
@@ -37,6 +36,7 @@ const Step4 = ({ formData, setFormData, errors }) => {
       // Show an error message
       setRelativeErrorMessage("Maximum of 6 relatives can be added.");
     }
+    console.log(formData.relatives.length);
   };
 
   const handleWorkChange = (index, event, type) => {
@@ -51,8 +51,6 @@ const Step4 = ({ formData, setFormData, errors }) => {
       workExperience: updatedWorkExperience,
     });
   };
-
-  const [visibleWorkExperienceIndex, setVisibleWorkExperienceIndex] = useState(0);
 
   const addWorkExperience = () => {
     if (visibleWorkExperienceIndex < formData.workExperience.length - 1) {
@@ -103,6 +101,9 @@ const Step4 = ({ formData, setFormData, errors }) => {
     }
   };
 
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split('T')[0];
+
   return (
     <div>
       <div className='max-w-8xl mx-auto bg-white shadow-lg rounded-lg'>
@@ -114,7 +115,11 @@ const Step4 = ({ formData, setFormData, errors }) => {
           <span className='text-lg font-bold block'>Relatives</span>
           <span className='text-base font-bold block my-3'>Provide relative's information (Maximum of 6)</span>
           {formData.relatives.map((relative, index) => (
-            <div key={index} className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4 ${index > visibleRelativeIndex ? 'hidden' : ''}`}>
+            <div
+              key={index}
+              className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4 ${(index > visibleRelativeIndex && !relative.name && !relative.birthdate && !relative.relationship) ? 'hidden' : ''
+                }`}
+            >
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>Name</label>
                 <input
@@ -134,6 +139,7 @@ const Step4 = ({ formData, setFormData, errors }) => {
                   name="birthdate"
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   value={relative.birthdate}
+                  max={today} // Set the max attribute to today's date
                   onChange={(event) => handleRelativeChange(index, event)}
                 />
               </div>
@@ -160,7 +166,7 @@ const Step4 = ({ formData, setFormData, errors }) => {
             </div>
           ))}
           <button
-            className='bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800'
+            className='bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800' type='button'
             onClick={addRelative}
           >
             Add Relative
@@ -187,10 +193,11 @@ const Step4 = ({ formData, setFormData, errors }) => {
                 <label className='block text-sm font-medium text-gray-700 mb-2'>Date Started</label>
                 <input
                   type="date"
-                  name="dateStarted"
+                  name="startDate"
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                  value={workExperience.dateStarted}
+                  value={workExperience.startDate}
                   onChange={(event) => handleWorkChange(index, event, 'workExperience')}
+                  max={today} // Set the max attribute to today's date
                 />
               </div>
 
@@ -236,7 +243,7 @@ const Step4 = ({ formData, setFormData, errors }) => {
             </div>
           ))}
           <button
-            className='bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800'
+            className='bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800' type='button'
             onClick={addWorkExperience}
           >
             Add Work Experience
@@ -273,7 +280,7 @@ const Step4 = ({ formData, setFormData, errors }) => {
             </div>
           ))}
           <button
-            className='bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800'
+            className='bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800' type='button'
             onClick={addSkill}
           >
             Add Skill & Qualification

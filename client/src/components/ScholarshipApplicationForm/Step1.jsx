@@ -120,6 +120,8 @@ const Step1 = ({ formData, setFormData, errors }) => {
   //   setSelectedBarangay(dummyData.barangay);
   // }, []);
 
+  const today = new Date().toISOString().split('T')[0];
+
   return (
     <div>
       <div className="max-w-8xl mx-auto bg-white shadow-lg rounded-lg">
@@ -177,6 +179,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
               value={formData.birthdate}
               onChange={handleChange}
               required
+              max={today} // Set the max attribute to today's date
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
             />
           </div>
@@ -314,6 +317,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
                 value={formData.height}
                 onChange={handleChange}
                 required
+                min="0" // Set the minimum value to 0
                 className='text-sm standard-input border border-gray-300 rounded-md p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                 placeholder="Height in cm"
               />
@@ -324,6 +328,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
                 value={formData.weight}
                 onChange={handleChange}
                 required
+                min="0" // Set the minimum value to 0
                 className='text-sm standard-input border border-gray-300 rounded-md p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                 placeholder="Weight in kg"
               />
