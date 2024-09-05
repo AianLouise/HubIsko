@@ -4,6 +4,7 @@ import { BiDotsHorizontal } from 'react-icons/bi';
 import { BiSolidRightArrow } from "react-icons/bi";
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { BiCog } from 'react-icons/bi';
 
 export default function ProviderDashboard() {
   useEffect(() => {
@@ -70,19 +71,15 @@ export default function ProviderDashboard() {
         )}
 
         {currentUser?.status === 'Verified' && (
-          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 m-6 rounded-md" role="alert">
+          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 m-6 my-8 rounded-md mx-24" role="alert">
             <p className="font-bold">Welcome Back!</p>
             <p>Your account is fully verified. Enjoy all the features available to you.</p>
           </div>
         )}
 
-        <div className='border-b mb-8'>
-          <div className={'flex items-center mx-auto justify-between px-24'}>
-            <div className='flex flex-col gap-2 w-1/2'>
-              <h1 className='text-4xl font-bold text-gray-800'>Welcome {orgName}!</h1>
-              <p className='text-lg text-slate-500 font-medium'>Here is your dashboard!</p>
-            </div>
-            <div className='bg-blue-600 w-36 h-36 my-8 rounded-md overflow-hidden'>
+        <div className='bg-blue-500 mx-24 px-10 flex justify-between rounded-md text-white'>
+          <div className={'flex w-full gap-4 items-center mx-auto'}>
+          <div className='bg-blue-600 w-24 h-24 my-8 rounded-full overflow-hidden'>
               {currentUser && currentUser.profilePicture ? (
                 <img
                   src={currentUser.profilePicture}
@@ -95,10 +92,22 @@ export default function ProviderDashboard() {
                 </div>
               )}
             </div>
+            <div className='flex flex-col gap-1 w-1/2'>
+              <h1 className='text-2xl font-bold '>Welcome {orgName}!</h1>
+              <p className='text-base'>Here is your dashboard!</p>
+            </div>
+         
+          </div>
+          
+          <div className='flex items-center w-[200px]'>
+          <button className='flex gap-2 font-medium px-6 py-2 rounded-md text-left bg-white hover:bg-slate-200 text-blue-600 shadow'>
+            <BiCog className='w-6 h-6' />
+            See Settings
+          </button>
           </div>
         </div>
 
-        <div className='max-w-8xl mx-auto px-24 py-12 gap-10 flex-col flex'>
+        <div className='max-w-8xl mx-auto px-24 my-8 gap-10 flex-col flex'>
           <div className='grid grid-cols-2 gap-10'>
             <div className="flex divide-x bg-white p-6 rounded-md shadow-md transition-all">
               <div className='flex flex-col w-1/2 items-center'>
