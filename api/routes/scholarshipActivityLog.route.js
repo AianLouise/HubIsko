@@ -2,7 +2,7 @@ import express from 'express';
 import {
   createScholarshipActivityLog,
   getScholarshipActivityLogsByProvider
-} from '../controllers/ScholarshipActivityLog.controller.js';
+} from '../controllers/scholarshipActivityLog.controller.js';
 
 const router = express.Router();
 
