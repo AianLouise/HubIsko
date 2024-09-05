@@ -16,7 +16,7 @@ import ResetPassword from "./components/ResetPassword";
 
 
 
-import ProviderDashboard from "./pages/Scholarship-Provider/providerDashboard";
+import ProviderDashboard from "./pages/Scholarship-Provider/ProviderDashboard";
 import ProviderForums from "./pages/Scholarship-Provider/ProviderForums";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import ScholarDashboard from "./pages/ScholarDashboard";
