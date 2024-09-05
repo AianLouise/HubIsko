@@ -192,6 +192,7 @@ export default function ApplyingStages() {
         documents: {},
         scholarshipProgram: '',
         applicant: currentUser._id,
+        
     });
 
     const [scholarship, setScholarship] = useState(null);

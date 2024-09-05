@@ -77,6 +77,8 @@ import Layout from "./components/Layout";
 import PublicRoute from "./components/PublicRoute";
 import ScholarshipApplication from "./pages/ScholarshipApplicationForm";
 
+import LocationSelector from "./pages/LocationSelector";
+
 
 export default function App() {
   return (
@@ -104,7 +106,9 @@ export default function App() {
 
         <Route path="/profile/:id" element={<Profiles />} />
 
-        <Route path="/scholarship-application" element={<ScholarshipApplication />} />
+        <Route path="/scholarship-application/:scholarshipId" element={<ScholarshipApplication />} />
+
+        <Route path="/location-selector" element={<LocationSelector />} />
 
         {/* <Route path="/others-profile/:id" element={<OthersProfile />} /> */}
         {/* Admin Routes */}
