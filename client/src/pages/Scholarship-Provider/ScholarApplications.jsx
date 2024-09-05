@@ -60,8 +60,27 @@ export default function ScholarApplications() {
           </div>
         </div>
 
-        <div className="max-w-8xl mx-auto px-24 gap-10 flex-col flex">
-          <div className="flex items-center gap-4">
+        <div className="max-w-8xl mx-auto px-24 flex-col flex">
+          <div className="flex justify-between items-center gap-4">
+               <div className='flex gap-2 font-medium text-sm'>
+                    <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
+                      All <span className='text-blue-600'>(0)</span>
+                    </button>
+
+                    <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
+                      Approved <span className='text-green-600'>(0)</span>
+                    </button>
+
+                    <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
+                      Pending <span className='text-yellow-600'>(0)</span>
+                    </button>
+
+                    <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
+                      Rejected <span className='text-red-600'>(0)</span>
+                    </button>
+                </div>
+
+            <div className='flex gap-2'>
             <input
               type="text"
               className="border border-gray-300 rounded-md p-2 pr-8 focus:outline-blue-600 focus:border-blue-600"
@@ -71,6 +90,7 @@ export default function ScholarApplications() {
               <BiFilter className="w-6 h-6" />
               <span>Filter</span>
             </button>
+            </div>
           </div>
 
           <div className="overflow-x-auto rounded-md bg-white shadow mt-6">
