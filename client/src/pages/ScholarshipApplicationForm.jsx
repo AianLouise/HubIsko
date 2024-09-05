@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FaInfoCircle, FaUsers, FaGraduationCap, FaEllipsisH, FaUpload, FaFileContract } from 'react-icons/fa';
 import { FaArrowRightLong } from "react-icons/fa6";
 import StepTemplate from '../components/ScholarshipApplicationForm/StepTemplate';
@@ -10,6 +10,8 @@ import Step4 from '../components/ScholarshipApplicationForm/Step4';
 import Step5 from '../components/ScholarshipApplicationForm/Step5';
 import Step6 from '../components/ScholarshipApplicationForm/Step6';
 import { useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const ScholarshipApplicationForm = () => {
     const { currentUser } = useSelector((state) => state.user);
@@ -17,39 +19,163 @@ const ScholarshipApplicationForm = () => {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
-        email: '',
-        phone: '',
-        address: '',
-        city: '',
-        state: '',
-        zip: '',
-        country: '',
-        dateOfBirth: '',
+        middleName: '',
+        birthdate: '',
         gender: '',
-        nationality: '',
-        gpa: '',
-        fieldOfStudy: '',
-        essay: '',
-        documents: [],
-        agree: false,
-        applicantId: currentUser ? currentUser._id : '',
+        bloodType: '',
+        civilStatus: '',
+        maidenName: '',
+        spouseName: '',
+        spouseOccupation: '',
+        religion: '',
+        height: '',
+        weight: '',
+        birthplace: '',
+        email: '',
+        contactNumber: '',
+        addressDetails: '',
+        region: '',
+        province: '',
+        city: '',
+        barangay: '',
+        father: {
+            firstName: '',
+            lastName: '',
+            middleName: '',
+            birthdate: '',
+            occupation: '',
+            yearlyIncome: '',
+            contactNo: ''
+        },
+        mother: {
+            firstName: '',
+            lastName: '',
+            middleName: '',
+            birthdate: '',
+            occupation: '',
+            yearlyIncome: '',
+            contactNo: ''
+        },
+        guardian: {
+            firstName: '',
+            lastName: '',
+            middleName: '',
+            birthdate: '',
+            occupation: '',
+            yearlyIncome: '',
+            contactNo: ''
+        },
+        education: {
+            elementary: {
+                school: '',
+                award: '',
+                yearGraduated: '',
+            },
+            juniorHighSchool: {
+                school: '',
+                award: '',
+                yearGraduated: '',
+            },
+            seniorHighSchool: {
+                school: '',
+                award: '',
+                yearGraduated: '',
+            },
+            college: {
+                school: '',
+                course: '',
+                yearGraduated: ''
+            }
+        },
+        relatives: Array(6).fill({
+            name: '',
+            birthdate: '',
+            relationship: ''
+        }),
+        workExperience: Array(2).fill({
+            companyName: '',
+            position: '',
+            startDate: '',
+            monthlySalary: '',
+            statusOfAppointment: ''
+        }),
+        skillsAndQualifications: Array(6).fill({
+            skills: '',
+            qualifications: ''
+        }),
+        documents: {},
+        scholarshipProgram: '',
+        applicant: currentUser._id,
     });
+
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
-    const [isLoading, setIsLoading] = useState(false);
     const [notification, setNotification] = useState(null);
     const [activeStep, setActiveStep] = useState(1);
     const navigate = useNavigate();
+    const storage = getStorage();
 
     useEffect(() => {
+        if (scholarshipId) {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                scholarshipProgram: scholarshipId, // Set the scholarshipProgram field with the id from the URL
+            }));
+        }
         // Scroll to the top of the page when the component is mounted
         window.scrollTo(0, 0);
     }, []);
 
+    const { scholarshipId } = useParams();
+    const [scholarship, setScholarship] = useState(null);
+    const [requiredDocuments, setRequiredDocuments] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
     useEffect(() => {
-        // Log the current page number to the console whenever it changes
-        console.log(`Current Page: ${currentPage}`);
-    }, [currentPage]);
+        const fetchScholarshipDetails = async () => {
+            try {
+                const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipId}`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                setScholarship(data);
+            } catch (err) {
+                setError(err.message);
+            }
+        };
+
+        const fetchRequiredDocuments = async () => {
+            try {
+                const response = await fetch(`/api/scholarshipProgram/${scholarshipId}/required-documents`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                setRequiredDocuments(data);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchScholarshipDetails();
+        fetchRequiredDocuments();
+    }, [scholarshipId]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -99,7 +225,14 @@ const ScholarshipApplicationForm = () => {
         {
             title: 'Upload Requirements',
             description: 'Upload necessary documents for review',
-            content: <Step5 formData={formData} setFormData={setFormData} />,
+            content:
+                <Step5
+                    formData={{}}
+                    setFormData={() => { }}
+                    errors={{}}
+                    scholarship={scholarship}
+                    requiredDocuments={requiredDocuments}
+                />,
             validate: (formData) => {
                 const errors = {};
                 // Add validation logic for Step 5
@@ -118,28 +251,78 @@ const ScholarshipApplicationForm = () => {
         }
     ];
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+
         console.log('Form Data:', formData);
+
+        // Upload files to Firebase and get the file URLs
+        const uploadedFilePaths = await Promise.all(Object.entries(formData.documents).map(async ([docType, fileObj]) => {
+            if (fileObj) {
+                const file = fileObj.file;
+                const fileExtension = file.name.split('.').pop(); // Extract the file extension
+                const fileNameWithoutExtension = file.name.replace(/\.[^/.]+$/, ""); // Remove the extension from the original file name
+                const fileName = `${currentUser.username}_${fileNameWithoutExtension.replace(/\s+/g, '_')}_${uuidv4()}.${fileExtension}`;
+                const storageRef = ref(storage, `scholarship_application_documents/${fileName}`);
+                await uploadBytes(storageRef, file);
+                const downloadURL = await getDownloadURL(storageRef);
+                return { [docType]: downloadURL }; // Save the download URL in the database
+            }
+            return { [docType]: null };
+        }));
+
+        // Combine the uploaded file URLs with the rest of the form data
+        const updatedFormData = {
+            ...formData,
+            documents: Object.assign({}, ...uploadedFilePaths),
+        };
+
+        console.log('Updated Form Data:', updatedFormData);
+
+        // Send scholarship application data to the backend
+        try {
+            const response = await fetch('/api/scholarshipApplication/create-application', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedFormData)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log('Success:', result);
+            // Handle success (e.g., show a success message, redirect, etc.)
+            navigate('/scholar-dashboard'); // Redirect to the scholar dashboard
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle error (e.g., show an error message)
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div className={`flex flex-col min-h-screen`}>
             <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''}`}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 mt-10">
-                    <div className="scholarship-info mb-4 p-6 bg-white rounded-lg shadow-md">
-                        <div className="flex items-center">
-                            <img
-                                src={'https://via.placeholder.com/150'}
-                                alt={` logo`}
-                                className="w-32 h-32 object-contain mr-4"
-                            />
-                            <div>
-                                <h2 className="text-2xl font-bold text-gray-800">You are applying to Sample Scholarship</h2>
-                                <p className="text-gray-600 mt-2">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde beatae explicabo quas, temporibus at saepe excepturi dolorem sit. Ad iste voluptatem voluptas dolorum minima perferendis illo enim molestias maiores autem.</p>
+                    {scholarship && (
+                        <div className="scholarship-info mb-4 p-6 bg-white rounded-lg shadow-md">
+                            <div className="flex items-center">
+                                {scholarship.scholarshipImage && (
+                                    <img src={scholarship.scholarshipImage} alt={`${scholarship.title} logo`} className="w-32 h-32 object-contain mr-4" />
+                                )}
+                                <div>
+                                    <h2 className="text-2xl font-bold text-gray-800">You are applying to {scholarship.title}</h2>
+                                    <p className="text-gray-600 mt-2">{scholarship.description}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
                     {notification && (
                         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded fixed top-4 right-4 z-50" role="alert">
                             <span className="block sm:inline">{notification}</span>

@@ -33,7 +33,7 @@ export default function Forums() {
                 if (data.hasApplied) {
                     setNotification2('You have already applied for this scholarship.');
                 } else {
-                    navigate(`/applying-stages/${scholarship.id}`);
+                    navigate(`/scholarship-application/${scholarship.id}`);
                 }
             } catch (error) {
                 console.error('Error checking application status:', error);
