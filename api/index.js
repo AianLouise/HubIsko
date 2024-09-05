@@ -11,7 +11,7 @@ import profileRoutes from './routes/profile.route.js';
 import adminRoutes from './routes/admin.route.js';
 import notificationRoutes from './routes/notification.route.js';
 import ActivityLogRoutes from './routes/activityLog.route.js';
-import ScholarshipActivityRoutes from './routes/ScholarshipActivityLog.route.js';
+import ScholarshipActivityRoutes from './routes/scholarshipActivityLog.route.js';
 import LocationRoutes from './routes/location.route.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
