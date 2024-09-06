@@ -3,32 +3,20 @@ import { Link, useParams } from 'react-router-dom';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import { useSelector } from 'react-redux';
 import { FaCheckCircle, FaTimesCircle, FaExclamationCircle } from 'react-icons/fa';
+import ProgramDetails from '../../components/ViewScholarshipDetails/ProgamDetails';
+import PostAnnouncement from '../../components/ViewScholarshipDetails/PostAnnouncement';
+import ViewScholars from '../../components/ViewScholarshipDetails/ViewScholars';
+import ScholarshipApplication from '../../components/ViewScholarshipDetails/ScholarApplication';
+import Validation from '../../components/ViewScholarshipDetails/Validation';
 
-const toSentenceCase = (str) => {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-};
 
-const getStatusColor = (status) => {
-    switch (status.toLowerCase()) {
-        case 'pending':
-            return 'bg-yellow-500';
-        case 'approved':
-            return 'bg-green-500';
-        case 'rejected':
-            return 'bg-red-500';
-        case 'completed':
-            return 'bg-blue-500';
-        default:
-            return 'bg-gray-500';
-    }
-};
 
 export default function ViewScholarshipDetails() {
     const { currentUser } = useSelector((state) => state.user);
 
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(true);
     const [activeTab, setActiveTab] = useState('details');
-    
+
     const [scholarshipProgram, setProgramDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -154,6 +142,7 @@ export default function ViewScholarshipDetails() {
                             { label: 'Program Details', value: 'details' },
                             { label: 'Edit Program', value: 'edit' },
                             { label: 'Post Announcement', value: 'announcement' },
+                            { label: 'Validation', value: 'validation' },
                             { label: 'View Scholars', value: 'scholars' },
                             { label: 'Scholar Applications', value: 'applications' },
                         ].map((tab) => (
@@ -173,91 +162,9 @@ export default function ViewScholarshipDetails() {
                     {/* Content Area */}
                     <div className="content">
                         {activeTab === 'details' && scholarshipProgram && (
-                            <div className="p-6 bg-white rounded-lg shadow-md">
-                                <div className="flex items-center mb-4">
-                                    <span className={`flex items-center px-3 py-1 rounded-full text-white font-semibold ${scholarshipProgram.status === 'Active' ? 'bg-green-500' :
-                                            scholarshipProgram.status === 'Inactive' ? 'bg-red-500' :
-                                                scholarshipProgram.status === 'Pending Approval' ? 'bg-yellow-500' :
-                                                    scholarshipProgram.status === 'Approved' ? 'bg-blue-500' :
-                                                        scholarshipProgram.status === 'Declined' ? 'bg-gray-500' :
-                                                            scholarshipProgram.status === 'Closed' ? 'bg-purple-500' :
-                                                                scholarshipProgram.status === 'Archived' ? 'bg-brown-500' :
-                                                                    scholarshipProgram.status === 'Cancelled' ? 'bg-orange-500' :
-                                                                        scholarshipProgram.status === 'Completed' ? 'bg-teal-500' :
-                                                                            'bg-yellow-500'
-                                        }`}>
-                                        {scholarshipProgram.status === 'Active' && <FaCheckCircle className="mr-2" />}
-                                        {scholarshipProgram.status === 'Inactive' && <FaTimesCircle className="mr-2" />}
-                                        {scholarshipProgram.status === 'Pending Approval' && <FaExclamationCircle className="mr-2" />}
-                                        {scholarshipProgram.status === 'Approved' && <FaCheckCircle className="mr-2" />}
-                                        {scholarshipProgram.status === 'Declined' && <FaTimesCircle className="mr-2" />}
-                                        {scholarshipProgram.status === 'Closed' && <FaExclamationCircle className="mr-2" />}
-                                        {scholarshipProgram.status === 'Archived' && <FaExclamationCircle className="mr-2" />}
-                                        {scholarshipProgram.status === 'Cancelled' && <FaTimesCircle className="mr-2" />}
-                                        {scholarshipProgram.status === 'Completed' && <FaCheckCircle className="mr-2" />}
-                                        {scholarshipProgram.status}
-                                    </span>
-                                </div>
-                                <h2 className="text-2xl font-bold mb-4">Program Details</h2>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div className="bg-gray-100 p-4 rounded-lg">
-                                        <strong>Scholarship Title:</strong> {scholarshipProgram.title}
-                                    </div>
-                                    <div className="bg-gray-100 p-4 rounded-lg">
-                                        <strong>Amount:</strong> {scholarshipProgram.amount}
-                                    </div>
-                                    <div className="bg-gray-100 p-4 rounded-lg">
-                                        <strong>Slots Filled:</strong> {scholarshipProgram.numberOfScholarshipsSlotFilled}
-                                    </div>
-                                    <div className="bg-gray-100 p-4 rounded-lg">
-                                        <strong>Total Slots:</strong> {scholarshipProgram.numberOfScholarships}
-                                    </div>
-                                    <div className="bg-gray-100 p-4 rounded-lg">
-                                        <strong>Duration:</strong> {scholarshipProgram.renewalDuration}
-                                    </div>
-                                    <div className="bg-gray-100 p-4 rounded-lg">
-                                        <strong>Category:</strong> {scholarshipProgram.category}
-                                    </div>
-                                    <div className="bg-gray-100 p-4 rounded-lg">
-                                        <strong>Type:</strong> {scholarshipProgram.selectionProcess}
-                                    </div>
-                                    <div className="bg-gray-100 p-4 rounded-lg">
-                                        <strong>Academic Requirements:</strong> {scholarshipProgram.minGPA}
-                                    </div>
-                                    <div className="bg-gray-100 p-4 rounded-lg">
-                                        <strong>Field of Study:</strong> {scholarshipProgram.fieldOfStudy}
-                                    </div>
-                                    <div className="bg-gray-100 p-4 rounded-lg">
-                                        <strong>Level of Education:</strong> {scholarshipProgram.selectionCriteria}
-                                    </div>
-                                    <div className="bg-gray-100 p-4 rounded-lg">
-                                        <strong>Location:</strong> {scholarshipProgram.nationality}
-                                    </div>
-                                    <div className="bg-gray-100 p-4 rounded-lg">
-                                        <strong>Application Start Date:</strong> {new Date(scholarshipProgram.startDate).toLocaleDateString()}
-                                    </div>
-                                    <div className="bg-gray-100 p-4 rounded-lg">
-                                        <strong>Application End Date:</strong> {new Date(scholarshipProgram.endDate).toLocaleDateString()}
-                                    </div>
-                                    <div className="bg-gray-100 p-4 rounded-lg">
-                                        <strong>Notification Date:</strong> {new Date(scholarshipProgram.applicationDeadline).toLocaleDateString()}
-                                    </div>
-                                    <div className="bg-gray-100 p-4 rounded-lg">
-                                        <strong>Coverage:</strong> {scholarshipProgram.renewalPolicy}
-                                    </div>
-                                    <div className="bg-gray-100 p-4 rounded-lg">
-                                        <strong>Contact Person:</strong> {scholarshipProgram.contactEmail}
-                                    </div>
-                                    <div className="bg-gray-100 p-4 rounded-lg">
-                                        <strong>Status:</strong> {scholarshipProgram.status}
-                                    </div>
-                                    <div className="bg-gray-100 p-4 rounded-lg">
-                                        <strong>Date Posted:</strong> {new Date(scholarshipProgram.startDate).toLocaleDateString()}
-                                    </div>
-                                </div>
-                                {/* Additional details can be included here */}
-                            </div>
+                            <ProgramDetails scholarshipProgram={scholarshipProgram} />
                         )}
+
                         {activeTab === 'edit' && (
                             <div className="p-6 bg-white rounded-lg shadow-md">
                                 <h2 className="text-2xl font-bold mb-4 text-blue-600">Edit Program</h2>
@@ -271,148 +178,19 @@ export default function ViewScholarshipDetails() {
                         )}
 
                         {activeTab === 'announcement' && (
-                            <div className="p-6 bg-white rounded-lg shadow-md">
-                                <h2 className="text-2xl font-bold mb-4 text-blue-600">Post Announcement</h2>
-                                <p className="text-gray-700">
-                                    You can post announcements here to keep scholars updated on important information.
-                                </p>
-                                <form className="mt-4">
-                                    <textarea
-                                        className="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                        rows="5"
-                                        placeholder="Write your announcement here..."
-                                    ></textarea>
-                                    <button
-                                        type="submit"
-                                        className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-300"
-                                    >
-                                        Post Announcement
-                                    </button>
-                                </form>
-                                <h2 className="text-2xl font-bold mt-8 mb-4 text-blue-600">Previous Announcements</h2>
+                            <PostAnnouncement />
+                        )}
 
-
-                                <div className='bg-white rounded-lg shadow-md border'>
-                                    <table className="min-w-full">
-                                        <thead>
-                                            <tr className='text-left'>
-                                                <th className="py-2 px-4 border-b">Date</th>
-                                                <th className="py-2 px-4 border-b">Announcement</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className=''>
-                                            <tr className="hover:bg-gray-100">
-                                                <td className="py-2 px-4 border-b">2023-10-01</td>
-                                                <td className="py-2 px-4 border-b">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.</td>
-                                            </tr>
-                                            <tr className="hover:bg-gray-100">
-                                                <td className="py-2 px-4 border-b">2023-09-15</td>
-                                                <td className="py-2 px-4 border-b">Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta.</td>
-                                            </tr>
-                                            <tr className="hover:bg-gray-100">
-                                                <td className="py-2 px-4 border-b">2023-09-01</td>
-                                                <td className="py-2 px-4 border-b">Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                        {activeTab === 'validation' && (
+                            <Validation />
                         )}
 
                         {activeTab === 'scholars' && (
-                            <div className="p-6 bg-white rounded-lg shadow-md space-y-4">
-                                <h2 className="text-2xl font-bold mb-4 text-blue-600">View Scholars</h2>
-
-                                <p className="text-gray-700">
-                                    Here is the list of scholars enrolled in the program.
-                                </p>
-
-                                <div className='rounded-lg shadow-md border'>
-                                    <table className="min-w-full">
-                                        <thead>
-                                            <tr className='text-blue-600'>
-                                                <th className="py-2 px-4 border-b">Name</th>
-                                                <th className="py-2 px-4 border-b">Course</th>
-                                                <th className="py-2 px-4 border-b">Year</th>
-                                                <th className="py-2 px-4 border-b">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className='text-center'>
-                                            {scholars.length === 0 ? (
-                                                <tr>
-                                                    <td colSpan="4" className="py-2 px-4 border-b text-gray-500">No scholars found.</td>
-                                                </tr>
-                                            ) : (
-                                                scholars.map((scholar) => (
-                                                    <tr key={scholar._id} className="hover:bg-gray-100">
-                                                        <td className="py-2 px-4 border-b"><strong>{scholar.applicationDetails.firstName} {scholar.applicationDetails.lastName}</strong></td>
-                                                        <td className="py-2 px-4 border-b">{scholar.applicationDetails.education.college.course}</td>
-                                                        <td className="py-2 px-4 border-b">{scholar.applicationDetails.education.college.yearGraduated || 'N/A'}</td>
-                                                        <td className="py-2 px-4 border-b">
-                                                            <Link to={`/scholar-view/${scholar.applicationDetails._id}`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
-                                                                View Details
-                                                            </Link>
-                                                        </td>
-                                                    </tr>
-                                                ))
-                                            )}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            <ViewScholars scholars={scholars} />
                         )}
 
                         {activeTab === 'applications' && (
-                            <div className="p-6 bg-white rounded-lg shadow-md">
-                                <h2 className="text-2xl font-bold mb-4 text-blue-600">Scholar Applications</h2>
-                                <p className="text-gray-700 mb-5">
-                                    Manage and review applications from scholars here.
-                                </p>
-
-                                <div className='bg-white rounded-lg shadow-md border'>
-                                    <table className="min-w-full">
-                                        <thead>
-                                            <tr className='text-blue-600'>
-                                                <th className="py-2 px-4 border-b text-center">Name</th>
-                                                <th className="py-2 px-4 border-b text-center">Status</th>
-                                                <th className="py-2 px-4 border-b text-center">Submission Date</th>
-                                                <th className="py-2 px-4 border-b text-center">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {error ? (
-                                                <tr>
-                                                    <td colSpan="4" className="py-2 px-4 border-b text-center text-red-600">
-                                                        {error}
-                                                    </td>
-                                                </tr>
-                                            ) : applications.length === 0 ? (
-                                                <tr>
-                                                    <td colSpan="4" className="py-2 px-4 border-b text-center">
-                                                        No applications found for this scholarship program.
-                                                    </td>
-                                                </tr>
-                                            ) : (
-                                                applications.map(application => (
-                                                    <tr key={application._id} className="hover:bg-gray-100">
-                                                        <td className="py-2 px-4 border-b text-center">{`${application.firstName} ${application.lastName}`}</td>
-                                                        <td className="py-2 px-4 border-b text-center">
-                                                            <span className={`inline-block w-3 h-3 mr-2 rounded-full ${getStatusColor(application.applicationStatus)}`}></span>
-                                                            {toSentenceCase(application.applicationStatus)}
-                                                        </td>
-                                                        <td className="py-2 px-4 border-b text-center">{new Date(application.submissionDate).toLocaleDateString()}</td>
-                                                        <td className="py-2 px-4 border-b text-center">
-                                                            <Link to={`/applications/${application._id}`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
-                                                                View Details
-                                                            </Link>
-                                                        </td>
-                                                    </tr>
-                                                ))
-                                            )}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            <ScholarshipApplication applications={applications} />
                         )}
                     </div>
                 </div>
