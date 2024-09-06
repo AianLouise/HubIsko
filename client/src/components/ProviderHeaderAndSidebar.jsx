@@ -215,10 +215,10 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
                             </li>
 
                             <li>
-                                <a href="/provider-settings" className="flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
+                                <Link to={'/provider-settings'} className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
                                     <FaCog className="w-4 h-4 text-blue-600" />
                                     Settings
-                                </a>
+                                </Link>
                             </li>
 
                         </ul>
