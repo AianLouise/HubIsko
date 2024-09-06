@@ -47,6 +47,13 @@ export default function Scholarships() {
     }
   };
 
+  const truncateDescription = (description, maxLength) => {
+    if (description.length <= maxLength) {
+      return description;
+    }
+    return description.substring(0, maxLength) + '...';
+  };
+
   return (
     <div className={`flex flex-col min-h-screen`}>
       <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''} `}>
@@ -123,16 +130,16 @@ export default function Scholarships() {
                   <div className='p-4'>
                     <div className='flex justify-between items-center mb-2'>
                       <h1 className='text-lg font-bold text-gray-800'>{scholarship.title}</h1>
-                      <span className={`text-lg font-semibold ${scholarship.numberOfScholarshipsSlotFilled === scholarship.numberOfScholarships ? 'text-red-600' : ''} ${scholarship.status === 'Pending Approval' ? 'text-yellow-500' : ''} ${scholarship.status === 'Active' ? 'text-green-500' : ''} ${scholarship.status === 'Closed' ? 'text-gray-500' : ''} ${scholarship.status === 'Archived' ? 'text-blue-500' : ''} ${scholarship.status === 'Cancelled' ? 'text-red-500' : ''} ${scholarship.status === 'Completed' ? 'text-purple-500' : ''}`}>
-                        {scholarship.status === 'Pending Approval' ? 'Pending Approval' : `${scholarship.numberOfScholarshipsSlotFilled}/${scholarship.numberOfScholarships}`}
-                      </span>
                     </div>
                     <span className='text-slate-600 block mb-2'>{scholarship.amount}</span>
-                    <p className='text-gray-500 mb-4'>{scholarship.description}</p>
+                    <p className='text-gray-500 mb-4'>{truncateDescription(scholarship.description, 100)}</p>
                     <div className='flex justify-between items-center'>
                       <Link to={`/view-scholarships/${scholarship._id}`} className='text-blue-600 font-bold border hover:bg-slate-200 px-4 py-1 rounded-md'>
                         View Details
                       </Link>
+                      <span className={`text-base font-semibold ${scholarship.numberOfScholarshipsSlotFilled === scholarship.numberOfScholarships ? 'text-red-600' : ''} ${scholarship.status === 'Pending Approval' ? 'text-yellow-500' : ''} ${scholarship.status === 'Active' ? 'text-green-500' : ''} ${scholarship.status === 'Closed' ? 'text-gray-500' : ''} ${scholarship.status === 'Archived' ? 'text-blue-500' : ''} ${scholarship.status === 'Cancelled' ? 'text-red-500' : ''} ${scholarship.status === 'Completed' ? 'text-purple-500' : ''}`}>
+                        {scholarship.status === 'Pending Approval' ? 'Pending Approval' : `${scholarship.numberOfScholarshipsSlotFilled}/${scholarship.numberOfScholarships}`}
+                      </span>
                     </div>
                   </div>
                 </div>

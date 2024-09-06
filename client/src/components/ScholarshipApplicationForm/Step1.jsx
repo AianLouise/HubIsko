@@ -129,7 +129,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
           <span className='text-lg font-bold'>Personal Information</span>
         </div>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4'>
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
             <input
@@ -167,6 +167,24 @@ const Step1 = ({ formData, setFormData, errors }) => {
               required
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
             />
+          </div>
+
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Name Extension</label>
+            <select
+              name="nameExtension"
+              value={formData.nameExtension}
+              onChange={handleChange}
+              required
+              className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+            >
+              <option value="">Select Name Ext. (if applicable)</option>
+              <option value="Jr.">Jr.</option>
+              <option value="Sr.">Sr.</option>
+              <option value="III">III</option>
+              <option value="IV">IV</option>
+              <option value="V">V</option>
+            </select>
           </div>
         </div>
 

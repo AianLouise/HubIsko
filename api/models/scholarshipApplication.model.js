@@ -14,6 +14,10 @@ const scholarshipApplicationSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    nameExtension: {
+        type: String,
+        required: false,
+      },
     birthdate: {
         type: String,
         required: false,

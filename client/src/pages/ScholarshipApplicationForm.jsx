@@ -20,6 +20,7 @@ const ScholarshipApplicationForm = () => {
         firstName: '',
         lastName: '',
         middleName: '',
+        nameExtension: '',
         birthdate: '',
         gender: '',
         bloodType: '',
@@ -173,7 +174,14 @@ const ScholarshipApplicationForm = () => {
     }, [scholarshipId]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex justify-center items-center h-screen">
+              <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+            </div>
+          );
     }
 
     // if (error) {
@@ -545,15 +553,32 @@ const ScholarshipApplicationForm = () => {
             description: 'Upload necessary documents for review',
             content:
                 <Step5
-                    formData={{}}
-                    setFormData={() => { }}
+                    formData={formData}
+                    setFormData={setFormData}
                     errors={{}}
                     scholarship={scholarship}
                     requiredDocuments={requiredDocuments}
                 />,
             validate: (formData) => {
                 const errors = {};
-                // Add validation logic for Step 5
+                const maxSizeInMB = 10;
+
+                if (formData.documents) {
+                    requiredDocuments.forEach(doc => {
+                        const file = formData.documents[doc.id];
+                        if (!file) {
+                            errors[doc.id] = `${doc.name} is required.`;
+                        } else if (file.size / (1024 * 1024) > maxSizeInMB) {
+                            errors[doc.id] = `File size should be 10 MB or less for ${doc.name}`;
+                        }
+                    });
+                }
+                // else {
+                //     requiredDocuments.forEach(doc => {
+                //         errors[doc.id] = `${doc.name} is required.`;
+                //     });
+                // }
+
                 return errors;
             },
         },
