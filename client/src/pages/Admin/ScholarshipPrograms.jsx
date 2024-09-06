@@ -74,7 +74,7 @@ export default function ScholarshipPrograms() {
 
     return (
         <div className="flex flex-col min-h-screen">
-           
+
             <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
                 <div className='border-b mb-8'>
                     <div className={'flex items-center mx-auto justify-between px-24'}>
@@ -126,7 +126,7 @@ export default function ScholarshipPrograms() {
                                         <td className="py-3 px-6">{program.status}</td>
                                         <td className="py-3 px-6">{program.applications}</td>
                                         <td className="py-3 px-6">
-                                            <Link to={`/scholarship-programs/${program.id}`} className="text-blue-600 hover:underline">View</Link>
+                                            <Link to={`/scholarship-program/${program._id}`} className="text-blue-600 hover:underline">View</Link>
                                         </td>
                                     </tr>
                                 ))}

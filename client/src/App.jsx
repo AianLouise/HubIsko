@@ -66,7 +66,7 @@ import AdminCreateForumPost from "./pages/Admin/AdminCreateForumPost";
 import AdminSettings from "./pages/Admin/AdminSettings";
 import ScholarshipDashboardDetails from "./pages/ScholarshipDashboardDetails";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
-import ScholarshipProgramDetails from "./pages/Admin/ScholarshipProgramApplicationDetails";
+import ScholarshipProgramApplicationDetails from "./pages/Admin/ScholarshipProgramApplicationDetails";
 import ScholarshipPrograms from "./pages/Admin/ScholarshipPrograms";
 import Profiles from "./pages/Profiles";
 import PasswordAndSecurity2 from "./pages/PasswordAndSecurity2";
@@ -78,6 +78,7 @@ import PasswordAndSecurity2 from "./pages/PasswordAndSecurity2";
 import Layout from "./components/Layout";
 import PublicRoute from "./components/PublicRoute";
 import ScholarshipApplication from "./pages/ScholarshipApplicationForm";
+import ScholarshipProgramDetails from "./pages/Admin/ScholarshipProgramDetails";
 
 import LocationSelector from "./pages/LocationSelector";
 
@@ -134,8 +135,9 @@ export default function App() {
             <Route path="inbox-application" element={<InboxApplication />} />
             <Route path="edit-student-info/:id" element={<EditStudentInfo />} />
 
-            <Route path="scholarship-program-applications/:id" element={<ScholarshipProgramDetails />} />
+            <Route path="scholarship-program-applications/:id" element={<ScholarshipProgramApplicationDetails />} />
             <Route path="scholarship-programs" element={<ScholarshipPrograms />} />
+            <Route path="scholarship-program/:id" element={<ScholarshipProgramDetails />} />
 
             <Route path="admin-forums" element={<AdminForums />} />
             <Route path="admin-forums/post/:postId" element={<AdminForumDetail />} />
