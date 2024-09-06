@@ -28,6 +28,7 @@ export default function ViewScholarshipDetails() {
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('details');
+    
     const [scholarshipProgram, setProgramDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -348,7 +349,7 @@ export default function ViewScholarshipDetails() {
                                                         <td className="py-2 px-4 border-b">{scholar.applicationDetails.education.college.course}</td>
                                                         <td className="py-2 px-4 border-b">{scholar.applicationDetails.education.college.yearGraduated || 'N/A'}</td>
                                                         <td className="py-2 px-4 border-b">
-                                                            <Link to={`/scholars/${scholar.applicationDetails.firstName.toLowerCase().replace(' ', '-')}`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
+                                                            <Link to={`/scholar-view/${scholar.applicationDetails._id}`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
                                                                 View Details
                                                             </Link>
                                                         </td>

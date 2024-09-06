@@ -79,6 +79,7 @@ import Layout from "./components/Layout";
 import PublicRoute from "./components/PublicRoute";
 import ScholarshipApplication from "./pages/ScholarshipApplicationForm";
 import ScholarshipProgramDetails from "./pages/Admin/ScholarshipProgramDetails";
+import ScholarView from "./pages/Scholarship-Provider/ScholarView";
 
 import LocationSelector from "./pages/LocationSelector";
 
@@ -161,6 +162,8 @@ export default function App() {
           <Route path="/provider-forums" element={<ProviderForums />} />
           <Route path="/provider-forums/post/:postId" element={<ProviderForumDetail />} />
           <Route path="/provider-create-forum-post" element={<ProviderCreateForumPost />} />
+
+          <Route path="/scholar-view/:id" element={<ScholarView />} />
         </Route>
 
         {/* Scholar Routes */}
