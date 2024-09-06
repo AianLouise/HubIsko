@@ -660,7 +660,9 @@ const ScholarshipApplicationForm = () => {
                                     <img src={scholarship.scholarshipImage} alt={`${scholarship.title} logo`} className="w-32 h-32 object-contain mr-4" />
                                 )}
                                 <div>
-                                    <h2 className="text-2xl font-bold text-gray-800">You are applying to {scholarship.title}</h2>
+                                    <h2 className="lg:text-2xl font-normal text-slate-500 lg:text-gray-800">You are applying for 
+                                    <span className='font-bold text-xl tracking-wide text-blue-600 lg:inline block'> {scholarship.title}</span>
+                                    </h2>
                                     <p className="text-gray-600 mt-2">{scholarship.description}</p>
                                 </div>
                             </div>
@@ -671,14 +673,14 @@ const ScholarshipApplicationForm = () => {
                             <span className="block sm:inline">{notification}</span>
                         </div>
                     )}
-                    <div>
-                        <div className='flex justify-center gap-5 mt-4 mb-8'>
+                    <div className='hidden lg:block'>
+                        <div className='flex lg:justify-center lg:gap-5 lg:mt-4 mb-8'>
                             {[0, 1, 2, 3, 4, 5].map((step) => (
                                 <React.Fragment key={step}>
                                     <div className='flex flex-col gap-1 items-center text-center'>
-                                        <span className={`text-xl font-bold ${currentPage === step ? 'text-blue-600' : 'text-gray-400'}`}>{step + 1}</span>
+                                        <span className={`text-xl font-bold ${currentPage === step ? 'text-blue-600' : 'lg:block hidden text-gray-400'}`}>{step + 1}</span>
                                         <button
-                                            className={`w-12 h-12 shadow rounded-md flex items-center justify-center ${currentPage === step ? 'bg-blue-600' : 'border'}`}
+                                            className={`w-12 h-12 shadow rounded-md flex items-center justify-center ${currentPage === step ? 'bg-blue-600' : 'hidden lg:flex border'}`}
                                             onClick={() => setCurrentPage(step)}
                                             disabled={currentPage !== step}
                                         >
@@ -690,18 +692,67 @@ const ScholarshipApplicationForm = () => {
                                             {step === 5 && <FaFileContract className={currentPage === step ? 'text-white' : 'text-blue-600'} />}
                                         </button>
                                         <span className='text-sm text-slate-600'>
-                                            {step === 0 && <>Personal <br /> Information</>}
-                                            {step === 1 && "Custodian"}
-                                            {step === 2 && "Education"}
-                                            {step === 3 && "Others"}
-                                            {step === 4 && <>Upload <br /> Requirements</>}
-                                            {step === 5 && <>Terms and <br /> Conditions</>}
+                                            {step === 0 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'} ><>Personal <br /> Information</></span>}
+                                            {step === 1 && <span  className={currentPage === step ? 'block' : 'lg:flex hidden'}>Custodian</span> }
+                                            {step === 2 && <span  className={currentPage === step ? 'block' : 'lg:flex hidden'}>Education</span> }
+                                            {step === 3 && <span  className={currentPage === step ? 'block' : 'lg:flex hidden'}>Others</span> }
+                                            {step === 4 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}><>Upload <br /> Requirements</></span>}
+                                            {step === 5 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}><>Terms and <br /> Conditions</></span>}
                                         </span>
                                     </div>
-                                    {step < 5 && <FaArrowRightLong className='text-4xl text-blue-600 mt-10' />}
+                                    {step < 5 && <FaArrowRightLong className='lg:block hidden text-4xl text-blue-600 mt-10' />}
                                 </React.Fragment>
                             ))}
                         </div>
+                    </div>
+                    
+
+                    <div className='lg:hidden flex flex-col'>
+                        <div className='flex justify-between items-center px-6 py-2 text-sm text-slate-500'>
+                            <span>Requirement</span>
+                            <span>Stages</span>
+                        </div>
+
+                        {[0, 1, 2, 3, 4, 5].map((step) => (
+                                <React.Fragment key={step}>
+                            <div className={`border-2 border-blue-600 rounded-md shadow w-full py-2 px-4 flex justify-between items-center ${currentPage === step ? 'flex' : 'hidden'} `}>
+                                <div className={`gap-2 items-center text-blue-600 ${step === 0 ? 'flex' : 'hidden'}`}>
+                                    <FaInfoCircle className='text-2xl'/>
+                                    <span className='font-bold'>Basic Information</span>
+                                </div>
+
+                                <div className={`gap-2 items-center text-blue-600 ${step === 1 ? 'flex' : 'hidden'}`}>
+                                    <FaUsers className='text-2xl'/>
+                                    <span className='font-bold'>Custodian</span>
+                                </div>
+
+                                <div className={`gap-2 items-center text-blue-600 ${step === 2 ? 'flex' : 'hidden'}`}>
+                                    <FaGraduationCap className='text-2xl'/>
+                                    <span className='font-bold'>Education</span>
+                                </div>
+
+                                <div className={`gap-2 items-center text-blue-600 ${step === 3 ? 'flex' : 'hidden'}`}>
+                                    <FaEllipsisH className='text-2xl'/>
+                                    <span className='font-bold'>Others</span>
+                                </div>
+
+                                <div className={`gap-2 items-center text-blue-600 ${step === 4 ? 'flex' : 'hidden'}`}>
+                                    <FaUpload className='text-2xl'/>
+                                    <span className='font-bold'>Upload Requirements</span>
+                                </div>
+
+                                <div className={`gap-2 items-center text-blue-600 ${step === 5 ? 'flex' : 'hidden'}`}>
+                                    <FaFileContract className='text-2xl'/>
+                                    <span className='font-bold'>Terms and Conditions</span>
+                                </div>
+                                
+                                
+                                <div>
+                                <span className='text-blue-600 text-4xl font-bold'> {currentPage}<span className='text-slate-400'>/5</span></span>
+                                </div>
+                            </div>
+                            </React.Fragment>
+                        ))}
 
                     </div>
                     <form onSubmit={handleSubmit}>

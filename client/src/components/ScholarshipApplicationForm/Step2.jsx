@@ -82,19 +82,19 @@ const Step2 = ({ formData, setFormData, errors }) => {
 
         <div className='mt-2'>
 
-          <div className='flex flex-col items-center gap-4 border-b pb-4'>
+          <div className='flex flex-col items-center gap-4 border-b p-5'>
             <span className='text-xl font-bold'>Please Select:</span>
 
-            <div className='flex gap-5'>
+            <div className='flex lg:flex-row flex-col gap-5'>
               <button
-                className={`border text-center rounded-xl px-16 py-4 ${selectedTab === 'Parents' ? 'bg-white text-blue-600 shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
+                className={`border text-center rounded-xl px-16 py-4 transition-all ease-in-out ${selectedTab === 'Parents' ? 'text-blue-600 bg-white shadow-md font-bold tracking-wider' : 'bg-slate-200 hover:bg-slate-300'}`}
                 onClick={() => handleTabClick('Parents')} type='button'
               >
                 I am guided by my Parents
               </button>
 
               <button
-                className={`border text-center rounded-xl px-16 py-4 ${selectedTab === 'Guardians' ? 'bg-white text-blue-600 shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
+                className={`border text-center rounded-xl px-16 py-4 transition-all ease-in-out ${selectedTab === 'Guardians' ? 'text-blue-600 bg-white shadow-md font-bold tracking-wider' : 'bg-slate-200 hover:bg-slate-300'}`}
                 onClick={() => handleTabClick('Guardians')} type='button'
               >
                 I am guided by my Guardian(s)

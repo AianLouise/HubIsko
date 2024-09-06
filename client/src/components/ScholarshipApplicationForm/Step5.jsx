@@ -85,7 +85,7 @@ const Step5 = ({ formData, setFormData, errors, scholarship, requiredDocuments }
                     />
                     {uploadedFiles[doc.id] && (
                       <button
-                        className='ml-2 bg-blue-600 text-white text-sm py-1 px-2 rounded hover:bg-blue-700 transition duration-200'
+                        className='hidden lg:inline ml-2 bg-blue-600 text-white text-sm py-1 px-2 rounded hover:bg-blue-700 transition duration-200'
                         type='button'
                         onClick={() => handleViewFile(doc.id)}
                       >
