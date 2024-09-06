@@ -8,10 +8,14 @@ import { FaRegHeart } from "react-icons/fa";
 import { BiCommentDots } from "react-icons/bi";
 import { FaRegEye } from "react-icons/fa";
 import Layout from "../../components/Layout";
+import ProviderDetailsEdit from "./ProviderDetailsEdit";
+import ProviderAbout from "./ProviderAbout";
+import ProviderScholarships from "./ProviderScholarships";
+import ProviderForumPost from "./ProviderForumPost";
 
 export default function ProviderDetails() {
 
-  const [selectedTab, setSelectedTab] = useState('About');
+  const [selectedTab, setSelectedTab] = useState('Organization Information');
 
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
@@ -71,59 +75,20 @@ export default function ProviderDetails() {
 
 
           {selectedTab === 'Organization Information' && (
-            <div className='border-2 rounded-md p-10 flex justify-center items-center bg-white h-96 mb-20'>
-              <span>Container for Organization</span>
-            </div>
-
+           <ProviderDetailsEdit />
           )}
 
 
           {selectedTab === 'About' && (
-            <div className='border-2 rounded-md p-10 flex justify-center items-center bg-white h-96 mb-20'>
-              <span>Container for About</span>
-            </div>
+           <ProviderAbout />
           )}
 
           {selectedTab === 'Scholarships' && (
-            <div className='border-2 rounded-md p-10 flex justify-center items-center bg-white h-96 mb-20'>
-              <span>Container for Student's Scholarships</span>
-            </div>
+           <ProviderScholarships />
           )}
 
           {selectedTab === 'Posts' && (
-            <div className='grid grid-cols-3 sm:grid-rows-1 gap-8'>
-              <div className='bg-white font-normal border p-4 rounded-md flex flex-col hover:-translate-y-1 hover:shadow-lg transition ease-in-out'>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, vel.
-                <span className='text-sm flex items-end justify-end w-full text-slate-600'>Posted: July 7,2024</span>
-
-                <div className='border-t mt-2'>
-                  <div className='flex flex-row justify-between mt-2 gap-2'>
-
-
-                    <div className='flex flex-row gap-2'>
-                      <div className='flex flex-row gap-1 px-2'>
-                        <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
-                        <span>123</span>
-                      </div>
-
-                      <div className='flex flex-row gap-1'>
-                        <BiCommentDots className='w-6 h-6 text-blue-600' />
-                        <span>10</span>
-                      </div>
-                    </div>
-
-                    <div className='flex flex-row gap-1 pr-2'>
-                      <FaRegEye className='w-6 h-6 text-blue-600' />
-                      <span>1.2k</span>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-
-
-
-            </div>
+            <ProviderForumPost />
           )}
 
         </div>
