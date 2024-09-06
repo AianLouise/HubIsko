@@ -104,8 +104,22 @@ export default function StudentDetailsEdit() {
         setIsEditing(true);
     };
     console.log(formData);
-    const handleSaveChanges = async () => {
-
+    
+        const handleSaveChanges = async () => {
+        // Validate form data
+        const { applicantDetails } = formData;
+        const { firstName, lastName, middleName, birthdate, birthplace, gender, bloodType, civilStatus, email, contactNumber, address } = applicantDetails;
+        const { region, province, city, barangay, addressDetails } = address;
+    
+        if (!firstName || !lastName || !middleName || !birthdate || !birthplace || !gender || !bloodType || !civilStatus || !email || !contactNumber || !region || !province || !city || !barangay || !addressDetails) {
+            setNotification('Please fill in all required fields.');
+            // Clear the notification after a few seconds
+            setTimeout(() => {
+                setNotification('');
+            }, 3000);
+            return;
+        }
+    
         try {
             const response = await fetch(`/api/admin/student/${id}`, {
                 method: 'PATCH',
@@ -114,11 +128,11 @@ export default function StudentDetailsEdit() {
                 },
                 body: JSON.stringify(formData),
             });
-
+    
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-
+    
             const updatedData = await response.json();
             setApplicant(updatedData.user); // Update the applicant state with the updated data
             setIsEditing(false);
@@ -127,7 +141,7 @@ export default function StudentDetailsEdit() {
             console.error('Error updating student details:', error);
             setNotification('Error updating student details'); // Set error notification
         }
-
+    
         // Clear the notification after a few seconds
         setTimeout(() => {
             setNotification('');
@@ -271,6 +285,7 @@ export default function StudentDetailsEdit() {
                                 value={formData.applicantDetails.firstName}
                                 onChange={handleInputChange}
                                 readOnly={!isEditing}
+                                required
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                             />
                         </div>
