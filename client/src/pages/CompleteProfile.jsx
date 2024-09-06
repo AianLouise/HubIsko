@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUserSuccess } from '../redux/user/userSlice'; // Adjust the import path as needed
 import { useNavigate } from 'react-router-dom';
-import { regions, provinces, cities, barangays, regionByCode, provincesByCode, provinceByName } from "select-philippines-address";
+import { regions, provinces, cities, barangays } from 'select-philippines-address';
 import { storage } from '../firebase'; // Import Firebase storage
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Import necessary Firebase functions
 
@@ -57,55 +57,11 @@ export default function CompleteProfile() {
           ...prevFormData,
           firstName: data.applicantDetails.firstName || '',
           lastName: data.applicantDetails.lastName || '',
+          profilePicture: data.profilePicture || '',
         }));
       })
       .catch((error) => console.error('Error fetching user details:', error));
   }, []);
-
-  const [regionList, setRegionList] = useState([]);
-  const [provinceList, setProvinceList] = useState([]);
-  const [cityList, setCityList] = useState([]);
-  const [barangayList, setBarangayList] = useState([]);
-
-  useEffect(() => {
-    regions().then(setRegionList);
-  }, []);
-
-  const handleRegionChange = (e) => {
-    const regionCode = e.target.value;
-    const selectedRegion = regionList.find(region => region.region_code === regionCode);
-    const regionName = selectedRegion ? selectedRegion.region_name : '';
-
-    setFormData({ ...formData, region: regionName, regionCode: regionCode, province: '', city: '', barangay: '' });
-    provinces(regionCode).then(setProvinceList);
-    setCityList([]);
-    setBarangayList([]);
-  };
-
-  const handleProvinceChange = (e) => {
-    const provinceCode = e.target.value;
-    const selectedProvince = provinceList.find(province => province.province_code === provinceCode);
-    const provinceName = selectedProvince ? selectedProvince.province_name : '';
-
-    setFormData({ ...formData, province: provinceName, provinceCode: provinceCode, city: '', barangay: '' });
-    cities(provinceCode).then(setCityList);
-    setBarangayList([]);
-  };
-
-  const handleCityChange = (e) => {
-    const cityCode = e.target.value;
-    const selectedCity = cityList.find(city => city.city_code === cityCode);
-    const cityName = selectedCity ? selectedCity.city_name : '';
-
-    setFormData({ ...formData, city: cityName, cityCode: cityCode, barangay: '' });
-    barangays(cityCode).then(setBarangayList);
-  };
-
-  const handleBarangayChange = (e) => {
-    const barangayCode = e.target.value;
-
-    setFormData({ ...formData, barangay: barangayCode });
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -184,6 +140,116 @@ export default function CompleteProfile() {
     });
   };
 
+
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split('T')[0];
+
+  const [regionList, setRegionList] = useState([]);
+  const [provinceList, setProvinceList] = useState([]);
+  const [cityList, setCityList] = useState([]);
+  const [barangayList, setBarangayList] = useState([]);
+
+  const [selectedRegion, setSelectedRegion] = useState('');
+  const [selectedProvince, setSelectedProvince] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedBarangay, setSelectedBarangay] = useState('');
+
+  // New state to store full address names
+  const [fullAddress, setFullAddress] = useState({
+    regionName: '',
+    provinceName: '',
+    cityName: '',
+    barangayName: ''
+  });
+
+  // Fetch all regions on component mount
+  useEffect(() => {
+    regions().then(setRegionList);
+  }, []);
+
+  // Fetch provinces when a region is selected
+  useEffect(() => {
+    if (selectedRegion) {
+      provinces(selectedRegion).then(data => {
+        setProvinceList(data);
+        const regionName = regionList.find(region => region.region_code === selectedRegion)?.region_name;
+        setFormData(prevState => ({
+          ...prevState,
+          region: selectedRegion,
+          regionName: regionName, // Save full region name
+          province: '',
+          city: '',
+          barangay: ''
+        }));
+        setFullAddress(prevState => ({ ...prevState, regionName }));
+      });
+    }
+  }, [selectedRegion, regionList]);
+
+  // Fetch cities when a province is selected
+  useEffect(() => {
+    if (selectedProvince) {
+      cities(selectedProvince).then(data => {
+        setCityList(data);
+        const provinceName = provinceList.find(province => province.province_code === selectedProvince)?.province_name;
+        setFormData(prevState => ({
+          ...prevState,
+          province: selectedProvince,
+          provinceName: provinceName, // Save full province name
+          city: '',
+          barangay: ''
+        }));
+        setFullAddress(prevState => ({ ...prevState, provinceName }));
+      });
+    }
+  }, [selectedProvince, provinceList]);
+
+  // Fetch barangays when a city is selected
+  useEffect(() => {
+    if (selectedCity) {
+      barangays(selectedCity).then(data => {
+        setBarangayList(data);
+        const cityName = cityList.find(city => city.city_code === selectedCity)?.city_name;
+        setFormData(prevState => ({
+          ...prevState,
+          city: selectedCity,
+          cityName: cityName, // Save full city name
+          barangay: ''
+        }));
+        setFullAddress(prevState => ({ ...prevState, cityName }));
+      });
+    }
+  }, [selectedCity, cityList]);
+
+  // Update formData when barangay is selected
+  useEffect(() => {
+    if (selectedBarangay) {
+      const barangayName = barangayList.find(barangay => barangay.brgy_code === selectedBarangay)?.brgy_name;
+      setFormData(prevState => ({
+        ...prevState,
+        barangay: selectedBarangay,
+        barangayName: barangayName // Save full barangay name
+      }));
+      setFullAddress(prevState => ({ ...prevState, barangayName }));
+    }
+  }, [selectedBarangay, barangayList]);
+
+  // Load initial data from formData
+  useEffect(() => {
+    if (formData.region) {
+      setSelectedRegion(formData.region);
+    }
+    if (formData.province) {
+      setSelectedProvince(formData.province);
+    }
+    if (formData.city) {
+      setSelectedCity(formData.city);
+    }
+    if (formData.barangay) {
+      setSelectedBarangay(formData.barangay);
+    }
+  }, [formData]);
+
   return (
     <div>
       <div className=" flex justify-center pt-8 rounded-md">
@@ -205,6 +271,7 @@ export default function CompleteProfile() {
                   accept="image/*"
                   onChange={handleFileChange}
                   className='absolute inset-0 w-full h-full opacity-0 cursor-pointer'
+                  required
                 />
                 <div className='w-24 h-24 rounded-full border border-gray-300 flex items-center justify-center overflow-hidden'>
                   <img
@@ -290,6 +357,7 @@ export default function CompleteProfile() {
               onChange={handleChange}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               required
+              max={today} // Set the max attribute to today's date
             />
           </div>
 
@@ -395,6 +463,7 @@ export default function CompleteProfile() {
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               required
             >
+              <option value="">Select Religion</option>
               <option value="Roman Catholic">Roman Catholic</option>
               <option value="Iglesia ni Cristo">Iglesia ni Cristo</option>
               <option value="Islam">Islam</option>
@@ -413,6 +482,7 @@ export default function CompleteProfile() {
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               placeholder="Enter height in cm"
               required
+              min="0" // Set the min attribute to 0
             />
           </div>
 
@@ -426,6 +496,7 @@ export default function CompleteProfile() {
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               placeholder="Enter weight in kg"
               required
+              min="0" // Set the min attribute to 0
             />
           </div>
 
@@ -458,17 +529,19 @@ export default function CompleteProfile() {
           </div>
         </div>
 
-        <div className='grid grid-cols-2 gap-4 px-4'>
-          <div className='col-span-1'>
-            <label className='block text-sm font-medium text-gray-700 mb-2'>
-              Region
-            </label>
+        <div className='grid grid-cols-2 gap-4 px-4 mt-4'>
+          {/* Region Selector */}
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Region:</label>
             <select
-              name="region"
-              value={formData.regionCode}
-              onChange={handleRegionChange}
+              value={selectedRegion}
+              onChange={(e) => {
+                setSelectedRegion(e.target.value);
+                setProvinceList([]); // Reset on region change
+                setCityList([]);
+                setBarangayList([]);
+              }}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-              required
             >
               <option value="">Select Region</option>
               {regionList.map((region) => (
@@ -479,16 +552,17 @@ export default function CompleteProfile() {
             </select>
           </div>
 
-          <div className='col-span-1'>
-            <label className='block text-sm font-medium text-gray-700 mb-2'>
-              Province
-            </label>
+          {/* Province Selector */}
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Province:</label>
             <select
-              name="province"
-              value={formData.provinceCode}
-              onChange={handleProvinceChange}
+              value={selectedProvince}
+              onChange={(e) => {
+                setSelectedProvince(e.target.value);
+                setCityList([]);
+                setBarangayList([]);
+              }}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-              required
             >
               <option value="">Select Province</option>
               {provinceList.map((province) => (
@@ -499,16 +573,16 @@ export default function CompleteProfile() {
             </select>
           </div>
 
-          <div className='col-span-1'>
-            <label className='block text-sm font-medium text-gray-700 mb-2'>
-              City
-            </label>
+          {/* City Selector */}
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>City/Municipality:</label>
             <select
-              name="city"
-              value={formData.cityCode || ''}
-              onChange={handleCityChange}
+              value={selectedCity}
+              onChange={(e) => {
+                setSelectedCity(e.target.value);
+                setBarangayList([]);
+              }}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-              required
             >
               <option value="">Select City</option>
               {cityList.map((city) => (
@@ -519,27 +593,25 @@ export default function CompleteProfile() {
             </select>
           </div>
 
-          <div className='col-span-1'>
-            <label className='block text-sm font-medium text-gray-700 mb-2'>
-              Barangay
-            </label>
+          {/* Barangay Selector */}
+          <div>
+            <label className='block text-sm font-medium text-gray-700 mb-2'>Barangay:</label>
             <select
-              name="barangay"
-              value={formData.barangay || ''}
-              onChange={handleBarangayChange}
+              value={selectedBarangay}
+              onChange={(e) => setSelectedBarangay(e.target.value)}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-              required
             >
               <option value="">Select Barangay</option>
               {barangayList.map((barangay) => (
-                <option key={barangay.brgy_code} value={barangay.brgy_name}>
+                <option key={barangay.brgy_code} value={barangay.brgy_code}>
                   {barangay.brgy_name}
                 </option>
               ))}
             </select>
           </div>
 
-          <div className='w-full flex flex-col lg:col-span-1'>
+          {/*  */}
+          <div className='w-full flex flex-col lg:col-span-1 mb-4'>
             <label className='hidden lg:block text-sm font-medium text-gray-700 mb-2'>
               House No./Unit No./Bldg/Floor, Street, Subdivision
             </label>
@@ -640,7 +712,7 @@ export default function CompleteProfile() {
                       <span className="font-semibold">Contact Number:</span> {formData.contactNumber}
                     </p>
                     <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Address:</span> {`${formData.addressDetails}, ${formData.barangay}, ${formData.city}, ${formData.province}, ${formData.region}`}
+                      <span className="font-semibold">Address:</span> {`${formData.addressDetails}, ${formData.barangayName}, ${formData.cityName}, ${formData.provinceName}, ${formData.regionName}`}
                     </p>
                   </div>
                   <div className="flex justify-end mt-6">

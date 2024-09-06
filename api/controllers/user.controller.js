@@ -71,9 +71,9 @@ export const forgotPassword = async (req, res, next) => {
     user.resetPasswordToken = resetToken;
     await user.save();
 
-    const resetUrl = `https://hubisko.onrender.com/reset-password?token=${resetToken}`;
+   // const resetUrl = `https://hubisko.onrender.com/reset-password?token=${resetToken}`;
 
-    // const resetUrl = `http://localhost:5173/reset-password?token=${resetToken}`;
+     const resetUrl = `http://localhost:5173/reset-password?token=${resetToken}`;
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
