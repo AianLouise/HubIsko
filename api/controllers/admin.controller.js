@@ -1,5 +1,6 @@
 import User from '../models/user.model.js'; // Import the User model
 import ScholarshipProgram from '../models/scholarshipProgram.model.js'; // Import the Scholarship model
+import ForumPost from '../models/forumPost.model.js'; // Import the ForumPost model
 
 export const test = (req, res) => {
   res.json({
@@ -429,6 +430,48 @@ export const getAllScholarshipPrograms = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error fetching scholarship programs',
+      error: error.message,
+    });
+  }
+};
+
+export const getUserScholarshipPrograms = async (req, res) => {
+  try {
+    const userId = req.params.userId; // Assuming the user ID is passed as a URL parameter
+
+    // Find all scholarship programs where the user ID is in the approvedScholars array
+    const scholarshipPrograms = await ScholarshipProgram.find({
+      'approvedScholars._id': userId
+    });
+
+    res.status(200).json({
+      success: true,
+      data: scholarshipPrograms,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching user scholarship programs',
+      error: error.message,
+    });
+  }
+};
+
+export const getUserForumPosts = async (req, res) => {
+  try {
+    const userId = req.params.userId; // Assuming the user ID is passed as a URL parameter
+
+    // Find all forum posts where the user ID matches
+    const forumPosts = await ForumPost.find({ userId });
+
+    res.status(200).json({
+      success: true,
+      data: forumPosts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching user forum posts',
       error: error.message,
     });
   }

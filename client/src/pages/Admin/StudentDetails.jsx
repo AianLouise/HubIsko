@@ -9,6 +9,8 @@ import { BiCommentDots } from "react-icons/bi";
 import { FaRegEye } from "react-icons/fa";
 import Layout from "../../components/Layout";
 import StudentDetailsEdit from "./StudentDetailsEdit";
+import StudentScholarship from "./StudentScholarship";
+import StudentForumPost from "./StudentForumPost";
 
 export default function StudentDetails() {
 
@@ -153,45 +155,11 @@ export default function StudentDetails() {
           )}
 
           {selectedTab === 'Scholarships' && (
-            <div className='border-2 rounded-md p-10 flex justify-center items-center bg-white h-96 mb-20'>
-              <span>Container for Student's Scholarships</span>
-            </div>
+            <StudentScholarship />
           )}
 
           {selectedTab === 'Posts' && (
-            <div className='grid grid-cols-3 sm:grid-rows-1 gap-8'>
-              <div className='bg-white font-normal border p-4 rounded-md flex flex-col hover:-translate-y-1 hover:shadow-lg transition ease-in-out'>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, vel.
-                <span className='text-sm flex items-end justify-end w-full text-slate-600'>Posted: July 7,2024</span>
-
-                <div className='border-t mt-2'>
-                  <div className='flex flex-row justify-between mt-2 gap-2'>
-
-
-                    <div className='flex flex-row gap-2'>
-                      <div className='flex flex-row gap-1 px-2'>
-                        <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
-                        <span>123</span>
-                      </div>
-
-                      <div className='flex flex-row gap-1'>
-                        <BiCommentDots className='w-6 h-6 text-blue-600' />
-                        <span>10</span>
-                      </div>
-                    </div>
-
-                    <div className='flex flex-row gap-1 pr-2'>
-                      <FaRegEye className='w-6 h-6 text-blue-600' />
-                      <span>1.2k</span>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-
-
-
-            </div>
+            <StudentForumPost />
           )}
 
         </div>
