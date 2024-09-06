@@ -75,23 +75,11 @@ const applicantSchema = new mongoose.Schema({
       type: String,
       required: false,
     },
-    regionCode: {
-      type: String,
-      required: false,
-    },
     province: {
       type: String,
       required: false,
     },
-    provinceCode: {
-      type: String,
-      required: false,
-    },
     city: {
-      type: String,
-      required: false,
-    },
-    cityCode: {
       type: String,
       required: false,
     },

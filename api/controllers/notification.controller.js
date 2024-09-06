@@ -50,9 +50,9 @@ export const getNotifications = async (req, res) => {
             .sort({ createdAt: -1 })
             .populate('senderId', 'profilePicture scholarshipProviderDetails.organizationName');  // Populating the senderId with profilePicture
 
-        if (!notifications.length) {
-            return res.status(404).json({ message: 'No notifications found' });
-        }
+        // if (!notifications.length) {
+        //     return res.status(404).json({ message: 'No notifications found' });
+        // }
 
         res.status(200).json(notifications);
     } catch (error) {
