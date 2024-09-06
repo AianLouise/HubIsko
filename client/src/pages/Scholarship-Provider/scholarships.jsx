@@ -4,6 +4,12 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import { useSelector } from 'react-redux';
+import { LuArchive } from "react-icons/lu";
+import { MdOutlinePlayLesson } from "react-icons/md";
+import { MdOutlinePendingActions } from "react-icons/md";
+import { FaRegThumbsUp } from "react-icons/fa";
+
+
 
 export default function Scholarships() {
   useEffect(() => {
@@ -71,82 +77,190 @@ export default function Scholarships() {
           </div>
         )}
 
-        <div className='border-b mb-8'>
-          <div className={'flex gap-2 items-center mx-auto px-24 h-36'}>
-            <h1 className='text-4xl font-bold text-gray-800'>Scholarship Program(s): </h1>
-            <span className='text-blue-600 text-4xl my-8 rounded-md font-bold'>{Array.isArray(scholarships) ? scholarships.length : 0}</span>
+        <div className='h-[250px]'>
+          <div className='bg-blue-600 text-white'>
+            <div className={'flex gap-2 mx-auto px-24 h-44'}>
+              <div className='flex items-center justify-between w-full h-28'>
+                <h1 className='text-2xl font-bold '>Scholarship Programs</h1>
+
+                {showMessage && (
+                  <div className="fixed top-4 right-4 bg-yellow-100 text-yellow-700 border-l-4 border-yellow-500 px-4 py-2 rounded shadow-lg fade-out">
+                    Your account is under verification. You cannot post a scholarship at this time.
+                  </div>
+                )}
+                <Link to='/post-scholarship' onClick={handleClick}>
+                  <button className='bg-white text-blue-600 px-4 py-2 shadow rounded-md font-medium flex items-center gap-2 hover:bg-slate-200'>
+                    <FontAwesomeIcon icon={faPlus} className='w-4 h-4' />
+                    <span>Post a Scholarship</span>
+                  </button>
+                </Link>
+              </div>
+
+            </div>
+          </div>
+
+          <div className='px-24 grid grid-cols-4 gap-5 -translate-y-20'>
+
+
+            <div className='flex flex-col gap-3 bg-white border shadow p-8 py-6 rounded-md'>
+              <div className='flex justify-between items-center'>
+                <h1 className='text-base font-medium'>All Programs</h1>
+                <div className='bg-blue-200 px-3 py-2 rounded-md'>
+                  <LuArchive className='text-2xl text-blue-600' />
+                </div>
+              </div>
+
+              <span className='text-4xl font-bold tracking-wide'>{Array.isArray(scholarships) ? scholarships.length : 0}</span>
+            </div>
+
+
+            <div className='flex flex-col gap-3 bg-white border shadow p-8 py-6 rounded-md'>
+              <div className='flex justify-between items-center'>
+                <h1 className='text-base font-medium'>Ongoing Programs</h1>
+                <div className='bg-blue-200 px-3 py-2 rounded-md'>
+                  <MdOutlinePlayLesson className='text-2xl text-blue-600' />
+                </div>
+              </div>
+
+              <span className='text-4xl font-bold tracking-wide'>123</span>
+            </div>
+
+            <div className='flex flex-col gap-3 bg-white border shadow p-8 py-6 rounded-md'>
+              <div className='flex justify-between items-center'>
+                <h1 className='text-base font-medium'>Pending Verifications</h1>
+                <div className='bg-blue-200 px-3 py-2 rounded-md'>
+                  <MdOutlinePendingActions className='text-2xl text-blue-600' />
+                </div>
+              </div>
+
+              <span className='text-4xl font-bold tracking-wide'>123</span>
+            </div>
+
+
+            <div className='flex flex-col gap-3 bg-white border shadow p-8 py-6 rounded-md'>
+              <div className='flex justify-between items-center'>
+                <h1 className='text-base font-medium'>Service Rating</h1>
+                <div className='bg-blue-200 px-3 py-2 rounded-md'>
+                  <FaRegThumbsUp className='text-2xl text-blue-600' />
+                </div>
+              </div>
+
+              <span className='text-4xl font-bold tracking-wide'>50%</span>
+            </div>
+
           </div>
         </div>
 
-        <div className='max-w-8xl mx-auto px-24 py-12 gap-10 flex-col flex'>
+        <div className='max-w-8xl mx-auto px-24 mt-4 flex-col flex'>
+          <div className='flex gap-10'>
+            {loading ? (
+              <div className="flex justify-center items-center h-screen">
+                <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+              </div>
+            ) : error ? (
+              <div className="flex justify-center items-center h-screen">
+                <p className="text-red-600 font-bold">{error}</p>
+              </div>
+            ) : !Array.isArray(scholarships) || scholarships.length === 0 ? (
+              <div className="flex justify-center items-center h-full">
+                <p className="text-gray-600 font-medium">No scholarships available at the moment.</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto border shadow rounded-md bg-white w-full">
+                <div className="flex justify-between p-6 border-b  items-center">
+                  {/* <h1 className='font-bold'>Scholarships</h1> */}
+                  <div className='flex gap-2 font-medium text-sm'>
+                    <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
+                      All <span className='text-blue-600'>(0)</span>
+                    </button>
 
-          <div className='flex justify-between items-center mb-6'>
-            {showMessage && (
-              <div className="fixed top-4 right-4 bg-yellow-100 text-yellow-700 border-l-4 border-yellow-500 px-4 py-2 rounded shadow-lg fade-out">
-                Your account is under verification. You cannot post a scholarship at this time.
+                    <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
+                      Completed <span className='text-green-600'>(0)</span>
+                    </button>
+
+                    <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
+                      Pending <span className='text-yellow-600'>(0)</span>
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder='Search Scholarships'
+                    className='p-2 border rounded-md'
+                  />
+                </div>
+
+                <div className="max-h-[400px] overflow-y-auto">
+                  <table className="divide-y w-full divide-gray-200">
+                    <thead className="bg-slate-50 text-slate-700 border-b font-bold sticky top-0">
+                      <tr>
+                        <th scope="col" className="px-6 py-3 text-left text-xs uppercase tracking-wider">
+                          Title
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs uppercase tracking-wider">
+                          Status
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs uppercase tracking-wider">
+                          Amount
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs uppercase tracking-wider">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {scholarships.map((scholarship) => (
+                        <tr key={scholarship._id}>
+                          <td className="px-6 flex gap-4 items-center py-4 whitespace-nowrap">
+                            <div
+                              className='w-16 h-16 rounded-md'
+                              style={{
+                                backgroundImage: `url(${scholarship.bannerImage})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center'
+                              }}
+                            ></div>
+
+                            <h1 className='text-base font-medium text-gray-800'>{scholarship.title}</h1>
+
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`text-base font-medium ${scholarship.numberOfScholarshipsSlotFilled === scholarship.numberOfScholarships ? 'text-red-600' : ''} ${scholarship.status === 'Pending Approval' ? 'bg-yellow-100 text-[#ffb048] font-semibold text-sm px-4 py-2 rounded-md' : ''} ${scholarship.status === 'Active' ? 'bg-green-100 text-green-600 font-semibold text-sm px-4 py-2 rounded-md' : ''} ${scholarship.status === 'Closed' ? 'bg-gray-50 text-gray-500 font-semibold text-sm px-4 py-2 rounded-md' : ''} ${scholarship.status === 'Archived' ? 'bg-blue-50 text-blue-500 font-semibold text-sm px-4 py-2 rounded-md ' : ''} ${scholarship.status === 'Cancelled' ? 'bg-red-50 text-red-500 font-semibold text-sm px-4 py-2 rounded-md' : ''} ${scholarship.status === 'Completed' ? 'bg-purple-50 text-purple-500 font-semibold text-sm px-4 py-2 rounded-md' : ''}`}>
+                              {scholarship.status === 'Pending Approval' ? 'Pending Approval' : `${scholarship.numberOfScholarshipsSlotFilled}/${scholarship.numberOfScholarships}`}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className='text-slate-600'>{scholarship.amount}</span>
+                          </td>
+
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <Link to={`/view-scholarships/${scholarship._id}`} className='text-blue-600 font-bold border text-sm hover:bg-slate-200 px-4 py-1 rounded-md'>
+                              View Details
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
-            <Link to='/post-scholarship' onClick={handleClick}>
-              <button className='bg-blue-600 text-white px-8 py-4 shadow rounded-md flex items-center gap-2 hover:bg-blue-800'>
-                <FontAwesomeIcon icon={faPlus} className='w-4 h-4' />
-                <span>Post a Scholarship</span>
-              </button>
-            </Link>
 
-            <input
-              type="text"
-              placeholder='Search scholarships...'
-              className='border-2 rounded-md px-4 py-2 w-96 focus:border-blue-600 focus:outline-none'
-            />
+            <div className='flex flex-col bg-white border shadow rounded-md p-6 w-1/2'>
+              <h1 className='font-bold'>Performance graph</h1>
+
+              <div className='flex justify-center items-center my-4 w-full h-full border rounded-md'>
+                <span>Filler</span>
+              </div>
+
+            </div>
+
           </div>
-
-          {loading ? (
-            <div className="flex justify-center items-center h-screen">
-              <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-              </svg>
-            </div>
-          ) : error ? (
-            <div className="flex justify-center items-center h-screen">
-              <p className="text-red-600 font-bold">{error}</p>
-            </div>
-          ) : !Array.isArray(scholarships) || scholarships.length === 0 ? (
-            <div className="flex justify-center items-center h-full">
-              <p className="text-gray-600 font-medium">No scholarships available at the moment.</p>
-            </div>
-          ) : (
-            <div className='grid grid-cols-3 gap-8'>
-              {scholarships.map((scholarship) => (
-                <div key={scholarship._id} className='bg-white rounded-md shadow hover:shadow-lg transition-shadow duration-300'>
-                  <div
-                    className='w-full h-36 rounded-t-md'
-                    style={{
-                      backgroundImage: `url(${scholarship.bannerImage})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center'
-                    }}
-                  ></div>
-                  <div className='p-4'>
-                    <div className='flex justify-between items-center mb-2'>
-                      <h1 className='text-lg font-bold text-gray-800'>{scholarship.title}</h1>
-                    </div>
-                    <span className='text-slate-600 block mb-2'>{scholarship.amount}</span>
-                    <p className='text-gray-500 mb-4'>{truncateDescription(scholarship.description, 100)}</p>
-                    <div className='flex justify-between items-center'>
-                      <Link to={`/view-scholarships/${scholarship._id}`} className='text-blue-600 font-bold border hover:bg-slate-200 px-4 py-1 rounded-md'>
-                        View Details
-                      </Link>
-                      <span className={`text-base font-semibold ${scholarship.numberOfScholarshipsSlotFilled === scholarship.numberOfScholarships ? 'text-red-600' : ''} ${scholarship.status === 'Pending Approval' ? 'text-yellow-500' : ''} ${scholarship.status === 'Active' ? 'text-green-500' : ''} ${scholarship.status === 'Closed' ? 'text-gray-500' : ''} ${scholarship.status === 'Archived' ? 'text-blue-500' : ''} ${scholarship.status === 'Cancelled' ? 'text-red-500' : ''} ${scholarship.status === 'Completed' ? 'text-purple-500' : ''}`}>
-                        {scholarship.status === 'Pending Approval' ? 'Pending Approval' : `${scholarship.numberOfScholarshipsSlotFilled}/${scholarship.numberOfScholarships}`}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
+
+
       </main>
     </div>
   );
