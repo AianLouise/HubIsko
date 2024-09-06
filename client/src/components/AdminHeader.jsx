@@ -59,7 +59,22 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
 
-    const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+    const toggleDropdown = () => {
+        setDropdownOpen(prevState => !prevState);
+    };
+
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setDropdownOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const dispatch = useDispatch();
     const currentUser = useSelector((state) => state.user.currentUser);
@@ -108,16 +123,23 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                 <div className="flex gap-2 items-center">
                     <span className="text-base">{currentUser.username}</span>
                     <div className="relative" ref={dropdownRef}>
-                        <img src={currentUser.profilePicture || 'https://via.placeholder.com/40'} alt="Profile" className="h-8 w-8 rounded-full" onClick={toggleDropdown} />
+                        <img
+                            src={currentUser.profilePicture || 'https://via.placeholder.com/40'}
+                            alt="Profile"
+                            className="h-8 w-8 rounded-full"
+                            onClick={toggleDropdown}
+                        />
                         {dropdownOpen && (
                             <div className="absolute mt-2 right-0 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50 font-medium">
                                 <ul>
                                     <li className="p-2 hover:bg-gray-100 cursor-pointer">
-                                    <Link to={'/admin-settings'}>
-                                    Settings
-                                    </Link>
+                                        <Link to={'/admin-settings'}>
+                                            Settings
+                                        </Link>
                                     </li>
-                                    <li className="p-2 hover:bg-gray-100 cursor-pointer" onClick={handleSignOut}>Sign out</li>
+                                    <li className="p-2 hover:bg-gray-100 cursor-pointer" onClick={handleSignOut}>
+                                        Sign out
+                                    </li>
                                 </ul>
                             </div>
                         )}
@@ -131,7 +153,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
 
                     <div className="flex justify-between items-center pb-2 mb-4 border-b">
 
-                    <div className='flex items-center gap-2'>
+                        <div className='flex items-center gap-2'>
                             <img src={Logo} alt='Logo' className='w-6 h-6 rounded-md' />
                             <span className='font-bold text-blue-600 text-2xl'>HubIsko</span>
                         </div>
@@ -205,7 +227,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
 
                                 </div>
                             </li>
-                            
+
                             <li>
                                 <Link to={'/scholarship-programs'}
                                     className={`flex gap-2 items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/scholarship-programs') ? 'bg-blue-600 text-white' : ''}`} >
@@ -277,10 +299,10 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                             </li>
 
                             <li>
-                            <Link to={"/admin-forums"} className={`flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/admin-forums' ? 'bg-blue-600 text-white' : ''}`}>
-                                    <MdForum className={`w-5 h-5 text-blue-600 ${location.pathname =='/admin-forums' ? 'text-white':''}`} /> {/* Updated icon */}
+                                <Link to={"/admin-forums"} className={`flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/admin-forums' ? 'bg-blue-600 text-white' : ''}`}>
+                                    <MdForum className={`w-5 h-5 text-blue-600 ${location.pathname == '/admin-forums' ? 'text-white' : ''}`} /> {/* Updated icon */}
                                     Forums
-                            </Link>
+                                </Link>
                             </li>
 
                         </ul>

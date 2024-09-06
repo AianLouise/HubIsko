@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { regions, provinces, cities, barangays, regionByCode, provincesByCode, provinceByName } from "select-philippines-address";
+import { regions, provinces, cities, barangays } from 'select-philippines-address';
 
 export default function StudentDetailsEdit() {
     const { id } = useParams();
@@ -44,18 +44,15 @@ export default function StudentDetailsEdit() {
             contactNumber: '',
             address: {
                 region: '',
-                regionCode: '',
                 province: '',
-                provinceCode: '',
                 city: '',
-                cityCode: '',
                 barangay: '',
                 addressDetails: '',
             }
         },
     });
 
-    console.log(applicant);
+    // console.log(applicant);
 
     const [isEditing, setIsEditing] = useState(false);
     const [notification, setNotification] = useState(''); // State for notification message
@@ -67,7 +64,7 @@ export default function StudentDetailsEdit() {
             middleName: '',
             birthdate: '',
             birthplace: '',
-            gender: '', // Ensure this is initialized
+            gender: '',
             bloodType: '',
             civilStatus: '',
             maidenName: '',
@@ -80,17 +77,15 @@ export default function StudentDetailsEdit() {
             contactNumber: '',
             address: {
                 region: '',
-                regionCode: '',
                 province: '',
-                provinceCode: '',
                 city: '',
-                cityCode: '',
                 barangay: '',
+                addressDetails: '',
             }
         }
     });
 
-    console.log(formData);
+    // console.log(formData);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -108,8 +103,9 @@ export default function StudentDetailsEdit() {
     const handleEditClick = () => {
         setIsEditing(true);
     };
-
+    console.log(formData);
     const handleSaveChanges = async () => {
+
         try {
             const response = await fetch(`/api/admin/student/${id}`, {
                 method: 'PATCH',
@@ -148,50 +144,105 @@ export default function StudentDetailsEdit() {
     const [cityList, setCityList] = useState([]);
     const [barangayList, setBarangayList] = useState([]);
 
+    const [selectedRegion, setSelectedRegion] = useState('');
+    const [selectedProvince, setSelectedProvince] = useState('');
+    const [selectedCity, setSelectedCity] = useState('');
+    const [selectedBarangay, setSelectedBarangay] = useState('');
+
+    // Fetch all regions on component mount
     useEffect(() => {
         regions().then(setRegionList);
     }, []);
 
-    const handleRegionChange = (e) => {
-        const regionCode = e.target.value;
-        const selectedRegion = regionList.find(region => region.region_code === regionCode);
-        const regionName = selectedRegion ? selectedRegion.region_name : '';
+    // Fetch provinces when a region is selected
+    useEffect(() => {
+        if (selectedRegion) {
+            provinces(selectedRegion).then(setProvinceList);
+            setFormData(prevState => ({
+                ...prevState,
+                applicantDetails: {
+                    ...prevState.applicantDetails,
+                    address: {
+                        ...prevState.applicantDetails.address,
+                        region: selectedRegion,
+                        province: '',
+                        city: '',
+                        barangay: ''
+                    }
+                }
+            }));
+        }
+    }, [selectedRegion]);
 
-        setFormData({ ...formData, region: regionName, regionCode: regionCode, province: '', city: '', barangay: '' });
-        provinces(regionCode).then(setProvinceList);
-        setCityList([]);
-        setBarangayList([]);
-    };
+    // Fetch cities when a province is selected
+    useEffect(() => {
+        if (selectedProvince) {
+            cities(selectedProvince).then(setCityList);
+            setFormData(prevState => ({
+                ...prevState,
+                applicantDetails: {
+                    ...prevState.applicantDetails,
+                    address: {
+                        ...prevState.applicantDetails.address,
+                        province: selectedProvince,
+                        city: '',
+                        barangay: ''
+                    }
+                }
+            }));
+        }
+    }, [selectedProvince]);
 
-    const handleProvinceChange = (e) => {
-        const provinceCode = e.target.value;
-        const selectedProvince = provinceList.find(province => province.province_code === provinceCode);
-        const provinceName = selectedProvince ? selectedProvince.province_name : '';
+    // Fetch barangays when a city is selected
+    useEffect(() => {
+        if (selectedCity) {
+            barangays(selectedCity).then(setBarangayList);
+            setFormData(prevState => ({
+                ...prevState,
+                applicantDetails: {
+                    ...prevState.applicantDetails,
+                    address: {
+                        ...prevState.applicantDetails.address,
+                        city: selectedCity,
+                        barangay: ''
+                    }
+                }
+            }));
+        }
+    }, [selectedCity]);
 
-        setFormData({ ...formData, province: provinceName, provinceCode: provinceCode, city: '', barangay: '' });
-        cities(provinceCode).then(setCityList);
-        setBarangayList([]);
-    };
+    // Update formData when barangay is selected
+    useEffect(() => {
+        if (selectedBarangay) {
+            setFormData(prevState => ({
+                ...prevState,
+                applicantDetails: {
+                    ...prevState.applicantDetails,
+                    address: {
+                        ...prevState.applicantDetails.address,
+                        barangay: selectedBarangay
+                    }
+                }
+            }));
+        }
+    }, [selectedBarangay]);
 
-    const handleCityChange = (e) => {
-        const cityCode = e.target.value;
-        const selectedCity = cityList.find(city => city.city_code === cityCode);
-        const cityName = selectedCity ? selectedCity.city_name : '';
+    // Load initial data from formData
+    useEffect(() => {
+        if (!isEditing && formData && formData.applicantDetails && formData.applicantDetails.address) {
+            const dummyData = {
+                region: formData.applicantDetails.address.region,
+                province: formData.applicantDetails.address.province,
+                city: formData.applicantDetails.address.city,
+                barangay: formData.applicantDetails.address.barangay,
+            };
 
-        setFormData({ ...formData, city: cityName, cityCode: cityCode, barangay: '' });
-        barangays(cityCode).then(setBarangayList);
-    };
-
-    const handleBarangayChange = (e) => {
-        const barangayCode = e.target.value;
-
-        setFormData({ ...formData, barangay: barangayCode });
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
+            setSelectedRegion(dummyData.region);
+            setSelectedProvince(dummyData.province);
+            setSelectedCity(dummyData.city);
+            setSelectedBarangay(dummyData.barangay);
+        }
+    }, [formData]);
 
     if (!applicant) {
         return <div>Loading...</div>;
@@ -202,7 +253,7 @@ export default function StudentDetailsEdit() {
             <div className="text-lg font-bold bg-slate-200 border-2 px-4 py-2 rounded-md">Student Information</div>
 
             {notification && (
-                <div className="fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-md">
+                <div className="fixed z-20 top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-md">
                     {notification}
                 </div>
             )}
@@ -466,17 +517,20 @@ export default function StudentDetailsEdit() {
                         </div>
                     </div>
 
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mt-4'>
-                        <div className='col-span-1'>
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>
-                                Region
-                            </label>
+                    <div className='grid grid-cols-2 gap-4 mt-4'>
+                        {/* Region Selector */}
+                        <div>
+                            <label className='block text-sm font-medium text-gray-700 mb-2'>Region:</label>
                             <select
-                                name="region"
-                                value={formData.applicantDetails.address.regionCode}
-                                onChange={handleRegionChange}
+                                value={selectedRegion}
+                                onChange={(e) => {
+                                    setSelectedRegion(e.target.value);
+                                    setProvinceList([]); // Reset on region change
+                                    setCityList([]);
+                                    setBarangayList([]);
+                                }}
+                                disabled={!isEditing}
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                required
                             >
                                 <option value="">Select Region</option>
                                 {regionList.map((region) => (
@@ -487,16 +541,18 @@ export default function StudentDetailsEdit() {
                             </select>
                         </div>
 
-                        <div className='col-span-1'>
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>
-                                Province
-                            </label>
+                        {/* Province Selector */}
+                        <div>
+                            <label className='block text-sm font-medium text-gray-700 mb-2'>Province:</label>
                             <select
-                                name="province"
-                                value={formData.provinceCode}
-                                onChange={handleProvinceChange}
+                                value={selectedProvince}
+                                onChange={(e) => {
+                                    setSelectedProvince(e.target.value);
+                                    setCityList([]);
+                                    setBarangayList([]);
+                                }}
+                                disabled={!isEditing}
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                required
                             >
                                 <option value="">Select Province</option>
                                 {provinceList.map((province) => (
@@ -507,16 +563,17 @@ export default function StudentDetailsEdit() {
                             </select>
                         </div>
 
-                        <div className='col-span-1'>
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>
-                                City
-                            </label>
+                        {/* City Selector */}
+                        <div>
+                            <label className='block text-sm font-medium text-gray-700 mb-2'>City/Municipality:</label>
                             <select
-                                name="city"
-                                value={formData.cityCode || ''}
-                                onChange={handleCityChange}
+                                value={selectedCity}
+                                onChange={(e) => {
+                                    setSelectedCity(e.target.value);
+                                    setBarangayList([]);
+                                }}
+                                disabled={!isEditing}
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                required
                             >
                                 <option value="">Select City</option>
                                 {cityList.map((city) => (
@@ -527,27 +584,26 @@ export default function StudentDetailsEdit() {
                             </select>
                         </div>
 
-                        <div className='col-span-1'>
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>
-                                Barangay
-                            </label>
+                        {/* Barangay Selector */}
+                        <div>
+                            <label className='block text-sm font-medium text-gray-700 mb-2'>Barangay:</label>
                             <select
-                                name="barangay"
-                                value={formData.barangay || ''}
-                                onChange={handleBarangayChange}
+                                value={selectedBarangay}
+                                onChange={(e) => setSelectedBarangay(e.target.value)}
+                                disabled={!isEditing}
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                required
                             >
                                 <option value="">Select Barangay</option>
                                 {barangayList.map((barangay) => (
-                                    <option key={barangay.brgy_code} value={barangay.brgy_name}>
+                                    <option key={barangay.brgy_code} value={barangay.brgy_code}>
                                         {barangay.brgy_name}
                                     </option>
                                 ))}
                             </select>
                         </div>
 
-                        <div className='w-full flex flex-col lg:col-span-1'>
+                        {/* Address Details */}
+                        <div className='w-full flex flex-col lg:col-span-1 mb-4'>
                             <label className='hidden lg:block text-sm font-medium text-gray-700 mb-2'>
                                 House No./Unit No./Bldg/Floor, Street, Subdivision
                             </label>
@@ -557,8 +613,9 @@ export default function StudentDetailsEdit() {
                             <input
                                 type="text"
                                 name="addressDetails"
-                                value={formData.addressDetails}
-                                onChange={handleChange}
+                                value={formData.applicantDetails.address?.addressDetails}
+                                onChange={handleInputChange}
+                                readOnly={!isEditing}
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                 placeholder="Enter House No./Unit No./Bldg/Floor, Street, Subdivision"
                                 required
