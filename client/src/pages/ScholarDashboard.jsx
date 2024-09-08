@@ -8,6 +8,8 @@ import { BiCommentDots } from "react-icons/bi";
 import { FaRegEye } from "react-icons/fa6";
 import { FaAngleRight } from "react-icons/fa";
 import { BiFilter } from 'react-icons/bi';
+import { IoMdArrowDropleftCircle } from "react-icons/io";
+
 
 export default function ScholarDashboard() {
   useEffect(() => {
@@ -18,6 +20,52 @@ export default function ScholarDashboard() {
   const [approvedApplications, setApprovedApplications] = useState([]);
   const [pendingApplications, setPendingApplications] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024); // Tailwind's lg breakpoint is 1024px
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Call initially to set the state based on the initial window size
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const activities = [
+    {
+      borderColor: 'border-blue-400',
+      textColor: 'text-blue-600',
+      title: 'You Applied for:',
+      scholarshipTitle: 'Scholarship Title',
+    },
+    {
+      borderColor: 'border-yellow-400',
+      textColor: 'text-yellow-600',
+      title: 'Requested review:',
+      scholarshipTitle: 'Scholarship Title',
+    },
+    {
+      borderColor: 'border-green-400',
+      textColor: 'text-green-600',
+      title: 'Approved Application:',
+      scholarshipTitle: 'Scholarship Title',
+    },
+  ];
+
+  
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % activities.length);
+  };
+
+  const handlePrev = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + activities.length) % activities.length);
+  };
 
   useEffect(() => {
     // Fetch the user's applications from the backend
@@ -34,7 +82,7 @@ export default function ScholarDashboard() {
         }
         const data = await response.json();
 
-        // Filter applications to include those with "Approved" and "Pending" status
+
         const approved = data.filter(app => app.applicationStatus === 'Approved');
         const pending = data.filter(app => app.applicationStatus === 'Pending');
         setApprovedApplications(approved);
@@ -124,16 +172,18 @@ export default function ScholarDashboard() {
         <div className='flex flex-col gap-4 py-12 max-w-6xl mx-auto justify-between p-4 lg:px-24'>
 
           <div className='flex flex-col border-b'>
-            <div className='flex justify-between items-center'>
-              <span className='font-bold text-2xl'>Scholarship Announcements <span className='text-blue-500'>(0)</span> </span>
+            <div className='flex flex-col gap-2 lg:gap-0 lg:flex-row lg:justify-between lg:items-center'>
+              <span className='font-bold text-xl lg:text-2xl'>Scholarship Announcements <span className='text-blue-500'>(0)</span> </span>
 
+              <div className=''>
               <button className='flex gap-2 bg-white hover:bg-slate-200 px-6 py-2 border shadow rounded-md'>
                 <BiFilter className='w-6 h-6 text-blue-600' />
                 <span>Recent</span>
               </button>
+              </div>
             </div>
 
-            <div className='grid grid-cols-3 gap-10 my-10'>
+            <div className='grid lg:grid-cols-3 mx-10 lg:mx-0 gap-10 my-10'>
               <div className='bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out'>
 
                 <div className='flex gap-2'>
@@ -178,65 +228,66 @@ export default function ScholarDashboard() {
 
 
           </div>
-          <span className='font-bold text-2xl'>Scholarship Applications</span>
+          <span className='font-bold text-xl lg:text-2xl'>Scholarship Applications</span>
 
           <div className='mb-2'>
-            <span className='font-medium text-slate-500'>Recent Scholarship Activities</span>
+            <span className='font-medium text-slate-500 lg:text-base text-sm'>Recent Scholarship Activities</span>
 
-            <div className='grid grid-cols-3 gap-4 text-sm mt-2'>
+            <div className='flex lg:grid lg:grid-rows-1 lg:grid-cols-3 gap-2 text-sm mt-4 lg:mt-2'>
+             
+                <button onClick={handlePrev} className='lg:hidden rounded-md'>
+                  <IoMdArrowDropleftCircle className='w-10 h-10 text-blue-600' />
+                  </button>
+            
+  
 
-              <div className='border border-blue-400 shadow rounded-md p-2 py-4 flex items-center justify-center flex-col gap-2 font-medium'>
-                <div>
-                  <span className='py-2'>You Applied for:</span>
-                  <span className='text-blue-600 px-2 py-2 rounded-md'>Scholarship Title</span>
+              {activities.map((activity, index) => (
+                <div
+                  key={index}
+                  className={`border ${activity.borderColor} shadow rounded-md w-full lg:p-2 py-4 flex items-center justify-center lg:flex-col gap-2 font-medium ${index === currentIndex ? 'block' : 'hidden'} lg:block`}
+                >
+                  <div className='items-center flex justify-center'>
+                    <span className='py-2'>{activity.title}</span>
+                    <span className={`${activity.textColor} lg:px-2 py-2 rounded-md`}>{activity.scholarshipTitle}</span>
+                  </div>
                 </div>
-              </div>
+              ))}
 
-              <div className='border border-yellow-400  shadow rounded-md flex items-center justify-center flex-col gap-2 font-medium'>
-                <div>
-                  <span className='py-2'>Requested review:</span>
-                  <span className=' text-yellow-600 px-2 py-2 rounded-md'>Scholarship Title</span>
-                </div>
-              </div>
-
-              <div className='border border-green-400  shadow rounded-md flex items-center justify-center flex-col gap-2 font-medium'>
-                <div>
-                  <span className='py-2'>Approved Application:</span>
-                  <span className=' text-green-600 px-2 py-2 rounded-md'>Scholarship Title</span>
-                </div>
-              </div>
-
+                <button onClick={handleNext} className='lg:hidden rounded-md'>
+                <IoMdArrowDropleftCircle className='w-10 h-10 rotate-180  text-blue-600' />
+                </button>
             </div>
           </div>
 
           <div className="flex flex-row justify-between items-center mt-4">
             <div className='flex gap-4'>
               <button
-                className={`flex gap-2 font-medium items-center ${filter === 'all' ? 'bg-blue-600 text-white' : 'bg-white hover:bg-slate-200'} shadow px-6 py-2 rounded-md text-md`}
+                className={`flex gap-2 font-medium items-center ${filter === 'all' ? 'bg-blue-600 text-white' : 'bg-white hover:bg-slate-200'} shadow lg:px-6 lg:py-2 px-4 py-2 rounded-md text-sm lg:text-md`}
                 onClick={() => setFilter('all')}
               >
-                <h2 className="rounded-t-lg text-center">All Applications</h2>
+                <h2 className="hidden  lg:block rounded-t-lg text-center">All Applications</h2>
+                <h2 className="lg:hidden block rounded-t-lg text-center">All</h2>
                 <div className='font-bold '>({allApplications.length})</div>
               </button>
 
               <button
-                className={`flex gap-2 items-center ${filter === 'approved' ? 'bg-blue-600 text-white' : 'bg-white hover:bg-slate-200'} shadow px-6 py-2 rounded-md border text-md`}
+                className={`flex gap-2 items-center ${filter === 'approved' ? 'bg-green-600 text-white border-green-600' : 'bg-white hover:bg-slate-200'} shadow lg:px-6 lg:py-2 px-4 py-2 rounded-md text-sm lg:text-md`}
                 onClick={() => setFilter('approved')}
               >
                 <h2 className="font-bold rounded-t-lg text-center">Approved</h2>
-                <div className='font-bold text-green-600'>({approvedApplications.length})</div>
+                <div className={`font-bold  ${filter === 'approved' ? 'text-white':'text-green-600'}`}>({approvedApplications.length})</div>
               </button>
 
               <button
-                className={`flex gap-2 items-center ${filter === 'pending' ? 'bg-blue-600 text-white' : 'bg-white hover:bg-slate-200'} shadow px-6 py-2 rounded-md border text-md`}
+                className={`flex gap-2 items-center ${filter === 'pending' ? 'bg-yellow-500 text-white border-yellow-500' : 'bg-white hover:bg-slate-200'} shadow lg:px-6 lg:py-2 px-4 py-2 rounded-md text-sm lg:text-md`}
                 onClick={() => setFilter('pending')}
               >
                 <h2 className="font-bold rounded-t-lg text-center">Pending</h2>
-                <div className='font-bold text-yellow-600'>({pendingApplications.length})</div>
+                <div className={`font-bold  ${filter === 'pending' ? 'text-white':'text-yellow-500'}`}>({pendingApplications.length})</div>
               </button>
             </div>
 
-            <div className="flex gap-2 items-center bg-white shadow px-6 py-2 rounded-md border text-md">
+            <div className="hidden lg:flex gap-2 items-center bg-white shadow px-6 py-2 rounded-md border text-md">
               <input
                 type="text"
                 placeholder="Search Applications"
@@ -247,13 +298,24 @@ export default function ScholarDashboard() {
             </div>
           </div>
 
-          <div className="grid gap-4 lg:max-h-[350px]">
+          <div className="lg:hidden flex gap-2 items-center bg-white shadow px-6 py-2 rounded-md border text-md">
+              <input
+                type="text"
+                placeholder="Search Applications"
+                className="w-full font-bold bg-transparent outline-none"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+
+
+          <div className="lg:grid gap-4 lg:max-h-[350px]">
             {/* Overview of approved applications */}
             <div className="bg-white shadow rounded-lg col-span-1 md:col-span-2">
               <div className='flex items-center justify-between font-semibold text-xl w-full p-4 rounded-t-lg border-b'>
                 <h2 className='font-bold text-xl'>Inbox</h2>
                 <button
-                  className='flex items-center gap-2 bg-blue-600 text-base text-white shadow rounded-md px-6 py-2'
+                  className='flex items-center gap-2 bg-blue-600 text-sm lg:text-base text-white shadow rounded-md lg:px-6 px-3 py-2'
                   onClick={() => setSortOrder(sortOrder === 'recent' ? 'oldest' : 'recent')}
                 >
                   <BiFilter className='w-6 h-6' />
@@ -273,20 +335,20 @@ export default function ScholarDashboard() {
                     </Link>
                   </div>
                 ) : (
-                  <div className="overflow-y-auto max-h-[800] h-64">
+                  <div className="overflow-y-auto max-h-[800px] h-64">
                     <table className="min-w-full divide-y divide-gray-200">
                       <thead className="">
                         <tr>
                           <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Title
                           </th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th scope="col" className="lg:table-cell hidden px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Organization
                           </th>
                           <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Status
                           </th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          <th scope="col" className="lg:table-cell hidden px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Action
                           </th>
                         </tr>
@@ -294,34 +356,70 @@ export default function ScholarDashboard() {
                       <tbody className="bg-white divide-y divide-gray-200">
                         {filteredApplications.map(application => (
                           <tr key={application._id} className="hover:bg-slate-200">
-                            <td className="px-6 py-4 whitespace-nowrap flex gap-2 items-center">
-                              <div className='bg-blue-600 w-12 h-12 rounded-md'>
-                                {application.scholarshipProgram && application.scholarshipProgram.scholarshipImage ? (
-                                  <img src={application.scholarshipProgram.scholarshipImage} alt="Scholarship" className='w-full h-full object-cover rounded-md' />
-                                ) : (
-                                  <div className='w-full h-full flex items-center justify-center text-white'>N/A</div>
-                                )}
-                              </div>
+                            {isMobile ? (
+                              <Link to={`/scholarship-dashboard-details/${application._id}`} className="contents">
+                                <td className="px-6 py-4 whitespace-nowrap flex gap-2 items-center">
+                                  <div className='lg:table-cell hidden bg-blue-600 w-12 h-12 rounded-md'>
+                                    {application.scholarshipProgram && application.scholarshipProgram.scholarshipImage ? (
+                                      <img src={application.scholarshipProgram.scholarshipImage} alt="Scholarship" className='w-full h-full object-cover rounded-md' />
+                                    ) : (
+                                      <div className='w-full h-full flex items-center justify-center text-white'>N/A</div>
+                                    )}
+                                  </div>
+                                  <span className='text-sm lg:text-base lg:font-bold'>{application.scholarshipProgram?.title}</span>
+                                </td>
 
-                              <span className='font-bold'>{application.scholarshipProgram?.title}</span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <span>{application.scholarshipProgram?.organizationName}</span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className='flex flex-row items-center gap-2'>
-                                <div className={`rounded-full w-2 h-2 ${getStatusColor(application.applicationStatus)}`}></div>
-                                <span>{toSentenceCase(application.applicationStatus)}</span>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <Link to={`/scholarship-dashboard-details/${application._id}`}>
-                                <button className='flex gap-2 items-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition ease-in-out'>
-                                  View
-                                  <FaAngleRight className='w-5 h-5' />
-                                </button>
+                                <td className="lg:table-cell hidden px-6 py-4 whitespace-nowrap">
+                                  <span>{application.scholarshipProgram?.organizationName}</span>
+                                </td>
+                                
+                                <td className="px-6 py-4 whitespace-nowrap ">
+                                  <div className='flex flex-row items-center gap-2'>
+                                    <div className={`rounded-full w-2 h-2 ${getStatusColor(application.applicationStatus)}`}></div>
+                                    <span className='lg:text-base text-sm'>{toSentenceCase(application.applicationStatus)}</span>
+                                  </div>
+                                </td>
+
+                                <td className="lg:table-cell hidden px-6 py-4 whitespace-nowrap">
+                                  <Link to={`/scholarship-dashboard-details/${application._id}`}>
+                                    <button className='flex gap-2 items-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition ease-in-out'>
+                                      View
+                                      <FaAngleRight className='w-5 h-5' />
+                                    </button>
+                                  </Link>
+                                </td>
                               </Link>
-                            </td>
+                            ) : (
+                              <>
+                                <td className="lg:px-6 py-4 whitespace-nowrap flex gap-2 items-center">
+                                  <div className='bg-blue-600 w-12 h-12 rounded-md'>
+                                    {application.scholarshipProgram && application.scholarshipProgram.scholarshipImage ? (
+                                      <img src={application.scholarshipProgram.scholarshipImage} alt="Scholarship" className='w-full h-full object-cover rounded-md' />
+                                    ) : (
+                                      <div className='w-full h-full flex items-center justify-center text-white'>N/A</div>
+                                    )}
+                                  </div>
+                                  <span className='text-sm lg:text-base lg:font-bold'>{application.scholarshipProgram?.title}</span>
+                                </td>
+                                <td className="lg:table-cell hidden px-6 py-4 whitespace-nowrap">
+                                  <span>{application.scholarshipProgram?.organizationName}</span>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className='flex items-center gap-2'>
+                                    <div className={`rounded-full w-2 h-2 ${getStatusColor(application.applicationStatus)}`}></div>
+                                    <span className='lg:text-base text-sm'>{toSentenceCase(application.applicationStatus)}</span>
+                                  </div>
+                                </td>
+                                <td className="lg:table-cell hidden px-6 py-4 whitespace-nowrap">
+                                  <Link to={`/scholarship-dashboard-details/${application._id}`}>
+                                    <button className='flex gap-2 items-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition ease-in-out'>
+                                      View
+                                      <FaAngleRight className='w-5 h-5' />
+                                    </button>
+                                  </Link>
+                                </td>
+                              </>
+                            )}
                           </tr>
                         ))}
                       </tbody>

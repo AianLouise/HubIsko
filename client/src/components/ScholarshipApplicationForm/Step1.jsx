@@ -381,7 +381,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
           </div>
         </div>
 
-        <div className='grid grid-cols-2 gap-4 px-4 mt-4'>
+        <div className='grid lg:grid-cols-2 gap-4 px-4 mt-4'>
           {/* Region Selector */}
           <div>
             <label className='block text-sm font-medium text-gray-700 mb-2'>Region:</label>
