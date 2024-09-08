@@ -7,7 +7,7 @@ export const test = (req, res) => {
     });
 };
 
-export const postValidation = async (req, res) => {
+export const createValidation = async (req, res) => {
     try {
         const { validationTitle, validationDescription, requirements, id } = req.body;
 
@@ -53,5 +53,110 @@ export const getValidationByProgram = async (req, res) => {
     } catch (error) {
         // Handle errors
         res.status(500).json({ error: error.message });
+    }
+};
+
+export const postValidation = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Find the validation by ID and update its status to 'Posted'
+        const validation = await Validation.findByIdAndUpdate(
+            id,
+            { status: 'Ongoing' },
+            { new: true }
+        );
+
+        // Check if the validation was found and updated
+        if (!validation) {
+            return res.status(404).json({ message: 'Validation not found' });
+        }
+
+        // Send the updated validation as a response
+        res.status(200).json(validation);
+    } catch (error) {
+        // Handle errors
+        res.status(500).json({ error: error.message });
+    }
+};
+
+export const updateValidation = async (req, res) => {
+    const { id } = req.params;
+    const { validationTitle, validationDescription, requirements } = req.body;
+
+    try {
+        const validation = await Validation.findById(id);
+
+        if (!validation) {
+            return res.status(404).json({ message: 'Validation not found' });
+        }
+
+        validation.validationTitle = validationTitle;
+        validation.validationDescription = validationDescription;
+        validation.requirements = requirements;
+
+        await validation.save();
+
+        res.status(200).json({ message: 'Validation updated successfully', validation });
+    } catch (error) {
+        console.error('Error updating validation:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+export const deleteValidation = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const validation = await Validation.findById(id);
+
+        if (!validation) {
+            return res.status(404).json({ message: 'Validation not found' });
+        }
+
+        validation.status = 'Deleted';
+        await validation.save();
+
+        res.status(200).json({ message: 'Validation status updated to Deleted successfully' });
+    } catch (error) {
+        console.error('Error updating validation status:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+export const completeValidation = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const validation = await Validation.findById(id);
+
+        if (!validation) {
+            return res.status(404).json({ message: 'Validation not found' });
+        }
+
+        validation.status = 'Done';
+        await validation.save();
+
+        res.status(200).json({ message: 'Validation status updated to Completed successfully' });
+    } catch (error) {
+        console.error('Error updating validation status:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+export const getValidationsByProgram = async (req, res) => {
+    const { programId } = req.params;
+
+    try {
+        const validations = await Validation.find({ programId, status: 'Ongoing' });
+
+        if (!validations.length) {
+            return res.status(404).json({ message: 'No validations found for this program' });
+        }
+
+        res.status(200).json(validations);
+    } catch (error) {
+        console.error('Error fetching validations:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 };

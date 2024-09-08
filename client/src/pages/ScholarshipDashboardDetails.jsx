@@ -38,31 +38,31 @@ export default function ScholarshipDashboardDetails() {
         fetchApplicationDetails();
     }, [applicationId]);
 
-    const handleDocumentReady = async (documentId) => {
-        try {
-            const response = await fetch(`/api/validation/mark-as-ready`, {
-                method: 'POST',
-                body: JSON.stringify({ documentId, studentId: currentUser.id }),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+    const [validations, setValidations] = useState([]);
 
-            if (!response.ok) {
-                throw new Error('Error marking document as ready');
+    const programId = application?.scholarshipProgram?._id;
+
+    useEffect(() => {
+        // Fetch validations by program from the backend
+        const fetchValidationsByProgram = async () => {
+            try {
+                const response = await fetch(`/api/validation/program/${programId}`);
+                const data = await response.json();
+                if (Array.isArray(data)) {
+                    setValidations(data);
+                } else {
+                    console.error('Fetched data is not an array:', data);
+                }
+            } catch (error) {
+                console.error('Error fetching validations:', error);
             }
+        };
 
-            const data = await response.json();
-            // Update the local state to reflect the document as ready
-            setValidationDocuments((prevDocs) =>
-                prevDocs.map((doc) =>
-                    doc.id === documentId ? { ...doc, status: 'Ready' } : doc
-                )
-            );
-        } catch (error) {
-            console.error('Failed to mark document as ready:', error);
-        }
-    };
+        fetchValidationsByProgram();
+    }, [programId]);
+
+    const upcomingValidations = validations.filter(validation => validation.status === 'Ongoing');
+    const previousValidations = validations.filter(validation => validation.status === 'Done');
 
 
     return (
@@ -169,66 +169,51 @@ export default function ScholarshipDashboardDetails() {
                         )}
 
                         {activeTab === 'validation' && (
-                            <div>
+                            <div className="p-6">
                                 {/* Upcoming Document Validation */}
                                 <div className='mb-8'>
-                                    {/* Upcoming Document Validation Header */}
                                     <h3 className='text-2xl font-bold mb-4'>Upcoming Document Validation</h3>
-
-                                    {/* Upcoming Document Validation Content */}
-                                    <div className='bg-white border-l-4 border-blue-500 text-black-700 p-4 rounded-md shadow relative mb-6'>
-                                        <div className='flex justify-between items-center mb-4'>
-                                            <h3 className='text-xl font-bold'>Jose Rizal Scholarship Program 2024-2025 Validation of Grades</h3>
-                                            <span className='text-blue-600'>Status: Not Submitted</span>
-                                        </div>
-
-                                        <p className='mb-4'>
-                                            Please be informed that the document validation for the 2024-2025 academic year is upcoming. Ensure all required documents are submitted on time.
-                                        </p>
-
-                                        {/* Displaying the required documents */}
-                                        <div className='flex items-center justify-between mb-4'>
-                                            <span>Proof of Enrollment</span>
-                                        </div>
-
-                                        <div className='flex items-center justify-between mb-4'>
-                                            <span>Transcript of Records</span>
-                                        </div>
-
-                                        <div className='flex items-center justify-between mb-4'>
-                                            <span>Financial Aid Application</span>
-                                        </div>
-                                    </div>
+                                    {upcomingValidations.length > 0 ? (
+                                        upcomingValidations.map(validation => (
+                                            <div key={validation._id} className='bg-white border-l-4 border-blue-500 text-black-700 p-4 rounded-md shadow relative mb-6'>
+                                                <div className='flex justify-between items-center mb-4'>
+                                                    <h3 className='text-xl font-bold'>{validation.validationTitle}</h3>
+                                                    <span className='text-blue-600'>Status: {validation.status}</span>
+                                                </div>
+                                                <p className='mb-4'>{validation.validationDescription}</p>
+                                                {validation.requirements.map((req, index) => (
+                                                    <div key={index} className='flex items-center justify-between mb-4'>
+                                                        <span>{req.requirement}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No upcoming validations found.</p>
+                                    )}
                                 </div>
 
+                                {/* Previous Document Validation */}
                                 <div className='mb-8'>
-                                    {/* Previous Document Validation Header */}
                                     <h3 className='text-2xl font-bold mb-4'>Previous Document Validation</h3>
-
-                                    {/* Previous Document Validation Content */}
-                                    <div className='bg-gray-100 border-l-4 border-gray-500 text-gray-700 p-4 rounded-md shadow relative'>
-                                        <div className='flex justify-between items-center mb-4'>
-                                            <h3 className='text-xl font-bold'>Jose Rizal Scholarship Program 2023-2024 Validation of Grades</h3>
-                                            <span className='text-gray-600'>Status: Completed</span>
-                                        </div>
-
-                                        <p className='mb-4'>
-                                            The document validation for the 2023-2024 academic year has been completed. Below are the details of the submitted documents.
-                                        </p>
-
-                                        {/* Displaying the previous documents */}
-                                        <div className='flex items-center justify-between mb-4'>
-                                            <span>Proof of Enrollment</span>
-                                        </div>
-
-                                        <div className='flex items-center justify-between mb-4'>
-                                            <span>Transcript of Records</span>
-                                        </div>
-
-                                        <div className='flex items-center justify-between mb-4'>
-                                            <span>Financial Aid Application</span>
-                                        </div>
-                                    </div>
+                                    {previousValidations.length > 0 ? (
+                                        previousValidations.map(validation => (
+                                            <div key={validation._id} className='bg-gray-100 border-l-4 border-gray-500 text-gray-700 p-4 rounded-md shadow relative mb-6'>
+                                                <div className='flex justify-between items-center mb-4'>
+                                                    <h3 className='text-xl font-bold'>{validation.validationTitle}</h3>
+                                                    <span className='text-gray-600'>Status: {validation.status}</span>
+                                                </div>
+                                                <p className='mb-4'>{validation.validationDescription}</p>
+                                                {validation.requirements.map((req, index) => (
+                                                    <div key={index} className='flex items-center justify-between mb-4'>
+                                                        <span>{req.requirement}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No previous validations found.</p>
+                                    )}
                                 </div>
                             </div>
                         )}

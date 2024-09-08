@@ -9,6 +9,7 @@ export default function Validation() {
     const [validationTitle, setValidationTitle] = useState('');
     const [validationDescription, setValidationDescription] = useState('');
     const [editingValidationId, setEditingValidationId] = useState(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const { id } = useParams();
     const scholarshiProgramId = id;
@@ -37,6 +38,14 @@ export default function Validation() {
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
+        setRequirements([]); // Clear requirements when modal is closed
+        setRequirementInput(''); // Optionally clear the input field as well
+        setValidationTitle(''); // Optionally clear the title field as well
+        setValidationDescription(''); // Optionally clear the description field as well
+    };
+
+    const handleCloseModal2 = () => {
+        setIsEditModalOpen(false);
         setRequirements([]); // Clear requirements when modal is closed
         setRequirementInput(''); // Optionally clear the input field as well
         setValidationTitle(''); // Optionally clear the title field as well
@@ -92,7 +101,7 @@ export default function Validation() {
 
     const handlePostValidation = async (validationId) => {
         try {
-            const response = await fetch(`/api/validations/${validationId}/post`, {
+            const response = await fetch(`/api/validation/${validationId}/post`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -102,7 +111,7 @@ export default function Validation() {
                 console.log('Validation posted successfully');
                 // Optionally, update the state to reflect the change
                 setValidations(validations.map(validation =>
-                    validation._id === validationId ? { ...validation, status: 'posted' } : validation
+                    validation._id === validationId ? { ...validation, status: 'Posted' } : validation
                 ));
             } else {
                 console.error('Failed to post validation');
@@ -119,7 +128,81 @@ export default function Validation() {
             setValidationDescription(validationToEdit.validationDescription);
             setRequirements(validationToEdit.requirements.map(req => req.requirement));
             setEditingValidationId(validationId);
-            setIsModalOpen(true);
+            setIsEditModalOpen(true);
+        }
+    };
+
+    const handleUpdate = async (event) => {
+        event.preventDefault();
+
+        const updatedValidation = {
+            validationTitle,
+            validationDescription,
+            requirements: requirements.map(req => ({ requirement: req }))
+        };
+
+        try {
+            const response = await fetch(`/api/validation/validations/${editingValidationId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedValidation)
+            });
+
+            if (response.ok) {
+                const updatedValidations = validations.map(validation =>
+                    validation._id === editingValidationId ? { ...validation, ...updatedValidation } : validation
+                );
+                setValidations(updatedValidations);
+                setIsEditModalOpen(false);
+            } else {
+                console.error('Failed to update validation');
+            }
+        } catch (error) {
+            console.error('Error updating validation:', error);
+        }
+    };
+    const handleDeleteValidation = async (validationId) => {
+        try {
+            const response = await fetch(`/api/validation/delete/${validationId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: 'Deleted' })
+            });
+
+            if (response.ok) {
+                setValidations(validations.map(validation =>
+                    validation._id === validationId ? { ...validation, status: 'Deleted' } : validation
+                ));
+            } else {
+                console.error('Failed to update validation status');
+            }
+        } catch (error) {
+            console.error('Error updating validation status:', error);
+        }
+    };
+
+    const handleMarkAsDone = async (validationId) => {
+        try {
+            const response = await fetch(`/api/validation/${validationId}/done`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                setValidations(validations.map(validation =>
+                    validation._id === validationId ? { ...validation, status: 'Done' } : validation
+                ));
+            } else {
+                console.error('Failed to update validation status');
+            }
+        } catch (error) {
+            console.error('Error updating validation status:', error);
         }
     };
 
@@ -174,6 +257,12 @@ export default function Validation() {
                                         >
                                             Edit
                                         </button>
+                                        <button
+                                            className="bg-red-600 text-white py-2 px-4 rounded"
+                                            onClick={() => handleDeleteValidation(validation._id)}
+                                        >
+                                            Delete
+                                        </button>
                                     </div>
                                     <div className='text-right'>
                                         <p className='text-gray-600'>Date Created: {new Date(validation.dateCreated).toLocaleDateString()}</p>
@@ -188,7 +277,7 @@ export default function Validation() {
 
                 <h3 className='text-xl font-bold mt-4'>Ongoing Document Validation</h3>
 
-                                <div className="p-6">
+                <div className="p-6">
                     {validations
                         .filter(validation => validation.status === 'Ongoing')
                         .map((validation) => (
@@ -239,7 +328,7 @@ export default function Validation() {
 
                 <div className="p-6">
                     {validations
-                        .filter(validation => validation.status === 'Completed')
+                        .filter(validation => validation.status === 'Done')
                         .map((validation) => (
                             <div key={validation._id} className='bg-white border-l-4 border-blue-500 text-black-700 p-4 rounded-md shadow relative mb-6'>
                                 <div className='flex justify-between items-center mb-4'>
@@ -359,6 +448,90 @@ export default function Validation() {
                                         className="bg-blue-600 text-white py-2 px-4 rounded"
                                     >
                                         Submit
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
+
+                {isEditModalOpen && (
+                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="bg-white p-6 rounded-lg shadow-lg w-1/3 relative">
+                            <button
+                                className="absolute top-2 right-4 text-gray-700 hover:text-gray-900 text-2xl"
+                                onClick={handleCloseModal2}
+                            >
+                                &times;
+                            </button>
+                            <h3 className="text-xl font-bold mb-4">Edit Validation</h3>
+                            <form onSubmit={handleUpdate}>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="validationTitle">
+                                        Validation Title
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="validationTitle"
+                                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        value={validationTitle}
+                                        onChange={(e) => setValidationTitle(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="validationDescription">
+                                        Validation Description
+                                    </label>
+                                    <textarea
+                                        id="validationDescription"
+                                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        value={validationDescription}
+                                        onChange={(e) => setValidationDescription(e.target.value)}
+                                        required
+                                    ></textarea>
+                                </div>
+                                <div className="mb-4">
+                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="requirements">
+                                        Requirements
+                                    </label>
+                                    <div className="flex">
+                                        <input
+                                            type="text"
+                                            id="requirements"
+                                            className="shadow appearance-none border rounded w-full py-1 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                            value={requirementInput}
+                                            onChange={(e) => setRequirementInput(e.target.value)}
+                                        />
+                                        <button
+                                            type="button"
+                                            className="bg-blue-600 text-white py-1 px-2 rounded ml-2"
+                                            onClick={handleAddRequirement}
+                                        >
+                                            Add Requirement
+                                        </button>
+                                    </div>
+                                    <ul className="list-disc list-inside mt-2 text-gray-700">
+                                        {requirements.map((requirement, index) => (
+                                            <li key={index} className="flex justify-between items-center">
+                                                {requirement}
+                                                <button
+                                                    type="button"
+                                                    className="bg-red-600 text-white py-1 px-2 rounded ml-2"
+                                                    onClick={() => handleRemoveRequirement(index)}
+                                                >
+                                                    Remove
+                                                </button>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <div className="flex justify-end">
+                                    <button
+                                        type="submit"
+                                        className="bg-blue-600 text-white py-2 px-4 rounded"
+                                    >
+                                        Update
                                     </button>
                                 </div>
                             </form>
