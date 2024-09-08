@@ -119,7 +119,7 @@ export default function EditPersonalInformation() {
                     )}
                 </div>
             </div>
-            <div className="grid grid-cols-4 gap-4 pt-2 lg:px-12 lg:py-8">
+            <div className="grid lg:grid-cols-4 gap-4 pt-2 lg:px-12 p-4 lg:py-8">
                 {/* First Row: First Name, Last Name, Middle Name, Name Extension */}
                 <div className="flex flex-col gap-2">
                     <label className="text-slate-400">First Name</label>

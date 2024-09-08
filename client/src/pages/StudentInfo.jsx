@@ -15,7 +15,7 @@ export default function StudentInfo() {
       <Header />
       <AccountManagement />
       <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
-        <div className="max-w-6xl lg:px-24 px-4 mx-auto my-4 lg:my-10">
+        <div className="max-w-6xl lg:px-24 mx-auto my-4 lg:my-10">
           {currentUser.applicantDetails.profileComplete ? (
             <div className="flex flex-col gap-10">
               <PersonalInformation />

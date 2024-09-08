@@ -301,8 +301,8 @@ export default function RegisterAsProvider() {
   return (
     <main className='bg-[#f8f8fb] font-medium flex flex-col items-center min-h-screen pb-14 pt-14'>
       <span className='text-2xl text-slate-500'>Let's get your organization setup!</span>
-      <span className='text-sm mt-2 text-slate-500'>We'll guide you step by step!</span>
-      <div className='flex justify-center items-center gap-4 mt-4 mb-8'>
+      <span className='text-sm mt-2 text-slate-500 lg:mb-0 mb-4'>We'll guide you step by step!</span>
+      <div className='hidden lg:flex justify-center items-center gap-4 mt-4 mb-8'>
         {[1, 2, 3, 4].map((step) => (
           <React.Fragment key={step}>
             <div className='flex flex-col gap-1 items-center text-center'>
@@ -328,14 +328,54 @@ export default function RegisterAsProvider() {
           </React.Fragment>
         ))}
       </div>
+      
+      <div className='lg:hidden w-full flex flex-col mb-4 px-2'>
+                        <div className='flex justify-between items-center px-6 py-2 text-sm text-slate-500'>
+                            <span>Requirement</span>
+                            <span>Stages</span>
+                        </div>
 
-      <div className='w-full max-w-4xl mx-auto px-8'>
+                        {[0, 1, 2, 3, 4].map((step) => (
+                                <React.Fragment key={step}>
+                            <div className={`border-2 border-blue-600 rounded-md shadow w-full py-2 px-4 flex justify-between items-center ${activeStep === step ? 'flex' : 'hidden'} `}>
+                                <div className={`gap-2 items-center text-blue-600 ${step === 1 ? 'flex' : 'hidden'}`}>
+                                    <FaBuilding className='text-2xl'/>
+                                    <span className='font-bold'>Organization Information</span>
+                                </div>
+
+                                <div className={`gap-2 items-center text-blue-600 ${step === 2 ? 'flex' : 'hidden'}`}>
+                                    <FaUser className='text-2xl'/>
+                                    <span className='font-bold'>Account Information</span>
+                                </div>
+
+                                <div className={`gap-2 items-center text-blue-600 ${step === 3 ? 'flex' : 'hidden'}`}>
+                                    <FaFileAlt className='text-2xl'/>
+                                    <span className='font-bold'>Documents Information</span>
+                                </div>
+
+                                <div className={`gap-2 items-center text-blue-600 ${step === 4 ? 'flex' : 'hidden'}`}>
+                                    <FaCheckCircle className='text-2xl'/>
+                                    <span className='font-bold'>Terms and Conditions</span>
+                                </div>
+
+        
+                                <div>
+                                <span className='text-blue-600 text-4xl font-bold'> {activeStep}<span className='text-slate-400'>/4</span></span>
+                                </div>
+                            </div>
+                            </React.Fragment>
+                        ))}
+
+                    </div>
+      
+
+      <div className='w-full lg:max-w-4xl lg:mx-auto lg:px-8'>
         <form onSubmit={handleSubmit} className='space-y-6'>
           {activeStep === 1 && (
             <div className='bg-white p-8 shadow rounded-md border'>
-              <h2 className="text-2xl font-bold mb-6">Enter Organization Information</h2>
-              <div className='grid grid-cols-2 gap-4'>
-                <div className="mb-4 col-span-2">
+              <h2 className="lg:text-2xl text-xl text-center lg:text-left font-bold mb-6">Enter Organization Information</h2>
+              <div className='grid lg:grid-cols-2 gap-4'>
+                <div className="mb-4 lg:col-span-2">
                   <label htmlFor="profilePicture" className="block text-sm font-medium text-gray-700 text-center mb-2">
                     Organization Image
                   </label>
@@ -367,7 +407,9 @@ export default function RegisterAsProvider() {
                     )}
                     {errors.profilePicture && <p className="text-red-500 text-sm mt-2">{errors.profilePicture}</p>}
                   </div>
+
                 </div>
+                
                 <div className="mb-4">
                   <label htmlFor="organizationName" className="block text-sm font-medium text-gray-700">Organization Name</label>
                   <input type="text" name="organizationName" id="organizationName" value={formData.organizationName} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Full legal name of the organization" />
@@ -399,7 +441,7 @@ export default function RegisterAsProvider() {
                 <hr className="col-span-2" />
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700">Contact Person Details</label>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid lg:grid-cols-2 gap-4">
                     <div className="mb-4">
                       <label htmlFor="contactPersonName" className="block text-sm font-medium text-gray-700">Name</label>
                       <input type="text" name="contactPersonName" id="contactPersonName" value={formData.contactPersonName} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Full name of the individual responsible for the registration" />
