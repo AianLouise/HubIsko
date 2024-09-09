@@ -107,32 +107,67 @@ export default function ScholarshipPrograms() {
 
                     <span className="border-b pb-2 mt-8">Scholarship Programs</span>
 
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-                            <thead className="bg-blue-600 text-white">
-                                <tr>
-                                    <th className="py-3 px-6 text-left">Program Name</th>
-                                    <th className="py-3 px-6 text-left">Provider</th>
-                                    <th className="py-3 px-6 text-left">Status</th>
-                                    <th className="py-3 px-6 text-left">Applications</th>
-                                    <th className="py-3 px-6 text-left">Actions</th>
-                                </tr>
+                    <div>
+                        {/* Searchbar */}
+                        <div className="flex justify-between items-center">
+                            <div className="flex gap-2 items-center">
+                            <button className="px-4 py-2 rounded-md bg-white shadow border">
+                                All <span className="text-blue-600">(0)</span>
+                            </button>
+                            <button className="px-4 py-2 rounded-md bg-white shadow border">
+                                Pending <span className="text-yellow-500">(0)</span>
+                            </button>
+                            <button className="px-4 py-2 rounded-md bg-white shadow border">
+                                Approved <span className="text-green-600">(0)</span>
+                            </button>
+                           
+                            </div>
+                            <input type="text" 
+                            placeholder="Search for a scholarship program" 
+                            className="w-96 px-4 py-2 border rounded-md" />
+                        </div>
+                    </div>
+                    <div className="overflow-x-auto border-2 rounded-md">
+                        <table className="min-w-full shadow-md rounded-lg">
+                            <thead className="bg-blue-600">
+                            <tr className="text-white">
+                                <th className="py-3 px-6 text-left">Program Name</th>
+                                <th className="py-3 px-6 text-left">Provider</th>
+                                <th className="py-3 px-6 text-left">Status</th>
+                                <th className="py-3 px-6 text-left">Applications</th>
+                                <th className="py-3 px-6 text-left">Actions</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                {scholarshipPrograms.map((program) => (
-                                    <tr key={program.id} className="border-b">
-                                        <td className="py-3 px-6">{program.title}</td>
-                                        <td className="py-3 px-6">{program.organizationName}</td>
-                                        <td className="py-3 px-6">{program.status}</td>
-                                        <td className="py-3 px-6">{program.applications}</td>
-                                        <td className="py-3 px-6">
-                                            <Link to={`/scholarship-program/${program._id}`} className="text-blue-600 hover:underline">View</Link>
-                                        </td>
-                                    </tr>
-                                ))}
+                            <tr>
+                                <td colSpan="5" className="p-0">
+                                <div className="max-h-[400px] overflow-y-auto">
+                                    <table className="min-w-full">
+                                    <tbody>
+                                        {scholarshipPrograms.map((program, index) => (
+                                        <tr
+                                            key={program.id}
+                                            className={`border-b ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100 transition-colors`}
+                                        >
+                                            <td className="py-3 px-6">{program.title}</td>
+                                            <td className="py-3 px-6">{program.organizationName}</td>
+                                            <td className="py-3 px-6">{program.status}</td>
+                                            <td className="py-3 px-6">{program.applications}</td>
+                                            <td className="py-3 px-6">
+                                            <Link to={`/scholarship-program/${program._id}`} className="text-blue-600 hover:underline">
+                                                View
+                                            </Link>
+                                            </td>
+                                        </tr>
+                                        ))}
+                                    </tbody>
+                                    </table>
+                                </div>
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
-                    </div>
+                        </div>
 
                     <span className="border-b pb-2">Recent Activities</span>
 

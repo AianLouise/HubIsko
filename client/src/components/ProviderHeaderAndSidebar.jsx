@@ -22,6 +22,7 @@ import Logo from '../assets/NewLogoClean.png';
 
 export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, currentPath }) {
     const { currentUser } = useSelector((state) => state.user);
+    
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
@@ -183,44 +184,58 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
                     </div>
 
 
+                    
                     <nav className="">
                         <ul className="space-y-2">
-                            <li>
-                                <Link to={'/provider-dashboard'} className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
-                                    <FaHouse className="w-4 h-4 text-blue-600" />
-                                    Dashboard
-                                </Link>
-                            </li>
+                        <li>
+                            <Link
+                            to={'/provider-dashboard'}
+                            className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/provider-dashboard' ? 'bg-blue-600 text-white' : ''}`}
+                            >
+                            <FaHouse className={`w-4 h-4 ${location.pathname === '/provider-dashboard' ? 'text-white' : 'text-blue-600'}`}  />
+                            Dashboard
+                            </Link>
+                        </li>
 
-                            <li>
-                                <Link to={'/scholarships'} className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
-                                    <FaGoogleScholar className="w-4 h-4 text-blue-600" />
-                                    Scholarships
-                                </Link>
-                            </li>
+                        <li>
+                            <Link
+                            to={'/scholarships'}
+                            className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/scholarships' ? 'bg-blue-600 text-white' : ''}`}
+                            >
+                            <FaGoogleScholar className={`w-4 h-4 ${location.pathname === '/scholarships' ? 'text-white' : 'text-blue-600'}`}/>
+                            Scholarships
+                            </Link>
+                        </li>
 
+                        <li>
+                            <Link
+                            to={'/scholar-applications'}
+                            className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/scholar-applications' ? 'bg-blue-600 text-white' : ''}`}
+                            >
+                            <IoDocuments className={`w-4 h-4 ${location.pathname === '/scholar-applications' ? 'text-white' : 'text-blue-600'}`} />
+                            Applications
+                            </Link>
+                        </li>
 
-                            <li>
-                                <Link to={'/scholar-applications'} className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
-                                    <IoDocuments className="w-4 h-4 text-blue-600" />
-                                    Applications
-                                </Link>
-                            </li>
+                        <li>
+                            <Link
+                            to={'/provider-forums'}
+                            className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/provider-forums' ? 'bg-blue-600 text-white' : ''}`}
+                            >
+                            <MdForum className={`w-4 h-4 ${location.pathname === '/provider-forums' ? 'text-white' : 'text-blue-600'}`}/>
+                            Forums
+                            </Link>
+                        </li>
 
-                            <li>
-                                <Link to={'/provider-forums'} className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
-                                    <MdForum className="w-4 h-4 text-blue-600" />
-                                    Forums
-                                </Link>
-                            </li>
-
-                            <li>
-                                <Link to={'/provider-settings'} className="flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group">
-                                    <FaCog className="w-4 h-4 text-blue-600" />
-                                    Settings
-                                </Link>
-                            </li>
-
+                        <li>
+                            <Link
+                            to={'/provider-settings'}
+                            className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/provider-settings' ? 'bg-blue-600 text-white' : ''}`}
+                            >
+                            <FaCog className={`w-4 h-4 ${location.pathname === '/provider-settings' ? 'text-white' : 'text-blue-600'}`} />
+                            Settings
+                            </Link>
+                        </li>
                         </ul>
                     </nav>
                 </aside>

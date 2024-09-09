@@ -18,6 +18,20 @@ export default function SignIn() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1080); // Tailwind's lg breakpoint is 1024px
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Call initially to set the state based on the initial window size
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+
 
   //   useEffect(() => {
   //     if (currentUser) {
@@ -203,13 +217,21 @@ export default function SignIn() {
                 <h2 className="text-2xl font-bold mb-4 text-center">Register</h2>
                 <p className="mb-6 text-center">Choose your registration type:</p>
                 <div className="flex flex-col gap-4">
-                  <Link to="/register" className="bg-blue-500 text-white py-2 px-4 rounded text-center hover:bg-blue-600 transition duration-200">
-                    Register as Student
-                  </Link>
-                  <Link to="/apply-as-provider" className="bg-blue-800 text-white py-2 px-4 rounded text-center hover:bg-blue-900 transition duration-200">
-                    Register as Scholarship Provider
-                  </Link>
-                </div>
+              <Link to="/register" className="bg-blue-500 text-white py-2 px-4 rounded text-center hover:bg-blue-600 transition duration-200">
+                Register as Student
+              </Link>
+
+              <div className='w-full flex flex-col'>
+              <Link
+                to="/apply-as-provider"
+                className={`bg-blue-800 py-2 px-4 rounded text-center hover:bg-blue-900 transition duration-200 ${isMobile ? 'pointer-events-none opacity-50 bg-white text-blue-600 border-2 font-medium' : 'text-white '}`}
+                onClick={(e) => isMobile && e.preventDefault()}
+              >
+                Register as Scholarship Provider 
+              </Link>
+              <span className='block lg:hidden mt-1 text-slate-400 text-xs text-center'>This function isn't available on Mobile</span>
+              </div>
+            </div>
               </div>
             </div>
           )}

@@ -755,6 +755,8 @@ const ScholarshipApplicationForm = () => {
                         ))}
 
                     </div>
+
+                    
                     <form onSubmit={handleSubmit}>
                         <StepTemplate
                             steps={steps}

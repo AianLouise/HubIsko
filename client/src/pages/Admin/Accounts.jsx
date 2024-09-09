@@ -171,16 +171,37 @@ export default function Accounts() {
 
                     <div className="flex flex-col gap-4">
                         <h1 className="text-xl font-semibold border-b pb-4">Accounts</h1>
-                        <div className="flex gap-4 mt-5">
-                            <input
-                                type="text"
-                                placeholder="Search for an account"
-                                className="border rounded-md p-2 flex-grow"
-                            />
+                        <div className="flex justify-between gap-4 mt-5">
+
+                        <div className="flex gap-2 items-center">
+                            <div className="flex gap-2">
+                            <button className="px-4 py-2 rounded-md bg-white shadow border">
+                                All <span className="text-blue-600">(0)</span>
+                            </button>
+                            <button className="px-4 py-2 rounded-md bg-white shadow border">
+                                Pending <span className="text-yellow-500">(0)</span>
+                            </button>
+                            <button className="px-4 py-2 rounded-md bg-white shadow border">
+                                Verified Students <span className="text-green-600">(0)</span>
+                            </button>
+                            <button className="px-4 py-2 rounded-md bg-white shadow border">
+                                Verified Scholarship Providers <span className="text-green-600">(0)</span>
+                            </button>
+                           
+                            </div>
+                        </div>
+
+                            <div className="flex gap-2 items-center">
+                             <input type="text" 
+                            placeholder="Search for a scholarship program" 
+                            className="w-96 px-4 py-2 border rounded-md" /> 
                             <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-800 text-white p-2 rounded-md">
                                 <BiFilter className="w-6 h-6" />
                                 <span>Filter</span>
                             </button>
+                            </div>
+                  
+                           
                         </div>
 
                         <table className="w-full mt-4 rounded-md border border-gray-200 bg-white">

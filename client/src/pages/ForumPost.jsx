@@ -319,7 +319,7 @@ export default function ForumPost() {
                                                     <img
                                                         src={attachment}
                                                         alt={`Attachment ${index + 1}`}
-                                                        className={`object-cover w-full border-4 rounded-md cursor-pointer ${post.attachments.length < 4  ? 'h-full' : 'h-96'}`}
+                                                        className={`object-cover w-full border-4 rounded-md cursor-pointer ${post.attachments.length < 4  ? 'h-full' : 'lg:h-96 h-32'}`}
                                                         onClick={() => openModal(index)}
                                                         onLoad={() => console.log(`Image ${index + 1} loaded successfully.`)}
                                                         onError={(e) => {
