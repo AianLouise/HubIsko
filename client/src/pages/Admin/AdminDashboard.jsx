@@ -260,8 +260,8 @@ export default function AdminDashboard() {
                     </div>
                     
 
-                    <span className="border-b pb-3">Activity History</span>
-                    <div className="">
+                    <span className="border-b">Activity History</span>
+                    <div className=" mb-16">
                         <div className="bg-white shadow border rounded-md group">
                             <div className="border-b flex justify-between px-6 items-center py-4 relative">
                                 <span className="">Table</span>

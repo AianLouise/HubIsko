@@ -5,6 +5,52 @@ import { Link } from "react-router-dom";
 import { PiArrowRightFill } from "react-icons/pi";
 import { GoDotFill } from "react-icons/go";
 import Layout from "../../components/Layout";
+import { FaUsers } from "react-icons/fa";
+import { FaUserClock } from "react-icons/fa6";
+import { RiGraduationCapFill } from "react-icons/ri";
+import { FaBuildingCircleCheck } from "react-icons/fa6";
+import { IoAddCircleOutline } from 'react-icons/io5';
+
+
+
+const getStatusColor = (status) => {
+    switch (status.toLowerCase()) {
+        case 'pending verification':
+            return 'bg-yellow-500';
+        case 'verified':
+            return 'bg-green-600';
+        case 'rejected':
+            return 'bg-red-500';
+        default:
+            return 'bg-gray-500';
+    }
+};
+
+const getRoleColor = (role) => {
+    switch (role.toLowerCase()) {
+        case 'applicant':
+            return 'bg-blue-600';
+        case 'scholarship_provider':
+            return 'bg-green-600';
+        default:
+            return 'bg-gray-500';
+    }
+};
+
+
+const toSentenceCase = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
+
+const getAccountLink = (account) => {
+    if (account.role === 'applicant') {
+        return <Link to={`/student-details/${account._id}`} className="bg-blue-600 hover:bg-blue-800 px-4 py-1 rounded-md text-white">View Details</Link>;
+    } else if (account.role === 'scholarship_provider') {
+        return <Link to={`/provider-details/${account._id}`} className="bg-blue-600 hover:bg-blue-800 px-4 py-1 rounded-md text-white">View Details</Link>;
+    } else {
+        return null;
+    }
+};
 
 export default function Accounts() {
     useEffect(() => {
@@ -117,7 +163,7 @@ export default function Accounts() {
         <div className="flex flex-col min-h-screen font-medium text-slate-700">
           
             <main className="flex-grow bg-[#f8f8fb]">
-                <div className='border-b mb-8'>
+                {/* <div className='border-b mb-8'>
                     <div className={'flex items-center mx-auto justify-between px-24'}>
                         <div className='flex flex-col gap-2 w-1/2'>
                             <h1 className='text-4xl font-bold text-gray-800'>Accounts</h1>
@@ -125,21 +171,87 @@ export default function Accounts() {
                         </div>
                         <div className='bg-blue-600 w-36 h-36 my-8 rounded-md'></div>
                     </div>
-                </div>
+                </div> */}
 
-                <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex'>
-                    <div className="flex justify-between gap-10">
-                        <div className="flex gap-10 w-1/3 flex-col justify-center items-center bg-white shadow rounded-md p-6">
-                            <h2 className="text-4xl font-semibold text-slate-600">Total Accounts</h2>
-                            <span className="text-6xl font-bold text-left text-blue-600">{totalAccounts}</span>
+                <div className='max-w-8xl mx-auto px-24  gap-2 mt-4 flex-col flex'>
+                    <div className="flex items-center justify-between pb-2">
+                    <h1 className="text-xl font-bold">Accounts</h1>
+                    <button className="flex items-center gap-2 px-6 py-2 rounded-md shadow bg-blue-600 text-white">
+                        <IoAddCircleOutline className="w-6 h-6" />
+                        Add an Account</button>
+                    </div>
+
+                    <div className="flex gap-2">
+                        <div className="flex flex-col w-full bg-white border shadow gap-10 p-4 rounded-md">
+                            <span>Filler Container</span>
+                            <div className="border flex items-center justify-center h-full rounded-md">
+                                Filler
+                            </div>
                         </div>
 
-                        <div className="grid grid-rows-3 gap-10 w-full">
-                            <div className="flex justify-between items-center bg-white p-6 rounded-md shadow-md">
+                    <div className="grid grid-cols-2 w-[1000px] gap-2">
+                        <div className="flex flex-col gap-4 justify-center bg-white shadow border rounded-md p-8">
+                            <div className="flex items-center gap-4">
+                            <FaUsers className="w-8 h-8 text-blue-600" />
+                            <h2 className="text-lg font-semibold text-slate-500 tracking-wide">Total Accounts</h2>
+                            </div>
+
+                            <div className="flex flex-col gap-4">
+                            <span className="text-6xl font-bold text-left">{totalAccounts}</span>
+                            <span className="text-slate-400">+0 new accounts</span>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-4 justify-center bg-white shadow border rounded-md p-8">
+
+                            <div className="flex items-center gap-3">
+                            <FaUserClock className="w-8 h-8 text-blue-600" />
+                            <h2 className="text-lg font-semibold text-slate-500">Unverified Accounts</h2>
+                            </div>
+
+                            <div className="flex flex-col gap-3">
+                            <span className="text-6xl font-bold text-left">{totalUnverifiedAccounts}</span>
+                            <span className="text-slate-400">+0 pending</span>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-4 justify-center bg-white shadow border rounded-md p-8">
+                            
+                            <div className="flex items-center gap-3">
+                            <RiGraduationCapFill className="w-8 h-8 text-blue-600" />
+                            <h2 className="text-lg font-semibold text-slate-500">Total Students</h2>
+                            </div>
+
+                            <div className="flex flex-col gap-4">
+                            <span className="text-6xl font-bold text-left">{totalApplicants}</span>
+                            <span className="text-slate-400">+0 new students</span>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-4 justify-center bg-white shadow border rounded-md p-8">
+
+                            <div className="flex items-center gap-3">
+                            <FaBuildingCircleCheck className="w-8 h-8 text-blue-600" />
+                            <h2 className="text-lg font-semibold text-slate-500">Scholarship Providers</h2>
+                            </div>
+
+                            <div className="flex flex-col gap-4">
+                            <span className="text-6xl font-bold text-left">{totalScholarshipProviders}</span>
+                            <span className="text-slate-400">+0 new providers</span>
+                            </div>
+                        </div>
+                        
+
+
+
+
+ 
+                      
+                            {/* <div className="flex justify-between items-center bg-white p-6 rounded-md shadow-md">
                                 <div>
                                     <div className="flex items-center gap-2">
                                         <h2 className="text-xl font-semibold text-slate-700">Total Unverified Users</h2>
-                                        {/* <span className="flex gap-2 items-center text-blue-600"><GoDotFill /> 5 new users</span> */}
+                                    
                                     </div>
                                     <p className="text-2xl font-bold text-left">{totalUnverifiedAccounts}</p>
                                 </div>
@@ -164,28 +276,28 @@ export default function Accounts() {
                                     <span className="text-xl">View</span>
                                     <PiArrowRightFill className="w-6 h-6" />
                                 </div>
-                            </Link>
+                            </Link> */}
 
-                        </div>
+                      </div>
                     </div>
 
                     <div className="flex flex-col gap-4">
-                        <h1 className="text-xl font-semibold border-b pb-4">Accounts</h1>
+                        
                         <div className="flex justify-between gap-4 mt-5">
 
                         <div className="flex gap-2 items-center">
                             <div className="flex gap-2">
                             <button className="px-4 py-2 rounded-md bg-white shadow border">
-                                All <span className="text-blue-600">(0)</span>
+                                All <span className="text-blue-600">({totalAccounts})</span>
                             </button>
                             <button className="px-4 py-2 rounded-md bg-white shadow border">
-                                Pending <span className="text-yellow-500">(0)</span>
+                                Pending <span className="text-yellow-500">({totalUnverifiedAccounts})</span>
                             </button>
                             <button className="px-4 py-2 rounded-md bg-white shadow border">
-                                Verified Students <span className="text-green-600">(0)</span>
+                                Verified Students <span className="text-green-600">({totalApplicants})</span>
                             </button>
                             <button className="px-4 py-2 rounded-md bg-white shadow border">
-                                Verified Scholarship Providers <span className="text-green-600">(0)</span>
+                                Verified Scholarship Providers <span className="text-green-600">({totalScholarshipProviders})</span>
                             </button>
                            
                             </div>
@@ -204,40 +316,43 @@ export default function Accounts() {
                            
                         </div>
 
-                        <table className="w-full mt-4 rounded-md border border-gray-200 bg-white">
-                            <thead className="bg-slate-100 rounded-t-md">
-                                <tr>
-                                    <th className="border border-gray-200 p-2">Username</th>
-                                    <th className="border border-gray-200 p-2">Email</th>
-                                    <th className="border border-gray-200 p-2">Role</th>
-                                    <th className="border border-gray-200 p-2">Status</th>
-                                    <th className="border border-gray-200 p-2">Details</th>
+                        <div className="border rounded-md">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                                <tr className='text-blue-600'>
+                                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
+                                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="text-center rounded-b-md">
+                            <tbody className="bg-white divide-y divide-gray-200">
                                 {accounts && accounts.length > 0 ? (
                                     accounts.map(account => (
-                                        <tr key={account._id} className="divide-x hover:bg-gray-100">
-                                            <td className="p-2">{account.username}</td>
-                                            <td className="p-2">{account.email}</td>
-                                            <td className="p-2">{account.role}</td>
-                                            <td className="p-2">{account.status}</td>
+                                        <tr key={account._id} className="hover:bg-gray-100">
+                                            <td className="p-4">{account.username}</td>
+                                            <td className="p-4">{account.email}</td>
                                             <td className="p-4">
-                                                {account.role === 'applicant' ? (
-                                                    <Link to={`/student-details/${account._id}`} className="bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white">View Details</Link>
-                                                ) : account.role === 'scholarship_provider' ? (
-                                                    <Link to={`/provider-details/${account._id}`} className="bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white">View Details</Link>
-                                                ) : null}
+                                            <span className={`px-4 py-1 text-white mr-2 rounded-full ${getRoleColor(account.role)}`}>   {toSentenceCase(account.role)}</span>
+                                            </td>
+                                            <td className="p-4">
+                                                <span className={`inline-block w-3 h-3 mr-2 rounded-full ${getStatusColor(account.status)}`}></span>
+                                                {toSentenceCase(account.status)}
+                                            </td>
+                                            <td className="p-4">
+                                                {getAccountLink(account)}
                                             </td>
                                         </tr>
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan="5" className="p-4 text-gray-600">No accounts found.</td>
+                                        <td colSpan="5" className="p-4 text-gray-600 text-center">No accounts found.</td>
                                     </tr>
                                 )}
                             </tbody>
                         </table>
+                        </div>
                         <div className="mt-8"></div> {/* Added space after the table */}
                     </div>
 
