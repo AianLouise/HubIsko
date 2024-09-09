@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function ViewScholars( { scholars } ) {
+export default function ViewScholars({ scholars }) {
     return (
         <div className="p-6 bg-white rounded-lg shadow-md space-y-4">
             <h2 className="text-2xl font-bold mb-4 text-blue-600">View Scholars</h2>
@@ -43,5 +43,5 @@ export default function ViewScholars( { scholars } ) {
                 </table>
             </div>
         </div>
-    )
+    );
 }

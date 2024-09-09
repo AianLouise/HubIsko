@@ -22,17 +22,15 @@ import Logo from '../assets/NewLogoClean.png';
 
 export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, currentPath }) {
     const { currentUser } = useSelector((state) => state.user);
-    
-
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const location = useLocation();
-
     const [showNotification, setShowNotification] = useState(false);
     const notificationRef = useRef(null);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const toggleNotification = () => setShowNotification(!showNotification);
-
     const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
     const handleClickOutside = (event) => {
@@ -53,18 +51,14 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
 
     useEffect(() => {
         toggleSidebar(false);
-
         if (location.pathname === '/provider-dashboard' || location.pathname === '/scholarships' || location.pathname === '/scholar-applications' || location.pathname === '/provider-forums') {
             toggleSidebar(true);
         }
     }, [location]);
 
-
     const ShowModal = () => {
         setShowNotification(false);
     };
-
-    const navigate = useNavigate();
 
     const handleProfileClick = () => {
         navigate('/provider-profile');
@@ -73,9 +67,6 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
     const handleSettingsClick = () => {
         navigate('/provider-settings');
     };
-
-
-    const dispatch = useDispatch();
 
     const handleSignOut = async () => {
         try {
@@ -88,19 +79,47 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
 
     const generateBreadcrumb = () => {
         const pathnames = location.pathname.split('/').filter(x => x);
+        const [titles, setTitles] = useState({});
 
         const capitalizeWords = (str) => {
             return str.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
         };
+
+        useEffect(() => {
+            const fetchTitles = async () => {
+                const newTitles = {};
+                for (const value of pathnames) {
+                    if (value === 'view-scholarships') {
+                        const id = pathnames[pathnames.indexOf(value) + 1];
+                        if (id) {
+                            try {
+                                const response = await fetch(`/api/provider/scholarshipProgramTitle/${id.trim()}`);
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                const data = await response.json();
+                                newTitles[id] = data.scholarshipProgramTitle;
+                            } catch (error) {
+                                console.error('Error fetching scholarship program title:', error);
+                            }
+                        }
+                    }
+                }
+                setTitles(newTitles);
+            };
+
+            fetchTitles();
+        }, [location.pathname]);
 
         return (
             <>
                 <h1 className="text-lg font-bold text-blue-500">{currentUser.scholarshipProviderDetails.organizationName}</h1>
                 {pathnames.map((value, index) => {
                     const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
+                    const displayValue = titles[value] || capitalizeWords(value);
                     return (
                         <span key={index} className="text-lg font-bold text-blue-500">
-                            /&nbsp;<Link to={routeTo}>{capitalizeWords(value)}</Link>
+                            /&nbsp;<Link to={routeTo}>{displayValue}</Link>
                         </span>
                     );
                 })}
@@ -184,58 +203,58 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
                     </div>
 
 
-                    
+
                     <nav className="">
                         <ul className="space-y-2">
-                        <li>
-                            <Link
-                            to={'/provider-dashboard'}
-                            className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/provider-dashboard' ? 'bg-blue-600 text-white' : ''}`}
-                            >
-                            <FaHouse className={`w-4 h-4 ${location.pathname === '/provider-dashboard' ? 'text-white' : 'text-blue-600'}`}  />
-                            Dashboard
-                            </Link>
-                        </li>
+                            <li>
+                                <Link
+                                    to={'/provider-dashboard'}
+                                    className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/provider-dashboard' ? 'bg-blue-600 text-white' : ''}`}
+                                >
+                                    <FaHouse className={`w-4 h-4 ${location.pathname === '/provider-dashboard' ? 'text-white' : 'text-blue-600'}`} />
+                                    Dashboard
+                                </Link>
+                            </li>
 
-                        <li>
-                            <Link
-                            to={'/scholarships'}
-                            className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/scholarships' ? 'bg-blue-600 text-white' : ''}`}
-                            >
-                            <FaGoogleScholar className={`w-4 h-4 ${location.pathname === '/scholarships' ? 'text-white' : 'text-blue-600'}`}/>
-                            Scholarships
-                            </Link>
-                        </li>
+                            <li>
+                                <Link
+                                    to={'/scholarships'}
+                                    className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/scholarships' ? 'bg-blue-600 text-white' : ''}`}
+                                >
+                                    <FaGoogleScholar className={`w-4 h-4 ${location.pathname === '/scholarships' ? 'text-white' : 'text-blue-600'}`} />
+                                    Scholarships
+                                </Link>
+                            </li>
 
-                        <li>
-                            <Link
-                            to={'/scholar-applications'}
-                            className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/scholar-applications' ? 'bg-blue-600 text-white' : ''}`}
-                            >
-                            <IoDocuments className={`w-4 h-4 ${location.pathname === '/scholar-applications' ? 'text-white' : 'text-blue-600'}`} />
-                            Applications
-                            </Link>
-                        </li>
+                            <li>
+                                <Link
+                                    to={'/scholar-applications'}
+                                    className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/scholar-applications' ? 'bg-blue-600 text-white' : ''}`}
+                                >
+                                    <IoDocuments className={`w-4 h-4 ${location.pathname === '/scholar-applications' ? 'text-white' : 'text-blue-600'}`} />
+                                    Applications
+                                </Link>
+                            </li>
 
-                        <li>
-                            <Link
-                            to={'/provider-forums'}
-                            className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/provider-forums' ? 'bg-blue-600 text-white' : ''}`}
-                            >
-                            <MdForum className={`w-4 h-4 ${location.pathname === '/provider-forums' ? 'text-white' : 'text-blue-600'}`}/>
-                            Forums
-                            </Link>
-                        </li>
+                            <li>
+                                <Link
+                                    to={'/provider-forums'}
+                                    className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/provider-forums' ? 'bg-blue-600 text-white' : ''}`}
+                                >
+                                    <MdForum className={`w-4 h-4 ${location.pathname === '/provider-forums' ? 'text-white' : 'text-blue-600'}`} />
+                                    Forums
+                                </Link>
+                            </li>
 
-                        <li>
-                            <Link
-                            to={'/provider-settings'}
-                            className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/provider-settings' ? 'bg-blue-600 text-white' : ''}`}
-                            >
-                            <FaCog className={`w-4 h-4 ${location.pathname === '/provider-settings' ? 'text-white' : 'text-blue-600'}`} />
-                            Settings
-                            </Link>
-                        </li>
+                            <li>
+                                <Link
+                                    to={'/provider-settings'}
+                                    className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/provider-settings' ? 'bg-blue-600 text-white' : ''}`}
+                                >
+                                    <FaCog className={`w-4 h-4 ${location.pathname === '/provider-settings' ? 'text-white' : 'text-blue-600'}`} />
+                                    Settings
+                                </Link>
+                            </li>
                         </ul>
                     </nav>
                 </aside>

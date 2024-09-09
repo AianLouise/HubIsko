@@ -179,3 +179,22 @@ export const countScholarshipApplications = async (req, res) => {
     res.status(500).json({ message: 'Error retrieving scholarship programs and counting applications', error: error.message });
   }
 };
+
+export const getScholarshipProgramTitle = async (req, res) => {
+  let { id } = req.params; // Extract id from request parameters
+  id = id.trim(); // Trim any leading or trailing whitespace
+
+  try {
+    // Find the specific scholarship program by id
+    const scholarshipProgram = await ScholarshipProgram.findById(id);
+
+    if (!scholarshipProgram) {
+      return res.status(404).json({ message: 'Scholarship program not found' });
+    }
+
+    // Return the scholarship program title
+    res.json({ scholarshipProgramTitle: scholarshipProgram.title });
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving scholarship program', error: error.message });
+  }
+};

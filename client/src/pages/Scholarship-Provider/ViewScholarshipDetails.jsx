@@ -15,7 +15,7 @@ export default function ViewScholarshipDetails() {
     const { currentUser } = useSelector((state) => state.user);
 
     const [sidebarOpen, setSidebarOpen] = useState(true);
-    const [activeTab, setActiveTab] = useState('details');
+    const [activeTab, setActiveTab] = useState(new URLSearchParams(location.search).get('tab') || 'details');
 
     const [scholarshipProgram, setProgramDetails] = useState(null);
     const [loading, setLoading] = useState(true);
