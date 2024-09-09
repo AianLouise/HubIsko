@@ -83,6 +83,7 @@ import ScholarshipProgramDetails from "./pages/Admin/ScholarshipProgramDetails";
 import ScholarView from "./pages/Scholarship-Provider/ScholarView";
 
 import LocationSelector from "./pages/LocationSelector";
+import AnnouncementDetails from "./components/ViewScholarshipDetails/AnnouncementDetails";
 
 
 export default function App() {
@@ -165,6 +166,7 @@ export default function App() {
           <Route path="/provider-create-forum-post" element={<ProviderCreateForumPost />} />
 
           <Route path="/scholar-view/:id" element={<ScholarView />} />
+          <Route path="/announcement/details/:announcementId" element={<AnnouncementDetails />} />
         </Route>
 
         {/* Scholar Routes */}

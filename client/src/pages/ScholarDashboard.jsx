@@ -58,7 +58,7 @@ export default function ScholarDashboard() {
     },
   ];
 
-  
+
   const handleNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % activities.length);
   };
@@ -176,10 +176,10 @@ export default function ScholarDashboard() {
               <span className='font-bold text-xl lg:text-2xl'>Scholarship Announcements <span className='text-blue-500'>(0)</span> </span>
 
               <div className=''>
-              <button className='flex gap-2 bg-white hover:bg-slate-200 px-6 py-2 border shadow rounded-md'>
-                <BiFilter className='w-6 h-6 text-blue-600' />
-                <span>Recent</span>
-              </button>
+                <button className='flex gap-2 bg-white hover:bg-slate-200 px-6 py-2 border shadow rounded-md'>
+                  <BiFilter className='w-6 h-6 text-blue-600' />
+                  <span>Recent</span>
+                </button>
               </div>
             </div>
 
@@ -234,12 +234,12 @@ export default function ScholarDashboard() {
             <span className='font-medium text-slate-500 lg:text-base text-sm'>Recent Scholarship Activities</span>
 
             <div className='flex lg:grid lg:grid-rows-1 lg:grid-cols-3 gap-2 text-sm mt-4 lg:mt-2'>
-             
-                <button onClick={handlePrev} className='lg:hidden rounded-md'>
-                  <IoMdArrowDropleftCircle className='w-10 h-10 text-blue-600' />
-                  </button>
-            
-  
+
+              <button onClick={handlePrev} className='lg:hidden rounded-md'>
+                <IoMdArrowDropleftCircle className='w-10 h-10 text-blue-600' />
+              </button>
+
+
 
               {activities.map((activity, index) => (
                 <div
@@ -253,9 +253,9 @@ export default function ScholarDashboard() {
                 </div>
               ))}
 
-                <button onClick={handleNext} className='lg:hidden rounded-md'>
+              <button onClick={handleNext} className='lg:hidden rounded-md'>
                 <IoMdArrowDropleftCircle className='w-10 h-10 rotate-180  text-blue-600' />
-                </button>
+              </button>
             </div>
           </div>
 
@@ -275,7 +275,7 @@ export default function ScholarDashboard() {
                 onClick={() => setFilter('approved')}
               >
                 <h2 className="font-bold rounded-t-lg text-center">Approved</h2>
-                <div className={`font-bold  ${filter === 'approved' ? 'text-white':'text-green-600'}`}>({approvedApplications.length})</div>
+                <div className={`font-bold  ${filter === 'approved' ? 'text-white' : 'text-green-600'}`}>({approvedApplications.length})</div>
               </button>
 
               <button
@@ -283,7 +283,7 @@ export default function ScholarDashboard() {
                 onClick={() => setFilter('pending')}
               >
                 <h2 className="font-bold rounded-t-lg text-center">Pending</h2>
-                <div className={`font-bold  ${filter === 'pending' ? 'text-white':'text-yellow-500'}`}>({pendingApplications.length})</div>
+                <div className={`font-bold  ${filter === 'pending' ? 'text-white' : 'text-yellow-500'}`}>({pendingApplications.length})</div>
               </button>
             </div>
 
@@ -299,14 +299,14 @@ export default function ScholarDashboard() {
           </div>
 
           <div className="lg:hidden flex gap-2 items-center bg-white shadow px-6 py-2 rounded-md border text-md">
-              <input
-                type="text"
-                placeholder="Search Applications"
-                className="w-full font-bold bg-transparent outline-none"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
+            <input
+              type="text"
+              placeholder="Search Applications"
+              className="w-full font-bold bg-transparent outline-none"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
 
 
           <div className="lg:grid gap-4 lg:max-h-[350px]">
@@ -372,7 +372,7 @@ export default function ScholarDashboard() {
                                 <td className="lg:table-cell hidden px-6 py-4 whitespace-nowrap">
                                   <span>{application.scholarshipProgram?.organizationName}</span>
                                 </td>
-                                
+
                                 <td className="px-6 py-4 whitespace-nowrap ">
                                   <div className='flex flex-row items-center gap-2'>
                                     <div className={`rounded-full w-2 h-2 ${getStatusColor(application.applicationStatus)}`}></div>

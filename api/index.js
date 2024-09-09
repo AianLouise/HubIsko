@@ -14,6 +14,7 @@ import ActivityLogRoutes from './routes/activityLog.route.js';
 import ScholarshipActivityRoutes from './routes/scholarshipActivityLog.route.js';
 import LocationRoutes from './routes/location.route.js';
 import ValidationRoutes from './routes/validation.route.js';
+import AnnouncementRoutes from './routes/announcement.route.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import cors from 'cors';
@@ -49,7 +50,7 @@ app.use('/api/activity', ActivityLogRoutes);
 app.use('/api/scholarshipActivity', ScholarshipActivityRoutes);
 app.use('/api/location', LocationRoutes);
 app.use('/api/validation', ValidationRoutes);
-
+app.use('/api/announcement', AnnouncementRoutes);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'client', 'dist')));
