@@ -10,21 +10,19 @@ import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
 import ForumsIcon from '../assets/ForumsIconwTexture.png';
 
-
-
 export default function Forums() {
   useEffect(() => {
     document.title = "Forums | HubIsko";
   }, []);
 
   const { currentUser } = useSelector(state => state.user);
-
   const isLoggedIn = !!currentUser;
 
   const [recentPosts, setRecentPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [notification, setNotification] = useState('');
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,7 +30,7 @@ export default function Forums() {
   }, []);
 
   const fetchRecentPosts = async () => {
-    setLoading(true); // Set loading to true before fetching
+    setLoading(true);
     try {
       const response = await fetch('/api/forums/posts');
       if (!response.ok) {
@@ -43,37 +41,27 @@ export default function Forums() {
     } catch (error) {
       console.error('Error fetching recent posts:', error);
     } finally {
-      setLoading(false); // Set loading to false after fetching
+      setLoading(false);
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-        </svg>
-      </div>
-    );
-  }
-
-  // Function to handle clicking on a post
   const handlePostClick = (postId) => {
-    // Navigate to post details page (assuming route '/post/:postId' is defined)
     navigate(`/forums/post/${postId}`);
   };
-
- 
 
   const handleCreatePostClick = () => {
     if (!isLoggedIn) {
       setNotification('You must be logged in to create a new post.');
-      setTimeout(() => setNotification(''), 3000); // Clear notification after 3 seconds
+      setTimeout(() => setNotification(''), 3000);
     } else {
       navigate('/forums/create-post');
     }
   };
+
+  const filteredPosts = recentPosts.filter(post =>
+    post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    post.content.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className='flex flex-col min-h-screen'>
@@ -84,7 +72,7 @@ export default function Forums() {
           <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl justify-between lg:px-24'>
 
             {/* Mobile na Icon */}
-          <div className='bg-blue-600 w-36 h-36 rounded-md flex lg:hidden items-center justify-center'>
+            <div className='bg-blue-600 w-36 h-36 rounded-md flex lg:hidden items-center justify-center'>
               <FontAwesomeIcon icon={faComments} className='text-white text-6xl' />
             </div>
 
@@ -94,36 +82,41 @@ export default function Forums() {
             </div>
 
             <img src={ForumsIcon} alt='Forums Icon' className='hidden lg:block rounded-md items-center justify-center w-[400px] h-auto' />
-          
+
           </div>
         </div>
 
         {/* Header */}
         <div className='max-w-6xl mx-auto lg:px-24'>
           <div className='flex flex-col gap-2 lg:gap-0 lg:flex-row justify-between'>
-            
+
             {/* Mobile Search Bar */}
             <div className='block mx-2 lg:hidden'>
-                <input
-                  type="text"
-                  placeholder='Search Posts'
-                  name=""
-                  id=""
-                  className='border-2 p-2 px-6 w-full lg:w-0 text-lg font-medium rounded-md focus:outline-blue-400' />
-              </div>
+              <input
+                type="text"
+                placeholder='Search Posts'
+                name=""
+                id=""
+                className='border-2 p-2 px-6 w-full lg:w-0 text-lg font-medium rounded-md focus:outline-blue-400' />
+            </div>
 
-              <div className='block lg:hidden mx-2 mt-5'>
-                <div className='border-b'></div>
-                <div className='text-slate-500 font-medium text-center -translate-y-3'>
-                  <span className='bg-[#f8f8fb] px-4'>OR</span>
-                </div>
+            <div className='block lg:hidden mx-2 mt-5'>
+              <div className='border-b'></div>
+              <div className='text-slate-500 font-medium text-center -translate-y-3'>
+                <span className='bg-[#f8f8fb] px-4'>OR</span>
               </div>
+            </div>
 
             <div className='flex flex-row lg:items-center lg:justify-center gap-4'>
 
-              <select name="Gender" id="Gender" className='bg-white border rounded-lg p-3 w-60 font-bold text-left hidden lg:block'>
-                <option value="All posts">All posts</option>
-                <option value="My Posts">My posts</option>
+              <select
+                name="postFilter"
+                id="postFilter"
+                className="bg-white border rounded-lg p-3 w-60 font-bold text-left hidden lg:block"
+                aria-label="Filter posts by type"
+              >
+                <option value="all">All posts</option>
+                <option value="myPosts">My posts</option>
               </select>
 
               {notification && (
@@ -132,7 +125,7 @@ export default function Forums() {
                 </div>
               )}
 
-              
+
               <button
                 onClick={handleCreatePostClick}
                 className="flex gap-2 w-full lg:w-[187.062px] mx-2 lg:mx-0 items-center lg:justify-center bg-blue-600 p-3 rounded-md border hover:bg-blue-800 transition ease-in-out"
@@ -147,9 +140,10 @@ export default function Forums() {
               <input
                 type="text"
                 placeholder='Search Posts'
-                name=""
-                id=""
-                className='border-2 p-2 px-6 text-lg font-medium rounded-md focus:outline-blue-400' />
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className='border-2 p-2 px-6 w-full text-lg font-medium rounded-md focus:outline-blue-400'
+              />
             </div>
           </div>
         </div>
@@ -247,12 +241,12 @@ export default function Forums() {
             <span className='font-bold text-lg'>Recent posts</span>
           </div>
 
-          <div className='grid lg:grid-cols-2 gap-6 mb-4'>
-            {recentPosts.map((post) => (
+          <div className='grid lg:grid-cols-1 gap-6 mb-4'>
+            {filteredPosts.length > 0 ? filteredPosts.map((post) => (
               <div key={post._id} className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow cursor-pointer hover:bg-slate-100 hover:-translate-y-1 transition ease-in-out' onClick={() => handlePostClick(post._id)}>
                 <div className='flex flex-row gap-3'>
                   <img
-                    src={post.author.profilePicture || 'default-profile-pic-url'} // Use a default profile picture if not available
+                    src={post.author.profilePicture || 'default-profile-pic-url'}
                     alt={`${post.author.username}'s profile`}
                     className='w-12 h-12 rounded-full'
                   />
@@ -286,12 +280,14 @@ export default function Forums() {
                     </div>
                     <div className='flex flex-row gap-1 pr-2'>
                       <FaRegEye className='w-6 h-6 text-blue-600' />
-                      <span>{post.views}</span>
+                      <span>{post.totalViews}</span>
                     </div>
                   </div>
                 </div>
               </div>
-            ))}
+            )) : (
+              <p>No posts found</p>
+            )}
           </div>
 
         </div>
