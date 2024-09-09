@@ -9,7 +9,11 @@ const ForumPostSchema = new Schema({
   comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
   likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   views: { type: Number, default: 0 },
-  attachments: [{ type: String }], // Add this line
+  attachmentUrls: [{
+    url: { type: String, required: true },
+    fileType: { type: String, required: true },
+    fileName: { type: String, required: true } // Add fileName field
+  }], // Nested attachment schema
   createdAt: { type: Date, default: Date.now }
 });
 

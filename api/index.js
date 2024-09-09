@@ -12,7 +12,6 @@ import adminRoutes from './routes/admin.route.js';
 import notificationRoutes from './routes/notification.route.js';
 import ActivityLogRoutes from './routes/activityLog.route.js';
 import ScholarshipActivityRoutes from './routes/scholarshipActivityLog.route.js';
-import LocationRoutes from './routes/location.route.js';
 import ValidationRoutes from './routes/validation.route.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
@@ -47,7 +46,6 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/notification', notificationRoutes);
 app.use('/api/activity', ActivityLogRoutes);
 app.use('/api/scholarshipActivity', ScholarshipActivityRoutes);
-app.use('/api/location', LocationRoutes);
 app.use('/api/validation', ValidationRoutes);
 
 

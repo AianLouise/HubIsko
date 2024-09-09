@@ -10,8 +10,6 @@ import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
 import ForumsIcon from '../assets/ForumsIconwTexture.png';
 
-
-
 export default function Forums() {
   useEffect(() => {
     document.title = "Forums | HubIsko";
@@ -64,8 +62,6 @@ export default function Forums() {
     navigate(`/forums/post/${postId}`);
   };
 
- 
-
   const handleCreatePostClick = () => {
     if (!isLoggedIn) {
       setNotification('You must be logged in to create a new post.');
@@ -84,7 +80,7 @@ export default function Forums() {
           <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl justify-between lg:px-24'>
 
             {/* Mobile na Icon */}
-          <div className='bg-blue-600 w-36 h-36 rounded-md flex lg:hidden items-center justify-center'>
+            <div className='bg-blue-600 w-36 h-36 rounded-md flex lg:hidden items-center justify-center'>
               <FontAwesomeIcon icon={faComments} className='text-white text-6xl' />
             </div>
 
@@ -94,30 +90,30 @@ export default function Forums() {
             </div>
 
             <img src={ForumsIcon} alt='Forums Icon' className='hidden lg:block rounded-md items-center justify-center w-[400px] h-auto' />
-          
+
           </div>
         </div>
 
         {/* Header */}
         <div className='max-w-6xl mx-auto lg:px-24'>
           <div className='flex flex-col gap-2 lg:gap-0 lg:flex-row justify-between'>
-            
+
             {/* Mobile Search Bar */}
             <div className='block mx-2 lg:hidden'>
-                <input
-                  type="text"
-                  placeholder='Search Posts'
-                  name=""
-                  id=""
-                  className='border-2 p-2 px-6 w-full lg:w-0 text-lg font-medium rounded-md focus:outline-blue-400' />
-              </div>
+              <input
+                type="text"
+                placeholder='Search Posts'
+                name=""
+                id=""
+                className='border-2 p-2 px-6 w-full lg:w-0 text-lg font-medium rounded-md focus:outline-blue-400' />
+            </div>
 
-              <div className='block lg:hidden mx-2 mt-5'>
-                <div className='border-b'></div>
-                <div className='text-slate-500 font-medium text-center -translate-y-3'>
-                  <span className='bg-[#f8f8fb] px-4'>OR</span>
-                </div>
+            <div className='block lg:hidden mx-2 mt-5'>
+              <div className='border-b'></div>
+              <div className='text-slate-500 font-medium text-center -translate-y-3'>
+                <span className='bg-[#f8f8fb] px-4'>OR</span>
               </div>
+            </div>
 
             <div className='flex flex-row lg:items-center lg:justify-center gap-4'>
 
@@ -132,7 +128,7 @@ export default function Forums() {
                 </div>
               )}
 
-              
+
               <button
                 onClick={handleCreatePostClick}
                 className="flex gap-2 w-full lg:w-[187.062px] mx-2 lg:mx-0 items-center lg:justify-center bg-blue-600 p-3 rounded-md border hover:bg-blue-800 transition ease-in-out"
@@ -247,57 +243,61 @@ export default function Forums() {
             <span className='font-bold text-lg'>Recent posts</span>
           </div>
 
-          <div className='grid lg:grid-cols-2 gap-6 mb-4'>
-            {recentPosts.map((post) => (
-              <div key={post._id} className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow cursor-pointer hover:bg-slate-100 hover:-translate-y-1 transition ease-in-out' onClick={() => handlePostClick(post._id)}>
-                <div className='flex flex-row gap-3'>
-                  <img
-                    src={post.author.profilePicture || 'default-profile-pic-url'} // Use a default profile picture if not available
-                    alt={`${post.author.username}'s profile`}
-                    className='w-12 h-12 rounded-full'
-                  />
-                  <div className='flex flex-col'>
-                    <span className='font-medium'>{post.author.username}</span>
-                    <span className='text-sm text-slate-500'>
-                      {new Date(post.createdAt).toLocaleString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: 'numeric',
-                        minute: 'numeric',
-                        hour12: true,
-                      })}
-                    </span>
-                  </div>
-                </div>
-                <span className='font-bold'>{post.title}</span>
-                <span className='text-sm text-slate-600'>{post.content}</span>
-                <div className='border-t'>
-                  <div className='flex flex-row justify-between mt-3 gap-2'>
-                    <div className='flex flex-row gap-2'>
-                      <div className='flex flex-row gap-1 px-2'>
-                        <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
-                        <span>{post.totalLikes}</span>
-                      </div>
-                      <div className='flex flex-row gap-1'>
-                        <BiCommentDots className='w-6 h-6 text-blue-600' />
-                        <span>{post.totalComments}</span>
-                      </div>
+          {recentPosts.length === 0 ? (
+            <div className='flex justify-center items-center h-64'>
+              <span className='text-lg text-gray-500'>No recent posts available.</span>
+            </div>
+          ) : (
+            recentPosts.map((post) => (
+              <div className='grid lg:grid-cols-2 gap-6 mb-4'>
+                <div key={post._id} className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow cursor-pointer hover:bg-slate-100 hover:-translate-y-1 transition ease-in-out' onClick={() => handlePostClick(post._id)}>
+                  <div className='flex flex-row gap-3'>
+                    <img
+                      src={post.author?.profilePicture || 'default-profile-pic-url'} // Use a default profile picture if not available
+                      alt={`${post.author?.username || 'Unknown'}'s profile`}
+                      className='w-12 h-12 rounded-full'
+                    />
+                    <div className='flex flex-col'>
+                      <span className='font-medium'>{post.author?.username || 'Unknown'}</span>
+                      <span className='text-sm text-slate-500'>
+                        {new Date(post.createdAt).toLocaleString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: 'numeric',
+                          minute: 'numeric',
+                          hour12: true,
+                        })}
+                      </span>
                     </div>
-                    <div className='flex flex-row gap-1 pr-2'>
-                      <FaRegEye className='w-6 h-6 text-blue-600' />
-                      <span>{post.views}</span>
+                  </div>
+                  <span className='font-bold'>{post.title}</span>
+                  <span className='text-sm text-slate-600'>{post.content}</span>
+                  <div className='border-t'>
+                    <div className='flex flex-row justify-between mt-3 gap-2'>
+                      <div className='flex flex-row gap-2'>
+                        <div className='flex flex-row gap-1 px-2'>
+                          <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
+                          <span>{post.totalLikes}</span>
+                        </div>
+                        <div className='flex flex-row gap-1'>
+                          <BiCommentDots className='w-6 h-6 text-blue-600' />
+                          <span>{post.totalComments}</span>
+                        </div>
+                      </div>
+                      <div className='flex flex-row gap-1 pr-2'>
+                        <FaRegEye className='w-6 h-6 text-blue-600' />
+                        <span>{post.views}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-
+            ))
+          )}
         </div>
-
-      </main>
+      </main >
       <Footer />
-    </div>
+    </div >
   );
 }

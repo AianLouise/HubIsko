@@ -46,11 +46,11 @@ export default function CreateForumPost() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSubmitTrigger(true);
-
+    
         const storage = getStorage();
-
-        // Upload files to Firebase and get the file URLs
-        const uploadedFilePaths = await Promise.all(selectedFiles.map(async (fileObj) => {
+    
+        // Upload files to Firebase and get the file URLs along with fileType and fileName
+        const uploadedFiles = await Promise.all(selectedFiles.map(async (fileObj) => {
             const file = fileObj.file;
             const fileExtension = file.name.split('.').pop(); // Extract the file extension
             const fileNameWithoutExtension = file.name.replace(/\.[^/.]+$/, ""); // Remove the extension from the original file name
@@ -58,16 +58,20 @@ export default function CreateForumPost() {
             const storageRef = ref(storage, `forum_uploads/${fileName}`);
             await uploadBytes(storageRef, file);
             const downloadURL = await getDownloadURL(storageRef);
-            return downloadURL; // Save the download URL in the database
+            return {
+                url: downloadURL,
+                fileType: file.type,
+                fileName: fileName
+            }; // Save the download URL, fileType, and fileName in the database
         }));
-
+    
         // Send post data to the backend
         const postData = {
             ...formData,
             author: currentUser._id,
-            attachments: uploadedFilePaths // Save file paths in the database
+            attachmentUrls: uploadedFiles // Save file paths in the database
         };
-
+    
         try {
             const response = await fetch('/api/forums/post', {
                 method: 'POST',
@@ -76,11 +80,11 @@ export default function CreateForumPost() {
                 },
                 body: JSON.stringify(postData)
             });
-
+    
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
+    
             const result = await response.json();
             console.log('Success:', result);
             navigate('/forums');
