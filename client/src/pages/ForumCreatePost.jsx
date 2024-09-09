@@ -14,6 +14,7 @@ export default function CreateForumPost() {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [submitTrigger, setSubmitTrigger] = useState(false);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
@@ -46,9 +47,10 @@ export default function CreateForumPost() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSubmitTrigger(true);
-    
+        setLoading(true);
+
         const storage = getStorage();
-    
+
         // Upload files to Firebase and get the file URLs along with fileType and fileName
         const uploadedFiles = await Promise.all(selectedFiles.map(async (fileObj) => {
             const file = fileObj.file;
@@ -64,14 +66,14 @@ export default function CreateForumPost() {
                 fileName: fileName
             }; // Save the download URL, fileType, and fileName in the database
         }));
-    
+
         // Send post data to the backend
         const postData = {
             ...formData,
             author: currentUser._id,
             attachmentUrls: uploadedFiles // Save file paths in the database
         };
-    
+
         try {
             const response = await fetch('/api/forums/post', {
                 method: 'POST',
@@ -80,11 +82,11 @@ export default function CreateForumPost() {
                 },
                 body: JSON.stringify(postData)
             });
-    
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-    
+
             const result = await response.json();
             console.log('Success:', result);
             navigate('/forums');
@@ -92,6 +94,7 @@ export default function CreateForumPost() {
             console.error('Error:', error);
         } finally {
             setSubmitTrigger(false);
+            setLoading(false);
         }
     };
 
@@ -151,9 +154,10 @@ export default function CreateForumPost() {
                             </button>
                             <button
                                 type="submit"
-                                className='bg-blue-600 text-white p-3 rounded-md hover:bg-blue-800 transition ease-in-out'
+                                className={`bg-blue-600 text-white p-3 rounded-md transition ease-in-out ${loading ? 'bg-blue-400 cursor-not-allowed' : 'hover:bg-blue-800'}`}
+                                disabled={loading}
                             >
-                                Create Post
+                                {loading ? 'Creating Post...' : 'Create Post'}
                             </button>
                         </div>
                     </form>

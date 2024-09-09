@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaRegHeart } from 'react-icons/fa';
 import { BiCommentDots } from 'react-icons/bi';
 import { formatDistanceToNow } from 'date-fns';
 import { AiFillFilePdf, AiFillFileWord } from 'react-icons/ai';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { IoMdArrowDropdown } from "react-icons/io";
 import Modal from 'react-modal';
 
 const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, repliesVisibility, activeReplyBox, replies, handleReplyChange, handleReplyComment }) => {
@@ -13,6 +14,9 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const [currentComment, setCurrentComment] = useState(null);
+
+    const [sortOption, setSortOption] = useState('Newest');
+    const [sortedComments, setSortedComments] = useState(post.comments);
 
     const openModal = (index, comment) => {
         if (comment) {
@@ -40,13 +44,75 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
         }
     };
 
+    // Ref for the dropdown
+    const [showDropdown, setShowDropdown] = useState(false);
+    const dropdownRef = useRef(null);
+
+    const toggleDropdown = () => {
+        setShowDropdown(!showDropdown);
+    };
+
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setShowDropdown(false);
+        }
+    };
+
+    const handleSort = (option) => {
+        setSortOption(option);
+        setShowDropdown(false);
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    useEffect(() => {
+        let sorted = [...post.comments];
+        if (sortOption === 'Newest') {
+            sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        } else if (sortOption === 'Oldest') {
+            sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        } else if (sortOption === 'Most Liked') {
+            sorted.sort((a, b) => (b.likes ? b.likes.length : 0) - (a.likes ? a.likes.length : 0));
+        }
+        setSortedComments(sorted);
+    }, [sortOption, post.comments]);
+
+    const totalComments = post.comments.length;
+    const totalReplies = post.comments.reduce((acc, comment) => acc + (comment.replies ? comment.replies.length : 0), 0);
+    const totalCommentsAndReplies = totalComments + totalReplies;
+
     return (
         <div className="my-8">
+                <div onClick={toggleDropdown} className='mt-4 px-4 py-2 border flex bg-white rounded-md w-48 shadow cursor-pointer hover:bg-slate-200 group'>
+                <div className='flex flex-row justify-between w-full'>
+                    <div>
+                        <span>Sort by: </span>
+                        <span>{sortOption}</span>
+                    </div>
+                    <IoMdArrowDropdown className='w-6 h-6 text-blue-600 group-hover:-rotate-90' />
+                </div>
+            </div>
+
+            {showDropdown && (
+                <div ref={dropdownRef} className='absolute w-52 bg-white rounded-md shadow-lg mt-2 py-2 justify-start'>
+                    <button onClick={() => handleSort('Newest')} className='px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full'>Newest</button>
+                    <button onClick={() => handleSort('Oldest')} className='px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full'>Oldest</button>
+                    <button onClick={() => handleSort('Most Liked')} className='px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full'>Most Liked</button>
+                </div>
+            )}
+
             {/* Header for the comments section */}
-            <h2 className="text-2xl font-bold mb-4">Replies <span className='text-blue-600'>({post.comments.length})</span></h2>
+            <h2 className="text-2xl font-bold mb-4 mt-4">
+                Replies <span className='text-blue-600'>({totalCommentsAndReplies})</span>
+            </h2>
 
             {/* Loop through each comment in the post */}
-            {post.comments.map(comment => (
+            {sortedComments.map(comment => (
                 <div key={comment._id} className='flex gap-2 w-full mb-4'>
                     {/* User avatar */}
                     <Link to={'/others-profile'}>
@@ -155,8 +221,9 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
                                 </button>
                             </Modal>
                         </div>
+
                         {/* Comment actions: likes, replies, views */}
-                        <div className='flex flex-row justify-between px-4 py-2 gap-2'>
+                        <div className='flex flex-row justify-between px-4 py-3 gap-2 mt-4'>
                             <div className='flex flex-row gap-2'>
                                 {/* Like button and count */}
                                 <div className='flex flex-row gap-1 px-2'>

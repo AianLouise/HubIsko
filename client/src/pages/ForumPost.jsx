@@ -201,11 +201,10 @@ export default function ForumPost() {
         if (!replyContent) return; // Optionally, add more validation
 
         try {
-            const response = await fetch(`/api/forums/post/reply/${commentId}`, {
+            const response = await fetch(`/api/forums/comment/reply/${commentId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
                 body: JSON.stringify({ content: replyContent }) // Ensure this matches the server's expected structure
             });
@@ -220,6 +219,7 @@ export default function ForumPost() {
             // Update the UI accordingly, e.g., clear the reply text
             setReplies(prevReplies => ({ ...prevReplies, [commentId]: '' }));
             // Optionally, fetch updated comments here to include the new reply
+            window.location.reload();
         } catch (error) {
             console.error('Failed to submit reply:', error);
             // Handle the error (e.g., show an error message to the user)
@@ -474,24 +474,6 @@ export default function ForumPost() {
                             <p className="text-red-500 bg-white p-8 rounded-md shadow mb-8 mx-auto text-center">You must be logged in to reply to this post.</p>
                         )}
 
-                        <div onClick={toggleDropdown} className='mt-4 px-4 py-2 border flex bg-white rounded-md w-48 shadow cursor-pointer hover:bg-slate-200 group'>
-                            <div className='flex flex-row justify-between w-full'>
-                                <div>
-                                    <span>Sort by: </span>
-                                    <span>Newest</span>
-                                </div>
-                                <IoMdArrowDropdown className='w-6 h-6 text-blue-600 group-hover:-rotate-90' />
-                            </div>
-                        </div>
-
-                        {showDropdown && (
-                            <div className='absolute w-52 bg-white rounded-md shadow-lg mt-2 py-2 justify-start'>
-                                <button className='px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full'>Newest</button>
-                                <button className='px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full'>Oldest</button>
-                                <button className='px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full'>Most Liked</button>
-                            </div>
-                        )
-                        }
 
                         <CommentsSection
                             post={post}
