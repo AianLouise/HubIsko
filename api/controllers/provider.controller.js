@@ -39,12 +39,8 @@ export const signupAsProvider = async (req, res) => {
       barangay,
       website,
       agreeTerms,
-      registrationCertificate,
-      tin,
-      proofOfAddress,
-      authorizationLetter,
-      idProofContactPerson,
       profilePicture,
+      documents, // This should contain the document URLs
     } = req.body;
 
     // Create new user object with document fields
@@ -71,11 +67,13 @@ export const signupAsProvider = async (req, res) => {
         barangay,
         website,
         agreeTerms,
-        registrationCertificate,
-        tin,
-        proofOfAddress,
-        authorizationLetter,
-        idProofContactPerson,
+        documents: {
+          registrationCertificate: documents.registrationCertificate,
+          tin: documents.tin,
+          proofOfAddress: documents.proofOfAddress,
+          authorizationLetter: documents.authorizationLetter,
+          idProofContactPerson: documents.idProofContactPerson,
+        },
         status: 'pending',
       }
     });
@@ -103,9 +101,7 @@ export const signupAsProvider = async (req, res) => {
       },
     });
 
-   // const verificationUrl = `https://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`;
-
-     const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
+    const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
 
     console.log('Sending verification email to:', email);
 
@@ -150,11 +146,11 @@ export const signupAsProvider = async (req, res) => {
       postalCode: savedUser.scholarshipProviderDetails.postalCode,
       country: savedUser.scholarshipProviderDetails.country,
       website: savedUser.scholarshipProviderDetails.website,
-      registrationCertificate: savedUser.scholarshipProviderDetails.registrationCertificate,
-      tin: savedUser.scholarshipProviderDetails.tin,
-      proofOfAddress: savedUser.scholarshipProviderDetails.proofOfAddress,
-      authorizationLetter: savedUser.scholarshipProviderDetails.authorizationLetter,
-      idProofContactPerson: savedUser.scholarshipProviderDetails.idProofContactPerson,
+      registrationCertificate: savedUser.scholarshipProviderDetails.documents.registrationCertificate,
+      tin: savedUser.scholarshipProviderDetails.documents.tin,
+      proofOfAddress: savedUser.scholarshipProviderDetails.documents.proofOfAddress,
+      authorizationLetter: savedUser.scholarshipProviderDetails.documents.authorizationLetter,
+      idProofContactPerson: savedUser.scholarshipProviderDetails.documents.idProofContactPerson,
       message: 'User created successfully. Please check your email to verify your account.'
     });
   } catch (error) {

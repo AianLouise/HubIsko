@@ -152,25 +152,27 @@ const scholarshipProviderSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
-  registrationCertificate: {
-    type: String,
-    default: '',
-  },
-  tin: {
-    type: String,
-    default: '',
-  },
-  proofOfAddress: {
-    type: String,
-    default: '',
-  },
-  authorizationLetter: {
-    type: String,
-    default: '',
-  },
-  idProofContactPerson: {
-    type: String,
-    default: '',
+  documents: {
+    registrationCertificate: {
+      type: String,
+      default: '',
+    },
+    tin: {
+      type: String,
+      default: '',
+    },
+    proofOfAddress: {
+      type: String,
+      default: '',
+    },
+    authorizationLetter: {
+      type: String,
+      default: '',
+    },
+    idProofContactPerson: {
+      type: String,
+      default: '',
+    }
   }
 }, { _id: false }); // Disable automatic _id generation for embedded sub-schema
 
@@ -215,7 +217,7 @@ const userSchema = new mongoose.Schema({
     enum: ['applicant', 'scholarship_provider', 'admin'],
     default: 'applicant',
   },
-   status: {
+  status: {
     type: String,
     enum: [
       'Pending Verification',

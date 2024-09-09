@@ -1,5 +1,5 @@
 import express from "express";
-import { test, updateUser, deleteUser, forgotPassword, resetPassword, getUserDetails, CompleteProfile, changePassword } from '../controllers/user.controller.js';
+import { test, updateUser, deleteUser, forgotPassword, resetPassword, getUserDetails, CompleteProfile, changePassword, checkEmail } from '../controllers/user.controller.js';
 import { verifyToken } from '../utils/verifyUser.js';
 
 const router = express.Router();
@@ -12,7 +12,7 @@ router.post('/reset-password', resetPassword);
 router.get("/details", verifyToken, getUserDetails);
 router.post("/complete-profile", verifyToken, CompleteProfile);
 router.post("/change-password/:id", changePassword);
-
+router.post('/check-email', checkEmail);
 
 
 export default router;
