@@ -45,7 +45,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
             setIsAccountsDropdownOpen(false);
         }
 
-        if (location.pathname.startsWith('/application-inbox')
+        if (location.pathname.startsWith('/scholarship-programs')
             || location.pathname.startsWith('/scholarship-program-applications')
             || location.pathname.startsWith('/scholarship-applications')
 
@@ -98,7 +98,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
 
         return (
             <>
-                <h1 className="text-lg font-bold text-blue-500">Admin</h1>
+                <h1 className="text-lg font-bold pl-4 text-blue-200">Admin</h1>
                 {pathnames.map((value, index) => {
                     const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
                     return (
@@ -230,27 +230,75 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
 
                             <li>
                                 <Link to={'/scholarship-programs'}
-                                    className={`flex gap-2 items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/scholarship-programs') ? 'bg-blue-600 text-white' : ''}`} >
-                                    <FaGraduationCap className={`w-5 h-5 text-blue-600 ${location.pathname.startsWith('/scholarship-programs') ? 'text-white' : ''}`} />
+                                 onClick={toggleInboxDropdown}
+                                    className={`flex gap-2 items-center text-gray-800 py-2 px-4 rounded-md 
+                                    ${location.pathname.startsWith('/scholarship-programs') 
+                                        || location.pathname.startsWith('/scholarship-program-applications')
+                                        || location.pathname.startsWith('/scholarship-applications')
+
+                                    ? 'bg-blue-600 text-white' : ''}`} >
+                                    <FaGraduationCap className={`w-5 h-5 text-blue-600 
+                                        ${location.pathname.startsWith('/scholarship-programs')
+                                            || location.pathname.startsWith('/scholarship-program-applications')
+                                            || location.pathname.startsWith('/scholarship-applications')
+
+                                        ? 'text-white' : ''}`} />
                                     Scholarship Programs
                                 </Link>
+
+                                
+
+                                {isInboxDropdownOpen && (
+                                <ul className="ml-4 my-2 space-y-2">
+                                   
+                                    <li>
+                                        <Link to={'/scholarship-programs'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-programs' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                            <FaGraduationCap className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-programs' ? ' text-white' : ''}`} />
+                                            Scholarship Dashboard
+                                        </Link>
+                                    </li>
+
+                                    <li>
+                                        <Link to={'/scholarship-program-applications'} 
+                                        className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md 
+                                        ${location.pathname === '/scholarship-program-applications' 
+            
+                                        ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                            <FaGoogleScholar className={`w-5 h-5 text-blue-600
+                                            ${location.pathname === '/scholarship-program-applications'
+
+                                            ? ' text-white' : ''}`} />
+                                            Scholarship Program Applications 
+                                        </Link>
+                                    </li>
+                                    {/* <li>
+                                        <Link to={'/scholarship-applications'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                            <HiDocument className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-applications' ? ' text-white' : ''}`} />
+                                            Scholarship Provider Applications
+                                        </Link>
+                                    </li> */}
+                                    <li>
+                                        <a href="#" className="flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
+                                            <FaFileCircleQuestion className="w-5 h-5 text-blue-600" />
+                                            Requests
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                )}
                             </li>
 
                             <li>
                                 <div>
                                     <Link to={'/application-inbox'}
-                                        onClick={toggleInboxDropdown}
+                        
                                         className={`flex gap-2 justify-between items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/application-inbox')
-                                            || location.pathname.startsWith('/scholarship-program-applications')
-                                            || location.pathname.startsWith('/scholarship-applications')
-
+                   
                                             ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                         <div className="flex items-center gap-2">
                                             <BsInboxFill className={`w-5 h-5 text-blue-600 
                                             ${location.pathname.startsWith('/application-inbox')
-                                                    || location.pathname.startsWith('/scholarship-program-applications')
-                                                    || location.pathname.startsWith('/scholarship-applications')
-
+                                           
                                                     ? 'text-white' : ''} `} />
                                             Application Inbox
                                         </div>
@@ -262,32 +310,6 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                                 ? 'text-blue-600 bg-white' : 'text-white'} `}>1</div>
                                     </Link>
 
-
-                                    {isInboxDropdownOpen && (
-
-
-                                        <ul className="ml-4 my-2 space-y-2">
-                                            <li>
-                                                <Link to={'/scholarship-program-applications'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-program-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                                    <FaGoogleScholar className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-program-applications' ? ' text-white' : ''}`} />
-                                                    Scholarship Program Applications
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                <Link to={'/scholarship-applications'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                                    <HiDocument className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-applications' ? ' text-white' : ''}`} />
-                                                    Scholarship Provider Applications
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                <a href="#" className="flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
-                                                    <FaFileCircleQuestion className="w-5 h-5 text-blue-600" />
-                                                    Requests
-                                                </a>
-                                            </li>
-                                        </ul>
-
-                                    )}
                                 </div>
                             </li>
 

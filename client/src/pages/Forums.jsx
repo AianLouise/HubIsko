@@ -16,13 +16,13 @@ export default function Forums() {
   }, []);
 
   const { currentUser } = useSelector(state => state.user);
-
   const isLoggedIn = !!currentUser;
 
   const [recentPosts, setRecentPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [notification, setNotification] = useState('');
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function Forums() {
   }, []);
 
   const fetchRecentPosts = async () => {
-    setLoading(true); // Set loading to true before fetching
+    setLoading(true);
     try {
       const response = await fetch('/api/forums/posts');
       if (!response.ok) {
@@ -41,35 +41,27 @@ export default function Forums() {
     } catch (error) {
       console.error('Error fetching recent posts:', error);
     } finally {
-      setLoading(false); // Set loading to false after fetching
+      setLoading(false);
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-        </svg>
-      </div>
-    );
-  }
-
-  // Function to handle clicking on a post
   const handlePostClick = (postId) => {
-    // Navigate to post details page (assuming route '/post/:postId' is defined)
     navigate(`/forums/post/${postId}`);
   };
 
   const handleCreatePostClick = () => {
     if (!isLoggedIn) {
       setNotification('You must be logged in to create a new post.');
-      setTimeout(() => setNotification(''), 3000); // Clear notification after 3 seconds
+      setTimeout(() => setNotification(''), 3000);
     } else {
       navigate('/forums/create-post');
     }
   };
+
+  const filteredPosts = recentPosts.filter(post =>
+    post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    post.content.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className='flex flex-col min-h-screen'>
@@ -117,9 +109,14 @@ export default function Forums() {
 
             <div className='flex flex-row lg:items-center lg:justify-center gap-4'>
 
-              <select name="Gender" id="Gender" className='bg-white border rounded-lg p-3 w-60 font-bold text-left hidden lg:block'>
-                <option value="All posts">All posts</option>
-                <option value="My Posts">My posts</option>
+              <select
+                name="postFilter"
+                id="postFilter"
+                className="bg-white border rounded-lg p-3 w-60 font-bold text-left hidden lg:block"
+                aria-label="Filter posts by type"
+              >
+                <option value="all">All posts</option>
+                <option value="myPosts">My posts</option>
               </select>
 
               {notification && (
@@ -143,9 +140,10 @@ export default function Forums() {
               <input
                 type="text"
                 placeholder='Search Posts'
-                name=""
-                id=""
-                className='border-2 p-2 px-6 text-lg font-medium rounded-md focus:outline-blue-400' />
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className='border-2 p-2 px-6 w-full text-lg font-medium rounded-md focus:outline-blue-400'
+              />
             </div>
           </div>
         </div>
@@ -243,58 +241,55 @@ export default function Forums() {
             <span className='font-bold text-lg'>Recent posts</span>
           </div>
 
-          {recentPosts.length === 0 ? (
-            <div className='flex justify-center items-center h-64'>
-              <span className='text-lg text-gray-500'>No recent posts available.</span>
-            </div>
-          ) : (
-            recentPosts.map((post) => (
-              <div className='grid lg:grid-cols-2 gap-6 mb-4'>
-                <div key={post._id} className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow cursor-pointer hover:bg-slate-100 hover:-translate-y-1 transition ease-in-out' onClick={() => handlePostClick(post._id)}>
-                  <div className='flex flex-row gap-3'>
-                    <img
-                      src={post.author?.profilePicture || 'default-profile-pic-url'} // Use a default profile picture if not available
-                      alt={`${post.author?.username || 'Unknown'}'s profile`}
-                      className='w-12 h-12 rounded-full'
-                    />
-                    <div className='flex flex-col'>
-                      <span className='font-medium'>{post.author?.username || 'Unknown'}</span>
-                      <span className='text-sm text-slate-500'>
-                        {new Date(post.createdAt).toLocaleString('en-US', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                          hour: 'numeric',
-                          minute: 'numeric',
-                          hour12: true,
-                        })}
-                      </span>
-                    </div>
+          <div className='grid lg:grid-cols-1 gap-6 mb-4'>
+            {filteredPosts.length > 0 ? filteredPosts.map((post) => (
+              <div key={post._id} className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow cursor-pointer hover:bg-slate-100 hover:-translate-y-1 transition ease-in-out' onClick={() => handlePostClick(post._id)}>
+                <div className='flex flex-row gap-3'>
+                  <img
+                    src={post.author.profilePicture || 'default-profile-pic-url'}
+                    alt={`${post.author.username}'s profile`}
+                    className='w-12 h-12 rounded-full'
+                  />
+                  <div className='flex flex-col'>
+                    <span className='font-medium'>{post.author.username}</span>
+                    <span className='text-sm text-slate-500'>
+                      {new Date(post.createdAt).toLocaleString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true,
+                      })}
+                    </span>
                   </div>
-                  <span className='font-bold'>{post.title}</span>
-                  <span className='text-sm text-slate-600'>{post.content}</span>
-                  <div className='border-t'>
-                    <div className='flex flex-row justify-between mt-3 gap-2'>
-                      <div className='flex flex-row gap-2'>
-                        <div className='flex flex-row gap-1 px-2'>
-                          <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
-                          <span>{post.totalLikes}</span>
-                        </div>
-                        <div className='flex flex-row gap-1'>
-                          <BiCommentDots className='w-6 h-6 text-blue-600' />
-                          <span>{post.totalComments}</span>
-                        </div>
+                </div>
+                <span className='font-bold'>{post.title}</span>
+                <span className='text-sm text-slate-600'>{post.content}</span>
+                <div className='border-t'>
+                  <div className='flex flex-row justify-between mt-3 gap-2'>
+                    <div className='flex flex-row gap-2'>
+                      <div className='flex flex-row gap-1 px-2'>
+                        <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
+                        <span>{post.totalLikes}</span>
                       </div>
-                      <div className='flex flex-row gap-1 pr-2'>
-                        <FaRegEye className='w-6 h-6 text-blue-600' />
-                        <span>{post.views}</span>
+                      <div className='flex flex-row gap-1'>
+                        <BiCommentDots className='w-6 h-6 text-blue-600' />
+                        <span>{post.totalComments}</span>
                       </div>
+                    </div>
+                    <div className='flex flex-row gap-1 pr-2'>
+                      <FaRegEye className='w-6 h-6 text-blue-600' />
+                      <span>{post.totalViews}</span>
                     </div>
                   </div>
                 </div>
               </div>
-            ))
-          )}
+            )) : (
+              <p>No posts found</p>
+            )}
+          </div>
+
         </div>
       </main >
       <Footer />

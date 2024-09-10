@@ -13,6 +13,8 @@ import notificationRoutes from './routes/notification.route.js';
 import ActivityLogRoutes from './routes/activityLog.route.js';
 import ScholarshipActivityRoutes from './routes/scholarshipActivityLog.route.js';
 import ValidationRoutes from './routes/validation.route.js';
+import AnnouncementRoutes from './routes/announcement.route.js';
+import ScholarRoutes from './routes/scholar.route.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import cors from 'cors';
@@ -47,7 +49,8 @@ app.use('/api/notification', notificationRoutes);
 app.use('/api/activity', ActivityLogRoutes);
 app.use('/api/scholarshipActivity', ScholarshipActivityRoutes);
 app.use('/api/validation', ValidationRoutes);
-
+app.use('/api/announcement', AnnouncementRoutes);
+app.use('/api/scholar', ScholarRoutes);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'client', 'dist')));

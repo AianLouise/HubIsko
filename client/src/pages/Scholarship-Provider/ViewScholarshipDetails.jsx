@@ -1,47 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import { useSelector } from 'react-redux';
-import { FaCheckCircle, FaTimesCircle, FaExclamationCircle } from 'react-icons/fa';
 import ProgramDetails from '../../components/ViewScholarshipDetails/ProgamDetails';
 import PostAnnouncement from '../../components/ViewScholarshipDetails/PostAnnouncement';
 import ViewScholars from '../../components/ViewScholarshipDetails/ViewScholars';
 import ScholarshipApplication from '../../components/ViewScholarshipDetails/ScholarApplication';
 import Validation from '../../components/ViewScholarshipDetails/Validation';
 
-
-
 export default function ViewScholarshipDetails() {
     const { currentUser } = useSelector((state) => state.user);
-
     const [sidebarOpen, setSidebarOpen] = useState(true);
-    const [activeTab, setActiveTab] = useState('details');
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // Get the active tab from the URL (default to 'details')
+    const [activeTab, setActiveTab] = useState(new URLSearchParams(location.search).get('tab') || 'details');
 
     const [scholarshipProgram, setProgramDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { id } = useParams();
 
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
+        navigate(`?tab=${tab}`); // Update the URL with the selected tab
     };
 
     const fetchProgramDetails = async () => {
         try {
             const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${id}`);
-            const contentType = response.headers.get("content-type");
-            if (!response.ok) {
-                const errorText = await response.text(); // Read response as text
-                throw new Error(`Network response was not ok: ${errorText}`);
-            }
-            if (contentType && contentType.indexOf("application/json") !== -1) {
-                const data = await response.json();
-                setProgramDetails(data);
-            } else {
-                throw new Error("Received non-JSON response");
-            }
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+            setProgramDetails(data);
         } catch (error) {
             console.error('Error fetching program details:', error);
             setError(error.message);
@@ -51,26 +44,12 @@ export default function ViewScholarshipDetails() {
     };
 
     const [applications, setApplications] = useState([]);
-
     const fetchApplications = async () => {
         try {
             const response = await fetch(`/api/scholarshipProgram/scholarship-applications/${id}`);
-            const contentType = response.headers.get("content-type");
-
-            if (!response.ok) {
-                const responseText = await response.text(); // Read response as text
-                if (response.status === 404 && responseText.includes("No applications found for this scholarship program")) {
-                    setApplications([]);
-                    setError(null); // No error, just no applications
-                } else {
-                    throw new Error(`Network response was not ok: ${responseText}`);
-                }
-            } else if (contentType && contentType.indexOf("application/json") !== -1) {
-                const data = await response.json(); // Parse the JSON directly
-                setApplications(data);
-            } else {
-                throw new Error("Received non-JSON response");
-            }
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+            setApplications(data);
         } catch (error) {
             console.error('Error fetching program applications:', error);
             setError(error.message);
@@ -91,9 +70,7 @@ export default function ViewScholarshipDetails() {
             const fetchScholars = async () => {
                 try {
                     const response = await fetch(`/api/scholarshipProgram/${id}/approved-scholar-info`);
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
+                    if (!response.ok) throw new Error('Network response was not ok');
                     const data = await response.json();
                     setScholars(data);
                 } catch (error) {
@@ -170,7 +147,7 @@ export default function ViewScholarshipDetails() {
                                 <h2 className="text-2xl font-bold mb-4 text-blue-600">Edit Program</h2>
                                 <p className="text-gray-700">
                                     To make changes to the scholarship program, please visit the{' '}
-                                    <Link to="/edit-program/:id" className="text-blue-600 hover:underline">
+                                    <Link to={`/edit-program/${id}`} className="text-blue-600 hover:underline">
                                         Edit Program Page
                                     </Link>.
                                 </p>

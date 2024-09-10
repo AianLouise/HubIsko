@@ -41,15 +41,15 @@ export default function ScholarApplications() {
     <div className="flex flex-col min-h-screen">
       <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''}`}>
         <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} currentPath={`${currentUser.scholarshipProviderDetails.organizationName} / Applications`} />
-       
-         {/* Status Check */}
-         {currentUser?.status === 'Pending Verification' && (
+
+        {/* Status Check */}
+        {currentUser?.status === 'Pending Verification' && (
           <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 m-6 rounded-md" role="alert">
             <p className="font-bold">Account Under Verification</p>
             <p>Your account is currently under verification. Some features may be restricted until your account is fully verified.</p>
           </div>
         )}
-       
+
         <div className="border-b mb-8">
           <div className="flex items-center mx-auto justify-between px-24">
             <div className="flex flex-col gap-2 w-1/2">
@@ -62,34 +62,34 @@ export default function ScholarApplications() {
 
         <div className="max-w-8xl mx-auto px-24 flex-col flex">
           <div className="flex justify-between items-center gap-4">
-               <div className='flex gap-2 font-medium text-sm'>
-                    <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
-                      All <span className='text-blue-600'>(0)</span>
-                    </button>
+            <div className='flex gap-2 font-medium text-sm'>
+              <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
+                All <span className='text-blue-600'>(0)</span>
+              </button>
 
-                    <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
-                      Approved <span className='text-green-600'>(0)</span>
-                    </button>
+              <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
+                Approved <span className='text-green-600'>(0)</span>
+              </button>
 
-                    <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
-                      Pending <span className='text-yellow-600'>(0)</span>
-                    </button>
+              <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
+                Pending <span className='text-yellow-600'>(0)</span>
+              </button>
 
-                    <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
-                      Rejected <span className='text-red-600'>(0)</span>
-                    </button>
-                </div>
+              <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
+                Rejected <span className='text-red-600'>(0)</span>
+              </button>
+            </div>
 
             <div className='flex gap-2'>
-            <input
-              type="text"
-              className="border border-gray-300 rounded-md p-2 pr-8 focus:outline-blue-600 focus:border-blue-600"
-              placeholder="Search for applications..."
-            />
-            <button className="bg-blue-600 px-4 py-2 rounded-md flex gap-2 text-white hover:bg-blue-700">
-              <BiFilter className="w-6 h-6" />
-              <span>Filter</span>
-            </button>
+              <input
+                type="text"
+                className="border border-gray-300 rounded-md p-2 pr-8 focus:outline-blue-600 focus:border-blue-600"
+                placeholder="Search for applications..."
+              />
+              <button className="bg-blue-600 px-4 py-2 rounded-md flex gap-2 text-white hover:bg-blue-700">
+                <BiFilter className="w-6 h-6" />
+                <span>Filter</span>
+              </button>
             </div>
           </div>
 
@@ -129,9 +129,13 @@ export default function ScholarApplications() {
                       </td>
                       <td className="border border-gray-200 p-2">
                         <div className="flex justify-center gap-2">
-                          <Link to={`/view-scholarships/${application.scholarshipProgram._id}`} className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600">
+                          <Link
+                            to={`/view-scholarships/${application.scholarshipProgram._id}?tab=applications`}
+                            className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600"
+                          >
                             Review Application
                           </Link>
+
                         </div>
                       </td>
                     </tr>
