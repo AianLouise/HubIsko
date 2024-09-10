@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
@@ -9,9 +9,11 @@ import { FaRegEye } from "react-icons/fa6";
 import { FaAngleRight } from "react-icons/fa";
 import { BiFilter } from 'react-icons/bi';
 import { IoMdArrowDropleftCircle } from "react-icons/io";
-
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function ScholarDashboard() {
+  useTokenExpiry();
+
   useEffect(() => {
     document.title = "Scholar Dashboard | HubIsko";
   }, []);
@@ -266,7 +268,7 @@ export default function ScholarDashboard() {
                   </div>
                 ))
               ) : (
-                         <div className='flex items-center justify-center h-52'>
+                <div className='flex items-center justify-center h-52'>
                   <p className='text-gray-700'>No announcements available.</p>
                 </div>
               )}

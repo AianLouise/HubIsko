@@ -12,8 +12,10 @@ import Step6 from '../components/ScholarshipApplicationForm/Step6';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 const ScholarshipApplicationForm = () => {
+    useTokenExpiry();
     const { currentUser } = useSelector((state) => state.user);
 
     const [formData, setFormData] = useState({

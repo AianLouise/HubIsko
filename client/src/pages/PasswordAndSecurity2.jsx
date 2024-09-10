@@ -6,8 +6,10 @@ import Header from '../components/Header';
 import AccountManagement from './AccountManagement';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import CustomNotification from '../components/CustomNotification';
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function PasswordAndSecurity() {
+    useTokenExpiry();
     useEffect(() => {
         document.title = "Account Settings | HubIsko";
     }, []);

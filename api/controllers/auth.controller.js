@@ -209,18 +209,23 @@ export const signin = async (req, res, next) => {
     if (!validPassword) return next(errorHandler(401, 'wrong credentials'));
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     const { password: hashedPassword, ...rest } = validUser._doc;
-    const expiryDate = new Date(Date.now() + 3600000); // 1 hour
+    const expiryDate = new Date(Date.now() + 30000); // 30 seconds
+    console.log('Token Expiry Date:', expiryDate); // Log the expiry date
     res
       .cookie('access_token', token, { httpOnly: true, expires: expiryDate })
+      .cookie('tokenExpiry', expiryDate.toISOString(), { httpOnly: false, expires: expiryDate }) // Set expiryDate as a separate cookie
       .status(200)
-      .json(rest);
+      .json({ ...rest, tokenExpiry: expiryDate });
   } catch (error) {
     next(error);
   }
 };
 
 export const signout = (req, res) => {
-  res.clearCookie('access_token').json('Signout successfully');
+  res
+    .clearCookie('access_token')
+    .clearCookie('tokenExpiry')
+    .json('Signout successfully');
 };
 
 export const verifyEmail = async (req, res, next) => {

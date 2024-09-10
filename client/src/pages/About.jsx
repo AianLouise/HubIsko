@@ -1,8 +1,10 @@
 import React from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer' // Import the Footer component
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function AboutUs() {
+  useTokenExpiry();
   return (
     <div className="flex flex-col min-h-screen"> {/* Wrap content in a flex container */}
       <Header />

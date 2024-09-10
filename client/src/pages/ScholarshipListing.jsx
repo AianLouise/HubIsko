@@ -5,8 +5,11 @@ import { FaSearch, FaRedo, FaHandHolding, FaGraduationCap, FaInfoCircle } from "
 import { Link } from 'react-router-dom';
 import { BiFilter } from 'react-icons/bi';
 import ListingIcon from '../assets/ListingIconwTexture.png'
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function ScholarshipListing() {
+  useTokenExpiry();
+  
   useEffect(() => {
     document.title = "Scholarship Listing | HubIsko";
   }, []);

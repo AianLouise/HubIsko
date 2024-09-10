@@ -22,9 +22,12 @@ import AccountManagement from './AccountManagement';
 
 import { IoPerson } from "react-icons/io5";
 import { FaEye } from "react-icons/fa";
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 
 export default function PasswordAndSecurity() {
+  useTokenExpiry();
+
   useEffect(() => {
     document.title = "Account Settings | HubIsko";
   }, []);

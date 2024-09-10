@@ -9,8 +9,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
 import ForumsIcon from '../assets/ForumsIconwTexture.png';
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function Forums() {
+  useTokenExpiry();
+  
   useEffect(() => {
     document.title = "Forums | HubIsko";
   }, []);

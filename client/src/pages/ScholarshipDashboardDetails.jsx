@@ -8,8 +8,10 @@ import { FaRegHeart, FaRegEye } from 'react-icons/fa';
 import { BiCommentDots } from 'react-icons/bi';
 import { BsArrowLeft } from 'react-icons/bs';
 import ApplicationForm from './ApplicationForm';
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function ScholarshipDashboardDetails() {
+    useTokenExpiry();
     const { id } = useParams();
     const [activeTab, setActiveTab] = useState('scholars');
 

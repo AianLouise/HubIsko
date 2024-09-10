@@ -9,8 +9,10 @@ import { FaInfoCircle, FaUsers, FaGraduationCap, FaEllipsisH, FaFileContract, Fa
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from 'uuid';
 import { regions, provinces, cities, barangays, regionByCode, provincesByCode, provinceByName } from "select-philippines-address";
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function ApplyingStages() {
+    useTokenExpiry();
 
     const [selectedTab, setSelectedTab] = useState('About');
 

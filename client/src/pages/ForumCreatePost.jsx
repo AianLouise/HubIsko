@@ -7,8 +7,10 @@ import { AiFillFilePdf, AiFillFileWord, AiOutlinePaperClip } from 'react-icons/a
 import { FaTrashAlt } from 'react-icons/fa';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { format } from 'date-fns';
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function CreateForumPost() {
+    useTokenExpiry();
     const [formData, setFormData] = useState({ title: '', content: '' });
     const currentUser = useSelector((state) => state.user.currentUser);
     const [selectedFiles, setSelectedFiles] = useState([]);

@@ -23,11 +23,12 @@ import HomeForums from '../assets/HomeForums.png';
 import HomeNotification from '../assets/HomeNotification.png';
 import HomeTeam from '../assets/HomeTeam.png';
 import HomeNetwork from '../assets/HomeNetwork.png';
-
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 
 export default function Home() {
-
+  useTokenExpiry();
+  
   useEffect(() => {
     document.title = "Home | HubIsko";
   }, []);

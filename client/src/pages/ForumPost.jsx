@@ -13,11 +13,14 @@ import CommentsSection from '../components/Forum/CommentsSection';
 import CommentForm from '../components/Forum/CommentForm';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { AiFillFilePdf, AiFillFileWord } from 'react-icons/ai';
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 Modal.setAppElement('#root');
 
 
 export default function ForumPost() {
+    useTokenExpiry();
+
     const [loading, setLoading] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
     const { postId } = useParams();

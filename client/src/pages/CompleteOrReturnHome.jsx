@@ -2,9 +2,11 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { IoDocumentAttachOutline } from "react-icons/io5";
 import { MdHome } from "react-icons/md";
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 
 export default function CompleteOrReturnHome() {
+    useTokenExpiry();
 
  return (
     <main className='bg-[#f8f8fb] flex justify-center md:flex-row items-center text-left p-4 gap-10 min-h-screen mx-auto'>

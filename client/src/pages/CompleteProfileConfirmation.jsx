@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 const ConfirmationPage = () => {
+  useTokenExpiry();
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">

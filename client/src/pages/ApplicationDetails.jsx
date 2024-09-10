@@ -9,8 +9,11 @@ import { FaEnvelope, FaPhone, FaUser } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { CgClose } from 'react-icons/cg';
 import NewLogo from '../assets/NewLogoClean.png';
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function Forums() {
+    useTokenExpiry();
+
     const { id } = useParams();
     const [scholarship, setScholarship] = useState(null);
 

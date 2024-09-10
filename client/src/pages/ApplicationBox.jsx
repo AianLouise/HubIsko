@@ -5,8 +5,11 @@ import { Link } from "react-router-dom";
 import { FaAngleRight } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function ApplicationBox() {
+  useTokenExpiry();
+
   useEffect(() => {
     document.title = "Scholar Dashboard | HubIsko";
   }, []);

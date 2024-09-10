@@ -5,16 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { regions, provinces, cities, barangays } from 'select-philippines-address';
 import { storage } from '../firebase'; // Import Firebase storage
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Import necessary Firebase functions
-
-// regions().then((region) => console.log(region));
-// regionByCode("01").then((region) => console.log(region.region_name));
-// provinces("01").then((province) => console.log(province));
-// provincesByCode("01").then((province) => console.log(province));
-// provinceByName("Rizal").then((province) => console.log(province.province_code));
-// cities("0128").then((city) => console.log(city));
-// barangays("052011").then((barangays) => console.log(barangays));
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function CompleteProfile() {
+  useTokenExpiry();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
 

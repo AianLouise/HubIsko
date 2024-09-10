@@ -8,8 +8,10 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { FaInfoCircle, FaUsers, FaGraduationCap, FaEllipsisH, FaFileContract, FaUpload } from "react-icons/fa";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from 'uuid';
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function ResubmitApplication() {
+    useTokenExpiry();
 
     const [selectedTab, setSelectedTab] = useState('About');
 

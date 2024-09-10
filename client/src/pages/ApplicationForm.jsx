@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 
 export default function ApplicationForm() {
+    useTokenExpiry();
+
     const navigate = useNavigate();
 
     const [showModal, setShowModal] = useState(false);

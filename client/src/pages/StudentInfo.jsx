@@ -6,8 +6,10 @@ import AccountManagement from "./AccountManagement";
 import { Link } from "react-router-dom";
 import PersonalInformation from "../components/StudentInfo/EditPersonalInformation";
 import { RiEditFill } from "react-icons/ri";
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function StudentInfo() {
+  useTokenExpiry();
   const { currentUser } = useSelector((state) => state.user);
 
   return (

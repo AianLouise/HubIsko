@@ -9,8 +9,11 @@ import ScholarshipProviderScholarships from '../components/Profiles/ScholarshipP
 import ScholarshipProviderPosts from '../components/Profiles/ScholarshipProviderPosts';
 import AdminAbout from '../components/Profiles/AdminAbout';
 import AdminPosts from '../components/Profiles/AdminPosts';
+import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function OthersProfile() {
+    useTokenExpiry();
+
     const { id } = useParams(); // Extract user ID from URL
     const [user, setUser] = useState(null);
     const [selectedTab, setSelectedTab] = useState(''); // Default tab

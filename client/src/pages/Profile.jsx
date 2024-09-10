@@ -12,6 +12,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { format } from 'date-fns';
 
 export default function Profile() {
+  
   const currentUser = useSelector((state) => state.user.currentUser);
 
   const [ShowModal, setShowModal] = useState(false);
