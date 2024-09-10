@@ -1,5 +1,5 @@
 import express from "express";
-import { approveScholarshipProvider, countApprovedScholars, declineScholarshipProgram, getAllApplicants, getAllProviders, getAllScholarshipPrograms, getAllUsers, getApplicantById, getPendingScholarshipPrograms, getPendingScholarshipProviders, getScholarshipProgramDetailsById, getScholarshipProviderById, getTotalApplicants, getTotalScholarshipProviders, getTotalScholarships, getTotalUnverifiedAccounts, getTotalUserAccounts, getUserForumPosts, getUserScholarshipPrograms, rejectScholarshipProvider, searchPendingApprovalPrograms, searchPendingVerificationProviders, test, updateStudentDetails, verifyScholarshipProgram, verifyScholarshipProviderStatus } from '../controllers/admin.controller.js';
+import { approveScholarshipProvider, countApprovedScholars, declineScholarshipProgram, getAllApplicants, getAllProviders, getAllScholarshipPrograms, getAllUsers, getApplicantById, getPendingScholarshipPrograms, getPendingScholarshipProviders, getScholarshipProgramDetailsById, getScholarshipProviderById, getTotalApplicants, getTotalApprovedPrograms, getTotalScholarshipProviders, getTotalScholarships, getTotalUnverifiedAccounts, getTotalUserAccounts, getUserForumPosts, getUserScholarshipPrograms, rejectScholarshipProvider, searchPendingApprovalPrograms, searchPendingVerificationProviders, test, updateStudentDetails, verifyScholarshipProgram, verifyScholarshipProviderStatus } from '../controllers/admin.controller.js';
 
 const router = express.Router();
 
@@ -29,5 +29,6 @@ router.patch('/student/:id', updateStudentDetails);
 router.get('/scholarship-programs', getAllScholarshipPrograms);
 router.get('/user/:userId/scholarship-programs', getUserScholarshipPrograms);
 router.get('/user/:userId/forum-posts', getUserForumPosts);
+router.get('/total-approved-programs', getTotalApprovedPrograms);
 
 export default router;

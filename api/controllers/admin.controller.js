@@ -476,3 +476,16 @@ export const getUserForumPosts = async (req, res) => {
     });
   }
 };
+
+export const getTotalApprovedPrograms = async (req, res) => {
+  try {
+    const approvedProgramsCount = await ScholarshipProgram.countDocuments({ status: 'Approved' });
+    res.status(200).json({ totalApprovedPrograms: approvedProgramsCount });
+  } catch (error) {
+    console.error('Error fetching total approved programs:', error.message);
+    res.status(500).json({
+      message: 'Error fetching total approved programs',
+      error: error.message,
+    });
+  }
+};
