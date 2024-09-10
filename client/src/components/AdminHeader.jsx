@@ -98,7 +98,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
 
         return (
             <>
-                <h1 className="text-lg font-bold pl-4 text-blue-200">Admin</h1>
+                <h1 className="text-lg font-bold pl-4 text-blue-500">Admin</h1>
                 {pathnames.map((value, index) => {
                     const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
                     return (
