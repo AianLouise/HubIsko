@@ -272,3 +272,44 @@ export const addReply = async (req, res) => {
         res.status(500).json({ message: 'Server error', error });
     }
 };
+
+export const getStudentScholarshipProgramAnnouncements = async (req, res) => {
+    try {
+        // Get the user ID from the request body
+        const { userId } = req.body;
+
+        // Validate userId
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID is required' });
+        }
+
+        // Find the scholarship programs where the user is an approved scholar
+        const scholarshipPrograms = await ScholarshipProgram.find({ 'approvedScholars._id': userId });
+
+        if (scholarshipPrograms.length === 0) {
+            return res.status(404).json({ message: 'No scholarship programs found for this user' });
+        }
+
+        // Extract the IDs of the scholarship programs
+        const scholarshipProgramIds = scholarshipPrograms.map(program => program._id);
+
+        // Find announcements related to these scholarship programs
+        const announcements = await Announcement.find({ scholarshipProgram: { $in: scholarshipProgramIds } });
+
+        if (announcements.length === 0) {
+            return res.status(404).json({ message: 'No announcements found for these scholarship programs' });
+        }
+
+        // Combine the scholarship program details with the announcements
+        const response = scholarshipPrograms.map(program => {
+            return {
+                scholarshipProgram: program,
+                announcements: announcements.filter(announcement => announcement.scholarshipProgram.equals(program._id))
+            };
+        });
+
+        res.status(200).json({ data: response });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
+};

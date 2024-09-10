@@ -17,6 +17,8 @@ export default function ScholarDashboard() {
   }, []);
 
   const currentUser = useSelector((state) => state.user.currentUser);
+  const userId = currentUser._id;
+
   const [approvedApplications, setApprovedApplications] = useState([]);
   const [pendingApplications, setPendingApplications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -153,6 +155,40 @@ export default function ScholarDashboard() {
   };
 
   const filteredApplications = getFilteredApplications();
+  const [scholarshipData, setScholarshipData] = useState([]);
+  const [carouselIndex, setCarouselIndex] = useState(0);
+
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        const response = await fetch('/api/announcement/student-scholarship-program', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userId }),
+        });
+        const data = await response.json();
+        setScholarshipData(data.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching announcements:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchAnnouncements();
+  }, [userId]);
+
+  const handleNextCarousel = () => {
+    setCarouselIndex((prevIndex) => (prevIndex + 2) % scholarshipData[0].announcements.length);
+  };
+
+  const handlePrevCarousel = () => {
+    setCarouselIndex((prevIndex) => (prevIndex - 2 + scholarshipData[0].announcements.length) % scholarshipData[0].announcements.length);
+  };
+
+  console.log(scholarshipData.length);
 
   if (loading) {
     return (
@@ -183,40 +219,72 @@ export default function ScholarDashboard() {
               </div>
             </div>
 
-            <div className='grid lg:grid-cols-3 mx-10 lg:mx-0 gap-10 my-10'>
-              <div className='bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out'>
-
-                <div className='flex gap-2'>
-                  <div className='bg-blue-600 w-12 h-12 rounded-md'></div>
-                  <div className='flex flex-col'>
-                    <span className='font-bold'>Organization Name</span>
-                    <span className='text-blue-600'>Scholarship Title</span>
-                  </div>
-                </div>
-
-                <p className='bg-slate-200 p-4 rounded-md'><span className='text-blue-600 font-bold'>@Students</span> Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, vel.</p>
-                <span className='text-sm flex items-end justify-end w-full text-slate-600'>Announced: July 7,2024</span>
-                <div className='border-t mt-2'>
-                  <div className='flex flex-row justify-between mt-2 gap-2'>
-                    <div className='flex flex-row gap-2'>
-                      <div className='flex flex-row gap-1 px-2'>
-                        <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
-                        <span>123</span>
+            <div className='relative'>
+              <div className='grid grid-cols-1 lg:grid-cols-2 mx-10 lg:mx-0 gap-10 my-10'>
+                {scholarshipData.length > 0 ? (
+                  scholarshipData[0].announcements.slice(carouselIndex, carouselIndex + 2).map((announcement) => (
+                    <div key={announcement._id} className='bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out'>
+                      <div className='flex gap-2'>
+                        <div className='bg-blue-600 w-12 h-12 rounded-md overflow-hidden'>
+                          <img src={scholarshipData[0].scholarshipProgram.scholarshipImage} alt="Scholarship" className="w-full h-full object-cover" />
+                        </div>
+                        <div className='flex flex-col'>
+                          <span className='font-bold'>{scholarshipData[0].scholarshipProgram.organizationName}</span>
+                          <span className='text-blue-600'>{scholarshipData[0].scholarshipProgram.title}</span>
+                        </div>
                       </div>
-                      <div className='flex flex-row gap-1'>
-                        <BiCommentDots className='w-6 h-6 text-blue-600' />
-                        <span>10</span>
+                      <p className='bg-slate-200 p-4 rounded-md'>
+                        <span className='text-blue-600 font-bold'>@Students</span> {announcement.content}
+                      </p>
+                      <span className='text-sm flex items-end justify-end w-full text-slate-600'>
+                        Announced: {new Date(announcement.date).toLocaleDateString()}
+                      </span>
+                      <div className='border-t mt-2'>
+                        <div className='flex flex-row justify-between mt-2 gap-2'>
+                          <div className='flex flex-row gap-2'>
+                            <div className='flex flex-row gap-1 px-2'>
+                              <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
+                              <span>{announcement.likesCount}</span>
+                            </div>
+                            <div className='flex flex-row gap-1'>
+                              <BiCommentDots className='w-6 h-6 text-blue-600' />
+                              <span>{announcement.comments.length}</span>
+                            </div>
+                          </div>
+                          <div className='flex flex-row gap-1 pr-2'>
+                            <FaRegEye className='w-6 h-6 text-blue-600' />
+                            <span>1.2k</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div className='flex flex-row gap-1 pr-2'>
-                      <FaRegEye className='w-6 h-6 text-blue-600' />
-                      <span>1.2k</span>
-                    </div>
-                  </div>
-                </div>
+                  ))
+                ) : (
+                  <p className='text-gray-700'>No announcements available.</p>
+                )}
               </div>
-
+              {scholarshipData.length > 0 && scholarshipData[0].announcements.length > 2 && (
+                <>
+                  <div className='absolute top-1/2 left-4 transform -translate-y-1/2 translate-x-[-80px]'>
+                    <button
+                      onClick={handlePrevCarousel}
+                      className='bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 transition duration-300 transform hover:translate-x-[-5px]'
+                    >
+                      &lt;
+                    </button>
+                  </div>
+                  <div className='absolute top-1/2 right-4 transform -translate-y-1/2 translate-x-[80px]'>
+                    <button
+                      onClick={handleNextCarousel}
+                      className='bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 transition duration-300 transform hover:translate-x-[5px]'
+                    >
+                      &gt;
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
+
 
             {/* If no Scholarship yet */}
             {/* <div className='flex flex-col items-center justify-center gap-2 my-20 text-slate-500 font-medium'>

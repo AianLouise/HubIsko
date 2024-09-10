@@ -17,7 +17,7 @@ const commentSchema = new mongoose.Schema({
 
 const announcementSchema = new mongoose.Schema({
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  scholarshipProgram: { type: String, required: true },
+    scholarshipProgram: { type: mongoose.Schema.Types.ObjectId, ref: 'ScholarshipProgram' },
   title: { type: String, required: true },
   content: { type: String, required: true },
   date: { type: Date, default: Date.now },

@@ -115,8 +115,13 @@ export default function PostAnnouncement() {
     useEffect(() => {
         const fetchAnnouncements = async () => {
             try {
+                console.log('Fetching announcements for program ID:', id);
                 const response = await fetch(`/api/announcement/${id}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
                 const data = await response.json();
+                console.log('Fetched data:', data);
                 setProgramDetails(data.programDetails);
                 setAnnouncements(data.announcements);
             } catch (error) {
@@ -225,7 +230,7 @@ export default function PostAnnouncement() {
                                             </div>
                                             <div className="flex flex-row gap-1">
                                                 <BiCommentDots className="w-6 h-6 text-blue-600" />
-                                                <span>10</span>
+                                                <span>{announcement.totalComments}</span>
                                             </div>
                                         </div>
                                         <div className="flex flex-row gap-1 pr-2">
