@@ -286,7 +286,7 @@ const ProviderRegistration = () => {
     };
 
     return (
-        <div className="container bg-[#f8f8fb] font-medium flex flex-col items-center min-h-screen pb-14 pt-14">
+        <div className="bg-[#f8f8fb] font-medium flex flex-col items-center min-h-screen pb-14 pt-14">
             {/* Top section with step indicators */}
             <div className="flex flex-col items-center mt-8">
                 <span className='text-2xl text-slate-500'>Let's get your organization setup!</span>

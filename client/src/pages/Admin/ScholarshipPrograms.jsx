@@ -3,6 +3,8 @@ import Layout from "../../components/Layout";
 import { Link } from "react-router-dom";
 import { BiDotsHorizontal } from "react-icons/bi";
 import { FaGraduationCap } from "react-icons/fa";
+import { IoDocumentTextOutline, IoHourglassOutline, IoCheckmarkCircleOutline, IoCloseCircleOutline } from 'react-icons/io5';
+import { IoAddCircleOutline } from "react-icons/io5";
 
 export default function ScholarshipPrograms() {
     useEffect(() => {
@@ -20,6 +22,16 @@ export default function ScholarshipPrograms() {
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
+
+    const mostScholars = [
+        { id: 1, name: 'Provider One', scholars: 120 },
+        { id: 2, name: 'Provider Two', scholars: 95 },
+        { id: 3, name: 'Provider Three', scholars: 80 },
+        { id: 4, name: 'Provider Four', scholars: 75 },
+        { id: 5, name: 'Provider Five', scholars: 60 },
+      ];
+    
+    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -76,7 +88,7 @@ export default function ScholarshipPrograms() {
         <div className="flex flex-col min-h-screen">
 
             <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
-                <div className='border-b mb-8'>
+                {/* <div className='border-b mb-8'>
                     <div className={'flex items-center mx-auto justify-between px-24'}>
                         <div className='flex flex-col gap-2 w-1/2'>
                             <h1 className='text-4xl font-bold text-slate-800'>Scholarship Programs</h1>
@@ -86,90 +98,160 @@ export default function ScholarshipPrograms() {
                             <FaGraduationCap className="text-white w-20 h-20" />
                         </div>
                     </div>
+                </div> */}
+
+                <div className='max-w-8xl mx-auto px-24 pb-12 pt-8 flex-col flex'>
+
+                <div className="flex items-center justify-between pb-2">
+                    <h1 className='text-2xl font-bold text-slate-600'>Scholarship Programs</h1>
+                    {/* Add Program button */}
+                    <Link to={'/add-scholarship-program'} className="flex gap-2 items-center bg-blue-600 rounded-md px-6 py-2 shadow text-white font-medium">
+                        <IoAddCircleOutline className='w-6 h-6' />
+                        Add Program
+                    </Link>
                 </div>
-                <div className='max-w-8xl mx-auto px-24 py-12 gap-10 flex-col flex'>
-                    <div className="grid grid-cols-3 gap-10">
-                        <Link to={'/scholarships-data'} className="bg-white flex flex-col gap-2 p-4 shadow border rounded-md h-[200px] justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
-                            <h1 className="text-2xl font-semibold text-slate-600">Total Scholarships</h1>
-                            <span className="text-6xl font-bold text-left text-blue-600">{totalScholarships}</span>
-                        </Link>
-
-                        <Link to={'/scholarship-program-applications'} className="bg-white flex flex-col gap-2 p-4 shadow border rounded-md h-[200px] justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
-                            <h1 className="text-2xl font-semibold text-slate-600 text-center">Pending Scholarship Programs</h1>
-                            <span className="text-6xl font-bold text-blue-600 text-center">{pendingPrograms}</span>
-                        </Link>
-
-                        <Link to={'/approved-scholarship-programs'} className="bg-white flex flex-col gap-2 p-4 shadow border rounded-md h-[200px] justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
-                            <h1 className="text-2xl font-semibold text-slate-600 text-center">Approved Scholarship Programs</h1>
-                            <span className="text-6xl font-bold text-blue-600 text-center">{approvedPrograms}</span>
-                        </Link>
-                    </div>
-
-                    <span className="border-b pb-2 mt-8">Scholarship Programs</span>
-
-                    <div>
-                        {/* Searchbar */}
-                        <div className="flex justify-between items-center">
-                            <div className="flex gap-2 items-center">
-                            <button className="px-4 py-2 rounded-md bg-white shadow border">
-                                All <span className="text-blue-600">(0)</span>
-                            </button>
-                            <button className="px-4 py-2 rounded-md bg-white shadow border">
-                                Pending <span className="text-yellow-500">(0)</span>
-                            </button>
-                            <button className="px-4 py-2 rounded-md bg-white shadow border">
-                                Approved <span className="text-green-600">(0)</span>
-                            </button>
-                           
-                            </div>
-                            <input type="text" 
-                            placeholder="Search for a scholarship program" 
-                            className="w-96 px-4 py-2 border rounded-md" />
+                
+                <div className="flex gap-4">
+                <div className="flex flex-col gap-4 w-full">
+                <div className="grid grid-cols-4 rounded-lg border">
+                    <div to={'/scholarships-data'} className="bg-white flex justify-between items-center gap-2 p-4 shadow rounded-l-lg">
+                        <div className="flex flex-col gap-2 items-left">
+                        <h1 className="text-base font-semibold text-slate-600">Total Scholarships</h1>
+                        <span className="text-4xl font-bold text-left">{totalScholarships}</span>
+                        </div>
+                        <div className="bg-blue-200 p-1 rounded-lg">
+                        <IoDocumentTextOutline className="w-12 h-12 text-blue-800" />
                         </div>
                     </div>
-                    <div className="overflow-x-auto border-2 rounded-md">
-                        <table className="min-w-full shadow-md rounded-lg">
-                            <thead className="bg-blue-600">
-                            <tr className="text-white">
-                                <th className="py-3 px-6 text-left">Program Name</th>
-                                <th className="py-3 px-6 text-left">Provider</th>
-                                <th className="py-3 px-6 text-left">Status</th>
-                                <th className="py-3 px-6 text-left">Applications</th>
-                                <th className="py-3 px-6 text-left">Actions</th>
+
+                    <div to={'/scholarship-program-applications'} className="bg-white flex justify-between items-center gap-2 p-4 shadow ">
+                        <div className="flex flex-col gap-2 items-left">
+                        <h1 className="text-base font-semibold text-slate-600">Pending Programs</h1>
+                        <span className="text-4xl font-bold text-left">{pendingPrograms}</span>
+                        </div>
+                        <div className="bg-yellow-200 p-1 rounded-lg">
+                        <IoHourglassOutline className="w-12 h-12 text-yellow-600" />
+                        </div>
+                    </div>
+
+                    <div to={'/approved-scholarship-programs'} className="bg-white flex justify-between items-center gap-2 p-4 shadow">
+                        <div className="flex flex-col gap-2 items-left">
+                        <h1 className="text-base font-semibold text-slate-600">Approved Programs</h1>
+                        <span className="text-4xl font-bold text-left">
+                            {/* {approvedPrograms} */}
+                            0
+                            </span>
+                        </div>
+                        <div className="bg-green-200 p-1 rounded-lg">
+                        <IoCheckmarkCircleOutline className="w-12 h-12 text-green-600" />
+                        </div>
+                    </div>
+
+                    <div to={'/rejected-scholarship-programs'} className="bg-white flex justify-between items-center gap-2 p-4 shadow rounded-r-lg">
+                        <div className="flex flex-col gap-2 items-left">
+                        <h1 className="text-base font-semibold text-slate-600">Rejected Programs</h1>
+                        <span className="text-4xl font-bold text-left">0</span>
+                        </div>
+                        <div className="bg-red-200 p-1 rounded-lg">
+                        <IoCloseCircleOutline className="w-12 h-12 text-red-600" />
+                        </div>
+                    </div>
+                    </div>
+
+                <div className='flex flex-col gap-10'>
+                <div className="overflow-x-auto rounded-lg shadow-md border">
+                    <div className="sticky top-0 bg-white z-10">
+                        <div className="flex justify-between items-center p-4 bg-white shadow-md">
+                        <div className="flex gap-2 items-center">
+                            <button className="px-4 py-2 rounded-md bg-white shadow border">
+                            All <span className="text-blue-600">(0)</span>
+                            </button>
+                            <button className="px-4 py-2 rounded-md bg-white shadow border">
+                            Pending <span className="text-yellow-500">(0)</span>
+                            </button>
+                            <button className="px-4 py-2 rounded-md bg-white shadow border">
+                            Rejected <span className="text-red-500">(0)</span>
+                            </button>
+                            <button className="px-4 py-2 rounded-md bg-white shadow border">
+                            Approved <span className="text-green-600">(0)</span>
+                            </button>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Search for a scholarship program"
+                            className="w-96 px-4 py-2 border rounded-md"
+                        />
+                        </div>
+                        <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-slate-100 sticky top-16 z-10">
+                            <tr className="border-y text-sm">
+                            <th className="py-3 px-6 text-left w-1/5 uppercase tracking-wider">Program Name</th>
+                            <th className="py-3 px-6 text-left w-1/5 uppercase tracking-wider">Provider</th>
+                            <th className="py-3 px-6 text-left w-1/5 uppercase tracking-wider">Status</th>
+                            <th className="py-3 px-6 text-left w-1/5 uppercase tracking-wider">Applications</th>
+                            <th className="py-3 px-6 text-left w-1/5 uppercase tracking-wider">Actions</th>
                             </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td colSpan="5" className="p-0">
-                                <div className="max-h-[400px] overflow-y-auto">
-                                    <table className="min-w-full">
-                                    <tbody>
-                                        {scholarshipPrograms.map((program, index) => (
-                                        <tr
-                                            key={program.id}
-                                            className={`border-b ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100 transition-colors`}
-                                        >
-                                            <td className="py-3 px-6">{program.title}</td>
-                                            <td className="py-3 px-6">{program.organizationName}</td>
-                                            <td className="py-3 px-6">{program.status}</td>
-                                            <td className="py-3 px-6">{program.applications}</td>
-                                            <td className="py-3 px-6">
-                                            <Link to={`/scholarship-program/${program._id}`} className="text-blue-600 hover:underline">
-                                                View
-                                            </Link>
-                                            </td>
-                                        </tr>
-                                        ))}
-                                    </tbody>
-                                    </table>
+                        </thead>
+                        </table>
+                    </div>
+                    <div className="max-h-[400px] overflow-y-auto">
+                        <table className="min-w-full divide-y divide-gray-200">
+                        <tbody className="bg-white font-normal text-sm">
+                            {scholarshipPrograms.map((program, index) => (
+                            <tr
+                                key={program.id}
+                                className={`border-b ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100 transition-colors`}
+                            >
+                                <td className="py-3 px-6 w-1/5">
+                                <div className="flex items-center gap-4">
+                                <div className="bg-blue-600 h-10 w-10 rounded-full"></div>
+                                {program.title}
                                 </div>
                                 </td>
+                                <td className="py-3 px-6 w-1/5">{program.organizationName}</td>
+                                <td>
+                                 <span className={`ml-8 py-2 px-6 rounded-md w-1/5 ${program.status === 'Approved' ? 'bg-green-600 text-white' 
+                                                                : program.status === 'Pending Approval' ? 'bg-yellow-500 text-white' 
+                                                                : program.status === 'Rejected' ? 'bg-red-600 text-white' :''}`}>
+                                                                {program.status}</span>
+                                </td>
+                                <td className="py-3 px-6 w-1/5">0</td>
+                                <td className="py-3 px-6 w-1/5">
+                                <Link to={`/scholarship-program/${program._id}`} className="bg-blue-600 text-white px-4 ml-2 py-1 rounded-md hover:bg-blue-800">
+                                    View
+                                </Link>
+                                </td>
                             </tr>
-                            </tbody>
+                            ))}
+                        </tbody>
                         </table>
-                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
 
-                    <span className="border-b pb-2">Recent Activities</span>
+            <div className="bg-white rounded-md  w-1/3 border shadow divide-y">
+            <div className="flex items-center justify-between p-4">
+                <h1 className="">Scholarship Providers</h1>
+                <button className="px-2 py-1 bg-blue-600 rounded-md text-white text-sm">Most Scholars</button>
+                </div>
+                <div className="divide-y">
+                {mostScholars.map((provider) => (
+                    <div key={provider.id} className="flex justify-between items-center p-4 hover:bg-gray-100 transition-colors">
+                    <div className="flex gap-2 items-center">
+                    <div className="border border-blue-600 w-10 h-10 rounded-full"></div>
+                    <span className="font-medium text-gray-700">{provider.name}</span>
+                    </div>
+                    <span className="text-gray-500">{provider.scholars} Scholars</span>
+                    </div>
+                ))}
+                </div>
+            </div>
+                    
+
+            </div>
+                                
+                    <span className="border-b pb-2 mt-10">Recent Activities</span>
 
                     <div className="">
                         <div className="bg-white shadow border rounded-md group">
@@ -206,9 +288,8 @@ export default function ScholarshipPrograms() {
                             </div>
                         </div>
                     </div>
-
-
                 </div>
+     
             </main>
         </div>
     );
