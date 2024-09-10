@@ -104,6 +104,8 @@ export default function PostAnnouncement() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [announcements, setAnnouncements] = useState([]);
     const [programDetails, setProgramDetails] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [sortCriteria, setSortCriteria] = useState('date'); // Default sort by date
     const { id } = useParams(); // Get the scholarshipProgram ID from the URL
     const navigate = useNavigate();
 
@@ -125,9 +127,34 @@ export default function PostAnnouncement() {
         fetchAnnouncements();
     }, [id]);
 
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const handleSortChange = (e) => {
+        setSortCriteria(e.target.value);
+    };
+
     const handleAnnouncementClick = (announcementId) => {
         navigate(`/announcement/details/${announcementId}`);
     };
+
+    const filteredAnnouncements = announcements
+        .filter((announcement) => announcement.status === 'Posted')
+        .filter((announcement) =>
+            announcement.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            announcement.content.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        .sort((a, b) => {
+            if (sortCriteria === 'newest') {
+                return new Date(b.date) - new Date(a.date);
+            } else if (sortCriteria === 'oldest') {
+                return new Date(a.date) - new Date(b.date);
+            } else if (sortCriteria === 'title') {
+                return a.title.localeCompare(b.title);
+            }
+            return 0;
+        });
 
     return (
         <div className="p-6 bg-white rounded-lg shadow-md">
@@ -148,55 +175,71 @@ export default function PostAnnouncement() {
                 Post Announcement
             </button>
             <AnnouncementModal isOpen={isModalOpen} onClose={closeModal} />
-            <div className="grid lg:grid-cols-3 mx-10 lg:mx-0 gap-10 my-10">
-                {announcements.length > 0 ? (
-                    announcements.map((announcement) => (
-                        <div
-                            key={announcement._id}
-                            className="bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out cursor-pointer"
-                            onClick={() => handleAnnouncementClick(announcement._id)}
-                        >
-                            <div className="flex gap-2">
-                                <div className="bg-blue-600 w-12 h-12 rounded-md overflow-hidden">
-                                    <img src={programDetails.scholarshipImage} alt="Scholarship" className="w-full h-full object-cover" />
-                                </div>
-                                <div className="flex flex-col">
-                                    <span className="font-bold">{programDetails.organizationName}</span>
-                                    <span className="text-blue-600">{programDetails.title}</span>
-                                </div>
-                            </div>
-                            <div className="bg-slate-200 p-4 rounded-md">
-                                <h3 className="text-xl font-bold text-blue-600 mb-2">{announcement.title}</h3>
-                                <p className="text-gray-700">
-                                    <span className="text-blue-600 font-bold">@Students:</span> {announcement.content}
-                                </p>
-                            </div>
-                            <span className="text-sm flex items-end justify-end w-full text-slate-600">
-                                Announced: {new Date(announcement.date).toLocaleDateString()}
-                            </span>
-                            <div className="border-t mt-2">
-                                <div className="flex flex-row justify-between mt-2 gap-2">
-                                    <div className="flex flex-row gap-2">
-                                        <div className="flex flex-row gap-1 px-2">
-                                            <FaRegHeart className="w-6 h-6 font-bold text-blue-600" />
-                                            <span>123</span>
-                                        </div>
-                                        <div className="flex flex-row gap-1">
-                                            <BiCommentDots className="w-6 h-6 text-blue-600" />
-                                            <span>10</span>
-                                        </div>
+            <div className="mx-10 lg:mx-0 my-10">
+                <div className="flex justify-between mb-4">
+                    <input
+                        type="text"
+                        placeholder="Search announcements..."
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        className="border p-2 rounded-md"
+                    />
+                    <select value={sortCriteria} onChange={handleSortChange} className="border p-2 rounded-md">
+                        <option value="newest">Sort by Newest</option>
+                        <option value="oldest">Sort by Oldest</option>
+                        <option value="title">Sort by Title</option>
+                    </select>
+                </div>
+                <div className="grid lg:grid-cols-2 gap-10">
+                    {filteredAnnouncements.length > 0 ? (
+                        filteredAnnouncements.map((announcement) => (
+                            <div
+                                key={announcement._id}
+                                className="bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out cursor-pointer"
+                                onClick={() => handleAnnouncementClick(announcement._id)}
+                            >
+                                <div className="flex gap-2">
+                                    <div className="bg-blue-600 w-12 h-12 rounded-md overflow-hidden">
+                                        <img src={programDetails.scholarshipImage} alt="Scholarship" className="w-full h-full object-cover" />
                                     </div>
-                                    <div className="flex flex-row gap-1 pr-2">
-                                        <FaRegEye className="w-6 h-6 text-blue-600" />
-                                        <span>1.2k</span>
+                                    <div className="flex flex-col">
+                                        <span className="font-bold">{programDetails.organizationName}</span>
+                                        <span className="text-blue-600">{programDetails.title}</span>
                                     </div>
                                 </div>
+                                <div className="bg-slate-200 p-4 rounded-md">
+                                    <div className="flex justify-between items-center">
+                                        <h3 className="text-xl font-bold text-blue-600 mb-2">{announcement.title}</h3>
+                                        <span className="text-sm text-slate-600">Announced: {new Date(announcement.date).toLocaleDateString()}</span>
+                                    </div>
+                                    <p className="text-gray-700">
+                                        <span className="text-blue-600 font-bold">@Students:</span> {announcement.content}
+                                    </p>
+                                </div>
+                                <div className="border-t mt-2">
+                                    <div className="flex flex-row justify-between mt-2 gap-2">
+                                        <div className="flex flex-row gap-2">
+                                            <div className="flex flex-row gap-1 px-2">
+                                                <FaRegHeart className="w-6 h-6 font-bold text-blue-600" />
+                                                <span>123</span>
+                                            </div>
+                                            <div className="flex flex-row gap-1">
+                                                <BiCommentDots className="w-6 h-6 text-blue-600" />
+                                                <span>10</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-row gap-1 pr-2">
+                                            <FaRegEye className="w-6 h-6 text-blue-600" />
+                                            <span>1.2k</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    ))
-                ) : (
-                    <p className="text-gray-700">No announcements available.</p>
-                )}
+                        ))
+                    ) : (
+                        <p className="text-gray-700">No announcements available.</p>
+                    )}
+                </div>
             </div>
         </div>
     );
