@@ -29,7 +29,7 @@ const AnnouncementDetails = () => {
             }
             const data = await response.json();
             setAnnouncement(data);
-            setLikesCount(data.likesCount || 0);
+            setLikesCount(data.likesCount || 0); 
             // Check if the logged-in user has liked the announcement
             if (data.likedBy.includes(currentUserId)) {
                 setLiked(true);
