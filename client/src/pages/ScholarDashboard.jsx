@@ -189,7 +189,7 @@ export default function ScholarDashboard() {
   };
 
   // Calculate total number of announcements
-  const totalAnnouncements = scholarshipData.reduce((total, program) => total + program.announcements.length, 0);
+  const totalAnnouncements = scholarshipData ? scholarshipData.reduce((total, program) => total + program.announcements.length, 0) : 0;
 
 
   if (loading) {
@@ -224,9 +224,10 @@ export default function ScholarDashboard() {
             </div>
 
             <div className='relative'>
-              <div className='grid grid-cols-1 lg:grid-cols-2 mx-10 lg:mx-0 gap-10 my-10'>
-                {scholarshipData.length > 0 ? (
-                  scholarshipData[0].announcements.slice(carouselIndex, carouselIndex + 2).map((announcement) => (
+
+              {scholarshipData && scholarshipData.length > 0 && scholarshipData[0].announcements.length > 0 ? (
+                scholarshipData[0].announcements.slice(carouselIndex, carouselIndex + 2).map((announcement) => (
+                  <div className='grid grid-cols-1 lg:grid-cols-2 mx-10 lg:mx-0 gap-10 my-10'>
                     <div key={announcement._id} className='bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out'>
                       <div className='flex gap-2'>
                         <div className='bg-blue-600 w-12 h-12 rounded-md overflow-hidden'>
@@ -262,12 +263,15 @@ export default function ScholarDashboard() {
                         </div>
                       </div>
                     </div>
-                  ))
-                ) : (
+                  </div>
+                ))
+              ) : (
+                         <div className='flex items-center justify-center h-52'>
                   <p className='text-gray-700'>No announcements available.</p>
-                )}
-              </div>
-              {scholarshipData.length > 0 && scholarshipData[0].announcements.length > 2 && (
+                </div>
+              )}
+
+              {scholarshipData && scholarshipData.length > 0 && scholarshipData[0].announcements.length > 2 && (
                 <>
                   <div className='absolute top-1/2 left-4 transform -translate-y-1/2 translate-x-[-80px]'>
                     <button
