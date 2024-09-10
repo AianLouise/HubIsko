@@ -188,7 +188,9 @@ export default function ScholarDashboard() {
     setCarouselIndex((prevIndex) => (prevIndex - 2 + scholarshipData[0].announcements.length) % scholarshipData[0].announcements.length);
   };
 
-  console.log(scholarshipData.length);
+  // Calculate total number of announcements
+  const totalAnnouncements = scholarshipData.reduce((total, program) => total + program.announcements.length, 0);
+
 
   if (loading) {
     return (
@@ -209,7 +211,9 @@ export default function ScholarDashboard() {
 
           <div className='flex flex-col border-b'>
             <div className='flex flex-col gap-2 lg:gap-0 lg:flex-row lg:justify-between lg:items-center'>
-              <span className='font-bold text-xl lg:text-2xl'>Scholarship Announcements <span className='text-blue-500'>(0)</span> </span>
+              <span className='font-bold text-xl lg:text-2xl'>
+                Scholarship Announcements <span className='text-blue-500'>({totalAnnouncements})</span>
+              </span>
 
               <div className=''>
                 <button className='flex gap-2 bg-white hover:bg-slate-200 px-6 py-2 border shadow rounded-md'>
