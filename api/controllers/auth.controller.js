@@ -4,11 +4,12 @@ import { errorHandler } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 
+import ActivityLog from '../models/activityLog.model.js'; // Adjust the path as necessary
+
 export const signup = async (req, res, next) => {
   const { firstName, lastName, email, username, password, role, address } = req.body;
   const hashedPassword = bcryptjs.hashSync(password, 10);
 
-  // Create a new user instance with profileComplete set to false
   const newUser = new User({
     email,
     username,
@@ -71,9 +72,7 @@ export const signup = async (req, res, next) => {
       },
     });
 
-    // const verificationUrl = ` https://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`;
-
-     const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
+    const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
 
     console.log('Sending verification email to:', email);
 
@@ -100,6 +99,16 @@ export const signup = async (req, res, next) => {
 
     console.log('Verification email sent successfully to:', email);
 
+    // Create an activity log entry
+    const activityLog = new ActivityLog({
+      userId: savedUser._id,
+      action: 'CREATE',
+      type: 'account', // Added type field with value 'account'
+      details: 'User signed up and verification email sent.'
+    });
+
+    await activityLog.save();
+
     res.status(201).json({ success: true, message: 'User created successfully. Please check your email to verify your account.' });
   } catch (error) {
     next(error);
@@ -118,6 +127,17 @@ export const google = async (req, res, next) => {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '5h' });
       const { password, ...rest } = user.toObject();
       const expiryDate = new Date(Date.now() + 5 * 60 * 60 * 1000); // 5 hours
+
+      // Create an activity log entry for existing user login
+      const activityLog = new ActivityLog({
+        userId: user._id,
+        action: 'LOGIN',
+        type: 'account', // Added type field with value 'account'
+        details: 'User logged in using Google.'
+      });
+
+      await activityLog.save();
+
       return res
         .cookie('access_token', token, {
           httpOnly: true,
@@ -189,6 +209,16 @@ export const google = async (req, res, next) => {
 
       await newUser.save();
 
+      // Create an activity log entry for new user signup
+      const activityLog = new ActivityLog({
+        userId: newUser._id,
+        action: 'CREATE',
+        type: 'account', // Added type field with value 'account'
+        details: 'User signed up using Google.'
+      });
+
+      await activityLog.save();
+
       // Generate a token and send the response
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '5h' });
       const { password, ...rest } = newUser.toObject();
@@ -221,6 +251,17 @@ export const signin = async (req, res, next) => {
     const { password: hashedPassword, ...rest } = validUser._doc;
     const expiryDate = new Date(Date.now() + 5 * 60 * 60 * 1000); // 5 hours
     console.log('Token Expiry Date:', expiryDate); // Log the expiry date
+
+    // Create an activity log entry for user sign in
+    const activityLog = new ActivityLog({
+      userId: validUser._id,
+      action: 'LOGIN',
+      type: 'account', // Added type field with value 'account'
+      details: 'User signed in.'
+    });
+
+    await activityLog.save();
+
     res
       .cookie('access_token', token, { httpOnly: true, expires: expiryDate })
       .cookie('tokenExpiry', expiryDate.toISOString(), { httpOnly: false, expires: expiryDate }) // Set expiryDate as a separate cookie
@@ -231,11 +272,25 @@ export const signin = async (req, res, next) => {
   }
 };
 
-export const signout = (req, res) => {
-  res
-    .clearCookie('access_token')
-    .clearCookie('tokenExpiry')
-    .json('Signout successfully');
+export const signout = async (req, res) => {
+  const { userId } = req.body; // Extract userId from the request body
+
+  try {
+    // Create a new log entry
+    await ActivityLog.create({
+      userId: userId, // Use the userId from the request body
+      action: 'signout',
+      type: 'account',
+      details: 'User signed out successfully'
+    });
+
+    res
+      .clearCookie('access_token')
+      .clearCookie('tokenExpiry')
+      .json('Signout successfully');
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to log signout activity' });
+  }
 };
 
 export const verifyEmail = async (req, res, next) => {
@@ -256,6 +311,16 @@ export const verifyEmail = async (req, res, next) => {
     user.emailVerified = true;
     user.emailVerificationToken = undefined;
     await user.save();
+
+    // Create an activity log entry for email verification
+    const activityLog = new ActivityLog({
+      userId: user._id,
+      action: 'UPDATE',
+      type: 'account', // Added type field with value 'account'
+      details: 'User email verified.'
+    });
+
+    await activityLog.save();
 
     res.status(200).send('Email verified successfully');
   } catch (error) {
@@ -323,6 +388,16 @@ export const resendVerificationEmail = async (req, res, next) => {
       });
 
       console.log('Verification email resent successfully to:', email);
+
+      // Create an activity log entry for resending verification email
+      const activityLog = new ActivityLog({
+        userId: user._id,
+        action: 'UPDATE',
+        type: 'account', // Added type field with value 'account'
+        details: 'Verification email resent.'
+      });
+
+      await activityLog.save();
 
       return res.status(200).json({ message: "Verification email resent successfully" });
     }

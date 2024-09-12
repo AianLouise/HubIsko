@@ -69,13 +69,26 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
     };
 
     const handleSignOut = async () => {
-        try {
-            await fetch('/api/auth/signout');
-            dispatch(signOut());
-        } catch (error) {
-            console.log(error);
+        const userId = currentUser ? currentUser._id : null;
+        if (!userId) {
+          console.log('User ID is not available');
+          return;
         }
-    };
+      
+        try {
+          await fetch('/api/auth/signout', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId }),
+          });
+          dispatch(signOut());
+          navigate('/');
+        } catch (error) {
+          console.log(error);
+        }
+      };
 
     const generateBreadcrumb = () => {
         const pathnames = location.pathname.split('/').filter(x => x);

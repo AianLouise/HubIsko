@@ -82,8 +82,20 @@ export default function Header() {
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
+    const userId = currentUser ? currentUser._id : null;
+    if (!userId) {
+      console.log('User ID is not available');
+      return;
+    }
+  
     try {
-      await fetch('/api/auth/signout');
+      await fetch('/api/auth/signout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId }),
+      });
       dispatch(signOut());
       navigate('/');
     } catch (error) {

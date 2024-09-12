@@ -80,13 +80,26 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
     const currentUser = useSelector((state) => state.user.currentUser);
 
     const handleSignOut = async () => {
-        try {
-            await fetch('/api/auth/signout');
-            dispatch(signOut());
-        } catch (error) {
-            console.log(error);
+        const userId = currentUser ? currentUser._id : null;
+        if (!userId) {
+          console.log('User ID is not available');
+          return;
         }
-    };
+      
+        try {
+          await fetch('/api/auth/signout', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId }),
+          });
+          dispatch(signOut());
+          navigate('/');
+        } catch (error) {
+          console.log(error);
+        }
+      };
 
     // Breadcrumbs based on current location
     const generateBreadcrumb = () => {
