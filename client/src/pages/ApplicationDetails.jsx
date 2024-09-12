@@ -26,6 +26,10 @@ export default function Forums() {
     const handleApplyClick = async () => {
         if (!isLoggedIn) {
             setNotification('You must be logged in to apply for scholarships.');
+        } else if (currentUser?.status === 'Pending Verification') {
+            setNotification('Your account is currently under verification. You cannot apply for scholarships until your account is fully verified.');
+        } else if (currentUser?.status === 'Verify Account') {
+            setNotification('You need to verify your account before applying for scholarships. Please visit the verification page.');
         } else {
             try {
                 const response = await fetch(`/api/scholarshipProgram/${scholarship.id}/has-applied/${currentUser._id}`);
@@ -239,34 +243,72 @@ export default function Forums() {
             {notification && (
                 <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
                     <div className='p-6 pb-10 bg-white rounded-md text-center shadow-lg font-medium'>
-
                         <button onClick={() => setNotification('')} className='flex w-full justify-end items-end'>
                             <div className='border rounded-full p-1 hover:bg-slate-200'>
                                 <CgClose className='w-4 h-4' />
                             </div>
                         </button>
-                        <strong className='font-bold text-red-500 text-lg'>Not Logged In!</strong>
-
-                        <div className='text-slate-400 ' role='alert'>
-                            <span className='block sm:inline font-medium'> {notification}</span>
-                        </div>
-
-                        <div className='flex flex-col justify-center w-full gap-2 mt-4'>
-                            <Link to='/login' className='bg-blue-600 text-white text-center rounded-md w-full hover:bg-blue-800 py-2'>Login</Link>
-
-
-                            <div className=''>
-                                <div className='border mt-5'></div>
-                                <div className='w-full -translate-y-4 text-center'>
-                                    <span className='bg-white px-5 text-slate-500 font-medium'>or</span>
+                        {notification === 'You must be logged in to apply for scholarships.' && (
+                            <>
+                                <strong className='font-bold text-red-500 text-lg'>Not Logged In!</strong>
+                                <div className='text-slate-400' role='alert'>
+                                    <span className='block sm:inline font-medium'>{notification}</span>
                                 </div>
-                            </div>
-
-                            <div className='w-full flex gap-2 justify-between'>
-                                <Link to='/register' className='bg-blue-600 text-white text-center rounded-md w-full hover:bg-blue-800 py-2'>Register as Student</Link>
-                                <Link to='/register-provider' className='bg-blue-800  text-white text-center rounded-md w-full hover:bg-blue-900 py-2'>Register as Provider</Link>
-                            </div>
-                        </div>
+                                <div className='flex flex-col justify-center w-full gap-2 mt-4'>
+                                    <Link to='/login' className='bg-blue-600 text-white text-center rounded-md w-full hover:bg-blue-800 py-2'>Login</Link>
+                                    <div className=''>
+                                        <div className='border mt-5'></div>
+                                        <div className='w-full -translate-y-4 text-center'>
+                                            <span className='bg-white px-5 text-slate-500 font-medium'>or</span>
+                                        </div>
+                                    </div>
+                                    <div className='w-full flex gap-2 justify-between'>
+                                        <Link to='/register' className='bg-blue-600 text-white text-center rounded-md w-full hover:bg-blue-800 py-2'>Register as Student</Link>
+                                        <Link to='/register-provider' className='bg-blue-800 text-white text-center rounded-md w-full hover:bg-blue-900 py-2'>Register as Provider</Link>
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                        {notification === 'Your account is currently under verification. You cannot apply for scholarships until your account is fully verified.' && (
+                            <>
+                                <div className="flex items-center justify-center mb-4">
+                                    <svg className="h-6 w-6 text-yellow-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                                    </svg>
+                                    <strong className="font-bold text-yellow-500 text-lg">Pending Verification!</strong>
+                                </div>
+                                <div className="text-slate-400" role="alert">
+                                    <span className="block sm:inline font-medium">{notification}</span>
+                                </div>
+                            </>
+                        )}
+                        {notification === 'You need to verify your account before applying for scholarships. Please visit the verification page.' && (
+                            <>
+                                <div className="flex items-center justify-center mb-4">
+                                    <svg className="h-6 w-6 text-yellow-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                                    </svg>
+                                    <strong className="font-bold text-yellow-500 text-lg">Verify Account!</strong>
+                                </div>
+                                <div className="text-slate-400" role="alert">
+                                    <span className="block sm:inline font-medium">{notification}</span>
+                                </div>
+                                <button
+                                    onClick={() => navigate('/verify-profile')}
+                                    className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+                                >
+                                    Verify Profile
+                                </button>
+                            </>
+                        )}
+                        {notification !== 'You must be logged in to apply for scholarships.' && notification !== 'Your account is currently under verification. You cannot apply for scholarships until your account is fully verified.' && notification !== 'You need to verify your account before applying for scholarships. Please visit the verification page.' && (
+                            <>
+                                <strong className='font-bold text-red-500 text-lg'>Notification</strong>
+                                <div className='text-slate-400' role='alert'>
+                                    <span className='block sm:inline font-medium'>{notification}</span>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             )}

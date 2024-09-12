@@ -2,17 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaRegHeart } from "react-icons/fa";
 import { BiCommentDots } from "react-icons/bi";
 import { FaRegEye } from "react-icons/fa6";
 import { FaAngleRight } from "react-icons/fa";
 import { BiFilter } from 'react-icons/bi';
 import { IoMdArrowDropleftCircle } from "react-icons/io";
-import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
+import useTokenExpiry from '../hooks/useTokenExpiry';
+
 
 export default function ScholarDashboard() {
   useTokenExpiry();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = "Scholar Dashboard | HubIsko";
@@ -193,6 +196,16 @@ export default function ScholarDashboard() {
   // Calculate total number of announcements
   const totalAnnouncements = scholarshipData ? scholarshipData.reduce((total, program) => total + program.announcements.length, 0) : 0;
 
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleVerifyClick = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      navigate('/verify-profile');
+    }, 2000);
+  };
+
 
   if (loading) {
     return (
@@ -210,6 +223,41 @@ export default function ScholarDashboard() {
       <Header />
       <main className="flex-grow bg-[#f8f8fb] pb-24"> {/* Main content grows to fill available space */}
         <div className='flex flex-col gap-4 py-12 max-w-6xl mx-auto justify-between p-4 lg:px-24'>
+
+          {currentUser?.status === 'Pending Verification' && (
+            <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 m-6 rounded-md" role="alert">
+              <p className="font-bold">Account Under Verification</p>
+              <p>Your account is currently under verification. Some features may be restricted until your account is fully verified.</p>
+            </div>
+          )}
+
+          {currentUser?.status === 'Verified' && (
+            <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 m-6 my-8 rounded-md mx-24" role="alert">
+              <p className="font-bold">Welcome Back!</p>
+              <p>Your account is fully verified. Enjoy all the features available to you.</p>
+            </div>
+          )}
+
+          {currentUser?.status === 'Verify Account' && (
+            <div className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 m-6 rounded-md" role="alert">
+              <p className="font-bold">Verify Your Account</p>
+              <p>Please verify your account to access all features. You can do this by visiting the verification page.</p>
+              <button
+                onClick={handleVerifyClick}
+                className={`mt-4 py-2 px-4 rounded bg-blue-500 text-white font-semibold hover:bg-blue-700 transition duration-200 focus:outline-none ${isLoading ? 'cursor-not-allowed' : ''}`}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <svg className="animate-spin h-5 w-5 text-white mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                  </svg>
+                ) : (
+                  'Verify Profile'
+                )}
+              </button>
+            </div>
+          )}
 
           <div className='flex flex-col border-b'>
             <div className='flex flex-col gap-2 lg:gap-0 lg:flex-row lg:justify-between lg:items-center'>

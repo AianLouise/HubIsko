@@ -74,7 +74,7 @@ export const signupAsProvider = async (req, res) => {
           authorizationLetter: documents.authorizationLetter,
           idProofContactPerson: documents.idProofContactPerson,
         },
-        status: 'pending',
+        status: 'Pending Verification',
       }
     });
 

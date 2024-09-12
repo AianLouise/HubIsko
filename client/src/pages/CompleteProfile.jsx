@@ -23,6 +23,10 @@ export default function CompleteProfile() {
     setCurrentStep((prevStep) => prevStep - 1);
   };
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  },);
+
 
   const [formData, setFormData] = useState({
     profilePicture: '',
@@ -264,6 +268,7 @@ export default function CompleteProfile() {
         },
         profilePicture: profilePictureUrl, // Update the profilePicture in currentUser
         studentIdFile: studentIdFileUrl, // Update the studentIdFile in currentUser
+        status: 'Pending Verification', // Update the status to Pending verification
       }));
 
       navigate('/complete-profile-confirmation');
@@ -438,17 +443,19 @@ export default function CompleteProfile() {
   };
 
   return (
-    <div>
+    <div className=' min-h-screen flex flex-col items-center'>
       {notification.show && (
         <CustomNotification
           message={notification.message}
           onClose={() => setNotification({ show: false, message: '' })}
         />
       )}
-      <div className=" flex justify-center pt-8 rounded-md">
-        <h2 className="text-base lg:text-xl font-medium text-slate-600">Please fill out the areas for student validation</h2>
+      <div className="flex justify-center pt-8 rounded-md">
+        <h2 className="text-base lg:text-xl font-medium ">
+          Please fill out the areas for student validation
+        </h2>
       </div>
-      <form onSubmit={handleSubmit} className="max-w-6xl mx-auto space-y-6 text-sm lg:text-base bg-white px-4 lg:px-0 lg:border rounded-lg shadow-lg mt-4 mb-10">
+      <form onSubmit={handleSubmit} className="max-w-6xl w-full mx-auto space-y-6 text-sm lg:text-base bg-white lg:border rounded-lg shadow-2xl mt-4 mb-10">
         {currentStep === 1 && (
           <div>
             <div className="bg-blue-600 text-white p-4 rounded-t-lg">
@@ -541,7 +548,7 @@ export default function CompleteProfile() {
               </div>
             </div>
 
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4'>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4 mt-4'>
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
                 <input
@@ -1021,7 +1028,7 @@ export default function CompleteProfile() {
             <div className="flex justify-end space-x-2 px-4 py-4">
               <button
                 onClick={handlePrevious}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
               >
                 Previous
               </button>
@@ -1075,13 +1082,13 @@ export default function CompleteProfile() {
             <div className="flex justify-end space-x-2 px-4 py-4">
               <button
                 onClick={handlePrevious}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
               >
                 Previous
               </button>
               <button
                 type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
               >
                 Submit
               </button>
@@ -1093,9 +1100,9 @@ export default function CompleteProfile() {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50 pt-8">
-          <div className="relative w-full max-w-5xl mx-auto my-8">
-            <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 h-screen">
+          <div className="relative w-full max-w-5xl">
+            <div className="bg-white rounded-lg shadow-lg p-6 max-h-screen overflow-y-auto">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold text-gray-800">Confirm Submission</h2>
                 <button
@@ -1163,7 +1170,7 @@ export default function CompleteProfile() {
                 </div>
                 <div className="border-t border-gray-200 pt-4">
                   <h3 className="text-xl font-semibold text-gray-800 mb-2">Education Information</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <p className="text-sm text-gray-600">
                       <span className="font-semibold">Elementary School:</span> {formData.education.elementary.school}
                     </p>
@@ -1197,11 +1204,9 @@ export default function CompleteProfile() {
                     <p className="text-sm text-gray-600">
                       <span className="font-semibold">College Course:</span> {formData.education.college.course}
                     </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">College Year Graduated:</span> {formData.education.college.yearGraduated}
-                    </p>
                   </div>
                 </div>
+
                 <div className="border-t border-gray-200 pt-4">
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">Student ID</h3>
                   <div className="flex flex-col items-center gap-2">
@@ -1209,11 +1214,11 @@ export default function CompleteProfile() {
                       <span className="font-semibold">Student ID File:</span> {formData.studentIdFile ? formData.studentIdFile.name : 'N/A'}
                     </p>
                     {formData.studentIdFile && (
-                      <div className="w-48 h-36 border border-gray-300 flex items-center justify-center overflow-hidden cursor-pointer" onClick={handleImageClick}>
+                      <div className="w-48 h-48 border border-gray-300 flex items-center justify-center overflow-hidden cursor-pointer" onClick={handleImageClick}>
                         <img
                           src={URL.createObjectURL(formData.studentIdFile)}
                           alt="Student ID"
-                          className="object-contain"
+                          className="object-cover w-full h-full"
                         />
                       </div>
                     )}
@@ -1222,8 +1227,8 @@ export default function CompleteProfile() {
 
                 {/* Image Modal */}
                 {showImageModal && (
-                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
-                    <div className="relative bg-white rounded-lg shadow-lg p-4">
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 p-4">
+                    <div className="relative bg-white rounded-lg shadow-lg p-4 max-w-md max-h-md overflow-auto">
                       <button
                         onClick={() => setShowImageModal(false)}
                         className="absolute top-2 right-2 text-gray-600 hover:text-gray-800 focus:outline-none"

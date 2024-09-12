@@ -282,6 +282,7 @@ const userSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: [
+      'Verify Account',
       'Pending Verification',
       'Verified',
       'Rejected',
@@ -290,7 +291,7 @@ const userSchema = new mongoose.Schema({
       'Suspended',
       'Pending Approval'
     ],
-    default: 'Pending Verification',
+    default: 'Verify Account',
   },
   rejectReason: {
     type: String,

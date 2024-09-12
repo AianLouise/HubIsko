@@ -146,6 +146,7 @@ export const CompleteProfile = async (req, res, next) => {
       req.user.id,
       {
         $set: {
+          "status": 'Pending Verification',
           "applicantDetails.profileComplete": 'true',
           "profilePicture": req.body.profilePicture,
           "applicantDetails.firstName": req.body.firstName,
