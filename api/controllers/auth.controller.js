@@ -117,13 +117,18 @@ export const google = async (req, res, next) => {
       // Existing user logic
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '5h' });
       const { password, ...rest } = user.toObject();
+      const expiryDate = new Date(Date.now() + 5 * 60 * 60 * 1000); // 5 hours
       return res
         .cookie('access_token', token, {
           httpOnly: true,
-          expires: new Date(Date.now() + 5 * 60 * 60 * 1000), // 5 hours
+          expires: expiryDate,
+        })
+        .cookie('tokenExpiry', expiryDate.toISOString(), {
+          httpOnly: false,
+          expires: expiryDate,
         })
         .status(200)
-        .json(rest);
+        .json({ ...rest, tokenExpiry: expiryDate });
     } else {
       // Split the name and handle the case where only a first name is provided
       const names = name.split(' ').filter(Boolean); // Filter out any empty strings
@@ -187,13 +192,18 @@ export const google = async (req, res, next) => {
       // Generate a token and send the response
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '5h' });
       const { password, ...rest } = newUser.toObject();
+      const expiryDate = new Date(Date.now() + 5 * 60 * 60 * 1000); // 5 hours
       res
         .cookie('access_token', token, {
           httpOnly: true,
-          expires: new Date(Date.now() + 5 * 60 * 60 * 1000), // 5 hours
+          expires: expiryDate,
+        })
+        .cookie('tokenExpiry', expiryDate.toISOString(), {
+          httpOnly: false,
+          expires: expiryDate,
         })
         .status(201)
-        .json(rest);
+        .json({ ...rest, tokenExpiry: expiryDate });
     }
   } catch (error) {
     next(error);
