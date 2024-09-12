@@ -172,6 +172,19 @@ export const CompleteProfile = async (req, res, next) => {
           "applicantDetails.address.city": req.body.city,
           "applicantDetails.address.barangay": req.body.barangay,
           "applicantDetails.address.addressDetails": req.body.addressDetails,
+          "applicantDetails.education.elementary.school": req.body.education.elementary.school,
+          "applicantDetails.education.elementary.award": req.body.education.elementary.award,
+          "applicantDetails.education.elementary.yearGraduated": req.body.education.elementary.yearGraduated,
+          "applicantDetails.education.juniorHighSchool.school": req.body.education.juniorHighSchool.school,
+          "applicantDetails.education.juniorHighSchool.award": req.body.education.juniorHighSchool.award,
+          "applicantDetails.education.juniorHighSchool.yearGraduated": req.body.education.juniorHighSchool.yearGraduated,
+          "applicantDetails.education.seniorHighSchool.school": req.body.education.seniorHighSchool.school,
+          "applicantDetails.education.seniorHighSchool.award": req.body.education.seniorHighSchool.award,
+          "applicantDetails.education.seniorHighSchool.yearGraduated": req.body.education.seniorHighSchool.yearGraduated,
+          "applicantDetails.education.college.school": req.body.education.college.school,
+          "applicantDetails.education.college.course": req.body.education.college.course,
+          "applicantDetails.education.college.yearGraduated": req.body.education.college.yearGraduated,
+          "applicantDetails.studentIdFile": req.body.studentIdFile // Added studentIdFile
         }
       },
       { new: true } // Return the modified document rather than the original.

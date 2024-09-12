@@ -172,7 +172,7 @@ export default function App() {
         {/* Scholar Routes */}
         <Route element={<PrivateRoute allowedRoles={['applicant']} />}>
           <Route path='/profile' element={<Profile />} />
-          <Route path="/complete-profile" element={<CompleteProfile />} />
+          <Route path="/verify-profile" element={<CompleteProfile />} />
           <Route path="/complete-profile-confirmation" element={<CompleteProfileConfirmation />} />
           <Route path="/scholar-dashboard" element={<ScholarDashboard />} />
           <Route path="/account-management" element={<AccountManagement />} />

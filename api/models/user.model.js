@@ -92,6 +92,68 @@ const applicantSchema = new mongoose.Schema({
       required: false,
     },
   },
+  education: {
+    elementary: {
+      school: {
+        type: String,
+        required: false,
+      },
+      award: {
+        type: String,
+        required: false,
+      },
+      yearGraduated: {
+        type: Number,
+        required: false,
+      }
+    },
+    juniorHighSchool: {
+      school: {
+        type: String,
+        required: false,
+      },
+      award: {
+        type: String,
+        required: false,
+      },
+      yearGraduated: {
+        type: Number,
+        required: false,
+      }
+    },
+    seniorHighSchool: {
+      school: {
+        type: String,
+        required: false,
+      },
+      award: {
+        type: String,
+        required: false,
+      },
+      yearGraduated: {
+        type: Number,
+        required: false,
+      }
+    },
+    college: {
+      school: {
+        type: String,
+        required: false,
+      },
+      course: {
+        type: String,
+        required: false,
+      },
+      yearGraduated: {
+        type: Number,
+        required: false,
+      }
+    }
+  },
+  studentIdFile: {
+    type: String,
+    default: '',
+  },
 }, { _id: false });
 
 // Sub-schema for Scholarship Provider
