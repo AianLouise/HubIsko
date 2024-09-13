@@ -13,6 +13,7 @@ export default function SignIn() {
   const { loading, error } = useSelector((state) => state.user);
   const [showPassword, setShowPassword] = useState(false);
   const [showErrorNotification, setShowErrorNotification] = useState(false);
+  const [showSlowConnectionNotification, setShowSlowConnectionNotification] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -69,13 +70,25 @@ export default function SignIn() {
     e.preventDefault();
     try {
       dispatch(signInStart());
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        controller.abort();
+        setShowSlowConnectionNotification(true);
+        setTimeout(() => setShowSlowConnectionNotification(false), 5000); // Hide after 5 seconds
+      }, 10000); // 10 seconds timeout
+
       const res = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
+
       const data = await res.json();
       if (data.success === false) {
         dispatch(signInFail(data));
@@ -131,7 +144,7 @@ export default function SignIn() {
           <img src={NewLogo} alt='HubIsko Logo' className='w-80 h-auto bg-white p-4 rounded-full transition-transform duration-300 ease-in-out transform hover:scale-110' />
         </Link>
       </div>
-      
+
       <div className='absolute w-full h-full'>
         <div className='bg-blue-600 rounded-full w-full h-full -translate-x-[1100px]'></div>
       </div>
@@ -217,21 +230,21 @@ export default function SignIn() {
                 <h2 className="text-2xl font-bold mb-4 text-center">Register</h2>
                 <p className="mb-6 text-center">Choose your registration type:</p>
                 <div className="flex flex-col gap-4">
-              <Link to="/register" className="bg-blue-500 text-white py-2 px-4 rounded text-center hover:bg-blue-600 transition duration-200">
-                Register as Student
-              </Link>
+                  <Link to="/register" className="bg-blue-500 text-white py-2 px-4 rounded text-center hover:bg-blue-600 transition duration-200">
+                    Register as Student
+                  </Link>
 
-              <div className='w-full flex flex-col'>
-              <Link
-                to="/apply-as-provider"
-                className={`bg-blue-800 py-2 px-4 rounded text-center hover:bg-blue-900 transition duration-200 ${isMobile ? 'pointer-events-none opacity-50 bg-white text-blue-600 border-2 font-medium' : 'text-white '}`}
-                onClick={(e) => isMobile && e.preventDefault()}
-              >
-                Register as Scholarship Provider 
-              </Link>
-              <span className='block lg:hidden mt-1 text-slate-400 text-xs text-center'>This function isn't available on Mobile</span>
-              </div>
-            </div>
+                  <div className='w-full flex flex-col'>
+                    <Link
+                      to="/apply-as-provider"
+                      className={`bg-blue-800 py-2 px-4 rounded text-center hover:bg-blue-900 transition duration-200 ${isMobile ? 'pointer-events-none opacity-50 bg-white text-blue-600 border-2 font-medium' : 'text-white '}`}
+                      onClick={(e) => isMobile && e.preventDefault()}
+                    >
+                      Register as Scholarship Provider
+                    </Link>
+                    <span className='block lg:hidden mt-1 text-slate-400 text-xs text-center'>This function isn't available on Mobile</span>
+                  </div>
+                </div>
               </div>
             </div>
           )}
@@ -239,6 +252,11 @@ export default function SignIn() {
           {showErrorNotification && (
             <div className="fixed top-5 right-5 bg-red-500 text-white px-4 py-2 rounded-md shadow-md opacity-95">
               {error.message || 'Something went wrong!'}
+            </div>
+          )}
+          {showSlowConnectionNotification && (
+            <div className="fixed top-5 right-5 bg-yellow-500 text-white px-4 py-2 rounded-md shadow-md opacity-95">
+              Slow internet connection. Please try again later.
             </div>
           )}
         </div>
