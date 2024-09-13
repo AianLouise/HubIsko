@@ -86,6 +86,9 @@ import LocationSelector from "./pages/LocationSelector";
 import AnnouncementDetails from "./components/ViewScholarshipDetails/AnnouncementDetails";
 import AnnouncementView from "./pages/AnnouncementView";
 
+import ScholarshipProviderApplications from "./pages/Admin/ScholarshipProviderApplications";
+import ScholarshipsProviderDetails from "./pages/Admin/ScholarshipProviderDetails";
+
 
 export default function App() {
   return (
@@ -143,11 +146,14 @@ export default function App() {
             <Route path="scholarship-programs" element={<ScholarshipPrograms />} />
             <Route path="scholarship-program/:id" element={<ScholarshipProgramDetails />} />
 
+            <Route path="scholarship-provider-applications" element={<ScholarshipProviderApplications />} />
+            <Route path="scholarship-provider-applications/:id" element={<ScholarshipsProviderDetails />} />
+
             <Route path="admin-forums" element={<AdminForums />} />
             <Route path="admin-forums/post/:postId" element={<AdminForumDetail />} />
             <Route path="admin-create-forum-post" element={<AdminCreateForumPost />} />
+
           </Route>
-          {/* Add other routes here */}
         </Route>
 
         {/* Provider Routes */}

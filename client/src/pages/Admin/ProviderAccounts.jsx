@@ -92,7 +92,7 @@ export default function ProviderAccounts() {
   return (
     <div className="flex flex-col min-h-screen">
       <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
-        <div className='max-w-8xl mx-auto px-24 gap-4 flex-col flex mt-12'>
+        <div className='max-w-8xl mx-auto px-24 gap-4 flex-col flex mt-12 pb-10'>
           <div className="flex items-center justify-between border-b pb-2">
             <h1 className='text-2xl font-bold text-slate-600'>Providers' Info</h1>
             <h1 className='text-xl text-slate-600'>Recently Added</h1>
@@ -119,7 +119,7 @@ export default function ProviderAccounts() {
                   </button>
                 </div>
               </div>
-                           <table className='w-full border-t text-left'>
+              <table className='w-full border-t text-left'>
                 <thead>
                   <tr className='bg-slate-100'>
                     <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">#No</th>
