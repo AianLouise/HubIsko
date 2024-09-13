@@ -58,6 +58,7 @@ const scholarshipProgramSchema = new mongoose.Schema({
     enum: [
       'Pending Approval',
       'Approved',
+      'Rejected',
       'Declined',
       'Active',
       'Closed',

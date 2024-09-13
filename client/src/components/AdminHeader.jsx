@@ -17,8 +17,8 @@ import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from '../redux/user/userSlice';
 import Logo from '../assets/NewLogoClean.png';
-import { FaUniversity } from 'react-icons/fa'; // Import the new icon
-                                                
+import { FaFileAlt, FaUniversity } from 'react-icons/fa'; // Import the new icon
+
 
 export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
     const [isAccountsDropdownOpen, setIsAccountsDropdownOpen] = useState(false);
@@ -84,24 +84,24 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
     const handleSignOut = async () => {
         const userId = currentUser ? currentUser._id : null;
         if (!userId) {
-          console.log('User ID is not available');
-          return;
+            console.log('User ID is not available');
+            return;
         }
-      
+
         try {
-          await fetch('/api/auth/signout', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ userId }),
-          });
-          dispatch(signOut());
-          navigate('/');
+            await fetch('/api/auth/signout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId }),
+            });
+            dispatch(signOut());
+            navigate('/');
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      };
+    };
 
     // Breadcrumbs based on current location
     const generateBreadcrumb = () => {
@@ -230,6 +230,12 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                                 </Link>
                                             </li>
                                             <li>
+                                                <Link to={'/student-applications'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/student-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                                    <FaFileAlt className={`w-5 h-5 text-blue-600 ${location.pathname === '/student-applications' ? ' text-white' : ''}`} />
+                                                    Students Application
+                                                </Link>
+                                            </li>
+                                            <li>
                                                 <Link to={'/scholarship-provider'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-provider' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                                     <BsBuildingFill className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-provider' ? ' text-white' : ''}`} />
                                                     Scholarship Providers
@@ -237,7 +243,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                             </li>
                                             <li>
                                                 <Link to={'/scholarship-provider-applications'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-provider-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                                    <FaUniversity className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-provider-applications' ? ' text-white' : ''}`} />
+                                                    <FaFileAlt className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-provider-applications' ? ' text-white' : ''}`} />
                                                     Scholarship Provider Application
                                                 </Link>
                                             </li>
@@ -251,60 +257,60 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
 
                             <li>
                                 <Link to={'/scholarship-programs'}
-                                 onClick={toggleInboxDropdown}
+                                    onClick={toggleInboxDropdown}
                                     className={`flex gap-2 items-center text-gray-800 py-2 px-4 rounded-md 
-                                    ${location.pathname.startsWith('/scholarship-programs') 
-                                        || location.pathname.startsWith('/scholarship-program-applications')
-                                        || location.pathname.startsWith('/scholarship-applications')
+                                    ${location.pathname.startsWith('/scholarship-programs')
+                                            || location.pathname.startsWith('/scholarship-program-applications')
+                                            || location.pathname.startsWith('/scholarship-applications')
 
-                                    ? 'bg-blue-600 text-white' : ''}`} >
+                                            ? 'bg-blue-600 text-white' : ''}`} >
                                     <FaGraduationCap className={`w-5 h-5 text-blue-600 
                                         ${location.pathname.startsWith('/scholarship-programs')
                                             || location.pathname.startsWith('/scholarship-program-applications')
                                             || location.pathname.startsWith('/scholarship-applications')
 
-                                        ? 'text-white' : ''}`} />
+                                            ? 'text-white' : ''}`} />
                                     Scholarship Programs
                                 </Link>
 
-                                
+
 
                                 {isInboxDropdownOpen && (
-                                <ul className="ml-4 my-2 space-y-2">
-                                   
-                                    <li>
-                                        <Link to={'/scholarship-programs'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-programs' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                            <FaGraduationCap className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-programs' ? ' text-white' : ''}`} />
-                                            Scholarship Dashboard
-                                        </Link>
-                                    </li>
+                                    <ul className="ml-4 my-2 space-y-2">
 
-                                    <li>
-                                        <Link to={'/scholarship-program-applications'} 
-                                        className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md 
-                                        ${location.pathname === '/scholarship-program-applications' 
-            
-                                        ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                            <FaGoogleScholar className={`w-5 h-5 text-blue-600
+                                        <li>
+                                            <Link to={'/scholarship-programs'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-programs' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                                <FaGraduationCap className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-programs' ? ' text-white' : ''}`} />
+                                                Scholarship Dashboard
+                                            </Link>
+                                        </li>
+
+                                        <li>
+                                            <Link to={'/scholarship-program-applications'}
+                                                className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md 
+                                        ${location.pathname === '/scholarship-program-applications'
+
+                                                        ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                                <FaGoogleScholar className={`w-5 h-5 text-blue-600
                                             ${location.pathname === '/scholarship-program-applications'
 
-                                            ? ' text-white' : ''}`} />
-                                            Scholarship Program Applications 
-                                        </Link>
-                                    </li>
-                                    {/* <li>
+                                                        ? ' text-white' : ''}`} />
+                                                Scholarship Program Applications
+                                            </Link>
+                                        </li>
+                                        {/* <li>
                                         <Link to={'/scholarship-applications'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                             <HiDocument className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-applications' ? ' text-white' : ''}`} />
                                             Scholarship Provider Applications
                                         </Link>
                                     </li> */}
-                                    <li>
-                                        <a href="#" className="flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
-                                            <FaFileCircleQuestion className="w-5 h-5 text-blue-600" />
-                                            Requests
-                                        </a>
-                                    </li>
-                                </ul>
+                                        <li>
+                                            <a href="#" className="flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
+                                                <FaFileCircleQuestion className="w-5 h-5 text-blue-600" />
+                                                Requests
+                                            </a>
+                                        </li>
+                                    </ul>
 
                                 )}
                             </li>
@@ -312,14 +318,14 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                             <li>
                                 <div>
                                     <Link to={'/application-inbox'}
-                        
+
                                         className={`flex gap-2 justify-between items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/application-inbox')
-                   
+
                                             ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                         <div className="flex items-center gap-2">
                                             <BsInboxFill className={`w-5 h-5 text-blue-600 
                                             ${location.pathname.startsWith('/application-inbox')
-                                           
+
                                                     ? 'text-white' : ''} `} />
                                             Application Inbox
                                         </div>

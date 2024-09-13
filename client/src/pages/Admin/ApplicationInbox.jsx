@@ -5,6 +5,7 @@ import { PiArrowRightFill } from "react-icons/pi";
 import { GoDotFill } from "react-icons/go";
 import Layout from "../../components/Layout";
 import { BiRightArrowAlt } from "react-icons/bi";
+import { BsInboxFill } from "react-icons/bs";
 
 export default function ApplicationInbox() {
   useEffect(() => {
@@ -17,6 +18,7 @@ export default function ApplicationInbox() {
   const [totalScholars, setTotalScholars] = useState(0);
   const [pendingProviders, setPendingProviders] = useState(0);
   const [pendingPrograms, setPendingPrograms] = useState(0); // New State for Pending Programs
+  const [pendingStudents, setPendingStudents] = useState(0); // New State for Pending Students
   const [activities, setActivities] = useState([]); // State for Activities
   const [loading, setLoading] = useState(true);
 
@@ -47,6 +49,11 @@ export default function ApplicationInbox() {
         const pendingProgramsResponse = await fetch('/api/admin/search-pending-approval-programs');
         const pendingProgramsData = await pendingProgramsResponse.json();
         setPendingPrograms(pendingProgramsData.length);
+
+        // Fetch total number of pending students
+        const pendingStudentsResponse = await fetch('/api/admin/search-pending-verification-students');
+        const pendingStudentsData = await pendingStudentsResponse.json();
+        setPendingStudents(pendingStudentsData.length);
 
         // Fetch recent activities
         // const activitiesResponse = await fetch('/api/admin/recent-activities');
@@ -98,7 +105,7 @@ export default function ApplicationInbox() {
 
   return (
     <div className="flex flex-col min-h-screen font-medium text-slate-700">
-     
+
       <main className="flex-grow bg-[#f8f8fb]">
         <div className="border-b mb-8">
           <div className="flex items-center mx-auto justify-between px-24">
@@ -108,7 +115,9 @@ export default function ApplicationInbox() {
                 Manage scholarship programs and scholarship provider applications.
               </p>
             </div>
-            <div className="bg-blue-600 w-36 h-36 my-8 rounded-md"></div>
+            <div className="bg-blue-600 w-24 h-24 lg:w-36 lg:h-36 my-8 rounded-md flex items-center justify-center">
+              <BsInboxFill className="text-white text-4xl lg:text-6xl" />
+            </div>
           </div>
         </div>
         <div className="max-w-8xl mx-auto px-24 gap-10 flex-col flex">
@@ -128,11 +137,11 @@ export default function ApplicationInbox() {
                 Click to view the list of applications for scholarship provider
               </span>
             </Link>
-            <Link to="/requests" className="bg-gradient-to-r from-purple-500 to-purple-700 text-white rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:from-purple-600 hover:to-purple-800 hover:-translate-y-2 transition ease-in-out">
-              <span className="text-lg font-semibold">Requests</span>
-              <span className="text-4xl font-bold">5</span>
+            <Link to="/student-applications" className="bg-gradient-to-r from-purple-500 to-purple-700 text-white rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:from-purple-600 hover:to-purple-800 hover:-translate-y-2 transition ease-in-out">
+              <span className="text-lg font-semibold">Student Applications</span>
+              <span className="text-4xl font-bold">{pendingStudents}</span>
               <span className="text-sm flex items-center mt-2 text-gray-200 font-normal">
-                Click to view the list of all requests
+                Click to view the list of applications for students
               </span>
             </Link>
           </div>

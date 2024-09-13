@@ -241,6 +241,22 @@ export const searchPendingVerificationProviders = async (req, res) => {
   }
 };
 
+export const searchPendingVerificationStudent = async (req, res) => {
+  try {
+    const pendingProviders = await User.find({
+      role: 'applicant',
+      status: 'Pending Verification',
+    });
+
+    res.status(200).json(pendingProviders);
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error searching for pending verification scholarship providers',
+      error: error.message,
+    });
+  }
+};
+
 export const searchPendingApprovalPrograms = async (req, res) => {
   try {
     const pendingPrograms = await ScholarshipProgram.find({

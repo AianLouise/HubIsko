@@ -88,7 +88,7 @@ import AnnouncementView from "./pages/AnnouncementView";
 
 import ScholarshipProviderApplications from "./pages/Admin/ScholarshipProviderApplications";
 import ScholarshipsProviderDetails from "./pages/Admin/ScholarshipProviderDetails";
-
+import StudentApplications from "./pages/Admin/StudentApplications";
 
 export default function App() {
   return (
@@ -148,6 +148,8 @@ export default function App() {
 
             <Route path="scholarship-provider-applications" element={<ScholarshipProviderApplications />} />
             <Route path="scholarship-provider-applications/:id" element={<ScholarshipsProviderDetails />} />
+
+            <Route path="student-applications" element={<StudentApplications />} />
 
             <Route path="admin-forums" element={<AdminForums />} />
             <Route path="admin-forums/post/:postId" element={<AdminForumDetail />} />
