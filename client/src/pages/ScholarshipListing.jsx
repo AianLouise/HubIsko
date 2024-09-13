@@ -9,7 +9,7 @@ import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function ScholarshipListing() {
   useTokenExpiry();
-  
+
   useEffect(() => {
     document.title = "Scholarship Listing | HubIsko";
   }, []);
@@ -112,8 +112,6 @@ export default function ScholarshipListing() {
         <div className='flex flex-col gap-4 justify-center items-left px-10 lg:mx-auto lg:max-w-6xl lg:px-24 my-8'>
           <div className='flex gap-2 items-center justify-between'>
             <span className='text-xl font-bold text-slate-600'>Organizations</span>
-            <button className='bg-white px-4 py-2 border rounded-md shadow font-medium flex items-center gap-2'>
-              <BiFilter className='text-xl text-blue-600' />Filter</button>
           </div>
           <div className='flex space-x-6'>
             {providers
@@ -150,23 +148,21 @@ export default function ScholarshipListing() {
 
         <div className='flex flex-col mx-auto max-w-6xl justify-center items-center px-10 lg:px-24'>
 
-          <div className='flex flex-row w-full items-center gap-4'>
+          <div className='flex flex-row w-full items-center justify-between gap-4'>
             <input
               type="text"
               placeholder='Search scholarship'
               value={searchQuery}
               onChange={handleSearchChange}
-              className='border-2 mb-8 p-2 px-6 lg:text-lg lg:font-medium w-[200px] lg:w-[400px] rounded-md focus:outline-blue-400'
+              className='border border-gray-300 p-2 px-4 lg:px-6 lg:text-base lg:font-sm w-[200px] lg:w-[400px] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition ease-in-out duration-150'
             />
-            <button
-              className='flex items-center justify-center bg-white p-2 rounded-full mb-6 border-2 hover:bg-slate-200 group'
-              onClick={() => setSearchQuery('')}
-            >
-              <FaRedo className='w-5 h-5 text-blue-600 group-hover:rotate-180 transition ease-in-out' />
+            <button className='bg-white px-4 py-2 border rounded-md shadow font-medium flex items-center gap-2'>
+              <BiFilter className='text-xl text-blue-600' />
+              Filter
             </button>
           </div>
 
-          <div className='grid grid-cols-1 md:grid-cols-2 w-full gap-4 text-slate-700'>
+          <div className='grid grid-cols-1 md:grid-cols-2 w-full gap-4 text-slate-700 mt-10'>
             {scholarships.length === 0 ? (
               <div className='col-span-full text-center text-gray-500 py-20'>
                 No scholarships available at the moment.
@@ -181,7 +177,7 @@ export default function ScholarshipListing() {
                 .map((scholarship) => (
                   <div key={scholarship.id} className='border bg-white rounded-lg pt-4 px-4 shadow-sm gap-2 mb-10 hover:-translate-y-1 transition ease-in-out'>
                     <div className='flex flex-row items-center justify-start px-5 mt-5'>
-                      <div className='lg:hidden'>
+                      <div className='lg:hidden flex-shrink-0'>
                         <div className='rounded-full w-14 h-14 overflow-hidden border-2 border-blue-500'>
                           <img
                             src={scholarship.scholarshipImage}
@@ -190,14 +186,14 @@ export default function ScholarshipListing() {
                           />
                         </div>
                       </div>
-                      <div className='rounded-full w-14 h-14 lg:block hidden overflow-hidden border-2 border-blue-500'>
+                      <div className='rounded-full w-14 h-14 lg:block hidden overflow-hidden border-2 border-blue-500 flex-shrink-0'>
                         <img
                           src={scholarship.scholarshipImage}
                           alt={scholarship.title}
                           className='w-full h-full object-cover'
                         />
                       </div>
-                      <div className='flex flex-col ml-6'>
+                      <div className='flex flex-col ml-6 flex-grow'>
                         <h2 className='lg:text-xl font-semibold'>{scholarship.title}</h2>
                         <p className='text-sm lg:text-base'>{truncateText(scholarship.organizationName, 50)}</p>
                       </div>
