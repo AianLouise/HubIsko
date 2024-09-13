@@ -297,6 +297,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
   applicantDetails: applicantSchema, // Embedded schema for applicant details
   scholarshipProviderDetails: scholarshipProviderSchema, // Embedded schema for scholarship provider details
 }, { timestamps: true });
