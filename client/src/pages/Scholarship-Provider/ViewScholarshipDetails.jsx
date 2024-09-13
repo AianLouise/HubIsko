@@ -11,6 +11,8 @@ import Validation from '../../components/ViewScholarshipDetails/Validation';
 export default function ViewScholarshipDetails() {
     const { currentUser } = useSelector((state) => state.user);
     const [sidebarOpen, setSidebarOpen] = useState(true);
+    const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+    
     const { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
@@ -22,7 +24,6 @@ export default function ViewScholarshipDetails() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
@@ -83,6 +84,19 @@ export default function ViewScholarshipDetails() {
             fetchScholars();
         }
     }, [activeTab, id]);
+
+    useEffect(() => {
+        // Ensure the sidebar state remains consistent on URL change
+        const handleLocationChange = () => {
+            setSidebarOpen(false); // or set it to the desired default state
+        };
+
+        handleLocationChange(); // Call initially to set the state based on the initial URL
+
+        return () => {
+            // Cleanup if necessary
+        };
+    }, [location]);
 
     if (loading) {
         return (

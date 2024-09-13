@@ -226,7 +226,7 @@ export default function PostAnnouncement() {
                                         <div className="flex flex-row gap-2">
                                             <div className="flex flex-row gap-1 px-2">
                                                 <FaRegHeart className="w-6 h-6 font-bold text-blue-600" />
-                                                <span>123</span>
+                                                <span>{announcement.likesCount}</span> {/* Display the likes count */}
                                             </div>
                                             <div className="flex flex-row gap-1">
                                                 <BiCommentDots className="w-6 h-6 text-blue-600" />

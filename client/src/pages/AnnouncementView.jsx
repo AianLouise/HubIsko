@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { FaRegHeart, FaHeart, FaRegEye } from 'react-icons/fa';
 import { BiCommentDots } from 'react-icons/bi';
-import AddCommentForm from './AddCommentForm';
+import AddCommentForm from '../components/ViewScholarshipDetails/AddCommentForm';
 import { useSelector } from 'react-redux';
 import { FaEllipsisH } from 'react-icons/fa';
 import { IoMdArrowDropdown } from 'react-icons/io';
@@ -210,8 +210,8 @@ const AnnouncementDetails = () => {
         <div className="flex flex-col items-center pt-7 pb-7 bg-gray-100 h-screen overflow-auto">
             <div className="relative w-full max-w-4xl">
                 <div className="flex justify-start items-center w-full">
-                    <div className='flex gap-1 items-center'>
-                        <Link to={`/view-scholarships/${announcement.scholarshipProgram._id}?tab=announcement`}>
+                <div className='flex gap-1 items-center'>
+                        <Link to={`/scholar-dashboard`}>
                             <button className='bg-white border shadow px-4 py-1 mr-2 rounded-md hover:bg-slate-200 transition ease-in-out font-medium'>Scholarship Dashboard</button>
                         </Link>
                         <IoMdArrowDropdown className='-rotate-90 text-2xl text-blue-600' />
@@ -286,6 +286,7 @@ const AnnouncementDetails = () => {
                             </div>
                         )}
                     </div>
+
                     <div className="bg-slate-200 p-4 rounded-md">
                         <div className="flex justify-between items-center">
                             <h1 className="text-2xl font-bold text-blue-600">{announcement.title}</h1>

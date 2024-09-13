@@ -84,6 +84,7 @@ import ScholarView from "./pages/Scholarship-Provider/ScholarView";
 
 import LocationSelector from "./pages/LocationSelector";
 import AnnouncementDetails from "./components/ViewScholarshipDetails/AnnouncementDetails";
+import AnnouncementView from "./pages/AnnouncementView";
 
 
 export default function App() {
@@ -191,6 +192,7 @@ export default function App() {
           {/* <Route path="/profile-preview/:id" element={<ProfilePreview />} /> */}
           {/* <Route path="/post-details" element={<PostDetails />} /> */}
           {/* <Route path="/preview-profile" element={<PreviewProfile />} /> */}
+          <Route path="/announcement/:announcementId" element={<AnnouncementView />} />
         </Route>
 
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
