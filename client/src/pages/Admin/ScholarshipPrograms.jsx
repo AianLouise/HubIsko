@@ -233,8 +233,8 @@ export default function ScholarshipPrograms() {
                                                         </td>
                                                         <td className="py-3 px-6 w-1/5">{program.organizationName}</td>
                                                         <td className="py-3 px-6 w-1/5">
-                                                            <span className={`py-2 px-6 rounded-md ${program.status === 'Approved' ? 'bg-green-600 text-white'
-                                                                : program.status === 'Pending Approval' ? 'bg-yellow-500 text-white'
+                                                            <span className={`px-4 ml-2 py-1 rounded-md whitespace-nowrap ${program.status === 'Approved' ? 'bg-green-600 text-white'
+                                                                : program.status === 'Pending Approval' ? 'bg-yellow-500 text-white text-xs sm:text-sm md:text-base'
                                                                     : program.status === 'Rejected' ? 'bg-red-600 text-white' : ''}`}>
                                                                 {program.status}
                                                             </span>

@@ -113,7 +113,7 @@ export default function StudentApplications() {
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-4 h-screen pt-5">
                         <h1 className="text-xl font-semibold border-b pb-4">Student Applications</h1>
                         <div className="flex gap-4 mt-5">
                             <input

@@ -43,10 +43,14 @@ const toSentenceCase = (str) => {
 };
 
 const getAccountLink = (account) => {
+    const buttonText = account.status === 'Pending Verification' ? 'Verify' : 'View Details';
+
     if (account.role === 'applicant') {
-        return <Link to={`/student-details/${account._id}`} className="bg-blue-600 hover:bg-blue-800 px-4 py-1 rounded-md text-white">View Details</Link>;
+        const route = account.status === 'Pending Verification' ? `/student-applications/${account._id}` : `/student-details/${account._id}`;
+        return <Link to={route} className="bg-blue-600 hover:bg-blue-800 px-4 py-1 rounded-md text-white">{buttonText}</Link>;
     } else if (account.role === 'scholarship_provider') {
-        return <Link to={`/provider-details/${account._id}`} className="bg-blue-600 hover:bg-blue-800 px-4 py-1 rounded-md text-white">View Details</Link>;
+        const route = account.status === 'Pending Verification' ? `/scholarship-provider-applications/${account._id}` : `/provider-details/${account._id}`;
+        return <Link to={route} className="bg-blue-600 hover:bg-blue-800 px-4 py-1 rounded-md text-white">{buttonText}</Link>;
     } else {
         return null;
     }
@@ -157,7 +161,7 @@ export default function Accounts() {
     };
 
     const toggleFilter = () => {
-        setSelectedFilter(prevFilter => (prevFilter === 'Latest' ? 'Old' : 'Latest'));
+        setSelectedFilter(prevFilter => (prevFilter === 'Recent' ? 'Oldest' : 'Recent'));
     };
 
     const filteredAccounts = accounts.filter(account => {
@@ -179,9 +183,9 @@ export default function Accounts() {
                 return true;
         }
     }).sort((a, b) => {
-        if (selectedFilter === 'Latest') {
+        if (selectedFilter === 'Recent') {
             return new Date(b.createdAt) - new Date(a.createdAt);
-        } else if (selectedFilter === 'Old') {
+        } else if (selectedFilter === 'Oldest') {
             return new Date(a.createdAt) - new Date(b.createdAt);
         }
         return 0;
@@ -342,20 +346,18 @@ export default function Accounts() {
                             </div>
 
                             <div className="flex gap-2">
-                                <div className="flex flex-col w-full bg-white border shadow gap-10 p-4 rounded-md">
-                                    <div className="flex justify-between items-center">
-                                        <input
-                                            type="text"
-                                            placeholder="Search for a scholarship program"
-                                            className="w-96 px-4 py-2 border rounded-md"
-                                            value={searchQuery}
-                                            onChange={handleSearchChange}
-                                        />
-                                        <button onClick={toggleFilter} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-800 text-white p-2 rounded-md">
-                                            <BiFilter className="w-6 h-6" />
-                                            <span>{selectedFilter === 'Latest' ? 'Latest' : 'Old'}</span>
-                                        </button>
-                                    </div>
+                                <div className="flex justify-between items-center gap-2">
+                                    <input
+                                        type="text"
+                                        placeholder="Search for a scholarship program"
+                                        className="w-96 px-4 py-2 border rounded-md"
+                                        value={searchQuery}
+                                        onChange={handleSearchChange}
+                                    />
+                                    <button onClick={toggleFilter} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-800 text-white p-2 rounded-md">
+                                        <BiFilter className="w-6 h-6" />
+                                        <span>{selectedFilter === 'Recent' ? 'Recent' : 'Oldest'}</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>

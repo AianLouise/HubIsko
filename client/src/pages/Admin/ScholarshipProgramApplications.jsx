@@ -5,6 +5,7 @@ import { BiFilter } from "react-icons/bi";
 import Layout from "../../components/Layout";
 import { FaGoogleScholar } from "react-icons/fa6";
 import axios from "axios";
+import { FaFileAlt } from "react-icons/fa";
 
 export default function ScholarshipProgramApplications() {
     useEffect(() => {
@@ -44,7 +45,7 @@ export default function ScholarshipProgramApplications() {
                             </p>
                         </div>
                         <div className="bg-blue-600 w-24 h-24 lg:w-36 lg:h-36 my-8 rounded-md flex items-center justify-center">
-                            <FaGoogleScholar className="text-white text-4xl lg:text-6xl" />
+                            <FaFileAlt className="text-white text-4xl lg:text-6xl" />
                         </div>
                     </div>
                 </div>
@@ -98,7 +99,7 @@ export default function ScholarshipProgramApplications() {
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-4 h-screen pt-5">
                         <h1 className="text-xl font-semibold border-b pb-4">Scholarship Programs</h1>
                         <div className="flex gap-4 mt-5">
                             <input

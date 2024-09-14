@@ -302,23 +302,18 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                 {isInboxDropdownOpen && (
                                     <ul className="ml-4 my-2 space-y-2">
 
-                                        <li>
+                                                                                <li>
                                             <Link to={'/scholarship-programs'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-programs' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                                 <FaGraduationCap className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-programs' ? ' text-white' : ''}`} />
                                                 Scholarship Dashboard
                                             </Link>
                                         </li>
-
-                                        <li>
+                                        
+                                        <li className="ml-4">
                                             <Link to={'/scholarship-program-applications'}
                                                 className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md 
-                                        ${location.pathname === '/scholarship-program-applications'
-
-                                                        ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                                <FaGoogleScholar className={`w-5 h-5 text-blue-600
-                                            ${location.pathname === '/scholarship-program-applications'
-
-                                                        ? ' text-white' : ''}`} />
+                                                ${location.pathname === '/scholarship-program-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                                <FaFileAlt className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-program-applications' ? ' text-white' : ''}`} />
                                                 Scholarship Program Applications
                                             </Link>
                                         </li>

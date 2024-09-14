@@ -10,7 +10,6 @@ import ResetPassword from "./components/ResetPassword";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 
 // Applicant Routes
-
 import Home from "./pages/Home";
 import CompleteOrReturnHome from "./pages/CompleteOrReturnHome";
 import About from "./pages/About";
@@ -67,6 +66,7 @@ import ScholarshipProviderApplications from "./pages/Admin/ScholarshipProviderAp
 import ScholarshipsProviderDetails from "./pages/Admin/ScholarshipProviderDetails";
 import StudentApplications from "./pages/Admin/StudentApplications";
 import Layout from "./components/Layout";
+import StudentApplicationDetails from "./pages/Admin/StudentApplicationDetails";
 
 // Scholarship Provider Routes
 import ProviderDashboard from "./pages/Scholarship-Provider/ProviderDashboard";
@@ -151,6 +151,7 @@ export default function App() {
             <Route path="scholarship-provider-applications/:id" element={<ScholarshipsProviderDetails />} />
 
             <Route path="student-applications" element={<StudentApplications />} />
+            <Route path="student-applications/:id" element={<StudentApplicationDetails />} />
 
             <Route path="admin-forums" element={<AdminForums />} />
             <Route path="admin-forums/post/:postId" element={<AdminForumDetail />} />
