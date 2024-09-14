@@ -67,6 +67,7 @@ import ScholarshipsProviderDetails from "./pages/Admin/ScholarshipProviderDetail
 import StudentApplications from "./pages/Admin/StudentApplications";
 import Layout from "./components/Layout";
 import StudentApplicationDetails from "./pages/Admin/StudentApplicationDetails";
+import AddAccount from "./pages/Admin/AddAccount";
 
 // Scholarship Provider Routes
 import ProviderDashboard from "./pages/Scholarship-Provider/ProviderDashboard";
@@ -156,6 +157,8 @@ export default function App() {
             <Route path="admin-forums" element={<AdminForums />} />
             <Route path="admin-forums/post/:postId" element={<AdminForumDetail />} />
             <Route path="admin-create-forum-post" element={<AdminCreateForumPost />} />
+
+            <Route path="add-account" element={<AddAccount />} />
 
           </Route>
         </Route>
