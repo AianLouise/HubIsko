@@ -14,14 +14,29 @@ import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 export default function Forums() {
     useTokenExpiry();
 
+    const navigate = useNavigate();
+    const { currentUser } = useSelector((state) => state.user);
+  
+    useEffect(() => {
+      if (currentUser) {
+        if (currentUser.role === 'admin') {
+          navigate('/admin-home');
+        } else if (currentUser.role === 'scholarship_provider') {
+          if (!currentUser.emailVerified) {
+            navigate('/verify-your-email', { state: { email: currentUser.email } });
+          } else {
+            navigate('/provider-dashboard');
+          }
+        }
+      }
+    }, [currentUser, navigate]);
+
     const { id } = useParams();
     const [scholarship, setScholarship] = useState(null);
 
-    const { currentUser } = useSelector(state => state.user);
     const isLoggedIn = Boolean(currentUser);
     const [notification, setNotification] = useState('');
     const [notification2, setNotification2] = useState('');
-    const navigate = useNavigate();
 
     const handleApplyClick = async () => {
         if (!isLoggedIn) {

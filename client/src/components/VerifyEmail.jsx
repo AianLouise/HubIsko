@@ -1,10 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaCheckCircle } from "react-icons/fa";
+import { useSelector } from 'react-redux';
 
 const VerifyEmail = () => {
-  const location = useLocation();
   const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (currentUser) {
+      if (currentUser.role === 'admin') {
+        navigate('/admin-home');
+      } else if (currentUser.role === 'scholarship_provider') {
+        if (!currentUser.emailVerified) {
+          navigate('/verify-your-email', { state: { email: currentUser.email } });
+        } else {
+          navigate('/provider-dashboard');
+        }
+      } else if (currentUser.role === 'applicant') {
+        if (!currentUser.emailVerified) {
+          navigate('/verify-your-email', { state: { email: currentUser.email } });
+        } else if (!currentUser.applicantDetails.profileComplete) {
+          navigate('/CoRH', { state: { userId: currentUser._id } });
+        } else {
+          navigate('/');
+        }
+      } else {
+        navigate('/');
+      }
+    }
+  }, [currentUser, navigate]);
+
+  const location = useLocation();
   const [message, setMessage] = useState('');
   const [redirectMessage, setRedirectMessage] = useState('');
 

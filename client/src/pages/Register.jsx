@@ -5,6 +5,7 @@ import { faEye, faEyeSlash, faCheck, faTimes } from '@fortawesome/free-solid-svg
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import NewLogo from '../assets/NewLogo.png';
 import SmallLogo from '../assets/NewLogoClean.png';
+import { useSelector } from 'react-redux';
 
 const PasswordRequirements = ({ requirements }) => {
   return (
@@ -67,6 +68,31 @@ export default function SignUp() {
   ]);
 
   const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (currentUser) {
+      if (currentUser.role === 'admin') {
+        navigate('/admin-home');
+      } else if (currentUser.role === 'scholarship_provider') {
+        if (!currentUser.emailVerified) {
+          navigate('/verify-your-email', { state: { email: currentUser.email } });
+        } else {
+          navigate('/provider-dashboard');
+        }
+      } else if (currentUser.role === 'applicant') {
+        if (!currentUser.emailVerified) {
+          navigate('/verify-your-email', { state: { email: currentUser.email } });
+        } else if (!currentUser.applicantDetails.profileComplete) {
+          navigate('/CoRH', { state: { userId: currentUser._id } });
+        } else {
+          navigate('/');
+        }
+      } else {
+        navigate('/');
+      }
+    }
+  }, [currentUser, navigate]);
 
   useEffect(() => {
     if (errors.global) {

@@ -1,7 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function ResetPassword() {
+  const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (currentUser) {
+      if (currentUser.role === 'admin') {
+        navigate('/admin-home');
+      } else if (currentUser.role === 'scholarship_provider') {
+        if (!currentUser.emailVerified) {
+          navigate('/verify-your-email', { state: { email: currentUser.email } });
+        } else {
+          navigate('/provider-dashboard');
+        }
+      } else if (currentUser.role === 'applicant') {
+        if (!currentUser.emailVerified) {
+          navigate('/verify-your-email', { state: { email: currentUser.email } });
+        } else if (!currentUser.applicantDetails.profileComplete) {
+          navigate('/CoRH', { state: { userId: currentUser._id } });
+        } else {
+          navigate('/');
+        }
+      } else {
+        navigate('/');
+      }
+    }
+  }, [currentUser, navigate]);
+
   const location = useLocation();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');

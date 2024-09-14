@@ -16,7 +16,22 @@ import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 const ScholarshipApplicationForm = () => {
     useTokenExpiry();
+    const navigate = useNavigate();
     const { currentUser } = useSelector((state) => state.user);
+  
+    useEffect(() => {
+      if (currentUser) {
+        if (currentUser.role === 'admin') {
+          navigate('/admin-home');
+        } else if (currentUser.role === 'scholarship_provider') {
+          if (!currentUser.emailVerified) {
+            navigate('/verify-your-email', { state: { email: currentUser.email } });
+          } else {
+            navigate('/provider-dashboard');
+          }
+        }
+      }
+    }, [currentUser, navigate]);
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -118,7 +133,6 @@ const ScholarshipApplicationForm = () => {
     const [visibleRelativeIndex, setVisibleRelativeIndex] = useState(0);
     const [visibleWorkExperienceIndex, setVisibleWorkExperienceIndex] = useState(0);
     const [visibleSkillIndex, setVisibleSkillIndex] = useState(0);
-    const navigate = useNavigate();
     const storage = getStorage();
 
     useEffect(() => {

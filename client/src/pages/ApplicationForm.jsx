@@ -8,6 +8,21 @@ export default function ApplicationForm() {
     useTokenExpiry();
 
     const navigate = useNavigate();
+    const { currentUser } = useSelector((state) => state.user);
+  
+    useEffect(() => {
+      if (currentUser) {
+        if (currentUser.role === 'admin') {
+          navigate('/admin-home');
+        } else if (currentUser.role === 'scholarship_provider') {
+          if (!currentUser.emailVerified) {
+            navigate('/verify-your-email', { state: { email: currentUser.email } });
+          } else {
+            navigate('/provider-dashboard');
+          }
+        }
+      }
+    }, [currentUser, navigate]);
 
     const [showModal, setShowModal] = useState(false);
 
@@ -18,8 +33,7 @@ export default function ApplicationForm() {
     const closeModal = () => {
         setShowModal(false);
     }
-
-    const currentUser = useSelector((state) => state.user.currentUser);
+    
     const [application, setApplication] = useState(null);
     const [loading, setLoading] = useState(true);
     const { id: applicationId } = useParams(); // Extract applicationId from the URL

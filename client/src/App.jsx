@@ -94,15 +94,15 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<PublicRoute><Home /></PublicRoute>} />
-        <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
-        <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
-        <Route path="/apply-as-provider" element={<PublicRoute><RegisterAsProvider /></PublicRoute>} />
-        <Route path="/reset-password" element={<PublicRoute><ResetPassword /></PublicRoute>} />
-        <Route path="/verify-email" element={<PublicRoute><VerifyEmail /></PublicRoute>} />
-        <Route path="/verify-your-email" element={<PublicRoute><VerifyYourEmail /></PublicRoute>} />
-        <Route path="/resend-verification-email" element={<PublicRoute><VerifyYourEmail /></PublicRoute>} />
-        <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/apply-as-provider" element={<RegisterAsProvider />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/verify-your-email" element={<VerifyYourEmail />} />
+        <Route path="/resend-verification-email" element={<VerifyYourEmail />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/scholarship-listing" element={<ScholarshipListing />} />
 
         <Route path="/forums" element={<Forums />} />

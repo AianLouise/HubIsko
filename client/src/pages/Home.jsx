@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { FaAngleRight } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FaSearch } from "react-icons/fa";
 import { FaFastForward } from "react-icons/fa";
@@ -33,7 +33,32 @@ export default function Home() {
     document.title = "Home | HubIsko";
   }, []);
 
-  const { currentUser } = useSelector(state => state.user);
+  const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (currentUser) {
+      if (currentUser.role === 'admin') {
+        navigate('/admin-home');
+      } else if (currentUser.role === 'scholarship_provider') {
+        if (!currentUser.emailVerified) {
+          navigate('/verify-your-email', { state: { email: currentUser.email } });
+        } else {
+          navigate('/provider-dashboard');
+        }
+      } else if (currentUser.role === 'applicant') {
+        if (!currentUser.emailVerified) {
+          navigate('/verify-your-email', { state: { email: currentUser.email } });
+        } else if (!currentUser.applicantDetails.profileComplete) {
+          navigate('/CoRH', { state: { userId: currentUser._id } });
+        } else {
+          navigate('/');
+        }
+      } else {
+        navigate('/');
+      }
+    }
+  }, [currentUser, navigate]);
 
   const [selectedTab, setSelectedTab] = useState('Explore Resources');
 

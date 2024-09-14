@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -12,6 +12,24 @@ import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function ScholarshipDashboardDetails() {
     useTokenExpiry();
+
+    const navigate = useNavigate();
+    const { currentUser } = useSelector((state) => state.user);
+  
+    useEffect(() => {
+      if (currentUser) {
+        if (currentUser.role === 'admin') {
+          navigate('/admin-home');
+        } else if (currentUser.role === 'scholarship_provider') {
+          if (!currentUser.emailVerified) {
+            navigate('/verify-your-email', { state: { email: currentUser.email } });
+          } else {
+            navigate('/provider-dashboard');
+          }
+        }
+      }
+    }, [currentUser, navigate]);
+
     const { id } = useParams();
     const [activeTab, setActiveTab] = useState('scholars');
 
@@ -19,7 +37,6 @@ export default function ScholarshipDashboardDetails() {
         setActiveTab(tab);
     };
 
-    const currentUser = useSelector((state) => state.user.currentUser);
     const [application, setApplication] = useState(null);
     const { id: applicationId } = useParams(); // Extract applicationId from the URL
 

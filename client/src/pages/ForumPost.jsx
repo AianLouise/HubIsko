@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -21,14 +21,29 @@ Modal.setAppElement('#root');
 export default function ForumPost() {
     useTokenExpiry();
 
+    const navigate = useNavigate();
+    const { currentUser } = useSelector((state) => state.user);
+  
+    useEffect(() => {
+      if (currentUser) {
+        if (currentUser.role === 'admin') {
+          navigate('/admin-home');
+        } else if (currentUser.role === 'scholarship_provider') {
+          if (!currentUser.emailVerified) {
+            navigate('/verify-your-email', { state: { email: currentUser.email } });
+          } else {
+            navigate('/provider-dashboard');
+          }
+        }
+      }
+    }, [currentUser, navigate]);
+
     const [loading, setLoading] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
     const { postId } = useParams();
     const [post, setPost] = useState(null);
     const [commentContent, setCommentContent] = useState('');
     const [selectedFiles, setSelectedFiles] = useState([]);
-
-    const { currentUser } = useSelector(state => state.user);
 
     const isLoggedIn = !!currentUser; // Check if currentUser is not null or undefined
 

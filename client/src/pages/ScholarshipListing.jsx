@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { FaSearch, FaRedo, FaHandHolding, FaGraduationCap, FaInfoCircle } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { BiFilter } from 'react-icons/bi';
 import ListingIcon from '../assets/ListingIconwTexture.png'
 import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
+import { useSelector } from 'react-redux';
 
 export default function ScholarshipListing() {
   useTokenExpiry();
@@ -13,6 +14,23 @@ export default function ScholarshipListing() {
   useEffect(() => {
     document.title = "Scholarship Listing | HubIsko";
   }, []);
+
+  const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (currentUser) {
+      if (currentUser.role === 'admin') {
+        navigate('/admin-home');
+      } else if (currentUser.role === 'scholarship_provider') {
+        if (!currentUser.emailVerified) {
+          navigate('/verify-your-email', { state: { email: currentUser.email } });
+        } else {
+          navigate('/provider-dashboard');
+        }
+      }
+    }
+  }, [currentUser, navigate]);
 
   const [scholarships, setScholarships] = useState([]);
   const [providers, setProviders] = useState([]);

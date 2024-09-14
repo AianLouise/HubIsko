@@ -15,9 +15,33 @@ export default function SignIn() {
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [showSlowConnectionNotification, setShowSlowConnectionNotification] = useState(false);
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (currentUser) {
+      if (currentUser.role === 'admin') {
+        navigate('/admin-home');
+      } else if (currentUser.role === 'scholarship_provider') {
+        if (!currentUser.emailVerified) {
+          navigate('/verify-your-email', { state: { email: currentUser.email } });
+        } else {
+          navigate('/provider-dashboard');
+        }
+      } else if (currentUser.role === 'applicant') {
+        if (!currentUser.emailVerified) {
+          navigate('/verify-your-email', { state: { email: currentUser.email } });
+        } else if (!currentUser.applicantDetails.profileComplete) {
+          navigate('/CoRH', { state: { userId: currentUser._id } });
+        } else {
+          navigate('/');
+        }
+      } else {
+        navigate('/');
+      }
+    }
+  }, [currentUser, navigate]);
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -33,30 +57,6 @@ export default function SignIn() {
   }, []);
 
 
-
-  //   useEffect(() => {
-  //     if (currentUser) {
-  //         if (currentUser.role === 'admin') {
-  //             navigate('/admin-home');
-  //         } else if (currentUser.role === 'scholarship_provider') {
-  //             if (!currentUser.emailVerified) {
-  //                 navigate('/verify-your-email', { state: { email: currentUser.email } });
-  //             } else {
-  //                 navigate('/provider-dashboard');
-  //             }
-  //         } else if (currentUser.role === 'applicant') {
-  //             if (!currentUser.emailVerified) {
-  //                 navigate('/verify-your-email', { state: { email: currentUser.email } });
-  //             } else if (!currentUser.applicantDetails.profileComplete) {
-  //                 navigate('/CoRH', { state: { userId: currentUser._id } });
-  //             } else {
-  //                 navigate('/');
-  //             }
-  //         } else {
-  //             navigate('/');
-  //         }
-  //     }
-  // }, [currentUser, navigate]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);

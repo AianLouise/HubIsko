@@ -29,7 +29,32 @@ const validateEmail = async (email) => {
 };
 
 const ProviderRegistration = () => {
+    const navigate = useNavigate();
     const { currentUser } = useSelector((state) => state.user);
+  
+    useEffect(() => {
+      if (currentUser) {
+        if (currentUser.role === 'admin') {
+          navigate('/admin-home');
+        } else if (currentUser.role === 'scholarship_provider') {
+          if (!currentUser.emailVerified) {
+            navigate('/verify-your-email', { state: { email: currentUser.email } });
+          } else {
+            navigate('/provider-dashboard');
+          }
+        } else if (currentUser.role === 'applicant') {
+          if (!currentUser.emailVerified) {
+            navigate('/verify-your-email', { state: { email: currentUser.email } });
+          } else if (!currentUser.applicantDetails.profileComplete) {
+            navigate('/CoRH', { state: { userId: currentUser._id } });
+          } else {
+            navigate('/');
+          }
+        } else {
+          navigate('/');
+        }
+      }
+    }, [currentUser, navigate]);
     const [loading, setLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [countdown, setCountdown] = useState(10);
@@ -66,7 +91,6 @@ const ProviderRegistration = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [notification, setNotification] = useState(null);
     const [activeStep, setActiveStep] = useState(1);
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (showModal) {

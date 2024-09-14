@@ -11,11 +11,28 @@ import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function CreateForumPost() {
     useTokenExpiry();
+
+
+    const navigate = useNavigate();
+    const { currentUser } = useSelector((state) => state.user);
+  
+    useEffect(() => {
+      if (currentUser) {
+        if (currentUser.role === 'admin') {
+          navigate('/admin-home');
+        } else if (currentUser.role === 'scholarship_provider') {
+          if (!currentUser.emailVerified) {
+            navigate('/verify-your-email', { state: { email: currentUser.email } });
+          } else {
+            navigate('/provider-dashboard');
+          }
+        }
+      }
+    }, [currentUser, navigate]);
+
     const [formData, setFormData] = useState({ title: '', content: '' });
-    const currentUser = useSelector((state) => state.user.currentUser);
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [submitTrigger, setSubmitTrigger] = useState(false);
-    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
     const handleFileChange = (event) => {

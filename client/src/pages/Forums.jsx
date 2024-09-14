@@ -18,7 +18,23 @@ export default function Forums() {
     document.title = "Forums | HubIsko";
   }, []);
 
-  const { currentUser } = useSelector(state => state.user);
+  const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (currentUser) {
+      if (currentUser.role === 'admin') {
+        navigate('/admin-home');
+      } else if (currentUser.role === 'scholarship_provider') {
+        if (!currentUser.emailVerified) {
+          navigate('/verify-your-email', { state: { email: currentUser.email } });
+        } else {
+          navigate('/provider-dashboard');
+        }
+      }
+    }
+  }, [currentUser, navigate]);
+
   const isLoggedIn = !!currentUser;
 
   const [recentPosts, setRecentPosts] = useState([]);
@@ -26,7 +42,6 @@ export default function Forums() {
   const [error, setError] = useState(null);
   const [notification, setNotification] = useState('');
   const [searchQuery, setSearchQuery] = useState(''); // State for search query
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetchRecentPosts();

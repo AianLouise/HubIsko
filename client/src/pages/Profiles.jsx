@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ApplicantProfile from '../components/Profiles/ApplicantProfile';
@@ -10,9 +10,27 @@ import ScholarshipProviderPosts from '../components/Profiles/ScholarshipProvider
 import AdminAbout from '../components/Profiles/AdminAbout';
 import AdminPosts from '../components/Profiles/AdminPosts';
 import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
+import { useSelector } from 'react-redux';
 
 export default function OthersProfile() {
     useTokenExpiry();
+
+    const navigate = useNavigate();
+    const { currentUser } = useSelector((state) => state.user);
+  
+    useEffect(() => {
+      if (currentUser) {
+        if (currentUser.role === 'admin') {
+          navigate('/admin-home');
+        } else if (currentUser.role === 'scholarship_provider') {
+          if (!currentUser.emailVerified) {
+            navigate('/verify-your-email', { state: { email: currentUser.email } });
+          } else {
+            navigate('/provider-dashboard');
+          }
+        }
+      }
+    }, [currentUser, navigate]);
 
     const { id } = useParams(); // Extract user ID from URL
     const [user, setUser] = useState(null);
