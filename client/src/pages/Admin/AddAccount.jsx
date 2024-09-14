@@ -1,57 +1,11 @@
 import React, { useState } from 'react';
 
 export default function AddAccount() {
-  const [role, setRole] = useState('applicant'); // Default to applicant
   const [formData, setFormData] = useState({
     email: '',
     username: '',
     password: '',
-    applicantDetails: {
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        nameExtension: '',
-        birthdate: '',
-        gender: '',
-        bloodType: '',
-        civilStatus: '',
-        contactNumber: '',
-        address: {
-          region: '',
-          province: '',
-          city: '',
-          barangay: '',
-          addressDetails: '',
-        },
-        education: {
-          elementary: {
-            school: '',
-            award: '',
-            yearGraduated: '',
-          },
-          juniorHighSchool: {
-            school: '',
-            award: '',
-            yearGraduated: '',
-          },
-          seniorHighSchool: {
-            school: '',
-            award: '',
-            yearGraduated: '',
-          },
-          college: {
-            school: '',
-            course: '',
-            yearGraduated: '',
-          },
-        },
-    },
-    scholarshipProviderDetails: {
-      organizationName: '',
-      contactPersonName: '',
-      email: '',
-      registrationNumber: '',
-    },
+    role: 'applicant',
   });
 
   // Handle input changes
@@ -63,23 +17,39 @@ export default function AddAccount() {
     }));
   };
 
-  // Handle role-based inputs
-  const handleRoleInputChange = (e, section) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [section]: {
-        ...prevData[section],
-        [name]: value,
-      },
-    }));
-  };
-
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Do something with formData, e.g., send to backend
-    console.log(formData);
+    const dataToSubmit = {
+      email: formData.email,
+      username: formData.username,
+      password: formData.password,
+      role: formData.role, // Include the role in the data to submit
+    };
+
+    try {
+      const response = await fetch('/api/admin/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSubmit),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create account');
+      }
+
+      alert('Account created successfully!');
+      setFormData({
+        email: '',
+        username: '',
+        password: '',
+        role: 'applicant', // Reset role to default
+      });
+    } catch (error) {
+      alert('Failed to create account. Please try again.');
+    }
   };
 
   return (
@@ -91,8 +61,9 @@ export default function AddAccount() {
           <label className="block mb-2 font-medium">Select Role</label>
           <select
             className="p-2 border rounded w-full"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
+            name="role"
+            value={formData.role}
+            onChange={handleInputChange}
           >
             <option value="applicant">Applicant</option>
             <option value="scholarship_provider">Scholarship Provider</option>
@@ -136,72 +107,6 @@ export default function AddAccount() {
             required
           />
         </div>
-
-        {/* Conditional Fields based on role */}
-        {role === 'applicant' && (
-          <>
-            <div>
-              <label className="block mb-2 font-medium">First Name</label>
-              <input
-                type="text"
-                name="firstName"
-                value={formData.applicantDetails.firstName}
-                onChange={(e) => handleRoleInputChange(e, 'applicantDetails')}
-                className="p-2 border rounded w-full"
-                required
-              />
-            </div>
-            <div>
-              <label className="block mb-2 font-medium">Last Name</label>
-              <input
-                type="text"
-                name="lastName"
-                value={formData.applicantDetails.lastName}
-                onChange={(e) => handleRoleInputChange(e, 'applicantDetails')}
-                className="p-2 border rounded w-full"
-                required
-              />
-            </div>
-          </>
-        )}
-
-        {role === 'scholarship_provider' && (
-          <>
-            <div>
-              <label className="block mb-2 font-medium">Organization Name</label>
-              <input
-                type="text"
-                name="organizationName"
-                value={formData.scholarshipProviderDetails.organizationName}
-                onChange={(e) => handleRoleInputChange(e, 'scholarshipProviderDetails')}
-                className="p-2 border rounded w-full"
-                required
-              />
-            </div>
-            <div>
-              <label className="block mb-2 font-medium">Contact Person Name</label>
-              <input
-                type="text"
-                name="contactPersonName"
-                value={formData.scholarshipProviderDetails.contactPersonName}
-                onChange={(e) => handleRoleInputChange(e, 'scholarshipProviderDetails')}
-                className="p-2 border rounded w-full"
-                required
-              />
-            </div>
-            <div>
-              <label className="block mb-2 font-medium">Registration Number</label>
-              <input
-                type="text"
-                name="registrationNumber"
-                value={formData.scholarshipProviderDetails.registrationNumber}
-                onChange={(e) => handleRoleInputChange(e, 'scholarshipProviderDetails')}
-                className="p-2 border rounded w-full"
-                required
-              />
-            </div>
-          </>
-        )}
 
         {/* Submit Button */}
         <button

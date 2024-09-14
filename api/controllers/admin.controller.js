@@ -1,6 +1,7 @@
 import User from '../models/user.model.js'; // Import the User model
 import ScholarshipProgram from '../models/scholarshipProgram.model.js'; // Import the Scholarship model
 import ForumPost from '../models/forumPost.model.js'; // Import the ForumPost model
+import bcryptjs from 'bcryptjs'; // Import the bcryptjs library
 
 export const test = (req, res) => {
   res.json({
@@ -501,6 +502,48 @@ export const getTotalApprovedPrograms = async (req, res) => {
     console.error('Error fetching total approved programs:', error.message);
     res.status(500).json({
       message: 'Error fetching total approved programs',
+      error: error.message,
+    });
+  }
+};
+
+export const createAccount = async (req, res) => {
+  const { email, username, password, role, applicantDetails, scholarshipProviderDetails } = req.body;
+
+  try {
+    // Hash the password
+    const hashedPassword = await bcryptjs.hash(password, 10);
+
+    // Create the user object
+    const userData = {
+      email,
+      username,
+      password: hashedPassword,
+      role,
+    };
+
+    // Add role-specific details
+    if (role === 'applicant') {
+      userData.applicantDetails = {
+        ...applicantDetails,
+        profileComplete: false,
+      };
+    } else if (role === 'scholarship_provider') {
+      userData.scholarshipProviderDetails = {
+        ...scholarshipProviderDetails,
+        registrationComplete: false,
+      };
+    }
+
+    // Save the user to the database
+    const newUser = new User(userData);
+    await newUser.save();
+
+    res.status(201).json({ message: 'Account created successfully!' });
+  } catch (error) {
+    console.error('Error creating account:', error.message);
+    res.status(500).json({
+      message: 'Error creating account',
       error: error.message,
     });
   }

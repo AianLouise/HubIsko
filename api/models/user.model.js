@@ -158,61 +158,65 @@ const applicantSchema = new mongoose.Schema({
 
 // Sub-schema for Scholarship Provider
 const scholarshipProviderSchema = new mongoose.Schema({
+  registrationComplete: {
+    type: Boolean,
+    default: false,
+  },
   organizationName: {
     type: String,
-    required: true,
+    required: false,
   },
   organizationType: {
     type: String,
-    required: true,
+    required: false,
   },
   registrationNumber: {
     type: String,
-    required: true,
+    required: false,
   },
   email: {
     type: String,
-    required: true,
+    required: false,
   },
   contactPersonName: {
     type: String,
-    required: true,
+    required: false,
   },
   contactPersonPosition: {
     type: String,
-    required: true,
+    required: false,
   },
   contactPersonNumber: {
     type: String,
-    required: true,
+    required: false,
   },
   addressDetails: {
     type: String,
-    required: true,
+    required: false,
   },
   region: {
     type: String,
-    required: true,
+    required: false,
   },
   province: {
     type: String,
-    required: true,
+    required: false,
   },
   city: {
     type: String,
-    required: true,
+    required: false,
   },
   barangay: {
     type: String,
-    required: true,
+    required: false,
   },
   website: {
     type: String,
-    required: true,
+    required: false,
   },
   agreeTerms: {
     type: Boolean,
-    required: true,
+    required: false,
   },
   documents: {
     registrationCertificate: {
