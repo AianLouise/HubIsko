@@ -41,19 +41,22 @@ export default function ProviderAccounts() {
   };
 
   const toggleFilter = () => {
-    setSelectedFilter(prevFilter => (prevFilter === 'Latest' ? 'Old' : 'Latest'));
+    setSelectedFilter(prevFilter => (prevFilter === 'Recent' ? 'Oldest' : 'Recent'));
   };
 
   const filteredProviders = providers.filter(provider => {
-    const matchesSearchQuery = provider.scholarshipProviderDetails.organizationName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      provider.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      provider.scholarshipProviderDetails.contactPersonName.toLowerCase().includes(searchQuery.toLowerCase());
-
+    const { scholarshipProviderDetails, email } = provider;
+    if (!scholarshipProviderDetails) return false;
+  
+    const matchesSearchQuery = (scholarshipProviderDetails.organizationName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      scholarshipProviderDetails.contactPersonName?.toLowerCase().includes(searchQuery.toLowerCase()));
+  
     return matchesSearchQuery;
   }).sort((a, b) => {
-    if (selectedFilter === 'Latest') {
+    if (selectedFilter === 'Recent') {
       return new Date(b.createdAt) - new Date(a.createdAt);
-    } else if (selectedFilter === 'Old') {
+    } else if (selectedFilter === 'Oldest') {
       return new Date(a.createdAt) - new Date(b.createdAt);
     }
     return 0;
@@ -115,7 +118,7 @@ export default function ProviderAccounts() {
                   />
                   <button onClick={toggleFilter} className='bg-blue-600 px-4 py-2 rounded-md flex gap-2 text-white'>
                     <BiFilter className='w-6 h-6' />
-                    <span>{selectedFilter === 'Latest' ? 'Latest' : 'Old'}</span>
+                    <span>{selectedFilter === 'Recent' ? 'Recent' : 'Oldest'}</span>
                   </button>
                 </div>
               </div>
@@ -130,27 +133,35 @@ export default function ProviderAccounts() {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentProviders.map((provider, index) => (
-                    <tr key={provider._id} className="font-normal tracking-wide hover:bg-slate-200">
-                      <td className='py-2 px-4 border-b border-gray-200'>{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                      <td className='py-2 px-4 border-b border-gray-200'>
-                        <div className="flex gap-2 items-center">
-                          <img src={provider.profilePicture} alt="Profile" className="rounded-full h-6 w-6" />
-                          {provider.scholarshipProviderDetails.organizationName}
-                        </div>
-                      </td>
-                      <td className='py-2 px-4 border-b border-gray-200'>{provider.email}</td>
-                      <td className='py-2 px-4 border-b border-gray-200'>{provider.scholarshipProviderDetails.contactPersonName}</td>
-                      <td className='py-2 px-4 border-b border-gray-200'>
-                        <div className="flex items-center gap-2">
-                          <Link to={`/provider-details/${provider._id}`} className=''>
-                            <MdPreview className='w-6 h-6 text-blue-600 hover:text-blue-800' />
-                          </Link>
-                          <MdDelete className='w-6 h-6 text-red-500' />
-                        </div>
+                  {filteredProviders.length === 0 ? (
+                    <tr>
+                      <td colSpan="5" className="py-4 text-center text-gray-500">
+                        No providers found.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    currentProviders.map((provider, index) => (
+                      <tr key={provider._id} className="font-normal tracking-wide hover:bg-slate-200">
+                        <td className='py-2 px-4 border-b border-gray-200'>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                        <td className='py-2 px-4 border-b border-gray-200'>
+                          <div className="flex gap-2 items-center">
+                            <img src={provider.profilePicture} alt="Profile" className="rounded-full h-6 w-6" />
+                            {provider.scholarshipProviderDetails.organizationName}
+                          </div>
+                        </td>
+                        <td className='py-2 px-4 border-b border-gray-200'>{provider.email}</td>
+                        <td className='py-2 px-4 border-b border-gray-200'>{provider.scholarshipProviderDetails.contactPersonName}</td>
+                        <td className='py-2 px-4 border-b border-gray-200'>
+                          <div className="flex items-center gap-2">
+                            <Link to={`/provider-details/${provider._id}`} className=''>
+                              <MdPreview className='w-6 h-6 text-blue-600 hover:text-blue-800' />
+                            </Link>
+                            <MdDelete className='w-6 h-6 text-red-500' />
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
 

@@ -201,3 +201,46 @@ export const getScholarshipProgramTitle = async (req, res) => {
     res.status(500).json({ message: 'Error retrieving scholarship program', error: error.message });
   }
 };
+
+export const getScholarshipProgramsByProvider = async (req, res) => {
+  let { userId } = req.params; // Extract userId from request parameters
+  userId = userId.trim(); // Trim any leading or trailing whitespace
+
+  try {
+    // Find all scholarship programs provided by the specific user
+    const scholarshipPrograms = await ScholarshipProgram.find({ providerId: userId });
+
+    if (!scholarshipPrograms || scholarshipPrograms.length === 0) {
+      return res.status(404).json({ message: 'No scholarship programs found for this provider' });
+    }
+
+    // Initialize an array to hold the details of the applications
+    let applicationDetails = [];
+
+    // Iterate over each scholarship program and find the applications
+    for (const program of scholarshipPrograms) {
+      const applications = await ScholarshipApplication.find({ scholarshipProgram: program._id });
+
+      // Add the application details to the array
+      for (const application of applications) {
+        // Find the user using the applicant field
+        const user = await User.findById(application.applicant);
+
+        applicationDetails.push({
+          firstName: application.firstName,
+          lastName: application.lastName,
+          applicationDate: application.applicationDate,
+          status: application.status,
+          profilePicture: user.profilePicture, // Add profilePicture from the User table
+          scholarshipProgram: application.scholarshipProgram, // Add scholarshipProgram title
+          // Add other relevant fields from the application as needed
+        });
+      }
+    }
+
+    // Return the application details
+    res.json({ applicationDetails });
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving scholarship applications', error: error.message });
+  }
+};

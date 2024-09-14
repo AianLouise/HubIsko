@@ -33,8 +33,11 @@ const ScholarshipApplicationForm = () => {
       }
     }, [currentUser, navigate]);
 
+    const userId = currentUser?._id;
+    const [userDetails, setUserDetails] = useState(null);
+
     const [formData, setFormData] = useState({
-        firstName: '',
+        firstName: userDetails?.applicantDetails.firstName,
         lastName: '',
         middleName: '',
         nameExtension: '',
@@ -125,6 +128,72 @@ const ScholarshipApplicationForm = () => {
         scholarshipProgram: '',
         applicant: currentUser._id,
     });
+
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+          try {
+            const response = await fetch(`/api/auth/user/${userId}`);
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            setUserDetails(data);
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              firstName: data.applicantDetails?.firstName || '',
+                lastName: data.applicantDetails?.lastName || '',
+                middleName: data.applicantDetails?.middleName || '',
+                nameExtension: data.applicantDetails?.nameExtension || '',
+                birthdate: data.applicantDetails?.birthdate || '',
+                birthplace: data.applicantDetails?.birthplace || '',
+                gender: data.applicantDetails?.gender || '',
+                bloodType: data.applicantDetails?.bloodType || '',
+                civilStatus: data.applicantDetails?.civilStatus || '', 
+                maidenName: data.applicantDetails?.maidenName || '',
+                spouseName: data.applicantDetails?.spouseName || '',
+                spouseOccupation: data.applicantDetails?.spouseOccupation || '',
+                religion: data.applicantDetails?.religion || '',
+                height: data.applicantDetails?.height || '',
+                weight: data.applicantDetails?.weight || '',
+                email: data.email || '',
+                contactNumber: data.applicantDetails?.contactNumber || '',
+                addressDetails: data.applicantDetails?.address.addressDetails || '',
+                region: data.applicantDetails?.address.region || '',
+                province: data.applicantDetails?.address.province || '',
+                city: data.applicantDetails?.address.city || '',
+                barangay: data.applicantDetails?.address.barangay || '',
+                education: {
+                    elementary: {
+                        school: data.applicantDetails?.education?.elementary?.school || '',
+                        award: data.applicantDetails?.education?.elementary?.award || '',
+                        yearGraduated: data.applicantDetails?.education?.elementary?.yearGraduated || '',
+                    },
+                    juniorHighSchool: {
+                        school: data.applicantDetails?.education?.juniorHighSchool?.school || '',
+                        award: data.applicantDetails?.education?.juniorHighSchool?.award || '',
+                        yearGraduated: data.applicantDetails?.education?.juniorHighSchool?.yearGraduated || '',
+                    },
+                    seniorHighSchool: {
+                        school: data.applicantDetails?.education?.seniorHighSchool?.school || '',
+                        award: data.applicantDetails?.education?.seniorHighSchool?.award || '',
+                        yearGraduated: data.applicantDetails?.education?.seniorHighSchool?.yearGraduated || '',
+                    },
+                    college: {
+                        school: data.applicantDetails?.education?.college?.school || '',
+                        course: data.applicantDetails?.education?.college?.course || '',
+                    }
+                },
+              // Initialize other form fields as needed
+            }));
+          } catch (error) {
+            console.error('Error fetching user details:', error);
+          }
+        };
+    
+        if (userId) {
+          fetchUserDetails();
+        }
+      }, [userId]);
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
@@ -399,48 +468,48 @@ const ScholarshipApplicationForm = () => {
             validate: (formData) => {
                 const errors = {};
 
-                // Validate elementary education details
-                if (!formData.education.elementary.school || formData.education.elementary.school.trim() === '') {
-                    errors.elementarySchool = 'Elementary school name is required';
-                }
-                if (!formData.education.elementary.yearGraduated || formData.education.elementary.yearGraduated.trim() === '') {
-                    errors.elementaryYearGraduated = 'Elementary year graduated is required';
-                } else if (!/^\d{4}$/.test(formData.education.elementary.yearGraduated)) {
-                    errors.elementaryYearGraduated = 'Elementary year graduated must be a valid year';
-                }
-
-                // Validate junior high school education details
-                if (!formData.education.juniorHighSchool.school || formData.education.juniorHighSchool.school.trim() === '') {
-                    errors.juniorHighSchool = 'Junior high school name is required';
-                }
-                if (!formData.education.juniorHighSchool.yearGraduated || formData.education.juniorHighSchool.yearGraduated.trim() === '') {
-                    errors.juniorHighSchoolYearGraduated = 'Junior high school year graduated is required';
-                } else if (!/^\d{4}$/.test(formData.education.juniorHighSchool.yearGraduated)) {
-                    errors.juniorHighSchoolYearGraduated = 'Junior high school year graduated must be a valid year';
-                }
-
-                // Validate senior high school education details
-                if (!formData.education.seniorHighSchool.school || formData.education.seniorHighSchool.school.trim() === '') {
-                    errors.seniorHighSchool = 'Senior high school name is required';
-                }
-                if (!formData.education.seniorHighSchool.yearGraduated || formData.education.seniorHighSchool.yearGraduated.trim() === '') {
-                    errors.seniorHighSchoolYearGraduated = 'Senior high school year graduated is required';
-                } else if (!/^\d{4}$/.test(formData.education.seniorHighSchool.yearGraduated)) {
-                    errors.seniorHighSchoolYearGraduated = 'Senior high school year graduated must be a valid year';
-                }
-
-                // Validate college education details
-                if (!formData.education.college.school || formData.education.college.school.trim() === '') {
-                    errors.collegeSchool = 'College school name is required';
-                }
-                if (!formData.education.college.course || formData.education.college.course.trim() === '') {
-                    errors.collegeCourse = 'College course is required';
-                }
-                // if (!formData.education.college.yearGraduated || formData.education.college.yearGraduated.trim() === '') {
-                //     errors.collegeYearGraduated = 'College year graduated is required';
-                // } else if (!/^\d{4}$/.test(formData.education.college.yearGraduated)) {
-                //     errors.collegeYearGraduated = 'College year graduated must be a valid year';
+                // // Validate elementary education details
+                // if (!formData.education.elementary.school || formData.education.elementary.school.trim() === '') {
+                //     errors.elementarySchool = 'Elementary school name is required';
                 // }
+                // if (!formData.education.elementary.yearGraduated || formData.education.elementary.yearGraduated.trim() === '') {
+                //     errors.elementaryYearGraduated = 'Elementary year graduated is required';
+                // } else if (!/^\d{4}$/.test(formData.education.elementary.yearGraduated)) {
+                //     errors.elementaryYearGraduated = 'Elementary year graduated must be a valid year';
+                // }
+
+                // // Validate junior high school education details
+                // if (!formData.education.juniorHighSchool.school || formData.education.juniorHighSchool.school.trim() === '') {
+                //     errors.juniorHighSchool = 'Junior high school name is required';
+                // }
+                // if (!formData.education.juniorHighSchool.yearGraduated || formData.education.juniorHighSchool.yearGraduated.trim() === '') {
+                //     errors.juniorHighSchoolYearGraduated = 'Junior high school year graduated is required';
+                // } else if (!/^\d{4}$/.test(formData.education.juniorHighSchool.yearGraduated)) {
+                //     errors.juniorHighSchoolYearGraduated = 'Junior high school year graduated must be a valid year';
+                // }
+
+                // // Validate senior high school education details
+                // if (!formData.education.seniorHighSchool.school || formData.education.seniorHighSchool.school.trim() === '') {
+                //     errors.seniorHighSchool = 'Senior high school name is required';
+                // }
+                // if (!formData.education.seniorHighSchool.yearGraduated || formData.education.seniorHighSchool.yearGraduated.trim() === '') {
+                //     errors.seniorHighSchoolYearGraduated = 'Senior high school year graduated is required';
+                // } else if (!/^\d{4}$/.test(formData.education.seniorHighSchool.yearGraduated)) {
+                //     errors.seniorHighSchoolYearGraduated = 'Senior high school year graduated must be a valid year';
+                // }
+
+                // // Validate college education details
+                // if (!formData.education.college.school || formData.education.college.school.trim() === '') {
+                //     errors.collegeSchool = 'College school name is required';
+                // }
+                // if (!formData.education.college.course || formData.education.college.course.trim() === '') {
+                //     errors.collegeCourse = 'College course is required';
+                // }
+                // // if (!formData.education.college.yearGraduated || formData.education.college.yearGraduated.trim() === '') {
+                // //     errors.collegeYearGraduated = 'College year graduated is required';
+                // // } else if (!/^\d{4}$/.test(formData.education.college.yearGraduated)) {
+                // //     errors.collegeYearGraduated = 'College year graduated must be a valid year';
+                // // }
 
                 return errors;
             },

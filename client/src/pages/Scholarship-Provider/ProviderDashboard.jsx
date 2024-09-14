@@ -3,7 +3,7 @@ import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import { BiDotsHorizontal } from 'react-icons/bi';
 import { BiSolidRightArrow } from "react-icons/bi";
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { BiCog } from 'react-icons/bi';
 
 export default function ProviderDashboard() {
@@ -58,6 +58,26 @@ export default function ProviderDashboard() {
     fetchActivities();
   }, [providerId]);
 
+  const [applicationDetails, setApplicationDetails] = useState([]);
+
+  useEffect(() => {
+    // Fetch application details from the backend
+    const fetchApplicationDetails = async () => {
+      try {
+        const response = await fetch(`/api/provider/${userId}/scholarship-programs`); // Adjust the endpoint as needed
+        const data = await response.json();
+        setApplicationDetails(data.applicationDetails || []);
+        setApplicationsCount(data.applicationDetails.length || 0);
+      } catch (error) {
+        console.error('Error fetching application details:', error);
+      }
+    };
+
+    fetchApplicationDetails();
+  }, [userId]);
+
+  const navigate = useNavigate();
+
   return (
     <div className={`flex flex-col min-h-screen`}>
       <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''} `}>
@@ -79,7 +99,7 @@ export default function ProviderDashboard() {
 
         <div className='bg-blue-500 mx-24 px-10 flex justify-between rounded-md text-white'>
           <div className={'flex w-full gap-4 items-center mx-auto'}>
-          <div className='bg-blue-600 w-24 h-24 my-8 rounded-full overflow-hidden'>
+            <div className='bg-blue-600 w-24 h-24 my-8 rounded-full overflow-hidden'>
               {currentUser && currentUser.profilePicture ? (
                 <img
                   src={currentUser.profilePicture}
@@ -96,14 +116,14 @@ export default function ProviderDashboard() {
               <h1 className='text-2xl font-bold '>Welcome {orgName}!</h1>
               <p className='text-base'>Here is your dashboard!</p>
             </div>
-         
+
           </div>
-          
+
           <div className='flex items-center w-[200px]'>
-          <Link to={'/provider-settings'} className='flex gap-2 font-medium px-6 py-2 rounded-md text-left bg-white hover:bg-slate-200 text-blue-600 shadow'>
-            <BiCog className='w-6 h-6' />
-            See Settings
-          </Link>
+            <Link to={'/provider-settings'} className='flex gap-2 font-medium px-6 py-2 rounded-md text-left bg-white hover:bg-slate-200 text-blue-600 shadow whitespace-nowrap'>
+              <BiCog className='w-6 h-6' />
+              See Settings
+            </Link>
           </div>
         </div>
 
@@ -118,14 +138,28 @@ export default function ProviderDashboard() {
               <div className='px-4 flex flex-col gap-2 w-full'>
                 <span className='font-medium'>Received Applications</span>
 
-                <button className='flex gap-2 justify-between border rounded-md w-full p-2 hover:bg-slate-200'>
-                  <div className='flex gap-2 items-center'>
-                    <div className='bg-blue-600 w-6 h-6 rounded-md'></div>
-                    <span className='font-medium'>Name : <span className='text-blue-600 font-normal'>sent a new application</span></span>
-                  </div>
-
-                  <BiDotsHorizontal className='text-blue-600 w-6 h-6' />
-                </button>
+                <div className='overflow-y-auto max-h-48 flex flex-col gap-2'>
+                  {applicationDetails.length > 0 ? (
+                    applicationDetails.slice(0, 3).map((application, index) => (
+                      <Link
+                        key={index}
+                        to={`/view-scholarships/${application.scholarshipProgram}`}
+                        className='flex gap-2 justify-between border rounded-md w-full p-2 hover:bg-slate-200'
+                      >
+                        <div className='flex gap-2 items-center text-left'>
+                          <div className='w-6 h-6 rounded-md overflow-hidden'>
+                            <img src={application.profilePicture} alt={`${application.firstName} ${application.lastName}`} className='w-full h-full object-cover' />
+                          </div>
+                          <span className='font-medium'>
+                            <span className='text-black font-normal'>{application.firstName} {application.lastName}</span> <span className='text-blue-600 font-normal'>sent a new application</span>
+                          </span>
+                        </div>
+                      </Link>
+                    ))
+                  ) : (
+                    <p>No applications received yet.</p>
+                  )}
+                </div>
               </div>
             </div>
 

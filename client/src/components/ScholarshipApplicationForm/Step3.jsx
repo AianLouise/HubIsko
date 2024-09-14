@@ -17,7 +17,7 @@ const Step3 = ({ formData, setFormData, errors }) => {
 
   return (
     <div>
-      <div className='max-w-8xl mx-auto bg-white shadow-lg rounded-lg'>
+      <div className='max-w-8xl mx-auto bg-white shadow-lg rounded-lg pb-3'>
         <div className="bg-blue-600 text-white p-4 rounded-t-lg">
           <span className='text-lg font-bold'>Education Information</span>
         </div>
@@ -34,6 +34,7 @@ const Step3 = ({ formData, setFormData, errors }) => {
                 value={formData.education.elementary.school}
                 onChange={(e) => handleEducationChange(e, 'elementary')}
                 required
+                disabled={true}
                 placeholder="Enter elementary school name"
                 className='standard-input border border-gray-300 rounded-md p-2 w-full'
               />
@@ -46,6 +47,7 @@ const Step3 = ({ formData, setFormData, errors }) => {
                 value={formData.education.elementary.award}
                 onChange={(e) => handleEducationChange(e, 'elementary')}
                 required
+                disabled={true}
                 placeholder="Enter elementary award"
                 className='standard-input border border-gray-300 rounded-md p-2 w-full'
               />
@@ -57,6 +59,7 @@ const Step3 = ({ formData, setFormData, errors }) => {
                 value={formData.education.elementary.yearGraduated}
                 onChange={(e) => handleEducationChange(e, 'elementary')}
                 required
+                disabled={true}
                 className='standard-input border border-gray-300 rounded-md p-2 w-full'
               >
                 <option value="">Select year</option>
@@ -78,6 +81,7 @@ const Step3 = ({ formData, setFormData, errors }) => {
                 value={formData.education.juniorHighSchool.school}
                 onChange={(e) => handleEducationChange(e, 'juniorHighSchool')}
                 required
+                disabled={true}
                 placeholder="Enter junior high school name"
                 className='standard-input border border-gray-300 rounded-md p-2 w-full'
               />
@@ -90,6 +94,7 @@ const Step3 = ({ formData, setFormData, errors }) => {
                 value={formData.education.juniorHighSchool.award}
                 onChange={(e) => handleEducationChange(e, 'juniorHighSchool')}
                 required
+                disabled={true}
                 placeholder="Enter junior high school award"
                 className='standard-input border border-gray-300 rounded-md p-2 w-full'
               />
@@ -101,6 +106,7 @@ const Step3 = ({ formData, setFormData, errors }) => {
                 value={formData.education.juniorHighSchool.yearGraduated}
                 onChange={(e) => handleEducationChange(e, 'juniorHighSchool')}
                 required
+                disabled={true}
                 className='standard-input border border-gray-300 rounded-md p-2 w-full'
               >
                 <option value="">Select year</option>
@@ -122,6 +128,7 @@ const Step3 = ({ formData, setFormData, errors }) => {
                 value={formData.education.seniorHighSchool.school}
                 onChange={(e) => handleEducationChange(e, 'seniorHighSchool')}
                 required
+                disabled={true}
                 placeholder="Enter senior high school name"
                 className='standard-input border border-gray-300 rounded-md p-2 w-full'
               />
@@ -134,6 +141,7 @@ const Step3 = ({ formData, setFormData, errors }) => {
                 value={formData.education.seniorHighSchool.award}
                 onChange={(e) => handleEducationChange(e, 'seniorHighSchool')}
                 required
+                disabled={true}
                 placeholder="Enter senior high school award"
                 className='standard-input border border-gray-300 rounded-md p-2 w-full'
               />
@@ -145,6 +153,7 @@ const Step3 = ({ formData, setFormData, errors }) => {
                 value={formData.education.seniorHighSchool.yearGraduated}
                 onChange={(e) => handleEducationChange(e, 'seniorHighSchool')}
                 required
+                disabled={true}
                 className='standard-input border border-gray-300 rounded-md p-2 w-full'
               >
                 <option value="">Select year</option>
@@ -166,6 +175,7 @@ const Step3 = ({ formData, setFormData, errors }) => {
                 value={formData.education.college.school}
                 onChange={(e) => handleEducationChange(e, 'college')}
                 required
+                disabled={true}
                 placeholder="Enter college name"
                 className='standard-input border border-gray-300 rounded-md p-2 w-full'
               />
@@ -178,6 +188,7 @@ const Step3 = ({ formData, setFormData, errors }) => {
                 value={formData.education.college.course}
                 onChange={(e) => handleEducationChange(e, 'college')}
                 required
+                disabled={true}
                 placeholder="Enter college course"
                 className='standard-input border border-gray-300 rounded-md p-2 w-full'
               />

@@ -43,19 +43,22 @@ export default function Students() {
   };
 
   const toggleFilter = () => {
-    setSelectedFilter(prevFilter => (prevFilter === 'Latest' ? 'Old' : 'Latest'));
+    setSelectedFilter(prevFilter => (prevFilter === 'Recent' ? 'Oldest' : 'Recent'));
   };
 
   const filteredApplicants = applicants.filter(applicant => {
-    const matchesSearchQuery = applicant.applicantDetails.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      applicant.applicantDetails.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      applicant.email.toLowerCase().includes(searchQuery.toLowerCase());
-
+    const { applicantDetails, email } = applicant;
+    if (!applicantDetails) return false;
+  
+    const matchesSearchQuery = applicantDetails.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      applicantDetails.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      email.toLowerCase().includes(searchQuery.toLowerCase());
+  
     return matchesSearchQuery;
   }).sort((a, b) => {
-    if (selectedFilter === 'Latest') {
+    if (selectedFilter === 'Recent') {
       return new Date(b.createdAt) - new Date(a.createdAt);
-    } else if (selectedFilter === 'Old') {
+    } else if (selectedFilter === 'Oldest') {
       return new Date(a.createdAt) - new Date(b.createdAt);
     }
     return 0;
@@ -93,20 +96,8 @@ export default function Students() {
 
   return (
     <div className="flex flex-col min-h-screen">
-
       <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
-        {/* <div className='border-b mb-8'>
-          <div className={'flex items-center mx-auto justify-between px-24'}>
-            <div className='flex flex-col gap-2 w-1/2'>
-              <h1 className='text-4xl font-bold text-gray-800'>Students' Info</h1>
-              <p className='text-lg text-slate-500 font-medium'>This will serve as a storage for student's info</p>
-            </div>
-            <div className='bg-blue-600 w-36 h-36 my-8 rounded-md'></div>
-          </div>
-        </div> */}
-
         <div className='max-w-8xl mx-auto px-24 gap-4 flex-col flex mt-12 pb-10'>
-
           <div className="flex items-center justify-between border-b pb-2">
             <h1 className='text-2xl font-bold text-slate-600'>Students' Info</h1>
             <h1 className='text-xl text-slate-600'>Recently Added</h1>
@@ -129,7 +120,7 @@ export default function Students() {
                   />
                   <button onClick={toggleFilter} className='bg-blue-600 px-4 py-2 rounded-md flex gap-2 text-white'>
                     <BiFilter className='w-6 h-6' />
-                    <span>{selectedFilter === 'Latest' ? 'Latest' : 'Old'}</span>
+                    <span>{selectedFilter === 'Recent' ? 'Recent' : 'Oldest'}</span>
                   </button>
                 </div>
               </div>
@@ -144,27 +135,35 @@ export default function Students() {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentApplicants.map((applicant, index) => (
-                    <tr key={applicant._id} className="font-normal tracking-wide hover:bg-slate-200">
-                      <td className='py-2 px-4 border-b border-gray-200'>{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                      <td className='py-2 px-4 border-b border-gray-200'>
-                        <div className="flex gap-2 items-center">
-                          <img src={applicant.profilePicture} alt="Profile" className="rounded-full h-6 w-6" />
-                          {`${applicant.applicantDetails.firstName} ${applicant.applicantDetails.middleName} ${applicant.applicantDetails.lastName}`}
-                        </div>
-                      </td>
-                      <td className='py-2 px-4 border-b border-gray-200'>{applicant.email}</td>
-                      <td className='py-2 px-4 border-b border-gray-200'>{new Date(applicant.createdAt).toLocaleDateString()}</td>
-                      <td className='py-2 px-4 border-b border-gray-200'>
-                        <div className="flex items-center gap-2">
-                          <Link to={`/student-details/${applicant._id}`} className=''>
-                            <MdPreview className='w-6 h-6 text-blue-600 hover:text-blue-800' />
-                          </Link>
-                          <MdDelete className='w-6 h-6 text-red-500' />
-                        </div>
+                  {filteredApplicants.length === 0 ? (
+                    <tr>
+                      <td colSpan="5" className="py-4 text-center text-gray-500">
+                        No applicants found.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    currentApplicants.map((applicant, index) => (
+                      <tr key={applicant._id} className="font-normal tracking-wide hover:bg-slate-200">
+                        <td className='py-2 px-4 border-b border-gray-200'>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                        <td className='py-2 px-4 border-b border-gray-200'>
+                          <div className="flex gap-2 items-center">
+                            <img src={applicant.profilePicture} alt="Profile" className="rounded-full h-6 w-6" />
+                            {`${applicant.applicantDetails.firstName} ${applicant.applicantDetails.middleName} ${applicant.applicantDetails.lastName}`}
+                          </div>
+                        </td>
+                        <td className='py-2 px-4 border-b border-gray-200'>{applicant.email}</td>
+                        <td className='py-2 px-4 border-b border-gray-200'>{new Date(applicant.createdAt).toLocaleDateString()}</td>
+                        <td className='py-2 px-4 border-b border-gray-200'>
+                          <div className="flex items-center gap-2">
+                            <Link to={`/student-details/${applicant._id}`} className=''>
+                              <MdPreview className='w-6 h-6 text-blue-600 hover:text-blue-800' />
+                            </Link>
+                            <MdDelete className='w-6 h-6 text-red-500' />
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
               <div className='flex justify-between items-center font-normal gap-4 p-4 py-6 text-gray-600 rounded-md'>
@@ -200,7 +199,6 @@ export default function Students() {
                 </div>
               </div>
 
-
               <ul className="p-4 divide-y font-normal text-slate-600">
                 {[
                   { label: 'Email:', value: 'sample@sample.com' },
@@ -224,13 +222,7 @@ export default function Students() {
                   See full Details
                 </button>
               </div>
-
-
             </div>
-
-
-
-
           </div>
         </div>
       </main>

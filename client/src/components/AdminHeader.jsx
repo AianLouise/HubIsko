@@ -17,7 +17,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from '../redux/user/userSlice';
 import Logo from '../assets/NewLogoClean.png';
-import { FaFileAlt, FaUniversity } from 'react-icons/fa'; // Import the new icon
+import { FaCog, FaFileAlt, FaUniversity } from 'react-icons/fa'; // Import the new icon
 
 
 export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
@@ -171,6 +171,11 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                         {dropdownOpen && (
                             <div className="absolute mt-2 right-0 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50 font-medium">
                                 <ul>
+                                <Link to={'#'}>
+                                        <li className="p-2 hover:bg-gray-100 cursor-pointer">
+                                            Profile
+                                        </li>
+                                    </Link>
                                     <Link to={'/admin-settings'}>
                                         <li className="p-2 hover:bg-gray-100 cursor-pointer">
                                             Settings
@@ -369,6 +374,13 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                 <Link to={"/admin-forums"} className={`flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/admin-forums' ? 'bg-blue-600 text-white' : ''}`}>
                                     <MdForum className={`w-5 h-5 text-blue-600 ${location.pathname == '/admin-forums' ? 'text-white' : ''}`} /> {/* Updated icon */}
                                     Forums
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link to={"/admin-settings"} className={`flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/admin-forums' ? 'bg-blue-600 text-white' : ''}`}>
+                                    <FaCog className={`w-5 h-5 text-blue-600 ${location.pathname == '/admin-forums' ? 'text-white' : ''}`} /> {/* Updated icon */}
+                                    Settings
                                 </Link>
                             </li>
 

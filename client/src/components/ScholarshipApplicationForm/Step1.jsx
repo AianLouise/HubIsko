@@ -139,6 +139,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
               value={formData.firstName}
               onChange={handleChange}
               required
+              disabled={true}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
             />
           </div>
@@ -152,6 +153,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
               value={formData.lastName}
               onChange={handleChange}
               required
+              disabled={true}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
             />
           </div>
@@ -165,6 +167,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
               value={formData.middleName}
               onChange={handleChange}
               required
+              disabled={true}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
             />
           </div>
@@ -176,6 +179,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
               value={formData.nameExtension}
               onChange={handleChange}
               required
+              disabled={true}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
             >
               <option value="">Select Name Ext. (if applicable)</option>
@@ -197,6 +201,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
               value={formData.birthdate}
               onChange={handleChange}
               required
+              disabled={true}
               max={today} // Set the max attribute to today's date
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
             />
@@ -210,6 +215,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
               value={formData.birthplace}
               onChange={handleChange}
               required
+              disabled={true}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               placeholder="Enter birthplace"
             />
@@ -223,6 +229,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
               value={formData.gender}
               onChange={handleChange}
               required
+              disabled={true}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
             >
               <option value="">Select Gender</option>
@@ -239,6 +246,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
               value={formData.bloodType}
               onChange={handleChange}
               required
+              disabled={true}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
             >
               <option value="">Select Blood Type</option>
@@ -261,6 +269,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
               value={formData.civilStatus}
               onChange={handleChange}
               required
+              disabled={true}
             >
               <option value="">Select Civil Status</option>
               <option value="Single">Single</option>
@@ -316,6 +325,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
               value={formData.religion}
               onChange={handleChange}
               required
+              disabled={true}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
             >
               <option value="Roman Catholic">Roman Catholic</option>
@@ -335,6 +345,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
                 value={formData.height}
                 onChange={handleChange}
                 required
+                disabled={true}
                 min="0" // Set the minimum value to 0
                 className='text-sm standard-input border border-gray-300 rounded-md p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                 placeholder="Height in cm"
@@ -346,6 +357,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
                 value={formData.weight}
                 onChange={handleChange}
                 required
+                disabled={true}
                 min="0" // Set the minimum value to 0
                 className='text-sm standard-input border border-gray-300 rounded-md p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                 placeholder="Weight in kg"
@@ -361,6 +373,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
               value={formData.email}
               onChange={handleChange}
               required
+              disabled={true}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               placeholder="Enter email"
             />
@@ -375,6 +388,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
               value={formData.contactNumber}
               onChange={handleChange}
               required
+              disabled={true}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               placeholder="Enter contact number"
             />
@@ -387,6 +401,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
             <label className='block text-sm font-medium text-gray-700 mb-2'>Region:</label>
             <select
               value={selectedRegion}
+              disabled={true}
               onChange={(e) => {
                 setSelectedRegion(e.target.value);
                 setProvinceList([]); // Reset on region change
@@ -409,6 +424,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
             <label className='block text-sm font-medium text-gray-700 mb-2'>Province:</label>
             <select
               value={selectedProvince}
+              disabled={true}
               onChange={(e) => {
                 setSelectedProvince(e.target.value);
                 setCityList([]);
@@ -430,6 +446,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
             <label className='block text-sm font-medium text-gray-700 mb-2'>City/Municipality:</label>
             <select
               value={selectedCity}
+              disabled={true}
               onChange={(e) => {
                 setSelectedCity(e.target.value);
                 setBarangayList([]);
@@ -450,6 +467,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
             <label className='block text-sm font-medium text-gray-700 mb-2'>Barangay:</label>
             <select
               value={selectedBarangay}
+              disabled={true}
               onChange={(e) => setSelectedBarangay(e.target.value)}
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
             >
@@ -478,6 +496,7 @@ const Step1 = ({ formData, setFormData, errors }) => {
               className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
               placeholder="Enter House No./Unit No./Bldg/Floor, Street, Subdivision"
               required
+              disabled={true}
             />
           </div>
         </div>

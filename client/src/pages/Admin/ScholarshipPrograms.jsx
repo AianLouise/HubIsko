@@ -241,8 +241,13 @@ export default function ScholarshipPrograms() {
                                                         </td>
                                                         <td className="py-3 px-6 w-1/5">0</td>
                                                         <td className="py-3 px-6 w-1/5">
-                                                            <Link to={`/scholarship-program/${program._id}`} className="bg-blue-600 text-white px-4 ml-2 py-1 rounded-md hover:bg-blue-800">
-                                                                View
+                                                                                                                       <Link 
+                                                              to={program.status === 'Pending Approval' 
+                                                                ? `/scholarship-program-applications/${program._id}` 
+                                                                : `/scholarship-program/${program._id}`} 
+                                                              className="bg-blue-600 text-white px-4 ml-2 py-1 rounded-md hover:bg-blue-800 whitespace-nowrap"
+                                                            >
+                                                              {program.status === 'Pending Approval' ? 'Verify' : 'View Details'}
                                                             </Link>
                                                         </td>
                                                     </tr>

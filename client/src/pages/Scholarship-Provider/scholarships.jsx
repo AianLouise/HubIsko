@@ -53,6 +53,34 @@ export default function Scholarships() {
     }
   };
 
+  const [filter, setFilter] = useState('All');
+
+  const handleFilterChange = (newFilter) => {
+    setFilter(newFilter);
+  };
+
+  const filteredScholarships = scholarships.filter((scholarship) => {
+    if (filter === 'All') return true;
+    if (filter === 'Completed') return scholarship.status === 'Completed';
+    if (filter === 'Pending') return scholarship.status === 'Pending Approval';
+    return false;
+  });
+
+    // Calculate the number of ongoing programs
+    const ongoingPrograms = Array.isArray(scholarships)
+    ? scholarships.filter(scholarship => scholarship.status === 'Ongoing').length
+    : 0;
+
+  // Calculate the number of pending verifications
+  const pendingVerifications = Array.isArray(scholarships)
+    ? scholarships.filter(scholarship => scholarship.status === 'Pending Verification').length
+    : 0;
+
+  // Calculate the service rating (example: average rating from user feedback)
+  const serviceRating = Array.isArray(scholarships) && scholarships.length > 0
+    ? (scholarships.reduce((acc, scholarship) => acc + (scholarship.rating || 0), 0) / scholarships.length).toFixed(2)
+    : 'N/A';
+
   const truncateDescription = (description, maxLength) => {
     if (description.length <= maxLength) {
       return description;
@@ -100,8 +128,6 @@ export default function Scholarships() {
           </div>
 
           <div className='px-24 grid grid-cols-4 gap-5 -translate-y-20'>
-
-
             <div className='flex flex-col gap-3 bg-white border shadow p-8 py-6 rounded-md'>
               <div className='flex justify-between items-center'>
                 <h1 className='text-base font-medium'>All Programs</h1>
@@ -109,10 +135,8 @@ export default function Scholarships() {
                   <LuArchive className='text-2xl text-blue-600' />
                 </div>
               </div>
-
               <span className='text-4xl font-bold tracking-wide'>{Array.isArray(scholarships) ? scholarships.length : 0}</span>
             </div>
-
 
             <div className='flex flex-col gap-3 bg-white border shadow p-8 py-6 rounded-md'>
               <div className='flex justify-between items-center'>
@@ -121,8 +145,7 @@ export default function Scholarships() {
                   <MdOutlinePlayLesson className='text-2xl text-blue-600' />
                 </div>
               </div>
-
-              <span className='text-4xl font-bold tracking-wide'>123</span>
+              <span className='text-4xl font-bold tracking-wide'>{ongoingPrograms}</span>
             </div>
 
             <div className='flex flex-col gap-3 bg-white border shadow p-8 py-6 rounded-md'>
@@ -132,10 +155,8 @@ export default function Scholarships() {
                   <MdOutlinePendingActions className='text-2xl text-blue-600' />
                 </div>
               </div>
-
-              <span className='text-4xl font-bold tracking-wide'>123</span>
+              <span className='text-4xl font-bold tracking-wide'>{pendingVerifications}</span>
             </div>
-
 
             <div className='flex flex-col gap-3 bg-white border shadow p-8 py-6 rounded-md'>
               <div className='flex justify-between items-center'>
@@ -144,11 +165,10 @@ export default function Scholarships() {
                   <FaRegThumbsUp className='text-2xl text-blue-600' />
                 </div>
               </div>
-
-              <span className='text-4xl font-bold tracking-wide'>50%</span>
+              <span className='text-4xl font-bold tracking-wide'>{serviceRating}%</span>
             </div>
-
           </div>
+
         </div>
 
         <div className='max-w-8xl mx-auto px-24 mt-4 flex-col flex'>
@@ -170,19 +190,27 @@ export default function Scholarships() {
               </div>
             ) : (
               <div className="overflow-x-auto border shadow rounded-md bg-white w-full">
-                <div className="flex justify-between p-6 border-b  items-center">
-                  {/* <h1 className='font-bold'>Scholarships</h1> */}
+                <div className="flex justify-between p-6 border-b items-center">
                   <div className='flex gap-2 font-medium text-sm'>
-                    <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
-                      All <span className='text-blue-600'>(0)</span>
+                    <button
+                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'All' ? 'bg-slate-200' : ''}`}
+                      onClick={() => handleFilterChange('All')}
+                    >
+                      All <span className='text-blue-600'>({scholarships.length})</span>
                     </button>
 
-                    <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
-                      Completed <span className='text-green-600'>(0)</span>
+                    <button
+                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Completed' ? 'bg-slate-200' : ''}`}
+                      onClick={() => handleFilterChange('Completed')}
+                    >
+                      Completed <span className='text-green-600'>({scholarships.filter(scholarship => scholarship.status === 'Completed').length})</span>
                     </button>
 
-                    <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
-                      Pending <span className='text-yellow-600'>(0)</span>
+                    <button
+                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Pending' ? 'bg-slate-200' : ''}`}
+                      onClick={() => handleFilterChange('Pending')}
+                    >
+                      Pending <span className='text-yellow-600'>({scholarships.filter(scholarship => scholarship.status === 'Pending Approval').length})</span>
                     </button>
                   </div>
                   <input
@@ -211,7 +239,7 @@ export default function Scholarships() {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {scholarships.map((scholarship) => (
+                      {filteredScholarships.map((scholarship) => (
                         <tr key={scholarship._id}>
                           <td className="px-6 flex gap-4 items-center py-4 whitespace-nowrap">
                             <div
@@ -224,7 +252,6 @@ export default function Scholarships() {
                             ></div>
 
                             <h1 className='text-base font-medium text-gray-800'>{scholarship.title}</h1>
-
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className={`text-base font-medium ${scholarship.numberOfScholarshipsSlotFilled === scholarship.numberOfScholarships ? 'text-red-600' : ''} ${scholarship.status === 'Pending Approval' ? 'bg-yellow-100 text-[#ffb048] font-semibold text-sm px-4 py-2 rounded-md' : ''} ${scholarship.status === 'Active' ? 'bg-green-100 text-green-600 font-semibold text-sm px-4 py-2 rounded-md' : ''} ${scholarship.status === 'Closed' ? 'bg-gray-50 text-gray-500 font-semibold text-sm px-4 py-2 rounded-md' : ''} ${scholarship.status === 'Archived' ? 'bg-blue-50 text-blue-500 font-semibold text-sm px-4 py-2 rounded-md ' : ''} ${scholarship.status === 'Cancelled' ? 'bg-red-50 text-red-500 font-semibold text-sm px-4 py-2 rounded-md' : ''} ${scholarship.status === 'Completed' ? 'bg-purple-50 text-purple-500 font-semibold text-sm px-4 py-2 rounded-md' : ''}`}>

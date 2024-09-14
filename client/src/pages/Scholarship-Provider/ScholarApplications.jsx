@@ -3,6 +3,7 @@ import { BiFilter } from 'react-icons/bi';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { IoDocuments } from 'react-icons/io5';
 
 export default function ScholarApplications() {
   useEffect(() => {
@@ -53,10 +54,12 @@ export default function ScholarApplications() {
         <div className="border-b mb-8">
           <div className="flex items-center mx-auto justify-between px-24">
             <div className="flex flex-col gap-2 w-1/2">
-              <h1 className="text-4xl font-bold text-gray-800">Application Page</h1>
-              <p className="text-lg text-slate-500 font-medium">This will serve as an inbox for applications</p>
+              <h1 className="text-4xl font-bold text-gray-800">Application Dashboard</h1>
+              <p className="text-lg text-slate-500 font-medium">Manage and review all incoming scholarship applications here.</p>
             </div>
-            <div className="bg-blue-600 w-36 h-36 my-8 rounded-md"></div>
+            <div className="bg-blue-600 w-36 h-36 my-8 rounded-md flex items-center justify-center">
+              <IoDocuments className="text-white text-6xl" />
+            </div>
           </div>
         </div>
 

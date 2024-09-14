@@ -45,7 +45,7 @@ export default function ViewScholarshipDetails() {
     };
 
     const [applications, setApplications] = useState([]);
-    const fetchApplications = async () => {
+     const fetchApplications = async () => {
         try {
             const response = await fetch(`/api/scholarshipProgram/scholarship-applications/${id}`);
             if (!response.ok) throw new Error('Network response was not ok');
@@ -107,10 +107,6 @@ export default function ViewScholarshipDetails() {
                 </svg>
             </div>
         );
-    }
-
-    if (error) {
-        return <div>Error: {error}</div>;
     }
 
     return (

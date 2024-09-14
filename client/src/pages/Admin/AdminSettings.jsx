@@ -6,46 +6,64 @@ export default function AdminSettings() {
     const [filteredLogs, setFilteredLogs] = useState([]);
     const [filter, setFilter] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
-  
+    const [currentPage, setCurrentPage] = useState(1);
+    const logsPerPage = 10;
+
     useEffect(() => {
-      const fetchActivityLogs = async () => {
-        try {
-          const response = await fetch('/api/activity/activity-logs'); // Adjust the endpoint as necessary
-          const data = await response.json();
-          setActivityLogs(Array.isArray(data) ? data : []); // Ensure data is an array
-        } catch (error) {
-          console.error('Error fetching activity logs:', error);
-        }
-      };
-  
-      fetchActivityLogs();
+        const fetchActivityLogs = async () => {
+            try {
+                const response = await fetch('/api/activity/activity-logs'); // Adjust the endpoint as necessary
+                const data = await response.json();
+                setActivityLogs(Array.isArray(data) ? data : []); // Ensure data is an array
+            } catch (error) {
+                console.error('Error fetching activity logs:', error);
+            }
+        };
+
+        fetchActivityLogs();
     }, []);
-  
+
     useEffect(() => {
-      let logs = activityLogs;
-  
-      if (filter !== 'all') {
-        logs = logs.filter(log => log.type === filter);
-      }
-  
-      if (searchQuery) {
-        logs = logs.filter(log =>
-          log.action.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          log.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          log.details.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          log.userId.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          log._id.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-      }
-  
-      setFilteredLogs(logs);
+        let logs = activityLogs;
+
+        if (filter !== 'all') {
+            logs = logs.filter(log => log.type === filter);
+        }
+
+        if (searchQuery) {
+            logs = logs.filter(log =>
+                log.action.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                log.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                log.details.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (log.userId && log.userId.username.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                log._id.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        }
+
+        setFilteredLogs(logs);
     }, [filter, searchQuery, activityLogs]);
-  
+
+    // Pagination logic
+    const indexOfLastLog = currentPage * logsPerPage;
+    const indexOfFirstLog = indexOfLastLog - logsPerPage;
+    const currentLogs = filteredLogs.slice(indexOfFirstLog, indexOfLastLog);
+    const totalPages = Math.ceil(filteredLogs.length / logsPerPage);
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
     return (
         <div className="flex flex-col min-h-screen">
             <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
-
-
                 <div className="max-w-8xl flex flex-col gap-10 px-20 mt-10">
                     <div className="flex gap-10">
                         <div className="bg-white shadow border rounded-md p-8 w-1/2">
@@ -53,7 +71,8 @@ export default function AdminSettings() {
                                 <span className="text-xl font-bold">Profile Information</span>
                                 <button className="flex gap-2 bg-blue-600 hover:bg-blue-800 text-white items-center px-4 py-2 rounded-md">
                                     <BsPencilFill className="text-xl" />
-                                    Edit</button>
+                                    Edit
+                                </button>
                             </div>
 
                             <div className="flex items-center gap-10 py-10 w-full border-b mb-10">
@@ -65,15 +84,12 @@ export default function AdminSettings() {
                                     <span className="text-2xl">Followers:</span>
                                     <span className="text-slate-500">Admin Email</span>
                                 </div>
-
                             </div>
 
                             <div className="grid grid-cols-2 gap-8 w-full">
-
                                 <div className="flex flex-col">
                                     <label className="px-2">Admin Name</label>
                                     <input
-
                                         value={"Admin Name"}
                                         type="text"
                                         disabled
@@ -84,7 +100,6 @@ export default function AdminSettings() {
                                 <div className="flex flex-col">
                                     <label className="px-2">Admin Contact No.</label>
                                     <input
-
                                         value={"09123456789"}
                                         type="text"
                                         disabled
@@ -95,19 +110,16 @@ export default function AdminSettings() {
                                 <div className="flex flex-col">
                                     <label className="px-2">Admin Email</label>
                                     <input
-
-                                        value={"09123456789"}
+                                        value={"admin@example.com"}
                                         type="text"
                                         disabled
                                         className="border rounded-md bg-slate-200 p-2 text-slate-500"
                                     />
                                 </div>
 
-
                                 <div className="flex flex-col">
                                     <label className="px-2">Admin Address</label>
                                     <input
-
                                         value={"Admin Address"}
                                         type="text"
                                         disabled
@@ -116,7 +128,6 @@ export default function AdminSettings() {
                                 </div>
                             </div>
                         </div>
-
 
                         <div className="flex flex-col bg-white shadow border rounded-md p-8 w-1/2">
                             <span className="text-xl font-bold">Time Spent</span>
@@ -127,7 +138,6 @@ export default function AdminSettings() {
                     </div>
 
                     <div className="flex flex-col gap-4">
-
                         <div className="border-t-2 mt-4">
                             <div className="flex items-center w-full justify-center">
                                 <span className="bg-[#f8f8fb] px-8 -translate-y-3 text-xl text-slate-500">Log History</span>
@@ -190,32 +200,59 @@ export default function AdminSettings() {
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {Array.isArray(filteredLogs) && filteredLogs.map((log) => (
-                                        <tr key={log._id}>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm text-gray-900">{log.action}</div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm text-gray-900">{log.type}</div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm text-gray-500">{new Date(log.timestamp).toLocaleDateString()}</div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm text-gray-900">{log.details}</div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm text-gray-900">{log.userId.username}</div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm text-gray-900">{log._id}</div>
+                                    {Array.isArray(currentLogs) && currentLogs.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
+                                                No activity logs available.
                                             </td>
                                         </tr>
-                                    ))}
+                                    ) : (
+                                        currentLogs.map((log) => (
+                                            <tr key={log._id}>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="text-sm text-gray-900">{log.action}</div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="text-sm text-gray-900">{log.type}</div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="text-sm text-gray-500">{new Date(log.timestamp).toLocaleDateString()}</div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="text-sm text-gray-900">{log.details}</div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="text-sm text-gray-900">{log.userId ? log.userId.username : 'N/A'}</div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div className="text-sm text-gray-900">{log._id}</div>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </table>
                         </div>
 
+                        <div className="flex justify-between mt-4">
+                            <button
+                                onClick={handlePreviousPage}
+                                disabled={currentPage === 1}
+                                className="px-4 py-2 rounded-md bg-white border shadow"
+                            >
+                                Previous
+                            </button>
+                            <span className="text-sm text-gray-700">
+                                Page {currentPage} of {totalPages}
+                            </span>
+                            <button
+                                onClick={handleNextPage}
+                                disabled={currentPage === totalPages}
+                                className="px-4 py-2 rounded-md bg-white border shadow"
+                            >
+                                Next
+                            </button>
+                        </div>
                     </div>
                 </div>
             </main>
