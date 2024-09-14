@@ -60,7 +60,7 @@ export default function Home() {
   useEffect(() => {
     if (userDetails) {
       if (userDetails.role === 'admin') {
-        navigate('/admin-home');
+        navigate('/admin-dashboard');
       } else if (userDetails.role === 'scholarship_provider') {
         if (!userDetails.emailVerified) {
           navigate('/verify-your-email', { state: { email: userDetails.email } });

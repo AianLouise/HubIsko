@@ -104,6 +104,29 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
         }
     };
 
+    const [pendingVerificationCount, setPendingVerificationCount] = useState(0);
+    const [pendingApprovalCount, setPendingApprovalCount] = useState(0);
+    const [totalPendingCount, setTotalPendingCount] = useState(0);
+
+    useEffect(() => {
+        const fetchPendingCounts = async () => {
+            try {
+                const response = await fetch('/api/adminApp/users/pending-verification');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setPendingVerificationCount(data.userCount);
+                setPendingApprovalCount(data.scholarshipProgramCount);
+                setTotalPendingCount(data.userCount + data.scholarshipProgramCount);
+            } catch (error) {
+                console.error('Error fetching pending counts:', error);
+            }
+        };
+
+        fetchPendingCounts();
+    }, []);
+
     // Breadcrumbs based on current location
     const generateBreadcrumb = () => {
         const pathnames = location.pathname.split('/').filter(x => x);
@@ -231,7 +254,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link to={'/student-applications'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/student-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                                <Link to={'/student-applications'} className={`flex text-sm ml-3 gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/student-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                                     <FaFileAlt className={`w-5 h-5 text-blue-600 ${location.pathname === '/student-applications' ? ' text-white' : ''}`} />
                                                     Students Application
                                                 </Link>
@@ -243,7 +266,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link to={'/scholarship-provider-applications'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-provider-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
+                                                <Link to={'/scholarship-provider-applications'} className={`flex text-sm ml-3 gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-provider-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                                     <FaFileAlt className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-provider-applications' ? ' text-white' : ''}`} />
                                                     Scholarship Provider Application
                                                 </Link>
@@ -335,9 +358,8 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                                 || location.pathname.startsWith('/scholarship-program-applications')
                                                 || location.pathname.startsWith('/scholarship-applications')
 
-                                                ? 'text-blue-600 bg-white' : 'text-white'} `}>1</div>
+                                                ? 'text-blue-600 bg-white' : 'text-white'} `}>{totalPendingCount}</div>
                                     </Link>
-
                                 </div>
                             </li>
 

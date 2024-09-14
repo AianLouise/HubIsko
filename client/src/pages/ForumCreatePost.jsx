@@ -19,7 +19,7 @@ export default function CreateForumPost() {
     useEffect(() => {
       if (currentUser) {
         if (currentUser.role === 'admin') {
-          navigate('/admin-home');
+          navigate('/admin-dashboard');
         } else if (currentUser.role === 'scholarship_provider') {
           if (!currentUser.emailVerified) {
             navigate('/verify-your-email', { state: { email: currentUser.email } });
