@@ -20,8 +20,6 @@ const VerifyEmail = () => {
       } else if (currentUser.role === 'applicant') {
         if (!currentUser.emailVerified) {
           navigate('/verify-your-email', { state: { email: currentUser.email } });
-        } else if (!currentUser.applicantDetails.profileComplete) {
-          navigate('/CoRH', { state: { userId: currentUser._id } });
         } else {
           navigate('/');
         }
