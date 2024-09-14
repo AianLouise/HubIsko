@@ -13,7 +13,7 @@ import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function Forums() {
   useTokenExpiry();
-  
+
   useEffect(() => {
     document.title = "Forums | HubIsko";
   }, []);
@@ -289,7 +289,7 @@ export default function Forums() {
                 </div>
               </div>
             )) : (
-              <p>No posts found</p>
+              <p className="text-center my-10">No posts found</p>
             )}
           </div>
 

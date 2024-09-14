@@ -23,9 +23,9 @@ export default function CompleteProfile() {
     setCurrentStep((prevStep) => prevStep - 1);
   };
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  },);
+  // useEffect(() => {
+  //   window.scrollTo({ top: 0, behavior: 'smooth' });
+  // },);
 
 
   const [formData, setFormData] = useState({

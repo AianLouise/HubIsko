@@ -111,8 +111,8 @@ export default function ApplicationInbox() {
           <div className="flex items-center mx-auto justify-between px-24">
             <div className="flex flex-col gap-2 w-1/2">
               <h1 className="text-4xl font-bold text-gray-800">Application Inbox</h1>
-              <p className="text-lg text-slate-500 font-medium">
-                Manage scholarship programs and scholarship provider applications.
+                           <p className="text-lg text-slate-500 font-medium">
+                Manage student, scholarship programs and scholarship provider applications.
               </p>
             </div>
             <div className="bg-blue-600 w-24 h-24 lg:w-36 lg:h-36 my-8 rounded-md flex items-center justify-center">

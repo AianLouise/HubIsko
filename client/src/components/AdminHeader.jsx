@@ -36,6 +36,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
     useEffect(() => {
         if (location.pathname.startsWith('/accounts')
             || location.pathname.startsWith('/students')
+            || location.pathname.startsWith('/student-applications')
             || location.pathname.startsWith('/provider-accounts')
             || location.pathname.startsWith('/verification-details')
             || location.pathname.startsWith('/student-details')

@@ -52,6 +52,7 @@ export const signupAsProvider = async (req, res) => {
       emailVerified: false,
       authProvider: 'email',
       profilePicture,
+      status: 'Pending Verification',
       scholarshipProviderDetails: {
         organizationName,
         organizationType,
@@ -74,7 +75,7 @@ export const signupAsProvider = async (req, res) => {
           authorizationLetter: documents.authorizationLetter,
           idProofContactPerson: documents.idProofContactPerson,
         },
-        status: 'Pending Verification',
+       
       }
     });
 
@@ -102,6 +103,8 @@ export const signupAsProvider = async (req, res) => {
     });
 
     const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
+
+    // const verificationUrl = `http://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`;
 
     console.log('Sending verification email to:', email);
 

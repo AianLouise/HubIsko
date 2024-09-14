@@ -270,8 +270,8 @@ export default function SignUp() {
               >
                 <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
               </button>
-              {errors.confirmPassword && <span className='text-red-500 text-sm'>{errors.confirmPassword}</span>}
             </div>
+              {errors.confirmPassword && <span className='text-red-500 text-sm'>{errors.confirmPassword}</span>}
 
             <button disabled={loading} className='bg-blue-600 text-white p-3 rounded-lg hover:opacity-95 disabled:opacity-50'>
               {loading ? 'Loading...' : 'Register'}

@@ -328,46 +328,46 @@ export default function RegisterAsProvider() {
           </React.Fragment>
         ))}
       </div>
-      
+
       <div className='lg:hidden w-full flex flex-col mb-4 px-2'>
-                        <div className='flex justify-between items-center px-6 py-2 text-sm text-slate-500'>
-                            <span>Requirement</span>
-                            <span>Stages</span>
-                        </div>
+        <div className='flex justify-between items-center px-6 py-2 text-sm text-slate-500'>
+          <span>Requirement</span>
+          <span>Stages</span>
+        </div>
 
-                        {[0, 1, 2, 3, 4].map((step) => (
-                                <React.Fragment key={step}>
-                            <div className={`border-2 border-blue-600 rounded-md shadow w-full py-2 px-4 flex justify-between items-center ${activeStep === step ? 'flex' : 'hidden'} `}>
-                                <div className={`gap-2 items-center text-blue-600 ${step === 1 ? 'flex' : 'hidden'}`}>
-                                    <FaBuilding className='text-2xl'/>
-                                    <span className='font-bold'>Organization Information</span>
-                                </div>
+        {[0, 1, 2, 3, 4].map((step) => (
+          <React.Fragment key={step}>
+            <div className={`border-2 border-blue-600 rounded-md shadow w-full py-2 px-4 flex justify-between items-center ${activeStep === step ? 'flex' : 'hidden'} `}>
+              <div className={`gap-2 items-center text-blue-600 ${step === 1 ? 'flex' : 'hidden'}`}>
+                <FaBuilding className='text-2xl' />
+                <span className='font-bold'>Organization Information</span>
+              </div>
 
-                                <div className={`gap-2 items-center text-blue-600 ${step === 2 ? 'flex' : 'hidden'}`}>
-                                    <FaUser className='text-2xl'/>
-                                    <span className='font-bold'>Account Information</span>
-                                </div>
+              <div className={`gap-2 items-center text-blue-600 ${step === 2 ? 'flex' : 'hidden'}`}>
+                <FaUser className='text-2xl' />
+                <span className='font-bold'>Account Information</span>
+              </div>
 
-                                <div className={`gap-2 items-center text-blue-600 ${step === 3 ? 'flex' : 'hidden'}`}>
-                                    <FaFileAlt className='text-2xl'/>
-                                    <span className='font-bold'>Documents Information</span>
-                                </div>
+              <div className={`gap-2 items-center text-blue-600 ${step === 3 ? 'flex' : 'hidden'}`}>
+                <FaFileAlt className='text-2xl' />
+                <span className='font-bold'>Documents Information</span>
+              </div>
 
-                                <div className={`gap-2 items-center text-blue-600 ${step === 4 ? 'flex' : 'hidden'}`}>
-                                    <FaCheckCircle className='text-2xl'/>
-                                    <span className='font-bold'>Terms and Conditions</span>
-                                </div>
+              <div className={`gap-2 items-center text-blue-600 ${step === 4 ? 'flex' : 'hidden'}`}>
+                <FaCheckCircle className='text-2xl' />
+                <span className='font-bold'>Terms and Conditions</span>
+              </div>
 
-        
-                                <div>
-                                <span className='text-blue-600 text-4xl font-bold'> {activeStep}<span className='text-slate-400'>/4</span></span>
-                                </div>
-                            </div>
-                            </React.Fragment>
-                        ))}
 
-                    </div>
-      
+              <div>
+                <span className='text-blue-600 text-4xl font-bold'> {activeStep}<span className='text-slate-400'>/4</span></span>
+              </div>
+            </div>
+          </React.Fragment>
+        ))}
+
+      </div>
+
 
       <div className='w-full lg:max-w-4xl lg:mx-auto lg:px-8'>
         <form onSubmit={handleSubmit} className='space-y-6'>
@@ -409,7 +409,7 @@ export default function RegisterAsProvider() {
                   </div>
 
                 </div>
-                
+
                 <div className="mb-4">
                   <label htmlFor="organizationName" className="block text-sm font-medium text-gray-700">Organization Name</label>
                   <input type="text" name="organizationName" id="organizationName" value={formData.organizationName} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Full legal name of the organization" />
@@ -635,14 +635,14 @@ export default function RegisterAsProvider() {
             </div>
           )}
 
-                  {activeStep === 4 && (
+          {activeStep === 4 && (
             <div className='bg-white p-8 shadow rounded-md border'>
               <h2 className="text-2xl font-bold mb-6">Agree to Terms and Conditions</h2>
               <div className="mb-4">
                 <div className="bg-gray-100 p-4 rounded-md mb-4 max-h-60 overflow-y-scroll" style={{ maxHeight: '300px', overflowY: 'auto' }}>
                   <p><strong>1. Introduction</strong></p>
                   <p>Welcome to HubIsko. These Terms and Conditions govern your registration and use of our services as a scholarship provider. By registering as a scholarship provider, you agree to comply with and be bound by these Terms. If you do not agree with any part of these Terms, please do not proceed with registration.</p>
-          
+
                   <p className="mt-4"><strong>2. Eligibility</strong></p>
                   <p>To register as a scholarship provider on HubIsko, you must:</p>
                   <ul>
@@ -650,7 +650,7 @@ export default function RegisterAsProvider() {
                     <li>Provide accurate and complete information during the registration process.</li>
                     <li>Agree to comply with all applicable laws and regulations related to scholarships.</li>
                   </ul>
-          
+
                   <p className="mt-4"><strong>3. Account Responsibilities</strong></p>
                   <p>Upon successful registration, you will be granted access to an account to manage your scholarships. You are responsible for:</p>
                   <ul>
@@ -658,7 +658,7 @@ export default function RegisterAsProvider() {
                     <li>Ensuring that all information provided through your account is accurate, current, and complete.</li>
                     <li>Reporting any unauthorized use of your account to us immediately.</li>
                   </ul>
-          
+
                   <p className="mt-4"><strong>4. Scholarship Program Creation</strong></p>
                   <p>When creating a scholarship program, you agree to:</p>
                   <ul>
@@ -666,7 +666,7 @@ export default function RegisterAsProvider() {
                     <li>Ensure that your scholarship programs comply with all relevant laws and regulations.</li>
                     <li>Obtain and provide all necessary documentation and approvals for the scholarship program.</li>
                   </ul>
-          
+
                   <p className="mt-4"><strong>5. Content and Conduct</strong></p>
                   <p>You agree that:</p>
                   <ul>
@@ -674,21 +674,21 @@ export default function RegisterAsProvider() {
                     <li>You will not use the Platform to engage in any unlawful, fraudulent, or harmful activities.</li>
                     <li>You will respect the privacy and rights of applicants and other users of the Platform.</li>
                   </ul>
-          
+
                   <p className="mt-4"><strong>6. Platform Use</strong></p>
                   <p>We reserve the right to:</p>
                   <ul>
                     <li>Modify or discontinue any aspect of the Platform, including but not limited to features, functionality, and availability.</li>
                     <li>Remove or reject any content or scholarship program that violates these Terms or our content policies.</li>
                   </ul>
-          
+
                   <p className="mt-4"><strong>7. Fees and Payments</strong></p>
                   <p>If applicable, you agree to:</p>
                   <ul>
                     <li>Pay any fees associated with using the Platform as a scholarship provider.</li>
                     <li>Comply with our payment terms and conditions, which will be provided separately.</li>
                   </ul>
-          
+
                   <p className="mt-4"><strong>8. Termination</strong></p>
                   <p>We may terminate your account and access to the Platform if you:</p>
                   <ul>
@@ -696,19 +696,19 @@ export default function RegisterAsProvider() {
                     <li>Fail to comply with applicable laws and regulations.</li>
                     <li>Engage in behavior that we deem inappropriate or harmful to the Platform or its users.</li>
                   </ul>
-          
+
                   <p className="mt-4"><strong>9. Limitation of Liability</strong></p>
                   <p>To the maximum extent permitted by law, HubIsko shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the Platform or any scholarship programs you create.</p>
-          
+
                   <p className="mt-4"><strong>10. Indemnification</strong></p>
                   <p>You agree to indemnify and hold harmless HubIsko, its affiliates, officers, directors, employees, and agents from any claims, damages, liabilities, costs, and expenses arising out of your use of the Platform or violation of these Terms.</p>
-          
+
                   <p className="mt-4"><strong>11. Changes to Terms</strong></p>
                   <p>We may update these Terms from time to time. We will notify you of any significant changes by posting the revised Terms on the Platform. Your continued use of the Platform after such changes indicates your acceptance of the updated Terms.</p>
-          
+
                   <p className="mt-4"><strong>12. Governing Law</strong></p>
                   <p>These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law principles. Any disputes arising from these Terms shall be resolved in the courts of [Your Jurisdiction].</p>
-          
+
                   <p className="mt-4"><strong>13. Contact Us</strong></p>
                   <p>If you have any questions or concerns about these Terms or your registration as a scholarship provider, please contact us at:</p>
                   <p>HubIsko</p>
@@ -763,6 +763,7 @@ export default function RegisterAsProvider() {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-8 rounded-md shadow-lg text-center">
+            <FaCheckCircle className="text-green-500 text-4xl mb-4" />
             <h2 className="text-2xl font-bold mb-4">Thank You!</h2>
             <p className="mb-4">Your registration was successful.</p>
             <p className="mb-4">A verification link has been sent to your email address. Please check your inbox and verify your email.</p>
