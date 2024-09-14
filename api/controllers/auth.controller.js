@@ -405,3 +405,20 @@ export const resendVerificationEmail = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getUserDetails = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+
+    // Fetch user details from the database
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    return res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};

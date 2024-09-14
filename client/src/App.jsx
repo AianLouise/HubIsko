@@ -1,26 +1,23 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
 import Login from "./pages/Login";
-import CompleteOrReturnHome from "./pages/CompleteOrReturnHome";
 import Register from "./pages/Register";
-import About from "./pages/About";
-import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import ProviderPrivateRoute from "./components/ProviderPrivateRoute";
 import VerifyEmail from "./components/VerifyEmail";
 import VerifyYourEmail from "./components/VerifyYourEmail";
-import ScholarshipListing from "./pages/ScholarshipListing";
 import ForgotPassword from "./components/ForgotPassword";
-import CompleteProfile from "./pages/CompleteProfile";
 import ResetPassword from "./components/ResetPassword";
-
-
-
-import ProviderDashboard from "./pages/Scholarship-Provider/ProviderDashboard";
-import ProviderForums from "./pages/Scholarship-Provider/ProviderForums";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
+
+// Applicant Routes
+
+import Home from "./pages/Home";
+import CompleteOrReturnHome from "./pages/CompleteOrReturnHome";
+import About from "./pages/About";
+import Profile from "./pages/Profile";
+import ScholarshipListing from "./pages/ScholarshipListing";
+import CompleteProfile from "./pages/CompleteProfile";
 import ScholarDashboard from "./pages/ScholarDashboard";
-// import RegisterAsProvider from "./pages/RegisterAsProvider";
 import RegisterAsProvider from "./pages/ProviderRegistration";
 import CompleteProfileConfirmation from "./pages/CompleteProfileConfirmation";
 import AccountManagement from "./pages/AccountManagement";
@@ -28,17 +25,29 @@ import PasswordAndSecurity from "./pages/PasswordAndSecurity";
 import ChangePassword from "./components/ChangePassword";
 import Forums from "./pages/Forums";
 import ApplicationDetails from "./pages/ApplicationDetails";
-// import OthersProfile from "./pages/Dump/OthersProfile";
 import ForumPost from "./pages/ForumPost";
 import ApplyingStages from "./pages/ApplyingStages";
 import ApplicationBox from "./pages/ApplicationBox";
 import InboxedApplicationDetail from "./pages/InboxedApplicationDetail";
 import StudentInfo from "./pages/StudentInfo";
-import Scholarships from "./pages/Scholarship-Provider/scholarships";
-import ScholarApplications from "./pages/Scholarship-Provider/ScholarApplications";
-import ProviderForumDetail from "./pages/Scholarship-Provider/ProviderForumDetail";
-import PostScholarship from "./pages/Scholarship-Provider/PostScholarship2";
 import ForumCreatePost from "./pages/ForumCreatePost";
+import ApplicationForm from "./pages/ApplicationForm";
+import ResubmitApplication from "./pages/ResubmitApplication";
+import ApplicantAllNotification from "./pages/ApplicantAllNotification";
+import ApplicantDetailedNotification from "./pages/ApplicantDetailedNotification";
+import ScholarshipDashboardDetails from "./pages/ScholarshipDashboardDetails";
+import Profiles from "./pages/Profiles";
+import PasswordAndSecurity2 from "./pages/PasswordAndSecurity2";
+import ScholarshipApplication from "./pages/ScholarshipApplicationForm";
+import AnnouncementDetails from "./components/ViewScholarshipDetails/AnnouncementDetails";
+import AnnouncementView from "./pages/AnnouncementView";
+
+// Admin Routes
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import AdminForums from "./pages/Admin/AdminForums";
+import AdminForumDetail from "./pages/Admin/AdminForumDetail";
+import AdminCreateForumPost from "./pages/Admin/AdminCreateForumPost";
+import AdminSettings from "./pages/Admin/AdminSettings";
 import Accounts from "./pages/Admin/Accounts";
 import Students from "./pages/Admin/StudentsAccount";
 import ProviderAccounts from "./pages/Admin/ProviderAccounts";
@@ -46,49 +55,43 @@ import VerificationDetails from "./pages/Admin/VerificationDetails";
 import StudentDetails from "./pages/Admin/StudentDetails";
 import ProviderDetails from "./pages/Admin/ProviderDetails";
 import ApplicationInbox from "./pages/Admin/ApplicationInbox";
-import ViewScholarshipDetails from "./pages/Scholarship-Provider/ViewScholarshipDetails";
 import InboxApplication from "./pages/Admin/InboxApplication";
-import ViewApplicationDetails from "./pages/Scholarship-Provider/ViewApplicationDetails";
-import EditProgramPage from "./pages/Scholarship-Provider/EditProgramPage";
 import EditStudentInfo from "./pages/Admin/EditStudentInfo";
-import ApplicationForm from "./pages/ApplicationForm";
-import ResubmitApplication from "./pages/ResubmitApplication";
-import Settings from "./pages/Scholarship-Provider/Settings";
-import ProviderProfile from "./pages/Scholarship-Provider/Profile";
-import ApplicantAllNotification from "./pages/ApplicantAllNotification";
-import ApplicantDetailedNotification from "./pages/ApplicantDetailedNotification";
 import ScholarshipApplications from "./pages/Admin/ScholarshipApplications";
 import ScholarshipProgramApplications from "./pages/Admin/ScholarshipProgramApplications";
 import ScholarshipProviderDetails from "./pages/Admin/ScholarshipProviderDetails";
-import ProviderCreateForumPost from "./pages/Scholarship-Provider/ProviderCreateForumPost";
-import AdminForums from "./pages/Admin/AdminForums";
-import AdminForumDetail from "./pages/Admin/AdminForumDetail";
-import AdminCreateForumPost from "./pages/Admin/AdminCreateForumPost";
-import AdminSettings from "./pages/Admin/AdminSettings";
-import ScholarshipDashboardDetails from "./pages/ScholarshipDashboardDetails";
-import AdminDashboard from "./pages/Admin/AdminDashboard";
 import ScholarshipProgramApplicationDetails from "./pages/Admin/ScholarshipProgramApplicationDetails";
 import ScholarshipPrograms from "./pages/Admin/ScholarshipPrograms";
-import Profiles from "./pages/Profiles";
-import PasswordAndSecurity2 from "./pages/PasswordAndSecurity2";
+import ScholarshipProgramDetails from "./pages/Admin/ScholarshipProgramDetails";
+import ScholarshipProviderApplications from "./pages/Admin/ScholarshipProviderApplications";
+import ScholarshipsProviderDetails from "./pages/Admin/ScholarshipProviderDetails";
+import StudentApplications from "./pages/Admin/StudentApplications";
+import Layout from "./components/Layout";
+
+// Scholarship Provider Routes
+import ProviderDashboard from "./pages/Scholarship-Provider/ProviderDashboard";
+import ProviderForums from "./pages/Scholarship-Provider/ProviderForums";
+import Scholarships from "./pages/Scholarship-Provider/scholarships";
+import ScholarApplications from "./pages/Scholarship-Provider/ScholarApplications";
+import ProviderForumDetail from "./pages/Scholarship-Provider/ProviderForumDetail";
+import PostScholarship from "./pages/Scholarship-Provider/PostScholarship2";
+import ViewScholarshipDetails from "./pages/Scholarship-Provider/ViewScholarshipDetails";
+import ViewApplicationDetails from "./pages/Scholarship-Provider/ViewApplicationDetails";
+import EditProgramPage from "./pages/Scholarship-Provider/EditProgramPage";
+import Settings from "./pages/Scholarship-Provider/Settings";
+import ProviderProfile from "./pages/Scholarship-Provider/Profile";
+import ProviderCreateForumPost from "./pages/Scholarship-Provider/ProviderCreateForumPost";
+import ScholarView from "./pages/Scholarship-Provider/ScholarView";
+
+
+// import RegisterAsProvider from "./pages/RegisterAsProvider";
+// import OthersProfile from "./pages/Dump/OthersProfile";
 // import NotificationsPage from "./components/notification";
 // import NotificationDetailPage from "./components/NotificationDetailPage";
 // import PreviewProfile from "./pages/Scholarship-Provider/PreviewProfile";
 // import ProfilePreview from "./pages/Dump/ProfilePreview";
 // import PostDetails from "./pages/Dump/PostDetails";
-import Layout from "./components/Layout";
-import PublicRoute from "./components/PublicRoute";
-import ScholarshipApplication from "./pages/ScholarshipApplicationForm";
-import ScholarshipProgramDetails from "./pages/Admin/ScholarshipProgramDetails";
-import ScholarView from "./pages/Scholarship-Provider/ScholarView";
 
-import LocationSelector from "./pages/LocationSelector";
-import AnnouncementDetails from "./components/ViewScholarshipDetails/AnnouncementDetails";
-import AnnouncementView from "./pages/AnnouncementView";
-
-import ScholarshipProviderApplications from "./pages/Admin/ScholarshipProviderApplications";
-import ScholarshipsProviderDetails from "./pages/Admin/ScholarshipProviderDetails";
-import StudentApplications from "./pages/Admin/StudentApplications";
 
 export default function App() {
   return (
@@ -117,8 +120,6 @@ export default function App() {
         <Route path="/profile/:id" element={<Profiles />} />
 
         <Route path="/scholarship-application/:scholarshipId" element={<ScholarshipApplication />} />
-
-        <Route path="/location-selector" element={<LocationSelector />} />
 
         {/* <Route path="/others-profile/:id" element={<OthersProfile />} /> */}
         {/* Admin Routes */}

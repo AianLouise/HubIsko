@@ -7,22 +7,43 @@ const RESEND_DELAY = 30; // seconds
 export default function VerifyYourEmail() {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
+  const userId = currentUser?._id;
+  const [userDetails, setUserDetails] = useState(null);
 
   useEffect(() => {
-    if (currentUser) {
-      if (currentUser.role === 'admin') {
+    const fetchUserDetails = async () => {
+      try {
+        const response = await fetch(`/api/auth/user/${userId}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setUserDetails(data);
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      }
+    };
+
+    if (userId) {
+      fetchUserDetails();
+    }
+  }, [userId]);
+
+   useEffect(() => {
+    if (userDetails) {
+      if (userDetails.role === 'admin') {
         navigate('/admin-home');
-      } else if (currentUser.role === 'scholarship_provider') {
-        if (!currentUser.emailVerified) {
-          navigate('/verify-your-email', { state: { email: currentUser.email } });
+      } else if (userDetails.role === 'scholarship_provider') {
+        if (!userDetails.emailVerified) {
+          navigate('/verify-your-email', { state: { email: userDetails.email } });
         } else {
           navigate('/provider-dashboard');
         }
-      } else if (currentUser.role === 'applicant') {
-        if (!currentUser.emailVerified) {
-          navigate('/verify-your-email', { state: { email: currentUser.email } });
-        } else if (!currentUser.applicantDetails.profileComplete) {
-          navigate('/CoRH', { state: { userId: currentUser._id } });
+      } else if (userDetails.role === 'applicant') {
+        if (!userDetails.emailVerified) {
+          navigate('/verify-your-email', { state: { email: userDetails.email } });
+        } else if (!userDetails.applicantDetails.profileComplete) {
+          navigate('/CoRH', { state: { userId: userDetails._id } });
         } else {
           navigate('/');
         }
@@ -30,7 +51,7 @@ export default function VerifyYourEmail() {
         navigate('/');
       }
     }
-  }, [currentUser, navigate]);
+  }, [userDetails, navigate]);
 
   const [message, setMessage] = useState('');
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
