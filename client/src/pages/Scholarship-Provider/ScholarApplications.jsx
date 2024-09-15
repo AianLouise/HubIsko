@@ -19,6 +19,10 @@ export default function ScholarApplications() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [filter, setFilter] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortOrder, setSortOrder] = useState('Recent');
+
   useEffect(() => {
     const fetchApplications = async () => {
       try {
@@ -37,6 +41,36 @@ export default function ScholarApplications() {
 
     fetchApplications();
   }, [currentUser._id]);
+
+  const handleFilterChange = (newFilter) => {
+    setFilter(newFilter);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSortChange = () => {
+    setSortOrder((prevSortOrder) => (prevSortOrder === 'Recent' ? 'Oldest' : 'Recent'));
+  };
+
+  const filteredApplications = applications
+    .filter((application) => {
+      if (filter === 'All') return true;
+      return application.applicationStatus === filter;
+    })
+    .filter((application) => {
+      const fullName = `${application.firstName} ${application.lastName}`.toLowerCase();
+      const scholarshipTitle = application.scholarshipProgram.title.toLowerCase();
+      return fullName.includes(searchQuery.toLowerCase()) || scholarshipTitle.includes(searchQuery.toLowerCase());
+    })
+    .sort((a, b) => {
+      if (sortOrder === 'Recent') {
+        return new Date(b.submissionDate) - new Date(a.submissionDate);
+      } else {
+        return new Date(a.submissionDate) - new Date(b.submissionDate);
+      }
+    });
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -66,20 +100,32 @@ export default function ScholarApplications() {
         <div className="max-w-8xl mx-auto px-24 flex-col flex">
           <div className="flex justify-between items-center gap-4">
             <div className='flex gap-2 font-medium text-sm'>
-              <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
-                All <span className='text-blue-600'>(0)</span>
+              <button
+                className={`border shadow rounded-md px-4 py-2 ${filter === 'All' ? 'bg-slate-200' : 'hover:bg-slate-200'}`}
+                onClick={() => handleFilterChange('All')}
+              >
+                All <span className='text-blue-600'>({applications.filter(app => app.applicationStatus === 'All' || filter === 'All').length})</span>
               </button>
 
-              <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
-                Approved <span className='text-green-600'>(0)</span>
+              <button
+                className={`border shadow rounded-md px-4 py-2 ${filter === 'Approved' ? 'bg-slate-200' : 'hover:bg-slate-200'}`}
+                onClick={() => handleFilterChange('Approved')}
+              >
+                Approved <span className='text-green-600'>({applications.filter(app => app.applicationStatus === 'Approved').length})</span>
               </button>
 
-              <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
-                Pending <span className='text-yellow-600'>(0)</span>
+              <button
+                className={`border shadow rounded-md px-4 py-2 ${filter === 'Pending' ? 'bg-slate-200' : 'hover:bg-slate-200'}`}
+                onClick={() => handleFilterChange('Pending')}
+              >
+                Pending <span className='text-yellow-600'>({applications.filter(app => app.applicationStatus === 'Pending').length})</span>
               </button>
 
-              <button className='border shadow rounded-md hover:bg-slate-200 px-4 py-2'>
-                Rejected <span className='text-red-600'>(0)</span>
+              <button
+                className={`border shadow rounded-md px-4 py-2 ${filter === 'Rejected' ? 'bg-slate-200' : 'hover:bg-slate-200'}`}
+                onClick={() => handleFilterChange('Rejected')}
+              >
+                Rejected <span className='text-red-600'>({applications.filter(app => app.applicationStatus === 'Rejected').length})</span>
               </button>
             </div>
 
@@ -88,10 +134,15 @@ export default function ScholarApplications() {
                 type="text"
                 className="border border-gray-300 rounded-md p-2 pr-8 focus:outline-blue-600 focus:border-blue-600"
                 placeholder="Search for applications..."
+                value={searchQuery}
+                onChange={handleSearchChange}
               />
-              <button className="bg-blue-600 px-4 py-2 rounded-md flex gap-2 text-white hover:bg-blue-700">
+              <button
+                className="bg-blue-600 px-4 py-2 rounded-md flex gap-2 text-white hover:bg-blue-700"
+                onClick={handleSortChange}
+              >
                 <BiFilter className="w-6 h-6" />
-                <span>Filter</span>
+                <span>{sortOrder === 'Recent' ? 'Sort by Oldest' : 'Sort by Recent'}</span>
               </button>
             </div>
           </div>
@@ -104,7 +155,7 @@ export default function ScholarApplications() {
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
                 </svg>
               </div>
-            ) : applications.length === 0 ? (
+            ) : filteredApplications.length === 0 ? (
               <div className="p-6 text-center text-gray-500">No applications available at the moment.</div>
             ) : (
               <table className="w-full border-2 border-gray-200">
@@ -119,7 +170,7 @@ export default function ScholarApplications() {
                   </tr>
                 </thead>
                 <tbody>
-                  {applications.map((application, index) => (
+                  {filteredApplications.map((application, index) => (
                     <tr key={application._id} className="hover:bg-gray-100 text-center">
                       <td className="border border-gray-200 p-2">{index + 1}</td>
                       <td className="border border-gray-200 p-2">{`${application.firstName} ${application.lastName}`}</td>
@@ -138,7 +189,6 @@ export default function ScholarApplications() {
                           >
                             Review Application
                           </Link>
-
                         </div>
                       </td>
                     </tr>

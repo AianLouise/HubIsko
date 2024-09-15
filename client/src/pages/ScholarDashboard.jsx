@@ -210,7 +210,7 @@ export default function ScholarDashboard() {
     setAnnouncementSortOrder((prevOrder) => (prevOrder === 'recent' ? 'oldest' : 'recent'));
   };
 
-  const sortedAnnouncements = scholarshipData.flatMap((item) => item.announcements).sort((a, b) => {
+  const sortedAnnouncements = (scholarshipData || []).flatMap((item) => item.announcements).sort((a, b) => {
     if (announcementSortOrder === 'recent') {
       return new Date(b.date) - new Date(a.date);
     } else {

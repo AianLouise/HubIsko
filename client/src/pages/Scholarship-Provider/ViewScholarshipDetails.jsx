@@ -7,12 +7,13 @@ import PostAnnouncement from '../../components/ViewScholarshipDetails/PostAnnoun
 import ViewScholars from '../../components/ViewScholarshipDetails/ViewScholars';
 import ScholarshipApplication from '../../components/ViewScholarshipDetails/ScholarApplication';
 import Validation from '../../components/ViewScholarshipDetails/Validation';
+import EditProgram from '../../components/ViewScholarshipDetails/EditProgram';
 
 export default function ViewScholarshipDetails() {
     const { currentUser } = useSelector((state) => state.user);
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
-    
+
     const { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
@@ -23,7 +24,6 @@ export default function ViewScholarshipDetails() {
     const [scholarshipProgram, setProgramDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
@@ -45,7 +45,7 @@ export default function ViewScholarshipDetails() {
     };
 
     const [applications, setApplications] = useState([]);
-     const fetchApplications = async () => {
+    const fetchApplications = async () => {
         try {
             const response = await fetch(`/api/scholarshipProgram/scholarship-applications/${id}`);
             if (!response.ok) throw new Error('Network response was not ok');
@@ -152,33 +152,34 @@ export default function ViewScholarshipDetails() {
                             <ProgramDetails scholarshipProgram={scholarshipProgram} />
                         )}
 
-                        {activeTab === 'edit' && (
-                            <div className="p-6 bg-white rounded-lg shadow-md">
-                                <h2 className="text-2xl font-bold mb-4 text-blue-600">Edit Program</h2>
-                                <p className="text-gray-700">
-                                    To make changes to the scholarship program, please visit the{' '}
-                                    <Link to={`/edit-program/${id}`} className="text-blue-600 hover:underline">
-                                        Edit Program Page
-                                    </Link>.
-                                </p>
-                            </div>
+                        {activeTab === 'edit' && scholarshipProgram?.status !== 'Pending Approval' && (
+                           <EditProgram />
                         )}
 
-                        {activeTab === 'announcement' && (
+                        {activeTab === 'announcement' && scholarshipProgram?.status !== 'Pending Approval' && (
                             <PostAnnouncement />
                         )}
 
-                        {activeTab === 'validation' && (
+                        {activeTab === 'validation' && scholarshipProgram?.status !== 'Pending Approval' && (
                             <Validation />
                         )}
 
-                        {activeTab === 'scholars' && (
+                        {activeTab === 'scholars' && scholarshipProgram?.status !== 'Pending Approval' && (
                             <ViewScholars scholars={scholars} />
                         )}
 
-                        {activeTab === 'applications' && (
+                        {activeTab === 'applications' && scholarshipProgram?.status !== 'Pending Approval' && (
                             <ScholarshipApplication applications={applications} />
                         )}
+
+{activeTab !== 'details' && scholarshipProgram?.status === 'Pending Approval' && (
+        <div className="p-6 bg-white rounded-lg shadow-md">
+            <h2 className="text-2xl font-bold mb-4 text-red-600">Access Restricted</h2>
+            <p className="text-gray-700">
+                Access to this section is restricted while the status is "Pending Approval".
+            </p>
+        </div>
+    )}
                     </div>
                 </div>
             </main>

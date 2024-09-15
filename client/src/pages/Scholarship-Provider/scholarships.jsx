@@ -189,7 +189,7 @@ export default function Scholarships() {
                 <p className="text-gray-600 font-medium">No scholarships available at the moment.</p>
               </div>
             ) : (
-              <div className="overflow-x-auto border shadow rounded-md bg-white w-full">
+              <div className="overflow-x-auto border shadow rounded-md bg-white w-full mb-10">
                 <div className="flex justify-between p-6 border-b items-center">
                   <div className='flex gap-2 font-medium text-sm'>
                     <button

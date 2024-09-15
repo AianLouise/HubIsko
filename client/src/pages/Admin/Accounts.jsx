@@ -174,7 +174,7 @@ export default function Accounts() {
             case 'Pending':
                 return account.status === 'Pending Verification';
             case 'Verified Students':
-                return account.role === 'Applicant' && account.status === 'Verified';
+                return account.role === 'applicant' && account.status === 'Verified';
             case 'Verified Scholarship Providers':
                 return account.role === 'scholarship_provider' && account.status === 'Verified';
             case 'Verify Account':
@@ -340,7 +340,7 @@ export default function Accounts() {
                                         Pending <span className="text-yellow-500">({accounts.filter(account => account.status === 'Pending Verification').length})</span>
                                     </button>
                                     <button onClick={() => handleFilterClick('Verified Students')} className="px-4 py-2 rounded-md bg-white shadow border">
-                                        Verified Students <span className="text-green-600">({accounts.filter(account => account.role === 'Applicant' && account.status === 'Verified').length})</span>
+                                        Verified Students <span className="text-green-600">({accounts.filter(account => account.role === 'applicant' && account.status === 'Verified').length})</span>
                                     </button>
                                     <button onClick={() => handleFilterClick('Verified Scholarship Providers')} className="px-4 py-2 rounded-md bg-white shadow border">
                                         Verified Scholarship Providers <span className="text-green-600">({accounts.filter(account => account.role === 'scholarship_provider' && account.status === 'Verified').length})</span>

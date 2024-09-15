@@ -136,7 +136,7 @@ const Step3 = ({ formData, setFormData }) => {
                     <div className='flex flex-row items-center mx-auto max-w-6xl gap-10 px-24'>
                         <div className='flex flex-col items-center'>
                             <span className='text-sm bg-blue-600 text-white px-6 rounded-md py-2'>Click to Upload an Image</span>
-                            <div className='bg-blue-600 w-36 h-36 my-2 rounded-md flex justify-center items-center relative overflow-hidden'>
+                            <div className='bg-white w-36 h-36 my-2 rounded-md flex justify-center items-center relative overflow-hidden'>
                                 <img
                                     src={formData.scholarshipImage || 'https://via.placeholder.com/150'}
                                     alt='Scholarship Logo'

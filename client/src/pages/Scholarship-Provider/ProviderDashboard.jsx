@@ -99,7 +99,7 @@ export default function ProviderDashboard() {
 
         <div className='bg-blue-500 mx-24 px-10 flex justify-between rounded-md text-white'>
           <div className={'flex w-full gap-4 items-center mx-auto'}>
-            <div className='bg-blue-600 w-24 h-24 my-8 rounded-full overflow-hidden'>
+            <div className='bg-white w-24 h-24 my-8 rounded-full overflow-hidden'>
               {currentUser && currentUser.profilePicture ? (
                 <img
                   src={currentUser.profilePicture}

@@ -279,6 +279,23 @@ const Step1 = ({ formData, setFormData }) => {
                         >
                             <option value="">Select nationality</option>
                             <option value="All nationalities">All nationalities</option>
+                            <option value="Filipino">Filipino</option>
+                            <option value="American">American</option>
+                            <option value="Canadian">Canadian</option>
+                            <option value="British">British</option>
+                            <option value="Australian">Australian</option>
+                            <option value="Indian">Indian</option>
+                            <option value="Chinese">Chinese</option>
+                            <option value="Japanese">Japanese</option>
+                            <option value="German">German</option>
+                            <option value="French">French</option>
+                            <option value="Brazilian">Brazilian</option>
+                            <option value="Mexican">Mexican</option>
+                            <option value="South African">South African</option>
+                            <option value="Nigerian">Nigerian</option>
+                            <option value="Russian">Russian</option>
+                            <option value="Italian">Italian</option>
+                            <option value="Spanish">Spanish</option>
                             {/* Add more options as needed */}
                         </select>
                     </div>

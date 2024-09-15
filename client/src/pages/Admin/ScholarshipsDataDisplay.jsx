@@ -107,7 +107,7 @@ export default function ScholarshipsDataDisplay() {
                     </div>
 
                     {/* FAQ Section */}
-                    <div className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
+                    <div className='flex flex-col gap-2 mt-8 border rounded-md bg-white my-10'>
                         <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>{scholarshipDetails.faqTitle}</span>
                         <span className='text-sm p-4'>{scholarshipDetails.faqDescription}</span>
 
@@ -150,36 +150,7 @@ export default function ScholarshipsDataDisplay() {
                         </div>
                     </div>
 
-                    <div className='flex flex-col items-center justify-center border-t my-10'>
-                        <span className='font-bold text-slate-700 py-8 text-2xl'>Ready to Apply?</span>
-                        <div className='flex gap-4 w-full'>
-                            <button className='bg-white flex border justify-between items-center shadow rounded-md p-4 w-1/2 h-22 hover:-translate-y-2 hover:bg-slate-200 transition ease-in-out group'>
-                                <div className='flex flex-row gap-4 '>
-                                    <div className='bg-blue-600 w-14 h-14 rounded-md'></div>
-                                    <div className='flex flex-col text-left'>
-                                        <span className='text-lg text-left'>Website Linked:</span>
-                                        <span className='text-slate-600'>SampleWebsite.com</span>
-                                    </div>
-                                </div>
-                                <BsGlobe2 className='w-8 h-8 ml-4 group-hover:w-12 group-hover:h-12 group-hover:text-blue-600 transition-all ease-in-out' />
-
-                            </button>
-
-
-                            <button className='bg-white flex items-center border justify-between shadow rounded-md p-4 w-1/2 h-22 hover:-translate-y-2 hover:bg-slate-200 transition ease-in-out group'>
-
-                                <div className='flex flex-row gap-4 '>
-                                    <div className='bg-blue-600 w-14 h-14 rounded-md'></div>
-                                    <div className='flex flex-col text-left'>
-                                        <span className='text-lg'>Apply now in Hubisko!</span>
-                                        <span className='text-slate-600'>We'll guide you step by step!</span>
-                                    </div>
-                                </div>
-                                <FaArrowRight className='w-8 h-8 mr-4 group-hover:translate-x-2 group-hover:text-blue-600 transition ease-in-out' />
-                            </button>
-
-                        </div>
-                    </div>
+                  
                 </div>
             </main>
         </div>

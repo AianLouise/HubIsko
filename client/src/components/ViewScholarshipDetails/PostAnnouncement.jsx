@@ -4,7 +4,7 @@ import { FaRegHeart, FaRegEye } from 'react-icons/fa';
 import { BiCommentDots } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 
-const AnnouncementModal = ({ isOpen, onClose, onSubmit }) => {
+const AnnouncementModal = ({ isOpen, onClose, onSubmit, addAnnouncement }) => {
     const { id } = useParams(); // Get the scholarshipProgram ID from the URL
     const { currentUser } = useSelector((state) => state.user);
 
@@ -32,11 +32,13 @@ const AnnouncementModal = ({ isOpen, onClose, onSubmit }) => {
             });
 
             if (response.ok) {
+                const createdAnnouncement = await response.json();
                 // Reset form fields
                 setTitle('');
                 setContent('');
                 alert('Announcement posted successfully!');
                 onClose();
+                addAnnouncement(createdAnnouncement); // Add the new announcement to the list
             } else {
                 alert('Failed to post announcement.');
             }
@@ -144,6 +146,10 @@ export default function PostAnnouncement() {
         navigate(`/announcement/details/${announcementId}`);
     };
 
+    const addAnnouncement = (newAnnouncement) => {
+        setAnnouncements((prevAnnouncements) => [newAnnouncement, ...prevAnnouncements]);
+    };
+
     const filteredAnnouncements = announcements
         .filter((announcement) => announcement.status === 'Posted')
         .filter((announcement) =>
@@ -164,12 +170,6 @@ export default function PostAnnouncement() {
     return (
         <div className="p-6 bg-white rounded-lg shadow-md">
             <h2 className="text-2xl font-bold mb-4 text-blue-600">Announcements</h2>
-            {programDetails && (
-                <div className="mb-4">
-                    <h3 className="text-xl font-bold">{programDetails.name}</h3>
-                    <p className="text-gray-700">{programDetails.description}</p>
-                </div>
-            )}
             <p className="text-gray-700">
                 You can post announcements here to keep scholars updated on important information.
             </p>
@@ -179,7 +179,7 @@ export default function PostAnnouncement() {
             >
                 Post Announcement
             </button>
-            <AnnouncementModal isOpen={isModalOpen} onClose={closeModal} />
+            <AnnouncementModal isOpen={isModalOpen} onClose={closeModal} addAnnouncement={addAnnouncement} />
             <div className="mx-10 lg:mx-0 my-10">
                 <div className="flex justify-between mb-4">
                     <input
@@ -204,7 +204,7 @@ export default function PostAnnouncement() {
                                 onClick={() => handleAnnouncementClick(announcement._id)}
                             >
                                 <div className="flex gap-2">
-                                    <div className="bg-blue-600 w-12 h-12 rounded-md overflow-hidden">
+                                    <div className="bg-white w-12 h-12 rounded-md overflow-hidden">
                                         <img src={programDetails.scholarshipImage} alt="Scholarship" className="w-full h-full object-cover" />
                                     </div>
                                     <div className="flex flex-col">

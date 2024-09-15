@@ -191,28 +191,67 @@ export default function ScholarshipsProviderDetails() {
                         </div>
 
                         <div className="text-lg font-bold bg-slate-200 border-2 px-4 py-2 rounded-md">Documents</div>
-
                         <div className="grid grid-cols-3 gap-8 my-4 border-b pb-4">
-                            <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Registration Certificate</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.registrationCertificate || 'Not Provided'}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm font-medium text-slate-400">TIN</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.tin || 'Not Provided'}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Proof of Address</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.proofOfAddress || 'Not Provided'}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Authorization Letter</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.authorizationLetter || 'Not Provided'}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm font-medium text-slate-400">ID Proof of Contact Person</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.idProofOfContactPerson || 'Not Provided'}</span>
-                            </div>
+                                                                               <div className="">
+                                                        <label className="block text-sm font-medium text-slate-400">Registration Certificate</label>
+                                                        {provider.scholarshipProviderDetails.documents.registrationCertificate ? (
+                                                            <img
+                                                                src={provider.scholarshipProviderDetails.documents.registrationCertificate}
+                                                                alt="Registration Certificate"
+                                                                className="mt-1 block px-3 py-2 border border-gray-300 rounded-md"
+                                                            />
+                                                        ) : (
+                                                            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+                                                        )}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className="block text-sm font-medium text-slate-400">TIN</label>
+                                                        {provider.scholarshipProviderDetails.documents.tin ? (
+                                                            <img
+                                                                src={provider.scholarshipProviderDetails.documents.tin}
+                                                                alt="TIN"
+                                                                className="mt-1 block px-3 py-2 border border-gray-300 rounded-md"
+                                                            />
+                                                        ) : (
+                                                            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+                                                        )}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className="block text-sm font-medium text-slate-400">Proof of Address</label>
+                                                        {provider.scholarshipProviderDetails.documents.proofOfAddress ? (
+                                                            <img
+                                                                src={provider.scholarshipProviderDetails.documents.proofOfAddress}
+                                                                alt="Proof of Address"
+                                                                className="mt-1 block px-3 py-2 border border-gray-300 rounded-md"
+                                                            />
+                                                        ) : (
+                                                            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+                                                        )}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className="block text-sm font-medium text-slate-400">Authorization Letter</label>
+                                                        {provider.scholarshipProviderDetails.documents.authorizationLetter ? (
+                                                            <img
+                                                                src={provider.scholarshipProviderDetails.documents.authorizationLetter}
+                                                                alt="Authorization Letter"
+                                                                className="mt-1 block px-3 py-2 border border-gray-300 rounded-md"
+                                                            />
+                                                        ) : (
+                                                            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+                                                        )}
+                                                    </div>
+                                                    <div className="">
+                                                        <label className="block text-sm font-medium text-slate-400">ID Proof of Contact Person</label>
+                                                        {provider.scholarshipProviderDetails.documents.idProofContactPerson ? (
+                                                            <img
+                                                                src={provider.scholarshipProviderDetails.documents.idProofContactPerson}
+                                                                alt="ID Proof of Contact Person"
+                                                                className="mt-1 block px-3 py-2 border border-gray-300 rounded-md"
+                                                            />
+                                                        ) : (
+                                                            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+                                                        )}
+                                                    </div>
                         </div>
 
                         <div className="flex justify-end gap-4 mt-6">
