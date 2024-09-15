@@ -2,27 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
-
+import { regions, provinces, cities, barangays } from 'select-philippines-address';
 
 export default function ApplicationForm() {
     useTokenExpiry();
 
     const navigate = useNavigate();
     const { currentUser } = useSelector((state) => state.user);
-  
-    useEffect(() => {
-      if (currentUser) {
-        if (currentUser.role === 'admin') {
-          navigate('/admin-dashboard');
-        } else if (currentUser.role === 'scholarship_provider') {
-          if (!currentUser.emailVerified) {
-            navigate('/verify-your-email', { state: { email: currentUser.email } });
-          } else {
-            navigate('/provider-dashboard');
-          }
-        }
-      }
-    }, [currentUser, navigate]);
 
     const [showModal, setShowModal] = useState(false);
 
@@ -33,10 +19,14 @@ export default function ApplicationForm() {
     const closeModal = () => {
         setShowModal(false);
     }
-    
+
     const [application, setApplication] = useState(null);
     const [loading, setLoading] = useState(true);
     const { id: applicationId } = useParams(); // Extract applicationId from the URL
+    const [regionName, setRegionName] = useState('');
+    const [provinceName, setProvinceName] = useState('');
+    const [cityName, setCityName] = useState('');
+    const [barangayName, setBarangayName] = useState('');
 
     useEffect(() => {
         const fetchApplicationDetails = async () => {
@@ -68,6 +58,42 @@ export default function ApplicationForm() {
         }
     };
 
+    useEffect(() => {
+        if (application && application.region) {
+            regions().then((regionList) => {
+                const region = regionList.find((r) => r.region_code === application.region);
+                setRegionName(region ? region.region_name : '');
+            });
+        }
+    }, [application]);
+
+    useEffect(() => {
+        if (application && application.province) {
+            provinces(application.region).then((provinceList) => {
+                const province = provinceList.find((p) => p.province_code === application.province);
+                setProvinceName(province ? province.province_name : '');
+            });
+        }
+    }, [application]);
+
+    useEffect(() => {
+        if (application && application.city) {
+            cities(application.province).then((cityList) => {
+                const city = cityList.find((c) => c.city_code === application.city);
+                setCityName(city ? city.city_name : '');
+            });
+        }
+    }, [application]);
+
+    useEffect(() => {
+        if (application && application.barangay) {
+            barangays(application.city).then((barangayList) => {
+                const barangay = barangayList.find((b) => b.brgy_code === application.barangay);
+                setBarangayName(barangay ? barangay.brgy_name : '');
+            });
+        }
+    }, [application]);
+
     const handleResubmit = () => {
         // Logic to handle resubmission can be added here
         // For now, we'll just show a modal
@@ -84,7 +110,6 @@ export default function ApplicationForm() {
             </div>
         );
     }
-
 
     return (
         <div>
@@ -149,7 +174,9 @@ export default function ApplicationForm() {
                                 <p className="text-sm"><strong>Weight:</strong> {application.weight}</p>
                                 <p className="text-sm"><strong>Birthplace:</strong> {application.birthplace}</p>
                                 <p className="text-sm"><strong>Contact Number:</strong> {application.contactNumber}</p>
-                                <p className="text-sm"><strong>Address:</strong> {`${application.address}, ${application.barangay}, ${application.town}, ${application.province}`}</p>
+                                <p className="text-sm">
+                                    <strong>Address:</strong> {`${application.addressDetails}, ${barangayName}, ${cityName}, ${provinceName}, ${regionName}`}
+                                </p>
                             </div>
                         </div>
                     </div>

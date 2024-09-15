@@ -159,6 +159,7 @@ export default function ScholarDashboard() {
     return applications;
   };
 
+  // Announcements
   const filteredApplications = getFilteredApplications();
   const [scholarshipData, setScholarshipData] = useState([]);
   const [carouselIndex, setCarouselIndex] = useState(0);
@@ -186,17 +187,45 @@ export default function ScholarDashboard() {
   }, [userId]);
 
   const handleNextCarousel = () => {
-    setCarouselIndex((prevIndex) => (prevIndex + 2) % scholarshipData[0].announcements.length);
+    const totalAnnouncements = scholarshipData.flatMap((item) => item.announcements).length;
+    if (carouselIndex < totalAnnouncements - 2) {
+      setCarouselIndex(carouselIndex + 2);
+    } else {
+      setCarouselIndex(0); // Loop back to the beginning
+    }
   };
 
   const handlePrevCarousel = () => {
-    setCarouselIndex((prevIndex) => (prevIndex - 2 + scholarshipData[0].announcements.length) % scholarshipData[0].announcements.length);
+    const totalAnnouncements = scholarshipData.flatMap((item) => item.announcements).length;
+    if (carouselIndex > 0) {
+      setCarouselIndex(carouselIndex - 2);
+    } else {
+      setCarouselIndex(totalAnnouncements - 2); // Loop back to the end
+    }
   };
+
+  const [announcementSortOrder, setAnnouncementSortOrder] = useState('recent');
+
+  const toggleAnnouncementSortOrder = () => {
+    setAnnouncementSortOrder((prevOrder) => (prevOrder === 'recent' ? 'oldest' : 'recent'));
+  };
+
+  const sortedAnnouncements = scholarshipData.flatMap((item) => item.announcements).sort((a, b) => {
+    if (announcementSortOrder === 'recent') {
+      return new Date(b.date) - new Date(a.date);
+    } else {
+      return new Date(a.date) - new Date(b.date);
+    }
+  });
 
   // Calculate total number of announcements
   const totalAnnouncements = scholarshipData ? scholarshipData.reduce((total, program) => total + program.announcements.length, 0) : 0;
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleAnnouncementClick = (announcementId) => {
+    navigate(`/announcement/${announcementId}`);
+  };
 
   const handleVerifyClick = () => {
     setIsLoading(true);
@@ -206,9 +235,6 @@ export default function ScholarDashboard() {
     }, 2000);
   };
 
-  const handleAnnouncementClick = (announcementId) => {
-    navigate(`/announcement/${announcementId}`);
-  };
 
   if (loading) {
     return (
@@ -269,15 +295,18 @@ export default function ScholarDashboard() {
               </span>
 
               <div className=''>
-                <button className='flex gap-2 bg-white hover:bg-slate-200 px-6 py-2 border shadow rounded-md'>
+                <button
+                  className='flex gap-2 bg-white hover:bg-slate-200 px-6 py-2 border shadow rounded-md'
+                  onClick={toggleAnnouncementSortOrder}
+                >
                   <BiFilter className='w-6 h-6 text-blue-600' />
-                  <span>Recent</span>
+                  <span>{announcementSortOrder === 'recent' ? 'Recent' : 'Oldest'}</span>
                 </button>
               </div>
             </div>
 
             <div className='relative'>
-              {scholarshipData && scholarshipData.length > 0 && scholarshipData[0].announcements.length > 0 ? (
+              {sortedAnnouncements.length > 0 ? (
                 <div className='flex items-center justify-between mx-10 lg:mx-0 my-10'>
                   <button
                     onClick={handlePrevCarousel}
@@ -286,26 +315,41 @@ export default function ScholarDashboard() {
                     &lt;
                   </button>
                   <div className='flex flex-row gap-10 overflow-hidden'>
-                    {scholarshipData[0].announcements.slice(carouselIndex, carouselIndex + 2).map((announcement) => (
+                    {sortedAnnouncements.slice(carouselIndex, carouselIndex + 2).map((announcement) => (
                       <div
                         className='bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out cursor-pointer'
                         key={announcement._id}
-                        onClick={() => handleAnnouncementClick(announcement._id)} // Add onClick handler
+                        onClick={() => handleAnnouncementClick(announcement._id)}
                       >
                         <div className='flex gap-2'>
-                          <div className='bg-blue-600 w-12 h-12 rounded-md overflow-hidden'>
-                            <img src={scholarshipData[0].scholarshipProgram.scholarshipImage} alt="Scholarship" className="w-full h-full object-cover" />
+                          <div className='bg-white w-12 h-12 rounded-md overflow-hidden'>
+                            <img
+                              src={scholarshipData.find((item) => item.scholarshipProgram._id === announcement.scholarshipProgram).scholarshipProgram.scholarshipImage}
+                              alt='Scholarship'
+                              className='w-full h-full object-cover'
+                            />
                           </div>
                           <div className='flex flex-col'>
-                            <span className='font-bold'>{scholarshipData[0].scholarshipProgram.organizationName}</span>
-                            <span className='text-blue-600'>{scholarshipData[0].scholarshipProgram.title}</span>
+                            <span className='font-bold'>
+                              {scholarshipData.find((item) => item.scholarshipProgram._id === announcement.scholarshipProgram).scholarshipProgram.organizationName}
+                            </span>
+                            <span className='text-blue-600'>
+                              {scholarshipData.find((item) => item.scholarshipProgram._id === announcement.scholarshipProgram).scholarshipProgram.title}
+                            </span>
                           </div>
                         </div>
                         <p className='bg-slate-200 p-4 rounded-md'>
                           <span className='text-blue-600 font-bold'>@Students</span> {announcement.content}
                         </p>
                         <span className='text-sm flex items-end justify-end w-full text-slate-600'>
-                          Announced: {new Date(announcement.date).toLocaleDateString()}
+                          Announced: {new Date(announcement.date).toLocaleString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            hour12: true,
+                          })}
                         </span>
                         <div className='border-t mt-2'>
                           <div className='flex flex-row justify-between mt-2 gap-2'>
@@ -484,7 +528,7 @@ export default function ScholarDashboard() {
                             {isMobile ? (
                               <Link to={`/scholarship-dashboard-details/${application._id}`} className="contents">
                                 <td className="px-6 py-4 whitespace-nowrap flex gap-2 items-center">
-                                  <div className='lg:table-cell hidden bg-blue-600 w-12 h-12 rounded-md'>
+                                  <div className='lg:table-cell hidden bg-white w-12 h-12 rounded-md'>
                                     {application.scholarshipProgram && application.scholarshipProgram.scholarshipImage ? (
                                       <img src={application.scholarshipProgram.scholarshipImage} alt="Scholarship" className='w-full h-full object-cover rounded-md' />
                                     ) : (
@@ -517,7 +561,7 @@ export default function ScholarDashboard() {
                             ) : (
                               <>
                                 <td className="lg:px-6 py-4 whitespace-nowrap flex gap-2 items-center">
-                                  <div className='bg-blue-600 w-12 h-12 rounded-md'>
+                                  <div className='bg-whit w-12 h-12 rounded-md'>
                                     {application.scholarshipProgram && application.scholarshipProgram.scholarshipImage ? (
                                       <img src={application.scholarshipProgram.scholarshipImage} alt="Scholarship" className='w-full h-full object-cover rounded-md' />
                                     ) : (

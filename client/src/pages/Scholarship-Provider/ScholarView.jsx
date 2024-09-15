@@ -63,6 +63,27 @@ export default function ScholarView() {
         }
     };
 
+
+    const [application, setApplication] = useState(null);
+    const { id: applicationId } = useParams(); // Extract applicationId from the URL
+
+    useEffect(() => {
+        const fetchApplicationDetails = async () => {
+            try {
+                const response = await fetch(`/api/scholarshipApplication/get-applications-details/${applicationId}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                setApplication(data);
+            } catch (error) {
+                console.error('Error fetching application details:', error);
+            }
+        };
+
+        fetchApplicationDetails();
+    }, [applicationId]);
+
     return (
         <div className={`flex flex-col min-h-screen`}>
             <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''}`}>
@@ -78,7 +99,7 @@ export default function ScholarView() {
                             }}
                             className='bg-white border rounded-md px-6 py-2 shadow hover:bg-slate-200'
                         >
-                            <span>Test</span>
+                            <span>{application?.scholarshipProgram.title}</span>
                         </Link>
                         <IoMdArrowDropdown className='-rotate-90 text-4xl text-blue-600' />
                         <div className='bg-white border rounded-md px-6 py-2 shadow'>

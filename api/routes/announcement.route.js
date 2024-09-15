@@ -1,5 +1,5 @@
 import express from 'express';
-import { test, createAnnouncement, getAnnouncements, deleteAnnouncement, getAnnouncementById, addCommentToAnnouncement, likeAnnouncement, unlikeAnnouncement, likeComment, unlikeComment, addReply, getStudentScholarshipProgramAnnouncements } from '../controllers/announcement.controller.js';
+import { test, createAnnouncement, getAnnouncements, deleteAnnouncement, getAnnouncementById, addCommentToAnnouncement, likeAnnouncement, unlikeAnnouncement, likeComment, unlikeComment, addReply, getStudentScholarshipProgramAnnouncements, getScholarshipProgramAnnouncementsByApplicationId } from '../controllers/announcement.controller.js';
 
 const router = express.Router();
 
@@ -15,5 +15,6 @@ router.post('/like-comment/:announcementId/:commentId', likeComment);
 router.post('/unlike-comment/:announcementId/:commentId', unlikeComment);
 router.post('/reply/:announcementId/:commentId', addReply);
 router.post('/student-scholarship-program', getStudentScholarshipProgramAnnouncements);
+router.post('/get-announcements-by-application-id', getScholarshipProgramAnnouncementsByApplicationId);
 
 export default router;

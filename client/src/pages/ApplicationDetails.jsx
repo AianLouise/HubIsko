@@ -16,19 +16,19 @@ export default function Forums() {
 
     const navigate = useNavigate();
     const { currentUser } = useSelector((state) => state.user);
-  
+
     useEffect(() => {
-      if (currentUser) {
-        if (currentUser.role === 'admin') {
-          navigate('/admin-dashboard');
-        } else if (currentUser.role === 'scholarship_provider') {
-          if (!currentUser.emailVerified) {
-            navigate('/verify-your-email', { state: { email: currentUser.email } });
-          } else {
-            navigate('/provider-dashboard');
-          }
+        if (currentUser) {
+            if (currentUser.role === 'admin') {
+                navigate('/admin-dashboard');
+            } else if (currentUser.role === 'scholarship_provider') {
+                if (!currentUser.emailVerified) {
+                    navigate('/verify-your-email', { state: { email: currentUser.email } });
+                } else {
+                    navigate('/provider-dashboard');
+                }
+            }
         }
-      }
     }, [currentUser, navigate]);
 
     const { id } = useParams();
@@ -118,7 +118,7 @@ export default function Forums() {
             <main className='flex-grow bg-[#f8f8fb] font-medium'>
                 <div key={scholarship._id} className='border-b mb-8 py-8'>
                     <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl gap-2 lg:gap-10 lg:px-24 p-4'>
-                        <div className='bg-blue-600 w-36 h-36 my-8 rounded-md'>
+                        <div className='bg-white w-36 h-36 my-8 rounded-md'>
                             {scholarship.scholarshipImage && (
                                 <img
                                     src={scholarship.scholarshipImage}

@@ -1,6 +1,7 @@
 // Get all announcements by scholarshipProgram ID
 import Announcement from '../models/announcement.model.js';
 import ScholarshipProgram from '../models/scholarshipProgram.model.js';
+import ScholarshipApplication from '../models/scholarshipApplication.model.js';
 import User from '../models/user.model.js';
 
 // Test route
@@ -307,6 +308,49 @@ export const getStudentScholarshipProgramAnnouncements = async (req, res) => {
                 announcements: announcements.filter(announcement => announcement.scholarshipProgram.equals(program._id))
             };
         });
+
+        res.status(200).json({ data: response });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
+
+export const getScholarshipProgramAnnouncementsByApplicationId = async (req, res) => {
+    try {
+        // Get the scholarshipApplicationId from the request body
+        const { scholarshipApplicationId } = req.body;
+
+        // Validate scholarshipApplicationId
+        if (!scholarshipApplicationId) {
+            return res.status(400).json({ message: 'Scholarship Application ID is required' });
+        }
+
+        // Find the scholarship application
+        const scholarshipApplication = await ScholarshipApplication.findById(scholarshipApplicationId);
+
+        if (!scholarshipApplication) {
+            return res.status(404).json({ message: 'Scholarship application not found' });
+        }
+
+        // Find the associated scholarship program
+        const scholarshipProgram = await ScholarshipProgram.findById(scholarshipApplication.scholarshipProgram);
+
+        if (!scholarshipProgram) {
+            return res.status(404).json({ message: 'Scholarship program not found' });
+        }
+
+        // Find announcements related to the scholarship program
+        const announcements = await Announcement.find({ scholarshipProgram: scholarshipProgram._id });
+
+        if (announcements.length === 0) {
+            return res.status(404).json({ message: 'No announcements found for this scholarship program' });
+        }
+
+        // Combine the scholarship program details with the announcements
+        const response = {
+            scholarshipProgram,
+            announcements
+        };
 
         res.status(200).json({ data: response });
     } catch (error) {

@@ -3,8 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { FaAngleRight } from 'react-icons/fa';
-import { FaRegHeart, FaRegEye } from 'react-icons/fa';
+import { FaAngleRight, FaRegHeart, FaRegEye } from 'react-icons/fa';
 import { BiCommentDots } from 'react-icons/bi';
 import { BsArrowLeft } from 'react-icons/bs';
 import ApplicationForm from './ApplicationForm';
@@ -15,6 +14,7 @@ export default function ScholarshipDashboardDetails() {
 
     const navigate = useNavigate();
     const { currentUser } = useSelector((state) => state.user);
+    const userId = currentUser?._id;
 
     useEffect(() => {
         if (currentUser) {
@@ -38,7 +38,7 @@ export default function ScholarshipDashboardDetails() {
     };
 
     const [application, setApplication] = useState(null);
-    const { id: applicationId } = useParams(); // Extract applicationId from the URL
+    const { id: applicationId } = useParams();
 
     useEffect(() => {
         const fetchApplicationDetails = async () => {
@@ -56,6 +56,8 @@ export default function ScholarshipDashboardDetails() {
 
         fetchApplicationDetails();
     }, [applicationId]);
+
+    console.log(application?.scholarshipProgram?._id);
 
     const [validations, setValidations] = useState([]);
 
@@ -77,17 +79,56 @@ export default function ScholarshipDashboardDetails() {
             }
         };
 
-        fetchValidationsByProgram();
+        if (programId) {
+            fetchValidationsByProgram();
+        }
     }, [programId]);
 
     const upcomingValidations = validations.filter(validation => validation.status === 'Ongoing');
     const previousValidations = validations.filter(validation => validation.status === 'Done');
+    const [carouselIndex, setCarouselIndex] = useState(0);
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
     const isPending = application?.applicationStatus === 'Pending';
+
+    // Announcements
+    const [scholarshipData, setScholarshipData] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+
+    useEffect(() => {
+        const fetchAnnouncements = async () => {
+            try {
+                const response = await fetch('/api/announcement/student-scholarship-program', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ userId }),
+                });
+                const data = await response.json();
+                const filteredData = data.data.filter(item => item.scholarshipProgram._id === application?.scholarshipProgram?._id);
+                setScholarshipData(filteredData);
+            } catch (error) {
+                console.error('Error fetching announcements:', error);
+            }
+        };
+
+        if (application?.scholarshipProgram?._id) {
+            fetchAnnouncements();
+        }
+    }, [userId, application?.scholarshipProgram?._id]);
+
+    const filteredAnnouncements = scholarshipData.flatMap((item) => item.announcements).filter((announcement) =>
+        announcement.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        announcement.content.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const handleAnnouncementClick = (announcementId) => {
+        navigate(`/announcement/${announcementId}`);
+    };
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -150,49 +191,83 @@ export default function ScholarshipDashboardDetails() {
                                 <div className='flex justify-between items-center gap-4'>
                                     <span className='text-2xl font-bold'>Announcements</span>
                                     <div className="hidden lg:flex gap-2 items-center bg-white shadow px-6 py-2 rounded-md border text-md">
-                                        <input type="text"
+                                        <input
+                                            type="text"
                                             placeholder="Search Announcements"
-                                            className="w-full bg-transparent outline-none" />
+                                            className="w-full bg-transparent outline-none"
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                        />
                                     </div>
                                 </div>
 
                                 <div className="lg:hidden flex gap-2 items-center bg-white shadow px-6 py-2 rounded-md border text-md">
-                                    <input type="text"
+                                    <input
+                                        type="text"
                                         placeholder="Search Announcements"
-                                        className="w-full bg-transparent outline-none" />
+                                        className="w-full bg-transparent outline-none"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
                                 </div>
 
-                                <div className='grid lg:grid-cols-3 gap-10'>
-                                    <div className='bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out'>
-                                        <div className='flex gap-2'>
-                                            <div className='bg-blue-600 w-12 h-12 rounded-md'></div>
-                                            <div className='flex flex-col'>
-                                                <span className='font-bold'>Organization Name</span>
-                                                <span className='text-blue-600'>Scholarship Title</span>
-                                            </div>
-                                        </div>
-
-                                        <p className='bg-slate-200 p-4 rounded-md'><span className='text-blue-600 font-bold'>@Students</span> Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, vel.</p>
-                                        <span className='text-sm flex items-end justify-end w-full text-slate-600'>Announced: July 7, 2024</span>
-                                        <div className='border-t mt-2'>
-                                            <div className='flex flex-row justify-between mt-2 gap-2'>
-                                                <div className='flex flex-row gap-2'>
-                                                    <div className='flex flex-row gap-1 px-2'>
-                                                        <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
-                                                        <span>123</span>
+                                <div className='relative'>
+                                    {filteredAnnouncements.length > 0 ? (
+                                        <div className='flex flex-col gap-4 mx-10 lg:mx-0'>
+                                            {filteredAnnouncements.map((announcement) => (
+                                                <div
+                                                    className='bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out cursor-pointer w-full'
+                                                    key={announcement._id}
+                                                    onClick={() => handleAnnouncementClick(announcement._id)}
+                                                >
+                                                    <div className='flex gap-2'>
+                                                        <div className='bg-white w-12 h-12 rounded-md overflow-hidden'>
+                                                            <img src={scholarshipData.find((item) => item.scholarshipProgram._id === announcement.scholarshipProgram).scholarshipProgram.scholarshipImage} alt="Scholarship" className="w-full h-full object-cover" />
+                                                        </div>
+                                                        <div className='flex flex-col'>
+                                                            <span className='font-bold'>{scholarshipData.find((item) => item.scholarshipProgram._id === announcement.scholarshipProgram).scholarshipProgram.organizationName}</span>
+                                                            <span className='text-blue-600'>{scholarshipData.find((item) => item.scholarshipProgram._id === announcement.scholarshipProgram).scholarshipProgram.title}</span>
+                                                        </div>
                                                     </div>
-                                                    <div className='flex flex-row gap-1'>
-                                                        <BiCommentDots className='w-6 h-6 text-blue-600' />
-                                                        <span>10</span>
+                                                    <p className='bg-slate-200 p-4 rounded-md'>
+                                                        <span className='text-blue-600 font-bold'>@Students</span> {announcement.content}
+                                                    </p>
+                                                    <span className='text-sm flex items-end justify-end w-full text-slate-600'>
+                                                        Announced: {new Date(announcement.date).toLocaleString('en-US', {
+                                                            year: 'numeric',
+                                                            month: 'long',
+                                                            day: 'numeric',
+                                                            hour: 'numeric',
+                                                            minute: 'numeric',
+                                                            hour12: true
+                                                        })}
+                                                    </span>
+                                                    <div className='border-t mt-2'>
+                                                        <div className='flex flex-row justify-between mt-2 gap-2'>
+                                                            <div className='flex flex-row gap-2'>
+                                                                <div className='flex flex-row gap-1 px-2'>
+                                                                    <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
+                                                                    <span>{announcement.likesCount}</span>
+                                                                </div>
+                                                                <div className='flex flex-row gap-1'>
+                                                                    <BiCommentDots className='w-6 h-6 text-blue-600' />
+                                                                    <span>{announcement.comments.length}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div className='flex flex-row gap-1 pr-2'>
+                                                                <FaRegEye className='w-6 h-6 text-blue-600' />
+                                                                <span>1.2k</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div className='flex flex-row gap-1 pr-2'>
-                                                    <FaRegEye className='w-6 h-6 text-blue-600' />
-                                                    <span>1.2k</span>
-                                                </div>
-                                            </div>
+                                            ))}
                                         </div>
-                                    </div>
+                                    ) : (
+                                        <div className='flex items-center justify-center h-52'>
+                                            <p className='text-gray-700'>No announcements available.</p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}
