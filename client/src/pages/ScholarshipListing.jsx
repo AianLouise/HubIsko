@@ -111,7 +111,7 @@ export default function ScholarshipListing() {
       <main className="flex-grow bg-[#f8f8fb]">
         <div className='sm:flex sm:flex-col lg:block border-b mb-8 pt-8'>
           <div className='flex justify-center items-center w-full lg:mx-auto lg:max-w-6xl lg:justify-between lg:px-24'>
-            <div className='flex flex-col gap-2 text-center items-center lg:items-baseline lg:text-left lg:w-1/2'>
+            <div className='flex flex-col gap-2 text-center items-center lg:items-start lg:text-left lg:w-1/2'>
               <div className='block lg:hidden bg-blue-600 w-36 h-36 rounded-md items-center justify-center'>
                 <FaGraduationCap className='text-white text-8xl my-auto mx-auto mt-6' />
               </div>
@@ -119,13 +119,15 @@ export default function ScholarshipListing() {
                 <span className='hidden lg:block'>Available Scholarships</span>
                 <span className='block lg:hidden'>Available Scholarships</span>
               </div>
-              <p className='w-full lg:w-1/2 text-lg text-slate-500 font-medium pb-8 lg:pb-0'>Browse them below!</p>
+              <p className='w-full lg:w-full text-lg text-slate-500 font-medium lg:text-left lg:pb-0'>
+                Discover various scholarship options to support your educational journey. Browse now to find the best fit for your needs!
+              </p>
             </div>
 
             <img src={ListingIcon} alt='Listing Icon' className='hidden lg:block rounded-md items-center justify-center w-[400px] h-auto' />
-
           </div>
         </div>
+
 
         <div className='flex flex-col gap-4 justify-center items-left px-10 lg:mx-auto lg:max-w-6xl lg:px-24 my-8'>
           <div className='flex gap-2 items-center justify-between'>

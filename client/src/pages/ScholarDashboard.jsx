@@ -225,7 +225,7 @@ export default function ScholarDashboard() {
     <div className="flex flex-col min-h-screen"> {/* Flex container */}
       <Header />
       <main className="flex-grow bg-[#f8f8fb] pb-24"> {/* Main content grows to fill available space */}
-        <div className='flex flex-col gap-4 py-12 max-w-6xl mx-auto justify-between p-4 lg:px-24'>
+        <div className='flex flex-col gap-4 py-2 max-w-6xl mx-auto justify-between p-4 lg:px-24'>
 
           {currentUser?.status === 'Pending Verification' && (
             <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 m-6 rounded-md" role="alert">
@@ -235,7 +235,7 @@ export default function ScholarDashboard() {
           )}
 
           {currentUser?.status === 'Verified' && (
-            <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 m-6 my-8 rounded-md mx-24" role="alert">
+            <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 m-6 my-8 rounded-md" role="alert">
               <p className="font-bold">Welcome Back!</p>
               <p>Your account is fully verified. Enjoy all the features available to you.</p>
             </div>
@@ -277,70 +277,70 @@ export default function ScholarDashboard() {
             </div>
 
             <div className='relative'>
-      {scholarshipData && scholarshipData.length > 0 && scholarshipData[0].announcements.length > 0 ? (
-        <div className='flex items-center justify-between mx-10 lg:mx-0 my-10'>
-          <button
-            onClick={handlePrevCarousel}
-            className='bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 transition duration-300 transform hover:translate-x-[-20px] translate-x-[-10px]'
-          >
-            &lt;
-          </button>
-          <div className='flex flex-row gap-10 overflow-hidden'>
-            {scholarshipData[0].announcements.slice(carouselIndex, carouselIndex + 2).map((announcement) => (
-              <div
-                className='bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out cursor-pointer'
-                key={announcement._id}
-                onClick={() => handleAnnouncementClick(announcement._id)} // Add onClick handler
-              >
-                <div className='flex gap-2'>
-                  <div className='bg-blue-600 w-12 h-12 rounded-md overflow-hidden'>
-                    <img src={scholarshipData[0].scholarshipProgram.scholarshipImage} alt="Scholarship" className="w-full h-full object-cover" />
-                  </div>
-                  <div className='flex flex-col'>
-                    <span className='font-bold'>{scholarshipData[0].scholarshipProgram.organizationName}</span>
-                    <span className='text-blue-600'>{scholarshipData[0].scholarshipProgram.title}</span>
-                  </div>
-                </div>
-                <p className='bg-slate-200 p-4 rounded-md'>
-                  <span className='text-blue-600 font-bold'>@Students</span> {announcement.content}
-                </p>
-                <span className='text-sm flex items-end justify-end w-full text-slate-600'>
-                  Announced: {new Date(announcement.date).toLocaleDateString()}
-                </span>
-                <div className='border-t mt-2'>
-                  <div className='flex flex-row justify-between mt-2 gap-2'>
-                    <div className='flex flex-row gap-2'>
-                      <div className='flex flex-row gap-1 px-2'>
-                        <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
-                        <span>{announcement.likesCount}</span>
+              {scholarshipData && scholarshipData.length > 0 && scholarshipData[0].announcements.length > 0 ? (
+                <div className='flex items-center justify-between mx-10 lg:mx-0 my-10'>
+                  <button
+                    onClick={handlePrevCarousel}
+                    className='bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 transition duration-300 transform hover:translate-x-[-20px] translate-x-[-10px]'
+                  >
+                    &lt;
+                  </button>
+                  <div className='flex flex-row gap-10 overflow-hidden'>
+                    {scholarshipData[0].announcements.slice(carouselIndex, carouselIndex + 2).map((announcement) => (
+                      <div
+                        className='bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out cursor-pointer'
+                        key={announcement._id}
+                        onClick={() => handleAnnouncementClick(announcement._id)} // Add onClick handler
+                      >
+                        <div className='flex gap-2'>
+                          <div className='bg-blue-600 w-12 h-12 rounded-md overflow-hidden'>
+                            <img src={scholarshipData[0].scholarshipProgram.scholarshipImage} alt="Scholarship" className="w-full h-full object-cover" />
+                          </div>
+                          <div className='flex flex-col'>
+                            <span className='font-bold'>{scholarshipData[0].scholarshipProgram.organizationName}</span>
+                            <span className='text-blue-600'>{scholarshipData[0].scholarshipProgram.title}</span>
+                          </div>
+                        </div>
+                        <p className='bg-slate-200 p-4 rounded-md'>
+                          <span className='text-blue-600 font-bold'>@Students</span> {announcement.content}
+                        </p>
+                        <span className='text-sm flex items-end justify-end w-full text-slate-600'>
+                          Announced: {new Date(announcement.date).toLocaleDateString()}
+                        </span>
+                        <div className='border-t mt-2'>
+                          <div className='flex flex-row justify-between mt-2 gap-2'>
+                            <div className='flex flex-row gap-2'>
+                              <div className='flex flex-row gap-1 px-2'>
+                                <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
+                                <span>{announcement.likesCount}</span>
+                              </div>
+                              <div className='flex flex-row gap-1'>
+                                <BiCommentDots className='w-6 h-6 text-blue-600' />
+                                <span>{announcement.comments.length}</span>
+                              </div>
+                            </div>
+                            <div className='flex flex-row gap-1 pr-2'>
+                              <FaRegEye className='w-6 h-6 text-blue-600' />
+                              <span>1.2k</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className='flex flex-row gap-1'>
-                        <BiCommentDots className='w-6 h-6 text-blue-600' />
-                        <span>{announcement.comments.length}</span>
-                      </div>
-                    </div>
-                    <div className='flex flex-row gap-1 pr-2'>
-                      <FaRegEye className='w-6 h-6 text-blue-600' />
-                      <span>1.2k</span>
-                    </div>
+                    ))}
                   </div>
+                  <button
+                    onClick={handleNextCarousel}
+                    className='bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 transition duration-300 transform hover:translate-x-[20px] translate-x-[10px]'
+                  >
+                    &gt;
+                  </button>
                 </div>
-              </div>
-            ))}
-          </div>
-          <button
-            onClick={handleNextCarousel}
-            className='bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 transition duration-300 transform hover:translate-x-[20px] translate-x-[10px]'
-          >
-            &gt;
-          </button>
-        </div>
-      ) : (
-        <div className='flex items-center justify-center h-52'>
-          <p className='text-gray-700'>No announcements available.</p>
-        </div>
-      )}
-    </div>
+              ) : (
+                <div className='flex items-center justify-center h-52'>
+                  <p className='text-gray-700'>No announcements available.</p>
+                </div>
+              )}
+            </div>
 
 
             {/* If no Scholarship yet */}
@@ -434,7 +434,7 @@ export default function ScholarDashboard() {
           </div>
 
 
-          <div className="lg:grid gap-4 lg:max-h-[350px]">
+          <div className="lg:grid gap-4 lg:max-h-[350px] mb-10">
             {/* Overview of approved applications */}
             <div className="bg-white shadow rounded-lg col-span-1 md:col-span-2">
               <div className='flex items-center justify-between font-semibold text-xl w-full p-4 rounded-t-lg border-b'>
