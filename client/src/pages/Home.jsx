@@ -143,11 +143,11 @@ export default function Home() {
           </div>
         </div>
         <div className='px-4 max-w-6xl mx-auto'>
-          <div className='border shadow-2xl rounded-md mb-40 w-full max-w-6xl transition-all hover:-translate-y-2 bg-white'>
+          <div className='border shadow-2xl text-sm font-medium tracking-wide lg:tracking-normal lg:text-base rounded-md mb-40 w-full max-w-6xl transition-all hover:-translate-y-2 bg-white'>
             <h1 className='text-center lg:text-left bg-blue-600 p-4 text-white font-bold text-xl lg:text-2xl rounded-t-md'>
               Our Goal
             </h1>
-            <p className='mb-4 text-slate-700 p-4 lg:px-8 font-medium'>
+            <p className='mb-4 text-slate-700 p-4 lg:px-8'>
               HubIsko is a comprehensive scholarship management system designed to streamline
               the process of finding, applying for, and managing scholarships. Whether you're
               a student seeking financial assistance or an organization looking to provide
@@ -155,14 +155,14 @@ export default function Home() {
               We aim to connect students with the resources they need to achieve their
               educational goals while helping organizations manage their scholarship programs efficiently.
             </p>
-            <p className='mb-4 text-slate-700 pb-4 lg:px-8 font-medium'>
+            <p className='mb-4 text-slate-700 pb-4 px-4 lg:px-8'>
               With HubIsko's user-friendly interface, you can easily search for scholarships
               that match your academic interests and eligibility. Our system also allows
               scholarship providers to track applications, review submissions, and communicate
               with applicants seamlessly. We are committed to making the scholarship process
               more accessible, transparent, and effective for everyone involved.
             </p>
-            <p className='text-slate-700 pb-4 lg:px-8 font-medium'>
+            <p className='text-slate-700 pb-4 px-4 lg:px-8'>
               Join HubIsko in achieving our mission to make education more accessible and to
               empower students and organizations with the tools they need to succeed.
             </p>
@@ -496,7 +496,7 @@ export default function Home() {
           </div>
 
 
-          <div className='flex flex-row gap-8 text-center items-center justify-center text-md font-semibold'>
+          <div className='flex flex-row gap-8 text-center items-center justify-center text-md font-semibold '>
             <div className='flex flex-row items-center justify-between w-full lg:h-auto rounded-md hover:-translate-y-2 transition-all p-10 lg:p-10'>
 
               <div className='w-1/2 text-left flex flex-col gap-8'>

@@ -261,7 +261,7 @@ export default function ScholarDashboard() {
           )}
 
           {currentUser?.status === 'Verified' && (
-            <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 m-6 my-8 rounded-md" role="alert">
+            <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 my-8 rounded-md" role="alert">
               <p className="font-bold">Welcome Back!</p>
               <p>Your account is fully verified. Enjoy all the features available to you.</p>
             </div>

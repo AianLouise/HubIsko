@@ -88,8 +88,8 @@ export default function StudentInfo() {
             <div className="flex flex-col items-center justify-center mt-20 lg:mt-40">
               <span className="text-2xl font-medium">Your account isn't verified yet.</span>
               <span className="text-slate-600">Complete your profile first to gain access to your student info.</span>
-              <Link to={'/complete-profile'}>
-                <button className="mt-10 bg-blue-600 rounded-md px-12 py-2 text-white hover:bg-blue-800 transition ease-in-out">Complete Profile Now</button>
+              <Link to={'/verify-profile'}>
+                <button className="mt-10 bg-blue-600 rounded-md px-12 py-2 text-white hover:bg-blue-800 transition ease-in-out">Verify Profile Now</button>
               </Link>
             </div>
           )}

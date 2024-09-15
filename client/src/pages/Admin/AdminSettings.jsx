@@ -234,7 +234,7 @@ export default function AdminSettings() {
                             </table>
                         </div>
 
-                        <div className="flex justify-between mt-4">
+                        <div className="flex justify-between mt-4 mb-20">
                             <button
                                 onClick={handlePreviousPage}
                                 disabled={currentPage === 1}

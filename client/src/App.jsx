@@ -44,6 +44,7 @@ import AnnouncementView from "./pages/AnnouncementView";
 // Admin Routes
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import AdminForums from "./pages/Admin/AdminForums";
+import AdminForumsNew from "./pages/Admin/AdminForumsNew";
 import AdminForumDetail from "./pages/Admin/AdminForumDetail";
 import AdminCreateForumPost from "./pages/Admin/AdminCreateForumPost";
 import AdminSettings from "./pages/Admin/AdminSettings";
@@ -155,6 +156,7 @@ export default function App() {
             <Route path="student-applications/:id" element={<StudentApplicationDetails />} />
 
             <Route path="admin-forums" element={<AdminForums />} />
+            <Route path="admin-forums/new" element={<AdminForumsNew />} />
             <Route path="admin-forums/post/:postId" element={<AdminForumDetail />} />
             <Route path="admin-create-forum-post" element={<AdminCreateForumPost />} />
 
