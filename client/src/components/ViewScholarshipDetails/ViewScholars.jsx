@@ -1,10 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function ViewScholars({ scholars }) {
+export default function ViewScholars({ scholars, numberOfScholarships, numberOfScholarshipsSlotFilled }) {
     return (
-        <div className="p-6 bg-white rounded-lg shadow-md space-y-4">
-            <h2 className="text-2xl font-bold mb-4 text-blue-600">View Scholars</h2>
+        <div className="p-6 bg-white rounded-lg shadow-md space-y-4 relative h-screen">
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-blue-600">View Scholars</h2>
+                <div className="flex flex-col items-end text-gray-700">
+                    <div>
+                        <strong>Total Scholarships:</strong> {numberOfScholarships}
+                    </div>
+                    <div>
+                        <strong>Slots Filled:</strong> {numberOfScholarshipsSlotFilled}
+                    </div>
+                </div>
+            </div>
 
             <p className="text-gray-700">
                 Here is the list of scholars enrolled in the program.

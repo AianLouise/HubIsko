@@ -644,3 +644,23 @@ export const hasUserApplied = async (req, res) => {
     return res.status(500).json({ error: 'Error checking application status' });
   }
 };
+
+export const publishScholarshipProgram = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+      const program = await Scholarship.findById(id);
+      if (!program) {
+          return res.status(404).json({ message: 'Scholarship Program not found' });
+      }
+
+      // Set the program status to 'Published'
+      program.status = 'Published';
+      await program.save();
+
+      res.status(200).json({ message: 'Scholarship Program successfully published', program });
+  } catch (error) {
+      console.error('Error publishing scholarship program:', error);
+      res.status(500).json({ message: 'Server error while publishing program' });
+  }
+};

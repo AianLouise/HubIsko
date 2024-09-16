@@ -206,6 +206,10 @@ export default function Validation() {
         }
     };
 
+    const pendingValidations = validations.filter(validation => validation.status === 'Pending');
+    const ongoingValidations = validations.filter(validation => validation.status === 'Ongoing');
+    const doneValidations = validations.filter(validation => validation.status === 'Done');
+
     return (
         <>
             <div className="p-6 bg-white rounded-lg shadow-md ">
@@ -225,9 +229,10 @@ export default function Validation() {
                 <h3 className='text-xl font-bold mt-4'>Pending Document Validation</h3>
 
                 <div className="p-6">
-                    {validations
-                        .filter(validation => validation.status === 'Pending')
-                        .map((validation) => (
+                    {pendingValidations.length === 0 ? (
+                        <p className='text-gray-600 text-center'>No pending document validations at the moment.</p>
+                    ) : (
+                        pendingValidations.map((validation) => (
                             <div key={validation._id} className='bg-white border-l-4 border-blue-500 text-black-700 p-4 rounded-md shadow relative mb-6'>
                                 <div className='flex justify-between items-center mb-4'>
                                     <h3 className='text-xl font-bold'>{validation.validationTitle}</h3>
@@ -272,15 +277,17 @@ export default function Validation() {
                                     </div>
                                 </div>
                             </div>
-                        ))}
+                        ))
+                    )}
                 </div>
 
+                {/* Ongoing Document Validation Content */}
                 <h3 className='text-xl font-bold mt-4'>Ongoing Document Validation</h3>
-
                 <div className="p-6">
-                    {validations
-                        .filter(validation => validation.status === 'Ongoing')
-                        .map((validation) => (
+                    {ongoingValidations.length === 0 ? (
+                        <p className='text-gray-600 text-center'>No ongoing document validations at the moment.</p>
+                    ) : (
+                        ongoingValidations.map((validation) => (
                             <div key={validation._id} className='bg-white border-l-4 border-blue-500 text-black-700 p-4 rounded-md shadow relative mb-6'>
                                 <div className='flex justify-between items-center mb-4'>
                                     <h3 className='text-xl font-bold'>{validation.validationTitle}</h3>
@@ -321,15 +328,17 @@ export default function Validation() {
                                     </div>
                                 </div>
                             </div>
-                        ))}
+                        ))
+                    )}
                 </div>
 
+                {/* Previous Document Validation Content */}
                 <h3 className='text-xl font-bold mt-4'>Previous Document Validation</h3>
-
                 <div className="p-6">
-                    {validations
-                        .filter(validation => validation.status === 'Done')
-                        .map((validation) => (
+                    {doneValidations.length === 0 ? (
+                        <p className='text-gray-600 text-center'>No previous document validations at the moment.</p>
+                    ) : (
+                        doneValidations.map((validation) => (
                             <div key={validation._id} className='bg-white border-l-4 border-blue-500 text-black-700 p-4 rounded-md shadow relative mb-6'>
                                 <div className='flex justify-between items-center mb-4'>
                                     <h3 className='text-xl font-bold'>{validation.validationTitle}</h3>
@@ -347,18 +356,7 @@ export default function Validation() {
                                 </ul>
                                 <div className="flex justify-between items-end mt-4">
                                     <div className="flex space-x-4">
-                                        {/* <button
-                                            className="bg-green-600 text-white py-2 px-4 rounded"
-                                            onClick={() => handlePostValidation(validation._id)}
-                                        >
-                                            Post Validation
-                                        </button>
-                                        <button
-                                            className="bg-yellow-600 text-white py-2 px-4 rounded"
-                                            onClick={() => handleEditValidation(validation._id)}
-                                        >
-                                            Edit
-                                        </button> */}
+                                        {/* No actions for previous validations */}
                                     </div>
                                     <div className='text-right'>
                                         <p className='text-gray-600'>Date Created: {new Date(validation.dateCreated).toLocaleDateString()}</p>
@@ -368,7 +366,8 @@ export default function Validation() {
                                     </div>
                                 </div>
                             </div>
-                        ))}
+                        ))
+                    )}
                 </div>
 
                 {isModalOpen && (

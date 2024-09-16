@@ -326,7 +326,7 @@ export default function Accounts() {
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-4 h-screen">
                         <div className="flex justify-between gap-4 mt-5">
                             <div className="flex gap-2 items-center">
                                 <div className="flex gap-2">
@@ -337,7 +337,7 @@ export default function Accounts() {
                                         Verify Account <span className="text-gray-600">({totalVerifyAccount})</span>
                                     </button>
                                     <button onClick={() => handleFilterClick('Pending')} className="px-4 py-2 rounded-md bg-white shadow border">
-                                        Pending <span className="text-yellow-500">({accounts.filter(account => account.status === 'Pending Verification').length})</span>
+                                        Pending Verification <span className="text-yellow-500">({accounts.filter(account => account.status === 'Pending Verification').length})</span>
                                     </button>
                                     <button onClick={() => handleFilterClick('Verified Students')} className="px-4 py-2 rounded-md bg-white shadow border">
                                         Verified Students <span className="text-green-600">({accounts.filter(account => account.role === 'applicant' && account.status === 'Verified').length})</span>

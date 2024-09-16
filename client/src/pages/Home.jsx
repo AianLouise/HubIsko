@@ -143,11 +143,11 @@ export default function Home() {
           </div>
         </div>
         <div className='px-4 max-w-6xl mx-auto'>
-          <div className='border shadow-2xl text-sm font-medium tracking-wide lg:tracking-normal lg:text-base rounded-md mb-40 w-full max-w-6xl transition-all hover:-translate-y-2 bg-white'>
-            <h1 className='text-center lg:text-left bg-blue-600 p-4 text-white font-bold text-xl lg:text-2xl rounded-t-md'>
+          <div className='border shadow-2xl rounded-md mb-10 lg:mb-40 w-full max-w-6xl transition-all hover:-translate-y-2 bg-white'>
+            <h1 className='text-center lg:text-left bg-blue-600 p-4 text-white font-bold text-lg lg:text-2xl rounded-t-md'>
               Our Goal
             </h1>
-            <p className='mb-4 text-slate-700 p-4 lg:px-8'>
+            <p className='mb-4 text-slate-700 p-4 lg:px-8 font-medium text-sm lg:text-base'>
               HubIsko is a comprehensive scholarship management system designed to streamline
               the process of finding, applying for, and managing scholarships. Whether you're
               a student seeking financial assistance or an organization looking to provide
@@ -155,14 +155,14 @@ export default function Home() {
               We aim to connect students with the resources they need to achieve their
               educational goals while helping organizations manage their scholarship programs efficiently.
             </p>
-            <p className='mb-4 text-slate-700 pb-4 px-4 lg:px-8'>
+            <p className='mb-4 text-slate-700 p-4 lg:px-8 font-medium text-sm lg:text-base'>
               With HubIsko's user-friendly interface, you can easily search for scholarships
               that match your academic interests and eligibility. Our system also allows
               scholarship providers to track applications, review submissions, and communicate
               with applicants seamlessly. We are committed to making the scholarship process
               more accessible, transparent, and effective for everyone involved.
             </p>
-            <p className='text-slate-700 pb-4 px-4 lg:px-8'>
+            <p className='text-slate-700 p-4 lg:px-8 font-medium text-sm lg:text-base'>
               Join HubIsko in achieving our mission to make education more accessible and to
               empower students and organizations with the tools they need to succeed.
             </p>
@@ -493,46 +493,48 @@ export default function Home() {
               </div>
             </div>
 
-          </div>
+            <div className='flex flex-row gap-8 text-center items-center justify-between lg:justify-center text-md font-semibold'>
+              <div className='flex flex-row items-center justify-between w-full rounded-md hover:-translate-y-2 transition-all p-10 lg:p-10'>
 
+                <div className='w-1/2 text-left flex flex-col gap-8'>
+                  {/* Title */}
+                  <div className='text-blue-600 text-md font-semibold'>
+                    STEP BY STEP PROCESS
+                  </div>
 
-          <div className='flex flex-row gap-8 text-center items-center justify-center text-md font-semibold '>
-            <div className='flex flex-row items-center justify-between w-full lg:h-auto rounded-md hover:-translate-y-2 transition-all p-10 lg:p-10'>
+                  {/* Main Heading */}
+                  <span className='hidden lg:block font-bold text-4xl'>
+                    The system will present you step-by-step stages when applying.
+                  </span>
 
-              <div className='w-1/2 text-left flex flex-col gap-8'>
-                {/* Title */}
-                <div className='text-blue-600 text-md font-semibold'>STEP BY STEP PROCESS</div>
+                  {/* Process Description */}
+                  <div className='hidden lg:flex flex-col text-lg text-slate-600 gap-1'>
+                    <span className=''>1. Sign up with your account details or register as a new user.</span>
+                    <span className=''>2. Fill in the scholarship application form with your credentials and required documents.</span>
+                    <span className=''>3. Review your application and submit it for approval.</span>
+                    <span className=''>4. Track the progress of your application through notifications and updates.</span>
+                  </div>
 
-                {/* Main Heading */}
-                <span className='hidden lg:block font-bold text-4xl'>
-                  The system will present you step-by-step stages when applying.
-                </span>
-
-                {/* Process Description */}
-                <div className='hidden lg:flex flex-col text-lg text-slate-600 gap-1'>
-                  <span className=''>1. Sign up with your account details or register as a new user.</span>
-                  <span className=''>2. Fill in the scholarship application form with your credentials and required documents.</span>
-                  <span className=''>3. Review your application and submit it for approval.</span>
-                  <span className=''>4. Track the progress of your application through notifications and updates.</span>
+                  {/* Additional Details (Optional) */}
+                  <div className='hidden lg:flex flex-col text-md text-slate-500 gap-2 mt-4'>
+                    <span className='font-semibold'>Tips for a successful application:</span>
+                    <ul className='list-disc ml-4'>
+                      <li>Ensure all your documents are up to date and clear.</li>
+                      <li>Double-check your eligibility for the scholarship before applying.</li>
+                      <li>Keep an eye on your email for important updates and communications.</li>
+                    </ul>
+                  </div>
                 </div>
 
-                {/* Additional Details (Optional) */}
-                <div className='hidden lg:flex flex-col text-md text-slate-500 gap-2 mt-4'>
-                  <span className='font-semibold'>Tips for a successful application:</span>
-                  <ul className='list-disc ml-4'>
-                    <li>Ensure all your documents are up to date and clear.</li>
-                    <li>Double-check your eligibility for the scholarship before applying.</li>
-                    <li>Keep an eye on your email for important updates and communications.</li>
-                  </ul>
+                {/* Image Section */}
+                <div className='flex w-1/2 items-center justify-center rounded-md ml-8'>
+                  <img src={HomeTeam} alt="Home Team" className='w-[350px] h-auto object-cover' />
                 </div>
-              </div>
-
-              {/* Image Section */}
-              <div className='flex w-1/2 items-center justify-center rounded-md ml-8'>
-                <img src={HomeTeam} alt="Home Team" className='w-[350px] h-auto object-cover' />
               </div>
             </div>
           </div>
+
+
 
           {/* APPLY FOR ROLE */}
           {!currentUser && (
@@ -549,11 +551,9 @@ export default function Home() {
                         Register as Student <FaAngleRight />
                       </Link>
 
-                      <div className='lg:hidden mt-6'>
-                        <button className='bg-blue-600 rounded-md text-white px-14 py-2 text-sm font-medium'>Register Now!</button>
+                      <div className='lg:block hidden rounded-md'>
+                        <MdEmail className='w-24 h-auto text-blue-600' />
                       </div>
-
-                      <MdEmail className='w-24 h-auto text-blue-600' />
                     </div>
                   </div>
                 </div>

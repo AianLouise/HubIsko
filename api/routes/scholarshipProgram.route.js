@@ -1,5 +1,5 @@
 import express from "express";
-import { addApprovedScholar, getApprovedScholarInfo, createScholarshipProgram, getAllApplicationsForProvider, getAllScholarshipPrograms, getApplicantDetails, getOrganizationName, getRequiredDocuments, getScholarshipApplications, getScholarshipProgramById, getScholarshipProgramsByProviderId, getScholarshipProviders, test, updateApplicationStatus, hasUserApplied } from '../controllers/scholarshipProgram.controller.js';
+import { addApprovedScholar, getApprovedScholarInfo, createScholarshipProgram, getAllApplicationsForProvider, getAllScholarshipPrograms, getApplicantDetails, getOrganizationName, getRequiredDocuments, getScholarshipApplications, getScholarshipProgramById, getScholarshipProgramsByProviderId, getScholarshipProviders, test, updateApplicationStatus, hasUserApplied, publishScholarshipProgram } from '../controllers/scholarshipProgram.controller.js';
 
 const router = express.Router();
 
@@ -18,5 +18,6 @@ router.get('/provider/:providerId/applications', getAllApplicationsForProvider);
 router.get("/:programId/required-documents", getRequiredDocuments);
 router.get('/:programId/approved-scholar-info', getApprovedScholarInfo);
 router.get('/:programId/has-applied/:userId', hasUserApplied);
+router.post('/scholarship-programs/:id/publish', publishScholarshipProgram);
 
 export default router;
