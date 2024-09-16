@@ -38,6 +38,21 @@ export default function Forums() {
     const [notification, setNotification] = useState('');
     const [notification2, setNotification2] = useState('');
 
+    useEffect(() => {
+        const fetchScholarship = async () => {
+            try {
+                const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${id}`);
+                const data = await response.json();
+                console.log('Fetched Scholarship:', data); // Add this line
+                setScholarship(data);
+            } catch (error) {
+                console.error('Error fetching scholarship:', error);
+            }
+        };
+
+        fetchScholarship();
+    }, [id]);
+
     const handleApplyClick = async () => {
         if (!isLoggedIn) {
             setNotification('You must be logged in to apply for scholarships.');
@@ -45,7 +60,10 @@ export default function Forums() {
             setNotification('Your account is currently under verification. You cannot apply for scholarships until your account is fully verified.');
         } else if (currentUser?.status === 'Verify Account') {
             setNotification('You need to verify your account before applying for scholarships. Please visit the verification page.');
-        } else {
+        } else if ( scholarship?.numberOfScholarships == scholarship?.approvedScholars ) {
+            setNotification('Applications are closed as the slots are full. Please check back later.');
+        }
+        else {
             try {
                 const response = await fetch(`/api/scholarshipProgram/${scholarship.id}/has-applied/${currentUser._id}`);
                 if (!response.ok) {
@@ -64,20 +82,12 @@ export default function Forums() {
         }
     };
 
-    useEffect(() => {
-        const fetchScholarship = async () => {
-            try {
-                const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${id}`);
-                const data = await response.json();
-                console.log('Fetched Scholarship:', data); // Add this line
-                setScholarship(data);
-            } catch (error) {
-                console.error('Error fetching scholarship:', error);
-            }
-        };
+    console.log('Number of Scholarships:', scholarship?.numberOfScholarships); // Add this line
+    console.log('Approved Scholars:', scholarship?.approvedScholars); // Add this line
 
-        fetchScholarship();
-    }, [id]);
+    if(scholarship?.numberOfScholarships === scholarship?.approvedScholars){
+        console.log('Slots are full');
+    }
 
     // const [organizationName, setOrganizationName] = useState('');
 

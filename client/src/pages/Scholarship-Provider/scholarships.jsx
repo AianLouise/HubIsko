@@ -28,7 +28,11 @@ export default function Scholarships() {
         try {
           const response = await fetch(`/api/scholarshipProgram/provider/${currentUser._id}`);
           const data = await response.json();
-          setScholarships(data);
+          if (Array.isArray(data)) {
+            setScholarships(data);
+          } else {
+            setScholarships([]);
+          }
           setLoading(false);
         } catch (error) {
           console.error('Error fetching scholarships:', error);
@@ -65,6 +69,7 @@ export default function Scholarships() {
   const filteredScholarships = scholarships
     .filter((scholarship) => {
       if (filter === 'All') return true;
+      if (filter === 'Ongoing') return scholarship.status === 'Ongoing';
       if (filter === 'Published') return scholarship.status === 'Published';
       if (filter === 'Approved') return scholarship.status === 'Approved';
       if (filter === 'Pending') return scholarship.status === 'Pending Approval';
@@ -83,8 +88,8 @@ export default function Scholarships() {
     : 0;
 
   // Calculate the number of pending verifications
-  const pendingVerifications = Array.isArray(scholarships)
-    ? scholarships.filter(scholarship => scholarship.status === 'Pending Approval').length
+  const ongoingPrograms = Array.isArray(scholarships)
+    ? scholarships.filter(scholarship => scholarship.status === 'Ongoing').length
     : 0;
 
   // Calculate the service rating (example: average rating from user feedback)
@@ -151,23 +156,23 @@ export default function Scholarships() {
             </div>
 
             <div className='flex flex-col gap-3 bg-white border shadow p-8 py-6 rounded-md'>
-              <div className='flex justify-between items-center'>
-                <h1 className='text-base font-medium'>Published Programs</h1>
-                <div className='bg-blue-200 px-3 py-2 rounded-md'>
-                  <MdOutlinePlayLesson className='text-2xl text-blue-600' />
+              <div className='flex justify-between items-center gap-1'>
+                <h1 className='text-base font-medium'>Ongoing Programs</h1>
+                <div className='bg-teal-200 px-3 py-2 rounded-md'>
+                  <MdOutlinePendingActions className='text-2xl text-teal-600' />
                 </div>
               </div>
-              <span className='text-4xl font-bold tracking-wide'>{publishedPrograms}</span>
+              <span className='text-4xl font-bold tracking-wide'>{ongoingPrograms}</span>
             </div>
 
             <div className='flex flex-col gap-3 bg-white border shadow p-8 py-6 rounded-md'>
               <div className='flex justify-between items-center'>
-                <h1 className='text-base font-medium'>Pending Verifications</h1>
-                <div className='bg-blue-200 px-3 py-2 rounded-md'>
-                  <MdOutlinePendingActions className='text-2xl text-blue-600' />
+                <h1 className='text-base font-medium'>Published Programs</h1>
+                <div className='bg-indigo-200 px-3 py-2 rounded-md'>
+                  <MdOutlinePlayLesson className='text-2xl text-indigo-600' />
                 </div>
               </div>
-              <span className='text-4xl font-bold tracking-wide'>{pendingVerifications}</span>
+              <span className='text-4xl font-bold tracking-wide'>{publishedPrograms}</span>
             </div>
 
             <div className='flex flex-col gap-3 bg-white border shadow p-8 py-6 rounded-md'>
@@ -197,8 +202,8 @@ export default function Scholarships() {
                 <p className="text-red-600 font-bold">{error}</p>
               </div>
             ) : !Array.isArray(scholarships) || scholarships.length === 0 ? (
-              <div className="flex justify-center items-center h-full">
-                <p className="text-gray-600 font-medium">No scholarships available at the moment.</p>
+              <div className="flex justify-center items-center h-full w-full">
+                <p className="text-gray-600 font-medium text-center">No scholarships available at the moment.</p>
               </div>
             ) : (
               <div className="overflow-x-auto border shadow rounded-md bg-white w-full mb-10 h-screen">
@@ -208,44 +213,52 @@ export default function Scholarships() {
                       className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'All' ? 'bg-slate-200' : ''}`}
                       onClick={() => handleFilterChange('All')}
                     >
-                      All <span className='text-blue-600'>({scholarships.length})</span>
+                      All <span className={`${filter === 'All' ? 'text-blue-600' : 'text-blue-600'}`}>({scholarships.length})</span>
                     </button>
 
                     <button
-                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Published' ? 'bg-slate-200' : ''}`}
+                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Ongoing' ? 'bg-teal-500 text-white' : ''}`}
+                      onClick={() => handleFilterChange('Ongoing')}
+                    >
+                      Ongoing <span className={`${filter === 'Ongoing' ? 'text-white' : 'text-teal-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Ongoing').length})</span>
+                    </button>
+
+                    <button
+                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Published' ? 'bg-indigo-500 text-white' : ''}`}
                       onClick={() => handleFilterChange('Published')}
                     >
-                      Published <span className='text-blue-600'>({scholarships.filter(scholarship => scholarship.status === 'Published').length})</span>
+                      Published <span className={`${filter === 'Published' ? 'text-white' : 'text-indigo-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Published').length})</span>
                     </button>
 
                     <button
-                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Approved' ? 'bg-slate-200' : ''}`}
+                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Approved' ? 'bg-blue-500 text-white' : ''}`}
                       onClick={() => handleFilterChange('Approved')}
                     >
-                      Approved <span className='text-green-600'>({scholarships.filter(scholarship => scholarship.status === 'Approved').length})</span>
+                      Approved <span className={`${filter === 'Approved' ? 'text-white' : 'text-blue-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Approved').length})</span>
                     </button>
 
                     <button
-                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Pending' ? 'bg-slate-200' : ''}`}
+                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Pending' ? 'bg-yellow-500 text-white' : ''}`}
                       onClick={() => handleFilterChange('Pending')}
                     >
-                      Pending Approval <span className='text-yellow-600'>({scholarships.filter(scholarship => scholarship.status === 'Pending Approval').length})</span>
+                      Pending Approval <span className={`${filter === 'Pending' ? 'text-white' : 'text-yellow-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Pending Approval').length})</span>
                     </button>
 
                     <button
-                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Completed' ? 'bg-slate-200' : ''}`}
+                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Completed' ? 'bg-purple-500 text-white' : ''}`}
                       onClick={() => handleFilterChange('Completed')}
                     >
-                      Completed <span className='text-purple-600'>({scholarships.filter(scholarship => scholarship.status === 'Completed').length})</span>
+                      Completed <span className={`${filter === 'Completed' ? 'text-white' : 'text-purple-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Completed').length})</span>
                     </button>
 
                     <button
-                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Rejected' ? 'bg-slate-200' : ''}`}
+                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Rejected' ? 'bg-red-500 text-white' : ''}`}
                       onClick={() => handleFilterChange('Rejected')}
                     >
-                      Rejected <span className='text-red-600'>({scholarships.filter(scholarship => scholarship.status === 'Rejected').length})</span>
+                      Rejected <span className={`${filter === 'Rejected' ? 'text-white' : 'text-red-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Rejected').length})</span>
                     </button>
                   </div>
+
                   <input
                     type="text"
                     placeholder='Search Scholarships'
@@ -295,16 +308,19 @@ export default function Scholarships() {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <span className={`text-base font-medium 
-                                ${scholarship.status === 'Pending Approval' ? 'bg-yellow-100 text-yellow-700 font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                ${scholarship.status === 'Published' ? 'bg-blue-100 text-blue-700 font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                ${scholarship.status === 'Approved' ? 'bg-green-100 text-green-700 font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                ${scholarship.status === 'Completed' ? 'bg-purple-100 text-purple-700 font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                ${scholarship.status === 'Rejected' ? 'bg-red-100 text-red-700 font-semibold text-sm px-4 py-2 rounded-md' : ''}`}>
+                                  ${scholarship.status === 'Pending Approval' ? 'bg-yellow-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                  ${scholarship.status === 'Approved' ? 'bg-blue-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                  ${scholarship.status === 'Published' ? 'bg-indigo-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                  ${scholarship.status === 'Ongoing' ? 'bg-teal-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                  ${scholarship.status === 'Rejected' ? 'bg-red-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                  ${scholarship.status === 'Archived' ? 'bg-gray-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                  ${scholarship.status === 'Cancelled' ? 'bg-orange-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                  ${scholarship.status === 'Completed' ? 'bg-purple-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''}`}>
                                 {scholarship.status}
                               </span>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <span className='text-slate-600'>{scholarship.numberOfScholarshipsSlotFilled}/{scholarship.numberOfScholarships}</span>
+                              <span className='text-slate-600'>{scholarship.approvedScholars}/{scholarship.numberOfScholarships}</span>
                             </td>
 
                             <td className="px-6 py-4 whitespace-nowrap">

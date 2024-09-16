@@ -121,6 +121,38 @@ export default function ViewScholarshipDetails() {
     const numberOfScholarships = scholarshipProgram?.numberOfScholarships || 0;
     const numberOfScholarshipsSlotFilled = scholarshipProgram?.numberOfScholarshipsSlotFilled || 0;
 
+    const [showOngoingMessage, setShowOngoingMessage] = useState(false);
+
+    useEffect(() => {
+        if (scholarshipProgram && scholarshipProgram.approvedScholars === scholarshipProgram.numberOfScholarships) {
+            // Display a message indicating that the slots are full
+            setShowShareMessage(false);
+            setShowOngoingMessage(true);
+        }
+    }, [scholarshipProgram]);
+
+    const updateScholarshipStatus = async (id, status) => {
+        try {
+            const response = await fetch(`/api/scholarshipProgram/update-status/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ status }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update scholarship status');
+            }
+
+            const updatedProgram = await response.json();
+            // Update the local state or handle the updated program as needed
+            console.log('Scholarship status updated:', updatedProgram);
+        } catch (error) {
+            console.error('Error updating scholarship status:', error);
+        }
+    };
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -137,68 +169,93 @@ export default function ViewScholarshipDetails() {
             <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''}`}>
                 <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} currentPath={`${currentUser.scholarshipProviderDetails.organizationName} / `} />
                 <div className="container mx-auto p-6">
-                    <div className="flex flex-col items-center mb-6">
-                        <img
-                            src={scholarshipProgram?.scholarshipImage || 'default-image-path.jpg'}
-                            alt="Scholarship Program"
-                            className="w-32 h-32 object-cover rounded-full mb-4 shadow-lg"
-                        />
-                        <h1 className="text-4xl font-bold text-center text-blue-600">{scholarshipProgram?.title}</h1>
-                    </div>
-
-                    {/* Congratulatory Message */}
-                    {scholarshipProgram?.status === 'Approved' && (
-                        <div className="bg-green-100 text-green-700 p-4 mb-6 rounded-md shadow-md">
-                            <h2 className="text-2xl font-bold">Congratulations!</h2>
-                            <p>Your scholarship program has been approved. You can now publish it to make it visible to students.</p>
-                            <button
-                                className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700"
-                                onClick={() => setShowPublishModal(true)}
-                            >
-                                Publish Program
-                            </button>
+                    <div className="container mx-auto p-6">
+                        <div className="flex flex-col items-center mb-6">
+                            <img
+                                src={scholarshipProgram?.scholarshipImage || 'default-image-path.jpg'}
+                                alt="Scholarship Program"
+                                className="w-32 h-32 object-cover rounded-full mb-4 shadow-lg"
+                            />
+                            <h1 className="text-4xl font-bold text-center text-blue-600">{scholarshipProgram?.title}</h1>
                         </div>
-                    )}
 
-                    {/* Publish Confirmation Modal */}
-                    {showPublishModal && (
-                        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-                            <div className="bg-white p-6 rounded-md shadow-md">
-                                <h3 className="text-xl font-bold mb-4">Confirm Publish</h3>
-                                <p>Are you sure you want to publish this scholarship program?</p>
-                                <div className="mt-6 flex justify-end space-x-4">
-                                    <button
-                                        className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
-                                        onClick={() => setShowPublishModal(false)}
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        className="bg-blue-600 text-white px-4 py-2 rounded-md"
-                                        onClick={handlePublish}
-                                    >
-                                        Confirm
-                                    </button>
+                        {/* Congratulatory Message */}
+                        {scholarshipProgram?.status === 'Approved' && (
+                            <div className="bg-blue-100 text-blue-700 p-4 mb-6 rounded-md shadow-md">
+                                <h2 className="text-2xl font-bold">Congratulations!</h2>
+                                <p>Your scholarship program has been approved. You can now publish it to make it visible to students.</p>
+                                <button
+                                    className="mt-4 bg-indigo-500 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-600"
+                                    onClick={() => setShowPublishModal(true)}
+                                >
+                                    Publish Program
+                                </button>
+                            </div>
+                        )}
+
+                        {/* Publish Confirmation Modal */}
+                        {showPublishModal && (
+                            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                                <div className="bg-white p-6 rounded-md shadow-md">
+                                    <h3 className="text-xl font-bold mb-4">Confirm Publish</h3>
+                                    <p>Are you sure you want to publish this scholarship program?</p>
+                                    <div className="mt-6 flex justify-end space-x-4">
+                                        <button
+                                            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
+                                            onClick={() => setShowPublishModal(false)}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            className="bg-indigo-500 text-white px-4 py-2 rounded-md"
+                                            onClick={handlePublish}
+                                        >
+                                            Confirm
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {/* Message to share on forums after publishing */}
-                    {showShareMessage && (
-                        <div className="bg-blue-100 text-blue-700 p-4 mt-6 rounded-md shadow-md">
-                            <h3 className="text-xl font-bold">Share Your Scholarship Program!</h3>
-                            <p>Congratulations, your scholarship program has been published successfully!</p>
-                            <p className="mt-2">Let others know about it by sharing it on the <Link to="/provider-forums" className="text-blue-600 underline">forums</Link>.</p>
-                            <p>You can also discuss your program and connect with potential applicants!</p>
-                            <button
-                                className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700"
-                                onClick={() => navigate('/provider-forums')}
-                            >
-                                Go to Forums
-                            </button>
-                        </div>
-                    )}
+                        {/* Message to share on forums after publishing */}
+                        {showShareMessage && (
+                            <div className="bg-indigo-100 text-indigo-700 p-4 mt-6 rounded-md shadow-md">
+                                <h3 className="text-xl font-bold">Share Your Scholarship Program!</h3>
+                                <p>Congratulations, your scholarship program has been published successfully!</p>
+                                <p className="mt-2">Let others know about it by sharing it on the <Link to="/provider-forums" className="text-indigo-600 underline">forums</Link>.</p>
+                                <p>You can also discuss your program and connect with potential applicants!</p>
+                                <button
+                                    className="mt-4 bg-indigo-500 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-600"
+                                    onClick={() => navigate('/provider-forums')}
+                                >
+                                    Go to Forums
+                                </button>
+                            </div>
+                        )}
+
+                        {/* Ongoing Message */}
+                        {showOngoingMessage && scholarshipProgram?.status === 'Published' && (
+                            <div className="bg-teal-100 text-teal-700 p-4 mb-6 rounded-md shadow-md">
+                                <h2 className="text-2xl font-bold">Slots are Filled!</h2>
+                                <p>All slots for this scholarship program have been filled. You can now start the program.</p>
+                                <button
+                                    className="mt-4 bg-teal-500 text-white px-4 py-2 rounded-md shadow hover:bg-teal-600"
+                                    onClick={() => updateScholarshipStatus(scholarshipProgram.id, 'Ongoing')}
+                                >
+                                    Start Program
+                                </button>
+                            </div>
+                        )}
+
+                        {/* Ongoing Status Message */}
+                        {scholarshipProgram?.status === 'Ongoing' && (
+                            <div className="bg-teal-100 text-teal-700 p-4 mb-6 rounded-md shadow-md">
+                                <h2 className="text-xl font-bold">Program is Ongoing!</h2>
+                                <p>The scholarship program is currently ongoing. Stay tuned for updates and announcements.</p>
+                            </div>
+                        )}
+                    </div>
+
 
                     {/* Tabs for different sections */}
                     <div className="tabs flex justify-center border-b mb-6">
@@ -244,6 +301,7 @@ export default function ViewScholarshipDetails() {
                         {activeTab === 'scholars' && scholarshipProgram?.status !== 'Pending Approval' && (
                             <ViewScholars
                                 scholars={scholars}
+                                approvedScholars={scholars.length}
                                 numberOfScholarships={numberOfScholarships}
                                 numberOfScholarshipsSlotFilled={numberOfScholarshipsSlotFilled}
                             />
