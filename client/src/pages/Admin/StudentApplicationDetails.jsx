@@ -104,10 +104,10 @@ export default function StudentApplicationDetails() {
     if (!student) return <p>No student data available</p>;
 
     return (
-        <div className="flex flex-col min-h-screen font-medium text-slate-700">
+        <div className="flex flex-col min-h-screen  text-slate-700">
             <main className="flex-grow bg-[#f8f8fb] pb-24">
-                <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex mt-16'>
-                    <div className="flex gap-2 items-center">
+                <div className='max-w-8xl mx-auto px-24 flex-col flex mt-16'>
+                    <div className="flex gap-2 items-center font-medium">
                         <Link to={'/student-applications'} className="border shadow px-6 py-2 bg-white rounded-md hover:bg-slate-200">
                             <span>Student Applications</span>
                         </Link>
@@ -117,153 +117,162 @@ export default function StudentApplicationDetails() {
                         </div>
                     </div>
 
-                    <div className=" bg-white p-8 rounded-md shadow-md w-full">
-                        <div className="text-lg font-bold bg-slate-200 border-2 px-4 py-2 rounded-md">Student Details</div>
+                    <div className="flex flex-col gap-10 p-8 w-full">
 
-                        <div className="grid grid-cols-3 gap-8 my-4 border-b pb-4">
+                        <div className="flex flex-col bg-white border p-4 py-6 rounded-md shadow">
+                        <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Student Details</div>
+                        <div className="grid grid-cols-4 gap-5 my-4 py-4 px-8">
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">First Name</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.firstName}</span>
+                                <label className="block text-sm  text-slate-400">First Name</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.firstName}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Middle Name</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.middleName}</span>
+                                <label className="block text-sm  text-slate-400">Middle Name</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.middleName}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Last Name</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.lastName}</span>
+                                <label className="block text-sm  text-slate-400">Last Name</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.lastName}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Name Extension</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.nameExtension}</span>
+                                <label className="block text-sm  text-slate-400">Name Extension</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.nameExtension}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Birthdate</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.birthdate}</span>
+                                <label className="block text-sm  text-slate-400">Birthdate</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.birthdate}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Gender</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.gender}</span>
+                                <label className="block text-sm  text-slate-400">Gender</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.gender}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Blood Type</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.bloodType}</span>
+                                <label className="block text-sm  text-slate-400">Blood Type</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.bloodType}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Civil Status</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.civilStatus}</span>
+                                <label className="block text-sm  text-slate-400">Civil Status</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.civilStatus}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Maiden Name</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.maidenName}</span>
+                                <label className="block text-sm  text-slate-400">Maiden Name</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.maidenName}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Spouse Name</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.spouseName}</span>
+                                <label className="block text-sm  text-slate-400">Spouse Name</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.spouseName}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Spouse Occupation</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.spouseOccupation}</span>
+                                <label className="block text-sm  text-slate-400">Spouse Occupation</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.spouseOccupation}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Religion</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.religion}</span>
+                                <label className="block text-sm  text-slate-400">Religion</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.religion}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Height</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.height}</span>
+                                <label className="block text-sm  text-slate-400">Height</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.height}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Weight</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.weight}</span>
+                                <label className="block text-sm  text-slate-400">Weight</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.weight}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Birthplace</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.birthplace}</span>
+                                <label className="block text-sm  text-slate-400">Birthplace</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.birthplace}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Contact Number</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.contactNumber}</span>
+                                <label className="block text-sm  text-slate-400">Contact Number</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.contactNumber}</span>
                             </div>
                         </div>
-
-                        <div className="text-lg font-bold bg-slate-200 border-2 px-4 py-2 rounded-md">Address</div>
-                        <div className="grid grid-cols-3 gap-8 my-4 border-b pb-4">
-                            <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Region</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.address?.region}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Province</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.address?.province}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm font-medium text-slate-400">City</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.address?.city}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Barangay</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.address?.barangay}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Address Details</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.address?.addressDetails}</span>
-                            </div>
                         </div>
 
-                        <div className="text-lg font-bold bg-slate-200 border-2 px-4 py-2 rounded-md">Education</div>
-                        <div className="grid grid-cols-3 gap-8 my-4 border-b pb-4">
+
+                        <div className="flex flex-col bg-white border p-4 py-6 rounded-md shadow">
+                        <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Address</div>
+                        <div className="grid grid-cols-3 gap-8 my-4 py-4 px-8">
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">College Course</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.college.course}</span>
+                                <label className="block text-sm  text-slate-400">Region</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.address?.region}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">College School</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.college.school}</span>
+                                <label className="block text-sm  text-slate-400">Province</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.address?.province}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Elementary Award</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.elementary.award}</span>
+                                <label className="block text-sm  text-slate-400">City</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.address?.city}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Elementary School</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.elementary.school}</span>
+                                <label className="block text-sm  text-slate-400">Barangay</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.address?.barangay}</span>
                             </div>
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Elementary Year Graduated</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.elementary.yearGraduated}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Junior High School Award</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.juniorHighSchool.award}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Junior High School School</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.juniorHighSchool.school}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Junior High School Year Graduated</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.juniorHighSchool.yearGraduated}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Senior High School Award</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.seniorHighSchool.award}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Senior High School School</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.seniorHighSchool.school}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Senior High School Year Graduated</label>
-                                <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.seniorHighSchool.yearGraduated}</span>
+                                <label className="block text-sm  text-slate-400">Address Details</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.address?.addressDetails}</span>
                             </div>
                         </div>
+                        </div>
 
-                        <div className="text-lg font-bold bg-slate-200 border-2 px-4 py-2 rounded-md">Documents</div>
-                        <div className="grid grid-cols-3 gap-8 my-4 border-b pb-4">
+                        
+                        <div className="flex flex-col bg-white border p-4 py-6 rounded-md shadow">
+                        <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Education</div>
+                        <div className="grid grid-cols-3 gap-8 my-4 py-4 px-8">
                             <div className="">
-                                <label className="block text-sm font-medium text-slate-400">Student ID File</label>
-                                <a href={student.applicantDetails.studentIdFile} target="_blank" rel="noopener noreferrer" className="mt-1 block px-3 py-2 border border-gray-300 rounded-md text-blue-600">View Document</a>
+                                <label className="block text-sm  text-slate-400">College Course</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.college.course}</span>
+                            </div>
+                            <div className="">
+                                <label className="block text-sm  text-slate-400">College School</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.college.school}</span>
+                            </div>
+                            <div className="">
+                                <label className="block text-sm  text-slate-400">Elementary Award</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.elementary.award}</span>
+                            </div>
+                            <div className="">
+                                <label className="block text-sm  text-slate-400">Elementary School</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.elementary.school}</span>
+                            </div>
+                            <div className="">
+                                <label className="block text-sm  text-slate-400">Elementary Year Graduated</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.elementary.yearGraduated}</span>
+                            </div>
+                            <div className="">
+                                <label className="block text-sm  text-slate-400">Junior High School Award</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.juniorHighSchool.award}</span>
+                            </div>
+                            <div className="">
+                                <label className="block text-sm  text-slate-400">Junior High School School</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.juniorHighSchool.school}</span>
+                            </div>
+                            <div className="">
+                                <label className="block text-sm  text-slate-400">Junior High School Year Graduated</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.juniorHighSchool.yearGraduated}</span>
+                            </div>
+                            <div className="">
+                                <label className="block text-sm  text-slate-400">Senior High School Award</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.seniorHighSchool.award}</span>
+                            </div>
+                            <div className="">
+                                <label className="block text-sm  text-slate-400">Senior High School School</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.seniorHighSchool.school}</span>
+                            </div>
+                            <div className="">
+                                <label className="block text-sm  text-slate-400">Senior High School Year Graduated</label>
+                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.seniorHighSchool.yearGraduated}</span>
+                            </div>
+                        </div>
+                        </div>
+
+                        <div className="flex flex-col bg-white border p-4 py-6 rounded-md shadow">
+                        <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Documents</div>
+                        <div className="grid grid-cols-3 gap-8 my-4 py-4 px-8">
+                            <div className="">
+                                <label className="block text-sm  text-slate-400">Student ID File</label>
+                                <a href={student.applicantDetails.studentIdFile} target="_blank" rel="noopener noreferrer" className="mt-1 block px-3 font-medium bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600">View Document</a>
                             </div>
                         </div>
 
@@ -300,6 +309,7 @@ export default function StudentApplicationDetails() {
                                 </>
                             )}
                         </div>
+                    </div>
                     </div>
                 </div>
             </main>

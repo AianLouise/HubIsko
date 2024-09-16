@@ -108,7 +108,7 @@ export default function ScholarshipsProviderDetails() {
         <div className="flex flex-col min-h-screen font-medium text-slate-700">
 
             <main className="flex-grow bg-[#f8f8fb] pb-24">
-                <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex mt-16'>
+                <div className='max-w-8xl mx-auto px-24 flex-col flex mt-16'>
                     <div className="flex gap-2 items-center">
                         <Link to={'/accounts'} className="border shadow px-6 py-2 bg-white rounded-md hover:bg-slate-200">
                             <span>Scholarships</span>
@@ -119,10 +119,12 @@ export default function ScholarshipsProviderDetails() {
                         </div>
                     </div>
 
-                    <div className=" bg-white p-8 rounded-md shadow-md w-full">
-                        <div className="text-lg font-bold bg-slate-200 border-2 px-4 py-2 rounded-md">Scholarship Provider Details</div>
+                    <div className="flex flex-col gap-10 p-8 w-full">
 
-                        <div className="grid grid-cols-3 gap-8 my-4 border-b pb-4">
+                    <div className="flex flex-col bg-white border p-4 py-6 rounded-md shadow">
+                        <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Scholarship Provider Details</div>
+
+                        <div className="grid grid-cols-3 gap-8 my-4 p-4">
                             <div className="">
                                 <label className="block text-sm font-medium text-slate-400">Organization Name</label>
                                 <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.scholarshipProviderDetails.organizationName}</span>
@@ -172,10 +174,11 @@ export default function ScholarshipsProviderDetails() {
                                 <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.scholarshipProviderDetails.website}</span>
                             </div>
                         </div>
+                        </div>
 
-                        <div className="text-lg font-bold bg-slate-200 border-2 px-4 py-2 rounded-md">Contact Information</div>
-
-                        <div className="grid grid-cols-3 gap-8 my-4 border-b pb-4">
+                    <div className="flex flex-col bg-white border p-4 py-6 rounded-md shadow">
+                        <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Contact Information</div>
+                        <div className="grid grid-cols-3 gap-8 p-4">
                             <div className="">
                                 <label className="block text-sm font-medium text-slate-400">Email Address</label>
                                 <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.scholarshipProviderDetails.email}</span>
@@ -189,70 +192,96 @@ export default function ScholarshipsProviderDetails() {
                                 <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.scholarshipProviderDetails.contactPersonNumber}</span>
                             </div>
                         </div>
+                    </div>
 
-                        <div className="text-lg font-bold bg-slate-200 border-2 px-4 py-2 rounded-md">Documents</div>
-                        <div className="grid grid-cols-3 gap-8 my-4 border-b pb-4">
-                                                                               <div className="">
-                                                        <label className="block text-sm font-medium text-slate-400">Registration Certificate</label>
-                                                        {provider.scholarshipProviderDetails.documents.registrationCertificate ? (
-                                                            <img
-                                                                src={provider.scholarshipProviderDetails.documents.registrationCertificate}
-                                                                alt="Registration Certificate"
-                                                                className="mt-1 block px-3 py-2 border border-gray-300 rounded-md"
-                                                            />
-                                                        ) : (
-                                                            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
-                                                        )}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className="block text-sm font-medium text-slate-400">TIN</label>
-                                                        {provider.scholarshipProviderDetails.documents.tin ? (
-                                                            <img
-                                                                src={provider.scholarshipProviderDetails.documents.tin}
-                                                                alt="TIN"
-                                                                className="mt-1 block px-3 py-2 border border-gray-300 rounded-md"
-                                                            />
-                                                        ) : (
-                                                            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
-                                                        )}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className="block text-sm font-medium text-slate-400">Proof of Address</label>
-                                                        {provider.scholarshipProviderDetails.documents.proofOfAddress ? (
-                                                            <img
-                                                                src={provider.scholarshipProviderDetails.documents.proofOfAddress}
-                                                                alt="Proof of Address"
-                                                                className="mt-1 block px-3 py-2 border border-gray-300 rounded-md"
-                                                            />
-                                                        ) : (
-                                                            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
-                                                        )}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className="block text-sm font-medium text-slate-400">Authorization Letter</label>
-                                                        {provider.scholarshipProviderDetails.documents.authorizationLetter ? (
-                                                            <img
-                                                                src={provider.scholarshipProviderDetails.documents.authorizationLetter}
-                                                                alt="Authorization Letter"
-                                                                className="mt-1 block px-3 py-2 border border-gray-300 rounded-md"
-                                                            />
-                                                        ) : (
-                                                            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
-                                                        )}
-                                                    </div>
-                                                    <div className="">
-                                                        <label className="block text-sm font-medium text-slate-400">ID Proof of Contact Person</label>
-                                                        {provider.scholarshipProviderDetails.documents.idProofContactPerson ? (
-                                                            <img
-                                                                src={provider.scholarshipProviderDetails.documents.idProofContactPerson}
-                                                                alt="ID Proof of Contact Person"
-                                                                className="mt-1 block px-3 py-2 border border-gray-300 rounded-md"
-                                                            />
-                                                        ) : (
-                                                            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
-                                                        )}
-                                                    </div>
-                        </div>
+                    <div className="flex flex-col bg-white border p-4 py-6 rounded-md shadow">
+                        <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Documents</div>
+                        <div className="grid grid-cols-3 gap-8 p-4">
+  <div className="">
+    <label className="block text-sm font-medium text-slate-400">Registration Certificate</label>
+    <div className="border p-2 border-gray-300 rounded-md">
+      {provider.scholarshipProviderDetails.documents.registrationCertificate ? (
+        <div className="flex items-center justify-center overflow-hidden h-[600px]">
+          <img
+            src={provider.scholarshipProviderDetails.documents.registrationCertificate}
+            alt="Registration Certificate"
+            className=""
+          />
+        </div>
+      ) : (
+        <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+      )}
+    </div>
+  </div>
+
+  <div className="">
+    <label className="block text-sm font-medium text-slate-400">TIN</label>
+    <div className="border p-2 border-gray-300 rounded-md">
+      {provider.scholarshipProviderDetails.documents.tin ? (
+        <div className="flex items-center justify-center overflow-hidden h-[600px]">
+          <img
+            src={provider.scholarshipProviderDetails.documents.tin}
+            alt="TIN"
+            className=""
+          />
+        </div>
+      ) : (
+        <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+      )}
+    </div>
+  </div>
+
+  <div className="">
+    <label className="block text-sm font-medium text-slate-400">Proof of Address</label>
+    <div className="border p-2 border-gray-300 rounded-md">
+      {provider.scholarshipProviderDetails.documents.proofOfAddress ? (
+        <div className="flex items-center justify-center overflow-hidden h-[600px]">
+          <img
+            src={provider.scholarshipProviderDetails.documents.proofOfAddress}
+            alt="Proof of Address"
+            className=""
+          />
+        </div>
+      ) : (
+        <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+      )}
+    </div>
+  </div>
+
+  <div className="">
+    <label className="block text-sm font-medium text-slate-400">Authorization Letter</label>
+    <div className="border p-2 border-gray-300 rounded-md">
+      {provider.scholarshipProviderDetails.documents.authorizationLetter ? (
+        <div className="flex items-center justify-center overflow-hidden h-[600px]">
+          <img
+            src={provider.scholarshipProviderDetails.documents.authorizationLetter}
+            alt="Authorization Letter"
+            className=""
+          />
+        </div>
+      ) : (
+        <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+      )}
+    </div>
+  </div>
+
+  <div className="">
+    <label className="block text-sm font-medium text-slate-400">ID Proof of Contact Person</label>
+    <div className="border p-2 border-gray-300 rounded-md">
+      {provider.scholarshipProviderDetails.documents.idProofContactPerson ? (
+        <div className="flex items-center justify-center overflow-hidden h-[600px]">
+          <img
+            src={provider.scholarshipProviderDetails.documents.idProofContactPerson}
+            alt="ID Proof of Contact Person"
+            className=""
+          />
+        </div>
+      ) : (
+        <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+      )}
+    </div>
+  </div>
+</div>
 
                         <div className="flex justify-end gap-4 mt-6">
                             {provider.status === 'Pending Verification' && (
@@ -287,6 +316,7 @@ export default function ScholarshipsProviderDetails() {
                                 </>
                             )}
                         </div>
+                    </div>
                     </div>
                 </div>
             </main>
