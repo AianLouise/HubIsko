@@ -137,7 +137,7 @@ export default function AdminSettings() {
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-4 mb-10">
                         <div className="border-t-2 mt-4">
                             <div className="flex items-center w-full justify-center">
                                 <span className="bg-[#f8f8fb] px-8 -translate-y-3 text-xl text-slate-500">Log History</span>

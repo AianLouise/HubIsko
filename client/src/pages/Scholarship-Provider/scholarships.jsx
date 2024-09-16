@@ -9,8 +9,6 @@ import { MdOutlinePlayLesson } from "react-icons/md";
 import { MdOutlinePendingActions } from "react-icons/md";
 import { FaRegThumbsUp } from "react-icons/fa";
 
-
-
 export default function Scholarships() {
   useEffect(() => {
     document.title = "Scholarship Program | HubIsko";
@@ -54,26 +52,39 @@ export default function Scholarships() {
   };
 
   const [filter, setFilter] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);
   };
 
-  const filteredScholarships = scholarships.filter((scholarship) => {
-    if (filter === 'All') return true;
-    if (filter === 'Completed') return scholarship.status === 'Completed';
-    if (filter === 'Pending') return scholarship.status === 'Pending Approval';
-    return false;
-  });
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
 
-    // Calculate the number of ongoing programs
-    const ongoingPrograms = Array.isArray(scholarships)
-    ? scholarships.filter(scholarship => scholarship.status === 'Ongoing').length
+  const filteredScholarships = scholarships
+    .filter((scholarship) => {
+      if (filter === 'All') return true;
+      if (filter === 'Published') return scholarship.status === 'Published';
+      if (filter === 'Approved') return scholarship.status === 'Approved';
+      if (filter === 'Pending') return scholarship.status === 'Pending Approval';
+      if (filter === 'Completed') return scholarship.status === 'Completed';
+      if (filter === 'Rejected') return scholarship.status === 'Rejected';
+      return false;
+    })
+    .filter((scholarship) => {
+      const title = scholarship.title.toLowerCase();
+      return title.includes(searchQuery.toLowerCase());
+    });
+
+  // Calculate the number of ongoing programs
+  const publishedPrograms = Array.isArray(scholarships)
+    ? scholarships.filter(scholarship => scholarship.status === 'Published').length
     : 0;
 
   // Calculate the number of pending verifications
   const pendingVerifications = Array.isArray(scholarships)
-    ? scholarships.filter(scholarship => scholarship.status === 'Pending Verification').length
+    ? scholarships.filter(scholarship => scholarship.status === 'Pending Approval').length
     : 0;
 
   // Calculate the service rating (example: average rating from user feedback)
@@ -87,6 +98,7 @@ export default function Scholarships() {
     }
     return description.substring(0, maxLength) + '...';
   };
+
 
   return (
     <div className={`flex flex-col min-h-screen`}>
@@ -140,12 +152,12 @@ export default function Scholarships() {
 
             <div className='flex flex-col gap-3 bg-white border shadow p-8 py-6 rounded-md'>
               <div className='flex justify-between items-center'>
-                <h1 className='text-base font-medium'>Ongoing Programs</h1>
+                <h1 className='text-base font-medium'>Published Programs</h1>
                 <div className='bg-blue-200 px-3 py-2 rounded-md'>
                   <MdOutlinePlayLesson className='text-2xl text-blue-600' />
                 </div>
               </div>
-              <span className='text-4xl font-bold tracking-wide'>{ongoingPrograms}</span>
+              <span className='text-4xl font-bold tracking-wide'>{publishedPrograms}</span>
             </div>
 
             <div className='flex flex-col gap-3 bg-white border shadow p-8 py-6 rounded-md'>
@@ -189,8 +201,8 @@ export default function Scholarships() {
                 <p className="text-gray-600 font-medium">No scholarships available at the moment.</p>
               </div>
             ) : (
-              <div className="overflow-x-auto border shadow rounded-md bg-white w-full mb-10">
-                <div className="flex justify-between p-6 border-b items-center">
+              <div className="overflow-x-auto border shadow rounded-md bg-white w-full mb-10 h-screen">
+                <div className="flex justify-between p-6 border-b items-center gap-2">
                   <div className='flex gap-2 font-medium text-sm'>
                     <button
                       className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'All' ? 'bg-slate-200' : ''}`}
@@ -200,90 +212,114 @@ export default function Scholarships() {
                     </button>
 
                     <button
-                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Completed' ? 'bg-slate-200' : ''}`}
-                      onClick={() => handleFilterChange('Completed')}
+                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Published' ? 'bg-slate-200' : ''}`}
+                      onClick={() => handleFilterChange('Published')}
                     >
-                      Completed <span className='text-green-600'>({scholarships.filter(scholarship => scholarship.status === 'Completed').length})</span>
+                      Published <span className='text-blue-600'>({scholarships.filter(scholarship => scholarship.status === 'Published').length})</span>
+                    </button>
+
+                    <button
+                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Approved' ? 'bg-slate-200' : ''}`}
+                      onClick={() => handleFilterChange('Approved')}
+                    >
+                      Approved <span className='text-green-600'>({scholarships.filter(scholarship => scholarship.status === 'Approved').length})</span>
                     </button>
 
                     <button
                       className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Pending' ? 'bg-slate-200' : ''}`}
                       onClick={() => handleFilterChange('Pending')}
                     >
-                      Pending <span className='text-yellow-600'>({scholarships.filter(scholarship => scholarship.status === 'Pending Approval').length})</span>
+                      Pending Approval <span className='text-yellow-600'>({scholarships.filter(scholarship => scholarship.status === 'Pending Approval').length})</span>
+                    </button>
+
+                    <button
+                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Completed' ? 'bg-slate-200' : ''}`}
+                      onClick={() => handleFilterChange('Completed')}
+                    >
+                      Completed <span className='text-purple-600'>({scholarships.filter(scholarship => scholarship.status === 'Completed').length})</span>
+                    </button>
+
+                    <button
+                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Rejected' ? 'bg-slate-200' : ''}`}
+                      onClick={() => handleFilterChange('Rejected')}
+                    >
+                      Rejected <span className='text-red-600'>({scholarships.filter(scholarship => scholarship.status === 'Rejected').length})</span>
                     </button>
                   </div>
                   <input
                     type="text"
                     placeholder='Search Scholarships'
                     className='p-2 border rounded-md'
+                    value={searchQuery}
+                    onChange={handleSearchChange}
                   />
                 </div>
 
-                <div className="max-h-[400px] overflow-y-auto">
-                  <table className="divide-y w-full divide-gray-200">
-                    <thead className="bg-slate-50 text-slate-700 border-b font-bold sticky top-0">
-                      <tr>
-                        <th scope="col" className="px-6 py-3 text-left text-xs uppercase tracking-wider">
-                          Title
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs uppercase tracking-wider">
-                          Status
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs uppercase tracking-wider">
-                          Amount
-                        </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs uppercase tracking-wider">
-                          Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {filteredScholarships.map((scholarship) => (
-                        <tr key={scholarship._id}>
-                          <td className="px-6 flex gap-4 items-center py-4 whitespace-nowrap">
-                            <div
-                              className='w-16 h-16 rounded-md'
-                              style={{
-                                backgroundImage: `url(${scholarship.bannerImage})`,
-                                backgroundSize: 'cover',
-                                backgroundPosition: 'center'
-                              }}
-                            ></div>
-
-                            <h1 className='text-base font-medium text-gray-800'>{scholarship.title}</h1>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`text-base font-medium ${scholarship.numberOfScholarshipsSlotFilled === scholarship.numberOfScholarships ? 'text-red-600' : ''} ${scholarship.status === 'Pending Approval' ? 'bg-yellow-100 text-[#ffb048] font-semibold text-sm px-4 py-2 rounded-md' : ''} ${scholarship.status === 'Active' ? 'bg-green-100 text-green-600 font-semibold text-sm px-4 py-2 rounded-md' : ''} ${scholarship.status === 'Closed' ? 'bg-gray-50 text-gray-500 font-semibold text-sm px-4 py-2 rounded-md' : ''} ${scholarship.status === 'Archived' ? 'bg-blue-50 text-blue-500 font-semibold text-sm px-4 py-2 rounded-md ' : ''} ${scholarship.status === 'Cancelled' ? 'bg-red-50 text-red-500 font-semibold text-sm px-4 py-2 rounded-md' : ''} ${scholarship.status === 'Completed' ? 'bg-purple-50 text-purple-500 font-semibold text-sm px-4 py-2 rounded-md' : ''}`}>
-                              {scholarship.status === 'Pending Approval' ? 'Pending Approval' : `${scholarship.numberOfScholarshipsSlotFilled}/${scholarship.numberOfScholarships}`}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className='text-slate-600'>{scholarship.amount}</span>
-                          </td>
-
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <Link to={`/view-scholarships/${scholarship._id}`} className='text-blue-600 font-bold border text-sm hover:bg-slate-200 px-4 py-1 rounded-md'>
-                              View Details
-                            </Link>
-                          </td>
+                <div className="">
+                  {filteredScholarships.length === 0 ? (
+                    <div className="flex justify-center items-center h-full py-4">
+                      <p className="text-gray-600 font-medium">No scholarships available for the selected filter.</p>
+                    </div>
+                  ) : (
+                    <table className="divide-y w-full divide-gray-200">
+                      <thead className="bg-slate-50 text-slate-700 border-b font-bold sticky top-0">
+                        <tr>
+                          <th scope="col" className="px-6 py-3 text-left text-xs uppercase tracking-wider">
+                            Title
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs uppercase tracking-wider">
+                            Status
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs uppercase tracking-wider">
+                            Slots
+                          </th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs uppercase tracking-wider">
+                            Actions
+                          </th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {filteredScholarships.map((scholarship) => (
+                          <tr key={scholarship._id}>
+                            <td className="px-6 flex gap-4 items-center py-4 whitespace-nowrap">
+                              <div
+                                className='w-16 h-16 rounded-md'
+                                style={{
+                                  backgroundImage: `url(${scholarship.bannerImage})`,
+                                  backgroundSize: 'cover',
+                                  backgroundPosition: 'center'
+                                }}
+                              ></div>
+
+                              <h1 className='text-base font-medium text-gray-800 break-words'>{scholarship.title}</h1>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <span className={`text-base font-medium 
+                                ${scholarship.status === 'Pending Approval' ? 'bg-yellow-100 text-yellow-700 font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                ${scholarship.status === 'Published' ? 'bg-blue-100 text-blue-700 font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                ${scholarship.status === 'Approved' ? 'bg-green-100 text-green-700 font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                ${scholarship.status === 'Completed' ? 'bg-purple-100 text-purple-700 font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                ${scholarship.status === 'Rejected' ? 'bg-red-100 text-red-700 font-semibold text-sm px-4 py-2 rounded-md' : ''}`}>
+                                {scholarship.status}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <span className='text-slate-600'>{scholarship.numberOfScholarshipsSlotFilled}/{scholarship.numberOfScholarships}</span>
+                            </td>
+
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <Link to={`/view-scholarships/${scholarship._id}`} className='text-blue-600 font-bold border text-sm hover:bg-slate-200 px-4 py-1 rounded-md'>
+                                View Details
+                              </Link>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
                 </div>
               </div>
             )}
-
-            <div className='flex flex-col bg-white border shadow rounded-md p-6 w-1/2'>
-              <h1 className='font-bold'>Performance graph</h1>
-
-              <div className='flex justify-center items-center my-4 w-full h-full border rounded-md'>
-                <span>Filler</span>
-              </div>
-
-            </div>
-
           </div>
         </div>
 

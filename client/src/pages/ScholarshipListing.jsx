@@ -90,9 +90,11 @@ export default function ScholarshipListing() {
     setSearchQuery(event.target.value);
   };
 
-  const filteredScholarships = scholarships.filter((scholarship) =>
-    scholarship.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredScholarships = scholarships
+    .filter((scholarship) => scholarship.status === 'Published')
+    .filter((scholarship) =>
+      scholarship.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
   if (loading) {
     return (
@@ -128,7 +130,6 @@ export default function ScholarshipListing() {
           </div>
         </div>
 
-
         <div className='flex flex-col gap-4 justify-center items-left px-10 lg:mx-auto lg:max-w-6xl lg:px-24 my-8'>
           <div className='flex gap-2 items-center justify-between'>
             <span className='text-xl font-bold text-slate-600'>Organizations</span>
@@ -162,12 +163,9 @@ export default function ScholarshipListing() {
                 </Link>
               ))}
           </div>
-
-
         </div>
 
         <div className='flex flex-col mx-auto max-w-6xl justify-center items-center px-10 lg:px-24'>
-
           <div className='flex flex-row w-full items-center justify-between gap-4'>
             <input
               type="text"
@@ -192,93 +190,90 @@ export default function ScholarshipListing() {
                 No scholarships found for the query "{searchQuery}"
               </div>
             ) : (
-              filteredScholarships
-                .filter((scholarship) => scholarship.status === 'Approved')
-                .map((scholarship) => (
-                  <div key={scholarship.id} className='border bg-white rounded-lg pt-4 px-4 shadow-sm gap-2 mb-10 hover:-translate-y-1 transition ease-in-out'>
-                    <div className='flex flex-row items-center justify-start px-5 mt-5'>
-                      <div className='lg:hidden flex-shrink-0'>
-                        <div className='rounded-full w-14 h-14 overflow-hidden border-2 border-blue-500'>
-                          <img
-                            src={scholarship.scholarshipImage}
-                            alt={scholarship.title}
-                            className='w-full h-full object-cover'
-                          />
-                        </div>
-                      </div>
-                      <div className='rounded-full w-14 h-14 lg:block hidden overflow-hidden border-2 border-blue-500 flex-shrink-0'>
+              filteredScholarships.map((scholarship) => (
+                <div key={scholarship.id} className='border bg-white rounded-lg pt-4 px-4 shadow-sm gap-2 mb-10 hover:-translate-y-1 transition ease-in-out'>
+                  <div className='flex flex-row items-center justify-start px-5 mt-5'>
+                    <div className='lg:hidden flex-shrink-0'>
+                      <div className='rounded-full w-14 h-14 overflow-hidden border-2 border-blue-500'>
                         <img
                           src={scholarship.scholarshipImage}
                           alt={scholarship.title}
                           className='w-full h-full object-cover'
                         />
                       </div>
-                      <div className='flex flex-col ml-6 flex-grow'>
-                        <h2 className='lg:text-xl font-semibold'>{scholarship.title}</h2>
-                        <p className='text-sm lg:text-base'>{truncateText(scholarship.organizationName, 50)}</p>
-                      </div>
                     </div>
-                    <div className='p-4 flex flex-col gap-2'>
-                      <div className='mt-4'>
-                        <div className='border-b-2'></div>
-                        <div className='-translate-y-4'>
-                          <div className='flex text-blue-600 text-left justify-center font-bold'>
-                            <div className='flex flex-row bg-white gap-2 px-2 items-center'>
-                              <FaHandHolding className='text-xl flex-shrink-0' />
-                              {scholarship.amount}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className='flex flex-col gap-4'>
-                        <div className='flex lg:flex-row lg:gap-4'>
-                          <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
-                            <div className='flex lg:gap-0 gap-2'>
-                              <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
-                              <p className='font-medium'>Info: </p>
-                            </div>
-                            <p className='text-sm lg:hidden'>{truncateText(scholarship.description, 50)}</p>
-                          </div>
-                          <p className='w-full text-sm hidden lg:block'>{truncateText(scholarship.description, 50)}</p>
-                        </div>
-                        <div className='flex lg:flex-row lg:gap-4'>
-                          <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
-                            <div className='flex lg:gap-0 gap-2'>
-                              <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
-                              <p className='font-medium'>Eligibility: </p>
-                            </div>
-                            <p className='text-sm lg:hidden'>{truncateText(scholarship.fieldOfStudy, 50)}</p>
-                            <p className='text-sm lg:hidden'>{truncateText(scholarship.otherEligibility, 50)}</p>
-                          </div>
-                          <p className='w-full text-sm hidden lg:block'>
-                            {truncateText(scholarship.fieldOfStudy, 50)}, {truncateText(scholarship.otherEligibility, 50)}
-                          </p>
-                        </div>
-                        <div className='flex lg:flex-row lg:gap-4'>
-                          <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
-                            <div className='flex lg:gap-0 gap-2'>
-                              <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
-                              <p className='font-medium'>Deadline: </p>
-                            </div>
-                            <p className='text-sm lg:hidden'>{formatDate(scholarship.endDate)}</p>
-                          </div>
-                          <p className='w-full text-sm hidden lg:block'>{formatDate(scholarship.endDate)}</p>
-                        </div>
-                      </div>
-                      <Link
-                        to={`/scholarship-details/${scholarship.id}`}
-                        key={scholarship._id}
-                        className='bg-blue-600 text-white p-2 flex justify-center items-center rounded-md my-4 text-sm lg:text-base font-medium hover:bg-blue-800 transition ease-in-out'
-                      >
-                        More Details for Application
-                      </Link>
+                    <div className='rounded-full w-14 h-14 lg:block hidden overflow-hidden border-2 border-blue-500 flex-shrink-0'>
+                      <img
+                        src={scholarship.scholarshipImage}
+                        alt={scholarship.title}
+                        className='w-full h-full object-cover'
+                      />
+                    </div>
+                    <div className='flex flex-col ml-6 flex-grow'>
+                      <h2 className='lg:text-xl font-semibold'>{scholarship.title}</h2>
+                      <p className='text-sm lg:text-base'>{truncateText(scholarship.organizationName, 50)}</p>
                     </div>
                   </div>
-                ))
+                  <div className='p-4 flex flex-col gap-2'>
+                    <div className='mt-4'>
+                      <div className='border-b-2'></div>
+                      <div className='-translate-y-4'>
+                        <div className='flex text-blue-600 text-left justify-center font-bold'>
+                          <div className='flex flex-row bg-white gap-2 px-2 items-center'>
+                            <FaHandHolding className='text-xl flex-shrink-0' />
+                            {scholarship.amount}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className='flex flex-col gap-4'>
+                      <div className='flex lg:flex-row lg:gap-4'>
+                        <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
+                          <div className='flex lg:gap-0 gap-2'>
+                            <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
+                            <p className='font-medium'>Info: </p>
+                          </div>
+                          <p className='text-sm lg:hidden'>{truncateText(scholarship.description, 50)}</p>
+                        </div>
+                        <p className='w-full text-sm hidden lg:block'>{truncateText(scholarship.description, 50)}</p>
+                      </div>
+                      <div className='flex lg:flex-row lg:gap-4'>
+                        <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
+                          <div className='flex lg:gap-0 gap-2'>
+                            <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
+                            <p className='font-medium'>Eligibility: </p>
+                          </div>
+                          <p className='text-sm lg:hidden'>{truncateText(scholarship.fieldOfStudy, 50)}</p>
+                          <p className='text-sm lg:hidden'>{truncateText(scholarship.otherEligibility, 50)}</p>
+                        </div>
+                        <p className='w-full text-sm hidden lg:block'>
+                          {truncateText(scholarship.fieldOfStudy, 50)}, {truncateText(scholarship.otherEligibility, 50)}
+                        </p>
+                      </div>
+                      <div className='flex lg:flex-row lg:gap-4'>
+                        <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
+                          <div className='flex lg:gap-0 gap-2'>
+                            <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
+                            <p className='font-medium'>Deadline: </p>
+                          </div>
+                          <p className='text-sm lg:hidden'>{formatDate(scholarship.endDate)}</p>
+                        </div>
+                        <p className='w-full text-sm hidden lg:block'>{formatDate(scholarship.endDate)}</p>
+                      </div>
+                    </div>
+                    <Link
+                      to={`/scholarship-details/${scholarship.id}`}
+                      key={scholarship._id}
+                      className='bg-blue-600 text-white p-2 flex justify-center items-center rounded-md my-4 text-sm lg:text-base font-medium hover:bg-blue-800 transition ease-in-out'
+                    >
+                      More Details for Application
+                    </Link>
+                  </div>
+                </div>
+              ))
             )}
           </div>
         </div>
-
       </main>
       <Footer />
     </div>
