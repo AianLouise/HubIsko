@@ -4,24 +4,24 @@ import { FaCheckCircle, FaTimesCircle, FaExclamationCircle } from 'react-icons/f
 export default function ProgamDetails( { scholarshipProgram } ) {
     return (
         <div className="p-6 bg-white rounded-lg shadow-md">
+            
             <div className="flex items-center mb-4">
-                <span className={`flex items-center px-3 py-1 rounded-full text-white font-semibold ${scholarshipProgram.status === 'Active' ? 'bg-green-500' :
-                    scholarshipProgram.status === 'Inactive' ? 'bg-red-500' :
-                        scholarshipProgram.status === 'Pending Approval' ? 'bg-yellow-500' :
-                            scholarshipProgram.status === 'Approved' ? 'bg-blue-500' :
-                                scholarshipProgram.status === 'Declined' ? 'bg-gray-500' :
-                                    scholarshipProgram.status === 'Closed' ? 'bg-purple-500' :
-                                        scholarshipProgram.status === 'Archived' ? 'bg-brown-500' :
-                                            scholarshipProgram.status === 'Cancelled' ? 'bg-orange-500' :
-                                                scholarshipProgram.status === 'Completed' ? 'bg-teal-500' :
-                                                    'bg-yellow-500'
-                    }`}>
-                    {scholarshipProgram.status === 'Active' && <FaCheckCircle className="mr-2" />}
-                    {scholarshipProgram.status === 'Inactive' && <FaTimesCircle className="mr-2" />}
+                <span className={`flex items-center px-3 py-1 rounded-full text-white font-semibold ${
+                    scholarshipProgram.status === 'Pending Approval' ? 'bg-yellow-500' :
+                    scholarshipProgram.status === 'Approved' ? 'bg-blue-500' :
+                    scholarshipProgram.status === 'Published' ? 'bg-indigo-500' :
+                    scholarshipProgram.status === 'Ongoing' ? 'bg-teal-500' :
+                    scholarshipProgram.status === 'Rejected' ? 'bg-red-500' :
+                    scholarshipProgram.status === 'Archived' ? 'bg-gray-500' :
+                    scholarshipProgram.status === 'Cancelled' ? 'bg-orange-500' :
+                    scholarshipProgram.status === 'Completed' ? 'bg-purple-500' :
+                    'bg-yellow-500'
+                }`}>
                     {scholarshipProgram.status === 'Pending Approval' && <FaExclamationCircle className="mr-2" />}
                     {scholarshipProgram.status === 'Approved' && <FaCheckCircle className="mr-2" />}
-                    {scholarshipProgram.status === 'Declined' && <FaTimesCircle className="mr-2" />}
-                    {scholarshipProgram.status === 'Closed' && <FaExclamationCircle className="mr-2" />}
+                    {scholarshipProgram.status === 'Published' && <FaCheckCircle className="mr-2" />}
+                    {scholarshipProgram.status === 'Ongoing' && <FaCheckCircle className="mr-2" />}
+                    {scholarshipProgram.status === 'Rejected' && <FaTimesCircle className="mr-2" />}
                     {scholarshipProgram.status === 'Archived' && <FaExclamationCircle className="mr-2" />}
                     {scholarshipProgram.status === 'Cancelled' && <FaTimesCircle className="mr-2" />}
                     {scholarshipProgram.status === 'Completed' && <FaCheckCircle className="mr-2" />}

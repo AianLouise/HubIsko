@@ -274,6 +274,7 @@ export const getScholarshipProgramsByProviderId = async (req, res) => {
       faqDescription: program.faqDescription,
       providerRequirements: program.providerRequirements,
       status: program.status,
+      approvedScholars: program.approvedScholars.length, // Assuming approvedScholars is an array
     }));
 
     res.status(200).json(formattedPrograms);
@@ -370,6 +371,7 @@ export const getScholarshipProgramById = async (req, res) => {
       fieldOfStudy: scholarshipProgram.fieldOfStudy,
       numberOfScholarships: scholarshipProgram.numberOfScholarships,
       numberOfScholarshipsSlotFilled: scholarshipProgram.numberOfScholarshipsSlotFilled,
+      approvedScholars: scholarshipProgram.approvedScholars.length, // Assuming approvedScholars is an array
       amount: scholarshipProgram.amount,
       applicationStart: scholarshipProgram.applicationStart,
       applicationDeadline: scholarshipProgram.applicationDeadline,
@@ -662,5 +664,27 @@ export const publishScholarshipProgram = async (req, res) => {
   } catch (error) {
       console.error('Error publishing scholarship program:', error);
       res.status(500).json({ message: 'Server error while publishing program' });
+  }
+};
+
+export const updateScholarshipStatus = async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  try {
+      const updatedProgram = await Scholarship.findByIdAndUpdate(
+          id,
+          { status },
+          { new: true }
+      );
+
+      if (!updatedProgram) {
+          return res.status(404).json({ message: 'Scholarship program not found' });
+      }
+
+      res.status(200).json(updatedProgram);
+  } catch (error) {
+      console.error('Error updating scholarship status:', error);
+      res.status(500).json({ message: 'Internal server error' });
   }
 };

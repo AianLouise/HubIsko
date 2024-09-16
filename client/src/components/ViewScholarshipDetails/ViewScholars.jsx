@@ -1,17 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function ViewScholars({ scholars, numberOfScholarships, numberOfScholarshipsSlotFilled }) {
+export default function ViewScholars({ scholars, numberOfScholarships, numberOfScholarshipsSlotFilled, approvedScholars }) {
     return (
         <div className="p-6 bg-white rounded-lg shadow-md space-y-4 relative h-screen">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold text-blue-600">View Scholars</h2>
                 <div className="flex flex-col items-end text-gray-700">
                     <div>
-                        <strong>Total Scholarships:</strong> {numberOfScholarships}
+                        <strong>Slots Filled:</strong> {approvedScholars}
                     </div>
                     <div>
-                        <strong>Slots Filled:</strong> {numberOfScholarshipsSlotFilled}
+                        <strong>Total Scholarship Slot:</strong> {numberOfScholarships}
                     </div>
                 </div>
             </div>
