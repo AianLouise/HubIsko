@@ -12,7 +12,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { format } from 'date-fns';
 
 export default function Profile() {
-  
+
   const currentUser = useSelector((state) => state.user.currentUser);
 
   const [ShowModal, setShowModal] = useState(false);
@@ -241,7 +241,9 @@ export default function Profile() {
 
               <div className='grid grid-cols-1 sm:grid-rows-1 gap-8 pb-12'>
                 {posts.length === 0 ? (
-                  <p>No posts available.</p>
+                  <div className='flex flex-col items-center justify-center gap-4 h-20'>
+                    <p>No posts available.</p>
+                  </div>
                 ) : (
                   filteredPosts
                     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort posts by creation date in descending order

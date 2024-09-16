@@ -37,31 +37,47 @@ export default function Forums() {
     const isLoggedIn = Boolean(currentUser);
     const [notification, setNotification] = useState('');
     const [notification2, setNotification2] = useState('');
+    const [userDetails, setUserDetails] = useState(null);
+
+    const fetchUserDetails = async () => {
+        try {
+            const response = await fetch(`/api/auth/user/${currentUser._id}`);
+            const data = await response.json();
+            console.log('Fetched User Details:', data);
+            setUserDetails(data);
+        } catch (error) {
+            console.error('Error fetching user details:', error);
+        }
+    };
+
+    const fetchScholarship = async () => {
+        try {
+            const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${id}`);
+            const data = await response.json();
+            console.log('Fetched Scholarship:', data); // Add this line
+            setScholarship(data);
+        } catch (error) {
+            console.error('Error fetching scholarship:', error);
+        }
+    };
 
     useEffect(() => {
-        const fetchScholarship = async () => {
-            try {
-                const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${id}`);
-                const data = await response.json();
-                console.log('Fetched Scholarship:', data); // Add this line
-                setScholarship(data);
-            } catch (error) {
-                console.error('Error fetching scholarship:', error);
-            }
-        };
-
         fetchScholarship();
+        fetchUserDetails();
     }, [id]);
 
     const handleApplyClick = async () => {
+        fetchScholarship();
         if (!isLoggedIn) {
             setNotification('You must be logged in to apply for scholarships.');
         } else if (currentUser?.status === 'Pending Verification') {
             setNotification('Your account is currently under verification. You cannot apply for scholarships until your account is fully verified.');
         } else if (currentUser?.status === 'Verify Account') {
             setNotification('You need to verify your account before applying for scholarships. Please visit the verification page.');
-        } else if ( scholarship?.numberOfScholarships == scholarship?.approvedScholars ) {
+        } else if (scholarship?.numberOfScholarships == scholarship?.approvedScholars) {
             setNotification('Applications are closed as the slots are full. Please check back later.');
+        } else if (scholarship?.fieldOfStudy !== userDetails?.applicantDetails?.education?.college?.course) {
+            setNotification('You are not eligible to apply for this scholarship based on your field of study.');
         }
         else {
             try {
@@ -81,13 +97,6 @@ export default function Forums() {
             }
         }
     };
-
-    console.log('Number of Scholarships:', scholarship?.numberOfScholarships); // Add this line
-    console.log('Approved Scholars:', scholarship?.approvedScholars); // Add this line
-
-    if(scholarship?.numberOfScholarships === scholarship?.approvedScholars){
-        console.log('Slots are full');
-    }
 
     // const [organizationName, setOrganizationName] = useState('');
 
@@ -328,8 +337,8 @@ export default function Forums() {
                         )}
                         {notification !== 'You must be logged in to apply for scholarships.' && notification !== 'Your account is currently under verification. You cannot apply for scholarships until your account is fully verified.' && notification !== 'You need to verify your account before applying for scholarships. Please visit the verification page.' && (
                             <>
-                                <strong className='font-bold text-red-500 text-lg'>Notification</strong>
-                                <div className='text-slate-400' role='alert'>
+                                {/* <strong className='font-bold text-red-500 text-lg'>Notification</strong> */}
+                                <div className='text-slate-400 h-10 flex items-center' role='alert'>
                                     <span className='block sm:inline font-medium'>{notification}</span>
                                 </div>
                             </>
