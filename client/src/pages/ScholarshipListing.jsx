@@ -207,11 +207,14 @@ export default function ScholarshipListing() {
                         src={scholarship.scholarshipImage}
                         alt={scholarship.title}
                         className='w-full h-full object-cover'
-                      />
+                      /> 
                     </div>
                     <div className='flex flex-col ml-6 flex-grow'>
-                      <h2 className='lg:text-xl font-semibold'>{scholarship.title}</h2>
-                      <p className='text-sm lg:text-base'>{truncateText(scholarship.organizationName, 50)}</p>
+                    <div className='flex justify-between items-center'>
+                    <h2 className='lg:text-lg font-semibold'>{truncateText(scholarship.title, 12)}</h2>
+                    <span className='font-medium bg-blue-600 text-white px-2 py-1 rounded-full'>000/000</span>
+                    </div>
+                    <p className='text-sm lg:text-base lg:text-gray-500'>{truncateText(scholarship.organizationName, 50)}</p>
                     </div>
                   </div>
                   <div className='p-4 flex flex-col gap-2'>
@@ -227,6 +230,17 @@ export default function ScholarshipListing() {
                       </div>
                     </div>
                     <div className='flex flex-col gap-4'>
+                      {/* Slots Info */}
+                      {/* <div className='flex lg:flex-row lg:gap-4'>
+                        <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
+                          <div className='flex lg:gap-0 gap-2'>
+                            <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
+                            <p className='font-medium'>Slots:  </p>
+                          </div>
+                          <p className='text-sm lg:hidden'>{scholarship.slots}</p>
+                        </div>
+                        <p className='w-full text-sm hidden lg:block'>{scholarship.slots}</p>
+                      </div> */}
                       <div className='flex lg:flex-row lg:gap-4'>
                         <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
                           <div className='flex lg:gap-0 gap-2'>
