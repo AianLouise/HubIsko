@@ -226,16 +226,16 @@ export default function Validation() {
                 </div>
 
                 {/* Upcoming Document Validation Content */}
-                <h3 className='text-xl font-bold mt-4'>Pending Document Validation</h3>
+                <h3 className='text-xl font-bold tracking-wide mt-4'>Pending Document Validation</h3>
 
                 <div className="p-6">
                     {pendingValidations.length === 0 ? (
-                        <p className='text-gray-600 text-center'>No pending document validations at the moment.</p>
+                            <p className='bg-slate-200 text-slate-600 px-8 py-4 rounded-md text-left'>No pending document validations at the moment.</p>
                     ) : (
                         pendingValidations.map((validation) => (
-                            <div key={validation._id} className='bg-white border-l-4 border-blue-500 text-black-700 p-4 rounded-md shadow relative mb-6'>
+                            <div key={validation._id} className='bg-white border-l-4 border-l-blue-500 text-black-700 p-4 rounded-md border shadow relative mb-6'>
                                 <div className='flex justify-between items-center mb-4'>
-                                    <h3 className='text-xl font-bold'>{validation.validationTitle}</h3>
+                                    <h3 className='text-lg font-medium'>{validation.validationTitle}</h3>
                                     <span className={`inline-block px-3 py-1 rounded-full text-white ${validation.status === 'posted' ? 'bg-green-600' : 'bg-blue-600'}`}>
                                         Status: {validation.status}
                                     </span>
@@ -285,10 +285,10 @@ export default function Validation() {
                 <h3 className='text-xl font-bold mt-4'>Ongoing Document Validation</h3>
                 <div className="p-6">
                     {ongoingValidations.length === 0 ? (
-                        <p className='text-gray-600 text-center'>No ongoing document validations at the moment.</p>
+                        <p className='bg-slate-200 text-slate-600 px-8 py-4 rounded-md text-left'>No ongoing document validations at the moment.</p>
                     ) : (
                         ongoingValidations.map((validation) => (
-                            <div key={validation._id} className='bg-white border-l-4 border-blue-500 text-black-700 p-4 rounded-md shadow relative mb-6'>
+                            <div key={validation._id} className='bg-white border-l-4 border-l-blue-500 text-black-700 p-4 rounded-md border shadow relative mb-6'>
                                 <div className='flex justify-between items-center mb-4'>
                                     <h3 className='text-xl font-bold'>{validation.validationTitle}</h3>
                                     <span className={`inline-block px-3 py-1 rounded-full text-white ${validation.status === 'posted' ? 'bg-green-600' : 'bg-blue-600'}`}>
@@ -336,10 +336,10 @@ export default function Validation() {
                 <h3 className='text-xl font-bold mt-4'>Previous Document Validation</h3>
                 <div className="p-6">
                     {doneValidations.length === 0 ? (
-                        <p className='text-gray-600 text-center'>No previous document validations at the moment.</p>
+                        <p className='bg-slate-200 text-slate-600 px-8 py-4 rounded-md text-left'>No previous document validations at the moment.</p>
                     ) : (
                         doneValidations.map((validation) => (
-                            <div key={validation._id} className='bg-white border-l-4 border-blue-500 text-black-700 p-4 rounded-md shadow relative mb-6'>
+                            <div key={validation._id} className='bg-white border-l-4 border-l-blue-500 text-black-700 p-4 rounded-md border shadow relative mb-6'>
                                 <div className='flex justify-between items-center mb-4'>
                                     <h3 className='text-xl font-bold'>{validation.validationTitle}</h3>
                                     <span className={`inline-block px-3 py-1 rounded-full text-white ${validation.status === 'posted' ? 'bg-green-600' : 'bg-blue-600'}`}>
@@ -382,7 +382,7 @@ export default function Validation() {
                             <h3 className="text-xl font-bold mb-4">Post Validation</h3>
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-4">
-                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="validationTitle">
+                                    <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="validationTitle">
                                         Validation Title
                                     </label>
                                     <input
@@ -395,7 +395,7 @@ export default function Validation() {
                                     />
                                 </div>
                                 <div className="mb-4">
-                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="validationDescription">
+                                    <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="validationDescription">
                                         Validation Description
                                     </label>
                                     <textarea
@@ -407,10 +407,10 @@ export default function Validation() {
                                     ></textarea>
                                 </div>
                                 <div className="mb-4">
-                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="requirements">
+                                    <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="requirements">
                                         Requirements
                                     </label>
-                                    <div className="flex">
+                                    <div className="flex flex-col gap-4">
                                         <input
                                             type="text"
                                             id="requirements"
@@ -420,7 +420,7 @@ export default function Validation() {
                                         />
                                         <button
                                             type="button"
-                                            className="bg-blue-600 text-white py-1 px-2 rounded ml-2"
+                                            className="bg-blue-600 text-whit py-2 w-[180px] text-center px-4 rounded text-white hover:w-full hover:font-bold hover:bg-blue-700 transition-all ease-in-out duration-300"
                                             onClick={handleAddRequirement}
                                         >
                                             Add Requirement
@@ -444,7 +444,7 @@ export default function Validation() {
                                 <div className="flex justify-end">
                                     <button
                                         type="submit"
-                                        className="bg-blue-600 text-white py-2 px-4 rounded"
+                                        className="bg-blue-600 text-white py-2 px-4 rounded font-bold"
                                     >
                                         Submit
                                     </button>
@@ -494,7 +494,7 @@ export default function Validation() {
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="requirements">
                                         Requirements
                                     </label>
-                                    <div className="flex">
+                                    <div className="flex flex-col gap-4">
                                         <input
                                             type="text"
                                             id="requirements"
@@ -504,7 +504,7 @@ export default function Validation() {
                                         />
                                         <button
                                             type="button"
-                                            className="bg-blue-600 text-white py-1 px-2 rounded ml-2"
+                                             className="bg-blue-600 text-whit py-2 w-[180px] text-center px-4 rounded text-white hover:w-full hover:font-bold hover:bg-blue-700 transition-all ease-in-out duration-300"
                                             onClick={handleAddRequirement}
                                         >
                                             Add Requirement
@@ -528,7 +528,7 @@ export default function Validation() {
                                 <div className="flex justify-end">
                                     <button
                                         type="submit"
-                                        className="bg-blue-600 text-white py-2 px-4 rounded"
+                                        className="bg-blue-600 text-white py-2 px-4 font-medium rounded"
                                     >
                                         Update
                                     </button>

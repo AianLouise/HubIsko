@@ -84,6 +84,7 @@ import Settings from "./pages/Scholarship-Provider/Settings";
 import ProviderProfile from "./pages/Scholarship-Provider/Profile";
 import ProviderCreateForumPost from "./pages/Scholarship-Provider/ProviderCreateForumPost";
 import ScholarView from "./pages/Scholarship-Provider/ScholarView";
+import ValidationPage from "./pages/Scholarship-Provider/ValidationPage";
 
 
 // import RegisterAsProvider from "./pages/RegisterAsProvider";
@@ -183,6 +184,8 @@ export default function App() {
 
           <Route path="/scholar-view/:id" element={<ScholarView />} />
           <Route path="/announcement/details/:announcementId" element={<AnnouncementDetails />} />
+
+          <Route path="/validation-page" element={<ValidationPage />} />
         </Route>
 
         {/* Scholar Routes */}

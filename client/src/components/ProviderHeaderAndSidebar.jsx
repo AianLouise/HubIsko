@@ -17,6 +17,7 @@ import { IoMenu } from "react-icons/io5";
 import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { MdDocumentScanner } from "react-icons/md";
 import Logo from '../assets/NewLogoClean.png';
 
 
@@ -251,6 +252,16 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
 
                             <li>
                                 <Link
+                                    to={'/validation-page'}
+                                    className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/validation-page' ? 'bg-blue-600 text-white' : ''}`}
+                                >
+                                    <MdDocumentScanner className={`w-4 h-4 ${location.pathname === '/validation-page' ? 'text-white' : 'text-blue-600'}`} />
+                                    Validation
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link
                                     to={'/provider-forums'}
                                     className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/provider-forums' ? 'bg-blue-600 text-white' : ''}`}
                                 >
@@ -268,6 +279,8 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
                                     Settings
                                 </Link>
                             </li>
+
+                         
                         </ul>
                     </nav>
                 </aside>
