@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FaRegHeart, FaRegEye } from 'react-icons/fa';
-import { BiCommentDots } from 'react-icons/bi';
+import { FaRegHeart, FaRegEye, FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa';
+import { BiCommentDots, BiFilter } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
 
 const AnnouncementModal = ({ isOpen, onClose, onSubmit, addAnnouncement }) => {
@@ -107,7 +107,7 @@ export default function PostAnnouncement() {
     const [announcements, setAnnouncements] = useState([]);
     const [programDetails, setProgramDetails] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
-    const [sortCriteria, setSortCriteria] = useState('date'); // Default sort by date
+    const [announcementSortOrder, setAnnouncementSortOrder] = useState('recent'); // Default sort by recent
     const { id } = useParams(); // Get the scholarshipProgram ID from the URL
     const navigate = useNavigate();
 
@@ -138,8 +138,8 @@ export default function PostAnnouncement() {
         setSearchQuery(e.target.value);
     };
 
-    const handleSortChange = (e) => {
-        setSortCriteria(e.target.value);
+    const toggleAnnouncementSortOrder = () => {
+        setAnnouncementSortOrder((prevOrder) => (prevOrder === 'recent' ? 'older' : 'recent'));
     };
 
     const handleAnnouncementClick = (announcementId) => {
@@ -157,12 +157,10 @@ export default function PostAnnouncement() {
             announcement.content.toLowerCase().includes(searchQuery.toLowerCase())
         )
         .sort((a, b) => {
-            if (sortCriteria === 'newest') {
+            if (announcementSortOrder === 'recent') {
                 return new Date(b.date) - new Date(a.date);
-            } else if (sortCriteria === 'oldest') {
+            } else if (announcementSortOrder === 'older') {
                 return new Date(a.date) - new Date(b.date);
-            } else if (sortCriteria === 'title') {
-                return a.title.localeCompare(b.title);
             }
             return 0;
         });
@@ -187,23 +185,27 @@ export default function PostAnnouncement() {
                         placeholder="Search announcements..."
                         value={searchQuery}
                         onChange={handleSearchChange}
-                        className="border p-2 rounded-md"
+                        className="border p-2 rounded-md w-full lg:w-1/2"
                     />
-                    <select value={sortCriteria} onChange={handleSortChange} className="border p-2 rounded-md">
-                        <option value="newest">Sort by Newest</option>
-                        <option value="oldest">Sort by Oldest</option>
-                        <option value="title">Sort by Title</option>
-                    </select>
+                    <div className=''>
+                        <button
+                            className='flex gap-2 bg-white hover:bg-slate-200 px-6 py-2 border shadow rounded-md'
+                            onClick={toggleAnnouncementSortOrder}
+                        >
+                            <BiFilter className='w-6 h-6 text-blue-600' />
+                            <span>{announcementSortOrder === 'recent' ? 'Recent' : 'Oldest'}</span>
+                        </button>
+                    </div>
                 </div>
-                <div className="grid lg:grid-cols-2 gap-10">
                     {filteredAnnouncements.length > 0 ? (
                         filteredAnnouncements.map((announcement) => (
+                            <div className="grid lg:grid-cols-2 gap-10">
                             <div
                                 key={announcement._id}
                                 className="bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out cursor-pointer"
                                 onClick={() => handleAnnouncementClick(announcement._id)}
                             >
-                                <div className="flex gap-2">
+                                <div className="flex gap-2 items-center">
                                     <div className="bg-white w-12 h-12 rounded-md overflow-hidden">
                                         <img src={programDetails.scholarshipImage} alt="Scholarship" className="w-full h-full object-cover" />
                                     </div>
@@ -221,30 +223,32 @@ export default function PostAnnouncement() {
                                         <span className="text-blue-600 font-bold">@Students:</span> {announcement.content}
                                     </p>
                                 </div>
-                                <div className="border-t mt-2">
-                                    <div className="flex flex-row justify-between mt-2 gap-2">
-                                        <div className="flex flex-row gap-2">
-                                            <div className="flex flex-row gap-1 px-2">
-                                                <FaRegHeart className="w-6 h-6 font-bold text-blue-600" />
-                                                <span>{announcement.likesCount}</span> {/* Display the likes count */}
+                                <div className="border-t mt-2 pt-2">
+                                    <div className="flex justify-between items-center">
+                                        <div className="flex gap-4">
+                                            <div className="flex items-center gap-1">
+                                                <FaRegHeart className="w-6 h-6 text-blue-600" />
+                                                <span>{announcement.likesCount}</span>
                                             </div>
-                                            <div className="flex flex-row gap-1">
+                                            <div className="flex items-center gap-1">
                                                 <BiCommentDots className="w-6 h-6 text-blue-600" />
                                                 <span>{announcement.totalComments}</span>
                                             </div>
                                         </div>
-                                        <div className="flex flex-row gap-1 pr-2">
+                                        <div className="flex items-center gap-1">
                                             <FaRegEye className="w-6 h-6 text-blue-600" />
                                             <span>1.2k</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         ))
                     ) : (
-                        <p className="text-gray-700">No announcements available.</p>
+                        <div className="flex justify-center items-center h-64">
+                            <p className="text-gray-700">No announcements available.</p>
+                        </div>
                     )}
-                </div>
             </div>
         </div>
     );

@@ -11,8 +11,6 @@ export default function ScholarshipPrograms() {
         document.title = "Scholarship Programs | HubIsko";
     }, []);
 
-
-
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [totalScholarships, setTotalScholarships] = useState(0);
     const [pendingPrograms, setPendingPrograms] = useState(0);
@@ -34,8 +32,6 @@ export default function ScholarshipPrograms() {
         { id: 4, name: 'Provider Four', scholars: 75 },
         { id: 5, name: 'Provider Five', scholars: 60 },
     ];
-
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -100,25 +96,10 @@ export default function ScholarshipPrograms() {
 
     return (
         <div className="flex flex-col min-h-screen">
-
             <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
-                {/* <div className='border-b mb-8'>
-                    <div className={'flex items-center mx-auto justify-between px-24'}>
-                        <div className='flex flex-col gap-2 w-1/2'>
-                            <h1 className='text-4xl font-bold text-slate-800'>Scholarship Programs</h1>
-                            <p className='text-lg text-slate-500 font-medium'>Manage and review scholarship programs here.</p>
-                        </div>
-                        <div className='bg-blue-600 w-36 h-36 my-8 rounded-md flex justify-center items-center'>
-                            <FaGraduationCap className="text-white w-20 h-20" />
-                        </div>
-                    </div>
-                </div> */}
-
                 <div className='max-w-8xl mx-auto px-24 pb-12 pt-8 flex-col flex'>
-
                     <div className="flex items-center justify-between pb-2">
                         <h1 className='text-2xl font-bold text-slate-600'>Scholarship Programs</h1>
-                        {/* Add Program button */}
                         <Link to={'/add-scholarship-program'} className="flex gap-2 items-center bg-blue-600 rounded-md px-6 py-2 shadow text-white font-medium">
                             <IoAddCircleOutline className='w-6 h-6' />
                             Add Program
@@ -174,7 +155,7 @@ export default function ScholarshipPrograms() {
                             <div className='flex flex-col gap-10'>
                                 <div className="overflow-x-auto rounded-lg shadow-md border">
                                     <div className="sticky top-0 bg-white z-10">
-                                        <div className="flex justify-between items-center p-4 bg-white shadow-md">
+                                        <div className="flex justify-between items-center p-4 bg-white shadow-md gap-1">
                                             <div className="flex gap-2 items-center">
                                                 <button
                                                     className={`px-4 py-2 rounded-md bg-white shadow border ${filter === 'All' ? 'bg-blue-200' : ''}`}
@@ -189,16 +170,34 @@ export default function ScholarshipPrograms() {
                                                     Pending Approval <span className="text-yellow-500">({scholarshipPrograms.filter(program => program.status === 'Pending Approval').length})</span>
                                                 </button>
                                                 <button
+                                                    className={`px-4 py-2 rounded-md bg-white shadow border ${filter === 'Approved' ? 'bg-blue-200' : ''}`}
+                                                    onClick={() => setFilter('Approved')}
+                                                >
+                                                    Approved <span className="text-blue-500">({scholarshipPrograms.filter(program => program.status === 'Approved').length})</span>
+                                                </button>
+                                                <button
+                                                    className={`px-4 py-2 rounded-md bg-white shadow border ${filter === 'Published' ? 'bg-indigo-200' : ''}`}
+                                                    onClick={() => setFilter('Published')}
+                                                >
+                                                    Published <span className="text-indigo-500">({scholarshipPrograms.filter(program => program.status === 'Published').length})</span>
+                                                </button>
+                                                <button
+                                                    className={`px-4 py-2 rounded-md bg-white shadow border ${filter === 'Ongoing' ? 'bg-teal-200' : ''}`}
+                                                    onClick={() => setFilter('Ongoing')}
+                                                >
+                                                    Ongoing <span className="text-teal-500">({scholarshipPrograms.filter(program => program.status === 'Ongoing').length})</span>
+                                                </button>
+                                                <button
+                                                    className={`px-4 py-2 rounded-md bg-white shadow border ${filter === 'Completed' ? 'bg-purple-200' : ''}`}
+                                                    onClick={() => setFilter('Completed')}
+                                                >
+                                                    Completed <span className="text-purple-500">({scholarshipPrograms.filter(program => program.status === 'Completed').length})</span>
+                                                </button>
+                                                <button
                                                     className={`px-4 py-2 rounded-md bg-white shadow border ${filter === 'Rejected' ? 'bg-red-200' : ''}`}
                                                     onClick={() => setFilter('Rejected')}
                                                 >
                                                     Rejected <span className="text-red-500">({scholarshipPrograms.filter(program => program.status === 'Rejected').length})</span>
-                                                </button>
-                                                <button
-                                                    className={`px-4 py-2 rounded-md bg-white shadow border ${filter === 'Approved' ? 'bg-green-200' : ''}`}
-                                                    onClick={() => setFilter('Approved')}
-                                                >
-                                                    Approved <span className="text-green-600">({scholarshipPrograms.filter(program => program.status === 'Approved').length})</span>
                                                 </button>
                                             </div>
                                             <input
@@ -233,21 +232,27 @@ export default function ScholarshipPrograms() {
                                                         </td>
                                                         <td className="py-3 px-6 w-1/5">{program.organizationName}</td>
                                                         <td className="py-3 px-6 w-1/5">
-                                                            <span className={`px-4 ml-2 py-1 rounded-md whitespace-nowrap ${program.status === 'Approved' ? 'bg-green-600 text-white'
-                                                                : program.status === 'Pending Approval' ? 'bg-yellow-500 text-white text-xs sm:text-sm md:text-base'
-                                                                    : program.status === 'Rejected' ? 'bg-red-600 text-white' : ''}`}>
+                                                            <span className={`px-4 ml-2 py-1 rounded-md whitespace-nowrap ${program.status === 'Pending Approval' ? 'bg-yellow-500 text-white' :
+                                                                    program.status === 'Approved' ? 'bg-blue-500 text-white' :
+                                                                        program.status === 'Published' ? 'bg-indigo-500 text-white' :
+                                                                            program.status === 'Ongoing' ? 'bg-teal-500 text-white' :
+                                                                                program.status === 'Rejected' ? 'bg-red-500 text-white' :
+                                                                                    program.status === 'Archived' ? 'bg-gray-500 text-white' :
+                                                                                        program.status === 'Cancelled' ? 'bg-orange-500 text-white' :
+                                                                                            program.status === 'Completed' ? 'bg-purple-500 text-white' : ''
+                                                                }`}>
                                                                 {program.status}
                                                             </span>
                                                         </td>
                                                         <td className="py-3 px-6 w-1/5">0</td>
                                                         <td className="py-3 px-6 w-1/5">
-                                                                                                                       <Link 
-                                                              to={program.status === 'Pending Approval' 
-                                                                ? `/scholarship-program-applications/${program._id}` 
-                                                                : `/scholarship-program/${program._id}`} 
-                                                              className="bg-blue-600 text-white px-4 ml-2 py-1 rounded-md hover:bg-blue-800 whitespace-nowrap"
+                                                            <Link
+                                                                to={program.status === 'Pending Approval'
+                                                                    ? `/scholarship-program-applications/${program._id}`
+                                                                    : `/scholarship-program/${program._id}`}
+                                                                className="bg-blue-600 text-white px-4 ml-2 py-1 rounded-md hover:bg-blue-800 whitespace-nowrap"
                                                             >
-                                                              {program.status === 'Pending Approval' ? 'Verify' : 'View Details'}
+                                                                {program.status === 'Pending Approval' ? 'Verify' : 'View Details'}
                                                             </Link>
                                                         </td>
                                                     </tr>
@@ -259,7 +264,7 @@ export default function ScholarshipPrograms() {
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-md  w-1/3 border shadow divide-y">
+                        {/* <div className="bg-white rounded-md  w-1/3 border shadow divide-y">
                             <div className="flex items-center justify-between p-4">
                                 <h1 className="">Scholarship Providers</h1>
                                 <button className="px-2 py-1 bg-blue-600 rounded-md text-white text-sm">Most Scholars</button>
@@ -275,7 +280,7 @@ export default function ScholarshipPrograms() {
                                     </div>
                                 ))}
                             </div>
-                        </div>
+                        </div> */}
 
 
                     </div>

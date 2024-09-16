@@ -90,11 +90,30 @@ export default function ScholarshipListing() {
     setSearchQuery(event.target.value);
   };
 
+  const [sortOrder, setSortOrder] = useState('oldest'); // Default to 'oldest'
+  const [selectedCourse, setSelectedCourse] = useState('');
+
+  const handleCourseChange = (e) => {
+    setSelectedCourse(e.target.value);
+  };
+
+  const toggleSortOrder = () => {
+    setSortOrder((prevOrder) => (prevOrder === 'recent' ? 'oldest' : 'recent'));
+  };
+
   const filteredScholarships = scholarships
-    .filter((scholarship) => scholarship.status === 'Published')
-    .filter((scholarship) =>
-      scholarship.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    .filter(scholarship =>
+      scholarship.status === 'Published' &&
+      scholarship.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (selectedCourse === '' || scholarship.fieldOfStudy === selectedCourse)
+    )
+    .sort((a, b) => {
+      if (sortOrder === 'recent') {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      } else {
+        return new Date(a.createdAt) - new Date(b.createdAt);
+      }
+    });
 
   if (loading) {
     return (
@@ -174,21 +193,123 @@ export default function ScholarshipListing() {
               onChange={handleSearchChange}
               className='border border-gray-300 p-2 px-4 lg:px-6 lg:text-base lg:font-sm w-[200px] lg:w-[400px] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition ease-in-out duration-150'
             />
-            <button className='bg-white px-4 py-2 border rounded-md shadow font-medium flex items-center gap-2'>
+            <select
+              value={selectedCourse}
+              onChange={handleCourseChange}
+              className='border border-gray-300 p-2 px-4 lg:px-6 lg:text-base lg:font-sm w-[200px] lg:w-[300px] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition ease-in-out duration-150'
+            >
+              <option value="Open for All Courses">Open for All Courses</option>
+              <option value="BS in Accounting">BS in Accounting</option>
+              <option value="BS in Aerospace Engineering">BS in Aerospace Engineering</option>
+              <option value="BS in Agricultural Engineering">BS in Agricultural Engineering</option>
+              <option value="BS in Agriculture">BS in Agriculture</option>
+              <option value="BA in Anthropology">BA in Anthropology</option>
+              <option value="BS in Applied Mathematics">BS in Applied Mathematics</option>
+              <option value="BS in Architecture">BS in Architecture</option>
+              <option value="BA in Art Studies">BA in Art Studies</option>
+              <option value="BS in Astronomy">BS in Astronomy</option>
+              <option value="BS in Biochemistry">BS in Biochemistry</option>
+              <option value="BS in Biology">BS in Biology</option>
+              <option value="BS in Biomedical Engineering">BS in Biomedical Engineering</option>
+              <option value="BS in Business Administration">BS in Business Administration</option>
+              <option value="BS in Business Management">BS in Business Management</option>
+              <option value="BS in Chemical Engineering">BS in Chemical Engineering</option>
+              <option value="BS in Chemistry">BS in Chemistry</option>
+              <option value="BS in Civil Engineering">BS in Civil Engineering</option>
+              <option value="BA in Communication">BA in Communication</option>
+              <option value="BS in Computer Engineering">BS in Computer Engineering</option>
+              <option value="BS in Computer Science">BS in Computer Science</option>
+              <option value="BS in Criminology">BS in Criminology</option>
+              <option value="BS in Dentistry">BS in Dentistry</option>
+              <option value="BA in Development Communication">BA in Development Communication</option>
+              <option value="BS in Digital Media Arts">BS in Digital Media Arts</option>
+              <option value="BA in Economics">BA in Economics</option>
+              <option value="BS in Education">BS in Education</option>
+              <option value="BS in Electrical Engineering">BS in Electrical Engineering</option>
+              <option value="BS in Electronics Engineering">BS in Electronics Engineering</option>
+              <option value="BS in Elementary Education">BS in Elementary Education</option>
+              <option value="BS in Environmental Engineering">BS in Environmental Engineering</option>
+              <option value="BS in Environmental Science">BS in Environmental Science</option>
+              <option value="BS in Fashion Design">BS in Fashion Design</option>
+              <option value="BS in Finance">BS in Finance</option>
+              <option value="BA in Fine Arts">BA in Fine Arts</option>
+              <option value="BS in Food Science">BS in Food Science</option>
+              <option value="BS in Forestry">BS in Forestry</option>
+              <option value="BS in Forensic Science">BS in Forensic Science</option>
+              <option value="BS in Geodetic Engineering">BS in Geodetic Engineering</option>
+              <option value="BA in Geography">BA in Geography</option>
+              <option value="BS in Geology">BS in Geology</option>
+              <option value="BS in Graphic Design">BS in Graphic Design</option>
+              <option value="BS in Health Sciences">BS in Health Sciences</option>
+              <option value="BA in History">BA in History</option>
+              <option value="BS in Hospitality Management">BS in Hospitality Management</option>
+              <option value="BS in Hotel and Restaurant Management">BS in Hotel and Restaurant Management</option>
+              <option value="BS in Human Resource Development">BS in Human Resource Development</option>
+              <option value="BS in Industrial Design">BS in Industrial Design</option>
+              <option value="BS in Industrial Engineering">BS in Industrial Engineering</option>
+              <option value="BS in Information Systems">BS in Information Systems</option>
+              <option value="BS in Information Technology">BS in Information Technology</option>
+              <option value="BS in Interior Design">BS in Interior Design</option>
+              <option value="BA in International Relations">BA in International Relations</option>
+              <option value="BA in Journalism">BA in Journalism</option>
+              <option value="BS in Landscape Architecture">BS in Landscape Architecture</option>
+              <option value="BA in Law">BA in Law</option>
+              <option value="BA in Linguistics">BA in Linguistics</option>
+              <option value="BS in Management Accounting">BS in Management Accounting</option>
+              <option value="BS in Marine Biology">BS in Marine Biology</option>
+              <option value="BS in Marine Engineering">BS in Marine Engineering</option>
+              <option value="BS in Marine Transportation">BS in Marine Transportation</option>
+              <option value="BS in Marketing">BS in Marketing</option>
+              <option value="BS in Materials Science">BS in Materials Science</option>
+              <option value="BS in Mathematics">BS in Mathematics</option>
+              <option value="BS in Mechanical Engineering">BS in Mechanical Engineering</option>
+              <option value="BA in Media Studies">BA in Media Studies</option>
+              <option value="BS in Medical Laboratory Science">BS in Medical Laboratory Science</option>
+              <option value="BS in Medicine">BS in Medicine</option>
+              <option value="BS in Metallurgical Engineering">BS in Metallurgical Engineering</option>
+              <option value="BS in Microbiology">BS in Microbiology</option>
+              <option value="BS in Midwifery">BS in Midwifery</option>
+              <option value="BS in Mining Engineering">BS in Mining Engineering</option>
+              <option value="BS in Molecular Biology">BS in Molecular Biology</option>
+              <option value="BS in Multimedia Arts">BS in Multimedia Arts</option>
+              <option value="BS in Music">BS in Music</option>
+              <option value="BS in Nanotechnology">BS in Nanotechnology</option>
+              <option value="BS in Nursing">BS in Nursing</option>
+              <option value="BS in Nutrition">BS in Nutrition</option>
+              <option value="BS in Occupational Therapy">BS in Occupational Therapy</option>
+              <option value="BS in Oceanography">BS in Oceanography</option>
+              <option value="BS in Pharmacy">BS in Pharmacy</option>
+              <option value="BS in Physical Therapy">BS in Physical Therapy</option>
+              <option value="BS in Physics">BS in Physics</option>
+              <option value="BS in Political Science">BS in Political Science</option>
+              <option value="BS in Psychology">BS in Psychology</option>
+              <option value="BS in Public Health">BS in Public Health</option>
+              <option value="BS in Radiologic Technology">BS in Radiologic Technology</option>
+              <option value="BS in Real Estate Management">BS in Real Estate Management</option>
+              <option value="BA in Religious Studies">BA in Religious Studies</option>
+              <option value="BA in Social Work">BA in Social Work</option>
+              <option value="BS in Sociology">BS in Sociology</option>
+              <option value="BS in Software Engineering">BS in Software Engineering</option>
+              <option value="BS in Statistics">BS in Statistics</option>
+              <option value="BS in Tourism Management">BS in Tourism Management</option>
+              <option value="BS in Veterinary Medicine">BS in Veterinary Medicine</option>
+              <option value="BS in Zoology">BS in Zoology</option>
+              {/* Add more courses as needed */}
+            </select>
+            <button
+              className='bg-white px-4 py-2 border rounded-md shadow font-medium flex items-center gap-2'
+              onClick={toggleSortOrder}
+            >
               <BiFilter className='text-xl text-blue-600' />
-              Filter
+              <span>{sortOrder === 'recent' ? 'Recent' : 'Oldest'}</span>
             </button>
           </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 w-full gap-4 text-slate-700 mt-10'>
-            {scholarships.length === 0 ? (
-              <div className='col-span-full text-center text-gray-500 py-20'>
-                No scholarships available at the moment.
-              </div>
-            ) : filteredScholarships.length === 0 ? (
-              <div className='col-span-full text-center text-gray-500 py-20'>
-                No scholarships found for the query "{searchQuery}"
-              </div>
+          {filteredScholarships.length === 0 ? (
+          <div className='col-span-full text-center text-gray-500 py-20'>
+            No scholarships available at the moment.
+          </div>
             ) : (
               filteredScholarships.map((scholarship) => (
                 <div key={scholarship.id} className='border bg-white rounded-lg pt-4 px-4 shadow-sm gap-2 mb-10 hover:-translate-y-1 transition ease-in-out'>
