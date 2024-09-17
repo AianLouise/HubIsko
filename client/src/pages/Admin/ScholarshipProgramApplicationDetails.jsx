@@ -115,7 +115,7 @@ export default function ScholarshipProgramApplicationDetails() {
 
     return (
         <div className="flex flex-col min-h-screen font-medium text-slate-700">
-            
+
             <main className="flex-grow bg-[#f8f8fb]">
                 <div className="flex gap-2 items-center max-w-8xl mx-auto px-24 mt-16 mb-10">
                     <Link to={'/scholarship-program-applications'} className="border shadow px-6 py-2 bg-white rounded-md hover:bg-slate-200">

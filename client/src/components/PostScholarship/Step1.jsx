@@ -10,7 +10,7 @@ const Step1 = ({ formData, setFormData }) => {
             setTitle(value);
         }
         if (name === 'numberOfScholarships' && (value <= 0 || isNaN(value))) {
-            return; // Prevent negative values
+            return; // Prevent negative values 
         }
         setFormData({ ...formData, [name]: value });
     };
