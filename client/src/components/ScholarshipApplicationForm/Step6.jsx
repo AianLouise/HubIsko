@@ -24,12 +24,12 @@ const Step6 = ({ formData, setFormData, errors }) => {
             </ul>
           </div>
 
-          <div className='flex items-center mb-4 mt-6'>
+                   <div className='flex items-center mb-4 mt-6'>
             <input
               type="checkbox"
               id="agree"
               name="agree"
-              className='mr-2 h-12 w-12 lg:w-8 lg:h-8'
+              className='mr-2 h-6 w-6 lg:w-5 lg:h-5'
               checked={agree}
               onChange={(e) => setAgree(e.target.checked)}
               required

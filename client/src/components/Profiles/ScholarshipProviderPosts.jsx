@@ -41,7 +41,9 @@ const ScholarshipProviderPosts = ({ userId }) => {
     <div>
       <div className='grid grid-cols-1 sm:grid-rows-1 gap-8 pb-12'>
         {posts.length === 0 ? (
-          <p>No posts available.</p>
+          <div className="flex justify-center items-center h-28">
+            <p>No posts available.</p>
+          </div>
         ) : (
           posts
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort posts by creation date in descending order

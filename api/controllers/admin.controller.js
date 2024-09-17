@@ -383,10 +383,10 @@ export const verifyScholarshipProgram = async (req, res) => {
   }
 };
 
-export const declineScholarshipProgram = async (req, res) => {
+export const rejectScholarshipProgram = async (req, res) => {
   try {
     const { id } = req.params;
-    const { declineReason } = req.body;
+    const { rejectReason } = req.body;
 
     // Assuming you have a ScholarshipProgram model
     const scholarshipProgram = await ScholarshipProgram.findById(id);
@@ -395,15 +395,15 @@ export const declineScholarshipProgram = async (req, res) => {
       return res.status(404).json({ message: 'Scholarship program not found' });
     }
 
-    // Update the scholarship program status to Declined and set the decline reason
-    scholarshipProgram.status = 'Declined';
-    scholarshipProgram.declineReason = declineReason;
+    // Update the scholarship program status to Rejected and set the reject reason
+    scholarshipProgram.status = 'Rejected';
+    scholarshipProgram.rejectReason = rejectReason;
     await scholarshipProgram.save();
 
-    res.status(200).json({ message: 'Scholarship program declined successfully', scholarshipProgram });
+    res.status(200).json({ message: 'Scholarship program rejected successfully', scholarshipProgram });
   } catch (error) {
     res.status(500).json({
-      message: 'Error declining scholarship program',
+      message: 'Error rejecting scholarship program',
       error: error.message,
     });
   }

@@ -66,7 +66,7 @@ const ScholarshipProviderScholarships = ({ userId }) => {
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-700 pb-12'>
             <div key={scholarship.id} className='border bg-white rounded-lg pt-4 px-4 shadow-sm gap-2 mb-10 hover:-translate-y-1 transition ease-in-out'>
               <div className='flex flex-row items-center justify-start px-5 mt-5'>
-                <div className='lg:hidden'>
+                <div className='lg:hidden flex-shrink-0'>
                   <div className='rounded-full w-14 h-14 overflow-hidden border-2 border-blue-500'>
                     <img
                       src={scholarship.scholarshipImage}
@@ -75,16 +75,19 @@ const ScholarshipProviderScholarships = ({ userId }) => {
                     />
                   </div>
                 </div>
-                <div className='rounded-full w-14 h-14 lg:block hidden overflow-hidden border-2 border-blue-500'>
+                <div className='rounded-full w-14 h-14 lg:block hidden overflow-hidden border-2 border-blue-500 flex-shrink-0'>
                   <img
                     src={scholarship.scholarshipImage}
                     alt={scholarship.title}
                     className='w-full h-full object-cover'
                   />
                 </div>
-                <div className='flex flex-col ml-6'>
-                  <h2 className='lg:text-xl font-semibold'>{scholarship.title}</h2>
-                  <p className='text-sm lg:text-base'>{truncateText(scholarship.organizationName, 50)}</p>
+                <div className='flex flex-col ml-6 flex-grow'>
+                  <div className='flex justify-between items-center'>
+                    <h2 className='lg:text-lg font-semibold'>{truncateText(scholarship.title, 12)}</h2>
+                    <span className='font-medium bg-blue-600 text-white px-2 py-1 rounded-full'>{scholarship.approvedScholars.length}/{scholarship.numberOfScholarships}</span>
+                  </div>
+                  <p className='text-sm lg:text-base lg:text-gray-500'>{truncateText(scholarship.organizationName, 50)}</p>
                 </div>
               </div>
               <div className='p-4 flex flex-col gap-2'>

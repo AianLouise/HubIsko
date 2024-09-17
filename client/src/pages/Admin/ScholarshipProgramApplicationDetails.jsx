@@ -7,7 +7,6 @@ import ScholarshipsDataDisplay from "./ScholarshipsDataDisplay";
 import ConfirmationModal from "../../components/ConfirmationModal"; // Adjust the import path as needed
 import Snackbar from "../../components/Snackbar"; // Adjust the import path as needed
 
-
 export default function ScholarshipProgramApplicationDetails() {
     const [currentStep, setCurrentStep] = useState(1);
     const [loading, setLoading] = useState(true);
@@ -16,7 +15,7 @@ export default function ScholarshipProgramApplicationDetails() {
     const [successMessage, setSuccessMessage] = useState('');
     const [showSnackbar, setShowSnackbar] = useState(false);
     const closeSnackbar = () => setShowSnackbar(false);
-    const [declineReason, setDeclineReason] = useState('');
+    const [rejectReason, setRejectReason] = useState('');
     const navigate = useNavigate();
 
     const { id } = useParams();
@@ -73,27 +72,27 @@ export default function ScholarshipProgramApplicationDetails() {
         }
     };
 
-    const handleDeclineClick = () => {
+    const handleRejectClick = () => {
         setIsModalOpen(true);
     };
 
     const handleModalClose = () => {
         setIsModalOpen(false);
-        setDeclineReason('');
+        setRejectReason('');
     };
 
     const handleReasonChange = (e) => {
-        setDeclineReason(e.target.value);
+        setRejectReason(e.target.value);
     };
 
     const handleSubmit = async () => {
         try {
-            const response = await fetch(`/api/admin/scholarships/${scholarshipDetails._id}/decline/`, {
+            const response = await fetch(`/api/admin/scholarships/${scholarshipDetails._id}/reject`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ declineReason: declineReason })
+                body: JSON.stringify({ rejectReason: rejectReason })
             });
 
             if (!response.ok) {
@@ -101,8 +100,8 @@ export default function ScholarshipProgramApplicationDetails() {
             }
 
             const data = await response.json();
-            console.log('Decline reason updated:', data);
-            setSuccessMessage('Application declined successfully!');
+            console.log('Reject reason updated:', data);
+            setSuccessMessage('Application rejected successfully!');
             setShowSnackbar(true);
             setIsVerifyModalOpen(false);
             fetchScholarshipDetails();
@@ -166,9 +165,9 @@ export default function ScholarshipProgramApplicationDetails() {
                                 <button
                                     type="button"
                                     className="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-700"
-                                    onClick={handleDeclineClick}
+                                    onClick={handleRejectClick}
                                 >
-                                    Decline
+                                    Reject
                                 </button>
 
                                 <button
@@ -192,13 +191,13 @@ export default function ScholarshipProgramApplicationDetails() {
                 {isModalOpen && (
                     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
                         <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-                            <h2 className="text-xl font-bold mb-4">Reason for Decline</h2>
+                            <h2 className="text-xl font-bold mb-4">Reason for Rejection</h2>
                             <textarea
                                 className="w-full p-2 border border-gray-300 rounded-md"
                                 rows="4"
-                                value={declineReason}
+                                value={rejectReason}
                                 onChange={handleReasonChange}
-                                placeholder="What are the reasons for declining this scholarship?"
+                                placeholder="What are the reasons for rejecting this scholarship?"
                             />
                             <div className="flex justify-end gap-4 mt-4">
                                 <button

@@ -79,12 +79,13 @@ import ProviderForumDetail from "./pages/Scholarship-Provider/ProviderForumDetai
 import PostScholarship from "./pages/Scholarship-Provider/PostScholarship2";
 import ViewScholarshipDetails from "./pages/Scholarship-Provider/ViewScholarshipDetails";
 import ViewApplicationDetails from "./pages/Scholarship-Provider/ViewApplicationDetails";
-import EditProgramPage from "./pages/Scholarship-Provider/EditProgramPage";
 import Settings from "./pages/Scholarship-Provider/Settings";
 import ProviderProfile from "./pages/Scholarship-Provider/Profile";
 import ProviderCreateForumPost from "./pages/Scholarship-Provider/ProviderCreateForumPost";
 import ScholarView from "./pages/Scholarship-Provider/ScholarView";
 import ValidationPage from "./pages/Scholarship-Provider/ValidationPage";
+import EditScholarshipDetails from "./components/ViewScholarshipDetails/EditScholarshipDetails";
+import EditScholarshipWebView from "./components/ViewScholarshipDetails/EditScholarshipWebView";
 
 
 // import RegisterAsProvider from "./pages/RegisterAsProvider";
@@ -174,7 +175,9 @@ export default function App() {
           <Route path="/scholarships" element={<Scholarships />} />
           <Route path="/applications/:id" element={<ViewApplicationDetails />} />
           <Route path="/view-scholarships/:id" element={<ViewScholarshipDetails />} />
-          <Route path="/edit-program/:id" element={<EditProgramPage />} />
+          <Route path="/view-scholarships/:id/edit-program-details" element={<EditScholarshipDetails />} />
+          <Route path="/view-scholarships/:id/scholarship-web-view" element={<EditScholarshipWebView />} />
+
           <Route path="/provider-settings" element={<Settings />} />
           <Route path="/provider-profile" element={<ProviderProfile />} />
 

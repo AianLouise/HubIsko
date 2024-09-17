@@ -276,6 +276,18 @@ export default function ViewScholarshipDetails() {
                                 <p>The scholarship program is currently ongoing. Stay tuned for updates and announcements.</p>
                             </div>
                         )}
+
+                        {/* Rejected Status Message */}
+                        {scholarshipProgram?.status === 'Rejected' && (
+                            <div className="bg-red-100 text-red-700 p-4 mb-6 rounded-md shadow-md">
+                                <h2 className="text-xl font-bold mb-1">Application Rejected</h2>
+                                <p>Unfortunately, your scholarship program application has been rejected.</p>
+                                {scholarshipProgram?.rejectReason && (
+                                    <p className="mt-2"><strong>Reason:</strong> {scholarshipProgram.rejectReason}</p>
+                                )}
+                                <p className="mt-2">Please review the feedback and consider making the necessary changes before reapplying.</p>
+                            </div>
+                        )}
                     </div>
 
 
@@ -308,19 +320,19 @@ export default function ViewScholarshipDetails() {
                             <ProgramDetails scholarshipProgram={scholarshipProgram} />
                         )}
 
-                        {activeTab === 'edit' && scholarshipProgram?.status !== 'Pending Approval' && (
+                        {activeTab === 'edit' && scholarshipProgram?.status !== 'Pending Approval' && scholarshipProgram?.status !== 'Rejected' && (
                             <EditProgram />
                         )}
 
-                        {activeTab === 'announcement' && scholarshipProgram?.status !== 'Pending Approval' && (
+                        {activeTab === 'announcement' && scholarshipProgram?.status !== 'Pending Approval' && scholarshipProgram?.status !== 'Rejected' && (
                             <PostAnnouncement />
                         )}
 
-                        {activeTab === 'validation' && scholarshipProgram?.status !== 'Pending Approval' && (
+                        {activeTab === 'validation' && scholarshipProgram?.status !== 'Pending Approval' && scholarshipProgram?.status !== 'Rejected' && (
                             <Validation />
                         )}
 
-                        {activeTab === 'scholars' && scholarshipProgram?.status !== 'Pending Approval' && (
+                        {activeTab === 'scholars' && scholarshipProgram?.status !== 'Pending Approval' && scholarshipProgram?.status !== 'Rejected' && (
                             <ViewScholars
                                 scholars={scholars}
                                 approvedScholars={scholars.length}
@@ -329,16 +341,21 @@ export default function ViewScholarshipDetails() {
                             />
                         )}
 
-                        {activeTab === 'applications' && scholarshipProgram?.status !== 'Pending Approval' && (
+                        {activeTab === 'applications' && scholarshipProgram?.status !== 'Pending Approval' && scholarshipProgram?.status !== 'Rejected' && (
                             <ScholarshipApplication applications={applications} />
                         )}
 
-                        {activeTab !== 'details' && scholarshipProgram?.status === 'Pending Approval' && (
+                        {activeTab !== 'details' && (scholarshipProgram?.status === 'Pending Approval' || scholarshipProgram?.status === 'Rejected') && (
                             <div className="p-6 bg-white rounded-lg shadow-md">
                                 <h2 className="text-2xl font-bold mb-4 text-red-600">Access Restricted</h2>
                                 <p className="text-gray-700">
-                                    Access to this section is restricted while the status is "Pending Approval".
+                                    Access to this section is restricted while the status is "{scholarshipProgram?.status === 'Pending Approval' ? 'Pending Approval' : 'Rejected'}".
                                 </p>
+                                {scholarshipProgram?.status === 'Rejected' && scholarshipProgram?.rejectReason && (
+                                    <p className="mt-2 text-gray-700">
+                                        <strong>Reason for Rejection:</strong> {scholarshipProgram.rejectReason}
+                                    </p>
+                                )}
                             </div>
                         )}
                     </div>
