@@ -15,7 +15,8 @@ const PostScholarship = () => {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        category: '',
+        educationLevel: '',
+        location: '',
         fieldOfStudy: '',
         numberOfScholarships: '',
         amount: '',
@@ -36,8 +37,8 @@ const PostScholarship = () => {
         contactPhone: '',
         providerId: currentUser ? currentUser._id : '',
         organizationName: currentUser ? currentUser.scholarshipProviderDetails.organizationName : '',
-        faqTitle: '',
-        faqDescription: '',
+        faqTitle: 'Frequently Asked Questions',
+        faqDescription: 'For more details, visit our website.',
         scholarshipImage: '',
         bannerImage: '',
         providerRequirements: ''
@@ -66,17 +67,12 @@ const PostScholarship = () => {
                 const errors = {};
                 if (!formData.title) errors.title = 'Title of Scholarship is required';
                 if (!formData.description) errors.description = 'Description is required';
-                if (!formData.category) errors.category = 'Scholarship Category is required';
                 if (!formData.numberOfScholarships) errors.numberOfScholarships = 'Number of Scholarships Available is required';
                 if (!formData.amount) errors.amount = 'Scholarship Amount is required';
-                if (!formData.applicationStartDate) errors.applicationStartDate = 'Application Start Date is required';
-                if (!formData.applicationDeadline) errors.applicationDeadline = 'Application Deadline is required';
+                if (!formData.educationLevel) errors.educationLevel = 'Education Level is required';
+                if (!formData.location) errors.location = 'Location is required';
                 if (!formData.fieldOfStudy) errors.fieldOfStudy = 'Field of Study is required';
-                if (!formData.minGPA) errors.minGPA = 'Minimum GPA/Grade Requirement is required';
-                if (!formData.nationality) errors.nationality = 'Nationality Requirements is required';
-                if (!formData.otherEligibility) errors.otherEligibility = 'Other Eligibility is required';
-                if (!formData.startDate) errors.startDate = 'Start Date is required';
-                if (!formData.endDate) errors.endDate = 'End Date is required';
+                if (!formData.duration) errors.duration = 'Duration Date is required';
                 if (!formData.contactEmail) errors.selectionProcess = 'Contact Email is required';
                 if (!formData.contactPhone) errors.contactPhone = 'Contact Phone is required';
                 return errors;

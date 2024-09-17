@@ -62,26 +62,6 @@ const Step1 = ({ formData, setFormData }) => {
                         ></textarea>
                     </div>
 
-
-
-                    <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Scholarship Category</label>
-                        <p className="text-sm text-gray-500 mb-2">Please select the appropriate category for the scholarship program.</p>
-                        <select
-                            name="category"
-                            value={formData.category || ''}
-                            onChange={handleChange}
-                            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required
-                        >
-                            <option value="">Select category</option>
-                            <option value="Undergraduate">Undergraduate</option>
-                            <option value="Graduate">Graduate</option>
-                            <option value="PhD">PhD</option>
-                            {/* Add more options as needed */}
-                        </select>
-                    </div>
-
                     <div>
                         <label className="block text-gray-700 font-semibold mb-2">Number of Scholarships Available</label>
                         <p className="text-sm text-gray-500 mb-2">Please enter the total number of scholarship slots available.</p>
@@ -110,33 +90,6 @@ const Step1 = ({ formData, setFormData }) => {
                             required
                         />
                     </div>
-
-                    <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Application Start Date</label>
-                        <p className="text-sm text-gray-500 mb-2">Please select the start date for scholarship applications.</p>
-                        <input
-                            type="date"
-                            name="applicationStartDate"
-                            value={formData.applicationStartDate || ''}
-                            onChange={handleChange}
-                            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            min={getTodayDate()}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Application Deadline</label>
-                        <p className="text-sm text-gray-500 mb-2">Please select the deadline date for scholarship applications.</p>
-                        <input
-                            type="date"
-                            name="applicationDeadline"
-                            value={formData.applicationDeadline || ''}
-                            onChange={handleChange}
-                            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            min={formData.applicationStartDate || getTodayDate()}
-                            required
-                        />
-                    </div>
                 </div>
             </div>
 
@@ -144,6 +97,45 @@ const Step1 = ({ formData, setFormData }) => {
             <div className='bg-white p-8 py-12 flex flex-col rounded-md border shadow'>
                 <h2 className="text-2xl font-bold mb-4 border-b-2 pb-4"> Eligibility Criteria</h2>
                 <div className='flex flex-col gap-4 px-4 space-y-1 mt-4'>
+                    <div>
+                        <label className="block text-gray-700 font-semibold mb-2">Education Level</label>
+                        <p className="text-sm text-gray-500 mb-2">Please select the appropriate education level for the scholarship program.</p>
+                        <select
+                            name="educationLevel"
+                            value={formData.educationLevel || ''}
+                            onChange={handleChange}
+                            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                        >
+                            <option value="">Select Education Level</option>
+                            <option value="Undergraduate">Undergraduate</option>
+                            <option value="Graduate">Graduate</option>
+                            <option value="PhD">PhD</option>
+                            {/* Add more options as needed */}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label className="block text-gray-700 font-semibold mb-2">Location</label>
+                        <p className="text-sm text-gray-500 mb-2">Select the location you want to provide.</p>
+                        <select
+                            name="location"
+                            value={formData.location || ''}
+                            onChange={handleChange}
+                            className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            required
+                        >
+                            <option value="" disabled>Select Location</option>
+                            <option value="Open for Any Location">Open for Any Location</option>
+                            <option value="Floridablanca">Floridablanca</option>
+                            <option value="Guagua">Guagua</option>
+                            <option value="Lubao">Lubao</option>
+                            <option value="Porac">Porac</option>
+                            <option value="Santa Rita">Santa Rita</option>
+                            <option value="Sasmuan">Sasmuan</option>
+                        </select>
+                    </div>
+
                     <div>
                         <label className="block text-gray-700 font-semibold mb-2">Field of Study</label>
                         <p className="text-sm text-gray-500 mb-2">Please select the field of study relevant to the scholarship program.</p>
@@ -154,7 +146,7 @@ const Step1 = ({ formData, setFormData }) => {
                             className="w-full p-2 border border-gray-300 rounded"
                             required
                         >
-                            <option value="" disabled>Select the field of study</option>
+                            <option value="" disabled>Select the Field of Study</option>
                             <option value="Open for All Courses">Open for All Courses</option>
                             <option value="BS in Accounting">BS in Accounting</option>
                             <option value="BS in Aerospace Engineering">BS in Aerospace Engineering</option>
@@ -253,101 +245,33 @@ const Step1 = ({ formData, setFormData }) => {
                             <option value="BS in Zoology">BS in Zoology</option>
                         </select>
                     </div>
-
-                    <div>
-                        <label className="block text-gray-700">Minimum GPA/Grade Requirement</label>
-                        <p className="text-sm text-gray-500 mb-2">Please enter the minimum GPA or grade required to be eligible for the scholarship.</p>
-                        <input
-                            type="text"
-                            name="minGPA"
-                            value={formData.minGPA || ''}
-                            onChange={handleChange}
-                            placeholder="Enter the minimum GPA required"
-                            className="w-full p-2 border border-gray-300 rounded"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700">Nationality Requirements</label>
-                        <p className="text-sm text-gray-500 mb-2">Please select the nationality requirements for the scholarship.</p>
-                        <select
-                            name="nationality"
-                            value={formData.nationality || ''}
-                            onChange={handleChange}
-                            className="w-full p-2 border border-gray-300 rounded"
-                            required
-                        >
-                            <option value="">Select nationality</option>
-                            <option value="All nationalities">All nationalities</option>
-                            <option value="Filipino">Filipino</option>
-                            <option value="American">American</option>
-                            <option value="Canadian">Canadian</option>
-                            <option value="British">British</option>
-                            <option value="Australian">Australian</option>
-                            <option value="Indian">Indian</option>
-                            <option value="Chinese">Chinese</option>
-                            <option value="Japanese">Japanese</option>
-                            <option value="German">German</option>
-                            <option value="French">French</option>
-                            <option value="Brazilian">Brazilian</option>
-                            <option value="Mexican">Mexican</option>
-                            <option value="South African">South African</option>
-                            <option value="Nigerian">Nigerian</option>
-                            <option value="Russian">Russian</option>
-                            <option value="Italian">Italian</option>
-                            <option value="Spanish">Spanish</option>
-                            {/* Add more options as needed */}
-                        </select>
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700">Other Eligibility Requirements</label>
-                        <p className="text-sm text-gray-500 mb-2">Please specify any other eligibility criteria for the scholarship.</p>
-                        <textarea
-                            name="otherEligibility"
-                            value={formData.otherEligibility || ''}
-                            onChange={handleChange}
-                            placeholder="Specify any other eligibility criteria"
-                            className="w-full p-2 border border-gray-300 rounded"
-                            required
-                        ></textarea>
-                    </div>
                 </div>
             </div>
 
             <div className='bg-white p-8 py-12 flex flex-col rounded-md border shadow'>
                 <h2 className="text-2xl font-bold mb-4 border-b-2 pb-4">Scholarship Duration</h2>
                 <div className='flex flex-col gap-4 px-4 space-y-1 mt-4'>
-
                     <div>
-                        <label className="block text-gray-700">Start Date</label>
-                        <p className="text-sm text-gray-500 mb-2">Please select the start date for the scholarship.</p>
-                        <input
-                            type="date"
-                            name="startDate"
-                            value={formData.startDate || ''}
+                        <label className="block text-gray-700">Duration</label>
+                        <p className="text-sm text-gray-500 mb-2">Please select the duration for the scholarship.</p>
+                        <select
+                            name="duration"
+                            value={formData.duration || ''}
                             onChange={handleChange}
                             className="w-full p-2 border border-gray-300 rounded"
-                            min={getTodayDate()}
                             required
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700">End Date</label>
-                        <p className="text-sm text-gray-500 mb-2">Please select the end date for the scholarship.</p>
-                        <input
-                            type="date"
-                            name="endDate"
-                            value={formData.endDate || ''}
-                            onChange={handleChange}
-                            className="w-full p-2 border border-gray-300 rounded"
-                            min={formData.startDate || getTodayDate()}
-                            required
-                        />
+                        >
+                            <option value="" disabled>Select duration</option>
+                            <option value="1 year">1 year</option>
+                            <option value="2 years">2 years</option>
+                            <option value="3 years">3 years</option>
+                            <option value="4 years">4 years</option>
+                            <option value="5 years">5 years</option>
+                        </select>
                     </div>
                 </div>
             </div>
+
 
             <div className='bg-white p-8 py-12 flex flex-col rounded-md border shadow'>
                 <h2 className="text-2xl font-bold mb-4 border-b-2 pb-4">Selection Criteria (Optional)</h2>

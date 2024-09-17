@@ -25,6 +25,7 @@ export default function ViewScholarshipDetails() {
     const [applications, setApplications] = useState([]);
     const [scholars, setScholars] = useState([]);
     const [showPublishModal, setShowPublishModal] = useState(false);
+    const [applicationDeadline, setApplicationDeadline] = useState('');
     const [showShareMessage, setShowShareMessage] = useState(false);
 
     const fetchProgramDetails = async () => {
@@ -107,10 +108,12 @@ export default function ViewScholarshipDetails() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                body: JSON.stringify({ applicationDeadline }), // Include the application deadline in the request body
             });
             if (!response.ok) throw new Error('Failed to publish the program');
             await response.json();
             setShowPublishModal(false);
+            console.log('Publishing with deadline:', applicationDeadline);
             fetchProgramDetails(); // Refresh the fetch after publishing
         } catch (error) {
             console.error('Error publishing the program:', error);
@@ -151,6 +154,14 @@ export default function ViewScholarshipDetails() {
         } catch (error) {
             console.error('Error updating scholarship status:', error);
         }
+    };
+
+    const getTodayDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     };
 
     if (loading) {
@@ -199,6 +210,17 @@ export default function ViewScholarshipDetails() {
                                 <div className="bg-white p-6 rounded-md shadow-md">
                                     <h3 className="text-xl font-bold mb-4">Confirm Publish</h3>
                                     <p>Are you sure you want to publish this scholarship program?</p>
+                                    <div className="mt-4">
+                                        <label className="block text-gray-700 font-semibold mb-2">Application Deadline</label>
+                                        <input
+                                            type="date"
+                                            value={applicationDeadline}
+                                            onChange={(e) => setApplicationDeadline(e.target.value)}
+                                            className="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                                            min={getTodayDate()} // Set the min attribute to today's date
+                                            required
+                                        />
+                                    </div>
                                     <div className="mt-6 flex justify-end space-x-4">
                                         <button
                                             className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md"

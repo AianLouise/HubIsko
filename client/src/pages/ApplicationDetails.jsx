@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { FaHandHolding, FaRegCalendarXmark, FaArrowRightLong } from "react-icons/fa6";
+import { FaHandHolding, FaRegCalendarXmark, FaArrowRightLong, FaGraduationCap, FaBook } from "react-icons/fa6";
 import { MdOutlineRefresh } from "react-icons/md";
 import { BsGlobe2 } from "react-icons/bs";
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { FaEnvelope, FaPhone, FaUser } from 'react-icons/fa';
+import { FaEnvelope, FaMapMarkerAlt, FaPhone, FaUser } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { CgClose } from 'react-icons/cg';
 import NewLogo from '../assets/NewLogoClean.png';
 import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 import { FaPersonCirclePlus } from "react-icons/fa6";
-
+import { regions, provinces, cities, barangays } from 'select-philippines-address';
 
 export default function Forums() {
     useTokenExpiry();
@@ -45,7 +45,6 @@ export default function Forums() {
         try {
             const response = await fetch(`/api/auth/user/${currentUser._id}`);
             const data = await response.json();
-            console.log('Fetched User Details:', data);
             setUserDetails(data);
         } catch (error) {
             console.error('Error fetching user details:', error);
@@ -56,7 +55,6 @@ export default function Forums() {
         try {
             const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${id}`);
             const data = await response.json();
-            console.log('Fetched Scholarship:', data); // Add this line
             setScholarship(data);
         } catch (error) {
             console.error('Error fetching scholarship:', error);
@@ -68,6 +66,130 @@ export default function Forums() {
         fetchUserDetails();
     }, [id]);
 
+    const [formData, setFormData] = useState({
+        region: '',
+        province: '',
+        city: '',
+        barangay: '',
+    });
+
+    const [regionList, setRegionList] = useState([]);
+    const [provinceList, setProvinceList] = useState([]);
+    const [cityList, setCityList] = useState([]);
+    const [barangayList, setBarangayList] = useState([]);
+
+    const [selectedRegion, setSelectedRegion] = useState('');
+    const [selectedProvince, setSelectedProvince] = useState('');
+    const [selectedCity, setSelectedCity] = useState('');
+    const [selectedBarangay, setSelectedBarangay] = useState('');
+
+    // New state to store full address names
+    const [fullAddress, setFullAddress] = useState({
+        regionName: '',
+        provinceName: '',
+        cityName: '',
+        barangayName: ''
+    });
+
+    // Fetch all regions on component mount
+    useEffect(() => {
+        regions().then(setRegionList);
+    }, []);
+
+    // Fetch provinces when a region is selected
+    useEffect(() => {
+        if (selectedRegion) {
+            provinces(selectedRegion).then(data => {
+                setProvinceList(data);
+                const regionName = regionList.find(region => region.region_code === selectedRegion)?.region_name;
+                setFormData(prevState => ({
+                    ...prevState,
+                    region: selectedRegion,
+                    regionName: regionName, // Save full region name
+                    province: '',
+                    city: '',
+                    barangay: ''
+                }));
+                setFullAddress(prevState => ({ ...prevState, regionName }));
+            });
+        }
+    }, [selectedRegion, regionList]);
+
+    // Fetch cities when a province is selected
+    useEffect(() => {
+        if (selectedProvince) {
+            cities(selectedProvince).then(data => {
+                setCityList(data);
+                const provinceName = provinceList.find(province => province.province_code === selectedProvince)?.province_name;
+                setFormData(prevState => ({
+                    ...prevState,
+                    province: selectedProvince,
+                    provinceName: provinceName, // Save full province name
+                    city: '',
+                    barangay: ''
+                }));
+                setFullAddress(prevState => ({ ...prevState, provinceName }));
+            });
+        }
+    }, [selectedProvince, provinceList]);
+
+    // Fetch barangays when a city is selected
+    useEffect(() => {
+        if (selectedCity) {
+            barangays(selectedCity).then(data => {
+                setBarangayList(data);
+                const cityName = cityList.find(city => city.city_code === selectedCity)?.city_name;
+                setFormData(prevState => ({
+                    ...prevState,
+                    city: selectedCity,
+                    cityName: cityName, // Save full city name
+                    barangay: ''
+                }));
+                setFullAddress(prevState => ({ ...prevState, cityName }));
+            });
+        }
+    }, [selectedCity, cityList]);
+
+    // Update formData when barangay is selected
+    useEffect(() => {
+        if (selectedBarangay) {
+            const barangayName = barangayList.find(barangay => barangay.brgy_code === selectedBarangay)?.brgy_name;
+            setFormData(prevState => ({
+                ...prevState,
+                barangay: selectedBarangay,
+                barangayName: barangayName // Save full barangay name
+            }));
+            setFullAddress(prevState => ({ ...prevState, barangayName }));
+        }
+    }, [selectedBarangay, barangayList]);
+
+    // Load initial data from formData
+    useEffect(() => {
+        const dummyData = {
+            region: userDetails?.applicantDetails?.address?.region || '',
+            province: userDetails?.applicantDetails?.address?.province || '',
+            city: userDetails?.applicantDetails?.address?.city || '',
+            barangay: userDetails?.applicantDetails?.address?.barangay || '',
+        };
+
+        setSelectedRegion(dummyData.region);
+        setSelectedProvince(dummyData.province);
+        setSelectedCity(dummyData.city);
+        setSelectedBarangay(dummyData.barangay);
+    }, [userDetails]);
+
+    // Fetch city name based on initial city code
+    useEffect(() => {
+        if (selectedCity) {
+            const cityName = cityList.find(city => city.city_code === selectedCity)?.city_name;
+            setFormData(prevState => ({
+                ...prevState,
+                cityName: cityName // Save full city name
+            }));
+            setFullAddress(prevState => ({ ...prevState, cityName }));
+        }
+    }, [selectedCity, cityList]);
+
     const handleApplyClick = async () => {
         fetchScholarship();
         if (!isLoggedIn) {
@@ -78,10 +200,19 @@ export default function Forums() {
             setNotification('You need to verify your account before applying for scholarships. Please visit the verification page.');
         } else if (scholarship?.numberOfScholarships == scholarship?.approvedScholars) {
             setNotification('Applications are closed as the slots are full. Please check back later.');
-        } else if (scholarship?.fieldOfStudy !== userDetails?.applicantDetails?.education?.college?.course) {
+        } else if (
+            scholarship?.fieldOfStudy !== 'Open for All Courses' &&
+            scholarship?.fieldOfStudy !== userDetails?.applicantDetails?.education?.college?.course
+        ) {
             setNotification('You are not eligible to apply for this scholarship based on your field of study.');
-        }
-        else {
+        } else if (
+            scholarship?.location !== 'Open for Any Location' &&
+            scholarship?.location !== formData.cityName
+        ) {
+            setNotification('You are not eligible to apply for this scholarship based on your location.');
+        } else if (new Date() > new Date(scholarship?.applicationDeadline)) {
+            setNotification('The deadline for this scholarship has passed.');
+        } else {
             try {
                 const response = await fetch(`/api/scholarshipProgram/${scholarship.id}/has-applied/${currentUser._id}`);
                 if (!response.ok) {
@@ -100,27 +231,10 @@ export default function Forums() {
         }
     };
 
-    // const [organizationName, setOrganizationName] = useState('');
-
-    // const fetchOrganizationName = async () => {
-    //     try {
-    //         const response = await fetch(`/api/scholarshipProgram/organization/${scholarship.providerId}`);
-    //         const data = await response.json();
-    //         if (response.ok) {
-    //             setOrganizationName(data.organizationName);
-    //         } else {
-    //             console.error(data.message);
-    //         }
-    //     } catch (error) {
-    //         console.error('Error fetching organization name:', error);
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     if (scholarship) {
-    //         fetchOrganizationName();
-    //     }
-    // }, [scholarship]);
+    const formatDate = (dateString) => {
+        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString('en-US', options);
+    };
 
     if (!scholarship) {
         return (
@@ -154,7 +268,7 @@ export default function Forums() {
                             <div className='flex flex-row divide-x-2 divide-blue-200 mb-2'>
                                 <span className='text-lg lg:text-xl font-bold text-gray-600 pr-4'>{scholarship.organizationName}</span>
                                 {/* need date posted */}
-                                <span className='text-lg lg:text-xl font-medium text-gray-400 pl-4'>{new Date(scholarship.startDate).toLocaleDateString()}</span>
+                                <span className='text-lg lg:text-xl font-medium text-gray-400 pl-4'>{new Date(scholarship.applicationStartDate).toLocaleDateString()}</span>
                             </div>
                             <h1 className='text-4xl hidden lg:block font-bold text-gray-800'>{scholarship.title}</h1>
 
@@ -167,27 +281,44 @@ export default function Forums() {
                         </div>
                     </div>
 
+                    <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl gap-2 lg:gap-10 lg:px-24 p-4'>
+                        <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl gap-2 lg:gap-10 lg:px-24 p-2'>
+                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                                <FaBook className='text-blue-500 w-6 h-6' />
+                                <p className='text-base'>{scholarship.fieldOfStudy}</p>
+                            </div>
+                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                                <FaMapMarkerAlt className='text-blue-500 w-6 h-6' />
+                                <p className='text-base'>{scholarship.location}</p>
+                            </div>
+                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                                <FaGraduationCap className='text-blue-500 w-6 h-6' />
+                                <p className='text-base'>{scholarship.educationLevel}</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div className='max-w-6xl lg:px-24 p-4 mx-auto mb-20'>
                         <div className='flex items-center justify-between gap-2'>
                             {/* need to add the last update date */}
 
                             <div className='flex gap-2 items-center'>
-                            <span className='flex gap-1 bg-white border px-4 py-2 rounded-md shadow'>
-                                <MdOutlineRefresh className='w-6 h-6 text-blue-600' />
-                                Last update: {new Date(scholarship.applicationEndDate).toLocaleDateString()}
-                            </span>
-                            <span className='flex gap-2 bg-white border px-4 py-2 rounded-md shadow items-center'>
-                                <FaRegCalendarXmark className='text-red-500' />
-                                Deadline: {new Date(scholarship.endDate).toLocaleDateString()}
-                            </span>
+                                <span className='flex gap-1 bg-white border px-4 py-2 rounded-md shadow'>
+                                    <MdOutlineRefresh className='w-6 h-6 text-blue-600' />
+                                    Last update: {new Date(scholarship.dateUpdated).toLocaleDateString()}
+                                </span>
+                                <span className='flex gap-2 bg-white border px-4 py-2 rounded-md shadow items-center'>
+                                    <FaRegCalendarXmark className='text-red-500' />
+                                    Deadline: {formatDate(scholarship.applicationDeadline)}
+                                </span>
                             </div>
 
                             <div className='flex gap-2 border shadow bg-white rounded-md px-4 py-2'>
                                 <div className='flex gap-2'>
-                                <FaPersonCirclePlus className='w-6 h-6 text-blue-600' />
-                                <span>Slots Available:</span> 
-                                 <span className='text-blue-500'>000/000</span>
-                                 </div>
+                                    <FaPersonCirclePlus className='w-6 h-6 text-blue-600' />
+                                    <span>Slots Available:</span>
+                                    <span className='text-blue-500'>{scholarship.approvedScholars}/{scholarship.numberOfScholarships}</span>
+                                </div>
                             </div>
                         </div>
                         <div className='flex justify-center items-center w-full h-52 rounded-md my-4 shadow border'>
@@ -289,8 +420,8 @@ export default function Forums() {
 
             {notification && (
                 <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
-                    <div className='p-6 pb-10 bg-white rounded-md text-center shadow-lg font-medium'>
-                        <button onClick={() => setNotification('')} className='flex w-full justify-end items-end'>
+                    <div className='relative p-10 bg-white rounded-md text-center shadow-lg font-medium'>
+                        <button onClick={() => setNotification('')} className='absolute top-2 right-2'>
                             <div className='border rounded-full p-1 hover:bg-slate-200'>
                                 <CgClose className='w-4 h-4' />
                             </div>
@@ -350,8 +481,7 @@ export default function Forums() {
                         )}
                         {notification !== 'You must be logged in to apply for scholarships.' && notification !== 'Your account is currently under verification. You cannot apply for scholarships until your account is fully verified.' && notification !== 'You need to verify your account before applying for scholarships. Please visit the verification page.' && (
                             <>
-                                {/* <strong className='font-bold text-red-500 text-lg'>Notification</strong> */}
-                                <div className='text-slate-400 h-10 flex items-center' role='alert'>
+                                <div className='text-slate-400 flex items-center justify-center' role='alert'>
                                     <span className='block sm:inline font-medium'>{notification}</span>
                                 </div>
                             </>

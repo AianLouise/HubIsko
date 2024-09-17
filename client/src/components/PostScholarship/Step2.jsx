@@ -95,20 +95,20 @@ const Step2 = ({ formData, setFormData }) => {
                 </div>
             </div>
 
-                              <div className="bg-white p-8 rounded-md shadow border flex flex-col gap-4">
-                        <h2 className="text-xl font-bold text-gray-800">Document Instructions</h2>
-                        <p className="text-sm text-gray-500 mb-2">Please provide any additional instructions or guidelines for document submission.</p>
-                        <textarea
-                            id="documentGuidelines"
-                            name="documentGuidelines"
-                            className="border border-gray-300 rounded-md p-2"
-                            placeholder="Enter detailed instructions for document submission"
-                            rows="4"
-                            value={formData.documentGuidelines || ''}
-                            onChange={handleChange}
-                            required
-                        ></textarea>
-                    </div>
+            <div className="bg-white p-8 rounded-md shadow border flex flex-col gap-4">
+                <h2 className="text-xl font-bold text-gray-800">Document Instructions</h2>
+                <p className="text-sm text-gray-500 mb-2">Please provide any additional instructions or guidelines for document submission.</p>
+                <textarea
+                    id="documentGuidelines"
+                    name="documentGuidelines"
+                    className="border border-gray-300 rounded-md p-2"
+                    placeholder="Enter detailed instructions for document submission"
+                    rows="4"
+                    value={formData.documentGuidelines || ''}
+                    onChange={handleChange}
+                    required
+                ></textarea>
+            </div>
         </div>
     );
 };

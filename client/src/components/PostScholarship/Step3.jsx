@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { FaHandHolding, FaRegCalendarXmark } from "react-icons/fa6";
+import { FaBook, FaGraduationCap, FaHandHolding, FaRegCalendarXmark } from "react-icons/fa6";
 import { MdOutlineRefresh } from "react-icons/md";
-import { FaEnvelope, FaPhone, FaUser } from 'react-icons/fa';
+import { FaEnvelope, FaMapMarkerAlt, FaPhone, FaUser } from 'react-icons/fa';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const Step3 = ({ formData, setFormData }) => {
@@ -173,6 +173,23 @@ const Step3 = ({ formData, setFormData }) => {
                         </div>
                     </div>
 
+                    <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl gap-2 lg:gap-10 lg:px-24 p-4'>
+                        <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl gap-2 lg:gap-10 lg:px-24 p-2'>
+                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                                <FaBook className='text-blue-500 w-6 h-6' />
+                                <p className='text-base'>{formData.fieldOfStudy}</p>
+                            </div>
+                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                                <FaMapMarkerAlt className='text-blue-500 w-6 h-6' />
+                                <p className='text-base'>{formData.location}</p>
+                            </div>
+                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                                <FaGraduationCap className='text-blue-500 w-6 h-6' />
+                                <p className='text-base'>{formData.educationLevel}</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div className='max-w-6xl px-24 mx-auto mb-20 mt-3'>
                         <div className='flex gap-2'>
                             <span className='flex gap-1 bg-white border px-4 py-2 rounded-md shadow'>
@@ -181,7 +198,7 @@ const Step3 = ({ formData, setFormData }) => {
                             </span>
                             <span className='flex gap-2 bg-white border px-4 py-2 rounded-md shadow items-center'>
                                 <FaRegCalendarXmark className='text-red-500' />
-                                Deadline: {new Date(formData.endDate).toLocaleDateString('en-US')}
+                                Deadline:  No deadline set
                             </span>
                         </div>
 

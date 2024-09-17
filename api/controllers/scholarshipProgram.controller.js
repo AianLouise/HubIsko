@@ -18,17 +18,12 @@ export const createScholarshipProgram = async (req, res) => {
     const {
       title,
       description,
-      category,
-      fieldOfStudy,
       numberOfScholarships,
       amount,
-      applicationStart,
-      applicationDeadline,
-      minGPA,
-      nationality,
-      otherEligibility,
-      startDate,
-      endDate,
+      educationLevel,
+      location,
+      fieldOfStudy,
+      duration,
       selectionProcess,
       selectionCriteria,
       renewalPolicy,
@@ -53,17 +48,11 @@ export const createScholarshipProgram = async (req, res) => {
     const newScholarship = new Scholarship({
       title,
       description,
-      category,
-      fieldOfStudy,
       numberOfScholarships,
       amount,
-      applicationStart: new Date(applicationStart),
-      applicationDeadline: new Date(applicationDeadline),
-      minGPA,
-      nationality,
-      otherEligibility,
-      startDate: new Date(startDate),
-      endDate: new Date(endDate),
+      educationLevel,
+      location,
+      fieldOfStudy,
       selectionProcess,
       selectionCriteria,
       renewalPolicy,
@@ -102,128 +91,6 @@ export const createScholarshipProgram = async (req, res) => {
   }
 };
 
-// export const createScholarshipProgram = async (req, res) => {
-//   try {
-//     // Log the request body for debugging
-//     console.log('Request Body:', req.body);
-
-//     // Extract data from request body
-//     const {
-//       title,
-//       category,
-//       fieldOfStudy,
-//       numberOfScholarships,
-//       amount,
-//       applicationDeadline,
-//       minGPA,
-//       nationality,
-//       otherEligibility,
-//       startDate,
-//       endDate,
-//       selectionProcess,
-//       selectionCriteria,
-//       renewalPolicy,
-//       renewalDuration,
-//       disbursementSchedule,
-//       disbursementMethod,
-//       contactEmail,
-//       contactPhone,
-//       providerId,
-//       organizationName,
-//       requiredDocuments,
-//       documentGuidelines,
-//       scholarshipImage,
-//       bannerImage,
-//       sections,
-//       faqTitle,
-//       faqDescription,
-//       providerRequirements
-//     } = req.body;
-
-//     // Validate required fields
-//     if (
-//       !title || !category || !fieldOfStudy ||
-//       numberOfScholarships === undefined || !amount || !applicationDeadline ||
-//       !minGPA || !nationality || !otherEligibility ||
-//       !startDate || !endDate || !selectionProcess || !selectionCriteria ||
-//       !renewalPolicy || !renewalDuration || !disbursementSchedule ||
-//       !disbursementMethod || !contactEmail || !contactPhone ||
-//       !providerId || !organizationName || !faqTitle || !faqDescription || // Include FAQ validation
-//       !scholarshipImage || !bannerImage || !providerRequirements// Include scholarshipImage and bannerImage validation
-//     ) {
-//       console.error('Validation Error: Missing required fields');
-//       return res.status(400).json({
-//         message: 'Title, category, field of study, number of scholarships, amount, application deadline, minimum GPA, nationality, other eligibility criteria, start date, end date, selection process, selection criteria, renewal policy, renewal duration, disbursement schedule, disbursement method, contact email, contact phone, provider ID, organization name, FAQ title, FAQ description, scholarship image, banner image, and providerRequirements are required fields.',
-//       });
-//     }
-
-//     // Validate date fields
-//     const parsedStartDate = new Date(startDate);
-//     const parsedEndDate = new Date(endDate);
-//     const parsedApplicationDeadline = new Date(applicationDeadline);
-
-//     if (
-//       isNaN(parsedStartDate.getTime()) ||
-//       isNaN(parsedEndDate.getTime()) ||
-//       isNaN(parsedApplicationDeadline.getTime())
-//     ) {
-//       console.error('Validation Error: Invalid date format');
-//       return res.status(400).json({
-//         message: 'Invalid date format for start date, end date, or application deadline.',
-//       });
-//     }
-
-//     // Create a new Scholarship document
-//     const newScholarship = new Scholarship({
-//       title,
-//       category,
-//       fieldOfStudy,
-//       numberOfScholarships,
-//       amount,
-//       applicationDeadline: parsedApplicationDeadline,
-//       minGPA,
-//       nationality,
-//       otherEligibility,
-//       startDate: parsedStartDate,
-//       endDate: parsedEndDate,
-//       selectionProcess,
-//       selectionCriteria,
-//       renewalPolicy,
-//       renewalDuration,
-//       disbursementSchedule,
-//       disbursementMethod,
-//       contactEmail,
-//       contactPhone,
-//       providerId,
-//       organizationName,
-//       requiredDocuments,
-//       documentGuidelines,
-//       scholarshipImage,
-//       bannerImage,
-//       sections,
-//       faqTitle,
-//       faqDescription,
-//       providerRequirements
-//     });
-
-//     // Save the Scholarship document to the database
-//     const savedScholarship = await newScholarship.save();
-
-//     // Send success response
-//     res.status(201).json({
-//       message: 'Scholarship program created successfully!',
-//       data: savedScholarship,
-//     });
-//   } catch (error) {
-//     // Handle errors
-//     console.error('Error creating scholarship program:', error);
-//     res.status(500).json({
-//       message: 'An error occurred while creating the scholarship program.',
-//       error: error.message,
-//     });
-//   }
-// };
-
 export const getScholarshipProgramsByProviderId = async (req, res) => {
   try {
     const providerId = req.params.id; // Extract providerId from route parameters
@@ -243,18 +110,56 @@ export const getScholarshipProgramsByProviderId = async (req, res) => {
       _id: program._id,
       title: program.title,
       description: program.description,
-      category: program.category,
-      fieldOfStudy: program.fieldOfStudy,
       numberOfScholarships: program.numberOfScholarships,
-      numberOfScholarshipsSlotFilled: program.numberOfScholarshipsSlotFilled,
       amount: program.amount,
-      applicationStart: program.applicationStart,
+      fieldOfStudy: program.fieldOfStudy,
+      location: program.location,
+      educationLevel: program.educationLevel,
+      applicationStartDate: program.applicationStartDate,
       applicationDeadline: program.applicationDeadline,
-      minGPA: program.minGPA,
-      nationality: program.nationality,
-      otherEligibility: program.otherEligibility,
-      startDate: program.startDate,
-      endDate: program.endDate,
+      selectionProcess: program.selectionProcess,
+      selectionCriteria: program.selectionCriteria,
+      renewalPolicy: program.renewalPolicy,
+      renewalDuration: program.renewalDuration,
+      disbursementSchedule: program.disbursementSchedule,
+      disbursementMethod: program.disbursementMethod,
+      contactEmail: program.contactEmail,
+      contactPhone: program.contactPhone,
+      providerId: program.providerId,
+      organizationName: program.organizationName,
+      requiredDocuments: program.requiredDocuments,
+      documentGuidelines: program.documentGuidelines,
+      scholarshipImage: program.scholarshipImage,
+      bannerImage: program.bannerImage,
+      sections: program.sections,
+      faqTitle: program.faqTitle,
+      faqDescription: program.faqDescription,
+      providerRequirements: program.providerRequirements,
+      status: program.status,
+      approvedScholars: program.approvedScholars.length,
+    }));
+
+    res.status(200).json(formattedPrograms);
+  } catch (error) {
+    console.error('Error fetching scholarship programs:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+export const getAllScholarshipPrograms = async (req, res) => {
+  try {
+    const programs = await Scholarship.find();
+    const formattedPrograms = programs.map(program => ({
+      id: program._id,
+      title: program.title,
+      description: program.description,
+      numberOfScholarships: program.numberOfScholarships,
+      amount: program.amount,
+      fieldOfStudy: program.fieldOfStudy,
+      location: program.location,
+      educationLevel: program.educationLevel,
+      applicationStartDate: program.applicationStartDate,
+      applicationDeadline: program.applicationDeadline,
       selectionProcess: program.selectionProcess,
       selectionCriteria: program.selectionCriteria,
       renewalPolicy: program.renewalPolicy,
@@ -275,53 +180,6 @@ export const getScholarshipProgramsByProviderId = async (req, res) => {
       providerRequirements: program.providerRequirements,
       status: program.status,
       approvedScholars: program.approvedScholars.length, // Assuming approvedScholars is an array
-    }));
-
-    res.status(200).json(formattedPrograms);
-  } catch (error) {
-    console.error('Error fetching scholarship programs:', error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
-
-export const getAllScholarshipPrograms = async (req, res) => {
-  try {
-    const programs = await Scholarship.find();
-    const formattedPrograms = programs.map(program => ({
-      id: program._id,
-      title: program.title,
-      description: program.description,
-      category: program.category,
-      fieldOfStudy: program.fieldOfStudy,
-      numberOfScholarships: program.numberOfScholarships,
-      numberOfScholarshipsSlotFilled: program.numberOfScholarshipsSlotFilled,
-      amount: program.amount,
-      applicationStart: program.applicationStart,
-      applicationDeadline: program.applicationDeadline,
-      minGPA: program.minGPA,
-      nationality: program.nationality,
-      otherEligibility: program.otherEligibility,
-      startDate: program.startDate,
-      endDate: program.endDate,
-      selectionProcess: program.selectionProcess,
-      selectionCriteria: program.selectionCriteria,
-      renewalPolicy: program.renewalPolicy,
-      renewalDuration: program.renewalDuration,
-      disbursementSchedule: program.disbursementSchedule,
-      disbursementMethod: program.disbursementMethod,
-      contactEmail: program.contactEmail,
-      contactPhone: program.contactPhone,
-      providerId: program.providerId,
-      organizationName: program.organizationName,
-      requiredDocuments: program.requiredDocuments,
-      documentGuidelines: program.documentGuidelines,
-      scholarshipImage: program.scholarshipImage,
-      bannerImage: program.bannerImage,
-      sections: program.sections,
-      faqTitle: program.faqTitle,
-      faqDescription: program.faqDescription,
-      providerRequirements: program.providerRequirements,
-      status: program.status,
     }));
 
     res.status(200).json(formattedPrograms);
@@ -367,19 +225,13 @@ export const getScholarshipProgramById = async (req, res) => {
       id: scholarshipProgram._id,
       title: scholarshipProgram.title,
       description: scholarshipProgram.description,
-      category: scholarshipProgram.category,
-      fieldOfStudy: scholarshipProgram.fieldOfStudy,
       numberOfScholarships: scholarshipProgram.numberOfScholarships,
-      numberOfScholarshipsSlotFilled: scholarshipProgram.numberOfScholarshipsSlotFilled,
-      approvedScholars: scholarshipProgram.approvedScholars.length, // Assuming approvedScholars is an array
       amount: scholarshipProgram.amount,
-      applicationStart: scholarshipProgram.applicationStart,
+      fieldOfStudy: scholarshipProgram.fieldOfStudy,
+      location: scholarshipProgram.location,
+      educationLevel: scholarshipProgram.educationLevel,
+      applicationStartDate: scholarshipProgram.applicationStartDate,
       applicationDeadline: scholarshipProgram.applicationDeadline,
-      minGPA: scholarshipProgram.minGPA,
-      nationality: scholarshipProgram.nationality,
-      otherEligibility: scholarshipProgram.otherEligibility,
-      startDate: scholarshipProgram.startDate,
-      endDate: scholarshipProgram.endDate,
       selectionProcess: scholarshipProgram.selectionProcess,
       selectionCriteria: scholarshipProgram.selectionCriteria,
       renewalPolicy: scholarshipProgram.renewalPolicy,
@@ -399,6 +251,8 @@ export const getScholarshipProgramById = async (req, res) => {
       faqDescription: scholarshipProgram.faqDescription,
       providerRequirements: scholarshipProgram.providerRequirements,
       status: scholarshipProgram.status,
+      dateUpdated: scholarshipProgram.dateUpdated,
+      approvedScholars: scholarshipProgram.approvedScholars.length,
     };
 
     res.status(200).json(formattedProgram);
@@ -498,8 +352,6 @@ export const updateApplicationStatus = async (req, res) => {
     res.status(500).json({ message: 'Failed to update application status', error });
   }
 };
-
-
 
 export const addApprovedScholar = async (req, res) => {
   const { userId, programId } = req.params;
@@ -648,23 +500,26 @@ export const hasUserApplied = async (req, res) => {
 };
 
 export const publishScholarshipProgram = async (req, res) => {
-  const { id } = req.params;
+    const { id } = req.params;
+    const { applicationDeadline } = req.body; // Get the application deadline from the request body
 
-  try {
-      const program = await Scholarship.findById(id);
-      if (!program) {
-          return res.status(404).json({ message: 'Scholarship Program not found' });
-      }
+    try {
+        const program = await Scholarship.findById(id);
+        if (!program) {
+            return res.status(404).json({ message: 'Scholarship Program not found' });
+        }
 
-      // Set the program status to 'Published'
-      program.status = 'Published';
-      await program.save();
+        // Set the program status to 'Published', update the application deadline, and set the application start date
+        program.status = 'Published';
+        program.applicationDeadline = applicationDeadline;
+        program.applicationStartDate = Date.now(); // Set the application start date to the current date and time
+        await program.save();
 
-      res.status(200).json({ message: 'Scholarship Program successfully published', program });
-  } catch (error) {
-      console.error('Error publishing scholarship program:', error);
-      res.status(500).json({ message: 'Server error while publishing program' });
-  }
+        res.status(200).json({ message: 'Scholarship Program successfully published', program });
+    } catch (error) {
+        console.error('Error publishing scholarship program:', error);
+        res.status(500).json({ message: 'Server error while publishing program' });
+    }
 };
 
 export const updateScholarshipStatus = async (req, res) => {
