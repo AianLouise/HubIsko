@@ -349,3 +349,37 @@ export const verifyEmailUpdate = async (req, res) => {
         res.status(500).json({ message: 'Error verifying email change', error: error.message });
     }
 };
+
+export const changePassword = async (req, res) => {
+  try {
+      const { userId } = req.params;
+      const { currentPassword, newPassword, confirmNewPassword } = req.body;
+
+      // Ensure new password and confirm password match (Optional, could be removed if handled in frontend)
+      if (newPassword !== confirmNewPassword) {
+          return res.status(400).json({ error: 'New passwords do not match.' });
+      }
+
+      // Find the user by ID
+      const user = await User.findById(userId);
+      if (!user) {
+          return res.status(404).json({ error: 'User not found.' });
+      }
+
+      // Compare current password with stored hash
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) {
+          return res.status(400).json({ error: 'Current password is incorrect.' });
+      }
+
+      // Hash the new password and save it
+      const hashedPassword = await bcrypt.hash(newPassword, 10); // Salt rounds are set to 10 directly
+      user.password = hashedPassword;
+      await user.save();
+
+      return res.status(200).json({ message: 'Password changed successfully.' });
+  } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal server error.' });
+  }
+};

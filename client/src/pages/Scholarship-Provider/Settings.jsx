@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import UpdateInformation from '../../components/ProviderSettings/UpdateInformation';
 import UpdateAccountDetails from '../../components/ProviderSettings/UpdateAccountDetails';
+import ChangePassword from '../../components/ProviderSettings/ChangePassword';
 import { updateUserDetails } from '../../redux/user/userSlice';
 
 export default function Settings() {
@@ -15,79 +16,6 @@ export default function Settings() {
 
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
     const handleTabClick = (tab) => setSelectedTab(tab);
-
-    const [passwordData, setPasswordData] = useState({
-        currentPassword: '',
-        newPassword: '',
-        confirmNewPassword: '',
-    });
-
-    const handlePasswordChange = (e) => {
-        const { name, value } = e.target;
-        setPasswordData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
-
-    const [passwordErrors, setPasswordErrors] = useState({});
-
-    const validatePassword = () => {
-        const errors = {};
-        const { newPassword, confirmNewPassword } = passwordData;
-
-        if (newPassword.length < 6) {
-            errors.newPassword = 'Password must be at least 6 characters long.';
-        }
-        if (!/[A-Z]/.test(newPassword)) {
-            errors.newPassword = 'Password must contain at least one uppercase letter.';
-        }
-        if (!/[!@#$%^&*(),.?":{}|<>]/.test(newPassword)) {
-            errors.newPassword = 'Password must contain at least one special character.';
-        }
-        if (newPassword !== confirmNewPassword) {
-            errors.confirmNewPassword = 'Passwords do not match.';
-        }
-
-        setPasswordErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
-
-    const handleChangePassword = async (e) => {
-        e.preventDefault();
-        if (!validatePassword()) {
-            return;
-        }
-
-        const passwordData = {
-            currentPassword: passwordErrors.currentPassword,
-            newPassword: passwordErrors.newPassword,
-            confirmNewPassword: passwordErrors.confirmNewPassword,
-        };
-
-        console.log('Password Data:', passwordData);
-
-        try {
-            const response = await fetch(`/api/users/${currentUser._id}/change-password`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(passwordData),
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const data = await response.json();
-            console.log('Response:', data);
-            // Handle success (e.g., show a success message)
-        } catch (error) {
-            console.error('Error changing password:', error);
-            // Handle error (e.g., show an error message)
-        }
-    };
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -144,48 +72,9 @@ export default function Settings() {
                         )}
 
                         {selectedTab === 'Change Password' && (
-                            <div className='bg-white border shadow rounded-md p-4'>
-                                <h2 className='text-2xl font-bold mb-4'>Change Password</h2>
-                                <form onSubmit={handleChangePassword}>
-                                    <div className='mb-4'>
-                                        <label className='block text-sm font-medium text-gray-700'>Current Password</label>
-                                        <input
-                                            type='password'
-                                            name='currentPassword'
-                                            className='mt-1 p-2 border rounded-md w-full'
-                                            value={passwordData.currentPassword}
-                                            onChange={handlePasswordChange}
-                                        />
-                                    </div>
-                                    <div className='mb-4'>
-                                        <label className='block text-sm font-medium text-gray-700'>New Password</label>
-                                        <input
-                                            type='password'
-                                            name='newPassword'
-                                            className='mt-1 p-2 border rounded-md w-full'
-                                            value={passwordData.newPassword}
-                                            onChange={handlePasswordChange}
-                                        />
-                                        {passwordErrors.newPassword && (
-                                            <p className='text-red-500 text-xs mt-1'>{passwordErrors.newPassword}</p>
-                                        )}
-                                    </div>
-                                    <div className='mb-4'>
-                                        <label className='block text-sm font-medium text-gray-700'>Confirm New Password</label>
-                                        <input
-                                            type='password'
-                                            name='confirmNewPassword'
-                                            className='mt-1 p-2 border rounded-md w-full'
-                                            value={passwordData.confirmNewPassword}
-                                            onChange={handlePasswordChange}
-                                        />
-                                        {passwordErrors.confirmNewPassword && (
-                                            <p className='text-red-500 text-xs mt-1'>{passwordErrors.confirmNewPassword}</p>
-                                        )}
-                                    </div>
-                                    <button type='submit' className='bg-blue-600 text-white px-4 py-2 rounded-md'>Change Password</button>
-                                </form>
-                            </div>
+                            <ChangePassword
+                                currentUser={currentUser}
+                            />
                         )}
                     </div>
                 </div>
