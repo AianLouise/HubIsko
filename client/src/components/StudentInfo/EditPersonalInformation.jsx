@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { RiEditFill, RiSaveFill, RiCloseFill } from "react-icons/ri";
 import CustomNotification from '../CustomNotification';
-import { updateUser } from '../../redux/user/userSlice'; // Import your action
 
 export default function EditPersonalInformation() {
-    const dispatch = useDispatch();
     const { currentUser } = useSelector((state) => state.user);
+    const userId = currentUser._id;
 
     const formatDate = (dateString) => {
         if (!dateString) return '';
@@ -19,33 +18,78 @@ export default function EditPersonalInformation() {
 
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
-        firstName: currentUser.applicantDetails.firstName || '',
-        middleName: currentUser.applicantDetails.middleName || '',
-        lastName: currentUser.applicantDetails.lastName || '',
-        nameExtension: currentUser.applicantDetails.nameExtension || '',
-        birthdate: formatDate(currentUser.applicantDetails.birthdate) || '',
-        gender: currentUser.applicantDetails.gender || '',
-        bloodType: currentUser.applicantDetails.bloodType || '',
-        civilStatus: currentUser.applicantDetails.civilStatus || '',
-        maidenName: currentUser.applicantDetails.maidenName || '',
-        spouseName: currentUser.applicantDetails.spouseName || '',
-        spouseOccupation: currentUser.applicantDetails.spouseOccupation || '',
-        religion: currentUser.applicantDetails.religion || '',
-        height: currentUser.applicantDetails.height || '',
-        weight: currentUser.applicantDetails.weight || '',
-        birthplace: currentUser.applicantDetails.birthplace || '',
-        contactNumber: currentUser.applicantDetails.contactNumber || '',
+        applicantDetails: {
+            firstName: '',
+            middleName: '',
+            lastName: '',
+            nameExtension: '',
+            birthdate: '',
+            gender: '',
+            bloodType: '',
+            civilStatus: '',
+            maidenName: '',
+            spouseName: '',
+            spouseOccupation: '',
+            religion: '',
+            height: '',
+            weight: '',
+            birthplace: '',
+            contactNumber: '',
+        },
     });
+
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                const response = await fetch(`/api/auth/user/${userId}`);
+                if (!response.ok) {
+                    throw new Error('Error fetching user details');
+                }
+
+                const user = await response.json();
+
+                // Corrected syntax for setFormData
+                setFormData({
+                    applicantDetails: {
+                        firstName: user.applicantDetails.firstName,
+                        middleName: user.applicantDetails.middleName,
+                        lastName: user.applicantDetails.lastName,
+                        nameExtension: user.applicantDetails.nameExtension,
+                        birthdate: formatDate(user.applicantDetails.birthdate), // If needed, format the date
+                        gender: user.applicantDetails.gender,
+                        bloodType: user.applicantDetails.bloodType,
+                        civilStatus: user.applicantDetails.civilStatus,
+                        maidenName: user.applicantDetails.maidenName,
+                        spouseName: user.applicantDetails.spouseName,
+                        spouseOccupation: user.applicantDetails.spouseOccupation,
+                        religion: user.applicantDetails.religion,
+                        height: user.applicantDetails.height,
+                        weight: user.applicantDetails.weight,
+                        birthplace: user.applicantDetails.birthplace,
+                        contactNumber: user.applicantDetails.contactNumber,
+                    },
+                });
+            } catch (error) {
+                console.error('Error fetching user details:', error);
+                setErrors({ general: 'Error fetching user details' });
+            }
+        };
+
+        fetchUserDetails();
+    }, [userId]);
 
     const [originalFormData, setOriginalFormData] = useState(formData);
     const [notification, setNotification] = useState(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            applicantDetails: {
+                ...prevFormData.applicantDetails,
+                [name]: value,
+            },
+        }));
     };
 
     const handleSave = async () => {
@@ -53,6 +97,8 @@ export default function EditPersonalInformation() {
             ...formData,
             birthdate: formatDate(formData.birthdate)
         };
+
+        console.log('Saving data:', formattedData);
 
         try {
             const response = await fetch(`/api/profile/user/${currentUser._id}`, {
@@ -65,8 +111,6 @@ export default function EditPersonalInformation() {
 
             if (response.ok) {
                 const updatedUser = await response.json(); // Assuming the updated user data is returned
-                dispatch(updateUser(updatedUser)); // Update the Redux store
-                alert('Information updated successfully');
                 setIsEditing(false); // Exit editing mode after successful save
                 setNotification({ type: 'success', message: 'User information updated successfully' });
             } else {
@@ -92,14 +136,20 @@ export default function EditPersonalInformation() {
         setNotification(null);
     };
 
+    const inputBaseClasses = "block w-full p-2 rounded-lg border transition duration-200";
+
     const inputClasses = isEditing
-        ? "w-full p-2 rounded-md border-2 border-blue-600 bg-white focus:outline-none focus:ring-2 focus:ring-blue-600"
-        : "w-full bg-slate-200 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600";
+        ? `${inputBaseClasses} border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 shadow-sm`
+        : `${inputBaseClasses} bg-gray-100 border-gray-200 cursor-not-allowed`;
+
+    const selectClasses = isEditing
+        ? `${inputBaseClasses} border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 shadow-sm`
+        : `${inputBaseClasses} bg-gray-100 border-gray-200 cursor-not-allowed`;
 
     return (
         <div className="bg-white lg:gap-8 w-full border shadow rounded-md">
-        <div className="flex justify-between items-center p-4 lg:px-12 lg:py-4 rounded-t-md border-b">
-          <span className="text-base lg:text-xl font-bold">Your Personal Information</span>
+            <div className="flex justify-between items-center p-4 lg:px-12 lg:py-4 rounded-t-md border-b">
+                <span className="text-base lg:text-xl font-bold">Your Personal Information</span>
                 <div className="flex gap-2">
                     <button
                         onClick={isEditing ? handleSave : toggleEdit}
@@ -127,7 +177,7 @@ export default function EditPersonalInformation() {
                         type="text"
                         name="firstName"
                         className={inputClasses}
-                        value={formData.firstName}
+                        value={formData.applicantDetails.firstName}
                         onChange={handleChange}
                         disabled={!isEditing}
                     />
@@ -138,7 +188,7 @@ export default function EditPersonalInformation() {
                         type="text"
                         name="lastName"
                         className={inputClasses}
-                        value={formData.lastName}
+                        value={formData.applicantDetails.lastName}
                         onChange={handleChange}
                         disabled={!isEditing}
                     />
@@ -149,7 +199,7 @@ export default function EditPersonalInformation() {
                         type="text"
                         name="middleName"
                         className={inputClasses}
-                        value={formData.middleName}
+                        value={formData.applicantDetails.middleName}
                         onChange={handleChange}
                         disabled={!isEditing}
                     />
@@ -159,7 +209,7 @@ export default function EditPersonalInformation() {
                     <select
                         name="nameExtension"
                         className={inputClasses}
-                        value={formData.nameExtension}
+                        value={formData.applicantDetails.nameExtension}
                         onChange={handleChange}
                         disabled={!isEditing}
                     >
@@ -180,7 +230,7 @@ export default function EditPersonalInformation() {
                         type="date"
                         name="birthdate"
                         className={inputClasses}
-                        value={formData.birthdate}
+                        value={formData.applicantDetails.birthdate}
                         onChange={handleChange}
                         disabled={!isEditing}
                     />
@@ -190,7 +240,7 @@ export default function EditPersonalInformation() {
                     <select
                         name="gender"
                         className={inputClasses}
-                        value={formData.gender}
+                        value={formData.applicantDetails.gender}
                         onChange={handleChange}
                         disabled={!isEditing}
                     >
@@ -205,7 +255,7 @@ export default function EditPersonalInformation() {
                     <select
                         name="bloodType"
                         className={inputClasses}
-                        value={formData.bloodType}
+                        value={formData.applicantDetails.bloodType}
                         onChange={handleChange}
                         disabled={!isEditing}
                     >
@@ -225,7 +275,7 @@ export default function EditPersonalInformation() {
                     <select
                         name="religion"
                         className={inputClasses}
-                        value={formData.religion}
+                        value={formData.applicantDetails.religion}
                         onChange={handleChange}
                         disabled={!isEditing}
                     >
@@ -243,7 +293,7 @@ export default function EditPersonalInformation() {
                     <select
                         name="civilStatus"
                         className={inputClasses}
-                        value={formData.civilStatus}
+                        value={formData.applicantDetails.civilStatus}
                         onChange={handleChange}
                         disabled={!isEditing}
                     >
@@ -260,7 +310,7 @@ export default function EditPersonalInformation() {
                         type="text"
                         name="maidenName"
                         className={inputClasses}
-                        value={formData.maidenName}
+                        value={formData.applicantDetails.maidenName}
                         onChange={handleChange}
                         disabled={!isEditing || formData.civilStatus !== 'Married'}
                     />
@@ -271,7 +321,7 @@ export default function EditPersonalInformation() {
                         type="text"
                         name="spouseName"
                         className={inputClasses}
-                        value={formData.spouseName}
+                        value={formData.applicantDetails.spouseName}
                         onChange={handleChange}
                         disabled={!isEditing || formData.civilStatus !== 'Married'}
                     />
@@ -282,7 +332,7 @@ export default function EditPersonalInformation() {
                         type="text"
                         name="spouseOccupation"
                         className={inputClasses}
-                        value={formData.spouseOccupation}
+                        value={formData.applicantDetails.spouseOccupation}
                         onChange={handleChange}
                         disabled={!isEditing || formData.civilStatus !== 'Married'}
                     />
@@ -295,7 +345,7 @@ export default function EditPersonalInformation() {
                         type="number"
                         name="height"
                         className={inputClasses}
-                        value={formData.height}
+                        value={formData.applicantDetails.height}
                         onChange={handleChange}
                         disabled={!isEditing}
                     />
@@ -306,7 +356,7 @@ export default function EditPersonalInformation() {
                         type="number"
                         name="weight"
                         className={inputClasses}
-                        value={formData.weight}
+                        value={formData.applicantDetails.weight}
                         onChange={handleChange}
                         disabled={!isEditing}
                     />
@@ -317,7 +367,7 @@ export default function EditPersonalInformation() {
                         type="text"
                         name="birthplace"
                         className={inputClasses}
-                        value={formData.birthplace}
+                        value={formData.applicantDetails.birthplace}
                         onChange={handleChange}
                         disabled={!isEditing}
                     />
@@ -328,7 +378,7 @@ export default function EditPersonalInformation() {
                         type="text"
                         name="contactNumber"
                         className={inputClasses}
-                        value={formData.contactNumber}
+                        value={formData.applicantDetails.contactNumber}
                         onChange={handleChange}
                         disabled={!isEditing}
                     />

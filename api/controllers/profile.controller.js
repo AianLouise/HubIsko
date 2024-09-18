@@ -11,6 +11,7 @@ export const test = (req, res) => {
 export const getUserById = async (req, res) => {
     try {
         const userId = req.params.id; // Get the user ID from the URL
+        console.log(`Received userId: ${userId}`); // Log the userId to the console
         const user = await User.findById(userId); // Find the user by ID
 
         if (!user) {
@@ -68,7 +69,7 @@ export const getForumPostsByUserId = async (req, res) => {
 export const editUserInfo = async (req, res) => {
     try {
         const { userId } = req.params;
-        const { firstName, middleName, lastName, nameExtension, birthdate, gender, bloodType, civilStatus, maidenName, spouseName, spouseOccupation, religion, height, weight, birthplace, contactNumber } = req.body;
+        const { applicantDetails } = req.body; // Destructure applicantDetails from the request body
 
         // Find the user by ID
         const user = await User.findById(userId);
@@ -76,23 +77,12 @@ export const editUserInfo = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Update user information
-        user.applicantDetails.firstName = firstName || user.applicantDetails.firstName;
-        user.applicantDetails.middleName = middleName || user.applicantDetails.middleName;
-        user.applicantDetails.lastName = lastName || user.applicantDetails.lastName;
-        user.applicantDetails.nameExtension = nameExtension || user.applicantDetails.nameExtension;
-        user.applicantDetails.birthdate = birthdate || user.applicantDetails.birthdate;
-        user.applicantDetails.gender = gender || user.applicantDetails.gender;
-        user.applicantDetails.bloodType = bloodType || user.applicantDetails.bloodType;
-        user.applicantDetails.civilStatus = civilStatus || user.applicantDetails.civilStatus;
-        user.applicantDetails.maidenName = maidenName || user.applicantDetails.maidenName;
-        user.applicantDetails.spouseName = spouseName || user.applicantDetails.spouseName;
-        user.applicantDetails.spouseOccupation = spouseOccupation || user.applicantDetails.spouseOccupation;
-        user.applicantDetails.religion = religion || user.applicantDetails.religion;
-        user.applicantDetails.height = height || user.applicantDetails.height;
-        user.applicantDetails.weight = weight || user.applicantDetails.weight;
-        user.applicantDetails.birthplace = birthplace || user.applicantDetails.birthplace;
-        user.applicantDetails.contactNumber = contactNumber || user.applicantDetails.contactNumber;
+        // Update user information by iterating over applicantDetails keys
+        Object.keys(applicantDetails).forEach((key) => {
+            if (applicantDetails[key]) {
+                user.applicantDetails[key] = applicantDetails[key];
+            }
+        });
 
         // Save the updated user information
         await user.save();
