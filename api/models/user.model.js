@@ -242,6 +242,30 @@ const scholarshipProviderSchema = new mongoose.Schema({
   }
 }, { _id: false }); // Disable automatic _id generation for embedded sub-schema
 
+const adminSchema = new mongoose.Schema({
+  firstName: {
+    type: String,
+    required: false,
+  },
+  lastName: {
+    type: String,
+    required: false,
+  },
+  middleName: {
+    type: String,
+    required: false,
+  },
+  contactNumber: {
+    type: String,
+    required: false,
+  },
+  role: {
+    type: String,
+    enum: ['admin', 'superadmin', 'manager', 'editor'], // Example roles
+    default: 'admin',
+  },
+}, { _id: false }); // Disable automatic _id generation for embedded sub-schema
+
 // Base schema (User schema)
 const userSchema = new mongoose.Schema({
   email: {
@@ -315,6 +339,7 @@ const userSchema = new mongoose.Schema({
   },
   applicantDetails: applicantSchema, // Embedded schema for applicant details
   scholarshipProviderDetails: scholarshipProviderSchema, // Embedded schema for scholarship provider details
+  adminDetails: adminSchema, // Embedded schema for admin details
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
