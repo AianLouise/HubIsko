@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import AccountManagement from './AccountManagement';
 import ChangePassword from '../components/AccountSettings/ChangePassword';
 import ChangeEmail from '../components/AccountSettings/ChangeEmail';
+import UpdateProfile from '../components/AccountSettings/UpdateProfile';
 import useTokenExpiry from '../hooks/useTokenExpiry';
 
 export default function AccountSettings() {
@@ -18,6 +19,7 @@ export default function AccountSettings() {
             <Header />
             <AccountManagement />
             <div className='max-w-[950px] mx-auto flex flex-col gap-10 pt-10 text-sm lg:text-base py-10'>
+                <UpdateProfile />
                 <ChangePassword />
                 <ChangeEmail />
             </div>

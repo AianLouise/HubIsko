@@ -206,3 +206,42 @@ export const verifyEmail = async (req, res) => {
         res.status(500).json({ message: 'Server error', error });
     }
 };
+
+export const updateProfile = async (req, res) => {
+    const { userId } = req.params; // Get userId from request params
+    const { username, profilePicture } = req.body;
+
+    try {
+        // Validate incoming data
+        if (!username || !profilePicture) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
+
+        // Find and update the user profile
+        const updatedUser = await User.findByIdAndUpdate(
+            userId, // Use userId from params
+            {
+                username,
+                profilePicture, // URL of the uploaded profile picture
+            },
+            { new: true } // Return the updated user
+        );
+
+        // Check if the user was found and updated
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Respond with the updated user data
+        res.status(200).json({
+            message: 'Profile updated successfully',
+            user: updatedUser
+        });
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        res.status(500).json({
+            message: 'Server error',
+            error: error.message
+        });
+    }
+};

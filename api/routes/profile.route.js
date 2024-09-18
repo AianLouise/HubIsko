@@ -1,5 +1,5 @@
 import express from "express";
-import { editAddress, editUserInfo, getForumPostsByUserId, getScholarshipProgramsByProviderId, getUserById, requestEmailUpdate, test, verifyEmail } from '../controllers/profile.controller.js';
+import { editAddress, editUserInfo, getForumPostsByUserId, getScholarshipProgramsByProviderId, getUserById, requestEmailUpdate, test, updateProfile, verifyEmail } from '../controllers/profile.controller.js';
 
 const router = express.Router();
 
@@ -16,5 +16,6 @@ router.post('/change-email/:userId', requestEmailUpdate);
 // Route to verify email
 router.get('/verify-email', verifyEmail);
 
+router.post('/update-profile/:userId', updateProfile);
 
 export default router;
