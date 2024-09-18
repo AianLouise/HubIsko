@@ -26,7 +26,10 @@ export default function ScholarshipProviderApplications() {
     useEffect(() => {
         document.title = "Scholarship Provider Applications | HubIsko";
     }, []);
+
     const [providers, setProviders] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [filteredProviders, setFilteredProviders] = useState([]);
 
     const fetchPendingApprovalProviders = async () => {
         try {
@@ -36,6 +39,7 @@ export default function ScholarshipProviderApplications() {
             }
             const data = await response.json();
             setProviders(data);
+            setFilteredProviders(data); // Initialize filteredProviders with fetched data
         } catch (error) {
             console.error("Error fetching pending approval providers:", error);
         }
@@ -44,6 +48,32 @@ export default function ScholarshipProviderApplications() {
     useEffect(() => {
         fetchPendingApprovalProviders();
     }, []);
+
+    const [sortOrder, setSortOrder] = useState('recent');
+
+    const handleSort = (order) => {
+        setSortOrder(order);
+    };
+
+    useEffect(() => {
+        // Filter providers based on search query
+        const lowercasedQuery = searchQuery.toLowerCase();
+        const filtered = providers.filter(provider =>
+            provider.scholarshipProviderDetails.organizationName.toLowerCase().includes(lowercasedQuery) ||
+            provider.email.toLowerCase().includes(lowercasedQuery)
+        );
+
+        // Sort filtered providers based on sortOrder
+        const sorted = filtered.sort((a, b) => {
+            if (sortOrder === 'oldest') {
+                return new Date(b.createdAt) - new Date(a.createdAt);
+            } else {
+                return new Date(a.createdAt) - new Date(b.createdAt);
+            }
+        });
+
+        setFilteredProviders(sorted);
+    }, [searchQuery, providers, sortOrder]);
 
     return (
         <div className="flex flex-col min-h-screen font-medium text-slate-700">
@@ -66,7 +96,7 @@ export default function ScholarshipProviderApplications() {
 
                 <div className="max-w-8xl mx-auto px-6 lg:px-24 flex flex-col gap-10">
                     <div className="flex flex-col lg:flex-row gap-10">
-                        <div className="flex flex-col justify-center items-center w-full lg:w-1/3 h-[200px] lg:h-[300px] bg-white shadow rounded-md p-6">
+                        <div className="flex flex-col justify-center items-center w-full lg:w-1/3 h-[200px] lg:h-[300px] bg-white shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105">
                             <div className="flex flex-col justify-center items-center h-full text-center">
                                 <h2 className="text-3xl lg:text-4xl font-semibold text-slate-600">
                                     Pending Applications
@@ -74,6 +104,9 @@ export default function ScholarshipProviderApplications() {
                                 <span className="text-5xl lg:text-6xl font-bold text-blue-600 mt-2">
                                     {providers.length}
                                 </span>
+                                <p className="text-lg text-gray-500 mt-2">
+                                    Applications awaiting review
+                                </p>
                             </div>
                         </div>
 
@@ -119,15 +152,20 @@ export default function ScholarshipProviderApplications() {
                             <input
                                 type="text"
                                 placeholder="Search for a provider"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
                                 className="border rounded-md p-2 flex-grow"
                             />
-                            <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-800 text-white p-2 rounded-md">
+                            <button
+                                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-800 text-white p-2 rounded-md"
+                                onClick={() => handleSort(sortOrder === 'recent' ? 'oldest' : 'recent')}
+                            >
                                 <BiFilter className="w-6 h-6" />
-                                <span>Filter</span>
+                                <span>{sortOrder === 'recent' ? 'Oldest' : 'Recent'}</span>
                             </button>
                         </div>
 
-                        <table className="w-full mt-4 border border-gray-200 bg-white rounded-lg">
+                        <table className="w-full mt-4 border border-gray-200 bg-white rounded-lg shadow-md">
                             <thead className="bg-slate-100 rounded-t-lg">
                                 <tr>
                                     <th className="border border-gray-200 p-2">Organization Name</th>
@@ -135,22 +173,21 @@ export default function ScholarshipProviderApplications() {
                                     <th className="border border-gray-200 p-2">Email</th>
                                     <th className="border border-gray-200 p-2">Contact Person</th>
                                     <th className="border border-gray-200 p-2">Position</th>
-                                    <th className="border border-gray-200 p-2">Contact Number</th>
                                     <th className="border border-gray-200 p-2">Status</th>
-                                    <th className="border border-gray-200 p-2">Details</th>
+                                    <th className="border border-gray-200 p-2">Action</th>
                                 </tr>
                             </thead>
                             <tbody className="text-center rounded-b-lg">
-                                {providers.length === 0 ? (
+                                {filteredProviders.length === 0 ? (
                                     <tr>
-                                        <td colSpan="10" className="p-4">
+                                        <td colSpan="7" className="p-4">
                                             <div className="flex justify-center items-center h-32">
                                                 <span className="text-xl font-semibold">No scholarship provider application found.</span>
                                             </div>
                                         </td>
                                     </tr>
                                 ) : (
-                                    providers.map((provider) => (
+                                    filteredProviders.map((provider) => (
                                         <tr key={provider._id} className="divide-x hover:bg-gray-100">
                                             <td className="p-2">
                                                 <div className="flex gap-2 items-center">
@@ -162,7 +199,6 @@ export default function ScholarshipProviderApplications() {
                                             <td className="p-2">{provider.email}</td>
                                             <td className="p-2">{provider.scholarshipProviderDetails.contactPersonName}</td>
                                             <td className="p-2">{provider.scholarshipProviderDetails.contactPersonPosition}</td>
-                                            <td className="p-2">{provider.scholarshipProviderDetails.contactPersonNumber}</td>
                                             <td className="p-4">
                                                 <span className={`inline-block w-3 h-3 mr-2 rounded-full ${getStatusColor(provider.status)}`}></span>
                                                 {toSentenceCase(provider.status)}

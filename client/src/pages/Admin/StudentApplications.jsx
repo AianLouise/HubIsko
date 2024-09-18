@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { GoDotFill } from "react-icons/go";
 import { BiFilter } from "react-icons/bi";
 import Layout from "../../components/Layout";
-import { FaFileAlt, FaUserGraduate } from "react-icons/fa";
+import { FaFileAlt } from "react-icons/fa";
 
 const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
@@ -26,7 +26,11 @@ export default function StudentApplications() {
     useEffect(() => {
         document.title = "Student Applications | HubIsko";
     }, []);
+
     const [students, setStudents] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [filteredStudents, setFilteredStudents] = useState([]);
+    const [sortOrder, setSortOrder] = useState('recent');
 
     const fetchPendingApprovalStudents = async () => {
         try {
@@ -36,6 +40,7 @@ export default function StudentApplications() {
             }
             const data = await response.json();
             setStudents(data);
+            setFilteredStudents(data); // Initialize filteredStudents with all data
         } catch (error) {
             console.error("Error fetching pending approval students:", error);
         }
@@ -44,6 +49,31 @@ export default function StudentApplications() {
     useEffect(() => {
         fetchPendingApprovalStudents();
     }, []);
+
+    const handleSort = (order) => {
+        setSortOrder(order);
+    };
+
+    useEffect(() => {
+        // Filter students based on search query
+        const lowercasedQuery = searchQuery.toLowerCase();
+        const filtered = students.filter(student =>
+        (student.applicantDetails.firstName.toLowerCase().includes(lowercasedQuery) ||
+            student.applicantDetails.lastName.toLowerCase().includes(lowercasedQuery) ||
+            student.email.toLowerCase().includes(lowercasedQuery))
+        );
+
+        // Sort filtered students based on sortOrder
+        const sorted = filtered.sort((a, b) => {
+            if (sortOrder === 'oldest') {
+                return new Date(b.createdAt) - new Date(a.createdAt);
+            } else {
+                return new Date(a.createdAt) - new Date(b.createdAt);
+            }
+        });
+
+        setFilteredStudents(sorted);
+    }, [searchQuery, students, sortOrder]);
 
     return (
         <div className="flex flex-col min-h-screen font-medium text-slate-700">
@@ -66,7 +96,7 @@ export default function StudentApplications() {
 
                 <div className="max-w-8xl mx-auto px-6 lg:px-24 flex flex-col gap-10">
                     <div className="flex flex-col lg:flex-row gap-10">
-                        <div className="flex flex-col justify-center items-center w-full lg:w-1/3 h-[200px] lg:h-[300px] bg-white shadow rounded-md p-6">
+                        <div className="flex flex-col justify-center items-center w-full lg:w-1/3 h-[200px] lg:h-[300px] bg-white shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105">
                             <div className="flex flex-col justify-center items-center h-full text-center">
                                 <h2 className="text-3xl lg:text-4xl font-semibold text-slate-600">
                                     Pending Applications
@@ -74,6 +104,9 @@ export default function StudentApplications() {
                                 <span className="text-5xl lg:text-6xl font-bold text-blue-600 mt-2">
                                     {students.length}
                                 </span>
+                                <p className="text-lg text-gray-500 mt-2">
+                                    Applications awaiting review
+                                </p>
                             </div>
                         </div>
 
@@ -119,26 +152,31 @@ export default function StudentApplications() {
                             <input
                                 type="text"
                                 placeholder="Search for a student"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
                                 className="border rounded-md p-2 flex-grow"
                             />
-                            <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-800 text-white p-2 rounded-md">
+                            <button
+                                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-800 text-white p-2 rounded-md"
+                                onClick={() => handleSort(sortOrder === 'recent' ? 'oldest' : 'recent')}
+                            >
                                 <BiFilter className="w-6 h-6" />
-                                <span>Filter</span>
+                                <span>{sortOrder === 'recent' ? 'Oldest' : 'Recent'}</span>
                             </button>
                         </div>
 
-                        <table className="w-full mt-4 border border-gray-200 bg-white rounded-lg">
+                        <table className="w-full mt-4 border border-gray-200 bg-white rounded-lg shadow-md">
                             <thead className="bg-slate-100 rounded-t-lg">
                                 <tr>
                                     <th className="border border-gray-200 p-2">Student Name</th>
                                     <th className="border border-gray-200 p-2">Email</th>
                                     <th className="border border-gray-200 p-2">Contact Number</th>
                                     <th className="border border-gray-200 p-2">Status</th>
-                                    <th className="border border-gray-200 p-2">Details</th>
+                                    <th className="border border-gray-200 p-2">Action</th>
                                 </tr>
                             </thead>
                             <tbody className="text-center rounded-b-lg">
-                                {students.length === 0 ? (
+                                {filteredStudents.length === 0 ? (
                                     <tr>
                                         <td colSpan="5" className="p-4">
                                             <div className="flex justify-center items-center h-32">
@@ -147,7 +185,7 @@ export default function StudentApplications() {
                                         </td>
                                     </tr>
                                 ) : (
-                                    students.map((student) => (
+                                    filteredStudents.map((student) => (
                                         <tr key={student._id} className="divide-x hover:bg-gray-100">
                                             <td className="p-2">
                                                 <div className="flex gap-2 items-center">

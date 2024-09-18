@@ -6,7 +6,7 @@ import { BsInboxFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { BsPersonFill } from "react-icons/bs";
 import { GiGraduateCap } from "react-icons/gi";
-import { IoMdChatboxes } from "react-icons/io"; 
+import { IoMdChatboxes } from "react-icons/io";
 import { FaInbox } from "react-icons/fa";
 import { FaClock } from "react-icons/fa6";
 import { IoMdArrowRoundForward } from "react-icons/io";
@@ -24,6 +24,7 @@ export default function AdminDashboard() {
     const [totalScholarships, setTotalScholarships] = useState(0);
     const [totalScholars, setTotalScholars] = useState(0);
     const [pendingProviders, setPendingProviders] = useState(0);
+    const [pendingStudents, setPendingStudents] = useState(0);
     const [pendingPrograms, setPendingPrograms] = useState(0); // New State for Pending Programs
     const [activities, setActivities] = useState([]); // State for Activities
     const [loading, setLoading] = useState(true);
@@ -56,6 +57,10 @@ export default function AdminDashboard() {
                 const pendingProvidersResponse = await fetch('/api/admin/search-pending-verification-providers');
                 const pendingProvidersData = await pendingProvidersResponse.json();
                 setPendingProviders(pendingProvidersData.length);
+
+                const pendingStudentsResponse = await fetch('/api/admin/search-pending-verification-students');
+                const pendingStudentsData = await pendingStudentsResponse.json();
+                setPendingStudents(pendingStudentsData.length);
 
                 // Fetch total number of pending programs
                 const pendingProgramsResponse = await fetch('/api/admin/search-pending-approval-programs');
@@ -111,154 +116,156 @@ export default function AdminDashboard() {
             <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
                 <div className=''>
                     <div className='flex items-center mx-auto justify-between px-8 lg:px-24 mb-3 bg-blue-600 text-white shadow'>
-                    
 
-                    <div className='flex items-center gap-4 '>   
-                    <div className='bg-blue-600  w-24 h-24 my-8 rounded-full flex items-center justify-center'>
+
+                        <div className='flex items-center gap-4 '>
+                            <div className='bg-blue-600  w-24 h-24 my-8 rounded-full flex items-center justify-center'>
                                 <img
                                     src={currentUser ? currentUser.profilePicture : 'defaultProfilePicture.jpg'}
                                     alt='Admin Profile'
                                     className='w-24 h-24 rounded-full object-cover'
                                 />
-                    </div>
-                        <div className='flex flex-col gap-1'>
-                            <h1 className='text-2xl font-bold'>Welcome {currentUser.username}!</h1>
-                            <p className='text-sm font-medium tracking-wide'>Here is your dashboard!</p>
+                            </div>
+                            <div className='flex flex-col gap-1'>
+                                <h1 className='text-2xl font-bold'>Welcome {currentUser.username}!</h1>
+                                <p className='text-sm font-medium tracking-wide'>Here is your dashboard!</p>
 
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="flex gap-2 items-center justify-center px-4 py-2 bg-white text-blue-600 font-medium border-2 rounded-md w-[300px]">
+                        <div className="flex gap-2 items-center justify-center px-4 py-2 bg-white text-blue-600 font-medium border-2 rounded-md w-[300px]">
                             <FaClock className='w-6 h-6 text-blue-600 inline-block' />
                             <p className='text-sm tracking-wider'>{`Today is ${formattedDate}, ${formattedTime}`}</p>
-                    </div>
-                      
+                        </div>
+
                     </div>
 
                 </div>
 
                 <div className='max-w-8xl mx-auto px-24 pt-5 gap-10 flex-col flex'>
-                <div className="flex gap-5 h-full">
-                <div className="grid grid-cols-2 gap-5 w-1/2">
-                        <Link to={'/accounts'} className="bg-white flex flex-col gap-2 shadow border rounded-md h-[200px] items-start p-6 hover:bg-slate-100 hover:-translate-y-2 transition ease-in-out group">
-                            <div className="flex items-center justify-between w-full">
-                                <h1 className="text-2xl font-semibold text-slate-600">Accounts</h1>
-                                <div className="px-4 py-2 bg-blue-200 rounded-md">
-                                <BsPersonFill className="w-8 h-8 text-blue-600" />
+                    <div className="flex gap-5 h-full">
+                        <div className="grid grid-cols-2 gap-5 w-1/2">
+                            <Link to={'/accounts'} className="bg-white flex flex-col gap-2 shadow border rounded-md h-[200px] items-start p-6 hover:bg-slate-100 hover:-translate-y-2 transition ease-in-out group">
+                                <div className="flex items-center justify-between w-full">
+                                    <h1 className="text-2xl font-semibold text-slate-600">Accounts</h1>
+                                    <div className="px-4 py-2 bg-blue-200 rounded-md">
+                                        <BsPersonFill className="w-8 h-8 text-blue-600" />
+                                    </div>
                                 </div>
-                            </div>
-                            
-        
-                            <div className="flex flex-col gap-3 w-full">
-                            <span className="text-6xl font-bold text-left text-blue-600">{totalAccounts}</span>
 
-                            <div className="flex justify-between items-center">
-                            <span className="text-base text-slate-500 flex gap-3">{pendingProviders} <span>Pending verification</span></span>
 
-                            <div className="hidden group-hover:flex gap-2 items-center  text-blue-600">
-                                
-                                View
-                                <IoMdArrowRoundForward className="w-6 h-6" />
-                            </div>
-                            </div>
-                            </div>
-                            
-                        </Link>
+                                <div className="flex flex-col gap-3 w-full">
+                                    <span className="text-6xl font-bold text-left text-blue-600">{totalAccounts}</span>
 
-                        <Link to={'/scholarship-programs'} className="bg-white flex flex-col gap-2 shadow border rounded-md h-[200px] items-start p-6 hover:bg-slate-100 hover:-translate-y-2 transition ease-in-out group">
-                        <div className="flex items-center justify-between w-full">
-                                <h1 className="text-2xl font-semibold text-slate-600">Scholarships</h1>
-                                <div className="px-4 py-2 bg-blue-200 rounded-md">
-                                <GiGraduateCap className="w-8 h-8 text-blue-600" />
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-base text-slate-500 flex gap-3">
+                                            {pendingProviders + pendingStudents} <span>Pending verification</span>
+                                        </span>
+
+                                        <div className="hidden group-hover:flex gap-2 items-center  text-blue-600">
+
+                                            View
+                                            <IoMdArrowRoundForward className="w-6 h-6" />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="flex flex-col gap-3 w-full">
-                            <span className="text-6xl font-bold text-left text-blue-600">{totalScholarships}</span>
-        
-                            <div className="flex justify-between items-center">
-                            <span className="text-base text-slate-500 flex gap-3">{pendingPrograms} <span>Pending verification</span></span>
+                            </Link>
 
-                            <div className="hidden group-hover:flex gap-2 items-center  text-blue-600">
-
-                                View
-                                <IoMdArrowRoundForward className="w-6 h-6" />
+                            <Link to={'/scholarship-programs'} className="bg-white flex flex-col gap-2 shadow border rounded-md h-[200px] items-start p-6 hover:bg-slate-100 hover:-translate-y-2 transition ease-in-out group">
+                                <div className="flex items-center justify-between w-full">
+                                    <h1 className="text-2xl font-semibold text-slate-600">Scholarships</h1>
+                                    <div className="px-4 py-2 bg-blue-200 rounded-md">
+                                        <GiGraduateCap className="w-8 h-8 text-blue-600" />
+                                    </div>
                                 </div>
-                            </div>
-                            </div>
 
-                        </Link>
+                                <div className="flex flex-col gap-3 w-full">
+                                    <span className="text-6xl font-bold text-left text-blue-600">{totalScholarships}</span>
 
-                        <Link to={'/admin-forums'} className="bg-white flex flex-col gap-2 shadow border rounded-md h-[200px] items-start p-6 hover:bg-slate-100 hover:-translate-y-2 transition ease-in-out group">
-                            <div className="flex items-center justify-between w-full">
-                                <h1 className="text-2xl font-semibold text-slate-600">Forum Posts</h1>
-                                <div className="px-4 py-2 bg-blue-200 rounded-md">
-                                <IoMdChatboxes className="w-8 h-8 text-blue-600" />
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-base text-slate-500 flex gap-3">{pendingPrograms} <span>Pending verification</span></span>
+
+                                        <div className="hidden group-hover:flex gap-2 items-center  text-blue-600">
+
+                                            View
+                                            <IoMdArrowRoundForward className="w-6 h-6" />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="flex flex-col gap-3 w-full">
-                            <span className="text-6xl font-bold text-left text-blue-600">{totalScholars}</span>
+                            </Link>
 
-                            <div className="flex justify-between items-center">
-                            <span className="text-base text-slate-500 flex gap-3">0 <span>New posts</span></span>
+                            <Link to={'/admin-forums'} className="bg-white flex flex-col gap-2 shadow border rounded-md h-[200px] items-start p-6 hover:bg-slate-100 hover:-translate-y-2 transition ease-in-out group">
+                                <div className="flex items-center justify-between w-full">
+                                    <h1 className="text-2xl font-semibold text-slate-600">Forum Posts</h1>
+                                    <div className="px-4 py-2 bg-blue-200 rounded-md">
+                                        <IoMdChatboxes className="w-8 h-8 text-blue-600" />
+                                    </div>
+                                </div>
 
-                            <div className="hidden group-hover:flex gap-2 items-center  text-blue-600">
-                                View
-                                <IoMdArrowRoundForward className="w-6 h-6" />
-                            </div>
-                            </div>
-                            </div>
-                            
-                        </Link>
+                                <div className="flex flex-col gap-3 w-full">
+                                    <span className="text-6xl font-bold text-left text-blue-600">{totalScholars}</span>
 
-                        {/* <Link to={'/scholarship-provider-applications'} className="bg-white flex flex-col gap-2 p-4 shadow border rounded-md h-[200px] justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-base text-slate-500 flex gap-3">0 <span>New posts</span></span>
+
+                                        <div className="hidden group-hover:flex gap-2 items-center  text-blue-600">
+                                            View
+                                            <IoMdArrowRoundForward className="w-6 h-6" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </Link>
+
+                            {/* <Link to={'/scholarship-provider-applications'} className="bg-white flex flex-col gap-2 p-4 shadow border rounded-md h-[200px] justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
                             <h1 className="text-2xl font-semibold text-slate-600 text-center">Pending Scholarship Provider Applications</h1>
                             <span className="text-6xl font-bold text-blue-600 text-center">{pendingProviders}</span>
                         </Link> */}
 
-                        {/* <Link to={'/scholarship-program-applications'} className="bg-white flex flex-col gap-2 p-4 shadow border rounded-md h-[200px] justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
+                            {/* <Link to={'/scholarship-program-applications'} className="bg-white flex flex-col gap-2 p-4 shadow border rounded-md h-[200px] justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
                             <h1 className="text-2xl font-semibold text-slate-600 text-center">Pending Scholarship Program Applications</h1>
                             <span className="text-6xl font-bold text-blue-600 text-center">{pendingPrograms}</span>
                         </Link> */}
 
-                        <Link to={'/application-inbox'}className="bg-white flex flex-col gap-2 shadow border rounded-md h-[200px] items-start p-6 hover:bg-slate-100 hover:-translate-y-2 transition ease-in-out group">
-                        <div className="flex items-center justify-between w-full">
-                                <h1 className="text-2xl font-semibold text-slate-600">Inbox Received</h1>
-                                <div className="px-4 py-2 bg-blue-200 rounded-md">
-                                <FaInbox className="w-8 h-8 text-blue-600" />
+                            <Link to={'/application-inbox'} className="bg-white flex flex-col gap-2 shadow border rounded-md h-[200px] items-start p-6 hover:bg-slate-100 hover:-translate-y-2 transition ease-in-out group">
+                                <div className="flex items-center justify-between w-full">
+                                    <h1 className="text-2xl font-semibold text-slate-600">Inbox Received</h1>
+                                    <div className="px-4 py-2 bg-blue-200 rounded-md">
+                                        <FaInbox className="w-8 h-8 text-blue-600" />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="flex flex-col gap-3 w-full">
-                            <span className="text-6xl font-bold text-left text-blue-600">10</span>
-
-
-                            <div className="flex justify-between items-center">
-                            <span className="text-base text-slate-500 flex gap-3">0 <span>New notifications</span></span>
-
-                            <div className="hidden group-hover:flex gap-2 items-center  text-blue-600">
-                                View
-                                <IoMdArrowRoundForward className="w-6 h-6" />
-
-                               </div> 
-                            </div>
-                            </div>
+                                <div className="flex flex-col gap-3 w-full">
+                                    <span className="text-6xl font-bold text-left text-blue-600">10</span>
 
 
-                        </Link>
-                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-base text-slate-500 flex gap-3">0 <span>New notifications</span></span>
 
-                    <div className="flex flex-col gap-4 bg-white shadow rounded-md border p-8 w-1/2">
-                        <span className="font-medium text-2xl">Interactions</span>
+                                        <div className="hidden group-hover:flex gap-2 items-center  text-blue-600">
+                                            View
+                                            <IoMdArrowRoundForward className="w-6 h-6" />
 
-                        <div className="flex items-center justify-center h-full border rounded-md">
-                            Interaction Graph
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </Link>
                         </div>
-                    </div>
+
+                        <div className="flex flex-col gap-4 bg-white shadow rounded-md border p-8 w-1/2">
+                            <span className="font-medium text-2xl">Interactions</span>
+
+                            <div className="flex items-center justify-center h-full border rounded-md">
+                                Interaction Graph
+                            </div>
+                        </div>
 
                     </div>
-                    
+
 
                     <span className="border-b">Activity History</span>
                     <div className=" mb-16">

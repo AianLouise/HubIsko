@@ -244,12 +244,12 @@ export const searchPendingVerificationProviders = async (req, res) => {
 
 export const searchPendingVerificationStudent = async (req, res) => {
   try {
-    const pendingProviders = await User.find({
+    const pendingStudents = await User.find({
       role: 'applicant',
       status: 'Pending Verification',
     });
 
-    res.status(200).json(pendingProviders);
+    res.status(200).json(pendingStudents);
   } catch (error) {
     res.status(500).json({
       message: 'Error searching for pending verification scholarship providers',
