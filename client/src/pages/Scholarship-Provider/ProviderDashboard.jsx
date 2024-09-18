@@ -5,6 +5,7 @@ import { BiSolidRightArrow } from "react-icons/bi";
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { BiCog } from 'react-icons/bi';
+import { FaFileAlt, FaUniversity } from 'react-icons/fa';
 
 export default function ProviderDashboard() {
   useEffect(() => {
@@ -76,6 +77,29 @@ export default function ProviderDashboard() {
     fetchApplicationDetails();
   }, [userId]);
 
+  const [scholarships, setScholarships] = useState([]);
+
+  useEffect(() => {
+    const fetchScholarships = async () => {
+      if (currentUser && currentUser._id) {
+        try {
+          const response = await fetch(`/api/scholarshipProgram/provider/${currentUser._id}`);
+          const data = await response.json();
+          if (Array.isArray(data)) {
+            setScholarships(data);
+          } else {
+            setScholarships([]);
+          }
+        } catch (error) {
+          console.error('Error fetching scholarships:', error);
+          setError('Failed to fetch scholarships');
+        }
+      }
+    };
+
+    fetchScholarships();
+  }, [currentUser]);
+
   const navigate = useNavigate();
 
   return (
@@ -132,11 +156,11 @@ export default function ProviderDashboard() {
             <div className="flex divide-x bg-white p-6 rounded-md shadow-md transition-all">
               <div className='flex flex-col w-1/2 items-center'>
                 <h2 className="text-xl font-semibold text-slate-700">Applications Received</h2>
-                <p className="text-8xl font-bold flex h-full justify-center items-center">{applicationsCount}</p>
+                <p className="text-8xl font-bold flex h-full justify-center items-center text-blue-600">{applicationsCount}</p>
               </div>
 
               <div className='px-4 flex flex-col gap-2 w-full'>
-                <span className='font-medium'>Received Applications</span>
+                <span className='font-medium text-slate-700'>Received Applications</span>
 
                 <div className='overflow-y-auto max-h-48 flex flex-col gap-2'>
                   {applicationDetails.length > 0 ? (
@@ -144,10 +168,10 @@ export default function ProviderDashboard() {
                       <Link
                         key={index}
                         to={`/view-scholarships/${application.scholarshipProgram}`}
-                        className='flex gap-2 justify-between border rounded-md w-full p-2 hover:bg-slate-200'
+                        className='flex gap-2 justify-between border rounded-md w-full p-2 hover:bg-slate-200 transition-all'
                       >
                         <div className='flex gap-2 items-center text-left'>
-                          <div className='w-6 h-6 rounded-md overflow-hidden'>
+                          <div className='w-10 h-10 rounded-full overflow-hidden'>
                             <img src={application.profilePicture} alt={`${application.firstName} ${application.lastName}`} className='w-full h-full object-cover' />
                           </div>
                           <span className='font-medium'>
@@ -157,7 +181,7 @@ export default function ProviderDashboard() {
                       </Link>
                     ))
                   ) : (
-                    <p>No applications received yet.</p>
+                    <p className='text-slate-500'>No applications received yet.</p>
                   )}
                 </div>
               </div>
@@ -165,30 +189,36 @@ export default function ProviderDashboard() {
 
             <div className="flex flex-col gap-8">
               <Link to="/scholar-applications">
-                <div className="flex justify-between items-center bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2 hover:bg-slate-200 group ease-in-out">
-                  <div>
-                    <h2 className="text-xl font-semibold text-slate-700">Total Applications</h2>
-                    <p className="text-2xl font-bold text-left">{applicationsCount}</p>
+                <div className="flex justify-between items-center bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2 hover:bg-slate-100 group ease-in-out">
+                  <div className="flex items-center gap-4">
+                    <FaFileAlt className="text-3xl text-blue-500" /> {/* Add icon */}
+                    <div>
+                      <h2 className="text-xl font-semibold text-slate-700">Total Applications</h2>
+                      <p className="text-2xl font-bold text-left text-slate-700">{applicationsCount}</p>
+                    </div>
                   </div>
-
-                  <div className='hidden items-center text-blue-600 font-medium gap-2 group-hover:flex ease-in-out transition'>
+                  <div className='hidden items-center text-blue-500 font-medium gap-2 group-hover:flex ease-in-out transition'>
                     <span>View</span>
-                    <BiSolidRightArrow className=' w-6 h-6' />
+                    <BiSolidRightArrow className='w-6 h-6' />
                   </div>
                 </div>
               </Link>
 
-              <button className="flex justify-between items-center bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2 hover:bg-slate-200 group ease-in-out">
-                <div>
-                  <h2 className="text-xl font-semibold text-slate-700">Total Scholarship Programs</h2>
-                  <p className="text-2xl font-bold text-left">{activeApplicationsCount}</p>
+              <Link to="/scholarships">
+                <div className="flex justify-between items-center bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2 hover:bg-slate-100 group ease-in-out">
+                  <div className="flex items-center gap-4">
+                    <FaUniversity className="text-3xl text-blue-500" /> {/* Add icon */}
+                    <div>
+                      <h2 className="text-xl font-semibold text-slate-700">Total Scholarship Programs</h2>
+                      <p className="text-2xl font-bold text-left text-slate-700">{Array.isArray(scholarships) ? scholarships.length : 0}</p>
+                    </div>
+                  </div>
+                  <div className='hidden items-center text-blue-500 font-medium gap-2 group-hover:flex ease-in-out transition'>
+                    <span>View</span>
+                    <BiSolidRightArrow className='w-6 h-6' />
+                  </div>
                 </div>
-
-                <div className='hidden items-center text-blue-600 font-medium gap-2 group-hover:flex ease-in-out transition'>
-                  <span>View</span>
-                  <BiSolidRightArrow className=' w-6 h-6' />
-                </div>
-              </button>
+              </Link>
             </div>
           </div>
 
