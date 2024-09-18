@@ -71,7 +71,7 @@ export default function StudentDetails() {
 
   return (
     <div className="flex flex-col min-h-screen font-medium text-slate-700">
-    
+
       <main className="flex-grow bg-[#f8f8fb] pb-24">
 
         <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex mt-16'>
@@ -115,7 +115,7 @@ export default function StudentDetails() {
 
           <div className='flex flex-row gap-4 justify-between font-semibold mb-6'>
             <button
-              className={`border text-center rounded-xl w-1/2 px-16 py-4 ${selectedTab === 'Student Information' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
+              className={`border text-center rounded-xl w-1/2 px-16 ${selectedTab === 'Student Information' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
               onClick={() => handleTabClick('Student Information')}
             >
               Student Information
@@ -144,7 +144,7 @@ export default function StudentDetails() {
 
 
           {selectedTab === 'Student Information' && (
-              <StudentDetailsEdit />
+            <StudentDetailsEdit />
           )}
 
 

@@ -98,7 +98,7 @@ export default function ProviderAccounts() {
         <div className='max-w-8xl mx-auto px-24 gap-4 flex-col flex mt-12 pb-10'>
           <div className="flex items-center justify-between border-b pb-2">
             <h1 className='text-2xl font-bold text-slate-600'>Providers' Info</h1>
-            <h1 className='text-xl text-slate-600'>Recently Added</h1>
+            {/* <h1 className='text-xl text-slate-600'>Recently Added</h1> */}
           </div>
 
           <div className='flex gap-4'>
@@ -190,7 +190,7 @@ export default function ProviderAccounts() {
               </div>
             </div>
 
-            <div className="divide-y bg-white shadow border rounded-md flex flex-col w-1/3">
+            {/* <div className="divide-y bg-white shadow border rounded-md flex flex-col w-1/3">
               <div className="flex items-center gap-2 p-4">
                 <div className="bg-blue-600 w-16 h-16 rounded-full"></div>
                 <div className="flex flex-col gap-1">
@@ -229,7 +229,7 @@ export default function ProviderAccounts() {
                   See full Details
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </main>

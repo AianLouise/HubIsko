@@ -171,7 +171,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                         {dropdownOpen && (
                             <div className="absolute mt-2 right-0 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50 font-medium">
                                 <ul>
-                                <Link to={'#'}>
+                                    <Link to={'#'}>
                                         <li className="p-2 hover:bg-gray-100 cursor-pointer">
                                             Profile
                                         </li>
@@ -307,13 +307,13 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                 {isInboxDropdownOpen && (
                                     <ul className="ml-4 my-2 space-y-2">
 
-                                                                                <li>
+                                        <li>
                                             <Link to={'/scholarship-programs'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-programs' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                                 <FaGraduationCap className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-programs' ? ' text-white' : ''}`} />
                                                 Scholarship Dashboard
                                             </Link>
                                         </li>
-                                        
+
                                         <li className="ml-4">
                                             <Link to={'/scholarship-program-applications'}
                                                 className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md 
@@ -363,12 +363,12 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                 </div>
                             </li>
 
-                            <li>
+                            {/* <li>
                                 <a href="#" className="flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
                                     <BsFlagFill className="w-5 h-5 text-blue-600" />
                                     Events
                                 </a>
-                            </li>
+                            </li> */}
 
                             <li>
                                 <Link to={"/admin-forums/new"} className={`flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/admin-forums' ? 'bg-blue-600 text-white' : ''}`}>

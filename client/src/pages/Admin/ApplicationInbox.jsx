@@ -6,6 +6,8 @@ import { GoDotFill } from "react-icons/go";
 import Layout from "../../components/Layout";
 import { BiRightArrowAlt } from "react-icons/bi";
 import { BsInboxFill } from "react-icons/bs";
+import { FaGraduationCap, FaUserGraduate } from "react-icons/fa6";
+import { FaUniversity } from "react-icons/fa";
 
 export default function ApplicationInbox() {
   useEffect(() => {
@@ -111,7 +113,7 @@ export default function ApplicationInbox() {
           <div className="flex items-center mx-auto justify-between px-24">
             <div className="flex flex-col gap-2 w-1/2">
               <h1 className="text-4xl font-bold text-gray-800">Application Inbox</h1>
-                           <p className="text-lg text-slate-500 font-medium">
+              <p className="text-lg text-slate-500 font-medium">
                 Manage student, scholarship programs and scholarship provider applications.
               </p>
             </div>
@@ -123,24 +125,38 @@ export default function ApplicationInbox() {
         <div className="max-w-8xl mx-auto px-24 gap-10 flex-col flex">
 
           <div className="grid grid-cols-3 gap-8">
-            <Link to="/scholarship-program-applications" className="bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:from-blue-600 hover:to-blue-800 hover:-translate-y-2 transition ease-in-out">
+            <Link
+              to="/scholarship-program-applications"
+              className="bg-blue-100 text-blue-900 rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:bg-blue-200 hover:-translate-y-2 transition ease-in-out"
+            >
+              <FaGraduationCap className="text-4xl mb-2 text-blue-600" />
               <span className="text-lg font-semibold">Scholarship Program Applications</span>
-              <span className="text-4xl font-bold">{pendingPrograms}</span>
-              <span className="text-sm flex items-center mt-2 text-gray-200 font-normal">
+              <span className="text-4xl font-bold text-blue-700">{pendingPrograms}</span>
+              <span className="text-sm flex items-center mt-2 text-blue-500 font-normal">
                 Click to view the list of applications for scholarship program
               </span>
             </Link>
-            <Link to="/scholarship-provider-applications" className="bg-gradient-to-r from-green-500 to-green-700 text-white rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:from-green-600 hover:to-green-800 hover:-translate-y-2 transition ease-in-out">
+
+            <Link
+              to="/scholarship-provider-applications"
+              className="bg-blue-100 text-blue-900 rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:bg-blue-200 hover:-translate-y-2 transition ease-in-out"
+            >
+              <FaUniversity className="text-4xl mb-2 text-blue-600" />
               <span className="text-lg font-semibold">Scholarship Provider Applications</span>
-              <span className="text-4xl font-bold">{pendingProviders}</span>
-              <span className="text-sm flex items-center mt-2 text-gray-200 font-normal">
+              <span className="text-4xl font-bold text-blue-700">{pendingProviders}</span>
+              <span className="text-sm flex items-center mt-2 text-blue-500 font-normal">
                 Click to view the list of applications for scholarship provider
               </span>
             </Link>
-            <Link to="/student-applications" className="bg-gradient-to-r from-purple-500 to-purple-700 text-white rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:from-purple-600 hover:to-purple-800 hover:-translate-y-2 transition ease-in-out">
+
+            <Link
+              to="/student-applications"
+              className="bg-blue-100 text-blue-900 rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:bg-blue-200 hover:-translate-y-2 transition ease-in-out"
+            >
+              <FaUserGraduate className="text-4xl mb-2 text-blue-600" />
               <span className="text-lg font-semibold">Student Applications</span>
-              <span className="text-4xl font-bold">{pendingStudents}</span>
-              <span className="text-sm flex items-center mt-2 text-gray-200 font-normal">
+              <span className="text-4xl font-bold text-blue-700">{pendingStudents}</span>
+              <span className="text-sm flex items-center mt-2 text-blue-500 font-normal">
                 Click to view the list of applications for students
               </span>
             </Link>

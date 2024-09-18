@@ -40,7 +40,6 @@ export default function StudentDetailsEdit() {
             religion: '',
             height: '',
             weight: '',
-            email: '',
             contactNumber: '',
             address: {
                 region: '',
@@ -73,7 +72,6 @@ export default function StudentDetailsEdit() {
             religion: '',
             height: '',
             weight: '',
-            email: '',
             contactNumber: '',
             address: {
                 region: '',
@@ -104,14 +102,14 @@ export default function StudentDetailsEdit() {
         setIsEditing(true);
     };
     console.log(formData);
-    
-        const handleSaveChanges = async () => {
+
+    const handleSaveChanges = async () => {
         // Validate form data
         const { applicantDetails } = formData;
-        const { firstName, lastName, middleName, birthdate, birthplace, gender, bloodType, civilStatus, email, contactNumber, address } = applicantDetails;
+        const { firstName, lastName, middleName, birthdate, birthplace, gender, bloodType, civilStatus, contactNumber, address } = applicantDetails;
         const { region, province, city, barangay, addressDetails } = address;
-    
-        if (!firstName || !lastName || !middleName || !birthdate || !birthplace || !gender || !bloodType || !civilStatus || !email || !contactNumber || !region || !province || !city || !barangay || !addressDetails) {
+
+        if (!firstName || !lastName || !middleName || !birthdate || !birthplace || !gender || !bloodType || !civilStatus || !contactNumber || !region || !province || !city || !barangay || !addressDetails) {
             setNotification('Please fill in all required fields.');
             // Clear the notification after a few seconds
             setTimeout(() => {
@@ -119,7 +117,7 @@ export default function StudentDetailsEdit() {
             }, 3000);
             return;
         }
-    
+
         try {
             const response = await fetch(`/api/admin/student/${id}`, {
                 method: 'PATCH',
@@ -128,11 +126,11 @@ export default function StudentDetailsEdit() {
                 },
                 body: JSON.stringify(formData),
             });
-    
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-    
+
             const updatedData = await response.json();
             setApplicant(updatedData.user); // Update the applicant state with the updated data
             setIsEditing(false);
@@ -141,7 +139,7 @@ export default function StudentDetailsEdit() {
             console.error('Error updating student details:', error);
             setNotification('Error updating student details'); // Set error notification
         }
-    
+
         // Clear the notification after a few seconds
         setTimeout(() => {
             setNotification('');
@@ -499,19 +497,6 @@ export default function StudentDetailsEdit() {
                                 name="applicantDetails.weight"
                                 placeholder="Enter your weight"
                                 value={formData.applicantDetails.weight}
-                                onChange={handleInputChange}
-                                readOnly={!isEditing}
-                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                            />
-                        </div>
-
-                        <div className="col-span-1">
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>Email</label>
-                            <input
-                                type="email"
-                                name="applicantDetails.email"
-                                placeholder="Enter your email"
-                                value={formData.applicantDetails.email}
                                 onChange={handleInputChange}
                                 readOnly={!isEditing}
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'

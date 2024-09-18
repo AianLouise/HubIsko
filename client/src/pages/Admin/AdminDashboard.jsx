@@ -161,15 +161,12 @@ export default function AdminDashboard() {
                                         <span className="text-base text-slate-500 flex gap-3">
                                             {pendingProviders + pendingStudents} <span>Pending verification</span>
                                         </span>
-
-                                        <div className="hidden group-hover:flex gap-2 items-center  text-blue-600">
-
+                                        <Link to={'/application-inbox'} className="hidden group-hover:flex gap-2 items-center  text-blue-600">
                                             View
                                             <IoMdArrowRoundForward className="w-6 h-6" />
-                                        </div>
+                                        </Link>
                                     </div>
                                 </div>
-
                             </Link>
 
                             <Link to={'/scholarship-programs'} className="bg-white flex flex-col gap-2 shadow border rounded-md h-[200px] items-start p-6 hover:bg-slate-100 hover:-translate-y-2 transition ease-in-out group">
