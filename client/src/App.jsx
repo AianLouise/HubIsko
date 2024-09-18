@@ -40,6 +40,7 @@ import PasswordAndSecurity2 from "./pages/PasswordAndSecurity2";
 import ScholarshipApplication from "./pages/ScholarshipApplicationForm";
 import AnnouncementDetails from "./components/ViewScholarshipDetails/AnnouncementDetails";
 import AnnouncementView from "./pages/AnnouncementView";
+import AccountSettings from "./pages/AccountSettings";
 
 // Admin Routes
 import AdminDashboard from "./pages/Admin/AdminDashboard";
@@ -203,6 +204,7 @@ export default function App() {
           <Route path="/scholar-dashboard" element={<ScholarDashboard />} />
           <Route path="/account-management" element={<AccountManagement />} />
           <Route path="/password-and-security" element={<PasswordAndSecurity2 />} />
+          <Route path="/account-settings" element={<AccountSettings />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/about" element={<About />} />
           <Route path="/CoRH" element={<CompleteOrReturnHome />} />

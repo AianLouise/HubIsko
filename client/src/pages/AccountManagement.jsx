@@ -22,8 +22,12 @@ export default function AccountManagement() {
                 <NavLink to="/student-info" className={getActiveLinkClass}>Student Info</NavLink>
               </li>
 
-              <li>
+              {/* <li>
                 <NavLink to="/password-and-security" className={getActiveLinkClass}>Password and Security</NavLink>
+              </li> */}
+
+              <li>
+                <NavLink to="/account-settings" className={getActiveLinkClass}>Account Settings</NavLink>
               </li>
             </ul>
           </nav>
