@@ -1,139 +1,210 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { MdClearAll } from "react-icons/md";
 import { PiStudentFill } from "react-icons/pi";
-import { FaBuilding , FaWrench } from "react-icons/fa6";
+import { FaBuilding, FaWrench } from "react-icons/fa6";
 import { IoMegaphoneSharp } from "react-icons/io5";
 import { FaList } from "react-icons/fa";
 import { BsFillGridFill } from "react-icons/bs";
-
-
+import AllPosts, { allPostsData } from "../../components/AdminForums/Allposts";
+import StudentPosts, { studentPostsData } from "../../components/AdminForums/StudentPosts";
+import ProviderPosts, { ProviderPostsData } from "../../components/AdminForums/ProviderPosts";
+import AnnouncementsPosts, { AnnouncementsPostsData } from "../../components/AdminForums/AnnouncementPosts";
+import AdminPosts, { adminPostsData } from "../../components/AdminForums/AdminPosts";
 
 export default function AdminForumsNew() {
-    const [isGridView, setIsGridView] = useState(false);
+  const [isGridView, setIsGridView] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedView, setSelectedView] = useState("All Posts");
+  const itemsPerPage = 6;
+  const itemsPerGrid = 6;
 
-    const toggleView = () => {
-      setIsGridView(!isGridView);
-    };
-    
-    return (
-        <div className="flex flex-col min-h-screen font-medium text-slate-700">
-        <main className="flex-grow bg-[#f8f8fb] pb-24">
-            <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex mt-16'>
-                <h1 className="text-2xl font-bold text-slate-900 tracking-wide">Forums</h1>
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
-                <div className="flex gap-10">
-                <div className="flex justify-between flex-col w-1/6 bg-white shadow border rounded-md max-h-[500px] h-[500px] p-4">
-                    <div className="flex flex-col items-center">
-                    <button className="bg-blue-600 w-full text-white px-6 py-2 mb-4 rounded-md">
-                        Create a New post</button>
+  const renderSelectedView = () => {
+    switch (selectedView) {
+      case "All Posts":
+        return (
+          <AllPosts
+            isGridView={isGridView}
+            currentPage={currentPage}
+            handlePageChange={handlePageChange}
+            itemsPerGrid={itemsPerGrid}
+            itemsPerPage={itemsPerPage}
+          />
+        );
+      case "Student Posts":
+        return (
+          <StudentPosts
+            isGridView={isGridView}
+            currentPage={currentPage}
+            handlePageChange={handlePageChange}
+            itemsPerGrid={itemsPerGrid}
+            itemsPerPage={itemsPerPage}
+          />
+        );
+      case "Provider Posts":
+        return <ProviderPosts 
+          isGridView={isGridView}
+          currentPage={currentPage}
+          handlePageChange={handlePageChange}
+          itemsPerGrid={itemsPerGrid}
+          itemsPerPage={itemsPerPage}
+        />;
+      case "Announcements":
+        return <AnnouncementsPosts 
+          isGridView={isGridView}
+          currentPage={currentPage}
+          handlePageChange={handlePageChange}
+          itemsPerGrid={itemsPerGrid}
+          itemsPerPage={itemsPerPage}
+        />;
+      case "Admin Posts":
+        return <AdminPosts 
+          isGridView={isGridView}
+          currentPage={currentPage}
+          handlePageChange={handlePageChange}
+          itemsPerGrid={itemsPerGrid}
+          itemsPerPage={itemsPerPage}
+        
+        />;
+      default:
+        return <AllPosts />;
+    }
+  };
 
-                    <div className="flex flex-col gap-2 w-full items-start justify-start">
-                        <button className="flex items-center gap-2 bg-slate-100 hover:bg-slate-300 hover:text-slate-800 text-slate-500 w-full text-left p-2 px-4 rounded-md">
-                        <MdClearAll className="text-xl" />
-                        All Posts</button>
+  const getTotalPosts = () => {
+    switch (selectedView) {
+      case "All Posts":
+        return allPostsData.length;
+      case "Student Posts":
+        return studentPostsData.length;
+      case "Provider Posts":
+        return ProviderPostsData.length;
+      case "Announcements":
+        return AnnouncementsPostsData.length;
+      case "Admin Posts":
+        return adminPostsData.length;
+      default:
+        return 0;
+    }
+  };
 
-                        <button className="flex items-center gap-2 bg-slate-100 hover:bg-slate-300 hover:text-slate-800 text-slate-500 w-full text-left p-2 px-4  rounded-md">
-                        <PiStudentFill className="text-xl" />
-                        Student Posts</button>
+  return (
+    <div className="flex flex-col min-h-screen font-medium text-slate-700">
+      <main className="flex-grow bg-[#f8f8fb] pb-24">
+        <div className="max-w-8xl mx-auto px-24 gap-10 flex-col flex mt-8">
+          <h1 className="text-2xl font-bold text-slate-900 tracking-wide">Forums</h1>
 
-                        <button className="flex items-center gap-2 bg-slate-100 hover:bg-slate-300 hover:text-slate-800 text-slate-500 w-full text-left p-2 px-4  rounded-md">
-                        <FaBuilding className="text-xl" />
-                        Provider Posts
-                        </button>
+          <div className="flex gap-10 h-[550px]">
 
-                        <button className="flex items-center gap-2 bg-slate-100 hover:bg-slate-300 hover:text-slate-800 text-slate-500 w-full text-left p-2 px-4  rounded-md">
-                        <IoMegaphoneSharp className="text-xl" />
-                        Announcements</button>
+            {/* Section 1 */}
+            <div className="flex flex-col justify-between w-1/6 bg-white shadow border rounded-md p-4 h-full">
+              <div className="flex flex-col items-center">
+                <button className="bg-blue-600 w-full text-white px-6 py-2 mb-4 rounded-md">
+                  Create a New post
+                </button>
 
-                        <button className="flex items-center gap-2 bg-slate-100 hover:bg-slate-300 hover:text-slate-800 text-slate-500 w-full text-left p-2 px-4 rounded-md">
-                        <FaWrench className="text-xl" />
-                        Admin Posts</button>
-                    </div>
-                    </div>
+                <div className="flex flex-col gap-2 w-full items-start justify-start">
+                  <button
+                    onClick={() => setSelectedView("All Posts")}
+                    className={`flex items-center gap-2 ${selectedView === "All Posts" ? 'bg-blue-600 text-white' : 'bg-slate-100  hover:bg-slate-300  hover:text-slate-800'} text-slate-500 w-full text-left p-2 px-4 rounded-md`}
+                  >
+                    <MdClearAll className="text-xl" />
+                    All Posts
+                  </button>
 
-                    <span>Posts: 000</span>
+                  <button
+                    onClick={() => setSelectedView("Student Posts")}
+                    className={`flex items-center gap-2 ${selectedView === "Student Posts" ? 'bg-blue-600 text-white' : 'bg-slate-100  hover:bg-slate-300  hover:text-slate-800'} text-slate-500 w-full text-left p-2 px-4 rounded-md`}
+                  >
+                    <PiStudentFill className="text-xl" />
+                    Student Posts
+                  </button>
+
+                  <button
+                    onClick={() => setSelectedView("Provider Posts")}
+                    className={`flex items-center gap-2 ${selectedView === "Provider Posts" ? 'bg-blue-600 text-white' : 'bg-slate-100  hover:bg-slate-300  hover:text-slate-800'} text-slate-500 w-full text-left p-2 px-4 rounded-md`}
+                  >
+                    <FaBuilding className="text-xl" />
+                    Provider Posts
+                  </button>
+
+                  <button
+                    onClick={() => setSelectedView("Announcements")}
+                    className={`flex items-center gap-2 ${selectedView === "Announcements" ? 'bg-blue-600 text-white' : 'bg-slate-100  hover:bg-slate-300  hover:text-slate-800'} text-slate-500 w-full text-left p-2 px-4 rounded-md`}
+                  >
+                    <IoMegaphoneSharp className="text-xl" />
+                    Announcements
+                  </button>
+
+                  <button
+                    onClick={() => setSelectedView("Admin Posts")}
+                    className={`flex items-center gap-2 ${selectedView === "Admin Posts" ? 'bg-blue-600 text-white' : 'bg-slate-100  hover:bg-slate-300  hover:text-slate-800'} text-slate-500 w-full text-left p-2 px-4 rounded-md`}
+                  >
+                    <FaWrench className="text-xl" />
+                    Admin Posts
+                  </button>
                 </div>
+              </div>
 
+              <span>Posts: {getTotalPosts()}</span>
+            </div>
 
-                <div className="flex gap-4 flex-col w-5/6">
-                
-                <div className="flex gap-4 justify-between items-center">
-                    <div className="flex gap-4 items-center">
-                    <input type="text" placeholder="Search" className=" border rounded-md p-2 px-4" />
-                    </div>
-                    <div className="flex gap-2 items-center">
-                        <button
-                            onClick={() => setIsGridView(false)}
-                            className={`p-2 rounded-full ${!isGridView ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'}`}
-                        >
-                            <FaList className="text-lg" />
-                        </button>
-                        <button
-                            onClick={() => setIsGridView(true)}
-                            className={`p-2 rounded-full ${isGridView ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'}`}
-                        >
-                            <BsFillGridFill className="text-lg" />
-                        </button>
-                        </div>
+            {/* Section 2 */}
+            <div className="flex flex-col gap-4 w-5/6 h-full">
+       
+              <h1 className="text-2xl font-bold border-b pb-2 text-slate-900 tracking-wide">
+                {selectedView}
+              </h1>
+              <div className="flex gap-4 justify-between items-center">
+                <div className="flex gap-4 items-center">
+                  <input type="text" placeholder="Search" className="border rounded-md p-2 px-4" />
+
+                  <select className="border rounded-md p-2 text-blue-600 px-4">
+                    <option value=''>Sort by</option>
+                    <option value=''>Newest</option>
+                    <option value=''>Oldest</option>
+                  </select>
                 </div>
-
-                <h1 className="border-b py-2">Admin Announcements</h1>
-                {isGridView ? (
-                    <div className="grid grid-cols-3 gap-5 h-full">
-                    <div className="bg-white flex justify-center items-center border shadow rounded-md">
-                        <span>Container</span>
-                    </div>
-                    <div className="bg-white flex justify-center items-center border shadow rounded-md">
-                        <span>Container</span>
-                    </div>
-                    <div className="bg-white flex justify-center items-center border shadow rounded-md">
-                        <span>Container</span>
-                    </div>
-                    </div>
-                ) : (
-                    <div className="border rounded-md bg-white">
-                    <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap">Container 1</td>
-                        <td className="px-6 py-4 whitespace-nowrap">Description 1</td>
-                        <td className="px-6 py-4 whitespace-nowrap">Date 1</td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <button className="text-blue-600 hover:text-blue-900">Edit</button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap">Container 2</td>
-                        <td className="px-6 py-4 whitespace-nowrap">Description 2</td>
-                        <td className="px-6 py-4 whitespace-nowrap">Date 2</td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <button className="text-blue-600 hover:text-blue-900">Edit</button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 whitespace-nowrap">Container 3</td>
-                        <td className="px-6 py-4 whitespace-nowrap">Description 3</td>
-                        <td className="px-6 py-4 whitespace-nowrap">Date 3</td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <button className="text-blue-600 hover:text-blue-900">Edit</button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                    </div>
-                )}
+                <div className="flex gap-2 items-center">
+                  <button
+                    onClick={() => setIsGridView(false)}
+                    className={`p-2 rounded-full ${!isGridView ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'}`}
+                  >
+                    <FaList className="text-lg" />
+                  </button>
+                  <button
+                    onClick={() => setIsGridView(true)}
+                    className={`p-2 rounded-full ${isGridView ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'}`}
+                  >
+                    <BsFillGridFill className="text-lg" />
+                  </button>
                 </div>
+              </div>
+
+              {renderSelectedView()}
+            </div>
+          </div>
+            
+            <div className="flex flex-col gap-4">
+                <span className="border-b pb-2">Forum Activity</span>
+
+                <div className="flex flex-col divide-y border shadow bg-white p-4 rounded-md">
+                    <div className="flex items-center py-4 gap-2">
+                      <div className="bg-blue-600 w-10 h-10 rounded-full"></div>
+                      <span>Name posted: <span className="text-blue-600">Title of the post</span></span>
+                    </div>
+
+                    <div className="flex items-center py-4 gap-2">
+                      <div className="bg-blue-600 w-10 h-10 rounded-full"></div>
+                      <span>Name commented on: <span className="text-blue-600">Title of the post</span></span>
+                    </div>
                 </div>
             </div>
-        </main>
         </div>
-    );
+      </main>
+    </div>
+  );
 }
