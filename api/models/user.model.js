@@ -266,6 +266,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  newEmail: {
+    type: String,
+    required: false,
+  },
   emailVerificationToken: {
     type: String,
     required: false,

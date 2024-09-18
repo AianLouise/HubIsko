@@ -7,7 +7,6 @@ import nodemailer from 'nodemailer';
 import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator';
 
-
 export const test = (req, res) => {
   res.json({
     message: 'API is working!',
@@ -243,4 +242,110 @@ export const getScholarshipProgramsByProvider = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Error retrieving scholarship applications', error: error.message });
   }
+};
+
+export const updateUserInfo = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const updateData = req.body;
+
+    // Find the user by ID and update their information
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true });
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'User information updated successfully', user: updatedUser });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating user information', error: error.message });
+  }
+};
+
+export const requestEmailUpdate = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const { newEmail } = req.body;
+
+        // Check if the new email already exists
+        const existingUser = await User.findOne({ email: newEmail });
+        if (existingUser) {
+            return res.status(400).json({ message: 'Email already exists' });
+        }
+
+        // Generate a verification token
+        const emailVerificationToken = jwt.sign(
+            { userId, newEmail },
+            process.env.JWT_SECRET,
+            { expiresIn: '1d' } // Token expires in 1 day
+        );
+
+        // Update the user with the new email and verification token
+        const user = await User.findByIdAndUpdate(userId, { newEmail, emailVerificationToken }, { new: true });
+
+        // Email setup
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USERNAME,
+                pass: process.env.EMAIL_PASSWORD,
+            },
+        });
+
+        const verificationUrl = `http://localhost:5173/verify-email-update?token=${emailVerificationToken}`;
+
+        console.log('Sending verification email to:', newEmail);
+
+        await transporter.sendMail({
+            from: '"HubIsko" <yourappemail@example.com>',
+            to: newEmail,
+            subject: 'Verify Your New Email',
+            html: `
+                <div style="max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 30px; font-family: Arial, sans-serif; background-color: #ffffff; border-radius: 10px;">
+                    <h2 style="color: #0047ab; text-align: center; margin-bottom: 25px; font-size: 24px;">Verify Your New Email</h2>
+                    <p style="font-size: 18px; color: #333; text-align: center; margin-top: 25px;">Hello,</p>
+                    <p style="font-size: 16px; color: #555; text-align: center; line-height: 1.5;">Please click the button below to verify your new email address:</p>
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="${verificationUrl}" style="background-color: #0047ab; color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 5px; font-size: 18px; display: inline-block;">Verify Email</a>
+                    </div>
+                    <p style="font-size: 16px; color: #555; text-align: center; line-height: 1.5;">If the button above does not work, please copy and paste the following link into your browser:</p>
+                    <p style="font-size: 16px; color: #0047ab; text-align: center;"><a href="${verificationUrl}" style="color: #0047ab; text-decoration: underline;">${verificationUrl}</a></p>
+                    <p style="font-size: 16px; color: #333; text-align: center; margin-top: 30px;">Best regards,</p>
+                    <p style="font-size: 16px; color: #333; text-align: center;">The HubIsko Team</p>
+                </div>
+            `
+        });
+
+        console.log('Verification email sent successfully to:', newEmail);
+
+        res.status(200).json({ message: 'Verification email sent successfully. Please check your new email to verify.' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error requesting email change', error: error.message });
+    }
+};
+
+export const verifyEmailUpdate = async (req, res) => {
+    try {
+        const { token } = req.query;
+
+        // Verify the token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const { userId, newEmail } = decoded;
+
+        // Update the user's email
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        user.email = newEmail;
+        user.emailVerified = true;
+        user.newEmail = null;
+        user.emailVerificationToken = null;
+        await user.save();
+
+        res.status(200).json({ message: 'Email verified and updated successfully', user });
+    } catch (error) {
+        res.status(500).json({ message: 'Error verifying email change', error: error.message });
+    }
 };

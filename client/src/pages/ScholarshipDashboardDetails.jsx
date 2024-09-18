@@ -145,7 +145,7 @@ export default function ScholarshipDashboardDetails() {
                     <div>
                         {application && application.scholarshipProgram ? (
                             <div className='flex flex-col items-center'>
-                                <div className="w-32 h-32 bg-blue-600 rounded-full mb-4 shadow-lg">
+                                <div className="w-32 h-32 bg-white rounded-full mb-4 shadow-lg">
                                     <img src={application.scholarshipProgram.scholarshipImage} alt="Scholarship Program" className="w-full h-full object-cover rounded-full" />
                                 </div>
                                 <span className='text-3xl font-bold'>{application.scholarshipProgram.title}</span>

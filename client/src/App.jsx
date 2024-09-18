@@ -86,6 +86,7 @@ import ScholarView from "./pages/Scholarship-Provider/ScholarView";
 import ValidationPage from "./pages/Scholarship-Provider/ValidationPage";
 import EditScholarshipDetails from "./components/ViewScholarshipDetails/EditScholarshipDetails";
 import EditScholarshipWebView from "./components/ViewScholarshipDetails/EditScholarshipWebView";
+import VerifyEmailUpdate from "./components/ProviderSettings/VerifyEmailUpdate";
 
 
 // import RegisterAsProvider from "./pages/RegisterAsProvider";
@@ -124,6 +125,8 @@ export default function App() {
         <Route path="/profile/:id" element={<Profiles />} />
 
         <Route path="/scholarship-application/:scholarshipId" element={<ScholarshipApplication />} />
+
+        <Route path="/verify-email-update" element={<VerifyEmailUpdate />} />
 
         {/* <Route path="/others-profile/:id" element={<OthersProfile />} /> */}
         {/* Admin Routes */}
@@ -189,6 +192,7 @@ export default function App() {
           <Route path="/announcement/details/:announcementId" element={<AnnouncementDetails />} />
 
           <Route path="/validation-page" element={<ValidationPage />} />
+     
         </Route>
 
         {/* Scholar Routes */}

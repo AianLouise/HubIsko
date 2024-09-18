@@ -28,8 +28,6 @@ export default function ViewScholars({ scholars, numberOfScholarships, numberOfS
                     </div>
                 </div>
 
-
-
                 <div className='rounded-lg shadow-md border'>
                     <table className="min-w-full">
                         <thead>
