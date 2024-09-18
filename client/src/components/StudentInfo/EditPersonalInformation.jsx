@@ -17,6 +17,7 @@ export default function EditPersonalInformation() {
     };
 
     const [isEditing, setIsEditing] = useState(false);
+    const [originalFormData, setOriginalFormData] = useState(null);
     const [formData, setFormData] = useState({
         applicantDetails: {
             firstName: '',
@@ -69,6 +70,26 @@ export default function EditPersonalInformation() {
                         contactNumber: user.applicantDetails.contactNumber,
                     },
                 });
+                setOriginalFormData({
+                    applicantDetails: {
+                        firstName: user.applicantDetails.firstName,
+                        middleName: user.applicantDetails.middleName,
+                        lastName: user.applicantDetails.lastName,
+                        nameExtension: user.applicantDetails.nameExtension,
+                        birthdate: formatDate(user.applicantDetails.birthdate), // If needed, format the date
+                        gender: user.applicantDetails.gender,
+                        bloodType: user.applicantDetails.bloodType,
+                        civilStatus: user.applicantDetails.civilStatus,
+                        maidenName: user.applicantDetails.maidenName,
+                        spouseName: user.applicantDetails.spouseName,
+                        spouseOccupation: user.applicantDetails.spouseOccupation,
+                        religion: user.applicantDetails.religion,
+                        height: user.applicantDetails.height,
+                        weight: user.applicantDetails.weight,
+                        birthplace: user.applicantDetails.birthplace,
+                        contactNumber: user.applicantDetails.contactNumber,
+                    },
+                });
             } catch (error) {
                 console.error('Error fetching user details:', error);
                 setErrors({ general: 'Error fetching user details' });
@@ -78,7 +99,6 @@ export default function EditPersonalInformation() {
         fetchUserDetails();
     }, [userId]);
 
-    const [originalFormData, setOriginalFormData] = useState(formData);
     const [notification, setNotification] = useState(null);
 
     const handleChange = (e) => {
@@ -172,7 +192,7 @@ export default function EditPersonalInformation() {
             <div className="grid lg:grid-cols-4 gap-4 pt-2 lg:px-12 p-4 lg:py-8">
                 {/* First Row: First Name, Last Name, Middle Name, Name Extension */}
                 <div className="flex flex-col gap-2">
-                    <label className="text-slate-400">First Name</label>
+                    <label className="block text-sm font-medium text-gray-700">First Name</label>
                     <input
                         type="text"
                         name="firstName"
@@ -183,7 +203,7 @@ export default function EditPersonalInformation() {
                     />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label className="text-slate-400">Last Name</label>
+                    <label className="block text-sm font-medium text-gray-700">Last Name</label>
                     <input
                         type="text"
                         name="lastName"
@@ -194,7 +214,7 @@ export default function EditPersonalInformation() {
                     />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label className="text-slate-400">Middle Name</label>
+                    <label className="block text-sm font-medium text-gray-700">Middle Name</label>
                     <input
                         type="text"
                         name="middleName"
@@ -205,7 +225,7 @@ export default function EditPersonalInformation() {
                     />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label className="text-slate-400">Name Extension</label>
+                    <label className="block text-sm font-medium text-gray-700">Name Extension</label>
                     <select
                         name="nameExtension"
                         className={inputClasses}
@@ -225,7 +245,7 @@ export default function EditPersonalInformation() {
 
                 {/* Second Row: Birthdate, Gender, Blood Type, Religion */}
                 <div className="flex flex-col gap-2">
-                    <label className="text-slate-400">Birthdate</label>
+                    <label className="block text-sm font-medium text-gray-700">Birthdate</label>
                     <input
                         type="date"
                         name="birthdate"
@@ -236,7 +256,7 @@ export default function EditPersonalInformation() {
                     />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label className="text-slate-400">Gender</label>
+                    <label className="block text-sm font-medium text-gray-700">Gender</label>
                     <select
                         name="gender"
                         className={inputClasses}
@@ -251,7 +271,7 @@ export default function EditPersonalInformation() {
                     </select>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label className="text-slate-400">Blood Type</label>
+                    <label className="block text-sm font-medium text-gray-700">Blood Type</label>
                     <select
                         name="bloodType"
                         className={inputClasses}
@@ -271,7 +291,7 @@ export default function EditPersonalInformation() {
                     </select>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label className="text-slate-400">Religion</label>
+                    <label className="block text-sm font-medium text-gray-700">Religion</label>
                     <select
                         name="religion"
                         className={inputClasses}
@@ -289,7 +309,7 @@ export default function EditPersonalInformation() {
 
                 {/* Third Row: Civil Status, Maiden Name, Spouse Name, Spouse Occupation */}
                 <div className="flex flex-col gap-2">
-                    <label className="text-slate-400">Civil Status</label>
+                    <label className="block text-sm font-medium text-gray-700">Civil Status</label>
                     <select
                         name="civilStatus"
                         className={inputClasses}
@@ -305,7 +325,7 @@ export default function EditPersonalInformation() {
                     </select>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label className="text-slate-400">Maiden Name</label>
+                    <label className="block text-sm font-medium text-gray-700">Maiden Name</label>
                     <input
                         type="text"
                         name="maidenName"
@@ -316,7 +336,7 @@ export default function EditPersonalInformation() {
                     />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label className="text-slate-400">Spouse Name</label>
+                    <label className="block text-sm font-medium text-gray-700">Spouse Name</label>
                     <input
                         type="text"
                         name="spouseName"
@@ -327,7 +347,7 @@ export default function EditPersonalInformation() {
                     />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label className="text-slate-400">Spouse Occupation</label>
+                    <label className="block text-sm font-medium text-gray-700">Spouse Occupation</label>
                     <input
                         type="text"
                         name="spouseOccupation"
@@ -340,7 +360,7 @@ export default function EditPersonalInformation() {
 
                 {/* Fourth Row: Height, Weight, Birthplace, Contact Number */}
                 <div className="flex flex-col gap-2">
-                    <label className="text-slate-400">Height (cm)</label>
+                    <label className="block text-sm font-medium text-gray-700">Height (cm)</label>
                     <input
                         type="number"
                         name="height"
@@ -351,7 +371,7 @@ export default function EditPersonalInformation() {
                     />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label className="text-slate-400">Weight (kg)</label>
+                    <label className="block text-sm font-medium text-gray-700">Weight (kg)</label>
                     <input
                         type="number"
                         name="weight"
@@ -362,7 +382,7 @@ export default function EditPersonalInformation() {
                     />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label className="text-slate-400">Birthplace</label>
+                    <label className="block text-sm font-medium text-gray-700">Birthplace</label>
                     <input
                         type="text"
                         name="birthplace"
@@ -373,7 +393,7 @@ export default function EditPersonalInformation() {
                     />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label className="text-slate-400">Contact Number</label>
+                    <label className="block text-sm font-medium text-gray-700">Contact Number</label>
                     <input
                         type="text"
                         name="contactNumber"

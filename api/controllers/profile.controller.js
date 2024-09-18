@@ -93,3 +93,31 @@ export const editUserInfo = async (req, res) => {
         res.status(500).json({ message: 'Server error', error });
     }
 };
+
+export const editAddress = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { address } = req.body; // Extract the address object from the request body
+
+        // Find the user by ID
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Update user's address information
+        if (address) {
+            user.applicantDetails.address = { ...user.applicantDetails.address, ...address };
+        }
+
+        // Save the updated user information
+        await user.save();
+
+        // Send the updated user information as a response
+        res.json({ message: 'Address updated successfully', user });
+    } catch (error) {
+        // Handle server errors
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
+
