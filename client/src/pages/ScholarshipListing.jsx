@@ -176,7 +176,7 @@ export default function ScholarshipListing() {
                     </span>
                     {/* Tooltip for the organization name */}
                   </button>
-                    <div className='absolute top-full w-40 p-2 z-20 bg-white border-2 border-blue-500 shadow-lg text-center text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none'>
+                                    <div className='absolute top-full w-40 p-2 z-20 bg-white border-2 border-blue-500 shadow-lg text-center text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden sm:block'>
                       {provider.scholarshipProviderDetails.organizationName}
                     </div>
                 </Link>
