@@ -119,7 +119,7 @@ export default function AdminDashboard() {
 
 
                         <div className='flex items-center gap-4 '>
-                            <div className='bg-blue-600  w-24 h-24 my-8 rounded-full flex items-center justify-center'>
+                            <div className='bg-white  w-24 h-24 my-8 rounded-full flex items-center justify-center'>
                                 <img
                                     src={currentUser ? currentUser.profilePicture : 'defaultProfilePicture.jpg'}
                                     alt='Admin Profile'
