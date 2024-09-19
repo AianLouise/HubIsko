@@ -92,7 +92,7 @@ export default function ScholarshipDashboardDetails() {
         window.scrollTo(0, 0);
     }, []);
 
-    const isPending = application?.applicationStatus === 'Pending';
+    const isApproved = application?.applicationStatus === 'Approved';
 
     // Announcements
     const [scholarshipData, setScholarshipData] = useState([]);
@@ -160,7 +160,7 @@ export default function ScholarshipDashboardDetails() {
                         { label: 'Announcement', value: 'announcement' },
                         { label: 'Validation', value: 'validation' }
                         ].map((tab) => (
-                            !isPending || tab.value === 'scholars' ? (
+                            isApproved || tab.value === 'scholars' ? (
                                 <button
                                     key={tab.value}
                                     className={`tab px-4 py-2 mx-2 transition-colors duration-300 ${activeTab === tab.value
@@ -186,7 +186,7 @@ export default function ScholarshipDashboardDetails() {
                             </div>
                         )}
 
-                        {activeTab === 'announcement' && !isPending && (
+                        {activeTab === 'announcement' && isApproved && (
                             <div className='flex flex-col gap-4'>
                                 <div className='flex justify-between items-center gap-4'>
                                     <span className='text-2xl font-bold'>Announcements</span>
@@ -272,7 +272,7 @@ export default function ScholarshipDashboardDetails() {
                             </div>
                         )}
 
-                        {activeTab === 'validation' && !isPending && (
+                        {activeTab === 'validation' && isApproved && (
                             <div className="p-6">
                                 {/* Upcoming Document Validation */}
                                 <div className='mb-8'>

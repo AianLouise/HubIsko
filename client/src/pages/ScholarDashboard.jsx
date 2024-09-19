@@ -26,6 +26,7 @@ export default function ScholarDashboard() {
 
   const [approvedApplications, setApprovedApplications] = useState([]);
   const [pendingApplications, setPendingApplications] = useState([]);
+  const [rejectedApplications, setRejectedApplications] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [isMobile, setIsMobile] = useState(false);
@@ -92,8 +93,10 @@ export default function ScholarDashboard() {
 
         const approved = data.filter(app => app.applicationStatus === 'Approved');
         const pending = data.filter(app => app.applicationStatus === 'Pending');
+        const rejected = data.filter(app => app.applicationStatus === 'Rejected');
         setApprovedApplications(approved);
         setPendingApplications(pending);
+        setRejectedApplications(rejected);
 
       } catch (error) {
         console.error('Error fetching applications:', error);
@@ -105,7 +108,7 @@ export default function ScholarDashboard() {
     fetchApplications();
   }, [currentUser]);
 
-  const allApplications = [...approvedApplications, ...pendingApplications];
+  const allApplications = [...approvedApplications, ...pendingApplications, ...rejectedApplications];
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -138,6 +141,9 @@ export default function ScholarDashboard() {
         break;
       case 'pending':
         applications = pendingApplications;
+        break;
+      case 'rejected':
+        applications = rejectedApplications;
         break;
       default:
         applications = allApplications;
@@ -428,34 +434,42 @@ export default function ScholarDashboard() {
             </div>
           </div>
 
-          <div className="flex flex-row justify-between items-center mt-4">
-            <div className='flex gap-4'>
+          <div className="flex flex-row justify-between items-center mt-4 font-medium">
+                        <div className='flex gap-4'>
               <button
-                className={`flex gap-2 font-medium items-center ${filter === 'all' ? 'bg-blue-600 text-white' : 'bg-white hover:bg-slate-200'} shadow lg:px-6 lg:py-2 px-4 py-2 rounded-md text-sm lg:text-md`}
+                className={`flex gap-2 items-center ${filter === 'all' ? 'bg-blue-600 text-white' : 'bg-white hover:bg-slate-200'} shadow lg:px-6 lg:py-2 px-4 py-2 rounded-md text-sm lg:text-md`}
                 onClick={() => setFilter('all')}
               >
-                <h2 className="hidden  lg:block rounded-t-lg text-center">All Applications</h2>
+                <h2 className="hidden lg:block rounded-t-lg text-center">All Applications</h2>
                 <h2 className="lg:hidden block rounded-t-lg text-center">All</h2>
                 <div className='font-bold '>({allApplications.length})</div>
               </button>
-
+            
               <button
                 className={`flex gap-2 items-center ${filter === 'approved' ? 'bg-green-600 text-white border-green-600' : 'bg-white hover:bg-slate-200'} shadow lg:px-6 lg:py-2 px-4 py-2 rounded-md text-sm lg:text-md`}
                 onClick={() => setFilter('approved')}
               >
-                <h2 className="font-bold rounded-t-lg text-center">Approved</h2>
-                <div className={`font-bold  ${filter === 'approved' ? 'text-white' : 'text-green-600'}`}>({approvedApplications.length})</div>
+                <h2 className="rounded-t-lg text-center">Approved</h2>
+                <div className={`font-bold ${filter === 'approved' ? 'text-white' : 'text-green-600'}`}>({approvedApplications.length})</div>
               </button>
-
+            
               <button
                 className={`flex gap-2 items-center ${filter === 'pending' ? 'bg-yellow-500 text-white border-yellow-500' : 'bg-white hover:bg-slate-200'} shadow lg:px-6 lg:py-2 px-4 py-2 rounded-md text-sm lg:text-md`}
                 onClick={() => setFilter('pending')}
               >
-                <h2 className="font-bold rounded-t-lg text-center">Pending</h2>
-                <div className={`font-bold  ${filter === 'pending' ? 'text-white' : 'text-yellow-500'}`}>({pendingApplications.length})</div>
+                <h2 className="rounded-t-lg text-center">Pending</h2>
+                <div className={`font-bold ${filter === 'pending' ? 'text-white' : 'text-yellow-500'}`}>({pendingApplications.length})</div>
+              </button>
+            
+              <button
+                className={`flex gap-2 items-center ${filter === 'rejected' ? 'bg-red-600 text-white border-red-600' : 'bg-white hover:bg-slate-200'} shadow lg:px-6 lg:py-2 px-4 py-2 rounded-md text-sm lg:text-md`}
+                onClick={() => setFilter('rejected')}
+              >
+                <h2 className="rounded-t-lg text-center">Rejected</h2>
+                <div className={`font-bold ${filter === 'rejected' ? 'text-white' : 'text-red-600'}`}>({rejectedApplications.length})</div>
               </button>
             </div>
-
+            
             <div className="hidden lg:flex gap-2 items-center bg-white shadow px-6 py-2 rounded-md border text-md">
               <input
                 type="text"

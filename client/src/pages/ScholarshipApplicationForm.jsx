@@ -18,19 +18,19 @@ const ScholarshipApplicationForm = () => {
     useTokenExpiry();
     const navigate = useNavigate();
     const { currentUser } = useSelector((state) => state.user);
-  
+
     useEffect(() => {
-      if (currentUser) {
-        if (currentUser.role === 'admin') {
-          navigate('/admin-dashboard');
-        } else if (currentUser.role === 'scholarship_provider') {
-          if (!currentUser.emailVerified) {
-            navigate('/verify-your-email', { state: { email: currentUser.email } });
-          } else {
-            navigate('/provider-dashboard');
-          }
+        if (currentUser) {
+            if (currentUser.role === 'admin') {
+                navigate('/admin-dashboard');
+            } else if (currentUser.role === 'scholarship_provider') {
+                if (!currentUser.emailVerified) {
+                    navigate('/verify-your-email', { state: { email: currentUser.email } });
+                } else {
+                    navigate('/provider-dashboard');
+                }
+            }
         }
-      }
     }, [currentUser, navigate]);
 
     const userId = currentUser?._id;
@@ -131,69 +131,69 @@ const ScholarshipApplicationForm = () => {
 
     useEffect(() => {
         const fetchUserDetails = async () => {
-          try {
-            const response = await fetch(`/api/auth/user/${userId}`);
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
+            try {
+                const response = await fetch(`/api/auth/user/${userId}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setUserDetails(data);
+                setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    firstName: data.applicantDetails?.firstName || '',
+                    lastName: data.applicantDetails?.lastName || '',
+                    middleName: data.applicantDetails?.middleName || '',
+                    nameExtension: data.applicantDetails?.nameExtension || '',
+                    birthdate: data.applicantDetails?.birthdate || '',
+                    birthplace: data.applicantDetails?.birthplace || '',
+                    gender: data.applicantDetails?.gender || '',
+                    bloodType: data.applicantDetails?.bloodType || '',
+                    civilStatus: data.applicantDetails?.civilStatus || '',
+                    maidenName: data.applicantDetails?.maidenName || '',
+                    spouseName: data.applicantDetails?.spouseName || '',
+                    spouseOccupation: data.applicantDetails?.spouseOccupation || '',
+                    religion: data.applicantDetails?.religion || '',
+                    height: data.applicantDetails?.height || '',
+                    weight: data.applicantDetails?.weight || '',
+                    email: data.email || '',
+                    contactNumber: data.applicantDetails?.contactNumber || '',
+                    addressDetails: data.applicantDetails?.address.addressDetails || '',
+                    region: data.applicantDetails?.address.region || '',
+                    province: data.applicantDetails?.address.province || '',
+                    city: data.applicantDetails?.address.city || '',
+                    barangay: data.applicantDetails?.address.barangay || '',
+                    education: {
+                        elementary: {
+                            school: data.applicantDetails?.education?.elementary?.school || '',
+                            award: data.applicantDetails?.education?.elementary?.award || '',
+                            yearGraduated: data.applicantDetails?.education?.elementary?.yearGraduated || '',
+                        },
+                        juniorHighSchool: {
+                            school: data.applicantDetails?.education?.juniorHighSchool?.school || '',
+                            award: data.applicantDetails?.education?.juniorHighSchool?.award || '',
+                            yearGraduated: data.applicantDetails?.education?.juniorHighSchool?.yearGraduated || '',
+                        },
+                        seniorHighSchool: {
+                            school: data.applicantDetails?.education?.seniorHighSchool?.school || '',
+                            award: data.applicantDetails?.education?.seniorHighSchool?.award || '',
+                            yearGraduated: data.applicantDetails?.education?.seniorHighSchool?.yearGraduated || '',
+                        },
+                        college: {
+                            school: data.applicantDetails?.education?.college?.school || '',
+                            course: data.applicantDetails?.education?.college?.course || '',
+                        }
+                    },
+                    // Initialize other form fields as needed
+                }));
+            } catch (error) {
+                console.error('Error fetching user details:', error);
             }
-            const data = await response.json();
-            setUserDetails(data);
-            setFormData((prevFormData) => ({
-              ...prevFormData,
-              firstName: data.applicantDetails?.firstName || '',
-                lastName: data.applicantDetails?.lastName || '',
-                middleName: data.applicantDetails?.middleName || '',
-                nameExtension: data.applicantDetails?.nameExtension || '',
-                birthdate: data.applicantDetails?.birthdate || '',
-                birthplace: data.applicantDetails?.birthplace || '',
-                gender: data.applicantDetails?.gender || '',
-                bloodType: data.applicantDetails?.bloodType || '',
-                civilStatus: data.applicantDetails?.civilStatus || '', 
-                maidenName: data.applicantDetails?.maidenName || '',
-                spouseName: data.applicantDetails?.spouseName || '',
-                spouseOccupation: data.applicantDetails?.spouseOccupation || '',
-                religion: data.applicantDetails?.religion || '',
-                height: data.applicantDetails?.height || '',
-                weight: data.applicantDetails?.weight || '',
-                email: data.email || '',
-                contactNumber: data.applicantDetails?.contactNumber || '',
-                addressDetails: data.applicantDetails?.address.addressDetails || '',
-                region: data.applicantDetails?.address.region || '',
-                province: data.applicantDetails?.address.province || '',
-                city: data.applicantDetails?.address.city || '',
-                barangay: data.applicantDetails?.address.barangay || '',
-                education: {
-                    elementary: {
-                        school: data.applicantDetails?.education?.elementary?.school || '',
-                        award: data.applicantDetails?.education?.elementary?.award || '',
-                        yearGraduated: data.applicantDetails?.education?.elementary?.yearGraduated || '',
-                    },
-                    juniorHighSchool: {
-                        school: data.applicantDetails?.education?.juniorHighSchool?.school || '',
-                        award: data.applicantDetails?.education?.juniorHighSchool?.award || '',
-                        yearGraduated: data.applicantDetails?.education?.juniorHighSchool?.yearGraduated || '',
-                    },
-                    seniorHighSchool: {
-                        school: data.applicantDetails?.education?.seniorHighSchool?.school || '',
-                        award: data.applicantDetails?.education?.seniorHighSchool?.award || '',
-                        yearGraduated: data.applicantDetails?.education?.seniorHighSchool?.yearGraduated || '',
-                    },
-                    college: {
-                        school: data.applicantDetails?.education?.college?.school || '',
-                        course: data.applicantDetails?.education?.college?.course || '',
-                    }
-                },
-              // Initialize other form fields as needed
-            }));
-          } catch (error) {
-            console.error('Error fetching user details:', error);
-          }
         };
-    
+
         if (userId) {
-          fetchUserDetails();
+            fetchUserDetails();
         }
-      }, [userId]);
+    }, [userId]);
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
@@ -261,12 +261,12 @@ const ScholarshipApplicationForm = () => {
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen">
-              <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-              </svg>
+                <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
             </div>
-          );
+        );
     }
 
     // if (error) {
@@ -650,17 +650,17 @@ const ScholarshipApplicationForm = () => {
 
                 if (formData.documents) {
                     requiredDocuments.forEach(doc => {
-                        const file = formData.documents[doc.id];
+                        const file = formData.documents[doc.name];
                         if (!file) {
-                            errors[doc.id] = `${doc.name} is required.`;
+                            errors[doc.name] = `${doc.name} is required.`;
                         } else if (file.size / (1024 * 1024) > maxSizeInMB) {
-                            errors[doc.id] = `File size should be 10 MB or less for ${doc.name}`;
+                            errors[doc.name] = `File size should be 10 MB or less for ${doc.name}`;
                         }
                     });
                 }
                 // else {
                 //     requiredDocuments.forEach(doc => {
-                //         errors[doc.id] = `${doc.name} is required.`;
+                //         errors[doc.name] = `${doc.name} is required.`;
                 //     });
                 // }
 
@@ -745,8 +745,8 @@ const ScholarshipApplicationForm = () => {
                                     <img src={scholarship.scholarshipImage} alt={`${scholarship.title} logo`} className="w-32 h-32 object-contain mr-4" />
                                 )}
                                 <div>
-                                    <h2 className="lg:text-2xl font-normal text-slate-500 lg:text-gray-800">You are applying for 
-                                    <span className='font-bold text-xl tracking-wide text-blue-600 lg:inline block'> {scholarship.title}</span>
+                                    <h2 className="lg:text-2xl font-normal text-slate-500 lg:text-gray-800">You are applying for
+                                        <span className='font-bold text-xl tracking-wide text-blue-600 lg:inline block'> {scholarship.title}</span>
                                     </h2>
                                     <p className="text-gray-600 mt-2">{scholarship.description}</p>
                                 </div>
@@ -778,9 +778,9 @@ const ScholarshipApplicationForm = () => {
                                         </button>
                                         <span className='text-sm text-slate-600'>
                                             {step === 0 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'} ><>Personal <br /> Information</></span>}
-                                            {step === 1 && <span  className={currentPage === step ? 'block' : 'lg:flex hidden'}>Custodian</span> }
-                                            {step === 2 && <span  className={currentPage === step ? 'block' : 'lg:flex hidden'}>Education</span> }
-                                            {step === 3 && <span  className={currentPage === step ? 'block' : 'lg:flex hidden'}>Others</span> }
+                                            {step === 1 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}>Custodian</span>}
+                                            {step === 2 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}>Education</span>}
+                                            {step === 3 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}>Others</span>}
                                             {step === 4 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}><>Upload <br /> Requirements</></span>}
                                             {step === 5 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}><>Terms and <br /> Conditions</></span>}
                                         </span>
@@ -790,7 +790,7 @@ const ScholarshipApplicationForm = () => {
                             ))}
                         </div>
                     </div>
-                    
+
 
                     <div className='lg:hidden flex flex-col'>
                         <div className='flex justify-between items-center px-6 py-2 text-sm text-slate-500'>
@@ -799,49 +799,49 @@ const ScholarshipApplicationForm = () => {
                         </div>
 
                         {[0, 1, 2, 3, 4, 5].map((step) => (
-                                <React.Fragment key={step}>
-                            <div className={`border-2 border-blue-600 rounded-md shadow w-full py-2 px-4 flex justify-between items-center ${currentPage === step ? 'flex' : 'hidden'} `}>
-                                <div className={`gap-2 items-center text-blue-600 ${step === 0 ? 'flex' : 'hidden'}`}>
-                                    <FaInfoCircle className='text-2xl'/>
-                                    <span className='font-bold'>Basic Information</span>
-                                </div>
+                            <React.Fragment key={step}>
+                                <div className={`border-2 border-blue-600 rounded-md shadow w-full py-2 px-4 flex justify-between items-center ${currentPage === step ? 'flex' : 'hidden'} `}>
+                                    <div className={`gap-2 items-center text-blue-600 ${step === 0 ? 'flex' : 'hidden'}`}>
+                                        <FaInfoCircle className='text-2xl' />
+                                        <span className='font-bold'>Basic Information</span>
+                                    </div>
 
-                                <div className={`gap-2 items-center text-blue-600 ${step === 1 ? 'flex' : 'hidden'}`}>
-                                    <FaUsers className='text-2xl'/>
-                                    <span className='font-bold'>Custodian</span>
-                                </div>
+                                    <div className={`gap-2 items-center text-blue-600 ${step === 1 ? 'flex' : 'hidden'}`}>
+                                        <FaUsers className='text-2xl' />
+                                        <span className='font-bold'>Custodian</span>
+                                    </div>
 
-                                <div className={`gap-2 items-center text-blue-600 ${step === 2 ? 'flex' : 'hidden'}`}>
-                                    <FaGraduationCap className='text-2xl'/>
-                                    <span className='font-bold'>Education</span>
-                                </div>
+                                    <div className={`gap-2 items-center text-blue-600 ${step === 2 ? 'flex' : 'hidden'}`}>
+                                        <FaGraduationCap className='text-2xl' />
+                                        <span className='font-bold'>Education</span>
+                                    </div>
 
-                                <div className={`gap-2 items-center text-blue-600 ${step === 3 ? 'flex' : 'hidden'}`}>
-                                    <FaEllipsisH className='text-2xl'/>
-                                    <span className='font-bold'>Others</span>
-                                </div>
+                                    <div className={`gap-2 items-center text-blue-600 ${step === 3 ? 'flex' : 'hidden'}`}>
+                                        <FaEllipsisH className='text-2xl' />
+                                        <span className='font-bold'>Others</span>
+                                    </div>
 
-                                <div className={`gap-2 items-center text-blue-600 ${step === 4 ? 'flex' : 'hidden'}`}>
-                                    <FaUpload className='text-2xl'/>
-                                    <span className='font-bold'>Upload Requirements</span>
-                                </div>
+                                    <div className={`gap-2 items-center text-blue-600 ${step === 4 ? 'flex' : 'hidden'}`}>
+                                        <FaUpload className='text-2xl' />
+                                        <span className='font-bold'>Upload Requirements</span>
+                                    </div>
 
-                                <div className={`gap-2 items-center text-blue-600 ${step === 5 ? 'flex' : 'hidden'}`}>
-                                    <FaFileContract className='text-2xl'/>
-                                    <span className='font-bold'>Terms and Conditions</span>
+                                    <div className={`gap-2 items-center text-blue-600 ${step === 5 ? 'flex' : 'hidden'}`}>
+                                        <FaFileContract className='text-2xl' />
+                                        <span className='font-bold'>Terms and Conditions</span>
+                                    </div>
+
+
+                                    <div>
+                                        <span className='text-blue-600 text-4xl font-bold'> {currentPage}<span className='text-slate-400'>/5</span></span>
+                                    </div>
                                 </div>
-                                
-                                
-                                <div>
-                                <span className='text-blue-600 text-4xl font-bold'> {currentPage}<span className='text-slate-400'>/5</span></span>
-                                </div>
-                            </div>
                             </React.Fragment>
                         ))}
 
                     </div>
 
-                    
+
                     <form onSubmit={handleSubmit}>
                         <StepTemplate
                             steps={steps}

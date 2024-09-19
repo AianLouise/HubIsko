@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 import { regions, provinces, cities, barangays } from 'select-philippines-address';
+import Modal from 'react-modal';
 
 export default function ApplicationForm() {
     useTokenExpiry();
@@ -10,14 +11,8 @@ export default function ApplicationForm() {
     const navigate = useNavigate();
     const { currentUser } = useSelector((state) => state.user);
 
-    const [showModal, setShowModal] = useState(false);
-
     const toggleModal = () => {
         setShowModal(!showModal);
-    }
-
-    const closeModal = () => {
-        setShowModal(false);
     }
 
     const [application, setApplication] = useState(null);
@@ -94,10 +89,19 @@ export default function ApplicationForm() {
         }
     }, [application]);
 
-    const handleResubmit = () => {
-        // Logic to handle resubmission can be added here
-        // For now, we'll just show a modal
+    const [showModal, setShowModal] = useState(false);
+
+    const openModal = () => {
         setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+    };
+
+    const handleResubmit = () => {
+        closeModal();
+        navigate(`/resubmit-application/${application._id}`); // Navigate to the resubmit application page
     };
 
     if (!application || !currentUser) {
@@ -113,7 +117,7 @@ export default function ApplicationForm() {
 
     return (
         <div>
-            <div className="border shadow rounded-md h-auto p-10">
+            <div className="border shadow rounded-md h-auto p-10 bg-white">
                 <div className="flex justify-between items-center">
                     <span className="text-2xl">Submitted details for: <span className='text-blue-600 font-bold'>{application.scholarshipProgram.title}</span></span>
                 </div>
@@ -136,7 +140,16 @@ export default function ApplicationForm() {
                                     <strong>Reason:</strong> {application.rejectionNote}
                                 </div>
                             )}
-                            {currentUser.role === 'applicant' && (
+                            {application.allowResubmission && (
+                                <div className="mt-2">
+                                    {currentUser.role === 'applicant' ? (
+                                        <p><strong>Note:</strong> You are allowed to resubmit your application.</p>
+                                    ) : currentUser.role === 'scholarship_provider' ? (
+                                        <p><strong>Note:</strong> The applicant is allowed to resubmit their application.</p>
+                                    ) : null}
+                                </div>
+                            )}
+                            {currentUser.role === 'applicant' && application.allowResubmission && (
                                 <button
                                     className="mt-4 bg-blue-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-blue-800"
                                     onClick={handleResubmit}
@@ -147,7 +160,7 @@ export default function ApplicationForm() {
                         </div>
                     )}
 
-                    <div className="mt-4 p-4 py-6 bg-white border shadow rounded">
+                    <div className="mt-4 p-4 py-6">
                         <div className="mb-4">
                             <p className="text-lg font-semibold"><strong>Applicant Name:</strong> {`${application.firstName} ${application.middleName} ${application.lastName}`}</p>
                             {/* <p><strong>Email:</strong> {application.email}</p> */}
@@ -182,7 +195,7 @@ export default function ApplicationForm() {
                     </div>
 
                     {/* Education Details */}
-                    <div className="mt-4 p-4 py-6 bg-white shadow border rounded">
+                    <div className=" p-4">
                         <div className="my-2">
                             <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Educational Background</h3>
                             <div className="px-4 pt-2 rounded-lg space-y-1">
@@ -194,7 +207,7 @@ export default function ApplicationForm() {
                         </div>
                     </div>
 
-                    <div className="mt-4 p-4 py-6 bg-white shadow rounded border">
+                    <div className="mt-4 p-4 py-6">
                         <div className="my-2">
                             <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Family Details</h3>
                             <div className="px-4 pt-2 rounded-lg shadow-s">
@@ -206,7 +219,7 @@ export default function ApplicationForm() {
                     </div>
 
                     {application.workExperience && application.workExperience.length > 0 && (
-                        <div className="mt-4 p-4 bg-white border shadow rounded">
+                        <div className="mt-4 p-4">
                             <div className="my-2">
                                 <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Work Experiences</h3>
                                 <div className="px-4 pt-2 rounded-lg">
@@ -227,7 +240,7 @@ export default function ApplicationForm() {
                     )}
 
                     {application.skillsAndQualifications && application.skillsAndQualifications.length > 0 && (
-                        <div className="mt-4 p-4 bg-white border shadow rounded">
+                        <div className="mt-4 p-4">
                             <div className="my-2">
                                 <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Skills and Qualifications</h3>
                                 <div className="px-4 pt-2 rounded-lg">
@@ -244,14 +257,21 @@ export default function ApplicationForm() {
                         </div>
                     )}
 
-                    <div className="mt-4 p-4 bg-white shadow rounded">
+                    <div className="mt-4 p-4">
                         <div className="my-2">
                             <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Documents</h3>
-                            <div className="px-4 pt-2 rounded-lg shadow-sm">
+                            <div className="px-4 pt-2">
                                 {application.documents && Object.entries(application.documents).map(([key, value], index) => (
                                     <div key={index} className="flex items-center mb-2">
                                         <strong className="w-1/3 text-sm">{key.replace(/_/g, ' ')}:</strong>
-                                        <a href={value} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline text-sm w-2/3 truncate">{value}</a>
+                                        <div className="w-2/3 flex justify-end items-center">
+                                            <button
+                                                onClick={() => window.open(value, '_blank')}
+                                                className="ml-2 bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 text-xs"
+                                            >
+                                                View Document
+                                            </button>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
@@ -259,23 +279,24 @@ export default function ApplicationForm() {
                     </div>
 
                     {/* Modal for resubmission confirmation */}
-                    {showModal && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50">
-                            <div className="bg-white flex-col gap-2 flex text-left p-8 w-1/4 shadow rounded-md border">
-                                <h1 className='text-2xl text-center font-bold text-blue-600'>Request to Resubmit?</h1>
-                                <span className='text-md text-slate-600 text-center'>
-                                    After you request a resubmission, you will need to update your application and submit it again.
-                                </span>
-                                <div className="justify-between w-full flex gap-2 font-medium mt-4">
-                                    <button onClick={closeModal} className="border rounded-md w-full py-2 hover:bg-slate-200">Cancel</button>
-                                    <button onClick={() => {
-                                        closeModal();
-                                        navigate(`/resubmit-application/${application._id}`); // Navigate to the resubmit application page
-                                    }} className="bg-blue-600 text-white rounded-md w-full hover:bg-blue-800">Request Resubmission</button>
-                                </div>
+                    <Modal
+                        isOpen={showModal}
+                        onRequestClose={closeModal}
+                        contentLabel="Request Resubmission"
+                        className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50"
+                        overlayClassName="fixed inset-0 bg-gray-900 bg-opacity-50"
+                    >
+                        <div className="bg-white flex-col gap-2 flex text-left p-8 w-1/4 shadow rounded-md border">
+                            <h1 className='text-2xl text-center font-bold text-blue-600'>Request to Resubmit?</h1>
+                            <span className='text-md text-slate-600 text-center'>
+                                After you request a resubmission, you will need to update your application and submit it again.
+                            </span>
+                            <div className="justify-between w-full flex gap-2 font-medium mt-4">
+                                <button onClick={closeModal} className="border rounded-md w-full py-2 hover:bg-slate-200">Cancel</button>
+                                <button onClick={handleResubmit} className="bg-blue-600 text-white rounded-md w-full hover:bg-blue-800">Request Resubmission</button>
                             </div>
                         </div>
-                    )}
+                    </Modal>
                 </div>
             </div>
         </div>

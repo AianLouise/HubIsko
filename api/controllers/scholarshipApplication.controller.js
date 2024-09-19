@@ -198,6 +198,7 @@ export const resubmitApplication = async (req, res) => {
                 documents,
                 scholarshipProgram,
                 applicant,
+                applicationStatus: 'Pending', // Add applicationStatus with value 'Pending'
             },
             { new: true }
         );

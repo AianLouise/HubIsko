@@ -5,6 +5,7 @@ import { IoMdArrowDropdown } from 'react-icons/io';
 import ApplicationForm from '../ApplicationForm';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import Snackbar from '../../components/Snackbar';
+import Modal from 'react-modal';
 
 export default function ViewApplicationDetails() {
     const { currentUser } = useSelector((state) => state.user);
@@ -112,7 +113,7 @@ export default function ViewApplicationDetails() {
         }
     };
 
-    const handleReject = async (applicationId, applicant) => {
+    const handleReject = async (applicationId, applicant, rejectionNote, allowResubmission) => {
         console.log(`Starting rejection process for application ID: ${applicationId}`);
 
         try {
@@ -124,7 +125,7 @@ export default function ViewApplicationDetails() {
                 body: JSON.stringify({
                     applicationStatus: 'Rejected',
                     rejectionNote: rejectionNote, // Include rejection note in the request
-                    allowResubmission: true // Allow applicant to resubmit the application
+                    allowResubmission: allowResubmission // Use the allowResubmission parameter
                 })
             });
 
@@ -145,7 +146,7 @@ export default function ViewApplicationDetails() {
                     applicantId: applicant, // Pass the applicant's ID as recipientId
                     senderId: currentUser._id, // Pass the current user's ID as senderId
                     scholarshipProgramId: application.scholarshipProgram._id, // Pass the scholarship program ID
-                    message: `Your application has been rejected. Reason: ${rejectionNote}. Please update and resubmit your application.` // Notification message
+                    message: `Your application has been rejected. Reason: ${rejectionNote}. ${allowResubmission ? 'Please update and resubmit your application.' : ''}` // Notification message
                 })
             });
 
@@ -158,13 +159,43 @@ export default function ViewApplicationDetails() {
             // Fetch updated application details to reflect the new status
             await fetchApplicationDetails();
 
-            setSuccessMessage('Application rejected successfully with a resubmission option.');
+            setSuccessMessage('Application rejected successfully.');
             setShowSnackbar(true);
 
         } catch (error) {
             console.error('Error rejecting application:', error);
             setError('Failed to reject application.');
         }
+    };
+
+    const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+    const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
+    const [allowResubmission, setAllowResubmission] = useState(false);
+
+    const openRejectModal = () => {
+        setIsRejectModalOpen(true);
+    };
+
+    const closeRejectModal = () => {
+        setIsRejectModalOpen(false);
+    };
+
+    const openApproveModal = () => {
+        setIsApproveModalOpen(true);
+    };
+
+    const closeApproveModal = () => {
+        setIsApproveModalOpen(false);
+    };
+
+    const confirmReject = () => {
+        handleReject(application._id, application.applicant, rejectionNote, allowResubmission);
+        closeRejectModal();
+    };
+
+    const confirmApprove = () => {
+        handleApprove(application._id, application.applicant, application.scholarshipProgram._id);
+        closeApproveModal();
     };
 
     const closeSnackbar = () => setShowSnackbar(false);
@@ -223,31 +254,95 @@ export default function ViewApplicationDetails() {
                                         <strong>Reason:</strong> {rejectionNote}
                                     </div>
                                 )}
+                                {application.allowResubmission && (
+                                    <div className="mt-2">
+                                        <strong>Note:</strong> You are allowed to resubmit your application.
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             <div className="mt-6 flex flex-col gap-4">
-                                <textarea
-                                    className="border rounded-md p-2 w-full"
-                                    placeholder="Enter the reason for rejection (optional)"
-                                    value={rejectionNote}
-                                    onChange={(e) => setRejectionNote(e.target.value)}
-                                />
                                 <div className="flex justify-end gap-4">
                                     <button
                                         className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-md"
-                                        onClick={() => handleApprove(application._id, application.applicant, application.scholarshipProgram._id)}
+                                        onClick={openApproveModal}
                                     >
                                         Approve
                                     </button>
                                     <button
                                         className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-md"
-                                        onClick={() => handleReject(application._id, application.applicant)}
+                                        onClick={openRejectModal}
                                     >
                                         Reject with Note
                                     </button>
                                 </div>
                             </div>
                         )}
+
+                        <Modal
+                            isOpen={isRejectModalOpen}
+                            onRequestClose={closeRejectModal}
+                            contentLabel="Reject Application"
+                            className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50"
+                        >
+                            <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+                                <h2 className="text-lg font-semibold mb-4">Reject Application</h2>
+                                <textarea
+                                    className="border rounded-md p-2 w-full mb-4"
+                                    placeholder="Enter the reason for rejection (optional)"
+                                    value={rejectionNote}
+                                    onChange={(e) => setRejectionNote(e.target.value)}
+                                />
+                                <div className="flex items-center mb-4">
+                                    <label className="mr-2">Allow Resubmission:</label>
+                                    <input
+                                        type="checkbox"
+                                        checked={allowResubmission}
+                                        onChange={(e) => setAllowResubmission(e.target.checked)}
+                                    />
+                                </div>
+                                <div className="flex justify-end gap-4">
+                                    <button
+                                        className="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-md"
+                                        onClick={closeRejectModal}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-md"
+                                        onClick={confirmReject}
+                                    >
+                                        Confirm Reject
+                                    </button>
+                                </div>
+                            </div>
+                        </Modal>
+
+                        <Modal
+                            isOpen={isApproveModalOpen}
+                            onRequestClose={closeApproveModal}
+                            contentLabel="Approve Application"
+                            className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50"
+                        >
+                            <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+                                <h2 className="text-lg font-semibold mb-4">Approve Application</h2>
+                                <p>Are you sure you want to approve this application?</p>
+                                <div className="flex justify-end gap-4 mt-4">
+                                    <button
+                                        className="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-md"
+                                        onClick={closeApproveModal}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-md"
+                                        onClick={confirmApprove}
+                                    >
+                                        Confirm Approve
+                                    </button>
+                                </div>
+                            </div>
+                        </Modal>
                     </div>
 
                 </div>
