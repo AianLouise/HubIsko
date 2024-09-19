@@ -299,10 +299,8 @@ export default function Forums() {
                     </div>
 
                     <div className='max-w-6xl lg:px-24 p-4 mx-auto mb-20'>
-                        <div className='flex items-center justify-between gap-2'>
-                            {/* need to add the last update date */}
-
-                            <div className='flex gap-2 items-center'>
+                                               <div className='flex flex-col md:flex-row items-center justify-between gap-2'>
+                            <div className='flex flex-col md:flex-row gap-2 items-center'>
                                 <span className='flex gap-1 bg-white border px-4 py-2 rounded-md shadow'>
                                     <MdOutlineRefresh className='w-6 h-6 text-blue-600' />
                                     Last update: {new Date(scholarship.dateUpdated).toLocaleDateString()}
@@ -312,8 +310,8 @@ export default function Forums() {
                                     Deadline: {formatDate(scholarship.applicationDeadline)}
                                 </span>
                             </div>
-
-                            <div className='flex gap-2 border shadow bg-white rounded-md px-4 py-2'>
+                        
+                            <div className='flex gap-2 border shadow bg-white rounded-md px-4 py-2 mt-2 md:mt-0'>
                                 <div className='flex gap-2'>
                                     <FaPersonCirclePlus className='w-6 h-6 text-blue-600' />
                                     <span>Slots Available:</span>
@@ -321,6 +319,7 @@ export default function Forums() {
                                 </div>
                             </div>
                         </div>
+                        
                         <div className='flex justify-center items-center w-full h-52 rounded-md my-4 shadow border'>
                             {scholarship.bannerImage ? (
                                 <img src={scholarship.bannerImage} alt="Scholarship Banner" className='w-full h-full object-cover' />

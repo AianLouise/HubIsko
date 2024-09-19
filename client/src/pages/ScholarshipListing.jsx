@@ -153,11 +153,11 @@ export default function ScholarshipListing() {
           <div className='flex gap-2 items-center justify-between'>
             <span className='text-xl font-bold text-slate-600'>Organizations</span>
           </div>
-          <div className='flex space-x-6'>
+          <div className='flex space-x-6 overflow-x-auto overflow-y-hidden h-32'>
             {providers
               .filter((provider) => provider.status === 'Verified')
               .map((provider) => (
-                <Link to={`/profile/${provider._id}`} key={provider._id} className='flex flex-col items-center group'>
+                <Link to={`/profile/${provider._id}`} key={provider._id} className='flex flex-col items-center group flex-shrink-0'>
                   <button className='flex flex-col items-center group space-y-2 relative'>
                     <div className='w-16 h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden group-hover:bg-blue-800'>
                       <img
@@ -175,10 +175,10 @@ export default function ScholarshipListing() {
                         : provider.scholarshipProviderDetails.organizationName}
                     </span>
                     {/* Tooltip for the organization name */}
+                  </button>
                     <div className='absolute top-full w-40 p-2 z-20 bg-white border-2 border-blue-500 shadow-lg text-center text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none'>
                       {provider.scholarshipProviderDetails.organizationName}
                     </div>
-                  </button>
                 </Link>
               ))}
           </div>
