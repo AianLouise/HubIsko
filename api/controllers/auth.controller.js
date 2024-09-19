@@ -72,7 +72,9 @@ export const signup = async (req, res, next) => {
       },
     });
 
-    const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
+    // Use the environment variable for the base URL
+    const baseUrl = process.env.BASE_URL || 'http://localhost:5173';
+    const verificationUrl = `${baseUrl}/verify-email?token=${emailVerificationToken}`;
 
     console.log('Sending verification email to:', email);
 
@@ -359,10 +361,10 @@ export const resendVerificationEmail = async (req, res, next) => {
           pass: process.env.EMAIL_PASSWORD,
         },
       });
-
-      // const verificationUrl = `https://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`;
-
-      const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
+      
+      // Use the environment variable for the base URL
+      const baseUrl = process.env.BASE_URL || 'http://localhost:5173';
+      const verificationUrl = `${baseUrl}/verify-email?token=${emailVerificationToken}`;
 
       console.log('Resending verification email to:', email);
 

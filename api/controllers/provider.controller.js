@@ -74,7 +74,7 @@ export const signupAsProvider = async (req, res) => {
           authorizationLetter: documents.authorizationLetter,
           idProofContactPerson: documents.idProofContactPerson,
         },
-       
+
       }
     });
 
@@ -101,9 +101,9 @@ export const signupAsProvider = async (req, res) => {
       },
     });
 
-    const verificationUrl = `http://localhost:5173/verify-email?token=${emailVerificationToken}`;
-
-    // const verificationUrl = `http://hubisko.onrender.com/verify-email?token=${emailVerificationToken}`;
+    // Use the environment variable for the base URL
+    const baseUrl = process.env.BASE_URL || 'http://localhost:5173';
+    const verificationUrl = `${baseUrl}/verify-email?token=${emailVerificationToken}`;
 
     console.log('Sending verification email to:', email);
 
@@ -168,7 +168,7 @@ export const countScholarshipApplications = async (req, res) => {
 
     // Find all scholarship programs associated with the provider
     const scholarshipPrograms = await ScholarshipProgram.find({ providerId });
-    
+
     // Extract the IDs of these scholarship programs
     const scholarshipProgramIds = scholarshipPrograms.map(program => program._id);
 
@@ -263,44 +263,46 @@ export const updateUserInfo = async (req, res) => {
 };
 
 export const requestEmailUpdate = async (req, res) => {
-    try {
-        const userId = req.params.id;
-        const { newEmail } = req.body;
+  try {
+    const userId = req.params.id;
+    const { newEmail } = req.body;
 
-        // Check if the new email already exists
-        const existingUser = await User.findOne({ email: newEmail });
-        if (existingUser) {
-            return res.status(400).json({ message: 'Email already exists' });
-        }
+    // Check if the new email already exists
+    const existingUser = await User.findOne({ email: newEmail });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already exists' });
+    }
 
-        // Generate a verification token
-        const emailVerificationToken = jwt.sign(
-            { userId, newEmail },
-            process.env.JWT_SECRET,
-            { expiresIn: '1d' } // Token expires in 1 day
-        );
+    // Generate a verification token
+    const emailVerificationToken = jwt.sign(
+      { userId, newEmail },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' } // Token expires in 1 day
+    );
 
-        // Update the user with the new email and verification token
-        const user = await User.findByIdAndUpdate(userId, { newEmail, emailVerificationToken }, { new: true });
+    // Update the user with the new email and verification token
+    const user = await User.findByIdAndUpdate(userId, { newEmail, emailVerificationToken }, { new: true });
 
-        // Email setup
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USERNAME,
-                pass: process.env.EMAIL_PASSWORD,
-            },
-        });
+    // Email setup
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
 
-        const verificationUrl = `http://localhost:5173/verify-email-update?token=${emailVerificationToken}`;
+    // Use the environment variable for the base URL
+    const baseUrl = process.env.BASE_URL || 'http://localhost:5173';
+    const verificationUrl = `${baseUrl}/verify-email-update?token=${emailVerificationToken}`;
 
-        console.log('Sending verification email to:', newEmail);
+    console.log('Sending verification email to:', newEmail);
 
-        await transporter.sendMail({
-            from: '"HubIsko" <yourappemail@example.com>',
-            to: newEmail,
-            subject: 'Verify Your New Email',
-            html: `
+    await transporter.sendMail({
+      from: '"HubIsko" <yourappemail@example.com>',
+      to: newEmail,
+      subject: 'Verify Your New Email',
+      html: `
                 <div style="max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 30px; font-family: Arial, sans-serif; background-color: #ffffff; border-radius: 10px;">
                     <h2 style="color: #0047ab; text-align: center; margin-bottom: 25px; font-size: 24px;">Verify Your New Email</h2>
                     <p style="font-size: 18px; color: #333; text-align: center; margin-top: 25px;">Hello,</p>
@@ -314,72 +316,72 @@ export const requestEmailUpdate = async (req, res) => {
                     <p style="font-size: 16px; color: #333; text-align: center;">The HubIsko Team</p>
                 </div>
             `
-        });
+    });
 
-        console.log('Verification email sent successfully to:', newEmail);
+    console.log('Verification email sent successfully to:', newEmail);
 
-        res.status(200).json({ message: 'Verification email sent successfully. Please check your new email to verify.' });
-    } catch (error) {
-        res.status(500).json({ message: 'Error requesting email change', error: error.message });
-    }
+    res.status(200).json({ message: 'Verification email sent successfully. Please check your new email to verify.' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error requesting email change', error: error.message });
+  }
 };
 
 export const verifyEmailUpdate = async (req, res) => {
-    try {
-        const { token } = req.query;
+  try {
+    const { token } = req.query;
 
-        // Verify the token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const { userId, newEmail } = decoded;
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const { userId, newEmail } = decoded;
 
-        // Update the user's email
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        user.email = newEmail;
-        user.emailVerified = true;
-        user.newEmail = null;
-        user.emailVerificationToken = null;
-        await user.save();
-
-        res.status(200).json({ message: 'Email verified and updated successfully', user });
-    } catch (error) {
-        res.status(500).json({ message: 'Error verifying email change', error: error.message });
+    // Update the user's email
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
+
+    user.email = newEmail;
+    user.emailVerified = true;
+    user.newEmail = null;
+    user.emailVerificationToken = null;
+    await user.save();
+
+    res.status(200).json({ message: 'Email verified and updated successfully', user });
+  } catch (error) {
+    res.status(500).json({ message: 'Error verifying email change', error: error.message });
+  }
 };
 
 export const changePassword = async (req, res) => {
   try {
-      const { userId } = req.params;
-      const { currentPassword, newPassword, confirmNewPassword } = req.body;
+    const { userId } = req.params;
+    const { currentPassword, newPassword, confirmNewPassword } = req.body;
 
-      // Ensure new password and confirm password match (Optional, could be removed if handled in frontend)
-      if (newPassword !== confirmNewPassword) {
-          return res.status(400).json({ error: 'New passwords do not match.' });
-      }
+    // Ensure new password and confirm password match (Optional, could be removed if handled in frontend)
+    if (newPassword !== confirmNewPassword) {
+      return res.status(400).json({ error: 'New passwords do not match.' });
+    }
 
-      // Find the user by ID
-      const user = await User.findById(userId);
-      if (!user) {
-          return res.status(404).json({ error: 'User not found.' });
-      }
+    // Find the user by ID
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
 
-      // Compare current password with stored hash
-      const isMatch = await bcrypt.compare(currentPassword, user.password);
-      if (!isMatch) {
-          return res.status(400).json({ error: 'Current password is incorrect.' });
-      }
+    // Compare current password with stored hash
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: 'Current password is incorrect.' });
+    }
 
-      // Hash the new password and save it
-      const hashedPassword = await bcrypt.hash(newPassword, 10); // Salt rounds are set to 10 directly
-      user.password = hashedPassword;
-      await user.save();
+    // Hash the new password and save it
+    const hashedPassword = await bcrypt.hash(newPassword, 10); // Salt rounds are set to 10 directly
+    user.password = hashedPassword;
+    await user.save();
 
-      return res.status(200).json({ message: 'Password changed successfully.' });
+    return res.status(200).json({ message: 'Password changed successfully.' });
   } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: 'Internal server error.' });
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error.' });
   }
 };

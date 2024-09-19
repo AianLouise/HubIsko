@@ -71,9 +71,9 @@ export const forgotPassword = async (req, res, next) => {
     user.resetPasswordToken = resetToken;
     await user.save();
 
-   // const resetUrl = `https://hubisko.onrender.com/reset-password?token=${resetToken}`;
-
-     const resetUrl = `http://localhost:5173/reset-password?token=${resetToken}`;
+    // Use the environment variable for the base URL
+    const baseUrl = process.env.BASE_URL || 'http://localhost:5173';
+    const resetUrl = `${baseUrl}/reset-password?token=${resetToken}`;
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -207,23 +207,23 @@ export const changePassword = async (req, res, next) => {
   const { oldPassword, newPassword } = req.body;
 
   try {
-      const user = await User.findById(id);
-      if (!user) {
-          return next(errorHandler(404, 'User not found'));
-      }
+    const user = await User.findById(id);
+    if (!user) {
+      return next(errorHandler(404, 'User not found'));
+    }
 
-      const isMatch = await bcryptjs.compare(oldPassword, user.password);
-      if (!isMatch) {
-          return next(errorHandler(400, 'Current password is incorrect'));
-      }
+    const isMatch = await bcryptjs.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return next(errorHandler(400, 'Current password is incorrect'));
+    }
 
-      const salt = await bcryptjs.genSalt(10);
-      user.password = await bcryptjs.hash(newPassword, salt);
-      await user.save();
+    const salt = await bcryptjs.genSalt(10);
+    user.password = await bcryptjs.hash(newPassword, salt);
+    await user.save();
 
-      res.status(200).send('Password successfully changed');
+    res.status(200).send('Password successfully changed');
   } catch (error) {
-      next(errorHandler(500, 'Server error'));
+    next(errorHandler(500, 'Server error'));
   }
 };
 

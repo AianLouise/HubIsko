@@ -153,7 +153,9 @@ export const requestEmailUpdate = async (req, res) => {
             },
         });
 
-        const verificationUrl = `http://localhost:5173/verify-email-update?token=${emailVerificationToken}`;
+        // Use the environment variable for the base URL
+        const baseUrl = process.env.BASE_URL || 'http://localhost:5173';
+        const verificationUrl = `${baseUrl}/verify-email-update?token=${emailVerificationToken}`;
 
         await transporter.sendMail({
             from: '"HubIsko" <yourappemail@example.com>',
