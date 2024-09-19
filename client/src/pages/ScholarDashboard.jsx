@@ -434,8 +434,8 @@ export default function ScholarDashboard() {
             </div>
           </div>
 
-          <div className="flex flex-row justify-between items-center mt-4 font-medium">
-                        <div className='flex gap-4'>
+          <div className="flex flex-col lg:flex-row justify-between items-center mt-4 font-medium px-4">
+            <div className='flex flex-wrap gap-2 lg:gap-4'>
               <button
                 className={`flex gap-2 items-center ${filter === 'all' ? 'bg-blue-600 text-white' : 'bg-white hover:bg-slate-200'} shadow lg:px-6 lg:py-2 px-4 py-2 rounded-md text-sm lg:text-md`}
                 onClick={() => setFilter('all')}
@@ -444,7 +444,7 @@ export default function ScholarDashboard() {
                 <h2 className="lg:hidden block rounded-t-lg text-center">All</h2>
                 <div className='font-bold '>({allApplications.length})</div>
               </button>
-            
+
               <button
                 className={`flex gap-2 items-center ${filter === 'approved' ? 'bg-green-600 text-white border-green-600' : 'bg-white hover:bg-slate-200'} shadow lg:px-6 lg:py-2 px-4 py-2 rounded-md text-sm lg:text-md`}
                 onClick={() => setFilter('approved')}
@@ -452,7 +452,7 @@ export default function ScholarDashboard() {
                 <h2 className="rounded-t-lg text-center">Approved</h2>
                 <div className={`font-bold ${filter === 'approved' ? 'text-white' : 'text-green-600'}`}>({approvedApplications.length})</div>
               </button>
-            
+
               <button
                 className={`flex gap-2 items-center ${filter === 'pending' ? 'bg-yellow-500 text-white border-yellow-500' : 'bg-white hover:bg-slate-200'} shadow lg:px-6 lg:py-2 px-4 py-2 rounded-md text-sm lg:text-md`}
                 onClick={() => setFilter('pending')}
@@ -460,7 +460,7 @@ export default function ScholarDashboard() {
                 <h2 className="rounded-t-lg text-center">Pending</h2>
                 <div className={`font-bold ${filter === 'pending' ? 'text-white' : 'text-yellow-500'}`}>({pendingApplications.length})</div>
               </button>
-            
+
               <button
                 className={`flex gap-2 items-center ${filter === 'rejected' ? 'bg-red-600 text-white border-red-600' : 'bg-white hover:bg-slate-200'} shadow lg:px-6 lg:py-2 px-4 py-2 rounded-md text-sm lg:text-md`}
                 onClick={() => setFilter('rejected')}
@@ -469,8 +469,8 @@ export default function ScholarDashboard() {
                 <div className={`font-bold ${filter === 'rejected' ? 'text-white' : 'text-red-600'}`}>({rejectedApplications.length})</div>
               </button>
             </div>
-            
-            <div className="hidden lg:flex gap-2 items-center bg-white shadow px-6 py-2 rounded-md border text-md">
+
+            <div className="flex w-full lg:w-auto mt-4 lg:mt-0 gap-2 items-center bg-white shadow px-4 lg:px-6 py-2 rounded-md border text-sm lg:text-md">
               <input
                 type="text"
                 placeholder="Search Applications"
@@ -480,17 +480,6 @@ export default function ScholarDashboard() {
               />
             </div>
           </div>
-
-          <div className="lg:hidden flex gap-2 items-center bg-white shadow px-6 py-2 rounded-md border text-md">
-            <input
-              type="text"
-              placeholder="Search Applications"
-              className="w-full font-bold bg-transparent outline-none"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
 
           <div className="lg:grid gap-4 lg:max-h-[350px] mb-10">
             {/* Overview of approved applications */}

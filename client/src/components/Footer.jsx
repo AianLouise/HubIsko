@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center">
           {/* Left Section: Logo and Info */}
           <div className="text-center lg:text-left mb-6 lg:mb-0">
-            <h1 className="text-2xl font-bold mb-2">Scholarship Management System</h1>
+            <h1 className="text-2xl font-bold mb-2">HubIsko</h1>
             <p>&copy; {new Date().getFullYear()} All rights reserved.</p>
           </div>
 
