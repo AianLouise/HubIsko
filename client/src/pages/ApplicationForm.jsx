@@ -117,7 +117,7 @@ export default function ApplicationForm() {
 
     return (
         <div>
-            <div className="border shadow rounded-md h-auto p-10 bg-white">
+            <div className="border shadow rounded-md h-auto p-4 sm:p-10 bg-white">
                 <div className="flex justify-between items-center">
                     <span className="text-2xl">Submitted details for: <span className='text-blue-600 font-bold'>{application.scholarshipProgram.title}</span></span>
                 </div>
@@ -160,7 +160,7 @@ export default function ApplicationForm() {
                         </div>
                     )}
 
-                    <div className="mt-4 p-4 py-6">
+                    <div className="mt-4 p-2 sm:p-4 py-6">
                         <div className="mb-4">
                             <p className="text-lg font-semibold"><strong>Applicant Name:</strong> {`${application.firstName} ${application.middleName} ${application.lastName}`}</p>
                             {/* <p><strong>Email:</strong> {application.email}</p> */}
@@ -170,7 +170,7 @@ export default function ApplicationForm() {
                         {/* Personal Details */}
                         <div className="mb-4">
                             <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Personal Details</h3>
-                            <div className="px-4 pt-2 rounded-lg space-y-1">
+                            <div className="px-2 sm:px-4 pt-2 rounded-lg space-y-1">
                                 <p className="text-sm"><strong>Birthdate:</strong> {application.birthdate}</p>
                                 <p className="text-sm"><strong>Gender:</strong> {application.gender}</p>
                                 <p className="text-sm"><strong>Blood Type:</strong> {application.bloodType}</p>
@@ -195,10 +195,10 @@ export default function ApplicationForm() {
                     </div>
 
                     {/* Education Details */}
-                    <div className=" p-4">
+                    <div className="p-2 sm:p-4">
                         <div className="my-2">
                             <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Educational Background</h3>
-                            <div className="px-4 pt-2 rounded-lg space-y-1">
+                            <div className="px-2 sm:px-4 pt-2 rounded-lg space-y-1">
                                 <p className="text-sm mb-2"><strong>Elementary:</strong> {application.education?.elementary?.school} ({application.education?.elementary?.yearGraduated})</p>
                                 <p className="text-sm mb-2"><strong>Junior High School:</strong> {application.education?.juniorHighSchool?.school} ({application.education?.juniorHighSchool?.yearGraduated})</p>
                                 <p className="text-sm mb-2"><strong>Senior High School:</strong> {application.education?.seniorHighSchool?.school} ({application.education?.seniorHighSchool?.yearGraduated})</p>
@@ -207,10 +207,10 @@ export default function ApplicationForm() {
                         </div>
                     </div>
 
-                    <div className="mt-4 p-4 py-6">
+                    <div className="mt-4 p-2 sm:p-4 py-6">
                         <div className="my-2">
                             <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Family Details</h3>
-                            <div className="px-4 pt-2 rounded-lg shadow-s">
+                            <div className="px-2 sm:px-4 pt-2 rounded-lg shadow-s">
                                 <p className="text-sm mb-2"><strong>Father:</strong> {`${application.father?.firstName} ${application.father?.middleName} ${application.father?.lastName}`} (Occupation: {application.father?.occupation})</p>
                                 <p className="text-sm mb-2"><strong>Mother:</strong> {`${application.mother?.firstName} ${application.mother?.middleName} ${application.mother?.lastName}`} (Occupation: {application.mother?.occupation})</p>
                                 <p className="text-sm"><strong>Guardian:</strong> {application.guardian ? `${application.guardian?.firstName} ${application.guardian?.middleName} ${application.guardian?.lastName}` : "N/A"}</p>
@@ -219,10 +219,10 @@ export default function ApplicationForm() {
                     </div>
 
                     {application.workExperience && application.workExperience.length > 0 && (
-                        <div className="mt-4 p-4">
+                        <div className="mt-4 p-2 sm:p-4">
                             <div className="my-2">
                                 <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Work Experiences</h3>
-                                <div className="px-4 pt-2 rounded-lg">
+                                <div className="px-2 sm:px-4 pt-2 rounded-lg">
                                     {application.workExperience.map((item, index) => (
                                         (item.companyName || item.position || item.startDate || item.monthlySalary || item.statusOfAppointment) && (
                                             <div key={index} className="mb-4">
@@ -240,10 +240,10 @@ export default function ApplicationForm() {
                     )}
 
                     {application.skillsAndQualifications && application.skillsAndQualifications.length > 0 && (
-                        <div className="mt-4 p-4">
+                        <div className="mt-4 p-2 sm:p-4">
                             <div className="my-2">
                                 <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Skills and Qualifications</h3>
-                                <div className="px-4 pt-2 rounded-lg">
+                                <div className="px-2 sm:px-4 pt-2 rounded-lg">
                                     {application.skillsAndQualifications.map((item, index) => (
                                         (item.skills || item.qualifications) && (
                                             <div key={index} className="mb-4">
@@ -257,10 +257,10 @@ export default function ApplicationForm() {
                         </div>
                     )}
 
-                    <div className="mt-4 p-4">
+                    <div className="mt-4 p-2 sm:p-4">
                         <div className="my-2">
                             <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Documents</h3>
-                            <div className="px-4 pt-2">
+                            <div className="px-2 sm:px-4 pt-2">
                                 {application.documents && Object.entries(application.documents).map(([key, value], index) => (
                                     <div key={index} className="flex items-center mb-2">
                                         <strong className="w-1/3 text-sm">{key.replace(/_/g, ' ')}:</strong>
