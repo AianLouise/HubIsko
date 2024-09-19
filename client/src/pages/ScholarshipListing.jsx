@@ -110,7 +110,7 @@ export default function ScholarshipListing() {
     .filter(scholarship =>
       scholarship.status === 'Published' &&
       scholarship.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (selectedCourse === '' || scholarship.course === selectedCourse) &&
+      (selectedCourse === '' || scholarship.fieldOfStudy === selectedCourse) &&
       (selectedLocation === '' || scholarship.location === selectedLocation) &&
       (selectedEducationLevel === '' || scholarship.educationLevel === selectedEducationLevel)
     );
