@@ -20,6 +20,8 @@ const Step3 = ({ formData, setFormData }) => {
         window.scrollTo(0, 0);
     }, []);
 
+    console.log(formData);
+
     const handleImageChange = async (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -99,13 +101,15 @@ const Step3 = ({ formData, setFormData }) => {
         }));
     };
 
-    const [sections, setSections] = useState([
-        { id: 1, title: 'What is this scholarship for?', content: 'To support students in their academic journey.' },
-        { id: 2, title: 'What are the benefits?', content: 'Tuition, Books, Living Expenses' },
-        { id: 3, title: 'What are the qualifications?', content: 'High School Diploma' },
-        { id: 4, title: 'How can I apply?', content: 'Submit your application online.' },
-        { id: 5, title: 'What documents should I prepare?', content: 'Transcript of Records, Birth Certificate' },
-    ]);
+    const [sections, setSections] = useState(() => {
+        return formData.sections || [
+            { id: 1, title: 'What is this scholarship for?', content: 'To support students in their academic journey.' },
+            { id: 2, title: 'What are the benefits?', content: 'Tuition, Books, Living Expenses' },
+            { id: 3, title: 'What are the qualifications?', content: 'High School Diploma' },
+            { id: 4, title: 'How can I apply?', content: 'Submit your application online.' },
+            { id: 5, title: 'What documents should I prepare?', content: 'Transcript of Records, Birth Certificate' },
+        ];
+    });
 
     // Sync sections with formData.sections
     useEffect(() => {
