@@ -332,7 +332,7 @@ export default function Forums() {
                                 scholarship.sections.map((section, index) => (
                                     <div key={index} className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
                                         <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>{section.title}</span>
-                                        <span className='text-sm p-4'>{section.content}</span>
+                                        <span className='text-sm px-4 pb-4 whitespace-pre-line'>{section.content}</span>
                                     </div>
                                 ))
                             ) : (
@@ -343,7 +343,7 @@ export default function Forums() {
                         {/* FAQ Section */}
                         <div className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
                             <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>{scholarship.faqTitle}</span>
-                            <span className='text-sm p-4'>{scholarship.faqDescription}</span>
+                            <span className='text-sm p-4 whitespace-pre-line'>{scholarship.faqDescription}</span>
 
                             <div className='border mx-8'></div>
                             <div className='items-center justify-center flex -translate-y-5'>
