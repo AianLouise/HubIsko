@@ -19,6 +19,7 @@ import AdminApp from './routes/adminApplication.route.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import cors from 'cors';
+import User from './models/user.model.js';
 
 dotenv.config();
 
@@ -29,11 +30,17 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI).then(() => {
+mongoose.connect(process.env.MONGODB_URI)
+  .then(async () => {
     console.log('Connected to MongoDB');
-}).catch(error => {
-    console.log(error);
-});
+
+    // Create default admin account if it doesn't exist
+    await User.createDefaultAdmin();
+  })
+  .catch(err => {
+    console.error('Failed to connect to MongoDB', err);
+  });
+
 
 const __dirname = path.resolve();
 

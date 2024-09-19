@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import bcryptjs from 'bcryptjs'; 
 
 // Sub-schema for Applicant
 const applicantSchema = new mongoose.Schema({
@@ -341,6 +342,39 @@ const userSchema = new mongoose.Schema({
   scholarshipProviderDetails: scholarshipProviderSchema, // Embedded schema for scholarship provider details
   adminDetails: adminSchema, // Embedded schema for admin details
 }, { timestamps: true });
+
+// Function to create a default admin account
+userSchema.statics.createDefaultAdmin = async function() {
+  const User = this;
+  const defaultAdmin = {
+    email: 'admin@example.com',
+    username: 'admin',
+    password: 'admin123',
+    profilePicture: 'https://firebasestorage.googleapis.com/v0/b/hubisko-21f8a.appspot.com/o/System%2FNewLogo.png?alt=media&token=9bcfb221-c954-44ef-9d4f-130f1d880a8e',
+    role: 'admin',
+    adminDetails: {
+      firstName: 'Aian Louise',
+      lastName: 'Alfaro',
+      contactNumber: '09958765432',
+    },
+    emailVerified: true,
+    status: 'Active',
+  };
+
+  // Check if an admin account already exists
+  const adminExists = await User.findOne({ role: 'admin' });
+  if (!adminExists) {
+    // Hash the password before saving
+    const salt = await bcryptjs.genSalt(10);
+    defaultAdmin.password = await bcryptjs.hash(defaultAdmin.password, salt);
+
+    // Create the default admin account
+    await User.create(defaultAdmin);
+    console.log('Default admin account created');
+  } else {
+    console.log('Admin account already exists');
+  }
+};
 
 const User = mongoose.model('User', userSchema);
 
