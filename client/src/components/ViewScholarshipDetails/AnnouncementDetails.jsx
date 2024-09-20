@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { FaRegHeart, FaHeart, FaRegEye } from 'react-icons/fa';
+import { FaRegHeart, FaHeart, FaRegEye, FaBullhorn } from 'react-icons/fa';
 import { BiCommentDots } from 'react-icons/bi';
 import AddCommentForm from './AddCommentForm';
 import { useSelector } from 'react-redux';
 import { FaEllipsisH } from 'react-icons/fa';
 import { IoMdArrowDropdown } from 'react-icons/io';
+import { formatDistanceToNow } from 'date-fns';
+import { BsArrowLeft } from 'react-icons/bs';
 
 const AnnouncementDetails = () => {
     const { announcementId } = useParams();
@@ -198,6 +200,10 @@ const AnnouncementDetails = () => {
         setModalVisible(false);
     };
 
+    const handleBackClick = () => {
+        navigate(-1);
+    };
+
     if (loading) {
         return <p>Loading...</p>;
     }
@@ -210,14 +216,22 @@ const AnnouncementDetails = () => {
         <div className="flex flex-col items-center pt-7 pb-7 bg-gray-100 h-screen overflow-auto">
             <div className="relative w-full max-w-4xl">
                 <div className="flex justify-start items-center w-full">
-                    <div className='flex gap-1 items-center'>
-                        <Link to={`/view-scholarships/${announcement.scholarshipProgram._id}?tab=announcement`}>
-                            <button className='bg-white border shadow px-4 py-1 mr-2 rounded-md hover:bg-slate-200 transition ease-in-out font-medium'>Scholarship Dashboard</button>
-                        </Link>
+                    <div className='flex gap-1 items-center font-medium'>
+                        <div className='flex gap-2'>
+                            <button
+                                onClick={handleBackClick}
+                                className='text-blue-600 flex gap-2 items-center hover:bg-slate-200 bg-white shadow rounded-md border px-6 py-2'
+                            >
+                                <BsArrowLeft className='w-6 h-6' /> Back to Scholarship
+                            </button>
+                        </div>
                         <IoMdArrowDropdown className='-rotate-90 text-2xl text-blue-600' />
-                        <button className='bg-white border shadow px-4 py-1 ml-2 rounded-md hover:bg-slate-200 transition ease-in-out'>
-                            <span className='font-bold text-blue-600'>{announcement.title}</span>
-                        </button>
+                        <div className='flex gap-1 items-center'>
+                            <button className='text-blue-600 flex gap-2 items-center hover:bg-slate-200 bg-white shadow rounded-md border px-6 py-2'>
+                                <FaBullhorn className='w-4 h-4' /> {/* Add the announcement icon */}
+                                {announcement.title}
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div className="bg-white border p-4 rounded-md flex flex-col gap-4 transition ease-in-out mt-5">
@@ -289,9 +303,9 @@ const AnnouncementDetails = () => {
                     <div className="bg-slate-200 p-4 rounded-md">
                         <div className="flex justify-between items-center">
                             <h1 className="text-2xl font-bold text-blue-600">{announcement.title}</h1>
-                            <p className="text-sm text-slate-600">
-                                Announced: {new Date(announcement.date).toLocaleDateString()}
-                            </p>
+                            <span className="text-sm text-slate-600">
+                                Announced: {formatDistanceToNow(new Date(announcement.date), { addSuffix: true })}
+                            </span>
                         </div>
                         <p className="text-gray-700">
                             <span className="text-blue-600 font-bold">@Students:</span> {announcement.content}
@@ -309,10 +323,10 @@ const AnnouncementDetails = () => {
                                     <span>{announcement.comments.length}</span>
                                 </div>
                             </div>
-                            <div className="flex flex-row gap-1 pr-2">
+                            {/* <div className="flex flex-row gap-1 pr-2">
                                 <FaRegEye className="w-6 h-6 text-blue-600" />
                                 <span>1.2k</span>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
 
@@ -327,7 +341,9 @@ const AnnouncementDetails = () => {
                                     <div className="flex flex-col w-full">
                                         <div className="flex justify-between items-center">
                                             <p className="font-bold">{comment.author.username}</p>
-                                            <p className="text-sm text-gray-500">{new Date(comment.date).toLocaleDateString()}</p>
+                                            <p className="text-sm text-gray-500">
+                                                {formatDistanceToNow(new Date(comment.date), { addSuffix: true })}
+                                            </p>
                                         </div>
                                         <p className="mt-2">{comment.content}</p>
                                     </div>
@@ -344,10 +360,10 @@ const AnnouncementDetails = () => {
                                                 <span>{comment.replies ? comment.replies.length : 0}</span>
                                             </div>
                                         </div>
-                                        <div className="flex flex-row gap-1 pr-2">
+                                        {/* <div className="flex flex-row gap-1 pr-2">
                                             <FaRegEye className="w-6 h-6 text-blue-600" />
                                             <span>1.2k</span>
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div className="mt-2">
                                         {comment.replies && comment.replies.map((reply, replyIndex) => (

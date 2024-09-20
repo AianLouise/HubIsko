@@ -10,7 +10,7 @@ import { FaAngleRight } from "react-icons/fa";
 import { BiFilter } from 'react-icons/bi';
 import { IoMdArrowDropleftCircle } from "react-icons/io";
 import useTokenExpiry from '../hooks/useTokenExpiry';
-
+import { formatDistanceToNow } from 'date-fns';
 
 export default function ScholarDashboard() {
   useTokenExpiry();
@@ -348,14 +348,7 @@ export default function ScholarDashboard() {
                           <span className='text-blue-600 font-bold'>@Students</span> {announcement.content}
                         </p>
                         <span className='text-sm flex items-end justify-end w-full text-slate-600'>
-                          Announced: {new Date(announcement.date).toLocaleString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: 'numeric',
-                            minute: 'numeric',
-                            hour12: true,
-                          })}
+                          Announced: {formatDistanceToNow(new Date(announcement.date), { addSuffix: true })}
                         </span>
                         <div className='border-t mt-2'>
                           <div className='flex flex-row justify-between mt-2 gap-2'>
@@ -369,10 +362,10 @@ export default function ScholarDashboard() {
                                 <span>{announcement.comments.length}</span>
                               </div>
                             </div>
-                            <div className='flex flex-row gap-1 pr-2'>
+                            {/* <div className='flex flex-row gap-1 pr-2'>
                               <FaRegEye className='w-6 h-6 text-blue-600' />
                               <span>1.2k</span>
-                            </div>
+                            </div> */}
                           </div>
                         </div>
                       </div>

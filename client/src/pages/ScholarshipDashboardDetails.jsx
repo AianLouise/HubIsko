@@ -7,6 +7,7 @@ import { FaAngleRight, FaRegHeart, FaRegEye } from 'react-icons/fa';
 import { BiCommentDots } from 'react-icons/bi';
 import { BsArrowLeft } from 'react-icons/bs';
 import ApplicationForm from './ApplicationForm';
+import { formatDistanceToNow } from 'date-fns';
 import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
 export default function ScholarshipDashboardDetails() {
@@ -130,6 +131,9 @@ export default function ScholarshipDashboardDetails() {
         navigate(`/announcement/${announcementId}`);
     };
 
+    const handleBackClick = () => {
+        navigate(-1);
+    };
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
@@ -137,9 +141,12 @@ export default function ScholarshipDashboardDetails() {
                 <div className='flex flex-col gap-4 py-12 max-w-6xl mx-auto justify-between p-4 lg:px-24'>
 
                     <div className='flex gap-2 font-medium'>
-                        <Link to='/scholar-dashboard' className='text-blue-600 flex gap-2 items-center hover:bg-slate-200 bg-white shadow rounded-md border px-6 py-2'>
-                            <BsArrowLeft className='w-6 h-6' /> Back to
-                            Scholarship Dashboard</Link>
+                        <button
+                            onClick={handleBackClick}
+                            className='text-blue-600 flex gap-2 items-center hover:bg-slate-200 bg-white shadow rounded-md border px-6 py-2'
+                        >
+                            <BsArrowLeft className='w-6 h-6' /> Back to Scholarship Dashboard
+                        </button>
                     </div>
 
                     <div>
@@ -233,14 +240,7 @@ export default function ScholarshipDashboardDetails() {
                                                         <span className='text-blue-600 font-bold'>@Students</span> {announcement.content}
                                                     </p>
                                                     <span className='text-sm flex items-end justify-end w-full text-slate-600'>
-                                                        Announced: {new Date(announcement.date).toLocaleString('en-US', {
-                                                            year: 'numeric',
-                                                            month: 'long',
-                                                            day: 'numeric',
-                                                            hour: 'numeric',
-                                                            minute: 'numeric',
-                                                            hour12: true
-                                                        })}
+                                                        Announced: {formatDistanceToNow(new Date(announcement.date), { addSuffix: true })}
                                                     </span>
                                                     <div className='border-t mt-2'>
                                                         <div className='flex flex-row justify-between mt-2 gap-2'>
@@ -254,10 +254,10 @@ export default function ScholarshipDashboardDetails() {
                                                                     <span>{announcement.comments.length}</span>
                                                                 </div>
                                                             </div>
-                                                            <div className='flex flex-row gap-1 pr-2'>
+                                                            {/* <div className='flex flex-row gap-1 pr-2'>
                                                                 <FaRegEye className='w-6 h-6 text-blue-600' />
                                                                 <span>1.2k</span>
-                                                            </div>
+                                                            </div> */}
                                                         </div>
                                                     </div>
                                                 </div>

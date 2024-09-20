@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { FaRegHeart, FaRegEye, FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa';
 import { BiCommentDots, BiFilter } from 'react-icons/bi';
 import { useSelector } from 'react-redux';
+import { formatDistanceToNow } from 'date-fns';
 
 const AnnouncementModal = ({ isOpen, onClose, onSubmit, addAnnouncement }) => {
     const { id } = useParams(); // Get the scholarshipProgram ID from the URL
@@ -65,6 +66,7 @@ const AnnouncementModal = ({ isOpen, onClose, onSubmit, addAnnouncement }) => {
                             className="w-full p-2 border border-gray-300 rounded-lg"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
+                            placeholder="Enter the title of the announcement"
                             required
                         />
                     </div>
@@ -78,6 +80,7 @@ const AnnouncementModal = ({ isOpen, onClose, onSubmit, addAnnouncement }) => {
                             rows="5"
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
+                            placeholder="Enter the content of the announcement"
                             required
                         ></textarea>
                     </div>
@@ -197,9 +200,9 @@ export default function PostAnnouncement() {
                         </button>
                     </div>
                 </div>
-                    {filteredAnnouncements.length > 0 ? (
-                        filteredAnnouncements.map((announcement) => (
-                            <div className="grid lg:grid-cols-2 gap-10">
+                {filteredAnnouncements.length > 0 ? (
+                    <div className="grid lg:grid-cols-2 gap-10">
+                        {filteredAnnouncements.map((announcement) => (
                             <div
                                 key={announcement._id}
                                 className="bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out cursor-pointer"
@@ -217,7 +220,9 @@ export default function PostAnnouncement() {
                                 <div className="bg-slate-200 p-4 rounded-md">
                                     <div className="flex justify-between items-center">
                                         <h3 className="text-xl font-bold text-blue-600 mb-2">{announcement.title}</h3>
-                                        <span className="text-sm text-slate-600">Announced: {new Date(announcement.date).toLocaleDateString()}</span>
+                                        <span className="text-sm text-slate-600">
+                                            Announced: {formatDistanceToNow(new Date(announcement.date), { addSuffix: true })}
+                                        </span>
                                     </div>
                                     <p className="text-gray-700">
                                         <span className="text-blue-600 font-bold">@Students:</span> {announcement.content}
@@ -232,23 +237,23 @@ export default function PostAnnouncement() {
                                             </div>
                                             <div className="flex items-center gap-1">
                                                 <BiCommentDots className="w-6 h-6 text-blue-600" />
-                                                <span>{announcement.totalComments}</span>
+                                                <span>{announcement.comments.length}</span>
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-1">
+                                        {/* <div className="flex items-center gap-1">
                                             <FaRegEye className="w-6 h-6 text-blue-600" />
                                             <span>1.2k</span>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        ))
-                    ) : (
-                        <div className="flex justify-center items-center h-64">
-                            <p className="text-gray-700">No announcements available.</p>
-                        </div>
-                    )}
+                        ))}
+                    </div>
+                ) : (
+                    <div className="flex justify-center items-center h-64">
+                        <p className="text-gray-700">No announcements available.</p>
+                    </div>
+                )}
             </div>
         </div>
     );
