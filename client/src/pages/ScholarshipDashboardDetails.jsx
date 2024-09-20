@@ -85,7 +85,7 @@ export default function ScholarshipDashboardDetails() {
         }
     }, [programId]);
 
-    const upcomingValidations = validations.filter(validation => validation.status === 'Ongoing');
+    const upcomingValidations = validations.filter(validation => validation.status === 'Upcoming');
     const previousValidations = validations.filter(validation => validation.status === 'Done');
     const [carouselIndex, setCarouselIndex] = useState(0);
 
@@ -282,10 +282,45 @@ export default function ScholarshipDashboardDetails() {
                                             <div key={validation._id} className='bg-white border-l-4 border-blue-500 text-black-700 p-4 rounded-md shadow relative mb-6'>
                                                 <div className='flex justify-between items-center mb-4'>
                                                     <h3 className='text-xl font-bold'>{validation.validationTitle}</h3>
-                                                    <span className='text-sm text-gray-500'>{validation.createdAt}</span>
+                                                    <div className='text-sm text-gray-500'>
+                                                        {validation.datePosted && (
+                                                            <p>
+                                                                Date Posted: {new Date(validation.datePosted).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {new Date(validation.datePosted).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                                            </p>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                                <p>{validation.validationDescription}</p>
-                                                <span className='absolute top-0 right-0 bg-blue-500 text-white rounded-full px-3 py-1 text-xs'>Upcoming</span>
+                                                <p className='mb-6'>{validation.validationDescription}</p> {/* Added more space after the description */}
+                                                <div className='mb-4'>
+                                                    <p className='font-medium text-gray-800'>Requirements Needed:</p>
+                                                    <ul className='list-disc pl-10'> {/* Indented the requirements */}
+                                                        {validation.requirements.map((req, index) => (
+                                                            <li key={index} className='mb-2 text-gray-700'>
+                                                                {req.requirement}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                                <div className='mb-4'>
+                                                    <p className='font-medium text-gray-800'>Validation Method: {validation.validationMethod}</p>
+                                                    {validation.validationMethod === 'Face-to-Face' && validation.faceToFaceDetails && (
+                                                        <div className='pl-5 mt-2'>
+                                                            <p className='text-gray-700'>Date & Time: {validation.faceToFaceDetails.sessionDate}</p>
+                                                            <p className='text-gray-700'>Location: {validation.faceToFaceDetails.location}</p>
+                                                        </div>
+                                                    )}
+                                                    {validation.validationMethod === 'Courier-Based' && validation.courierDetails && (
+                                                        <div className='pl-5 mt-2'>
+                                                            <p className='text-gray-700'>Mailing Address: {validation.courierDetails.mailingAddress}</p>
+                                                            <p className='text-gray-700'>Recipient Name: {validation.courierDetails.recipientName}</p>
+                                                            <p className='text-gray-700'>Recipient Contact: {validation.courierDetails.recipientContact}</p>
+                                                            <p className='text-gray-700'>Submission Deadline: {new Date(validation.courierDetails.submissionDeadline).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {new Date(validation.courierDetails.submissionDeadline).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</p>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                                                         <span className={`absolute top-0 right-0 ${validation.status === 'Upcoming' ? 'bg-blue-500' : validation.status === 'Completed' ? 'bg-gray-500' : 'bg-green-500'} text-white rounded-full px-3 py-1 text-xs`}>
+                                                    {validation.status}
+                                                </span>
                                             </div>
                                         ))
                                     ) : (
@@ -301,9 +336,45 @@ export default function ScholarshipDashboardDetails() {
                                             <div key={validation._id} className='bg-white border-l-4 border-gray-500 text-black-700 p-4 rounded-md shadow relative mb-6'>
                                                 <div className='flex justify-between items-center mb-4'>
                                                     <h3 className='text-xl font-bold'>{validation.validationTitle}</h3>
-                                                    <span className='text-sm text-gray-500'>{validation.createdAt}</span>
+                                                    <div className='text-sm text-gray-500'>
+                                                        <p>
+                                                            Date Created: {new Date(validation.createdAt).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {new Date(validation.createdAt).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                                        </p>
+                                                        {validation.datePosted && (
+                                                            <p>
+                                                                Date Posted: {new Date(validation.datePosted).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {new Date(validation.datePosted).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                                            </p>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                                <p>{validation.validationDescription}</p>
+                                                <p className='mb-6'>{validation.validationDescription}</p> {/* Added more space after the description */}
+                                                <div className='mb-4'>
+                                                    <p className='font-medium text-gray-800'>Requirements Needed:</p>
+                                                    <ul className='list-disc pl-10'> {/* Indented the requirements */}
+                                                        {validation.requirements.map((req, index) => (
+                                                            <li key={index} className='mb-2 text-gray-700'>
+                                                                {req.requirement}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                                <div className='mb-4'>
+                                                    <p className='font-medium text-gray-800'>Validation Method: {validation.validationMethod}</p>
+                                                    {validation.validationMethod === 'Face-to-Face' && validation.faceToFaceDetails && (
+                                                        <div className='pl-5 mt-2'>
+                                                            <p className='text-gray-700'>Date & Time: {validation.faceToFaceDetails.sessionDate}</p>
+                                                            <p className='text-gray-700'>Location: {validation.faceToFaceDetails.location}</p>
+                                                        </div>
+                                                    )}
+                                                    {validation.validationMethod === 'Courier-Based' && validation.courierDetails && (
+                                                        <div className='pl-5 mt-2'>
+                                                            <p className='text-gray-700'>Mailing Address: {validation.courierDetails.mailingAddress}</p>
+                                                            <p className='text-gray-700'>Recipient Name: {validation.courierDetails.recipientName}</p>
+                                                            <p className='text-gray-700'>Recipient Contact: {validation.courierDetails.recipientContact}</p>
+                                                            <p className='text-gray-700'>Submission Deadline: {new Date(validation.courierDetails.submissionDeadline).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {new Date(validation.courierDetails.submissionDeadline).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</p>
+                                                        </div>
+                                                    )}
+                                                </div>
                                                 <span className='absolute top-0 right-0 bg-gray-500 text-white rounded-full px-3 py-1 text-xs'>Completed</span>
                                             </div>
                                         ))

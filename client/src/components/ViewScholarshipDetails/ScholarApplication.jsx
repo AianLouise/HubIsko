@@ -38,6 +38,12 @@ export default function ScholarApplication({ applications, error }) {
             `${application.firstName} ${application.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
         )
         .sort((a, b) => {
+            if (a.applicationStatus.toLowerCase() === 'pending' && b.applicationStatus.toLowerCase() !== 'pending') {
+                return -1;
+            }
+            if (a.applicationStatus.toLowerCase() !== 'pending' && b.applicationStatus.toLowerCase() === 'pending') {
+                return 1;
+            }
             if (sortOrder === 'recent') {
                 return new Date(b.submissionDate) - new Date(a.submissionDate);
             } else {

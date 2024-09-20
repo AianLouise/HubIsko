@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { FaTrashAlt } from 'react-icons/fa';
+import { FaCheck, FaPlus, FaTimes, FaTrashAlt } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
+import { FaPaperPlane, FaEdit } from 'react-icons/fa';
 
 export default function Validation() {
     const { id } = useParams();
@@ -54,6 +55,13 @@ export default function Validation() {
         setRequirementInput(''); // Optionally clear the input field as well
         setValidationTitle(''); // Optionally clear the title field as well
         setValidationDescription(''); // Optionally clear the description field as well
+        setValidationMethod(''); // Clear the validation method field as well
+        setSessionDate(''); // Clear the session date field as well
+        setLocation(''); // Clear the location field as well
+        setMailingAddress(''); // Clear the mailing address field as well
+        setRecipientName(''); // Clear the recipient name field as well
+        setRecipientContact(''); // Clear the recipient contact field as well
+        setSubmissionDeadline(''); // Clear the submission deadline field as well
     };
 
     const handleCloseModal2 = () => {
@@ -62,6 +70,13 @@ export default function Validation() {
         setRequirementInput(''); // Optionally clear the input field as well
         setValidationTitle(''); // Optionally clear the title field as well
         setValidationDescription(''); // Optionally clear the description field as well
+        setValidationMethod(''); // Clear the validation method field as well
+        setSessionDate(''); // Clear the session date field as well
+        setLocation(''); // Clear the location field as well
+        setMailingAddress(''); // Clear the mailing address field as well
+        setRecipientName(''); // Clear the recipient name field as well
+        setRecipientContact(''); // Clear the recipient contact field as well
+        setSubmissionDeadline(''); // Clear the submission deadline field as well
     };
 
 
@@ -71,7 +86,10 @@ export default function Validation() {
             id: scholarshiProgramId,
             validationTitle,
             validationDescription,
-            requirements
+            requirements,
+            validationMethod,
+            faceToFaceDetails: validationMethod === 'Face-to-Face' ? { sessionDate, location } : undefined,
+            courierDetails: validationMethod === 'Courier-Based' ? { mailingAddress, recipientName, recipientContact, submissionDeadline } : undefined
         };
         try {
             const response = await fetch("/api/validation/validations", {
@@ -89,6 +107,13 @@ export default function Validation() {
                 setRequirementInput(''); // Optionally clear the input field as well
                 setValidationTitle(''); // Optionally clear the title field as well
                 setValidationDescription(''); // Optionally clear the description field as well
+                setValidationMethod(''); // Optionally clear the validation method field as well
+                setSessionDate(''); // Optionally clear the session date field as well
+                setLocation(''); // Optionally clear the location field as well
+                setMailingAddress(''); // Optionally clear the mailing address field as well
+                setRecipientName(''); // Optionally clear the recipient name field as well
+                setRecipientContact(''); // Optionally clear the recipient contact field as well
+                setSubmissionDeadline(''); // Optionally clear the submission deadline field as well
                 fetchValidations(); // Refresh validations
             } else {
                 const errorData = await response.json();
@@ -113,6 +138,7 @@ export default function Validation() {
                 setValidations(validations.map(validation =>
                     validation._id === validationId ? { ...validation, status: 'Posted' } : validation
                 ));
+                fetchValidations(); // Refresh validations
             } else {
                 console.error('Failed to post validation');
             }
@@ -127,6 +153,28 @@ export default function Validation() {
             setValidationTitle(validationToEdit.validationTitle);
             setValidationDescription(validationToEdit.validationDescription);
             setRequirements(validationToEdit.requirements.map(req => req.requirement));
+            setValidationMethod(validationToEdit.validationMethod);
+
+            if (validationToEdit.validationMethod === 'Face-to-Face' && validationToEdit.faceToFaceDetails) {
+                setSessionDate(validationToEdit.faceToFaceDetails.sessionDate);
+                setLocation(validationToEdit.faceToFaceDetails.location);
+            } else {
+                setSessionDate('');
+                setLocation('');
+            }
+
+            if (validationToEdit.validationMethod === 'Courier-Based' && validationToEdit.courierDetails) {
+                setMailingAddress(validationToEdit.courierDetails.mailingAddress);
+                setRecipientName(validationToEdit.courierDetails.recipientName);
+                setRecipientContact(validationToEdit.courierDetails.recipientContact);
+                setSubmissionDeadline(validationToEdit.courierDetails.submissionDeadline);
+            } else {
+                setMailingAddress('');
+                setRecipientName('');
+                setRecipientContact('');
+                setSubmissionDeadline('');
+            }
+
             setEditingValidationId(validationId);
             setIsEditModalOpen(true);
         }
@@ -138,7 +186,10 @@ export default function Validation() {
         const updatedValidation = {
             validationTitle,
             validationDescription,
-            requirements: requirements.map(req => ({ requirement: req }))
+            requirements: requirements.map(req => ({ requirement: req })),
+            validationMethod,
+            faceToFaceDetails: validationMethod === 'Face-to-Face' ? { sessionDate, location } : undefined,
+            courierDetails: validationMethod === 'Courier-Based' ? { mailingAddress, recipientName, recipientContact, submissionDeadline } : undefined
         };
 
         try {
@@ -156,6 +207,7 @@ export default function Validation() {
                 );
                 setValidations(updatedValidations);
                 setIsEditModalOpen(false);
+                fetchValidations(); // Refresh validations
             } else {
                 console.error('Failed to update validation');
             }
@@ -199,6 +251,7 @@ export default function Validation() {
                 setValidations(validations.map(validation =>
                     validation._id === validationId ? { ...validation, status: 'Done' } : validation
                 ));
+                fetchValidations(); // Refresh validations
             } else {
                 console.error('Failed to update validation status');
             }
@@ -229,7 +282,7 @@ export default function Validation() {
     };
 
     const pendingValidations = validations.filter(validation => validation.status === 'Pending');
-    const ongoingValidations = validations.filter(validation => validation.status === 'Ongoing');
+    const upcomingValidations = validations.filter(validation => validation.status === 'Upcoming');
     const doneValidations = validations.filter(validation => validation.status === 'Done');
 
     return (
@@ -249,53 +302,74 @@ export default function Validation() {
 
                 {/* Upcoming Document Validation Content */}
                 <h3 className='text-xl font-bold tracking-wide mt-4'>Pending Document Validation</h3>
-
                 <div className="p-6">
                     {pendingValidations.length === 0 ? (
                         <p className='bg-slate-200 text-slate-600 px-8 py-4 rounded-md text-left'>No pending document validations at the moment.</p>
                     ) : (
                         pendingValidations.map((validation) => (
-                            <div key={validation._id} className='bg-white border-l-4 border-l-blue-500 text-black-700 p-4 rounded-md border shadow relative mb-6'>
+                            <div key={validation._id} className='bg-white border-l-4 border-l-blue-500 text-black-700 p-6 rounded-md border shadow relative mb-6'>
                                 <div className='flex justify-between items-center mb-4'>
-                                    <h3 className='text-lg font-medium'>{validation.validationTitle}</h3>
+                                    <h3 className='text-xl font-semibold'>{validation.validationTitle}</h3>
                                     <span className={`inline-block px-3 py-1 rounded-full text-white ${validation.status === 'posted' ? 'bg-green-600' : 'bg-blue-600'}`}>
                                         Status: {validation.status}
                                     </span>
                                 </div>
-                                <p className='mb-4'>{validation.validationDescription}</p>
-                                <ul className='list-disc pl-5'>
-                                    {validation.requirements.map((req, index) => (
-                                        <li key={index} className='mb-2'>
-                                            {req.requirement}
-                                        </li>
-                                    ))}
-                                </ul>
+                                <p className='mb-4 text-gray-700'>{validation.validationDescription}</p>
+                                <div className='mb-4'>
+                                    <p className='font-medium text-gray-800'>Requirements Needed:</p>
+                                    <ul className='list-disc pl-5'>
+                                        {validation.requirements.map((req, index) => (
+                                            <li key={index} className='mb-2 text-gray-700'>
+                                                {req.requirement}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <div className='mb-4'>
+                                    <p className='font-medium text-gray-800'>Validation Method: {validation.validationMethod}</p>
+                                    {validation.validationMethod === 'Face-to-Face' && validation.faceToFaceDetails && (
+                                        <div className='pl-5 mt-2'>
+                                            <p className='text-gray-700'>Date & Time: {validation.faceToFaceDetails.sessionDate}</p>
+                                            <p className='text-gray-700'>Location: {validation.faceToFaceDetails.location}</p>
+                                        </div>
+                                    )}
+                                    {validation.validationMethod === 'Courier-Based' && validation.courierDetails && (
+                                        <div className='pl-5 mt-2'>
+                                            <p className='text-gray-700'>Mailing Address: {validation.courierDetails.mailingAddress}</p>
+                                            <p className='text-gray-700'>Recipient Name: {validation.courierDetails.recipientName}</p>
+                                            <p className='text-gray-700'>Recipient Contact: {validation.courierDetails.recipientContact}</p>
+                                            <p className='text-gray-700'>Submission Deadline: {new Date(validation.courierDetails.submissionDeadline).toLocaleDateString()}</p>
+                                        </div>
+                                    )}
+                                </div>
                                 <div className="flex justify-between items-end mt-4">
                                     <div className="flex space-x-4">
                                         <button
-                                            className="bg-green-600 text-white py-2 px-4 rounded"
+                                            className="bg-green-600 text-white py-2 px-4 rounded flex items-center hover:bg-green-700 transition duration-300"
                                             onClick={() => handlePostValidation(validation._id)}
                                         >
-                                            Post Validation
+                                            <FaPaperPlane className="mr-2" />
+                                            <span>Post Validation</span>
                                         </button>
                                         <button
-                                            className="bg-yellow-600 text-white py-2 px-4 rounded"
+                                            className="bg-yellow-600 text-white py-2 px-4 rounded flex items-center hover:bg-yellow-700 transition duration-300"
                                             onClick={() => handleEditValidation(validation._id)}
                                         >
-                                            Edit
+                                            <FaEdit className="mr-2" />
+                                            <span>Edit</span>
                                         </button>
                                         <button
-                                            className="bg-red-600 text-white py-2 px-4 rounded"
+                                            className="bg-red-600 text-white py-2 px-4 rounded flex items-center hover:bg-red-700 transition duration-300"
                                             onClick={() => handleDeleteValidation(validation._id)}
                                         >
-                                            Delete
+                                            <FaTrashAlt className="mr-2" />
+                                            <span>Delete</span>
                                         </button>
                                     </div>
                                     <div className='text-right'>
-                                        <p className='text-gray-600'>Date Created: {new Date(validation.dateCreated).toLocaleDateString()}</p>
-                                        {validation.datePosted && (
-                                            <p className='text-gray-600'>Date Posted: {new Date(validation.datePosted).toLocaleDateString()}</p>
-                                        )}
+                                        <p className='text-gray-600'>
+                                            Date Created: {new Date(validation.dateCreated).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {new Date(validation.dateCreated).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -303,49 +377,72 @@ export default function Validation() {
                     )}
                 </div>
 
-                {/* Ongoing Document Validation Content */}
-                <h3 className='text-xl font-bold mt-4'>Ongoing Document Validation</h3>
+                {/* Upcoming Document Validation Content */}
+                <h3 className='text-xl font-bold tracking-wide mt-4'>Upcoming Document Validation</h3>
                 <div className="p-6">
-                    {ongoingValidations.length === 0 ? (
-                        <p className='bg-slate-200 text-slate-600 px-8 py-4 rounded-md text-left'>No ongoing document validations at the moment.</p>
+                    {upcomingValidations.length === 0 ? (
+                        <p className='bg-slate-200 text-slate-600 px-8 py-4 rounded-md text-left'>No upcoming document validations at the moment.</p>
                     ) : (
-                        ongoingValidations.map((validation) => (
-                            <div key={validation._id} className='bg-white border-l-4 border-l-blue-500 text-black-700 p-4 rounded-md border shadow relative mb-6'>
+                        upcomingValidations.map((validation) => (
+                            <div key={validation._id} className='bg-white border-l-4 border-l-blue-500 text-black-700 p-6 rounded-md border shadow relative mb-6'>
                                 <div className='flex justify-between items-center mb-4'>
-                                    <h3 className='text-xl font-bold'>{validation.validationTitle}</h3>
+                                    <h3 className='text-xl font-semibold'>{validation.validationTitle}</h3>
                                     <span className={`inline-block px-3 py-1 rounded-full text-white ${validation.status === 'posted' ? 'bg-green-600' : 'bg-blue-600'}`}>
                                         Status: {validation.status}
                                     </span>
                                 </div>
-                                <p className='mb-4'>{validation.validationDescription}</p>
-                                <ul className='list-disc pl-5'>
-                                    {validation.requirements.map((req, index) => (
-                                        <li key={index} className='mb-2'>
-                                            {req.requirement}
-                                        </li>
-                                    ))}
-                                </ul>
+                                <p className='mb-4 text-gray-700'>{validation.validationDescription}</p>
+                                <div className='mb-4'>
+                                    <p className='font-medium text-gray-800'>Requirements Needed:</p>
+                                    <ul className='list-disc pl-5'>
+                                        {validation.requirements.map((req, index) => (
+                                            <li key={index} className='mb-2 text-gray-700'>
+                                                {req.requirement}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <div className='mb-4'>
+                                    <p className='font-medium text-gray-800'>Validation Method: {validation.validationMethod}</p>
+                                    {validation.validationMethod === 'Face-to-Face' && validation.faceToFaceDetails && (
+                                        <div className='pl-5 mt-2'>
+                                            <p className='text-gray-700'>Date & Time: {validation.faceToFaceDetails.sessionDate}</p>
+                                            <p className='text-gray-700'>Location: {validation.faceToFaceDetails.location}</p>
+                                        </div>
+                                    )}
+                                    {validation.validationMethod === 'Courier-Based' && validation.courierDetails && (
+                                        <div className='pl-5 mt-2'>
+                                            <p className='text-gray-700'>Mailing Address: {validation.courierDetails.mailingAddress}</p>
+                                            <p className='text-gray-700'>Recipient Name: {validation.courierDetails.recipientName}</p>
+                                            <p className='text-gray-700'>Recipient Contact: {validation.courierDetails.recipientContact}</p>
+                                            <p className='text-gray-700'>Submission Deadline: {new Date(validation.courierDetails.submissionDeadline).toLocaleDateString()}</p>
+                                        </div>
+                                    )}
+                                </div>
                                 <div className="flex justify-between items-end mt-4">
                                     <div className="flex space-x-4">
                                         <button
-                                            className="bg-yellow-600 text-white py-2 px-4 rounded"
+                                            className="bg-yellow-600 text-white py-2 px-4 rounded flex items-center hover:bg-yellow-700 transition duration-300"
                                             onClick={() => handleEditValidation(validation._id)}
                                         >
-                                            Edit
+                                            <FaEdit className="mr-2" />
+                                            <span>Edit</span>
                                         </button>
-                                        {validation.status === 'Ongoing' && (
+                                        {validation.status === 'Upcoming' && (
                                             <button
-                                                className="bg-red-600 text-white py-2 px-4 rounded"
+                                                className="bg-red-600 text-white py-2 px-4 rounded flex items-center hover:bg-red-700 transition duration-300"
                                                 onClick={() => handleMarkAsDone(validation._id)}
                                             >
-                                                Mark as Done
+                                                <FaCheck className="mr-2" />
+                                                <span>Mark as Done</span>
                                             </button>
                                         )}
                                     </div>
                                     <div className='text-right'>
-                                        <p className='text-gray-600'>Date Created: {new Date(validation.dateCreated).toLocaleDateString()}</p>
                                         {validation.datePosted && (
-                                            <p className='text-gray-600'>Date Posted: {new Date(validation.datePosted).toLocaleDateString()}</p>
+                                            <p className='text-gray-600'>
+                                                Date Posted: {new Date(validation.datePosted).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {new Date(validation.datePosted).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                            </p>
                                         )}
                                     </div>
                                 </div>
@@ -355,35 +452,56 @@ export default function Validation() {
                 </div>
 
                 {/* Previous Document Validation Content */}
-                <h3 className='text-xl font-bold mt-4'>Previous Document Validation</h3>
+                <h3 className='text-xl font-bold tracking-wide mt-4'>Previous Document Validation</h3>
                 <div className="p-6">
                     {doneValidations.length === 0 ? (
                         <p className='bg-slate-200 text-slate-600 px-8 py-4 rounded-md text-left'>No previous document validations at the moment.</p>
                     ) : (
                         doneValidations.map((validation) => (
-                            <div key={validation._id} className='bg-white border-l-4 border-l-blue-500 text-black-700 p-4 rounded-md border shadow relative mb-6'>
+                            <div key={validation._id} className='bg-white border-l-4 border-l-blue-500 text-black-700 p-6 rounded-md border shadow relative mb-6'>
                                 <div className='flex justify-between items-center mb-4'>
-                                    <h3 className='text-xl font-bold'>{validation.validationTitle}</h3>
+                                    <h3 className='text-xl font-semibold'>{validation.validationTitle}</h3>
                                     <span className={`inline-block px-3 py-1 rounded-full text-white ${validation.status === 'posted' ? 'bg-green-600' : 'bg-blue-600'}`}>
                                         Status: {validation.status}
                                     </span>
                                 </div>
-                                <p className='mb-4'>{validation.validationDescription}</p>
-                                <ul className='list-disc pl-5'>
-                                    {validation.requirements.map((req, index) => (
-                                        <li key={index} className='mb-2'>
-                                            {req.requirement}
-                                        </li>
-                                    ))}
-                                </ul>
+                                <p className='mb-4 text-gray-700'>{validation.validationDescription}</p>
+                                <div className='mb-4'>
+                                    <p className='font-medium text-gray-800'>Requirements Needed:</p>
+                                    <ul className='list-disc pl-5'>
+                                        {validation.requirements.map((req, index) => (
+                                            <li key={index} className='mb-2 text-gray-700'>
+                                                {req.requirement}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <div className='mb-4'>
+                                    <p className='font-medium text-gray-800'>Validation Method: {validation.validationMethod}</p>
+                                    {validation.validationMethod === 'Face-to-Face' && validation.faceToFaceDetails && (
+                                        <div className='pl-5 mt-2'>
+                                            <p className='text-gray-700'>Date & Time: {validation.faceToFaceDetails.sessionDate}</p>
+                                            <p className='text-gray-700'>Location: {validation.faceToFaceDetails.location}</p>
+                                        </div>
+                                    )}
+                                    {validation.validationMethod === 'Courier-Based' && validation.courierDetails && (
+                                        <div className='pl-5 mt-2'>
+                                            <p className='text-gray-700'>Mailing Address: {validation.courierDetails.mailingAddress}</p>
+                                            <p className='text-gray-700'>Recipient Name: {validation.courierDetails.recipientName}</p>
+                                            <p className='text-gray-700'>Recipient Contact: {validation.courierDetails.recipientContact}</p>
+                                            <p className='text-gray-700'>Submission Deadline: {new Date(validation.courierDetails.submissionDeadline).toLocaleDateString()}</p>
+                                        </div>
+                                    )}
+                                </div>
                                 <div className="flex justify-between items-end mt-4">
                                     <div className="flex space-x-4">
                                         {/* No actions for previous validations */}
                                     </div>
                                     <div className='text-right'>
-                                        <p className='text-gray-600'>Date Created: {new Date(validation.dateCreated).toLocaleDateString()}</p>
-                                        {validation.datePosted && (
-                                            <p className='text-gray-600'>Date Posted: {new Date(validation.datePosted).toLocaleDateString()}</p>
+                                        {validation.dateDone && (
+                                            <p className='text-gray-600'>
+                                                Date Done: {new Date(validation.dateDone).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {new Date(validation.dateDone).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                            </p>
                                         )}
                                     </div>
                                 </div>
@@ -469,7 +587,7 @@ export default function Validation() {
                                                 className="block text-gray-700 text-sm font-medium mb-2"
                                                 htmlFor="sessionDate"
                                             >
-                                                Session Date & Time
+                                                Date & Time
                                             </label>
                                             <input
                                                 type="text"
@@ -477,7 +595,7 @@ export default function Validation() {
                                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                                 value={sessionDate}
                                                 onChange={(e) => setSessionDate(e.target.value)}
-                                                placeholder="Enter session date and time"
+                                                placeholder="Enter date and time"
                                                 required
                                             />
                                         </div>
@@ -535,14 +653,13 @@ export default function Validation() {
                                                     </button>
                                                 </div>
                                             )}
-                                            <ul className="list-disc list-inside mt-2 text-gray-700">
+                                            <ul className="list-disc list-inside mt-2 text-gray-700 space-y-2">
                                                 {requirements.map((requirement, index) => (
-                                                    // Inside your component
                                                     <li key={index} className="flex justify-between items-center">
-                                                        {requirement}
+                                                        <span className="mr-4">{requirement}</span>
                                                         <button
                                                             type="button"
-                                                            className="bg-red-600 text-white py-1 px-2 rounded ml-2"
+                                                            className="bg-red-600 text-white py-1 px-2 rounded"
                                                             onClick={() => handleRemoveRequirement(index)}
                                                         >
                                                             <FaTrashAlt />
@@ -663,14 +780,13 @@ export default function Validation() {
                                                     </button>
                                                 </div>
                                             )}
-                                            <ul className="list-disc list-inside mt-2 text-gray-700">
+                                            <ul className="list-disc list-inside mt-2 text-gray-700 space-y-2">
                                                 {requirements.map((requirement, index) => (
-                                                    // Inside your component
                                                     <li key={index} className="flex justify-between items-center">
-                                                        {requirement}
+                                                        <span className="mr-4">{requirement}</span>
                                                         <button
                                                             type="button"
-                                                            className="bg-red-600 text-white py-1 px-2 rounded ml-2"
+                                                            className="bg-red-600 text-white py-1 px-2 rounded"
                                                             onClick={() => handleRemoveRequirement(index)}
                                                         >
                                                             <FaTrashAlt />
@@ -696,20 +812,23 @@ export default function Validation() {
                     </div>
                 )}
 
-
                 {isEditModalOpen && (
                     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                        <div className="bg-white p-6 rounded-lg shadow-lg w-1/3 relative">
+                        <div className="bg-white p-6 rounded-lg shadow-lg w-2/4 relative max-h-[80vh] overflow-y-auto">
                             <button
                                 className="absolute top-2 right-4 text-gray-700 hover:text-gray-900 text-2xl"
                                 onClick={handleCloseModal2}
                             >
-                                &times;
+                                <FaTimes />
                             </button>
                             <h3 className="text-xl font-bold mb-4">Edit Validation</h3>
                             <form onSubmit={handleUpdate}>
+                                {/* Validation Title */}
                                 <div className="mb-4">
-                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="validationTitle">
+                                    <label
+                                        className="block text-gray-700 text-sm font-medium mb-2"
+                                        htmlFor="validationTitle"
+                                    >
                                         Validation Title
                                     </label>
                                     <input
@@ -718,60 +837,274 @@ export default function Validation() {
                                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         value={validationTitle}
                                         onChange={(e) => setValidationTitle(e.target.value)}
+                                        placeholder="Enter validation title"
                                         required
                                     />
                                 </div>
+
                                 <div className="mb-4">
-                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="validationDescription">
+                                    <label
+                                        className="block text-gray-700 text-sm font-medium mb-2"
+                                        htmlFor="validationDescription"
+                                    >
                                         Validation Description
                                     </label>
-                                    <textarea
+                                    <input
+                                        type="text"
                                         id="validationDescription"
                                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         value={validationDescription}
                                         onChange={(e) => setValidationDescription(e.target.value)}
+                                        placeholder="Enter validation description"
                                         required
-                                    ></textarea>
+                                    />
                                 </div>
+
+                                {/* Validation Method Dropdown */}
                                 <div className="mb-4">
-                                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="requirements">
-                                        Requirements
+                                    <label
+                                        className="block text-gray-700 text-sm font-medium mb-2"
+                                        htmlFor="validationMethod"
+                                    >
+                                        Validation Method
                                     </label>
-                                    <div className="flex flex-col gap-4">
-                                        <input
-                                            type="text"
-                                            id="requirements"
-                                            className="shadow appearance-none border rounded w-full py-1 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                            value={requirementInput}
-                                            onChange={(e) => setRequirementInput(e.target.value)}
-                                        />
-                                        <button
-                                            type="button"
-                                            className="bg-blue-600 text-whit py-2 w-[180px] text-center px-4 rounded text-white hover:w-full hover:font-bold hover:bg-blue-700 transition-all ease-in-out duration-300"
-                                            onClick={handleAddRequirement}
-                                        >
-                                            Add Requirement
-                                        </button>
-                                    </div>
-                                    <ul className="list-disc list-inside mt-2 text-gray-700">
-                                        {requirements.map((requirement, index) => (
-                                            <li key={index} className="flex justify-between items-center">
-                                                {requirement}
+                                    <select
+                                        id="validationMethod"
+                                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        value={validationMethod}
+                                        onChange={(e) => setValidationMethod(e.target.value)}
+                                        required
+                                    >
+                                        <option value="">Select a method</option>
+                                        <option value="Face-to-Face">Face-to-Face</option>
+                                        <option value="Courier-Based">Courier-Based</option>
+                                    </select>
+                                </div>
+
+                                {/* Conditional Fields for Face-to-Face */}
+                                {validationMethod === "Face-to-Face" && (
+                                    <>
+                                        <div className="mb-4">
+                                            <label
+                                                className="block text-gray-700 text-sm font-medium mb-2"
+                                                htmlFor="sessionDate"
+                                            >
+                                                Date & Time
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="sessionDate"
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                value={sessionDate}
+                                                onChange={(e) => setSessionDate(e.target.value)}
+                                                placeholder="Enter date and time"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="mb-4">
+                                            <label
+                                                className="block text-gray-700 text-sm font-medium mb-2"
+                                                htmlFor="location"
+                                            >
+                                                Location
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="location"
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                value={location}
+                                                onChange={(e) => setLocation(e.target.value)}
+                                                placeholder="Enter location"
+                                                required
+                                            />
+                                        </div>
+                                        {/* Requirements Section */}
+                                        <div className="mb-4">
+                                            <div className="flex justify-between items-center">
+                                                <label
+                                                    className="block text-gray-700 text-sm font-medium mb-2"
+                                                    htmlFor="requirements"
+                                                >
+                                                    Requirements
+                                                </label>
                                                 <button
                                                     type="button"
-                                                    className="bg-red-600 text-white py-1 px-2 rounded ml-2"
-                                                    onClick={() => handleRemoveRequirement(index)}
+                                                    className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-all ease-in-out duration-300"
+                                                    onClick={handleAddRequirement}
                                                 >
-                                                    Remove
+                                                    Add Requirement
                                                 </button>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
+                                            </div>
+                                            {showInput && (
+                                                <div className="flex gap-4 mt-2">
+                                                    <input
+                                                        type="text"
+                                                        id="requirements"
+                                                        className="shadow appearance-none border rounded w-full py-1 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                        value={requirementInput}
+                                                        onChange={(e) => setRequirementInput(e.target.value)}
+                                                        placeholder="Enter requirement"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-all ease-in-out duration-300"
+                                                        onClick={handleSaveRequirement}
+                                                    >
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            )}
+                                            <ul className="list-disc list-inside mt-2 text-gray-700 space-y-2">
+                                                {requirements.map((requirement, index) => (
+                                                    <li key={index} className="flex justify-between items-center">
+                                                        {requirement}
+                                                        <button
+                                                            type="button"
+                                                            className="bg-red-600 text-white py-1 px-2 rounded"
+                                                            onClick={() => handleRemoveRequirement(index)}
+                                                        >
+                                                            <FaTrashAlt />
+                                                        </button>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </>
+                                )}
+
+                                {/* Conditional Fields for Courier-Based */}
+                                {validationMethod === "Courier-Based" && (
+                                    <>
+                                        <div className="mb-4">
+                                            <label
+                                                className="block text-gray-700 text-sm font-medium mb-2"
+                                                htmlFor="mailingAddress"
+                                            >
+                                                Mailing Address
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="mailingAddress"
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                value={mailingAddress}
+                                                onChange={(e) => setMailingAddress(e.target.value)}
+                                                placeholder="Enter mailing address"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="mb-4">
+                                            <label
+                                                className="block text-gray-700 text-sm font-medium mb-2"
+                                                htmlFor="recipientName"
+                                            >
+                                                Recipient Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="recipientName"
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                value={recipientName}
+                                                onChange={(e) => setRecipientName(e.target.value)}
+                                                placeholder="Enter recipient name"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="mb-4">
+                                            <label
+                                                className="block text-gray-700 text-sm font-medium mb-2"
+                                                htmlFor="recipientContact"
+                                            >
+                                                Recipient Contact
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="recipientContact"
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                value={recipientContact}
+                                                onChange={(e) => setRecipientContact(e.target.value)}
+                                                placeholder="Enter recipient contact"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="mb-4">
+                                            <label
+                                                className="block text-gray-700 text-sm font-medium mb-2"
+                                                htmlFor="submissionDeadline"
+                                            >
+                                                Submission Deadline
+                                            </label>
+                                            <input
+                                                type="date"
+                                                id="submissionDeadline"
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                value={submissionDeadline}
+                                                onChange={(e) => setSubmissionDeadline(e.target.value)}
+                                                required
+                                            />
+                                        </div>
+                                        {/* Requirements Section */}
+                                        <div className="mb-4">
+                                            <div className="flex justify-between items-center">
+                                                <label
+                                                    className="block text-gray-700 text-sm font-medium mb-2"
+                                                    htmlFor="requirements"
+                                                >
+                                                    Requirements
+                                                </label>
+                                                <button
+                                                    type="button"
+                                                    className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-all ease-in-out duration-300"
+                                                    onClick={handleAddRequirement}
+                                                >
+                                                    Add Requirement
+                                                </button>
+                                            </div>
+                                            {showInput && (
+                                                <div className="flex gap-4 mt-2">
+                                                    <input
+                                                        type="text"
+                                                        id="requirements"
+                                                        className="shadow appearance-none border rounded w-full py-1 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                        value={requirementInput}
+                                                        onChange={(e) => setRequirementInput(e.target.value)}
+                                                        placeholder="Enter requirement"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-all ease-in-out duration-300"
+                                                        onClick={handleSaveRequirement}
+                                                    >
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            )}
+                                            <ul className="list-disc list-inside mt-2 text-gray-700 space-y-2">
+                                                {requirements.map((requirement, index) => (
+                                                    <li key={index} className="flex justify-between items-center">
+                                                        {requirement}
+                                                        <button
+                                                            type="button"
+                                                            className="bg-red-600 text-white py-1 px-2 rounded"
+                                                            onClick={() => handleRemoveRequirement(index)}
+                                                        >
+                                                            <FaTrashAlt />
+                                                        </button>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </>
+                                )}
+
+                                {/* Submit Button */}
                                 <div className="flex justify-end">
                                     <button
                                         type="submit"
-                                        className="bg-blue-600 text-white py-2 px-4 font-medium rounded"
+                                        className="bg-blue-600 text-white py-2 px-4 rounded font-bold hover:bg-blue-700 transition duration-300"
                                     >
                                         Update
                                     </button>

@@ -14,6 +14,13 @@ export const createValidation = async (req, res) => {
         // Transform requirements to the expected format
         const formattedRequirements = requirements.map(req => ({ requirement: req }));
 
+        // Fetch the scholarship program to get the approved scholars
+        const scholarshipProgram = await ScholarshipProgram.findById(id).populate('approvedScholars');
+
+        if (!scholarshipProgram) {
+            return res.status(404).json({ error: 'Scholarship program not found' });
+        }
+
         // Create a new validation object
         const newValidation = new Validation({
             validationTitle,
@@ -24,7 +31,11 @@ export const createValidation = async (req, res) => {
             scholarshipProgram: id, // Associate with scholarship program
             validationMethod,
             faceToFaceDetails: validationMethod === 'Face-to-Face' ? faceToFaceDetails : undefined,
-            courierDetails: validationMethod === 'Courier-Based' ? courierDetails : undefined
+            courierDetails: validationMethod === 'Courier-Based' ? courierDetails : undefined,
+            validationResults: scholarshipProgram.approvedScholars.map(scholar => ({
+                scholar: scholar._id,
+                status: 'Pending'
+            }))
         });
 
         // Save the validation object to the database
@@ -63,17 +74,38 @@ export const postValidation = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Find the validation by ID and update its status to 'Posted'
-        const validation = await Validation.findByIdAndUpdate(
-            id,
-            { status: 'Ongoing' },
-            { new: true }
-        );
+        // Find the validation by ID
+        const validation = await Validation.findById(id);
 
-        // Check if the validation was found and updated
+        // Check if the validation was found
         if (!validation) {
             return res.status(404).json({ message: 'Validation not found' });
         }
+
+        // Update the status to 'Upcoming' and set the datePosted
+        validation.status = 'Upcoming';
+        validation.datePosted = new Date(); // Set the current date as the datePosted
+
+        // Fetch the scholarship program to get the approved scholars
+        const scholarshipProgram = await ScholarshipProgram.findById(validation.scholarshipProgram).populate('approvedScholars');
+
+        if (!scholarshipProgram) {
+            return res.status(404).json({ message: 'Scholarship program not found' });
+        }
+
+        // Add approved scholars to validation results if not already present
+        const existingScholars = validation.validationResults.map(result => result.scholar.toString());
+        scholarshipProgram.approvedScholars.forEach(scholar => {
+            if (!existingScholars.includes(scholar._id.toString())) {
+                validation.validationResults.push({
+                    scholar: scholar._id,
+                    status: 'Pending'
+                });
+            }
+        });
+
+        // Save the updated validation
+        await validation.save();
 
         // Send the updated validation as a response
         res.status(200).json(validation);
@@ -85,7 +117,7 @@ export const postValidation = async (req, res) => {
 
 export const updateValidation = async (req, res) => {
     const { id } = req.params;
-    const { validationTitle, validationDescription, requirements } = req.body;
+    const { validationTitle, validationDescription, requirements, validationMethod, faceToFaceDetails, courierDetails } = req.body;
 
     try {
         const validation = await Validation.findById(id);
@@ -97,6 +129,37 @@ export const updateValidation = async (req, res) => {
         validation.validationTitle = validationTitle;
         validation.validationDescription = validationDescription;
         validation.requirements = requirements;
+        validation.validationMethod = validationMethod;
+        validation.dateUpdated = new Date(); // Set the current date as the dateUpdated
+
+        if (validationMethod === 'Face-to-Face') {
+            validation.faceToFaceDetails = faceToFaceDetails;
+            validation.courierDetails = undefined; // Clear courier details if not applicable
+        } else if (validationMethod === 'Courier-Based') {
+            validation.courierDetails = courierDetails;
+            validation.faceToFaceDetails = undefined; // Clear face-to-face details if not applicable
+        } else {
+            validation.faceToFaceDetails = undefined;
+            validation.courierDetails = undefined;
+        }
+
+        // Fetch the scholarship program to get the approved scholars
+        const scholarshipProgram = await ScholarshipProgram.findById(validation.scholarshipProgram).populate('approvedScholars');
+
+        if (!scholarshipProgram) {
+            return res.status(404).json({ message: 'Scholarship program not found' });
+        }
+
+        // Add approved scholars to validation results if not already present
+        const existingScholars = validation.validationResults.map(result => result.scholar.toString());
+        scholarshipProgram.approvedScholars.forEach(scholar => {
+            if (!existingScholars.includes(scholar._id.toString())) {
+                validation.validationResults.push({
+                    scholar: scholar._id,
+                    status: 'Pending'
+                });
+            }
+        });
 
         await validation.save();
 
@@ -138,6 +201,7 @@ export const completeValidation = async (req, res) => {
         }
 
         validation.status = 'Done';
+        validation.dateDone = new Date(); // Set the current date and time as dateDone
         await validation.save();
 
         res.status(200).json({ message: 'Validation status updated to Completed successfully' });
@@ -151,7 +215,7 @@ export const getValidationsByProgram = async (req, res) => {
     const { programId } = req.params;
 
     try {
-        const validations = await Validation.find({ programId, status: 'Ongoing' });
+        const validations = await Validation.find({ programId, status: 'Upcoming' });
 
         if (!validations.length) {
             return res.status(404).json({ message: 'No validations found for this program' });
@@ -160,6 +224,94 @@ export const getValidationsByProgram = async (req, res) => {
         res.status(200).json(validations);
     } catch (error) {
         console.error('Error fetching validations:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+export const getValidationsByProvider = async (req, res) => {
+    const { providerId } = req.params;
+
+    try {
+        // Fetch all scholarship programs of the provider
+        const scholarshipPrograms = await ScholarshipProgram.find({ providerId: providerId });
+
+        if (!scholarshipPrograms.length) {
+            return res.status(404).json({ message: 'No scholarship programs found for this provider' });
+        }
+
+        // Extract the program IDs
+        const programIds = scholarshipPrograms.map(program => program._id);
+
+        // Fetch all validations for the scholarship programs of the provider
+        const validations = await Validation.find({ scholarshipProgram: { $in: programIds } })
+            .populate({
+                path: 'scholarshipProgram',
+                select: 'scholarshipImage title' // Only select the scholarshipImage and title fields
+            })
+            .populate({
+                path: 'validationResults.scholar',
+                select: 'profilePicture applicantDetails.firstName applicantDetails.lastName' // Select the required fields from the User model
+            });
+
+        if (!validations.length) {
+            return res.status(404).json({ message: 'No validations found for the scholarship programs of this provider' });
+        }
+
+        res.status(200).json(validations);
+    } catch (error) {
+        console.error('Error fetching validations:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// Approve validation result
+export const approveValidationResult = async (req, res) => {
+    const { validationId, resultId } = req.params;
+
+    try {
+        const validation = await Validation.findById(validationId);
+        if (!validation) {
+            return res.status(404).json({ message: 'Validation not found' });
+        }
+
+        const result = validation.validationResults.id(resultId);
+        if (!result) {
+            return res.status(404).json({ message: 'Validation result not found' });
+        }
+
+        result.status = 'Approved';
+        await validation.save();
+
+        res.status(200).json({ message: 'Validation result approved successfully' });
+    } catch (error) {
+        console.error('Error approving validation result:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// Reject validation result with feedback
+export const rejectValidationResult = async (req, res) => {
+    const { validationId, resultId } = req.params;
+    const { feedback } = req.body; // Extract feedback from request body
+
+    try {
+        const validation = await Validation.findById(validationId);
+        if (!validation) {
+            return res.status(404).json({ message: 'Validation not found' });
+        }
+
+        const result = validation.validationResults.id(resultId);
+        if (!result) {
+            return res.status(404).json({ message: 'Validation result not found' });
+        }
+
+        result.status = 'Rejected';
+        result.feedback = feedback; // Store feedback in the validation result
+        await validation.save();
+
+        res.status(200).json({ message: 'Validation result rejected successfully' });
+    } catch (error) {
+        console.error('Error rejecting validation result:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
