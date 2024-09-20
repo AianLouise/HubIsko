@@ -9,7 +9,7 @@ export const test = (req, res) => {
 
 export const createValidation = async (req, res) => {
     try {
-        const { validationTitle, validationDescription, requirements, id } = req.body;
+        const { validationTitle, validationDescription, requirements, id, validationMethod, faceToFaceDetails, courierDetails } = req.body;
 
         // Transform requirements to the expected format
         const formattedRequirements = requirements.map(req => ({ requirement: req }));
@@ -21,7 +21,10 @@ export const createValidation = async (req, res) => {
             requirements: formattedRequirements,
             dateCreated: new Date(), // Set dateCreated to the current date
             datePosted: new Date(), // Set datePosted to the current date
-            scholarshipProgram: id // Associate with scholarship program
+            scholarshipProgram: id, // Associate with scholarship program
+            validationMethod,
+            faceToFaceDetails: validationMethod === 'Face-to-Face' ? faceToFaceDetails : undefined,
+            courierDetails: validationMethod === 'Courier-Based' ? courierDetails : undefined
         });
 
         // Save the validation object to the database

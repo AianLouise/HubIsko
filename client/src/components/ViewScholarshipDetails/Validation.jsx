@@ -1,19 +1,31 @@
 import React, { useEffect, useState } from 'react';
+import { FaTrashAlt } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 
 export default function Validation() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [validations, setValidations] = useState([]);
-    const [requirements, setRequirements] = useState([]);
-    const [requirementInput, setRequirementInput] = useState('');
-    const [validationTitle, setValidationTitle] = useState('');
-    const [validationDescription, setValidationDescription] = useState('');
-    const [editingValidationId, setEditingValidationId] = useState(null);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
     const { id } = useParams();
     const scholarshiProgramId = id;
 
+    // Validation Form Fields
+    const [validations, setValidations] = useState([]);
+    const [validationTitle, setValidationTitle] = useState('');
+    const [validationDescription, setValidationDescription] = useState('');
+    const [validationMethod, setValidationMethod] = useState('');
+    // Face-to-Face
+    const [sessionDate, setSessionDate] = useState('');
+    const [location, setLocation] = useState('');
+    // Courier-Based
+    const [recipientName, setRecipientName] = useState('');
+    const [recipientContact, setRecipientContact] = useState('');
+    const [mailingAddress, setMailingAddress] = useState('');
+    const [submissionDeadline, setSubmissionDeadline] = useState('');
+
+    // Modal State
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingValidationId, setEditingValidationId] = useState(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+    // Fetch Validations
     const fetchValidations = async () => {
         try {
             const response = await fetch(`/api/validation/program/${scholarshiProgramId}`);
@@ -51,18 +63,6 @@ export default function Validation() {
         setValidationTitle(''); // Optionally clear the title field as well
         setValidationDescription(''); // Optionally clear the description field as well
     };
-
-    const handleAddRequirement = () => {
-        if (requirementInput.trim()) {
-            setRequirements([...requirements, requirementInput.trim()]);
-            setRequirementInput('');
-        }
-    };
-
-    const handleRemoveRequirement = (index) => {
-        setRequirements(requirements.filter((_, i) => i !== index));
-    };
-
 
 
     const handleSubmit = async (e) => {
@@ -163,6 +163,7 @@ export default function Validation() {
             console.error('Error updating validation:', error);
         }
     };
+
     const handleDeleteValidation = async (validationId) => {
         try {
             const response = await fetch(`/api/validation/delete/${validationId}`, {
@@ -206,6 +207,27 @@ export default function Validation() {
         }
     };
 
+    const [requirements, setRequirements] = useState([]);
+    const [requirementInput, setRequirementInput] = useState('');
+    const [showInput, setShowInput] = useState(false);
+
+    const handleAddRequirement = () => {
+        setShowInput(true);
+    };
+
+    const handleSaveRequirement = () => {
+        if (requirementInput.trim()) {
+            setRequirements([...requirements, requirementInput]);
+            setRequirementInput('');
+            setShowInput(false);
+        }
+    };
+
+    const handleRemoveRequirement = (index) => {
+        const newRequirements = requirements.filter((_, i) => i !== index);
+        setRequirements(newRequirements);
+    };
+
     const pendingValidations = validations.filter(validation => validation.status === 'Pending');
     const ongoingValidations = validations.filter(validation => validation.status === 'Ongoing');
     const doneValidations = validations.filter(validation => validation.status === 'Done');
@@ -230,7 +252,7 @@ export default function Validation() {
 
                 <div className="p-6">
                     {pendingValidations.length === 0 ? (
-                            <p className='bg-slate-200 text-slate-600 px-8 py-4 rounded-md text-left'>No pending document validations at the moment.</p>
+                        <p className='bg-slate-200 text-slate-600 px-8 py-4 rounded-md text-left'>No pending document validations at the moment.</p>
                     ) : (
                         pendingValidations.map((validation) => (
                             <div key={validation._id} className='bg-white border-l-4 border-l-blue-500 text-black-700 p-4 rounded-md border shadow relative mb-6'>
@@ -372,7 +394,7 @@ export default function Validation() {
 
                 {isModalOpen && (
                     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                        <div className="bg-white p-6 rounded-lg shadow-lg w-1/3 relative">
+                        <div className="bg-white p-6 rounded-lg shadow-lg w-2/4 relative max-h-[80vh] overflow-y-auto">
                             <button
                                 className="absolute top-2 right-4 text-gray-700 hover:text-gray-900 text-2xl"
                                 onClick={handleCloseModal}
@@ -381,8 +403,12 @@ export default function Validation() {
                             </button>
                             <h3 className="text-xl font-bold mb-4">Post Validation</h3>
                             <form onSubmit={handleSubmit}>
+                                {/* Validation Title */}
                                 <div className="mb-4">
-                                    <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="validationTitle">
+                                    <label
+                                        className="block text-gray-700 text-sm font-medium mb-2"
+                                        htmlFor="validationTitle"
+                                    >
                                         Validation Title
                                     </label>
                                     <input
@@ -391,60 +417,276 @@ export default function Validation() {
                                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         value={validationTitle}
                                         onChange={(e) => setValidationTitle(e.target.value)}
+                                        placeholder="Enter validation title"
                                         required
                                     />
                                 </div>
+
                                 <div className="mb-4">
-                                    <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="validationDescription">
+                                    <label
+                                        className="block text-gray-700 text-sm font-medium mb-2"
+                                        htmlFor="validationDescription"
+                                    >
                                         Validation Description
                                     </label>
-                                    <textarea
+                                    <input
+                                        type="text"
                                         id="validationDescription"
                                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                         value={validationDescription}
                                         onChange={(e) => setValidationDescription(e.target.value)}
+                                        placeholder="Enter validation description"
                                         required
-                                    ></textarea>
+                                    />
                                 </div>
+
+                                {/* Validation Method Dropdown */}
                                 <div className="mb-4">
-                                    <label className="block text-gray-700 text-sm font-medium mb-2" htmlFor="requirements">
-                                        Requirements
+                                    <label
+                                        className="block text-gray-700 text-sm font-medium mb-2"
+                                        htmlFor="validationMethod"
+                                    >
+                                        Validation Method
                                     </label>
-                                    <div className="flex flex-col gap-4">
-                                        <input
-                                            type="text"
-                                            id="requirements"
-                                            className="shadow appearance-none border rounded w-full py-1 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                            value={requirementInput}
-                                            onChange={(e) => setRequirementInput(e.target.value)}
-                                        />
-                                        <button
-                                            type="button"
-                                            className="bg-blue-600 text-whit py-2 w-[180px] text-center px-4 rounded text-white hover:w-full hover:font-bold hover:bg-blue-700 transition-all ease-in-out duration-300"
-                                            onClick={handleAddRequirement}
-                                        >
-                                            Add Requirement
-                                        </button>
-                                    </div>
-                                    <ul className="list-disc list-inside mt-2 text-gray-700">
-                                        {requirements.map((requirement, index) => (
-                                            <li key={index} className="flex justify-between items-center">
-                                                {requirement}
+                                    <select
+                                        id="validationMethod"
+                                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        value={validationMethod}
+                                        onChange={(e) => setValidationMethod(e.target.value)}
+                                        required
+                                    >
+                                        <option value="">Select a method</option>
+                                        <option value="Face-to-Face">Face-to-Face</option>
+                                        <option value="Courier-Based">Courier-Based</option>
+                                    </select>
+                                </div>
+
+                                {/* Conditional Fields for Face-to-Face */}
+                                {validationMethod === "Face-to-Face" && (
+                                    <>
+                                        <div className="mb-4">
+                                            <label
+                                                className="block text-gray-700 text-sm font-medium mb-2"
+                                                htmlFor="sessionDate"
+                                            >
+                                                Session Date & Time
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="sessionDate"
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                value={sessionDate}
+                                                onChange={(e) => setSessionDate(e.target.value)}
+                                                placeholder="Enter session date and time"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="mb-4">
+                                            <label
+                                                className="block text-gray-700 text-sm font-medium mb-2"
+                                                htmlFor="location"
+                                            >
+                                                Location
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="location"
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                value={location}
+                                                onChange={(e) => setLocation(e.target.value)}
+                                                placeholder="Enter location"
+                                                required
+                                            />
+                                        </div>
+                                        {/* Requirements Section */}
+                                        <div className="mb-4">
+                                            <div className="flex justify-between items-center">
+                                                <label
+                                                    className="block text-gray-700 text-sm font-medium mb-2"
+                                                    htmlFor="requirements"
+                                                >
+                                                    Requirements
+                                                </label>
                                                 <button
                                                     type="button"
-                                                    className="bg-red-600 text-white py-1 px-2 rounded ml-2"
-                                                    onClick={() => handleRemoveRequirement(index)}
+                                                    className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-all ease-in-out duration-300"
+                                                    onClick={handleAddRequirement}
                                                 >
-                                                    Remove
+                                                    Add Requirement
                                                 </button>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
+                                            </div>
+                                            {showInput && (
+                                                <div className="flex gap-4 mt-2">
+                                                    <input
+                                                        type="text"
+                                                        id="requirements"
+                                                        className="shadow appearance-none border rounded w-full py-1 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                        value={requirementInput}
+                                                        onChange={(e) => setRequirementInput(e.target.value)}
+                                                        placeholder="Enter requirement"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-all ease-in-out duration-300"
+                                                        onClick={handleSaveRequirement}
+                                                    >
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            )}
+                                            <ul className="list-disc list-inside mt-2 text-gray-700">
+                                                {requirements.map((requirement, index) => (
+                                                    // Inside your component
+                                                    <li key={index} className="flex justify-between items-center">
+                                                        {requirement}
+                                                        <button
+                                                            type="button"
+                                                            className="bg-red-600 text-white py-1 px-2 rounded ml-2"
+                                                            onClick={() => handleRemoveRequirement(index)}
+                                                        >
+                                                            <FaTrashAlt />
+                                                        </button>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </>
+                                )}
+
+                                {/* Conditional Fields for Courier-Based */}
+                                {validationMethod === "Courier-Based" && (
+                                    <>
+                                        <div className="mb-4">
+                                            <label
+                                                className="block text-gray-700 text-sm font-medium mb-2"
+                                                htmlFor="mailingAddress"
+                                            >
+                                                Mailing Address
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="mailingAddress"
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                value={mailingAddress}
+                                                onChange={(e) => setMailingAddress(e.target.value)}
+                                                placeholder="Enter mailing address"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="mb-4">
+                                            <label
+                                                className="block text-gray-700 text-sm font-medium mb-2"
+                                                htmlFor="recipientName"
+                                            >
+                                                Recipient Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="recipientName"
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                value={recipientName}
+                                                onChange={(e) => setRecipientName(e.target.value)}
+                                                placeholder="Enter recipient name"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="mb-4">
+                                            <label
+                                                className="block text-gray-700 text-sm font-medium mb-2"
+                                                htmlFor="recipientContact"
+                                            >
+                                                Recipient Contact
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="recipientContact"
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                value={recipientContact}
+                                                onChange={(e) => setRecipientContact(e.target.value)}
+                                                placeholder="Enter recipient contact"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="mb-4">
+                                            <label
+                                                className="block text-gray-700 text-sm font-medium mb-2"
+                                                htmlFor="submissionDeadline"
+                                            >
+                                                Submission Deadline
+                                            </label>
+                                            <input
+                                                type="date"
+                                                id="submissionDeadline"
+                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                value={submissionDeadline}
+                                                onChange={(e) => setSubmissionDeadline(e.target.value)}
+                                                required
+                                            />
+                                        </div>
+                                        {/* Requirements Section */}
+                                        <div className="mb-4">
+                                            <div className="flex justify-between items-center">
+                                                <label
+                                                    className="block text-gray-700 text-sm font-medium mb-2"
+                                                    htmlFor="requirements"
+                                                >
+                                                    Requirements
+                                                </label>
+                                                <button
+                                                    type="button"
+                                                    className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-all ease-in-out duration-300"
+                                                    onClick={handleAddRequirement}
+                                                >
+                                                    Add Requirement
+                                                </button>
+                                            </div>
+                                            {showInput && (
+                                                <div className="flex gap-4 mt-2">
+                                                    <input
+                                                        type="text"
+                                                        id="requirements"
+                                                        className="shadow appearance-none border rounded w-full py-1 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                        value={requirementInput}
+                                                        onChange={(e) => setRequirementInput(e.target.value)}
+                                                        placeholder="Enter requirement"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-all ease-in-out duration-300"
+                                                        onClick={handleSaveRequirement}
+                                                    >
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            )}
+                                            <ul className="list-disc list-inside mt-2 text-gray-700">
+                                                {requirements.map((requirement, index) => (
+                                                    // Inside your component
+                                                    <li key={index} className="flex justify-between items-center">
+                                                        {requirement}
+                                                        <button
+                                                            type="button"
+                                                            className="bg-red-600 text-white py-1 px-2 rounded ml-2"
+                                                            onClick={() => handleRemoveRequirement(index)}
+                                                        >
+                                                            <FaTrashAlt />
+                                                        </button>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </>
+                                )}
+
+                                {/* Submit Button */}
                                 <div className="flex justify-end">
                                     <button
                                         type="submit"
-                                        className="bg-blue-600 text-white py-2 px-4 rounded font-bold"
+                                        className="bg-blue-600 text-white py-2 px-4 rounded font-bold hover:bg-blue-700 transition duration-300"
                                     >
                                         Submit
                                     </button>
@@ -453,6 +695,7 @@ export default function Validation() {
                         </div>
                     </div>
                 )}
+
 
                 {isEditModalOpen && (
                     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -504,7 +747,7 @@ export default function Validation() {
                                         />
                                         <button
                                             type="button"
-                                             className="bg-blue-600 text-whit py-2 w-[180px] text-center px-4 rounded text-white hover:w-full hover:font-bold hover:bg-blue-700 transition-all ease-in-out duration-300"
+                                            className="bg-blue-600 text-whit py-2 w-[180px] text-center px-4 rounded text-white hover:w-full hover:font-bold hover:bg-blue-700 transition-all ease-in-out duration-300"
                                             onClick={handleAddRequirement}
                                         >
                                             Add Requirement
