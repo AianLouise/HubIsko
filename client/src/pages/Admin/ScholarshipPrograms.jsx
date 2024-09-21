@@ -208,57 +208,59 @@ export default function ScholarshipPrograms() {
                                                 onChange={(e) => setSearchQuery(e.target.value)}
                                             />
                                         </div>
-                                        <table className="min-w-full divide-y divide-gray-200">
-                                            <thead className="bg-slate-100 sticky top-16 z-10">
-                                                <tr className="border-y text-sm">
-                                                    <th className="py-3 px-6 text-left w-1/5 uppercase tracking-wider">Program Name</th>
-                                                    <th className="py-3 px-6 text-left w-1/5 uppercase tracking-wider">Provider</th>
-                                                    <th className="py-3 px-6 text-left w-1/5 uppercase tracking-wider">Status</th>
-                                                    <th className="py-3 px-6 text-left w-1/5 uppercase tracking-wider">Applications</th>
-                                                    <th className="py-3 px-6 text-left w-1/5 uppercase tracking-wider">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="bg-white font-normal text-sm">
-                                                {filteredPrograms.map((program, index) => (
-                                                    <tr
-                                                        key={program.id}
-                                                        className={`border-b ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100 transition-colors`}
-                                                    >
-                                                        <td className="py-3 px-6 w-1/5">
-                                                            <div className="flex items-center gap-4">
-                                                                <img src={program.scholarshipImage} alt="Scholarship" className="h-10 w-10 rounded-full object-cover" />
-                                                                {program.title}
-                                                            </div>
-                                                        </td>
-                                                        <td className="py-3 px-6 w-1/5">{program.organizationName}</td>
-                                                        <td className="py-3 px-6 w-1/5">
-                                                            <span className={`px-4 ml-2 py-1 rounded-md whitespace-nowrap ${program.status === 'Pending Approval' ? 'bg-yellow-500 text-white' :
-                                                                program.status === 'Approved' ? 'bg-blue-500 text-white' :
-                                                                    program.status === 'Published' ? 'bg-indigo-500 text-white' :
-                                                                        program.status === 'Ongoing' ? 'bg-teal-500 text-white' :
-                                                                            program.status === 'Rejected' ? 'bg-red-500 text-white' :
-                                                                                program.status === 'Archived' ? 'bg-gray-500 text-white' :
-                                                                                    program.status === 'Cancelled' ? 'bg-orange-500 text-white' :
-                                                                                        program.status === 'Completed' ? 'bg-purple-500 text-white' : ''
-                                                                }`}>
-                                                                {program.status}
-                                                            </span>
-                                                        </td>
-                                                        <td className="py-3 px-6 w-1/5">0</td>
-                                                        <td className="py-3 px-6 w-1/5">
-                                                            <Link
-                                                                to={program.status === 'Pending Approval'
-                                                                    ? `/scholarship-program-applications/${program._id}`
-                                                                    : `/scholarship-program/${program._id}`}
-                                                                className="bg-blue-600 text-white px-4 ml-2 py-1 rounded-md hover:bg-blue-800 whitespace-nowrap"
-                                                            >
-                                                                {program.status === 'Pending Approval' ? 'Verify' : 'View Details'}
-                                                            </Link>
-                                                        </td>
+                                        <div className="flex justify-center">
+                                            <table className="min-w-full divide-y divide-gray-200">
+                                                <thead className="bg-slate-100 sticky top-16 z-10">
+                                                    <tr className="border-y text-sm">
+                                                        <th className="py-3 px-6 text-center w-1/5 uppercase tracking-wider">Program Name</th>
+                                                        <th className="py-3 px-6 text-center w-1/5 uppercase tracking-wider">Provider</th>
+                                                        <th className="py-3 px-6 text-center w-1/5 uppercase tracking-wider">Status</th>
+                                                        <th className="py-3 px-6 text-center w-1/5 uppercase tracking-wider">Applications</th>
+                                                        <th className="py-3 px-6 text-center w-1/5 uppercase tracking-wider">Actions</th>
                                                     </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody className="bg-white font-normal text-sm">
+                                                    {filteredPrograms.map((program, index) => (
+                                                        <tr
+                                                            key={program.id}
+                                                            className={`border-b ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100 transition-colors`}
+                                                        >
+                                                            <td className="py-3 px-6 w-1/5 text-center">
+                                                                <div className="flex items-center justify-center gap-4">
+                                                                    <img src={program.scholarshipImage} alt="Scholarship" className="h-10 w-10 rounded-full object-cover" />
+                                                                    {program.title}
+                                                                </div>
+                                                            </td>
+                                                            <td className="py-3 px-6 w-1/5 text-center">{program.organizationName}</td>
+                                                            <td className="py-3 px-6 w-1/5 text-center">
+                                                                <span className={`px-4 ml-2 py-1 rounded-md whitespace-nowrap ${program.status === 'Pending Approval' ? 'bg-yellow-500 text-white' :
+                                                                    program.status === 'Approved' ? 'bg-blue-500 text-white' :
+                                                                        program.status === 'Published' ? 'bg-indigo-500 text-white' :
+                                                                            program.status === 'Ongoing' ? 'bg-teal-500 text-white' :
+                                                                                program.status === 'Rejected' ? 'bg-red-500 text-white' :
+                                                                                    program.status === 'Archived' ? 'bg-gray-500 text-white' :
+                                                                                        program.status === 'Cancelled' ? 'bg-orange-500 text-white' :
+                                                                                            program.status === 'Completed' ? 'bg-purple-500 text-white' : ''
+                                                                    }`}>
+                                                                    {program.status}
+                                                                </span>
+                                                            </td>
+                                                            <td className="py-3 px-6 w-1/5 text-center">0</td>
+                                                            <td className="py-3 px-6 w-1/5 text-center">
+                                                                <Link
+                                                                    to={program.status === 'Pending Approval'
+                                                                        ? `/scholarship-program-applications/${program._id}`
+                                                                        : `/scholarship-program/${program._id}`}
+                                                                    className="bg-blue-600 text-white px-4 ml-2 py-1 rounded-md hover:bg-blue-800 whitespace-nowrap"
+                                                                >
+                                                                    {program.status === 'Pending Approval' ? 'Verify' : 'View Details'}
+                                                                </Link>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

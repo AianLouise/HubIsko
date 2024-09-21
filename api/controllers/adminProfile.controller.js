@@ -55,6 +55,35 @@ export const getProviderForumPosts = async (req, res) => {
     }
 };
 
+export const getApplicantForumPosts = async (req, res) => {
+    const { id } = req.params; // Extract applicant ID from request parameters
+
+    try {
+        const forumPosts = await ForumPost.find({ author: id }); // Fetch forum posts from ForumPost table using the applicant ID
+
+        if (!forumPosts.length) {
+            return res.status(404).json({ message: 'No forum posts found for this applicant' }); // Send 404 if no forum posts found
+        }
+
+        // Fetch user details for each post
+        const forumPostsWithUserDetails = await Promise.all(
+            forumPosts.map(async (post) => {
+                const user = await User.findById(post.author);
+                return {
+                    ...post._doc,
+                    profilePicture: user.profilePicture,
+                    username: user.username,
+                };
+            })
+        );
+
+        res.json(forumPostsWithUserDetails); // Send the fetched forum posts with user details as a JSON response
+    } catch (error) {
+        console.error('Error fetching forum posts:', error);
+        res.status(500).json({ message: 'Error fetching forum posts' }); // Send an error response
+    }
+};
+
 // Function to get provider scholarship programs by provider ID
 export const getProviderScholarshipPrograms = async (req, res) => {
     const { id } = req.params; // Extract provider ID from request parameters

@@ -8,7 +8,9 @@ import { FaRegHeart } from "react-icons/fa";
 import { BiCommentDots } from "react-icons/bi";
 import { FaRegEye } from "react-icons/fa";
 import Layout from "../../components/Layout";
-import StudentDetailsEdit from "./StudentDetailsEdit";
+import StudentAccountEdit from "../../components/AdminStudentProfile/StudentAccountEdit";
+import StudentDetailsEdit from "../../components/AdminStudentProfile/StudentDetailsEdit";
+import StudentAddressEdit from "../../components/AdminStudentProfile/StudentAddressEdit";
 import StudentScholarship from "./StudentScholarship";
 import StudentForumPost from "./StudentForumPost";
 import { PiStudentFill } from "react-icons/pi";
@@ -149,7 +151,11 @@ export default function StudentDetails() {
 
 
           {selectedTab === 'Student Information' && (
-            <StudentDetailsEdit />
+            <>
+              <StudentAccountEdit />
+              <StudentDetailsEdit />
+              <StudentAddressEdit />
+            </>
           )}
 
 

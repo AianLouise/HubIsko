@@ -3,7 +3,9 @@ import { Link, useParams } from "react-router-dom";
 import { IoMdArrowDropdown, IoMdPeople } from "react-icons/io";
 import { BiCheck } from "react-icons/bi";
 import Layout from "../../components/Layout";
-import ProviderDetailsEdit from "./ProviderDetailsEdit";
+import ProviderAccountEdit from "../../components/AdminProviderProfile/ProviderAccountEdit";
+import ProviderDetailsEdit from "../../components/AdminProviderProfile/ProviderDetailsEdit";
+import ProviderAddressEdit from "../../components/AdminProviderProfile/ProviderAddressEdit";
 import ProviderAbout from "./ProviderAbout";
 import ProviderScholarships from "./ProviderScholarships";
 import ProviderForumPost from "./ProviderForumPost";
@@ -54,7 +56,7 @@ export default function ProviderDetails() {
               <span>Accounts</span>
             </Link>
             <IoMdArrowDropdown className='-rotate-90 w-8 h-8 text-blue-600' />
-          
+
             <div className="border shadow px-6 py-2 bg-white rounded-md flex items-center gap-2">
               <BsBuildingFill className="w-6 h-6 text-blue-600" />
               <span className="text-blue-600">{`${provider.scholarshipProviderDetails.organizationName}`}</span>
@@ -114,7 +116,11 @@ export default function ProviderDetails() {
           </div>
 
           {selectedTab === 'Organization Information' && (
-            <ProviderDetailsEdit provider={provider} />
+            <>
+              <ProviderAccountEdit provider={provider} />
+              <ProviderDetailsEdit provider={provider} />
+              <ProviderAddressEdit provider={provider} />
+            </>
           )}
 
           {selectedTab === 'About' && (
