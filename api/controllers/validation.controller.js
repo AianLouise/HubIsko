@@ -115,6 +115,34 @@ export const postValidation = async (req, res) => {
     }
 };
 
+export const startValidation = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // Find the validation by ID
+        const validation = await Validation.findById(id);
+
+        // Check if the validation was found
+        if (!validation) {
+            return res.status(404).json({ message: 'Validation not found' });
+        }
+
+        // Update the status to 'Ongoing' and set the dateStarted
+        validation.status = 'Ongoing';
+        validation.dateStarted = new Date(); // Set the current date as the dateStarted
+
+        // Save the updated validation
+        await validation.save();
+
+        // Send the updated validation as a response
+        res.status(200).json({ message: 'Validation started successfully', validation });
+    } catch (error) {
+        // Handle errors
+        console.error('Error starting validation:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 export const updateValidation = async (req, res) => {
     const { id } = req.params;
     const { validationTitle, validationDescription, requirements, validationMethod, faceToFaceDetails, courierDetails } = req.body;
@@ -312,6 +340,31 @@ export const rejectValidationResult = async (req, res) => {
         res.status(200).json({ message: 'Validation result rejected successfully' });
     } catch (error) {
         console.error('Error rejecting validation result:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// Function to get validation by ID
+export const getValidationById = async (req, res) => {
+    const { validationId } = req.params;
+
+    try {
+        // Find the validation by ID and populate the scholar details
+        const validation = await Validation.findById(validationId).populate({
+            path: 'validationResults.scholar',
+            select: 'applicantDetails.firstName applicantDetails.lastName profilePicture'
+        });
+
+        // Check if the validation was found
+        if (!validation) {
+            return res.status(404).json({ message: 'Validation not found' });
+        }
+
+        // Send the validation as a response
+        res.status(200).json(validation);
+    } catch (error) {
+        // Handle errors
+        console.error('Error fetching validation:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };

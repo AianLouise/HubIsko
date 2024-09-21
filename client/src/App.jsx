@@ -88,6 +88,7 @@ import ValidationPage from "./pages/Scholarship-Provider/ValidationPage";
 import EditScholarshipDetails from "./components/ViewScholarshipDetails/EditScholarshipDetails";
 import EditScholarshipWebView from "./components/ViewScholarshipDetails/EditScholarshipWebView";
 import VerifyEmailUpdate from "./components/ProviderSettings/VerifyEmailUpdate";
+import ValidationResult from "./components/ViewScholarshipDetails/ValidationResult";
 
 
 // import RegisterAsProvider from "./pages/RegisterAsProvider";
@@ -193,6 +194,7 @@ export default function App() {
           <Route path="/announcement/details/:announcementId" element={<AnnouncementDetails />} />
 
           <Route path="/validation-page" element={<ValidationPage />} />
+          <Route path="/validation/:id/scholars" element={<ValidationResult />} />
      
         </Route>
 

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { FaCheck, FaPlus, FaTimes, FaTrashAlt } from 'react-icons/fa';
-import { useParams } from 'react-router-dom';
+import { FaCheck, FaCog, FaPlay, FaPlus, FaTimes, FaTrashAlt } from 'react-icons/fa';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FaPaperPlane, FaEdit } from 'react-icons/fa';
 
 export default function Validation() {
     const { id } = useParams();
     const scholarshiProgramId = id;
+    const navigate = useNavigate();
 
     // Validation Form Fields
     const [validations, setValidations] = useState([]);
@@ -260,6 +261,34 @@ export default function Validation() {
         }
     };
 
+    const handleStartValidation = async (validationId) => {
+        try {
+            const response = await fetch(`/api/validation/${validationId}/start`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to start validation');
+            }
+
+            const data = await response.json();
+            console.log(data.message);
+
+            // Optionally, refetch validations to update the UI
+            await fetchValidations();
+        } catch (error) {
+            console.error('Error starting validation:', error);
+        }
+    };
+
+    const handleManageValidation = (validationId) => {
+        // Navigate to the scholars page for the specific validation
+        navigate(`/validation/${validationId}/scholars`);
+    };
+
     const [requirements, setRequirements] = useState([]);
     const [requirementInput, setRequirementInput] = useState('');
     const [showInput, setShowInput] = useState(false);
@@ -283,20 +312,29 @@ export default function Validation() {
 
     const pendingValidations = validations.filter(validation => validation.status === 'Pending');
     const upcomingValidations = validations.filter(validation => validation.status === 'Upcoming');
+    const ongoingValidations = validations.filter(validation => validation.status === 'Ongoing');
     const doneValidations = validations.filter(validation => validation.status === 'Done');
 
     return (
         <>
             <div className="p-6 bg-white rounded-lg shadow-md ">
-                <div className='flex justify-between items-center'>
-                    <h2 className="text-2xl font-bold mb-4 text-blue-600">Validation</h2>
-                    <div>
-                        <button
-                            className="bg-blue-600 text-white py-2 px-4 rounded"
-                            onClick={handleButtonClick}
-                        >
-                            Create Validation
-                        </button>
+                <div className='flex flex-col justify-between items-start'>
+                    <div className='flex justify-between items-center w-full'>
+                        <div>
+                            <h2 className="text-2xl font-bold text-blue-600">Validation</h2>
+                            <p className="text-gray-700 mb-4">
+                                This page allows you to manage and review validation results for your scholarship programs.
+                                You can approve or reject validation results, and keep track of the status of each validation.
+                            </p>
+                        </div>
+                        <div>
+                            <button
+                                className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+                                onClick={handleButtonClick}
+                            >
+                                Create Validation
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -430,11 +468,94 @@ export default function Validation() {
                                         </button>
                                         {validation.status === 'Upcoming' && (
                                             <button
+                                                className="bg-green-600 text-white py-2 px-4 rounded flex items-center hover:bg-green-700 transition duration-300"
+                                                onClick={() => handleStartValidation(validation._id)}
+                                            >
+                                                <FaPlay className="mr-2" />
+                                                <span>Start Validation</span>
+                                            </button>
+                                        )}
+                                    </div>
+                                    <div className='text-right'>
+                                        {validation.datePosted && (
+                                            <p className='text-gray-600'>
+                                                Date Posted: {new Date(validation.datePosted).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {new Date(validation.datePosted).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+
+                {/* Ongoing Document Validation Content */}
+                <h3 className='text-xl font-bold tracking-wide mt-4'>Ongoing Document Validation</h3>
+                <div className="p-6">
+                    {ongoingValidations.length === 0 ? (
+                        <p className='bg-slate-200 text-slate-600 px-8 py-4 rounded-md text-left'>No ongoing document validations at the moment.</p>
+                    ) : (
+                        ongoingValidations.map((validation) => (
+                            <div key={validation._id} className='bg-white border-l-4 border-l-blue-500 text-black-700 p-6 rounded-md border shadow relative mb-6'>
+                                <div className='flex justify-between items-center mb-4'>
+                                    <h3 className='text-xl font-semibold'>{validation.validationTitle}</h3>
+                                    <span className={`inline-block px-3 py-1 rounded-full text-white ${validation.status === 'posted' ? 'bg-green-600' : 'bg-blue-600'}`}>
+                                        Status: {validation.status}
+                                    </span>
+                                </div>
+                                <p className='mb-4 text-gray-700'>{validation.validationDescription}</p>
+                                <div className='mb-4'>
+                                    <p className='font-medium text-gray-800'>Requirements Needed:</p>
+                                    <ul className='list-disc pl-5'>
+                                        {validation.requirements.map((req, index) => (
+                                            <li key={index} className='mb-2 text-gray-700'>
+                                                {req.requirement}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <div className='mb-4'>
+                                    <p className='font-medium text-gray-800'>Validation Method: {validation.validationMethod}</p>
+                                    {validation.validationMethod === 'Face-to-Face' && validation.faceToFaceDetails && (
+                                        <div className='pl-5 mt-2'>
+                                            <p className='text-gray-700'>Date & Time: {validation.faceToFaceDetails.sessionDate}</p>
+                                            <p className='text-gray-700'>Location: {validation.faceToFaceDetails.location}</p>
+                                        </div>
+                                    )}
+                                    {validation.validationMethod === 'Courier-Based' && validation.courierDetails && (
+                                        <div className='pl-5 mt-2'>
+                                            <p className='text-gray-700'>Mailing Address: {validation.courierDetails.mailingAddress}</p>
+                                            <p className='text-gray-700'>Recipient Name: {validation.courierDetails.recipientName}</p>
+                                            <p className='text-gray-700'>Recipient Contact: {validation.courierDetails.recipientContact}</p>
+                                            <p className='text-gray-700'>Submission Deadline: {new Date(validation.courierDetails.submissionDeadline).toLocaleDateString()}</p>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="flex justify-between items-end mt-4">
+                                    <div className="flex space-x-4">
+                                        <button
+                                            className="bg-yellow-600 text-white py-2 px-4 rounded flex items-center hover:bg-yellow-700 transition duration-300"
+                                            onClick={() => handleEditValidation(validation._id)}
+                                        >
+                                            <FaEdit className="mr-2" />
+                                            <span>Edit</span>
+                                        </button>
+                                        {validation.status === 'Upcoming' && (
+                                            <button
                                                 className="bg-red-600 text-white py-2 px-4 rounded flex items-center hover:bg-red-700 transition duration-300"
                                                 onClick={() => handleMarkAsDone(validation._id)}
                                             >
                                                 <FaCheck className="mr-2" />
                                                 <span>Mark as Done</span>
+                                            </button>
+                                        )}
+                                        {validation.status === 'Ongoing' && (
+                                            <button
+                                                className="bg-blue-600 text-white py-2 px-4 rounded flex items-center hover:bg-blue-700 transition duration-300"
+                                                onClick={() => handleManageValidation(validation._id)}
+                                            >
+                                                <FaCog className="mr-2" />
+                                                <span>Manage Validation</span>
                                             </button>
                                         )}
                                     </div>

@@ -12,7 +12,8 @@ const validationSchema = new mongoose.Schema({
   datePosted: { type: Date },
   dateDone: { type: Date },
   scholarshipProgram: { type: mongoose.Schema.Types.ObjectId, ref: 'ScholarshipProgram', required: true },
-  status: { type: String, enum: ['Posted', 'Pending', 'Upcoming', 'Done', 'Deleted'], default: 'Pending' },
+  status: { type: String, enum: ['Pending', 'Upcoming', 'Ongoing', 'Done', 'Deleted'], default: 'Pending'
+  },
   validationMethod: { type: String, enum: ['Face-to-Face', 'Courier-Based'], required: true },
   faceToFaceDetails: {
     sessionDate: { type: String }, // Optional field for Face-to-Face
