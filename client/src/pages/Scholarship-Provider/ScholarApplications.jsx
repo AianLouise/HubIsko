@@ -97,7 +97,7 @@ export default function ScholarApplications() {
           </div>
         </div>
 
-        <div className="max-w-8xl mx-auto px-24 flex-col flex">
+        <div className="max-w-8xl mx-auto px-24 flex-col flex min-h-screen py-4">
           <div className="flex justify-between items-center gap-4">
             <div className='flex gap-2 font-medium text-sm'>
               <button
