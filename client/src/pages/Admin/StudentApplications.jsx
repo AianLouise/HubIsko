@@ -165,8 +165,8 @@ export default function StudentApplications() {
                             </button>
                         </div>
 
-                        <table className="w-full mt-4 border border-gray-200 bg-white rounded-lg shadow-md">
-                            <thead className="bg-slate-100 rounded-t-lg">
+                        <table className="w-full mt-4 border border-gray-200 bg-white rounded-lg shadow-md text-center">
+                            <thead className="bg-slate-100">
                                 <tr>
                                     <th className="border border-gray-200 p-2">Student Name</th>
                                     <th className="border border-gray-200 p-2">Email</th>
@@ -175,7 +175,7 @@ export default function StudentApplications() {
                                     <th className="border border-gray-200 p-2">Action</th>
                                 </tr>
                             </thead>
-                            <tbody className="text-center rounded-b-lg">
+                            <tbody>
                                 {filteredStudents.length === 0 ? (
                                     <tr>
                                         <td colSpan="5" className="p-4">
@@ -186,9 +186,9 @@ export default function StudentApplications() {
                                     </tr>
                                 ) : (
                                     filteredStudents.map((student) => (
-                                        <tr key={student._id} className="divide-x hover:bg-gray-100">
+                                        <tr key={student._id} className="hover:bg-gray-100">
                                             <td className="p-2">
-                                                <div className="flex gap-2 items-center">
+                                                <div className="flex gap-2 items-center justify-center">
                                                     <img src={student.profilePicture} alt="Profile" className="rounded-full h-6 w-6" />
                                                     {student.applicantDetails.firstName} {student.applicantDetails.lastName}
                                                 </div>

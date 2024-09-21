@@ -166,19 +166,17 @@ export default function ScholarshipProviderApplications() {
                             </button>
                         </div>
 
-                        <table className="w-full mt-4 border border-gray-200 bg-white rounded-lg shadow-md">
-                            <thead className="bg-slate-100 rounded-t-lg">
+                        <table className="w-full mt-4 border border-gray-200 bg-white rounded-lg shadow-md text-center">
+                            <thead className="bg-slate-100">
                                 <tr>
                                     <th className="border border-gray-200 p-2">Organization Name</th>
                                     <th className="border border-gray-200 p-2">Organization Type</th>
                                     <th className="border border-gray-200 p-2">Email</th>
-                                    <th className="border border-gray-200 p-2">Contact Person</th>
-                                    <th className="border border-gray-200 p-2">Position</th>
                                     <th className="border border-gray-200 p-2">Status</th>
                                     <th className="border border-gray-200 p-2">Action</th>
                                 </tr>
                             </thead>
-                            <tbody className="text-center rounded-b-lg">
+                            <tbody>
                                 {filteredProviders.length === 0 ? (
                                     <tr>
                                         <td colSpan="7" className="p-4">
@@ -189,17 +187,15 @@ export default function ScholarshipProviderApplications() {
                                     </tr>
                                 ) : (
                                     filteredProviders.map((provider) => (
-                                        <tr key={provider._id} className="divide-x hover:bg-gray-100">
+                                        <tr key={provider._id} className="hover:bg-gray-100">
                                             <td className="p-2">
-                                                <div className="flex gap-2 items-center">
+                                                <div className="flex gap-2 items-center justify-center">
                                                     <img src={provider.profilePicture} alt="Profile" className="rounded-full h-6 w-6" />
                                                     {provider.scholarshipProviderDetails.organizationName}
                                                 </div>
                                             </td>
                                             <td className="p-2">{provider.scholarshipProviderDetails.organizationType}</td>
                                             <td className="p-2">{provider.email}</td>
-                                            <td className="p-2">{provider.scholarshipProviderDetails.contactPersonName}</td>
-                                            <td className="p-2">{provider.scholarshipProviderDetails.contactPersonPosition}</td>
                                             <td className="p-4">
                                                 <span className={`inline-block w-3 h-3 mr-2 rounded-full ${getStatusColor(provider.status)}`}></span>
                                                 {toSentenceCase(provider.status)}
