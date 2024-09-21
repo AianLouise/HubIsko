@@ -616,44 +616,48 @@ export default function CompleteProfile() {
                 </select>
               </div>
 
-              <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Maiden Name</label>
-                <input
-                  type="text"
-                  name="maidenName"
-                  value={formData.maidenName}
-                  onChange={handleChange}
-                  placeholder="Enter maiden name"
-                  disabled={isSingleWidowedOrDivorced}
-                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
-                />
-              </div>
+              {!isSingleWidowedOrDivorced && (
+                <>
+                  <div>
+                    <label className='block text-sm font-medium text-gray-700 mb-2'>Maiden Name</label>
+                    <input
+                      type="text"
+                      name="maidenName"
+                      value={formData.maidenName}
+                      onChange={handleChange}
+                      placeholder="Enter maiden name"
+                      disabled={isSingleWidowedOrDivorced}
+                      className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
+                    />
+                  </div>
 
-              <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Name of Spouse</label>
-                <input
-                  type="text"
-                  name="spouseName"
-                  value={formData.spouseName}
-                  onChange={handleChange}
-                  placeholder="Enter name of spouse"
-                  disabled={isSingleWidowedOrDivorced}
-                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
-                />
-              </div>
+                  <div>
+                    <label className='block text-sm font-medium text-gray-700 mb-2'>Name of Spouse</label>
+                    <input
+                      type="text"
+                      name="spouseName"
+                      value={formData.spouseName}
+                      onChange={handleChange}
+                      placeholder="Enter name of spouse"
+                      disabled={isSingleWidowedOrDivorced}
+                      className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
+                    />
+                  </div>
 
-              <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation of Spouse</label>
-                <input
-                  type="text"
-                  name="spouseOccupation"
-                  value={formData.spouseOccupation}
-                  onChange={handleChange}
-                  placeholder="Enter occupation of spouse"
-                  disabled={isSingleWidowedOrDivorced}
-                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
-                />
-              </div>
+                  <div>
+                    <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation of Spouse</label>
+                    <input
+                      type="text"
+                      name="spouseOccupation"
+                      value={formData.spouseOccupation}
+                      onChange={handleChange}
+                      placeholder="Enter occupation of spouse"
+                      disabled={isSingleWidowedOrDivorced}
+                      className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
+                    />
+                  </div>
+                </>
+              )}
 
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>Religion</label>
@@ -723,8 +727,8 @@ export default function CompleteProfile() {
                   onChange={handleChange}
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter contact number"
-                  minLength="11"
                   maxLength="11"
+                  pattern="\d{11}"
                   title="Please enter a valid 11-digit phone number"
                   required
                 />
