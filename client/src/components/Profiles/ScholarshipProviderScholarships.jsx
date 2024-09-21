@@ -62,9 +62,9 @@ const ScholarshipProviderScholarships = ({ userId }) => {
           <p>No scholarships available at the moment.</p>
         </div>
       ) : (
-        filteredScholarships.map((scholarship) => (
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-700 pb-12'>
-            <div key={scholarship.id} className='border bg-white rounded-lg pt-4 px-4 shadow-sm gap-2 mb-10 hover:-translate-y-1 transition ease-in-out'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-700 pb-12'>
+          {filteredScholarships.map((scholarship) => (
+            <div key={scholarship._id} className='border bg-white rounded-lg pt-4 px-4 shadow-sm gap-2 mb-10 hover:-translate-y-1 transition ease-in-out'>
               <div className='flex flex-row items-center justify-start px-5 mt-5'>
                 <div className='lg:hidden flex-shrink-0'>
                   <div className='rounded-full w-14 h-14 overflow-hidden border-2 border-blue-500'>
@@ -146,11 +146,10 @@ const ScholarshipProviderScholarships = ({ userId }) => {
                 </Link>
               </div>
             </div>
-          </div>
-        ))
+          ))}
+        </div>
       )}
     </div>
-
   );
 };
 

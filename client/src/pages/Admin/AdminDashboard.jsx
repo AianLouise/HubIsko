@@ -114,7 +114,10 @@ export default function AdminDashboard() {
     const formattedDate = currentDate.toLocaleDateString();
     const formattedTime = currentDate.toLocaleTimeString();
 
-
+    const handleViewClick = (e) => {
+        e.stopPropagation(); // Prevent the outer link from being triggered
+        navigate('/application-inbox');
+      };
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -161,10 +164,10 @@ export default function AdminDashboard() {
                                         <span className="text-base text-slate-500 flex gap-3">
                                             {pendingProviders + pendingStudents} <span>Pending verification</span>
                                         </span>
-                                        <Link to={'/application-inbox'} className="hidden group-hover:flex gap-2 items-center text-blue-600">
+                                        <div onClick={handleViewClick} className="hidden group-hover:flex gap-2 items-center text-blue-600 cursor-pointer">
                                             View
                                             <IoMdArrowRoundForward className="w-6 h-6" />
-                                        </Link>
+                                        </div>
                                     </div>
                                 </div>
                             </Link>

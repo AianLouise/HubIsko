@@ -93,7 +93,7 @@ export default function ProviderDetails() {
               className={`border text-center rounded-xl w-1/2 px-16 py-4 ${selectedTab === 'Posts' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
               onClick={() => handleTabClick('Posts')}
             >
-              Posts
+              Forum Posts
             </button>
           </div>
 

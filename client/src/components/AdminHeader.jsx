@@ -13,7 +13,7 @@ import { BsInboxFill } from "react-icons/bs";
 import { HiDocument } from "react-icons/hi2";
 import { FaGoogleScholar, FaGraduationCap } from "react-icons/fa6";
 import { FaFileCircleQuestion } from "react-icons/fa6";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from '../redux/user/userSlice';
 import Logo from '../assets/NewLogoClean.png';
@@ -24,6 +24,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
     const [isAccountsDropdownOpen, setIsAccountsDropdownOpen] = useState(false);
     const [isInboxDropdownOpen, setIsInboxDropdownOpen] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
 
     const toggleAccountsDropdown = () => {
         setIsAccountsDropdownOpen(!isAccountsDropdownOpen);
