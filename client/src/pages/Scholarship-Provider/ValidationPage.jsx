@@ -6,12 +6,14 @@ import { FaCheckCircle, FaPaperPlane, FaTrashAlt } from "react-icons/fa";
 import { MdPending } from "react-icons/md";
 import { FaClock } from "react-icons/fa6";
 import Modal from 'react-modal';
+import { useNavigate } from "react-router-dom";
 
 Modal.setAppElement('#root'); // Set the app element for accessibility
 
 export default function ValidationPage() {
     const currentUser = useSelector((state) => state.user.currentUser);
     const providerId = currentUser._id;
+    const navigate = useNavigate();
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [validations, setValidations] = useState([]);
@@ -149,18 +151,18 @@ export default function ValidationPage() {
                                             />
                                             <h3 className="text-sm font-medium">{validation.validationTitle}</h3>
                                         </div>
-
                                         <div className="flex items-center">
                                             <span className={`p-1 rounded-full text-white flex items-center gap-1 
-                                                ${validation.status === 'Upcoming' ? 'bg-blue-500'
-                                                    : validation.status === 'Completed' ? 'bg-green-500'
-                                                        : validation.status === 'Posted' ? 'bg-purple-500'
-                                                            : validation.status === 'Deleted' ? 'bg-red-500'
-                                                                : 'bg-yellow-500'}`}>
-                                                {validation.status === 'Upcoming' && <MdPending className="w-4 h-4" />}
-                                                {validation.status === 'Done' && <FaCheckCircle className="w-4 h-4" />}
+                                                ${validation.status === 'Pending' ? 'bg-yellow-500'
+                                                    : validation.status === 'Upcoming' ? 'bg-blue-500'
+                                                        : validation.status === 'Ongoing' ? 'bg-orange-500'
+                                                            : validation.status === 'Done' ? 'bg-green-500'
+                                                                : validation.status === 'Deleted' ? 'bg-red-500'
+                                                                    : 'bg-gray-500'}`}>
                                                 {validation.status === 'Pending' && <FaClock className="w-4 h-4" />}
-                                                {validation.status === 'Posted' && <FaPaperPlane className="w-4 h-4" />}
+                                                {validation.status === 'Upcoming' && <MdPending className="w-4 h-4" />}
+                                                {validation.status === 'Ongoing' && <FaClock className="w-4 h-4" />}
+                                                {validation.status === 'Done' && <FaCheckCircle className="w-4 h-4" />}
                                                 {validation.status === 'Deleted' && <FaTrashAlt className="w-4 h-4" />}
                                             </span>
                                         </div>
@@ -243,7 +245,16 @@ export default function ValidationPage() {
                                     </table>
                                 </div>
                             </div>
+                            <div className="flex justify-end">
+                                <button
+                                    onClick={() => navigate(`/validation/${selectedValidation}/scholars`)} // Navigate to validation result
+                                    className='bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-800'
+                                >
+                                    Mark as Done
+                                </button>
+                            </div>
                         </div>
+
                     </div>
                 </div>
 

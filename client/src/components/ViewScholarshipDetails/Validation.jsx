@@ -289,6 +289,11 @@ export default function Validation() {
         navigate(`/validation/${validationId}/scholars`);
     };
 
+    const handleViewValidationResult = (validationId) => {
+        // Navigate to the validation result page for the specific validation
+        navigate(`/validation/${validationId}/scholars`);
+    };
+
     const [requirements, setRequirements] = useState([]);
     const [requirementInput, setRequirementInput] = useState('');
     const [showInput, setShowInput] = useState(false);
@@ -572,7 +577,7 @@ export default function Validation() {
                     )}
                 </div>
 
-                {/* Previous Document Validation Content */}
+                                {/* Previous Document Validation Content */}
                 <h3 className='text-xl font-bold tracking-wide mt-4'>Previous Document Validation</h3>
                 <div className="p-6">
                     {doneValidations.length === 0 ? (
@@ -616,7 +621,13 @@ export default function Validation() {
                                 </div>
                                 <div className="flex justify-between items-end mt-4">
                                     <div className="flex space-x-4">
-                                        {/* No actions for previous validations */}
+                                        {/* View Validation Result Button */}
+                                        <button
+                                            className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600'
+                                            onClick={() => handleViewValidationResult(validation._id)}
+                                        >
+                                            View Validation Result
+                                        </button>
                                     </div>
                                     <div className='text-right'>
                                         {validation.dateDone && (

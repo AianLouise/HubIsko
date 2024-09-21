@@ -144,11 +144,13 @@ const ValidationResult = () => {
                             Mark as Done
                         </button>
                     </div>
-                    {errorMessage && (
-                        <div className="mb-4 text-red-600">
-                            {errorMessage}
-                        </div>
-                    )}
+                    <div className="flex justify-end">
+                        {errorMessage && (
+                            <div className="mb-4 text-red-600">
+                                {errorMessage}
+                            </div>
+                        )}
+                    </div>
 
                     <div key={validation._id} className='bg-white border-l-4 border-l-blue-500 text-black-700 p-6 rounded-md border shadow relative mb-6'>
                         <div className='flex justify-between items-center mb-4'>
@@ -260,7 +262,15 @@ const ValidationResult = () => {
                         <h2 className="text-xl font-semibold mb-4 text-gray-900">
                             {modalAction} Validation Result
                         </h2>
-                        <p className="text-gray-600">Are you sure you want to {modalAction} this validation result?</p>
+                        {modalAction === 'Reject' && (
+                            <p className="text-gray-600">Are you sure you want to reject this scholar?</p>
+                        )}
+                        {modalAction === 'Approve' && (
+                            <p className="text-gray-600">Are you sure you want to approve this scholar?</p>
+                        )}
+                        {modalAction === 'Mark as Done' && (
+                            <p className="text-gray-600">Please confirm that you want to mark this validation result as done.</p>
+                        )}
                         {modalAction === 'Reject' && (
                             <div className="mt-4">
                                 <label htmlFor="feedback" className="block text-sm font-medium text-gray-700 mb-1">
@@ -274,11 +284,6 @@ const ValidationResult = () => {
                                     onChange={(e) => setFeedback(e.target.value)}
                                     placeholder="Provide feedback on the rejection here..."
                                 />
-                            </div>
-                        )}
-                        {modalAction === 'Mark as Done' && (
-                            <div className="mt-4">
-                                <p className="text-gray-600">Please confirm that you want to mark this validation result as done.</p>
                             </div>
                         )}
                         <div className="mt-6 flex justify-end space-x-2">
