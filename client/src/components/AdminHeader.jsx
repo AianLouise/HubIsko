@@ -120,7 +120,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                 setPendingApprovalCount(data.scholarshipProgramCount);
                 setTotalPendingCount(data.userCount + data.scholarshipProgramCount);
             } catch (error) {
-                console.error('Error fetching pending counts:', error);
+                // console.error('Error fetching pending counts:', error);
             }
         };
 

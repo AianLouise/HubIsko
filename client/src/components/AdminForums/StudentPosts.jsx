@@ -1,19 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AdminForumViews from './AdminForumViews';
 
+const StudentPosts = ({ isGridView, currentPage, handlePageChange, itemsPerGrid, itemsPerPage }) => {
+  const [studentPostsData, setStudentPostsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-export const studentPostsData = [
-    { id: 1, title: "Student Post 1", description: "Description for Student Post 1", date: "2023-10-01" },
-    { id: 2, title: "Student Post 2", description: "Description for Student Post 2", date: "2023-10-02" },
-    { id: 3, title: "Student Post 3", description: "Description for Student Post 3", date: "2023-10-03" },
-    { id: 4, title: "Student Post 4", description: "Description for Student Post 4", date: "2023-10-04" },
-    { id: 5, title: "Student Post 5", description: "Description for Student Post 5", date: "2023-10-05" },
-    { id: 6, title: "Student Post 6", description: "Description for Student Post 6", date: "2023-10-06" },
-    { id: 7, title: "Student Post 7", description: "Description for Student Post 7", date: "2023-10-07" },
-    { id: 8, title: "Student Post 8", description: "Description for Student Post 8", date: "2023-10-08" },
-  ];
+  useEffect(() => {
+    const fetchStudentPosts = async () => {
+      try {
+        const response = await fetch('/api/adminForums/applicant-forum-posts'); // Fetch data from the backend
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setStudentPostsData(data);
+        setLoading(false);
+      } catch (error) {
+        setError(error.message);
+        setLoading(false);
+      }
+    };
 
-  const StudentPosts = ({ isGridView, currentPage, handlePageChange, itemsPerGrid, itemsPerPage }) => {
+    fetchStudentPosts();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   const paginatedData = studentPostsData.slice((currentPage - 1) * (isGridView ? itemsPerGrid : itemsPerPage), currentPage * (isGridView ? itemsPerGrid : itemsPerPage));
 
   return (

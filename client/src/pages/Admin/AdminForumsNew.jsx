@@ -1,22 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdClearAll } from "react-icons/md";
 import { PiStudentFill } from "react-icons/pi";
 import { FaBuilding, FaWrench } from "react-icons/fa6";
 import { IoMegaphoneSharp } from "react-icons/io5";
 import { FaList } from "react-icons/fa";
 import { BsFillGridFill } from "react-icons/bs";
-import AllPosts, { allPostsData } from "../../components/AdminForums/Allposts";
-import StudentPosts, { studentPostsData } from "../../components/AdminForums/StudentPosts";
-import ProviderPosts, { ProviderPostsData } from "../../components/AdminForums/ProviderPosts";
-import AnnouncementsPosts, { AnnouncementsPostsData } from "../../components/AdminForums/AnnouncementPosts";
-import AdminPosts, { adminPostsData } from "../../components/AdminForums/AdminPosts";
+import AllPosts from "../../components/AdminForums/Allposts";
+import StudentPosts from "../../components/AdminForums/StudentPosts";
+import ProviderPosts from "../../components/AdminForums/ProviderPosts";
+import AnnouncementsPosts from "../../components/AdminForums/AnnouncementPosts";
+import AdminPosts from "../../components/AdminForums/AdminPosts";
 
 export default function AdminForumsNew() {
   const [isGridView, setIsGridView] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedView, setSelectedView] = useState("All Posts");
+  const [totalPosts, setTotalPosts] = useState(0);
   const itemsPerPage = 6;
   const itemsPerGrid = 6;
+
+  useEffect(() => {
+    const fetchTotalPosts = async () => {
+      try {
+        const response = await fetch('/api/adminForums/forum-posts'); // Fetch all posts from the backend
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setTotalPosts(data.length); // Set the total number of posts
+      } catch (error) {
+        console.error('Error fetching total posts:', error);
+      }
+    };
+
+    fetchTotalPosts();
+  }, []);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -45,7 +63,7 @@ export default function AdminForumsNew() {
           />
         );
       case "Provider Posts":
-        return <ProviderPosts 
+        return <ProviderPosts
           isGridView={isGridView}
           currentPage={currentPage}
           handlePageChange={handlePageChange}
@@ -53,7 +71,7 @@ export default function AdminForumsNew() {
           itemsPerPage={itemsPerPage}
         />;
       case "Announcements":
-        return <AnnouncementsPosts 
+        return <AnnouncementsPosts
           isGridView={isGridView}
           currentPage={currentPage}
           handlePageChange={handlePageChange}
@@ -61,33 +79,16 @@ export default function AdminForumsNew() {
           itemsPerPage={itemsPerPage}
         />;
       case "Admin Posts":
-        return <AdminPosts 
+        return <AdminPosts
           isGridView={isGridView}
           currentPage={currentPage}
           handlePageChange={handlePageChange}
           itemsPerGrid={itemsPerGrid}
           itemsPerPage={itemsPerPage}
-        
+
         />;
       default:
         return <AllPosts />;
-    }
-  };
-
-  const getTotalPosts = () => {
-    switch (selectedView) {
-      case "All Posts":
-        return allPostsData.length;
-      case "Student Posts":
-        return studentPostsData.length;
-      case "Provider Posts":
-        return ProviderPostsData.length;
-      case "Announcements":
-        return AnnouncementsPostsData.length;
-      case "Admin Posts":
-        return adminPostsData.length;
-      default:
-        return 0;
     }
   };
 
@@ -149,12 +150,12 @@ export default function AdminForumsNew() {
                 </div>
               </div>
 
-              <span>Posts: {getTotalPosts()}</span>
+              <span>Posts: {totalPosts}</span>
             </div>
 
             {/* Section 2 */}
             <div className="flex flex-col gap-4 w-5/6 h-full">
-       
+
               <h1 className="text-2xl font-bold border-b pb-2 text-slate-900 tracking-wide">
                 {selectedView}
               </h1>
@@ -187,22 +188,22 @@ export default function AdminForumsNew() {
               {renderSelectedView()}
             </div>
           </div>
-            
-            <div className="flex flex-col gap-4">
-                <span className="border-b pb-2">Forum Activity</span>
 
-                <div className="flex flex-col divide-y border shadow bg-white p-4 rounded-md">
-                    <div className="flex items-center py-4 gap-2">
-                      <div className="bg-blue-600 w-10 h-10 rounded-full"></div>
-                      <span>Name posted: <span className="text-blue-600">Title of the post</span></span>
-                    </div>
+          <div className="flex flex-col gap-4">
+            <span className="border-b pb-2">Forum Activity</span>
 
-                    <div className="flex items-center py-4 gap-2">
-                      <div className="bg-blue-600 w-10 h-10 rounded-full"></div>
-                      <span>Name commented on: <span className="text-blue-600">Title of the post</span></span>
-                    </div>
-                </div>
+            <div className="flex flex-col divide-y border shadow bg-white p-4 rounded-md">
+              <div className="flex items-center py-4 gap-2">
+                <div className="bg-blue-600 w-10 h-10 rounded-full"></div>
+                <span>Name posted: <span className="text-blue-600">Title of the post</span></span>
+              </div>
+
+              <div className="flex items-center py-4 gap-2">
+                <div className="bg-blue-600 w-10 h-10 rounded-full"></div>
+                <span>Name commented on: <span className="text-blue-600">Title of the post</span></span>
+              </div>
             </div>
+          </div>
         </div>
       </main>
     </div>
