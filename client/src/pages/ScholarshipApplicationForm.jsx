@@ -560,27 +560,26 @@ const ScholarshipApplicationForm = () => {
 
                 // Validate work experience
                 formData.workExperience.forEach((work, index) => {
+                    // Validate the first work experience's details
                     if (index === 0) {
-                        // Validate the first work experience's details
-                        if (!work.companyName || work.companyName.trim() === '') {
-                            errors[`workCompanyName${index}`] = `Work experience ${index + 1}'s company name is required`;
-                        }
-                        if (!work.position || work.position.trim() === '') {
-                            errors[`workPosition${index}`] = `Work experience ${index + 1}'s position is required`;
-                        }
-                        if (!work.startDate) {
-                            errors[`workStartDate${index}`] = `Work experience ${index + 1}'s start date is required`;
-                        } else {
-                            const today = new Date().toISOString().split('T')[0];
-                            if (work.startDate > today) {
-                                errors[`workStartDate${index}`] = `Work experience ${index + 1}'s start date cannot be in the future`;
+                        if (work.companyName && work.companyName.trim() !== '') {
+                            if (!work.position || work.position.trim() === '') {
+                                errors[`workPosition${index}`] = `Work experience ${index + 1}'s position is required`;
                             }
-                        }
-                        if (!work.monthlySalary || work.monthlySalary.trim() === '') {
-                            errors[`workMonthlySalary${index}`] = `Work experience ${index + 1}'s monthly salary is required`;
-                        }
-                        if (!work.statusOfAppointment || work.statusOfAppointment.trim() === '') {
-                            errors[`workStatusOfAppointment${index}`] = `Work experience ${index + 1}'s status of appointment is required`;
+                            if (!work.startDate) {
+                                errors[`workStartDate${index}`] = `Work experience ${index + 1}'s start date is required`;
+                            } else {
+                                const today = new Date().toISOString().split('T')[0];
+                                if (work.startDate > today) {
+                                    errors[`workStartDate${index}`] = `Work experience ${index + 1}'s start date cannot be in the future`;
+                                }
+                            }
+                            if (!work.monthlySalary || work.monthlySalary.trim() === '') {
+                                errors[`workMonthlySalary${index}`] = `Work experience ${index + 1}'s monthly salary is required`;
+                            }
+                            if (!work.statusOfAppointment || work.statusOfAppointment.trim() === '') {
+                                errors[`workStatusOfAppointment${index}`] = `Work experience ${index + 1}'s status of appointment is required`;
+                            }
                         }
                     } else {
                         // Validate the rest of the work experiences' details only if they have been filled out
@@ -737,7 +736,7 @@ const ScholarshipApplicationForm = () => {
     return (
         <div className={`flex flex-col min-h-screen`}>
             <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''}`}>
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 mt-10">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 mt-10 min-h-screen">
                     {scholarship && (
                         <div className="scholarship-info mb-4 p-6 bg-white rounded-lg shadow-md">
                             <div className="flex items-center">
@@ -792,7 +791,7 @@ const ScholarshipApplicationForm = () => {
                     </div>
 
 
-                    <div className='lg:hidden flex flex-col'>
+                    <div className='lg:hidden flex flex-col min-h-screen'>
                         <div className='flex justify-between items-center px-6 py-2 text-sm text-slate-500'>
                             <span>Requirement</span>
                             <span>Stages</span>

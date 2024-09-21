@@ -196,20 +196,23 @@ const Step2 = ({ formData, setFormData, errors }) => {
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No.</label>
                 <input
-                  type="tel"
+                  type="number"
                   name="contactNo"
                   value={formData.father.contactNo}
                   onChange={(e) => handleChange(e, 'father')}
+                  onInput={(e) => {
+                    if (e.target.value.length > 11) {
+                      e.target.value = e.target.value.slice(0, 11);
+                    }
+                  }}
                   required
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter contact number"
+                  maxLength="11"
+                  title="Please enter a valid 11-digit phone number"
                 />
               </div>
             </div>
-
-
-
-
 
             <span className='text-lg font-bold mt-8 block'>Mother's Information</span>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
@@ -302,13 +305,20 @@ const Step2 = ({ formData, setFormData, errors }) => {
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No.</label>
                 <input
-                  type="tel"
+                  type="number"
                   name="contactNo"
                   value={formData.mother.contactNo}
                   onChange={(e) => handleChange(e, 'mother')}
+                  onInput={(e) => {
+                    if (e.target.value.length > 11) {
+                      e.target.value = e.target.value.slice(0, 11);
+                    }
+                  }}
                   required
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter contact number"
+                  maxLength="11"
+                  title="Please enter a valid 11-digit phone number"
                 />
               </div>
             </div>
@@ -323,18 +333,6 @@ const Step2 = ({ formData, setFormData, errors }) => {
           <div className='p-4'>
 
             <span className='text-lg font-bold mt-8 block'>Guardian's Information</span>
-            <div className='mt-4'>
-              {/* <label className='block text-sm font-medium text-gray-700 mb-2'>
-                                        <input
-                                            type="checkbox"
-                                            name="sameAsParents"
-                                            checked={sameAsParents}
-                                            onChange={handleCheckboxChange}
-                                            className='mr-2'
-                                        />
-                                        Same as parents
-                                    </label> */}
-            </div>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
