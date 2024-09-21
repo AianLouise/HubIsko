@@ -29,6 +29,10 @@ export default function StudentApplicationDetails() {
             }
             const data = await response.json();
             setStudent(data.student);
+            setSelectedRegion(data.student.applicantDetails.address.region);
+            setSelectedProvince(data.student.applicantDetails.address.province);
+            setSelectedCity(data.student.applicantDetails.address.city);
+            setSelectedBarangay(data.student.applicantDetails.address.barangay);
             setLoading(false);
         } catch (error) {
             setError(error.message);
@@ -174,21 +178,6 @@ export default function StudentApplicationDetails() {
             barangay: barangayName,
         });
     }, [selectedRegion, selectedProvince, selectedCity, selectedBarangay, regionList, provinceList, cityList, barangayList]);
-
-    // Set dummy data for location
-    useEffect(() => {
-        const dummyData = {
-            region: '03',
-            province: '0349',
-            city: '034904',
-            barangay: '034904004',
-        };
-
-        setSelectedRegion(dummyData.region);
-        setSelectedProvince(dummyData.province);
-        setSelectedCity(dummyData.city);
-        setSelectedBarangay(dummyData.barangay);
-    }, []);
 
     if (loading) return (
         <div className="flex justify-center items-center h-screen">
@@ -366,7 +355,7 @@ export default function StudentApplicationDetails() {
                                 <div className="">
                                     <label className="block text-sm text-slate-600">Address Details</label>
                                     <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
-                                        {student?.applicantDetails?.address?.addressDetails || 'N/A'}
+                                        {student.applicantDetails.address.addressDetails || 'N/A'}
                                     </span>
                                 </div>
                             </div>

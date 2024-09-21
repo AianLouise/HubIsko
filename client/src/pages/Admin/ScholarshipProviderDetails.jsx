@@ -7,6 +7,7 @@ import Snackbar from '../../components/Snackbar';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import { FaFileAlt } from "react-icons/fa";
 import { BsBuildingFill } from "react-icons/bs";
+import { regions, provinces, cities, barangays } from 'select-philippines-address';
 
 export default function ScholarshipsProviderDetails() {
     const { id } = useParams();
@@ -30,12 +31,16 @@ export default function ScholarshipsProviderDetails() {
             }
             const data = await response.json();
             setProvider(data.provider);
+            setSelectedRegion(data.provider.scholarshipProviderDetails.region);
+            setSelectedProvince(data.provider.scholarshipProviderDetails.province);
+            setSelectedCity(data.provider.scholarshipProviderDetails.city);
+            setSelectedBarangay(data.provider.scholarshipProviderDetails.barangay);
             setLoading(false);
         } catch (error) {
             setError(error.message);
             setLoading(false);
         }
-    };
+    };                           
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -103,7 +108,80 @@ export default function ScholarshipsProviderDetails() {
         setRejectReason(e.target.value);
     };
 
-    if (loading)  return (
+    const [regionList, setRegionList] = useState([]);
+    const [provinceList, setProvinceList] = useState([]);
+    const [cityList, setCityList] = useState([]);
+    const [barangayList, setBarangayList] = useState([]);
+
+    const [selectedRegion, setSelectedRegion] = useState('');
+    const [selectedProvince, setSelectedProvince] = useState('');
+    const [selectedCity, setSelectedCity] = useState('');
+    const [selectedBarangay, setSelectedBarangay] = useState('');
+
+    const [formData, setFormData] = useState({});
+    const [locationNames, setLocationNames] = useState({
+        region: '',
+        province: '',
+        city: '',
+        barangay: ''
+    });
+
+    // Fetch all regions on component mount
+    useEffect(() => {
+        regions().then(setRegionList);
+    }, []);
+
+    // Fetch provinces when a region is selected
+    useEffect(() => {
+        if (selectedRegion) {
+            provinces(selectedRegion).then(setProvinceList);
+        }
+    }, [selectedRegion]);
+
+    // Fetch cities when a province is selected
+    useEffect(() => {
+        if (selectedProvince) {
+            cities(selectedProvince).then(setCityList);
+        }
+    }, [selectedProvince]);
+
+    // Fetch barangays when a city is selected
+    useEffect(() => {
+        if (selectedCity) {
+            barangays(selectedCity).then(setBarangayList);
+        }
+    }, [selectedCity]);
+
+    // Save the selected location to the formData state
+    const handleSave = () => {
+        const locationData = {
+            region: selectedRegion,
+            province: selectedProvince,
+            city: selectedCity,
+            barangay: selectedBarangay,
+        };
+
+        console.log('Form Data:', locationData);
+
+        setFormData(locationData);
+    };
+
+    // Convert codes to names
+    useEffect(() => {
+        const regionName = regionList.find(region => region.region_code === selectedRegion)?.region_name || '';
+        const provinceName = provinceList.find(province => province.province_code === selectedProvince)?.province_name || '';
+        const cityName = cityList.find(city => city.city_code === selectedCity)?.city_name || '';
+        const barangayName = barangayList.find(barangay => barangay.brgy_code === selectedBarangay)?.brgy_name || '';
+
+        setLocationNames({
+            region: regionName,
+            province: provinceName,
+            city: cityName,
+            barangay: barangayName,
+        });
+    }, [selectedRegion, selectedProvince, selectedCity, selectedBarangay, regionList, provinceList, cityList, barangayList]);
+
+    if (loading) return (
         <div className="flex justify-center items-center h-screen">
             <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
@@ -120,15 +198,15 @@ export default function ScholarshipsProviderDetails() {
             <main className="flex-grow bg-[#f8f8fb] pb-24">
                 <div className='max-w-8xl mx-auto px-24 flex-col flex mt-16'>
                     <div className="flex gap-2 items-center">
-                      <Link to={'/scholarship-provider-applications'} className="border shadow px-6 py-2 bg-white rounded-md hover:bg-slate-200 flex items-center gap-2">
-                        <FaFileAlt className="w-6 h-6 text-blue-600" />
-                        <span>Scholarship Provider Applications</span>
-                      </Link>
-                      <IoMdArrowDropdown className='-rotate-90 w-8 h-8 text-blue-600' />
-                      <div className="border shadow px-6 py-2 bg-white rounded-md flex items-center gap-2">
-                        <BsBuildingFill className="w-6 h-6 text-blue-600" />
-                        <span className="text-blue-600">{provider.scholarshipProviderDetails.organizationName}'s</span>
-                      </div>
+                        <Link to={'/scholarship-provider-applications'} className="border shadow px-6 py-2 bg-white rounded-md hover:bg-slate-200 flex items-center gap-2">
+                            <FaFileAlt className="w-6 h-6 text-blue-600" />
+                            <span>Scholarship Provider Applications</span>
+                        </Link>
+                        <IoMdArrowDropdown className='-rotate-90 w-8 h-8 text-blue-600' />
+                        <div className="border shadow px-6 py-2 bg-white rounded-md flex items-center gap-2">
+                            <BsBuildingFill className="w-6 h-6 text-blue-600" />
+                            <span className="text-blue-600">{provider.scholarshipProviderDetails.organizationName}'s</span>
+                        </div>
                     </div>
 
                     <div className="flex flex-col gap-10 p-8 w-full">
@@ -150,38 +228,6 @@ export default function ScholarshipsProviderDetails() {
                                     <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.scholarshipProviderDetails.registrationNumber}</span>
                                 </div>
                                 <div className="">
-                                    <label className="block text-sm font-medium text-slate-400">Contact Person Name</label>
-                                    <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.scholarshipProviderDetails.contactPersonName}</span>
-                                </div>
-                                <div className="">
-                                    <label className="block text-sm font-medium text-slate-400">Contact Person Position</label>
-                                    <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.scholarshipProviderDetails.contactPersonPosition}</span>
-                                </div>
-                                <div className="">
-                                    <label className="block text-sm font-medium text-slate-400">Contact Person Number</label>
-                                    <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.scholarshipProviderDetails.contactPersonNumber}</span>
-                                </div>
-                                <div className="">
-                                    <label className="block text-sm font-medium text-slate-400">Address Details</label>
-                                    <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.scholarshipProviderDetails.addressDetails}</span>
-                                </div>
-                                <div className="">
-                                    <label className="block text-sm font-medium text-slate-400">Region</label>
-                                    <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.scholarshipProviderDetails.region}</span>
-                                </div>
-                                <div className="">
-                                    <label className="block text-sm font-medium text-slate-400">Province</label>
-                                    <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.scholarshipProviderDetails.province}</span>
-                                </div>
-                                <div className="">
-                                    <label className="block text-sm font-medium text-slate-400">City</label>
-                                    <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.scholarshipProviderDetails.city}</span>
-                                </div>
-                                <div className="">
-                                    <label className="block text-sm font-medium text-slate-400">Barangay</label>
-                                    <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.scholarshipProviderDetails.barangay}</span>
-                                </div>
-                                <div className="">
                                     <label className="block text-sm font-medium text-slate-400">Website</label>
                                     <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.scholarshipProviderDetails.website}</span>
                                 </div>
@@ -189,15 +235,51 @@ export default function ScholarshipsProviderDetails() {
                         </div>
 
                         <div className="flex flex-col bg-white border p-4 py-6 rounded-md shadow">
-                            <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Contact Information</div>
-                            <div className="grid grid-cols-3 gap-8 p-4">
+                            <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Address</div>
+                            <div className="grid grid-cols-3 gap-8 my-4 py-4 px-8">
                                 <div className="">
-                                    <label className="block text-sm font-medium text-slate-400">Email Address</label>
-                                    <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.scholarshipProviderDetails.email}</span>
+                                    <label className="block text-sm text-slate-600">Region</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {locationNames.region}
+                                    </span>
                                 </div>
                                 <div className="">
-                                    <label className="block text-sm font-medium text-slate-400">Contact Person</label>
+                                    <label className="block text-sm text-slate-600">Province</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {locationNames.province}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">City</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {locationNames.city}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Barangay</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {locationNames.barangay}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Address Details</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {provider.scholarshipProviderDetails.addressDetails || 'N/A'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col bg-white border p-4 py-6 rounded-md shadow">
+                            <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Contact Person Information</div>
+                            <div className="grid grid-cols-3 gap-8 p-4">
+                                <div className="">
+                                    <label className="block text-sm font-medium text-slate-400">Name</label>
                                     <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.scholarshipProviderDetails.contactPersonName}</span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm font-medium text-slate-400">Position</label>
+                                    <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">{provider.scholarshipProviderDetails.contactPersonPosition}</span>
                                 </div>
                                 <div className="">
                                     <label className="block text-sm font-medium text-slate-400">Contact Number</label>
@@ -216,7 +298,7 @@ export default function ScholarshipsProviderDetails() {
                                             href={provider.scholarshipProviderDetails.documents.registrationCertificate}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="mt-1 block px-3 font-medium bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
+                                            className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
                                         >
                                             View Document
                                         </a>
@@ -232,7 +314,7 @@ export default function ScholarshipsProviderDetails() {
                                             href={provider.scholarshipProviderDetails.documents.tin}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="mt-1 block px-3 font-medium bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
+                                            className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
                                         >
                                             View Document
                                         </a>
@@ -248,7 +330,7 @@ export default function ScholarshipsProviderDetails() {
                                             href={provider.scholarshipProviderDetails.documents.proofOfAddress}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="mt-1 block px-3 font-medium bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
+                                            className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
                                         >
                                             View Document
                                         </a>
@@ -264,7 +346,7 @@ export default function ScholarshipsProviderDetails() {
                                             href={provider.scholarshipProviderDetails.documents.authorizationLetter}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="mt-1 block px-3 font-medium bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
+                                            className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
                                         >
                                             View Document
                                         </a>
@@ -280,7 +362,7 @@ export default function ScholarshipsProviderDetails() {
                                             href={provider.scholarshipProviderDetails.documents.idProofContactPerson}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="mt-1 block px-3 font-medium bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
+                                            className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
                                         >
                                             View Document
                                         </a>
@@ -290,39 +372,41 @@ export default function ScholarshipsProviderDetails() {
                                 </div>
                             </div>
 
-                            <div className="flex justify-end gap-4 mt-6">
-                                {provider.status === 'Pending Verification' && (
-                                    <>
-                                        <button
-                                            className="border shadow px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-                                            onClick={() => setIsApproveModalOpen(true)}
-                                        >
-                                            Approve
-                                        </button>
+                        </div>
+                        <div className="flex justify-end gap-4 mt-6">
+                            {provider.status === 'Pending Verification' && (
+                                <>
+                                    <button
+                                        className="border shadow px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                                        onClick={() => setIsRejectModalOpen(true)}
+                                    >
+                                        Reject
+                                    </button>
 
-                                        <ConfirmationModal
-                                            isOpen={isApproveModalOpen}
-                                            onClose={() => setIsApproveModalOpen(false)}
-                                            onConfirm={() => handleApprove(provider._id)}
-                                            message="Are you sure you want to approve this provider?"
-                                        />
+                                    <ConfirmationModal
+                                        isOpen={isRejectModalOpen}
+                                        onClose={() => setIsRejectModalOpen(false)}
+                                        onConfirm={() => handleReject(provider._id)}
+                                        message="Are you sure you want to reject this provider?"
+                                    />
 
-                                        <button
-                                            className="border shadow px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                                            onClick={() => setIsRejectModalOpen(true)}
-                                        >
-                                            Reject
-                                        </button>
+                                    <button
+                                        className="border shadow px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                                        onClick={() => setIsApproveModalOpen(true)}
+                                    >
+                                        Approve
+                                    </button>
 
-                                        <ConfirmationModal
-                                            isOpen={isRejectModalOpen}
-                                            onClose={() => setIsRejectModalOpen(false)}
-                                            onConfirm={() => handleReject(provider._id)}
-                                            message="Are you sure you want to reject this provider?"
-                                        />
-                                    </>
-                                )}
-                            </div>
+                                    <ConfirmationModal
+                                        isOpen={isApproveModalOpen}
+                                        onClose={() => setIsApproveModalOpen(false)}
+                                        onConfirm={() => handleApprove(provider._id)}
+                                        message="Are you sure you want to approve this provider?"
+                                    />
+
+
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
