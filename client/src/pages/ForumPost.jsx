@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { FaRegHeart, FaHeart, FaRegEye } from "react-icons/fa";
 import { BiCommentDots } from "react-icons/bi";
-import { IoMdArrowDropdown } from "react-icons/io";
+import { IoMdAdd, IoMdArrowDropdown } from "react-icons/io";
 import Modal from 'react-modal';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { FaFilePdf, FaFileWord } from 'react-icons/fa';
@@ -14,6 +14,8 @@ import CommentForm from '../components/Forum/CommentForm';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { AiFillFilePdf, AiFillFileWord } from 'react-icons/ai';
 import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
+import { MdForum, MdOutlineForum } from 'react-icons/md';
+import { FaComments } from 'react-icons/fa6';
 
 Modal.setAppElement('#root');
 
@@ -314,11 +316,18 @@ export default function ForumPost() {
 
                     <div className='flex gap-1 mt-10 items-center'>
                         <Link to='/Forums'>
-                            <button className='bg-white border shadow px-4 py-1 mr-2 rounded-md hover:bg-slate-200 transition ease-in-out'>Forums</button>
+                            <button className='bg-white border shadow px-4 py-1 mr-2 rounded-md hover:bg-slate-200 transition ease-in-out flex items-center gap-2'>
+                                <MdForum className='text-blue-600' />
+                                Forums
+                            </button>
                         </Link>
                         <IoMdArrowDropdown className='-rotate-90 text-2xl text-blue-600' />
-                        <button className='bg-white border shadow px-4 py-1 ml-2 rounded-md hover:bg-slate-200 transition ease-in-out'>{post.title}</button>
+                        <button className='bg-white border shadow px-4 py-1 ml-2 rounded-md hover:bg-slate-200 transition ease-in-out flex items-center gap-2'>
+                            <MdOutlineForum className='text-blue-600' />
+                            {post.title}
+                        </button>
                     </div>
+
                     <div className='border shadow p-4 rounded-md bg-white'>
                         <div className='flex gap-4'>
                             <Link to={`/profile/${post.author._id}`}>

@@ -97,6 +97,11 @@ const AddressInformation = () => {
         }
     }, [selectedCity]);
 
+    useEffect(() => {
+        console.log('Selected City:', selectedCity);
+        console.log('Barangay List:', barangayList);
+    }, [selectedCity, barangayList]);
+
     const toggleEdit = () => {
         setIsEditing(!isEditing);
     };
@@ -108,6 +113,9 @@ const AddressInformation = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        if (name === 'barangay') {
+            setSelectedBarangay(value);
+        }
         setFormData({
             ...formData,
             applicantDetails: {
@@ -262,7 +270,7 @@ const AddressInformation = () => {
 
                 {/* Barangay Selector */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Barangay:</label>
+                    <label className='block text-sm font-medium text-gray-700 mb-2'>Barangay:</label>
                     <select
                         value={selectedBarangay}
                         onChange={(e) => setSelectedBarangay(e.target.value)}
@@ -271,8 +279,8 @@ const AddressInformation = () => {
                     >
                         <option value="">Select Barangay</option>
                         {barangayList.map((barangay) => (
-                            <option key={barangay.barangay_code} value={barangay.barangay_code}>
-                                {barangay.barangay_name}
+                            <option key={barangay.brgy_code} value={barangay.brgy_code}>
+                                {barangay.brgy_name}
                             </option>
                         ))}
                     </select>

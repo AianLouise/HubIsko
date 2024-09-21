@@ -6,8 +6,6 @@ const ScholarshipProviderScholarships = ({ userId }) => {
   const [scholarships, setScholarships] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
-  console.log(userId);
-
   // Function to fetch scholarship programs
   const fetchScholarships = async () => {
     try {

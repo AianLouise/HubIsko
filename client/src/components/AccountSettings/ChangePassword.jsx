@@ -18,6 +18,7 @@ export default function ChangePassword() {
         confirmNewPassword: ''
     });
     const [notification, setNotification] = useState({ message: '', type: '' });
+    const [newPasswordError, setNewPasswordError] = useState('');
 
     const toggleShowPasswords = () => {
         setShowPasswords(!showPasswords);
@@ -32,6 +33,11 @@ export default function ChangePassword() {
 
         if (name === 'newPassword') {
             evaluatePasswordStrength(value);
+            if (value === formData.currentPassword) {
+                setNewPasswordError('New password cannot be the same as the current password');
+            } else {
+                setNewPasswordError('');
+            }
         }
     };
 
@@ -68,6 +74,10 @@ export default function ChangePassword() {
         const validationError = validatePassword(formData.newPassword);
         if (validationError) {
             setNotification({ message: validationError, type: 'error' });
+            return;
+        }
+        if (formData.newPassword === formData.currentPassword) {
+            setNotification({ message: 'New password cannot be the same as the current password', type: 'error' });
             return;
         }
         if (formData.newPassword !== formData.confirmNewPassword) {
@@ -149,6 +159,9 @@ export default function ChangePassword() {
                         className='bg-slate-100 rounded-lg p-3'
                         required
                     />
+                    {newPasswordError && (
+                        <div className='text-red-500 text-sm mt-1'>{newPasswordError}</div>
+                    )}
                     <div className='text-sm text-slate-500 mt-1'>
                         Password Strength: <span className={`font-bold ${passwordStrength === 'Strong' ? 'text-green-500' : passwordStrength === 'Medium' ? 'text-yellow-500' : 'text-red-500'}`}>{passwordStrength}</span>
                     </div>
