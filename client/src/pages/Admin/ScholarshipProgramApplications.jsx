@@ -32,7 +32,7 @@ export default function ScholarshipProgramApplications() {
 
     return (
         <div className="flex flex-col min-h-screen font-medium text-slate-700">
-        
+
             <main className="flex-grow bg-[#f8f8fb]">
                 <div className="border-b mb-8">
                     <div className="flex items-center justify-between px-6 lg:px-24 mx-auto">
@@ -60,6 +60,9 @@ export default function ScholarshipProgramApplications() {
                                 <span className="text-5xl lg:text-6xl font-bold text-blue-600 mt-2">
                                     {programs.length}
                                 </span>
+                                <p className="text-lg text-gray-500 mt-2">
+                                    Applications awaiting review
+                                </p>
                             </div>
                         </div>
 

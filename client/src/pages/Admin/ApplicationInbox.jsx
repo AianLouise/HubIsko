@@ -127,36 +127,36 @@ export default function ApplicationInbox() {
           <div className="grid grid-cols-3 gap-8">
             <Link
               to="/scholarship-program-applications"
-              className="bg-blue-100 text-blue-900 rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:bg-blue-200 hover:-translate-y-2 transition ease-in-out"
+              className="bg-white text-blue-600 rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:bg-gray-100 hover:-translate-y-2 transition ease-in-out"
             >
               <FaGraduationCap className="text-4xl mb-2 text-blue-600" />
               <span className="text-lg font-semibold">Scholarship Program Applications</span>
-              <span className="text-4xl font-bold text-blue-700">{pendingPrograms}</span>
-              <span className="text-sm flex items-center mt-2 text-blue-500 font-normal">
+              <span className="text-4xl font-bold">{pendingPrograms}</span>
+              <span className="text-sm flex items-center mt-2 font-normal">
                 Click to view the list of applications for scholarship program
               </span>
             </Link>
 
             <Link
               to="/scholarship-provider-applications"
-              className="bg-blue-100 text-blue-900 rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:bg-blue-200 hover:-translate-y-2 transition ease-in-out"
+              className="bg-white text-blue-600 rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:bg-gray-100 hover:-translate-y-2 transition ease-in-out"
             >
               <FaUniversity className="text-4xl mb-2 text-blue-600" />
               <span className="text-lg font-semibold">Scholarship Provider Applications</span>
-              <span className="text-4xl font-bold text-blue-700">{pendingProviders}</span>
-              <span className="text-sm flex items-center mt-2 text-blue-500 font-normal">
+              <span className="text-4xl font-bold">{pendingProviders}</span>
+              <span className="text-sm flex items-center mt-2 font-normal">
                 Click to view the list of applications for scholarship provider
               </span>
             </Link>
 
             <Link
               to="/student-applications"
-              className="bg-blue-100 text-blue-900 rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:bg-blue-200 hover:-translate-y-2 transition ease-in-out"
+              className="bg-white text-blue-600 rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:bg-gray-100 hover:-translate-y-2 transition ease-in-out"
             >
               <FaUserGraduate className="text-4xl mb-2 text-blue-600" />
               <span className="text-lg font-semibold">Student Applications</span>
-              <span className="text-4xl font-bold text-blue-700">{pendingStudents}</span>
-              <span className="text-sm flex items-center mt-2 text-blue-500 font-normal">
+              <span className="text-4xl font-bold">{pendingStudents}</span>
+              <span className="text-sm flex items-center mt-2 font-normal">
                 Click to view the list of applications for students
               </span>
             </Link>

@@ -27,6 +27,7 @@ export default function AdminDashboard() {
     const [pendingStudents, setPendingStudents] = useState(0);
     const [pendingPrograms, setPendingPrograms] = useState(0); // New State for Pending Programs
     const [forumPost, setForumPost] = useState(0); // New State for Forum Posts
+    const [applicationInbox, setApplicationInbox] = useState(0); // New State for Application Inbox
     const [activities, setActivities] = useState([]); // State for Activities
     const [loading, setLoading] = useState(true);
 
@@ -71,6 +72,11 @@ export default function AdminDashboard() {
                 const forumPostResponse = await fetch('/api/adminForums/forum-posts');
                 const forumPostData = await forumPostResponse.json();
                 setForumPost(forumPostData.length);
+
+                const ApplicationInboxResponse = await fetch('/api/adminApp/users/pending-verification');
+                const ApplicationInboxData = await ApplicationInboxResponse.json();
+                const totalPendingVerifications = ApplicationInboxData.userCount + ApplicationInboxData.scholarshipProgramCount;
+                setApplicationInbox(totalPendingVerifications);
 
                 // Fetch recent activities
                 // const activitiesResponse = await fetch('/api/admin/recent-activities');
@@ -117,7 +123,7 @@ export default function AdminDashboard() {
     const handleViewClick = (e) => {
         e.stopPropagation(); // Prevent the outer link from being triggered
         navigate('/application-inbox');
-      };
+    };
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -161,7 +167,7 @@ export default function AdminDashboard() {
                                 <div className="flex flex-col gap-3 w-full">
                                     <span className="text-6xl font-bold text-left text-blue-600">{totalAccounts}</span>
                                     <div className="flex justify-between items-center">
-                                        <span className="text-base text-slate-500 flex gap-3">
+                                        <span className="text-base text-slate-500 flex gap-3 truncate">
                                             {pendingProviders + pendingStudents} <span>Pending verification</span>
                                         </span>
                                         <div onClick={handleViewClick} className="hidden group-hover:flex gap-2 items-center text-blue-600 cursor-pointer">
@@ -182,7 +188,9 @@ export default function AdminDashboard() {
                                 <div className="flex flex-col gap-3 w-full">
                                     <span className="text-6xl font-bold text-left text-blue-600">{totalScholarships}</span>
                                     <div className="flex justify-between items-center">
-                                        <span className="text-base text-slate-500 flex gap-3">{pendingPrograms} <span>Pending verification</span></span>
+                                        <span className="text-base text-slate-500 flex gap-3 truncate">
+                                            {pendingPrograms} <span>Pending verification</span>
+                                        </span>
                                         <div className="hidden group-hover:flex gap-2 items-center text-blue-600">
                                             View
                                             <IoMdArrowRoundForward className="w-6 h-6" />
@@ -201,7 +209,9 @@ export default function AdminDashboard() {
                                 <div className="flex flex-col gap-3 w-full">
                                     <span className="text-6xl font-bold text-left text-blue-600">{forumPost}</span>
                                     <div className="flex justify-between items-center">
-                                        <span className="text-base text-slate-500 flex gap-3">0 <span>New posts</span></span>
+                                        <span className="text-base text-slate-500 flex gap-3 truncate">
+                                            0 <span>New posts</span>
+                                        </span>
                                         <div className="hidden group-hover:flex gap-2 items-center text-blue-600">
                                             View
                                             <IoMdArrowRoundForward className="w-6 h-6" />
@@ -218,9 +228,11 @@ export default function AdminDashboard() {
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-3 w-full">
-                                    <span className="text-6xl font-bold text-left text-blue-600">10</span>
+                                    <span className="text-6xl font-bold text-left text-blue-600">{applicationInbox}</span>
                                     <div className="flex justify-between items-center">
-                                        <span className="text-base text-slate-500 flex gap-3">0 <span>New notifications</span></span>
+                                        <span className="text-base text-slate-500 flex gap-3 truncate">
+                                            0 <span>New notifications</span>
+                                        </span>
                                         <div className="hidden group-hover:flex gap-2 items-center text-blue-600">
                                             View
                                             <IoMdArrowRoundForward className="w-6 h-6" />

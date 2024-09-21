@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { IoMdArrowDropdown } from "react-icons/io";
+import { IoMdArrowDropdown, IoMdPeople } from "react-icons/io";
 import { BsPencilFill } from "react-icons/bs";
 import { BsTrashFill } from "react-icons/bs";
 import { BiCheck } from "react-icons/bi";
@@ -11,6 +11,7 @@ import Layout from "../../components/Layout";
 import StudentDetailsEdit from "./StudentDetailsEdit";
 import StudentScholarship from "./StudentScholarship";
 import StudentForumPost from "./StudentForumPost";
+import { PiStudentFill } from "react-icons/pi";
 
 export default function StudentDetails() {
 
@@ -23,6 +24,7 @@ export default function StudentDetails() {
   const { id } = useParams();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchApplicantDetails = async () => {
       try {
         const response = await fetch(`/api/admin/applicant/${id}`);
@@ -73,16 +75,16 @@ export default function StudentDetails() {
     <div className="flex flex-col min-h-screen font-medium text-slate-700">
 
       <main className="flex-grow bg-[#f8f8fb] pb-24">
-
         <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex mt-16'>
-
           <div className="flex gap-2 items-center">
-            <Link to={'/students'} className="border shadow px-6 py-2 bg-white rounded-md hover:bg-slate-200">
-              <span>Students</span>
+            <Link to={'/accounts'} className="border shadow px-6 py-2 bg-white rounded-md hover:bg-slate-200 flex items-center gap-2">
+              <IoMdPeople className="w-6 h-6 text-blue-600" />
+              <span>Accounts</span>
             </Link>
             <IoMdArrowDropdown className='-rotate-90 w-8 h-8 text-blue-600' />
 
-            <div className="border shadow px-6 py-2 bg-white rounded-md">
+            <div className="border shadow px-6 py-2 bg-white rounded-md flex items-center gap-2">
+              <PiStudentFill className="w-6 h-6 text-blue-600" />
               <span className="text-blue-600">{`${applicant.applicantDetails.firstName} ${applicant.applicantDetails.lastName}`}</span>
             </div>
           </div>

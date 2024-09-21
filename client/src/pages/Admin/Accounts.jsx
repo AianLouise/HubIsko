@@ -11,8 +11,6 @@ import { RiGraduationCapFill } from "react-icons/ri";
 import { FaBuildingCircleCheck } from "react-icons/fa6";
 import { IoAddCircleOutline } from 'react-icons/io5';
 
-
-
 const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
         case 'pending verification':
@@ -36,7 +34,6 @@ const getRoleColor = (role) => {
             return 'bg-gray-500';
     }
 };
-
 
 const toSentenceCase = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
@@ -140,7 +137,6 @@ export default function Accounts() {
             }
         };
 
-
         fetchTotalApplicants();
         fetchTotalUnverifiedAccounts();
         fetchTotalAccounts();
@@ -165,7 +161,16 @@ export default function Accounts() {
     };
 
     const filteredAccounts = accounts.filter(account => {
-        const matchesSearchQuery = account.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        let fullName = '';
+        if (account.role === 'applicant' && account.applicantDetails) {
+            fullName = `${account.applicantDetails.firstName} ${account.applicantDetails.lastName}`.toLowerCase();
+        } else if (account.role === 'scholarship_provider' && account.scholarshipProviderDetails) {
+            fullName = account.scholarshipProviderDetails.organizationName.toLowerCase();
+        } else if (account.role === 'admin') {
+            fullName = `${account.adminDetails.firstName} ${account.adminDetails.lastName}`.toLowerCase();
+        }
+
+        const matchesSearchQuery = fullName.includes(searchQuery.toLowerCase()) ||
             account.email.toLowerCase().includes(searchQuery.toLowerCase());
 
         if (!matchesSearchQuery) return false;
@@ -190,7 +195,6 @@ export default function Accounts() {
         }
         return 0;
     });
-
 
     if (loading) {
         return (
@@ -335,39 +339,53 @@ export default function Accounts() {
                         </div>
 
                         <div className="border rounded-md">
-                            <table className="min-w-full divide-y divide-gray-200">
+                            <table className="min-w-full divide-y divide-gray-200 text-center">
                                 <thead className="bg-gray-50">
                                     <tr className='text-blue-600'>
-                                        <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
-                                        <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                        <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                                        <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                        <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                        <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                        <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                        <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                                        <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {filteredAccounts && filteredAccounts.length > 0 ? (
-                                        filteredAccounts.map(account => (
-                                            <tr key={account._id} className="hover:bg-gray-100">
-                                                <td className="p-4">{account.username}</td>
-                                                <td className="p-4">{account.email}</td>
-                                                <td className="p-4">
-                                                    <span className={`px-4 py-1 text-white mr-2 rounded-full ${getRoleColor(account.role)}`}>
-                                                        {account.role === 'applicant' ? 'Student' : account.role === 'scholarship_provider' ? 'Scholarship Provider' : toSentenceCase(account.role)}
-                                                    </span>
-                                                </td>
-                                                <td className="p-4">
-                                                    <span className={`inline-block w-3 h-3 mr-2 rounded-full ${getStatusColor(account.status)}`}></span>
-                                                    {toSentenceCase(account.status)}
-                                                </td>
-                                                <td className="p-4">
-                                                    {getAccountLink(account)}
-                                                </td>
-                                            </tr>
-                                        ))
+                                        filteredAccounts.map(account => {
+                                            let fullName = 'N/A';
+                                            if (account.role === 'applicant' && account.applicantDetails) {
+                                                fullName = `${account.applicantDetails.firstName} ${account.applicantDetails.lastName}`;
+                                            } else if (account.role === 'scholarship_provider' && account.scholarshipProviderDetails) {
+                                                fullName = account.scholarshipProviderDetails.organizationName;
+                                            } else if (account.role === 'admin') {
+                                                fullName = `${account.adminDetails.firstName} ${account.adminDetails.lastName}`;
+                                            }
+
+                                            return (
+                                                <tr key={account._id} className="hover:bg-gray-100">
+                                                    <td className="p-4 flex items-center">
+                                                        <img src={account.profilePicture} alt={fullName} className="w-10 h-10 rounded-full mr-4" />
+                                                        {fullName}
+                                                    </td>
+                                                    <td className="p-4">{account.email}</td>
+                                                    <td className="p-4 whitespace-nowrap">
+                                                        <span className={`px-4 py-1 text-white mr-2 rounded-full ${getRoleColor(account.role)}`}>
+                                                            {account.role === 'applicant' ? 'Student' : account.role === 'scholarship_provider' ? 'Scholarship Provider' : toSentenceCase(account.role)}
+                                                        </span>
+                                                    </td>
+                                                    <td className="p-4">
+                                                        <span className={`inline-block w-3 h-3 mr-2 rounded-full ${getStatusColor(account.status)}`}></span>
+                                                        {toSentenceCase(account.status)}
+                                                    </td>
+                                                    <td className="p-4 whitespace-nowrap">
+                                                        {getAccountLink(account)}
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })
                                     ) : (
                                         <tr>
-                                            <td colSpan="5" className="p-4 text-gray-600 text-center">No accounts found.</td>
+                                            <td colSpan="5" className="p-4 text-center">No accounts found</td>
                                         </tr>
                                     )}
                                 </tbody>

@@ -47,11 +47,11 @@ export default function ProviderAccounts() {
   const filteredProviders = providers.filter(provider => {
     const { scholarshipProviderDetails, email } = provider;
     if (!scholarshipProviderDetails) return false;
-  
+
     const matchesSearchQuery = (scholarshipProviderDetails.organizationName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       scholarshipProviderDetails.contactPersonName?.toLowerCase().includes(searchQuery.toLowerCase()));
-  
+
     return matchesSearchQuery;
   }).sort((a, b) => {
     if (selectedFilter === 'Recent') {
@@ -122,14 +122,14 @@ export default function ProviderAccounts() {
                   </button>
                 </div>
               </div>
-              <table className='w-full border-t text-left'>
+              <table className='w-full border-t text-center'>
                 <thead>
                   <tr className='bg-slate-100'>
-                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">#No</th>
-                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Organization</th>
-                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Email</th>
-                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Contact Person</th>
-                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Actions</th>
+                    <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">#No</th>
+                    <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Organization</th>
+                    <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Email</th>
+                    <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Contact Person</th>
+                    <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -152,11 +152,10 @@ export default function ProviderAccounts() {
                         <td className='py-2 px-4 border-b border-gray-200'>{provider.email}</td>
                         <td className='py-2 px-4 border-b border-gray-200'>{provider.scholarshipProviderDetails.contactPersonName}</td>
                         <td className='py-2 px-4 border-b border-gray-200'>
-                          <div className="flex items-center gap-2">
+                          <div className="flex justify-center items-center gap-2">
                             <Link to={`/provider-details/${provider._id}`} className=''>
                               <MdPreview className='w-6 h-6 text-blue-600 hover:text-blue-800' />
                             </Link>
-                            <MdDelete className='w-6 h-6 text-red-500' />
                           </div>
                         </td>
                       </tr>

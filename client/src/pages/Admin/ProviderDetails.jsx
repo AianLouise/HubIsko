@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { IoMdArrowDropdown } from "react-icons/io";
+import { Link, useParams } from "react-router-dom";
+import { IoMdArrowDropdown, IoMdPeople } from "react-icons/io";
 import { BiCheck } from "react-icons/bi";
 import Layout from "../../components/Layout";
 import ProviderDetailsEdit from "./ProviderDetailsEdit";
 import ProviderAbout from "./ProviderAbout";
 import ProviderScholarships from "./ProviderScholarships";
 import ProviderForumPost from "./ProviderForumPost";
+import { BsBuildingFill } from "react-icons/bs";
 
 export default function ProviderDetails() {
   const { id } = useParams(); // Extract provider ID from URL parameters
@@ -15,6 +16,7 @@ export default function ProviderDetails() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchProviderDetails = async () => {
       try {
         const response = await fetch(`/api/adminProfile/provider/${id}`); // Adjust the URL as necessary
@@ -45,6 +47,20 @@ export default function ProviderDetails() {
   return (
     <div className="flex flex-col min-h-screen font-medium text-slate-700">
       <main className="flex-grow bg-[#f8f8fb] pb-24">
+        <div className='max-w-8xl mx-auto px-24 gap-10 flex-col flex mt-16'>
+          <div className="flex gap-2 items-center">
+            <Link to={'/accounts'} className="border shadow px-6 py-2 bg-white rounded-md hover:bg-slate-200 flex items-center gap-2">
+              <IoMdPeople className="w-6 h-6 text-blue-600" />
+              <span>Accounts</span>
+            </Link>
+            <IoMdArrowDropdown className='-rotate-90 w-8 h-8 text-blue-600' />
+          
+            <div className="border shadow px-6 py-2 bg-white rounded-md flex items-center gap-2">
+              <BsBuildingFill className="w-6 h-6 text-blue-600" />
+              <span className="text-blue-600">{`${provider.scholarshipProviderDetails.organizationName}`}</span>
+            </div>
+          </div>
+        </div>
         <div className='border-b mb-8'>
           <div className={'flex items-center mx-auto px-24'}>
             <div className='flex items-center gap-6 w-1/2'>

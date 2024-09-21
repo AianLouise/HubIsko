@@ -135,15 +135,15 @@ export default function Students() {
                   </button>
                 </div>
               </div>
-              <table className='w-full border-t text-left'>
+              <table className='w-full border-t text-center'>
                 <thead>
                   <tr className='bg-slate-100'>
-                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">#No</th>
-                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Name</th>
-                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Email</th>
-                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Date Applied</th>
-                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Status</th>
-                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Actions</th>
+                    <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">#No</th>
+                    <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Name</th>
+                    <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Email</th>
+                    <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Date Applied</th>
+                    <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Status</th>
+                    <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -165,16 +165,15 @@ export default function Students() {
                         </td>
                         <td className='py-2 px-4 border-b border-gray-200'>{applicant.email}</td>
                         <td className='py-2 px-4 border-b border-gray-200'>{new Date(applicant.createdAt).toLocaleDateString()}</td>
-                        <td className='py-2 px-4 border-b border-gray-200 flex items-center'>
+                                               <td className='py-2 px-4 border-b border-gray-200 flex justify-center items-center'>
                           <span className={`w-3 h-3 rounded-full ${statusColors[applicant.status]} mr-2`}></span>
                           {applicant.status}
                         </td>
                         <td className='py-2 px-4 border-b border-gray-200'>
-                          <div className="flex items-center gap-2">
+                          <div className="flex justify-center items-center gap-2">
                             <Link to={`/student-details/${applicant._id}`} className=''>
                               <MdPreview className='w-6 h-6 text-blue-600 hover:text-blue-800' />
-                            </Link>
-                            <MdDelete className='w-6 h-6 text-red-500' />
+                            </Link> 
                           </div>
                         </td>
                       </tr>
