@@ -142,14 +142,12 @@ export default function AdminDashboard() {
                             <FaClock className='w-6 h-6 text-blue-600 inline-block' />
                             <p className='text-sm tracking-wider'>{`Today is ${formattedDate}, ${formattedTime}`}</p>
                         </div>
-
                     </div>
-
                 </div>
 
                 <div className='max-w-8xl mx-auto px-24 pt-5 gap-10 flex-col flex'>
-                    <div className="flex gap-5 h-full">
-                        <div className="grid grid-cols-2 gap-5 w-1/2">
+                    <div className="flex justify-center h-full">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 w-full max-w-7xl">
                             <Link to={'/accounts'} className="bg-white flex flex-col gap-2 shadow border rounded-md h-[200px] items-start p-6 hover:bg-slate-100 hover:-translate-y-2 transition ease-in-out group">
                                 <div className="flex items-center justify-between w-full">
                                     <h1 className="text-2xl font-semibold text-slate-600">Accounts</h1>
@@ -157,16 +155,13 @@ export default function AdminDashboard() {
                                         <BsPersonFill className="w-8 h-8 text-blue-600" />
                                     </div>
                                 </div>
-
-
                                 <div className="flex flex-col gap-3 w-full">
                                     <span className="text-6xl font-bold text-left text-blue-600">{totalAccounts}</span>
-
                                     <div className="flex justify-between items-center">
                                         <span className="text-base text-slate-500 flex gap-3">
                                             {pendingProviders + pendingStudents} <span>Pending verification</span>
                                         </span>
-                                        <Link to={'/application-inbox'} className="hidden group-hover:flex gap-2 items-center  text-blue-600">
+                                        <Link to={'/application-inbox'} className="hidden group-hover:flex gap-2 items-center text-blue-600">
                                             View
                                             <IoMdArrowRoundForward className="w-6 h-6" />
                                         </Link>
@@ -181,21 +176,16 @@ export default function AdminDashboard() {
                                         <GiGraduateCap className="w-8 h-8 text-blue-600" />
                                     </div>
                                 </div>
-
                                 <div className="flex flex-col gap-3 w-full">
                                     <span className="text-6xl font-bold text-left text-blue-600">{totalScholarships}</span>
-
                                     <div className="flex justify-between items-center">
                                         <span className="text-base text-slate-500 flex gap-3">{pendingPrograms} <span>Pending verification</span></span>
-
-                                        <div className="hidden group-hover:flex gap-2 items-center  text-blue-600">
-
+                                        <div className="hidden group-hover:flex gap-2 items-center text-blue-600">
                                             View
                                             <IoMdArrowRoundForward className="w-6 h-6" />
                                         </div>
                                     </div>
                                 </div>
-
                             </Link>
 
                             <Link to={'/admin-forums'} className="bg-white flex flex-col gap-2 shadow border rounded-md h-[200px] items-start p-6 hover:bg-slate-100 hover:-translate-y-2 transition ease-in-out group">
@@ -205,31 +195,17 @@ export default function AdminDashboard() {
                                         <IoMdChatboxes className="w-8 h-8 text-blue-600" />
                                     </div>
                                 </div>
-
                                 <div className="flex flex-col gap-3 w-full">
                                     <span className="text-6xl font-bold text-left text-blue-600">{forumPost}</span>
-
                                     <div className="flex justify-between items-center">
                                         <span className="text-base text-slate-500 flex gap-3">0 <span>New posts</span></span>
-
-                                        <div className="hidden group-hover:flex gap-2 items-center  text-blue-600">
+                                        <div className="hidden group-hover:flex gap-2 items-center text-blue-600">
                                             View
                                             <IoMdArrowRoundForward className="w-6 h-6" />
                                         </div>
                                     </div>
                                 </div>
-
                             </Link>
-
-                            {/* <Link to={'/scholarship-provider-applications'} className="bg-white flex flex-col gap-2 p-4 shadow border rounded-md h-[200px] justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
-                            <h1 className="text-2xl font-semibold text-slate-600 text-center">Pending Scholarship Provider Applications</h1>
-                            <span className="text-6xl font-bold text-blue-600 text-center">{pendingProviders}</span>
-                        </Link> */}
-
-                            {/* <Link to={'/scholarship-program-applications'} className="bg-white flex flex-col gap-2 p-4 shadow border rounded-md h-[200px] justify-center items-center hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out">
-                            <h1 className="text-2xl font-semibold text-slate-600 text-center">Pending Scholarship Program Applications</h1>
-                            <span className="text-6xl font-bold text-blue-600 text-center">{pendingPrograms}</span>
-                        </Link> */}
 
                             <Link to={'/application-inbox'} className="bg-white flex flex-col gap-2 shadow border rounded-md h-[200px] items-start p-6 hover:bg-slate-100 hover:-translate-y-2 transition ease-in-out group">
                                 <div className="flex items-center justify-between w-full">
@@ -238,34 +214,18 @@ export default function AdminDashboard() {
                                         <FaInbox className="w-8 h-8 text-blue-600" />
                                     </div>
                                 </div>
-
                                 <div className="flex flex-col gap-3 w-full">
                                     <span className="text-6xl font-bold text-left text-blue-600">10</span>
-
-
                                     <div className="flex justify-between items-center">
                                         <span className="text-base text-slate-500 flex gap-3">0 <span>New notifications</span></span>
-
-                                        <div className="hidden group-hover:flex gap-2 items-center  text-blue-600">
+                                        <div className="hidden group-hover:flex gap-2 items-center text-blue-600">
                                             View
                                             <IoMdArrowRoundForward className="w-6 h-6" />
-
                                         </div>
                                     </div>
                                 </div>
-
-
                             </Link>
                         </div>
-
-                        <div className="flex flex-col gap-4 bg-white shadow rounded-md border p-8 w-1/2">
-                            <span className="font-medium text-2xl">Interactions</span>
-
-                            <div className="flex items-center justify-center h-full border rounded-md">
-                                Interaction Graph
-                            </div>
-                        </div>
-
                     </div>
 
 

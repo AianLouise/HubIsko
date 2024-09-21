@@ -208,9 +208,9 @@ export default function Accounts() {
     }
 
     return (
-        <div className="flex flex-col min-h-screen font-medium text-slate-700">
+        <div className="flex flex-col min-h-screen font-medium text-slate-700 bg-[#f8f8fb]">
 
-            <main className="flex-grow bg-[#f8f8fb]">
+            <main className="flex-grow ">
                 {/* <div className='border-b mb-8'>
                     <div className={'flex items-center mx-auto justify-between px-24'}>
                         <div className='flex flex-col gap-2 w-1/2'>
@@ -232,21 +232,13 @@ export default function Accounts() {
                         </Link>
                     </div>
 
-                    <div className="flex gap-2">
-                        <div className="flex flex-col w-full bg-white border shadow gap-10 p-4 rounded-md">
-                            <span>Filler Container</span>
-                            <div className="border flex items-center justify-center h-full rounded-md">
-                                Filler
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 w-[1000px] gap-2">
+                    <div className="flex justify-center">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-7xl">
                             <div className="flex flex-col gap-4 justify-center bg-white shadow border rounded-md p-8">
                                 <div className="flex items-center gap-4">
                                     <FaUsers className="w-8 h-8 text-blue-600" />
                                     <h2 className="text-lg font-semibold text-slate-500 tracking-wide">Total Accounts</h2>
                                 </div>
-
                                 <div className="flex flex-col gap-4">
                                     <span className="text-6xl font-bold text-left">{totalAccounts}</span>
                                     <span className="text-slate-400">+0 new accounts</span>
@@ -254,12 +246,10 @@ export default function Accounts() {
                             </div>
 
                             <div className="flex flex-col gap-4 justify-center bg-white shadow border rounded-md p-8">
-
                                 <div className="flex items-center gap-3">
                                     <FaUserClock className="w-8 h-8 text-blue-600" />
                                     <h2 className="text-lg font-semibold text-slate-500">Unverified Accounts</h2>
                                 </div>
-
                                 <div className="flex flex-col gap-3">
                                     <span className="text-6xl font-bold text-left">{totalUnverifiedAccounts}</span>
                                     <span className="text-slate-400">+0 pending</span>
@@ -267,12 +257,10 @@ export default function Accounts() {
                             </div>
 
                             <div className="flex flex-col gap-4 justify-center bg-white shadow border rounded-md p-8">
-
                                 <div className="flex items-center gap-3">
                                     <RiGraduationCapFill className="w-8 h-8 text-blue-600" />
                                     <h2 className="text-lg font-semibold text-slate-500">Total Students</h2>
                                 </div>
-
                                 <div className="flex flex-col gap-4">
                                     <span className="text-6xl font-bold text-left">{totalApplicants}</span>
                                     <span className="text-slate-400">+0 new students</span>
@@ -280,70 +268,51 @@ export default function Accounts() {
                             </div>
 
                             <div className="flex flex-col gap-4 justify-center bg-white shadow border rounded-md p-8">
-
                                 <div className="flex items-center gap-3">
                                     <FaBuildingCircleCheck className="w-8 h-8 text-blue-600" />
                                     <h2 className="text-lg font-semibold text-slate-500">Scholarship Providers</h2>
                                 </div>
-
                                 <div className="flex flex-col gap-4">
                                     <span className="text-6xl font-bold text-left">{totalScholarshipProviders}</span>
                                     <span className="text-slate-400">+0 new providers</span>
                                 </div>
                             </div>
-
-                            {/* <div className="flex justify-between items-center bg-white p-6 rounded-md shadow-md">
-                                <div>
-                                    <div className="flex items-center gap-2">
-                                        <h2 className="text-xl font-semibold text-slate-700">Total Unverified Users</h2>
-                                    
-                                    </div>
-                                    <p className="text-2xl font-bold text-left">{totalUnverifiedAccounts}</p>
-                                </div>
-                            </div>
-
-                            <Link to={'/students'} className="flex justify-between items-center bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2 hover:bg-slate-200 group ease-in-out">
-                                <div>
-                                    <h2 className="text-xl font-semibold text-slate-700">Total Students</h2>
-                                    <p className="text-2xl font-bold text-left">{totalApplicants}</p>
-                                </div>
-                                <div className="group-hover:flex items-center gap-2 text-blue-600 hidden">
-                                    <span className="text-xl">View</span>
-                                    <PiArrowRightFill className="w-6 h-6" />
-                                </div>
-                            </Link>
-                            <Link to={'/provider-accounts'} className="flex justify-between items-center bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2 hover:bg-slate-200 group ease-in-out">
-                                <div>
-                                    <h2 className="text-xl font-semibold text-slate-700">Total Scholarship Providers</h2>
-                                    <p className="text-2xl font-bold text-left">{totalScholarshipProviders}</p>
-                                </div>
-                                <div className="group-hover:flex items-center gap-2 text-blue-600 hidden">
-                                    <span className="text-xl">View</span>
-                                    <PiArrowRightFill className="w-6 h-6" />
-                                </div>
-                            </Link> */}
-
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-4 h-screen">
+                    <div className="flex flex-col gap-4 py-10 min-h-screen">
                         <div className="flex justify-between gap-4 mt-5">
                             <div className="flex gap-2 items-center">
                                 <div className="flex gap-2">
-                                    <button onClick={() => handleFilterClick('All')} className="px-4 py-2 rounded-md bg-white shadow border">
-                                        All <span className="text-blue-600">({accounts.length})</span>
+                                    <button
+                                        onClick={() => handleFilterClick('All')}
+                                        className={`px-4 py-2 rounded-md shadow border ${selectedFilter === 'All' ? 'bg-blue-600 text-white' : 'bg-white'}`}
+                                    >
+                                        All <span className={`text-${selectedFilter === 'All' ? 'white' : 'blue-600'}`}>({accounts.length})</span>
                                     </button>
-                                    <button onClick={() => handleFilterClick('Verify Account')} className="px-4 py-2 rounded-md bg-white shadow border">
-                                        Verify Account <span className="text-gray-600">({totalVerifyAccount})</span>
+                                    <button
+                                        onClick={() => handleFilterClick('Verify Account')}
+                                        className={`px-4 py-2 rounded-md shadow border ${selectedFilter === 'Verify Account' ? 'bg-gray-600 text-white' : 'bg-white'}`}
+                                    >
+                                        Verify Account <span className={`text-${selectedFilter === 'Verify Account' ? 'white' : 'gray-600'}`}>({totalVerifyAccount})</span>
                                     </button>
-                                    <button onClick={() => handleFilterClick('Pending')} className="px-4 py-2 rounded-md bg-white shadow border">
-                                        Pending Verification <span className="text-yellow-500">({accounts.filter(account => account.status === 'Pending Verification').length})</span>
+                                    <button
+                                        onClick={() => handleFilterClick('Pending')}
+                                        className={`px-4 py-2 rounded-md shadow border ${selectedFilter === 'Pending' ? 'bg-yellow-500 text-white' : 'bg-white'}`}
+                                    >
+                                        Pending Verification <span className={`text-${selectedFilter === 'Pending' ? 'white' : 'yellow-500'}`}>({accounts.filter(account => account.status === 'Pending Verification').length})</span>
                                     </button>
-                                    <button onClick={() => handleFilterClick('Verified Students')} className="px-4 py-2 rounded-md bg-white shadow border">
-                                        Verified Students <span className="text-green-600">({accounts.filter(account => account.role === 'applicant' && account.status === 'Verified').length})</span>
+                                    <button
+                                        onClick={() => handleFilterClick('Verified Students')}
+                                        className={`px-4 py-2 rounded-md shadow border ${selectedFilter === 'Verified Students' ? 'bg-green-600 text-white' : 'bg-white'}`}
+                                    >
+                                        Verified Students <span className={`text-${selectedFilter === 'Verified Students' ? 'white' : 'green-600'}`}>({accounts.filter(account => account.role === 'applicant' && account.status === 'Verified').length})</span>
                                     </button>
-                                    <button onClick={() => handleFilterClick('Verified Scholarship Providers')} className="px-4 py-2 rounded-md bg-white shadow border">
-                                        Verified Scholarship Providers <span className="text-green-600">({accounts.filter(account => account.role === 'scholarship_provider' && account.status === 'Verified').length})</span>
+                                    <button
+                                        onClick={() => handleFilterClick('Verified Scholarship Providers')}
+                                        className={`px-4 py-2 rounded-md shadow border ${selectedFilter === 'Verified Scholarship Providers' ? 'bg-green-600 text-white' : 'bg-white'}`}
+                                    >
+                                        Verified Scholarship Providers <span className={`text-${selectedFilter === 'Verified Scholarship Providers' ? 'white' : 'green-600'}`}>({accounts.filter(account => account.role === 'scholarship_provider' && account.status === 'Verified').length})</span>
                                     </button>
                                 </div>
                             </div>
@@ -365,7 +334,7 @@ export default function Accounts() {
                             </div>
                         </div>
 
-                        <div className="border rounded-md mb-10">
+                        <div className="border rounded-md">
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-50">
                                     <tr className='text-blue-600'>
@@ -404,9 +373,7 @@ export default function Accounts() {
                                 </tbody>
                             </table>
                         </div>
-                        <div className="mt-8"></div> {/* Added space after the table */}
                     </div>
-
                 </div>
             </main>
         </div>

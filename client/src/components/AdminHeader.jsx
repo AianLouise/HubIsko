@@ -328,12 +328,12 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                             Scholarship Provider Applications
                                         </Link>
                                     </li> */}
-                                        <li>
+                                        {/* <li>
                                             <a href="#" className="flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
                                                 <FaFileCircleQuestion className="w-5 h-5 text-blue-600" />
                                                 Requests
                                             </a>
-                                        </li>
+                                        </li> */}
                                     </ul>
 
                                 )}

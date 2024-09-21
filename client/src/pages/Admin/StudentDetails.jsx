@@ -99,8 +99,11 @@ export default function StudentDetails() {
                 />
               </div>
               <div className="flex flex-col gap-4">
+                <div className='text-xl font-semibold text-gray-600'>
+                  {applicant.role === 'applicant' ? 'Student' : applicant.role}
+                </div>
                 <div className='text-4xl font-bold text-gray-800 flex items-center gap-4'>
-                  Name: {`${applicant.applicantDetails.firstName} ${applicant.applicantDetails.lastName}`}
+                  {`${applicant.applicantDetails.firstName} ${applicant.applicantDetails.lastName}`}
                   <div className="bg-blue-600 rounded-full">
                     <BiCheck className="w-8 h-8 text-white" />
                   </div>

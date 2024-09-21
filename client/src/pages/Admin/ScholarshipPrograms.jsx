@@ -158,46 +158,46 @@ export default function ScholarshipPrograms() {
                                         <div className="flex justify-between items-center p-4 bg-white shadow-md gap-1">
                                             <div className="flex gap-2 items-center">
                                                 <button
-                                                    className={`px-4 py-2 rounded-md bg-white shadow border ${filter === 'All' ? 'bg-blue-200' : ''}`}
+                                                    className={`px-4 py-2 rounded-md shadow border ${filter === 'All' ? 'bg-blue-600 text-white' : 'bg-white text-black'}`}
                                                     onClick={() => setFilter('All')}
                                                 >
-                                                    All <span className="text-blue-600">({scholarshipPrograms.length})</span>
+                                                    All <span className={`text-${filter === 'All' ? 'white' : 'blue-600'}`}>({scholarshipPrograms.length})</span>
                                                 </button>
                                                 <button
-                                                    className={`px-4 py-2 rounded-md bg-white shadow border ${filter === 'Pending Approval' ? 'bg-yellow-200' : ''}`}
+                                                    className={`px-4 py-2 rounded-md shadow border ${filter === 'Pending Approval' ? 'bg-yellow-500 text-white' : 'bg-white text-black'}`}
                                                     onClick={() => setFilter('Pending Approval')}
                                                 >
-                                                    Pending Approval <span className="text-yellow-500">({scholarshipPrograms.filter(program => program.status === 'Pending Approval').length})</span>
+                                                    Pending Approval <span className={`text-${filter === 'Pending Approval' ? 'white' : 'yellow-500'}`}>({scholarshipPrograms.filter(program => program.status === 'Pending Approval').length})</span>
                                                 </button>
                                                 <button
-                                                    className={`px-4 py-2 rounded-md bg-white shadow border ${filter === 'Approved' ? 'bg-blue-200' : ''}`}
+                                                    className={`px-4 py-2 rounded-md shadow border ${filter === 'Approved' ? 'bg-blue-600 text-white' : 'bg-white text-black'}`}
                                                     onClick={() => setFilter('Approved')}
                                                 >
-                                                    Approved <span className="text-blue-500">({scholarshipPrograms.filter(program => program.status === 'Approved').length})</span>
+                                                    Approved <span className={`text-${filter === 'Approved' ? 'white' : 'blue-600'}`}>({scholarshipPrograms.filter(program => program.status === 'Approved').length})</span>
                                                 </button>
                                                 <button
-                                                    className={`px-4 py-2 rounded-md bg-white shadow border ${filter === 'Published' ? 'bg-indigo-200' : ''}`}
+                                                    className={`px-4 py-2 rounded-md shadow border ${filter === 'Published' ? 'bg-indigo-500 text-white' : 'bg-white text-black'}`}
                                                     onClick={() => setFilter('Published')}
                                                 >
-                                                    Published <span className="text-indigo-500">({scholarshipPrograms.filter(program => program.status === 'Published').length})</span>
+                                                    Published <span className={`text-${filter === 'Published' ? 'white' : 'indigo-500'}`}>({scholarshipPrograms.filter(program => program.status === 'Published').length})</span>
                                                 </button>
                                                 <button
-                                                    className={`px-4 py-2 rounded-md bg-white shadow border ${filter === 'Ongoing' ? 'bg-teal-200' : ''}`}
+                                                    className={`px-4 py-2 rounded-md shadow border ${filter === 'Ongoing' ? 'bg-teal-500 text-white' : 'bg-white text-black'}`}
                                                     onClick={() => setFilter('Ongoing')}
                                                 >
-                                                    Ongoing <span className="text-teal-500">({scholarshipPrograms.filter(program => program.status === 'Ongoing').length})</span>
+                                                    Ongoing <span className={`text-${filter === 'Ongoing' ? 'white' : 'teal-500'}`}>({scholarshipPrograms.filter(program => program.status === 'Ongoing').length})</span>
                                                 </button>
                                                 <button
-                                                    className={`px-4 py-2 rounded-md bg-white shadow border ${filter === 'Completed' ? 'bg-purple-200' : ''}`}
+                                                    className={`px-4 py-2 rounded-md shadow border ${filter === 'Completed' ? 'bg-purple-500 text-white' : 'bg-white text-black'}`}
                                                     onClick={() => setFilter('Completed')}
                                                 >
-                                                    Completed <span className="text-purple-500">({scholarshipPrograms.filter(program => program.status === 'Completed').length})</span>
+                                                    Completed <span className={`text-${filter === 'Completed' ? 'white' : 'purple-500'}`}>({scholarshipPrograms.filter(program => program.status === 'Completed').length})</span>
                                                 </button>
                                                 <button
-                                                    className={`px-4 py-2 rounded-md bg-white shadow border ${filter === 'Rejected' ? 'bg-red-200' : ''}`}
+                                                    className={`px-4 py-2 rounded-md shadow border ${filter === 'Rejected' ? 'bg-red-500 text-white' : 'bg-white text-black'}`}
                                                     onClick={() => setFilter('Rejected')}
                                                 >
-                                                    Rejected <span className="text-red-500">({scholarshipPrograms.filter(program => program.status === 'Rejected').length})</span>
+                                                    Rejected <span className={`text-${filter === 'Rejected' ? 'white' : 'red-500'}`}>({scholarshipPrograms.filter(program => program.status === 'Rejected').length})</span>
                                                 </button>
                                             </div>
                                             <input
@@ -233,13 +233,13 @@ export default function ScholarshipPrograms() {
                                                         <td className="py-3 px-6 w-1/5">{program.organizationName}</td>
                                                         <td className="py-3 px-6 w-1/5">
                                                             <span className={`px-4 ml-2 py-1 rounded-md whitespace-nowrap ${program.status === 'Pending Approval' ? 'bg-yellow-500 text-white' :
-                                                                    program.status === 'Approved' ? 'bg-blue-500 text-white' :
-                                                                        program.status === 'Published' ? 'bg-indigo-500 text-white' :
-                                                                            program.status === 'Ongoing' ? 'bg-teal-500 text-white' :
-                                                                                program.status === 'Rejected' ? 'bg-red-500 text-white' :
-                                                                                    program.status === 'Archived' ? 'bg-gray-500 text-white' :
-                                                                                        program.status === 'Cancelled' ? 'bg-orange-500 text-white' :
-                                                                                            program.status === 'Completed' ? 'bg-purple-500 text-white' : ''
+                                                                program.status === 'Approved' ? 'bg-blue-500 text-white' :
+                                                                    program.status === 'Published' ? 'bg-indigo-500 text-white' :
+                                                                        program.status === 'Ongoing' ? 'bg-teal-500 text-white' :
+                                                                            program.status === 'Rejected' ? 'bg-red-500 text-white' :
+                                                                                program.status === 'Archived' ? 'bg-gray-500 text-white' :
+                                                                                    program.status === 'Cancelled' ? 'bg-orange-500 text-white' :
+                                                                                        program.status === 'Completed' ? 'bg-purple-500 text-white' : ''
                                                                 }`}>
                                                                 {program.status}
                                                             </span>
