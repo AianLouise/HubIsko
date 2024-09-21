@@ -17,6 +17,7 @@ import AnnouncementRoutes from './routes/announcement.route.js';
 import ScholarRoutes from './routes/scholar.route.js';
 import AdminApp from './routes/adminApplication.route.js';
 import AdminForums from './routes/adminForums.route.js';
+import AdminProfile from './routes/adminProfile.route.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import cors from 'cors';
@@ -62,6 +63,7 @@ app.use('/api/announcement', AnnouncementRoutes);
 app.use('/api/scholar', ScholarRoutes);
 app.use('/api/adminApp', AdminApp);
 app.use('/api/adminForums', AdminForums);
+app.use('/api/adminProfile', AdminProfile);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'client', 'dist')));

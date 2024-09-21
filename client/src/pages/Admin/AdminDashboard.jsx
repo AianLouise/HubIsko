@@ -26,6 +26,7 @@ export default function AdminDashboard() {
     const [pendingProviders, setPendingProviders] = useState(0);
     const [pendingStudents, setPendingStudents] = useState(0);
     const [pendingPrograms, setPendingPrograms] = useState(0); // New State for Pending Programs
+    const [forumPost, setForumPost] = useState(0); // New State for Forum Posts
     const [activities, setActivities] = useState([]); // State for Activities
     const [loading, setLoading] = useState(true);
 
@@ -66,6 +67,10 @@ export default function AdminDashboard() {
                 const pendingProgramsResponse = await fetch('/api/admin/search-pending-approval-programs');
                 const pendingProgramsData = await pendingProgramsResponse.json();
                 setPendingPrograms(pendingProgramsData.length);
+
+                const forumPostResponse = await fetch('/api/adminForums/forum-posts');
+                const forumPostData = await forumPostResponse.json();
+                setForumPost(forumPostData.length);
 
                 // Fetch recent activities
                 // const activitiesResponse = await fetch('/api/admin/recent-activities');
@@ -202,7 +207,7 @@ export default function AdminDashboard() {
                                 </div>
 
                                 <div className="flex flex-col gap-3 w-full">
-                                    <span className="text-6xl font-bold text-left text-blue-600">{totalScholars}</span>
+                                    <span className="text-6xl font-bold text-left text-blue-600">{forumPost}</span>
 
                                     <div className="flex justify-between items-center">
                                         <span className="text-base text-slate-500 flex gap-3">0 <span>New posts</span></span>
