@@ -324,39 +324,44 @@ export default function EditPersonalInformation() {
                         <option value="Widowed">Widowed</option>
                     </select>
                 </div>
-                <div className="flex flex-col gap-2">
-                    <label className="block text-sm font-medium text-gray-700">Maiden Name</label>
-                    <input
-                        type="text"
-                        name="maidenName"
-                        className={inputClasses}
-                        value={formData.applicantDetails.maidenName}
-                        onChange={handleChange}
-                        disabled={!isEditing || formData.civilStatus !== 'Married'}
-                    />
-                </div>
-                <div className="flex flex-col gap-2">
-                    <label className="block text-sm font-medium text-gray-700">Spouse Name</label>
-                    <input
-                        type="text"
-                        name="spouseName"
-                        className={inputClasses}
-                        value={formData.applicantDetails.spouseName}
-                        onChange={handleChange}
-                        disabled={!isEditing || formData.civilStatus !== 'Married'}
-                    />
-                </div>
-                <div className="flex flex-col gap-2">
-                    <label className="block text-sm font-medium text-gray-700">Spouse Occupation</label>
-                    <input
-                        type="text"
-                        name="spouseOccupation"
-                        className={inputClasses}
-                        value={formData.applicantDetails.spouseOccupation}
-                        onChange={handleChange}
-                        disabled={!isEditing || formData.civilStatus !== 'Married'}
-                    />
-                </div>
+
+                {formData.applicantDetails.civilStatus === 'Married' && (
+                    <>
+                        <div className="flex flex-col gap-2">
+                            <label className="block text-sm font-medium text-gray-700">Maiden Name</label>
+                            <input
+                                type="text"
+                                name="maidenName"
+                                className={inputClasses}
+                                value={formData.applicantDetails.maidenName}
+                                onChange={handleChange}
+                                disabled={!isEditing}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <label className="block text-sm font-medium text-gray-700">Spouse Name</label>
+                            <input
+                                type="text"
+                                name="spouseName"
+                                className={inputClasses}
+                                value={formData.applicantDetails.spouseName}
+                                onChange={handleChange}
+                                disabled={!isEditing}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <label className="block text-sm font-medium text-gray-700">Spouse Occupation</label>
+                            <input
+                                type="text"
+                                name="spouseOccupation"
+                                className={inputClasses}
+                                value={formData.applicantDetails.spouseOccupation}
+                                onChange={handleChange}
+                                disabled={!isEditing}
+                            />
+                        </div>
+                    </>
+                )}
 
                 {/* Fourth Row: Height, Weight, Birthplace, Contact Number */}
                 <div className="flex flex-col gap-2">
