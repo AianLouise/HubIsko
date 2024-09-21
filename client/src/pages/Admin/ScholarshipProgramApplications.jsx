@@ -27,6 +27,7 @@ export default function ScholarshipProgramApplications() {
     };
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         fetchPendingApprovalPrograms();
     }, []);
 

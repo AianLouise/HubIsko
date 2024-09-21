@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { IoMdArrowDropdown } from "react-icons/io";
+import { IoMdArrowDropdown, IoMdBusiness, IoMdSchool } from "react-icons/io";
 import Layout from "../../components/Layout";
 import ProviderDetails from "./ProviderDetails";
 import Snackbar from '../../components/Snackbar';
 import ConfirmationModal from '../../components/ConfirmationModal';
+import { FaFileAlt } from "react-icons/fa";
+import { BsBuildingFill } from "react-icons/bs";
 
 export default function ScholarshipsProviderDetails() {
     const { id } = useParams();
@@ -36,6 +38,7 @@ export default function ScholarshipsProviderDetails() {
     };
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         fetchProviderDetails();
     }, [id]);
 
@@ -117,13 +120,15 @@ export default function ScholarshipsProviderDetails() {
             <main className="flex-grow bg-[#f8f8fb] pb-24">
                 <div className='max-w-8xl mx-auto px-24 flex-col flex mt-16'>
                     <div className="flex gap-2 items-center">
-                        <Link to={'/accounts'} className="border shadow px-6 py-2 bg-white rounded-md hover:bg-slate-200">
-                            <span>Scholarships</span>
-                        </Link>
-                        <IoMdArrowDropdown className='-rotate-90 w-8 h-8 text-blue-600' />
-                        <div className="border shadow px-6 py-2 bg-white rounded-md">
-                            <span className="text-blue-600">{provider.scholarshipProviderDetails.organizationName}'s</span>
-                        </div>
+                      <Link to={'/scholarship-provider-applications'} className="border shadow px-6 py-2 bg-white rounded-md hover:bg-slate-200 flex items-center gap-2">
+                        <FaFileAlt className="w-6 h-6 text-blue-600" />
+                        <span>Scholarship Provider Applications</span>
+                      </Link>
+                      <IoMdArrowDropdown className='-rotate-90 w-8 h-8 text-blue-600' />
+                      <div className="border shadow px-6 py-2 bg-white rounded-md flex items-center gap-2">
+                        <BsBuildingFill className="w-6 h-6 text-blue-600" />
+                        <span className="text-blue-600">{provider.scholarshipProviderDetails.organizationName}'s</span>
+                      </div>
                     </div>
 
                     <div className="flex flex-col gap-10 p-8 w-full">

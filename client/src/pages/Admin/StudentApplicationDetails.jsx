@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { IoMdArrowDropdown } from "react-icons/io";
+import { IoMdArrowDropdown, IoMdPeople, IoMdPerson } from "react-icons/io";
 import Layout from "../../components/Layout";
 import Snackbar from '../../components/Snackbar';
 import ConfirmationModal from '../../components/ConfirmationModal';
+import { regions, provinces, cities, barangays } from 'select-philippines-address';
+import { FaFileAlt } from "react-icons/fa";
 
 export default function StudentApplicationDetails() {
     const { id } = useParams();
@@ -35,6 +37,7 @@ export default function StudentApplicationDetails() {
     };
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         fetchStudentDetails();
     }, [id]);
 
@@ -99,7 +102,95 @@ export default function StudentApplicationDetails() {
         setRejectReason(e.target.value);
     };
 
-    if (loading)  return (
+    const [regionList, setRegionList] = useState([]);
+    const [provinceList, setProvinceList] = useState([]);
+    const [cityList, setCityList] = useState([]);
+    const [barangayList, setBarangayList] = useState([]);
+
+    const [selectedRegion, setSelectedRegion] = useState('');
+    const [selectedProvince, setSelectedProvince] = useState('');
+    const [selectedCity, setSelectedCity] = useState('');
+    const [selectedBarangay, setSelectedBarangay] = useState('');
+
+    const [formData, setFormData] = useState({});
+    const [locationNames, setLocationNames] = useState({
+        region: '',
+        province: '',
+        city: '',
+        barangay: ''
+    });
+
+    // Fetch all regions on component mount
+    useEffect(() => {
+        regions().then(setRegionList);
+    }, []);
+
+    // Fetch provinces when a region is selected
+    useEffect(() => {
+        if (selectedRegion) {
+            provinces(selectedRegion).then(setProvinceList);
+        }
+    }, [selectedRegion]);
+
+    // Fetch cities when a province is selected
+    useEffect(() => {
+        if (selectedProvince) {
+            cities(selectedProvince).then(setCityList);
+        }
+    }, [selectedProvince]);
+
+    // Fetch barangays when a city is selected
+    useEffect(() => {
+        if (selectedCity) {
+            barangays(selectedCity).then(setBarangayList);
+        }
+    }, [selectedCity]);
+
+    // Save the selected location to the formData state
+    const handleSave = () => {
+        const locationData = {
+            region: selectedRegion,
+            province: selectedProvince,
+            city: selectedCity,
+            barangay: selectedBarangay,
+        };
+
+        console.log('Form Data:', locationData);
+
+        setFormData(locationData);
+    };
+
+    // Convert codes to names
+    useEffect(() => {
+        const regionName = regionList.find(region => region.region_code === selectedRegion)?.region_name || '';
+        const provinceName = provinceList.find(province => province.province_code === selectedProvince)?.province_name || '';
+        const cityName = cityList.find(city => city.city_code === selectedCity)?.city_name || '';
+        const barangayName = barangayList.find(barangay => barangay.brgy_code === selectedBarangay)?.brgy_name || '';
+
+        setLocationNames({
+            region: regionName,
+            province: provinceName,
+            city: cityName,
+            barangay: barangayName,
+        });
+    }, [selectedRegion, selectedProvince, selectedCity, selectedBarangay, regionList, provinceList, cityList, barangayList]);
+
+    // Set dummy data for location
+    useEffect(() => {
+        const dummyData = {
+            region: '03',
+            province: '0349',
+            city: '034904',
+            barangay: '034904004',
+        };
+
+        setSelectedRegion(dummyData.region);
+        setSelectedProvince(dummyData.province);
+        setSelectedCity(dummyData.city);
+        setSelectedBarangay(dummyData.barangay);
+    }, []);
+
+    if (loading) return (
         <div className="flex justify-center items-center h-screen">
             <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
@@ -107,6 +198,7 @@ export default function StudentApplicationDetails() {
             </svg>
         </div>
     );
+
     if (error) return <p>Error: {error}</p>;
     if (!student) return <p>No student data available</p>;
 
@@ -115,11 +207,14 @@ export default function StudentApplicationDetails() {
             <main className="flex-grow bg-[#f8f8fb] pb-24">
                 <div className='max-w-8xl mx-auto px-24 flex-col flex mt-16'>
                     <div className="flex gap-2 items-center font-medium">
-                        <Link to={'/student-applications'} className="border shadow px-6 py-2 bg-white rounded-md hover:bg-slate-200">
+                        <Link to={'/student-applications'} className="border shadow px-6 py-2 bg-white rounded-md hover:bg-slate-200 flex items-center gap-2">
+                            <FaFileAlt className="w-6 h-6 text-blue-600" />
                             <span>Student Applications</span>
                         </Link>
                         <IoMdArrowDropdown className='-rotate-90 w-8 h-8 text-blue-600' />
-                        <div className="border shadow px-6 py-2 bg-white rounded-md">
+
+                        <div className="border shadow px-6 py-2 bg-white rounded-md flex items-center gap-2">
+                            <IoMdPerson className="w-6 h-6 text-blue-600" />
                             <span className="text-blue-600">{student?.applicantDetails?.firstName} {student?.applicantDetails?.lastName}'s Application</span>
                         </div>
                     </div>
@@ -127,165 +222,257 @@ export default function StudentApplicationDetails() {
                     <div className="flex flex-col gap-10 p-8 w-full">
 
                         <div className="flex flex-col bg-white border p-4 py-6 rounded-md shadow">
-                        <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Student Details</div>
-                        <div className="grid grid-cols-4 gap-5 my-4 py-4 px-8">
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">First Name</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.firstName}</span>
+                            <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Student Details</div>
+                            <div className="flex flex-col items-center justify-center py-4">
+                                <label className="block text-sm text-slate-600 mb-2">Profile Picture</label>
+                                <img
+                                    src={student?.profilePicture || 'default-profile-picture-url'}
+                                    alt="Student Profile"
+                                    className="w-24 h-24 rounded-full object-cover"
+                                />
                             </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Middle Name</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.middleName}</span>
+                            <div className="grid grid-cols-4 gap-5 my-4 py-4 px-8">
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">First Name</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student?.applicantDetails?.firstName || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Middle Name</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student?.applicantDetails?.middleName || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Last Name</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student?.applicantDetails?.lastName || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Name Extension</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student?.applicantDetails?.nameExtension || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Birthdate</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student?.applicantDetails?.birthdate || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Gender</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student?.applicantDetails?.gender || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Blood Type</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student?.applicantDetails?.bloodType || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Civil Status</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student?.applicantDetails?.civilStatus || 'N/A'}
+                                    </span>
+                                </div>
+                                {student?.applicantDetails?.civilStatus === 'Married' && (
+                                    <>
+                                        <div className="">
+                                            <label className="block text-sm text-slate-600">Maiden Name</label>
+                                            <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                                {student?.applicantDetails?.maidenName || 'N/A'}
+                                            </span>
+                                        </div>
+                                        <div className="">
+                                            <label className="block text-sm text-slate-600">Spouse Name</label>
+                                            <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                                {student?.applicantDetails?.spouseName || 'N/A'}
+                                            </span>
+                                        </div>
+                                        <div className="">
+                                            <label className="block text-sm text-slate-600">Spouse Occupation</label>
+                                            <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                                {student?.applicantDetails?.spouseOccupation || 'N/A'}
+                                            </span>
+                                        </div>
+                                    </>
+                                )}
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Religion</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student?.applicantDetails?.religion || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Height</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student?.applicantDetails?.height || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Weight</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student?.applicantDetails?.weight || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Birthplace</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student?.applicantDetails?.birthplace || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Contact Number</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student?.applicantDetails?.contactNumber || 'N/A'}
+                                    </span>
+                                </div>
                             </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Last Name</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.lastName}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Name Extension</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.nameExtension}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Birthdate</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.birthdate}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Gender</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.gender}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Blood Type</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.bloodType}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Civil Status</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.civilStatus}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Maiden Name</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.maidenName}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Spouse Name</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.spouseName}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Spouse Occupation</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.spouseOccupation}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Religion</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.religion}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Height</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.height}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Weight</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.weight}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Birthplace</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.birthplace}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Contact Number</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.contactNumber}</span>
-                            </div>
-                        </div>
                         </div>
 
 
                         <div className="flex flex-col bg-white border p-4 py-6 rounded-md shadow">
-                        <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Address</div>
-                        <div className="grid grid-cols-3 gap-8 my-4 py-4 px-8">
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Region</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.address?.region}</span>
+                            <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Address</div>
+                            <div className="grid grid-cols-3 gap-8 my-4 py-4 px-8">
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Region</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {locationNames.region}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Province</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {locationNames.province}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">City</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {locationNames.city}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Barangay</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {locationNames.barangay}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Address Details</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student?.applicantDetails?.address?.addressDetails || 'N/A'}
+                                    </span>
+                                </div>
                             </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Province</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.address?.province}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">City</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.address?.city}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Barangay</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.address?.barangay}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Address Details</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student?.applicantDetails?.address?.addressDetails}</span>
-                            </div>
-                        </div>
                         </div>
 
-                        
+
                         <div className="flex flex-col bg-white border p-4 py-6 rounded-md shadow">
-                        <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Education</div>
-                        <div className="grid grid-cols-3 gap-8 my-4 py-4 px-8">
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">College Course</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.college.course}</span>
+                            <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Education</div>
+                            <div className="grid grid-cols-3 gap-8 my-4 py-4 px-8">
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Elementary School</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student.applicantDetails.education.elementary.school || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Elementary Year Graduated</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student.applicantDetails.education.elementary.yearGraduated || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Elementary Award</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student.applicantDetails.education.elementary.award || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Junior High School School</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student.applicantDetails.education.juniorHighSchool.school || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Junior High School Year Graduated</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student.applicantDetails.education.juniorHighSchool.yearGraduated || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Junior High School Award</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student.applicantDetails.education.juniorHighSchool.award || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Senior High School School</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student.applicantDetails.education.seniorHighSchool.school || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Senior High School Year Graduated</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student.applicantDetails.education.seniorHighSchool.yearGraduated || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">Senior High School Award</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student.applicantDetails.education.seniorHighSchool.award || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">College Course</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student.applicantDetails.education.college.course || 'N/A'}
+                                    </span>
+                                </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-600">College School</label>
+                                    <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">
+                                        {student.applicantDetails.education.college.school || 'N/A'}
+                                    </span>
+                                </div>
                             </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">College School</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.college.school}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Elementary Award</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.elementary.award}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Elementary School</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.elementary.school}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Elementary Year Graduated</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.elementary.yearGraduated}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Junior High School Award</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.juniorHighSchool.award}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Junior High School School</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.juniorHighSchool.school}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Junior High School Year Graduated</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.juniorHighSchool.yearGraduated}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Senior High School Award</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.seniorHighSchool.award}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Senior High School School</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.seniorHighSchool.school}</span>
-                            </div>
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Senior High School Year Graduated</label>
-                                <span className="mt-1 block px-3 font-medium bg-slate-100 py-2 border border-gray-300 rounded-md">{student.applicantDetails.education.seniorHighSchool.yearGraduated}</span>
-                            </div>
-                        </div>
                         </div>
 
                         <div className="flex flex-col bg-white border p-4 py-6 rounded-md shadow">
-                        <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Documents</div>
-                        <div className="grid grid-cols-3 gap-8 my-4 py-4 px-8">
-                            <div className="">
-                                <label className="block text-sm  text-slate-400">Student ID File</label>
-                                <a href={student.applicantDetails.studentIdFile} target="_blank" rel="noopener noreferrer" className="mt-1 block px-3 font-medium bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600">View Document</a>
+                            <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Documents</div>
+                            <div className="grid grid-cols-1 gap-8 my-4 py-10 items-center px-8">
+                                <div className="flex flex-col items-center">
+                                    <label className="block text-sm text-slate-600">Student ID File</label>
+                                    <a href={student.applicantDetails.studentIdFile} target="_blank" rel="noopener noreferrer" className="mt-1 block px-10 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600">
+                                        View Document
+                                    </a>
+                                </div>
                             </div>
                         </div>
 
                         <div className="flex justify-end gap-4 mt-6">
                             {student.status === 'Pending Verification' && (
                                 <>
+                                    <button
+                                        className="border shadow px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                                        onClick={() => setIsRejectModalOpen(true)}
+                                    >
+                                        Reject
+                                    </button>
+
+                                    <ConfirmationModal
+                                        isOpen={isRejectModalOpen}
+                                        onClose={() => setIsRejectModalOpen(false)}
+                                        onConfirm={() => handleReject(student._id)}
+                                        message="Are you sure you want to reject this student?"
+                                    />
                                     <button
                                         className="border shadow px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
                                         onClick={() => setIsApproveModalOpen(true)}
@@ -300,23 +487,9 @@ export default function StudentApplicationDetails() {
                                         message="Are you sure you want to approve this student?"
                                     />
 
-                                    <button
-                                        className="border shadow px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                                        onClick={() => setIsRejectModalOpen(true)}
-                                    >
-                                        Reject
-                                    </button>
-
-                                    <ConfirmationModal
-                                        isOpen={isRejectModalOpen}
-                                        onClose={() => setIsRejectModalOpen(false)}
-                                        onConfirm={() => handleReject(student._id)}
-                                        message="Are you sure you want to reject this student?"
-                                    />
                                 </>
                             )}
                         </div>
-                    </div>
                     </div>
                 </div>
             </main>

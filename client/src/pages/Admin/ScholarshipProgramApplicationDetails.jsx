@@ -37,6 +37,7 @@ export default function ScholarshipProgramApplicationDetails() {
     };
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         fetchScholarshipDetails();
     }, [id]);
 
