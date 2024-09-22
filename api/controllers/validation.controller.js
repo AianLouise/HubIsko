@@ -498,3 +498,27 @@ export const getValidationById = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+export const getValidationResultByScholarId = async (req, res) => {
+    const { scholarId } = req.params;
+
+    try {
+        // Find the validation results for the specific scholar
+        const validationResults = await Validation.find({ 'validationResults.scholar': scholarId }).populate({
+            path: 'validationResults.scholar',
+            select: 'applicantDetails.firstName applicantDetails.lastName profilePicture'
+        });
+
+        // Check if any validation results were found
+        if (!validationResults || validationResults.length === 0) {
+            return res.status(404).json({ message: 'Validation results not found for the specified scholar' });
+        }
+
+        // Send the validation results as a response
+        res.status(200).json(validationResults);
+    } catch (error) {
+        // Handle errors
+        console.error('Error fetching validation results:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};

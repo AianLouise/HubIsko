@@ -48,10 +48,25 @@ export default function ViewApplicationDetails() {
         fetchApplicationDetails();
     }, [applicationId]);
 
-        const handleApprove = async (applicationId, applicant, scholarshipId) => {
+    const handleApprove = async (applicationId, applicant, scholarshipId) => {
         console.log(`Starting approval process for application ID: ${applicationId}`);
-    
+
         try {
+            // Fetch available slots for the scholarship program
+            const slotsResponse = await fetch(`/api/scholarshipProgram/scholarships/${scholarshipId}/available-slots`);
+            if (!slotsResponse.ok) {
+                throw new Error('Failed to fetch available slots');
+            }
+            const slotsData = await slotsResponse.json();
+
+            // Check if there are available slots
+            if (slotsData.availableSlots <= 0) {
+                setError('No available slots in the scholarship program.');
+                setSuccessMessage('No available slots in the scholarship program.');
+                setShowSnackbar(true);
+                return;
+            }
+
             // Approve the application
             const response = await fetch(`/api/scholarshipProgram/applications/${applicationId}/status`, {
                 method: 'PATCH',
@@ -60,14 +75,14 @@ export default function ViewApplicationDetails() {
                 },
                 body: JSON.stringify({ applicationStatus: 'Approved' })
             });
-    
+
             if (!response.ok) {
                 throw new Error('Approval failed');
             }
-    
+
             const data = await response.json();
             console.log('Application approved:', data);
-    
+
             // Update the approvedScholar field in the scholarshipProgram table
             const updateScholarResponse = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipId}/approve-scholar/${applicant}`, {
                 method: 'PATCH',
@@ -75,22 +90,24 @@ export default function ViewApplicationDetails() {
                     'Content-Type': 'application/json',
                 }
             });
-    
+
             if (!updateScholarResponse.ok) {
                 throw new Error('Updating approved scholar failed');
             }
-    
+
             console.log('Approved scholar updated successfully');
-    
+
             // Fetch updated application details to reflect the new status
             await fetchApplicationDetails();
-    
+
             setSuccessMessage('Application approved successfully!');
             setShowSnackbar(true);
-    
+
         } catch (error) {
             console.error('Error approving application:', error);
             setError('Failed to approve application.');
+            setSuccessMessage('Failed to approve application.');
+            setShowSnackbar(true);
         }
     };
 
@@ -146,6 +163,8 @@ export default function ViewApplicationDetails() {
         } catch (error) {
             console.error('Error rejecting application:', error);
             setError('Failed to reject application.');
+            setSuccessMessage('Failed to reject application.');
+            setShowSnackbar(true);
         }
     };
 

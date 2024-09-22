@@ -5,6 +5,7 @@ import { BsArrowLeft } from 'react-icons/bs';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import ApplicationForm from '../ApplicationForm';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
+import Modal from 'react-modal';
 
 export default function ScholarView() {
     const { currentUser } = useSelector((state) => state.user);
@@ -16,6 +17,7 @@ export default function ScholarView() {
     const [activeTab, setActiveTab] = useState('scholars');
     const [scholar, setScholar] = useState(null);
     const [isValidated, setIsValidated] = useState(false);
+    const [isTerminateModalOpen, setIsTerminateModalOpen] = useState(false);
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
@@ -63,6 +65,31 @@ export default function ScholarView() {
         }
     };
 
+    const terminateScholar = async () => {
+        try {
+            const response = await fetch(`/api/scholar/terminate/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            alert('Scholar terminated successfully');
+            navigate(-1); // Navigate back after termination
+        } catch (error) {
+            console.error('Error terminating scholar:', error);
+        }
+    };
+
+    const openTerminateModal = () => {
+        setIsTerminateModalOpen(true);
+    };
+
+    const closeTerminateModal = () => {
+        setIsTerminateModalOpen(false);
+    };
 
     const [application, setApplication] = useState(null);
     const { id: applicationId } = useParams(); // Extract applicationId from the URL
@@ -161,11 +188,48 @@ export default function ScholarView() {
                                         Save Validation Status
                                     </button>
                                 </div>
+                                <div className='bg-white rounded-md shadow border p-4 mt-4'>
+                                    <h3 className='text-xl font-bold mb-2'>Validation Result</h3>
+                                    <p>{isValidated ? 'The scholar has been successfully validated.' : 'The scholar has not been validated yet.'}</p>
+                                    <button
+                                        onClick={openTerminateModal}
+                                        className='mt-4 px-4 py-2 bg-red-600 text-white rounded-md'
+                                    >
+                                        Terminate Scholar
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>
                 </div>
             </main>
+
+            <Modal
+                isOpen={isTerminateModalOpen}
+                onRequestClose={closeTerminateModal}
+                contentLabel="Confirm Termination"
+                className="fixed inset-0 flex items-center justify-center z-50"
+                overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
+            >
+                <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4 md:mx-auto">
+                    <h2 className="text-2xl font-bold mb-4">Confirm Termination</h2>
+                    <p>Are you sure you want to terminate this scholar?</p>
+                    <div className="flex justify-end gap-4 mt-4">
+                        <button
+                            className="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-md"
+                            onClick={closeTerminateModal}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-md"
+                            onClick={terminateScholar}
+                        >
+                            Confirm Termination
+                        </button>
+                    </div>
+                </div>
+            </Modal>
         </div>
-    )
+    );
 }

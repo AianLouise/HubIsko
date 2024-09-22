@@ -1,5 +1,5 @@
 import express from "express";
-import { getValidationByProgram, createValidation, test, postValidation, updateValidation, deleteValidation, completeValidation, getValidationsByProgram, getValidationsByProvider, approveValidationResult, rejectValidationResult, startValidation, getValidationById } from '../controllers/validation.controller.js';
+import { getValidationByProgram, createValidation, test, postValidation, updateValidation, deleteValidation, completeValidation, getValidationsByProgram, getValidationsByProvider, approveValidationResult, rejectValidationResult, startValidation, getValidationById, getValidationResultByScholarId } from '../controllers/validation.controller.js';
 
 const router = express.Router();
 
@@ -22,4 +22,7 @@ router.put('/:validationId/result/:resultId/reject', rejectValidationResult);
 
 // Route to get validation by ID
 router.get('/:validationId', getValidationById);
+
+router.get('/validation-results/scholar/:scholarId', getValidationResultByScholarId);
+
 export default router;

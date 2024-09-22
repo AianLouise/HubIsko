@@ -16,7 +16,15 @@ export default function ScholarshipDashboardDetails() {
     const navigate = useNavigate();
     const { currentUser } = useSelector((state) => state.user);
     const userId = currentUser?._id;
+    const { id: applicationId } = useParams();
+    const [activeTab, setActiveTab] = useState('scholars');
+    const [application, setApplication] = useState(null);
+    const [validations, setValidations] = useState([]);
+    const [carouselIndex, setCarouselIndex] = useState(0);
+    const [scholarshipData, setScholarshipData] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
 
+    // Redirect based on user role and email verification status
     useEffect(() => {
         if (currentUser) {
             if (currentUser.role === 'admin') {
@@ -31,16 +39,7 @@ export default function ScholarshipDashboardDetails() {
         }
     }, [currentUser, navigate]);
 
-    const { id } = useParams();
-    const [activeTab, setActiveTab] = useState('scholars');
-
-    const handleTabChange = (tab) => {
-        setActiveTab(tab);
-    };
-
-    const [application, setApplication] = useState(null);
-    const { id: applicationId } = useParams();
-
+    // Fetch application details
     useEffect(() => {
         const fetchApplicationDetails = async () => {
             try {
@@ -58,47 +57,29 @@ export default function ScholarshipDashboardDetails() {
         fetchApplicationDetails();
     }, [applicationId]);
 
-    console.log(application?.scholarshipProgram?._id);
-
-    const [validations, setValidations] = useState([]);
-
-    const programId = application?.scholarshipProgram?._id;
-
+    // Fetch validations by program
     useEffect(() => {
-        // Fetch validations by program from the backend
-        const fetchValidationsByProgram = async () => {
-            try {
-                const response = await fetch(`/api/validation/program/${programId}`);
-                const data = await response.json();
-                if (Array.isArray(data)) {
-                    setValidations(data);
-                } else {
-                    console.error('Fetched data is not an array:', data);
-                }
-            } catch (error) {
-                console.error('Error fetching validations:', error);
-            }
-        };
-
+        const programId = application?.scholarshipProgram?._id;
         if (programId) {
+            const fetchValidationsByProgram = async () => {
+                try {
+                    const response = await fetch(`/api/validation/program/${programId}`);
+                    const data = await response.json();
+                    if (Array.isArray(data)) {
+                        setValidations(data);
+                    } else {
+                        console.error('Fetched data is not an array:', data);
+                    }
+                } catch (error) {
+                    console.error('Error fetching validations:', error);
+                }
+            };
+
             fetchValidationsByProgram();
         }
-    }, [programId]);
+    }, [application?.scholarshipProgram?._id]);
 
-    const upcomingValidations = validations.filter(validation => validation.status === 'Upcoming');
-    const previousValidations = validations.filter(validation => validation.status === 'Done');
-    const [carouselIndex, setCarouselIndex] = useState(0);
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
-
-    const isApproved = application?.applicationStatus === 'Approved';
-
-    // Announcements
-    const [scholarshipData, setScholarshipData] = useState([]);
-    const [searchQuery, setSearchQuery] = useState('');
-
+    // Fetch announcements
     useEffect(() => {
         const fetchAnnouncements = async () => {
             try {
@@ -122,10 +103,14 @@ export default function ScholarshipDashboardDetails() {
         }
     }, [userId, application?.scholarshipProgram?._id]);
 
-    const filteredAnnouncements = scholarshipData.flatMap((item) => item.announcements).filter((announcement) =>
-        announcement.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        announcement.content.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // Scroll to top on mount
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    const handleTabChange = (tab) => {
+        setActiveTab(tab);
+    };
 
     const handleAnnouncementClick = (announcementId) => {
         navigate(`/announcement/${announcementId}`);
@@ -134,6 +119,17 @@ export default function ScholarshipDashboardDetails() {
     const handleBackClick = () => {
         navigate(-1);
     };
+
+    const upcomingValidations = validations.filter(validation => validation.status === 'Upcoming');
+    const ongoingValidations = validations.filter(validation => validation.status === 'Ongoing');
+    const previousValidations = validations.filter(validation => validation.status === 'Done');
+    const isApproved = application?.applicationStatus === 'Approved';
+
+    const filteredAnnouncements = scholarshipData.flatMap((item) => item.announcements).filter((announcement) =>
+        announcement.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        announcement.content.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
@@ -318,13 +314,69 @@ export default function ScholarshipDashboardDetails() {
                                                         </div>
                                                     )}
                                                 </div>
-                                                                                         <span className={`absolute top-0 right-0 ${validation.status === 'Upcoming' ? 'bg-blue-500' : validation.status === 'Completed' ? 'bg-gray-500' : 'bg-green-500'} text-white rounded-full px-3 py-1 text-xs`}>
+                                                <span className={`absolute top-0 right-0 ${validation.status === 'Upcoming' ? 'bg-blue-500' : validation.status === 'Completed' ? 'bg-gray-500' : 'bg-green-500'} text-white rounded-full px-3 py-1 text-xs`}>
                                                     {validation.status}
                                                 </span>
                                             </div>
                                         ))
                                     ) : (
                                         <p>No upcoming validations.</p>
+                                    )}
+                                </div>
+
+                                {/* Ongoing Document Validation */}
+                                <div className='mb-8'>
+                                    <h3 className='text-2xl font-bold mb-4'>Ongoing Document Validation</h3>
+                                    {ongoingValidations.length > 0 ? (
+                                        ongoingValidations.map(validation => (
+                                            <div key={validation._id} className='bg-white border-l-4 border-yellow-500 text-black-700 p-4 rounded-md shadow relative mb-6'>
+                                                <div className='flex justify-between items-center mb-4'>
+                                                    <h3 className='text-xl font-bold'>{validation.validationTitle}</h3>
+                                                    <div className='text-sm text-gray-500'>
+                                                        {validation.datePosted && (
+                                                            <p>
+                                                                Date Posted: {new Date(validation.datePosted).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {new Date(validation.datePosted).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <p className='mb-6'>{validation.validationDescription}</p> {/* Added more space after the description */}
+                                                <div className='mb-4'>
+                                                    <p className='font-medium text-gray-800'>Requirements Needed:</p>
+                                                    <ul className='list-disc pl-10'> {/* Indented the requirements */}
+                                                        {validation.requirements.map((req, index) => (
+                                                            <li key={index} className='mb-2 text-gray-700'>
+                                                                {req.requirement}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                                <div className='mb-4'>
+                                                    <p className='font-medium text-gray-800'>Validation Method: {validation.validationMethod}</p>
+                                                    {validation.validationMethod === 'Face-to-Face' && validation.faceToFaceDetails && (
+                                                        <div className='pl-5 mt-2'>
+                                                            <p className='text-gray-700'>Date & Time: {validation.faceToFaceDetails.sessionDate}</p>
+                                                            <p className='text-gray-700'>Location: {validation.faceToFaceDetails.location}</p>
+                                                        </div>
+                                                    )}
+                                                    {validation.validationMethod === 'Courier-Based' && validation.courierDetails && (
+                                                        <div className='pl-5 mt-2'>
+                                                            <p className='text-gray-700'>Mailing Address: {validation.courierDetails.mailingAddress}</p>
+                                                            <p className='text-gray-700'>Recipient Name: {validation.courierDetails.recipientName}</p>
+                                                            <p className='text-gray-700'>Recipient Contact: {validation.courierDetails.recipientContact}</p>
+                                                            <p className='text-gray-700'>Submission Deadline: {new Date(validation.courierDetails.submissionDeadline).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {new Date(validation.courierDetails.submissionDeadline).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</p>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className='mb-4'>
+                                                    <p className='font-medium text-gray-800'>Validation Result:</p>
+                                                    <p className='text-gray-700'>{validation.validationResult || 'No validation result available yet.'}</p>
+                                                </div>
+                                                <span className='absolute top-0 right-0 bg-yellow-500 text-white rounded-full px-3 py-1 text-xs'>Ongoing</span>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No ongoing validations.</p>
                                     )}
                                 </div>
 
@@ -374,6 +426,10 @@ export default function ScholarshipDashboardDetails() {
                                                             <p className='text-gray-700'>Submission Deadline: {new Date(validation.courierDetails.submissionDeadline).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {new Date(validation.courierDetails.submissionDeadline).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</p>
                                                         </div>
                                                     )}
+                                                </div>
+                                                <div className='mb-4'>
+                                                    <p className='font-medium text-gray-800'>Validation Result:</p>
+                                                    <p className='text-gray-700'>{validation.validationResult || 'No validation result available yet.'}</p>
                                                 </div>
                                                 <span className='absolute top-0 right-0 bg-gray-500 text-white rounded-full px-3 py-1 text-xs'>Completed</span>
                                             </div>

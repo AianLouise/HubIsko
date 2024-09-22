@@ -606,3 +606,23 @@ export const updateScholarshipDetails = async (req, res) => {
       res.status(500).json({ message: 'Server error' });
   }
 };
+
+export const checkAvailableSlots = async (req, res) => {
+  try {
+    const scholarshipId = req.params.id;
+    const scholarship = await Scholarship.findById(scholarshipId);
+
+    if (!scholarship) {
+      return res.status(404).json({ message: 'Scholarship program not found' });
+    }
+
+    const totalSlots = scholarship.numberOfScholarships;
+    const approvedScholars = scholarship.approvedScholars.length;
+    const availableSlots = totalSlots - approvedScholars;
+
+    res.status(200).json({ availableSlots });
+  } catch (error) {
+    console.error('Error checking available slots:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
