@@ -475,10 +475,10 @@ export default function ForumPost() {
                                         <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
                                         <span>{post.totalLikes}</span>
                                     </div>
-                                    <div className='flex flex-row gap-1 pr-2'>
+                                    {/* <div className='flex flex-row gap-1 pr-2'>
                                         <FaRegEye className='w-6 h-6 text-blue-600' />
                                         <span>{post.totalViews}</span>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>

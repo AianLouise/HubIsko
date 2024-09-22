@@ -14,6 +14,7 @@ import CommentForm from '../components/Forum/CommentForm';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { AiFillFilePdf, AiFillFileWord } from 'react-icons/ai';
 import { FaTrash } from 'react-icons/fa6';
+import { MdForum, MdOutlineForum } from 'react-icons/md';
 
 
 Modal.setAppElement('#root');
@@ -27,12 +28,14 @@ export default function ForumDetail() {
     const [commentContent, setCommentContent] = useState('');
     const [selectedFiles, setSelectedFiles] = useState([]);
     const navigate = useNavigate();
+    const storage = getStorage();
 
     const { currentUser } = useSelector(state => state.user);
 
     const isLoggedIn = !!currentUser; // Check if currentUser is not null or undefined
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         fetchPostDetails();
     }, []);
 
@@ -86,7 +89,10 @@ export default function ForumDetail() {
 
             await response.json();
             // Refresh the page
-            window.location.reload();
+            fetchPostDetails();
+            // Clear the comment box
+            setCommentContent('');
+            setSelectedFiles([]);
         } catch (error) {
             console.error('Error adding reply:', error);
         } finally {
@@ -220,7 +226,7 @@ export default function ForumDetail() {
             // Update the UI accordingly, e.g., clear the reply text
             setReplies(prevReplies => ({ ...prevReplies, [commentId]: '' }));
             // Optionally, fetch updated comments here to include the new reply
-            window.location.reload();
+            fetchPostDetails();
         } catch (error) {
             console.error('Failed to submit reply:', error);
             // Handle the error (e.g., show an error message to the user)
@@ -326,109 +332,116 @@ export default function ForumDetail() {
                 <div className='flex flex-col gap-8 mx-auto max-w-6xl p-2 lg:px-24'>
 
                     <div className='flex justify-between items-center mt-10'>
-                        <div className='flex gap-1 items-center'>
+                        <div className='flex gap-1 mt-10 items-center'>
                             <button
-                                className='bg-white border shadow px-4 py-1 mr-2 rounded-md hover:bg-slate-200 transition ease-in-out'
-                                onClick={() => navigate(`/admin-forums/new`)} // Navigate back to the previous page
+                                className='bg-white border shadow px-4 py-1 mr-2 rounded-md hover:bg-slate-200 transition ease-in-out flex items-center gap-2'
+                                onClick={() => navigate(-1)}
                             >
+                                <MdForum className='text-blue-600' />
                                 Forums
                             </button>
                             <IoMdArrowDropdown className='-rotate-90 text-2xl text-blue-600' />
-                            <button className='bg-white border shadow px-4 py-1 ml-2 rounded-md hover:bg-slate-200 transition ease-in-out'>
+                            <button className='bg-white border shadow px-4 py-1 ml-2 rounded-md hover:bg-slate-200 transition ease-in-out flex items-center gap-2'>
+                                <MdOutlineForum className='text-blue-600' />
                                 {post.title}
                             </button>
                         </div>
-                        <div className='flex gap-1 items-center'>
-                            <button
-                                className='bg-blue-600 text-white border shadow px-4 py-1 ml-2 rounded-md hover:bg-blue-700 transition ease-in-out flex items-center'
-                                onClick={handleEdit}
-                            >
-                                <FaEdit className='mr-1' /> Edit
-                            </button>
-                            <button
-                                className='bg-red-600 text-white border shadow px-4 py-1 ml-2 rounded-md hover:bg-red-700 transition ease-in-out flex items-center'
-                                onClick={openDeleteModal}
-                            >
-                                <FaTrash className='mr-1' /> Delete
-                            </button>
-                        </div>
 
-                        <Modal
-                            isOpen={isEditModalOpen}
-                            onRequestClose={closeEditModal}
-                            contentLabel="Edit Post"
-                            className="fixed inset-0 flex items-center justify-center z-50"
-                            overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
-                        >
-                            <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full mx-4 md:mx-auto">
-                                <h2 className="text-2xl font-bold mb-4">Edit Post</h2>
-                                <form>
-                                    <div className="mb-4">
-                                        <label className="block text-gray-700 text-sm font-bold mb-2">
-                                            Title:
-                                        </label>
-                                        <input
-                                            type="text"
-                                            defaultValue={post.title}
-                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                        />
-                                    </div>
-                                    <div className="mb-4">
-                                        <label className="block text-gray-700 text-sm font-bold mb-2">
-                                            Content:
-                                        </label>
-                                        <textarea
-                                            defaultValue={post.content}
-                                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                        ></textarea>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <button
-                                            type="submit"
-                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                                        >
-                                            Save
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={closeEditModal}
-                                            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                                        >
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </Modal>
-
-                        <Modal
-                            isOpen={isDeleteModalOpen}
-                            onRequestClose={closeDeleteModal}
-                            contentLabel="Delete Confirmation"
-                            className="fixed inset-0 flex items-center justify-center z-50"
-                            overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
-                        >
-                            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4 md:mx-auto">
-                                <h2 className="text-2xl font-bold mb-4">Confirm Delete</h2>
-                                <p className="mb-4">Are you sure you want to delete this post?</p>
-                                <div className="flex items-center justify-between">
+                        {currentUser.role === 'admin' && (
+                            <>
+                                <div className='flex gap-1 items-center'>
                                     <button
-                                        type="button"
-                                        onClick={handleDelete}
-                                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                        className='bg-blue-600 text-white border shadow px-4 py-1 ml-2 rounded-md hover:bg-blue-700 transition ease-in-out flex items-center'
+                                        onClick={handleEdit}
                                     >
-                                        Delete
+                                        <FaEdit className='mr-1' /> Edit
                                     </button>
                                     <button
-                                        type="button"
-                                        onClick={closeDeleteModal}
-                                        className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                        className='bg-red-600 text-white border shadow px-4 py-1 ml-2 rounded-md hover:bg-red-700 transition ease-in-out flex items-center'
+                                        onClick={openDeleteModal}
                                     >
-                                        Cancel
+                                        <FaTrash className='mr-1' /> Delete
                                     </button>
                                 </div>
-                            </div>
-                        </Modal>
+
+                                <Modal
+                                    isOpen={isEditModalOpen}
+                                    onRequestClose={closeEditModal}
+                                    contentLabel="Edit Post"
+                                    className="fixed inset-0 flex items-center justify-center z-50"
+                                    overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
+                                >
+                                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full mx-4 md:mx-auto">
+                                        <h2 className="text-2xl font-bold mb-4">Edit Post</h2>
+                                        <form>
+                                            <div className="mb-4">
+                                                <label className="block text-gray-700 text-sm font-bold mb-2">
+                                                    Title:
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    defaultValue={post.title}
+                                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                />
+                                            </div>
+                                            <div className="mb-4">
+                                                <label className="block text-gray-700 text-sm font-bold mb-2">
+                                                    Content:
+                                                </label>
+                                                <textarea
+                                                    defaultValue={post.content}
+                                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                                ></textarea>
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <button
+                                                    type="submit"
+                                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                                >
+                                                    Save
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={closeEditModal}
+                                                    className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </Modal>
+
+                                <Modal
+                                    isOpen={isDeleteModalOpen}
+                                    onRequestClose={closeDeleteModal}
+                                    contentLabel="Delete Confirmation"
+                                    className="fixed inset-0 flex items-center justify-center z-50"
+                                    overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
+                                >
+                                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4 md:mx-auto">
+                                        <h2 className="text-2xl font-bold mb-4">Confirm Delete</h2>
+                                        <p className="mb-4">Are you sure you want to delete this post?</p>
+                                        <div className="flex items-center justify-between">
+                                            <button
+                                                type="button"
+                                                onClick={handleDelete}
+                                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                            >
+                                                Delete
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={closeDeleteModal}
+                                                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                            >
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                </Modal>
+                            </>
+                        )}
                     </div>
 
                     <div className='border shadow p-4 rounded-md bg-white'>

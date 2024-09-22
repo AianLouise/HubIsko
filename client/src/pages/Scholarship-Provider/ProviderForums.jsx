@@ -23,6 +23,7 @@ export default function ProviderForums() {
   const [error, setError] = useState(null);
   const [notification, setNotification] = useState('');
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
 
   useEffect(() => {
     fetchRecentPosts();
@@ -72,6 +73,11 @@ export default function ProviderForums() {
     }
   };
 
+  const filteredPosts = recentPosts.filter(post =>
+    post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    post.content.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className={`flex flex-col min-h-screen`}>
 
@@ -119,9 +125,14 @@ export default function ProviderForums() {
 
             <div className='flex flex-row lg:items-center lg:justify-center gap-4'>
 
-              <select name="Gender" id="Gender" className='bg-white border rounded-lg p-3 w-60 font-bold text-left hidden lg:block'>
-                <option value="All posts">All posts</option>
-                <option value="My Posts">My posts</option>
+              <select
+                name="postFilter"
+                id="postFilter"
+                className="bg-white border rounded-lg p-3 w-60 font-bold text-left hidden lg:block"
+                aria-label="Filter posts by type"
+              >
+                <option value="all">All posts</option>
+                <option value="myPosts">My posts</option>
               </select>
 
               {notification && (
@@ -145,9 +156,10 @@ export default function ProviderForums() {
               <input
                 type="text"
                 placeholder='Search Posts'
-                name=""
-                id=""
-                className='border-2 p-2 px-6 text-lg font-medium rounded-md focus:outline-blue-400' />
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className='border-2 p-2 px-6 w-full text-lg font-medium rounded-md focus:outline-blue-400'
+              />
             </div>
           </div>
         </div>
@@ -245,14 +257,14 @@ export default function ProviderForums() {
             <span className='font-bold text-lg'>Recent posts</span>
           </div>
 
-          <div className='grid lg:grid-cols-2 gap-6 mb-4'>
-            {recentPosts.map((post) => (
+          <div className='grid lg:grid-cols-1 gap-6 mb-4'>
+            {filteredPosts.length > 0 ? filteredPosts.map((post) => (
               <div key={post._id} className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow cursor-pointer hover:bg-slate-100 hover:-translate-y-1 transition ease-in-out' onClick={() => handlePostClick(post._id)}>
                 <div className='flex flex-row gap-3'>
                   <img
-                    src={post.author.profilePicture || 'default-profile-pic-url'} // Use a default profile picture if not available
+                    src={post.author.profilePicture || 'default-profile-pic-url'}
                     alt={`${post.author.username}'s profile`}
-                    className='w-12 h-12 rounded-full object-cover' // Add object-cover class
+                    className='w-12 h-12 rounded-full'
                   />
                   <div className='flex flex-col'>
                     <span className='font-medium'>{post.author.username}</span>
@@ -282,14 +294,16 @@ export default function ProviderForums() {
                         <span>{post.totalComments}</span>
                       </div>
                     </div>
-                    <div className='flex flex-row gap-1 pr-2'>
+                    {/* <div className='flex flex-row gap-1 pr-2'>
                       <FaRegEye className='w-6 h-6 text-blue-600' />
-                      <span>{post.views}</span>
-                    </div>
+                      <span>{post.totalViews}</span>
+                    </div> */}
                   </div>
                 </div>
               </div>
-            ))}
+            )) : (
+              <p className="text-center my-10">No posts found</p>
+            )}
           </div>
 
         </div>
