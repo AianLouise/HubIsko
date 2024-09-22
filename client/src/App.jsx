@@ -204,7 +204,7 @@ export default function App() {
           <Route path="/validation/:id/scholars" element={<ValidationResult />} />
      
           <Route path="/provider-notification/:notificationId" element={<ProviderNotificationDetailPage />} />
-          <Route path="/provider-notifications" element={<ProviderAllNotification />} />
+          <Route path="/provider-notification" element={<ProviderAllNotification />} />
         </Route>
 
         {/* Scholar Routes */}
