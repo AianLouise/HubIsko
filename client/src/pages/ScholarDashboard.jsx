@@ -468,7 +468,7 @@ export default function ScholarDashboard() {
           </div>
           <span className='font-bold text-xl lg:text-2xl'>Scholarship Applications</span>
 
-          <div className='mb-2'>
+          {/* <div className='mb-2'>
             <span className='font-medium text-slate-500 lg:text-base text-sm'>Recent Scholarship Activities</span>
 
             <div className='flex lg:grid lg:grid-rows-1 lg:grid-cols-3 gap-2 text-sm mt-4 lg:mt-2'>
@@ -495,7 +495,7 @@ export default function ScholarDashboard() {
                 <IoMdArrowDropleftCircle className='w-10 h-10 rotate-180  text-blue-600' />
               </button>
             </div>
-          </div>
+          </div> */}
 
           <div className="flex flex-col lg:flex-row justify-between items-center mt-4 font-medium px-4">
             <div className='flex flex-wrap gap-2 lg:gap-4'>
