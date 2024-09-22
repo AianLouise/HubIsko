@@ -14,11 +14,13 @@ export default function ProviderDashboard() {
 
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const orgName = currentUser?.scholarshipProviderDetails.organizationName;
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const userId = currentUser?._id;
   const providerId = currentUser?._id;
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
+
 
   const [applicationsCount, setApplicationsCount] = useState(0);
   const [activeApplicationsCount, setActiveApplicationsCount] = useState(0); // Assuming you have a way to get active applications count
@@ -105,7 +107,7 @@ export default function ProviderDashboard() {
   return (
     <div className={`flex flex-col min-h-screen`}>
       <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''} `}>
-        <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} currentPath={`${currentUser.scholarshipProviderDetails.organizationName} / Dashboard`} />
+        <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
 
         {currentUser?.status === 'Pending Verification' && (
           <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 m-6 rounded-md" role="alert">

@@ -48,9 +48,9 @@ export default function ViewApplicationDetails() {
         fetchApplicationDetails();
     }, [applicationId]);
 
-    const handleApprove = async (applicationId, applicant, scholarshipId) => {
+        const handleApprove = async (applicationId, applicant, scholarshipId) => {
         console.log(`Starting approval process for application ID: ${applicationId}`);
-
+    
         try {
             // Approve the application
             const response = await fetch(`/api/scholarshipProgram/applications/${applicationId}/status`, {
@@ -60,14 +60,14 @@ export default function ViewApplicationDetails() {
                 },
                 body: JSON.stringify({ applicationStatus: 'Approved' })
             });
-
+    
             if (!response.ok) {
                 throw new Error('Approval failed');
             }
-
+    
             const data = await response.json();
             console.log('Application approved:', data);
-
+    
             // Update the approvedScholar field in the scholarshipProgram table
             const updateScholarResponse = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipId}/approve-scholar/${applicant}`, {
                 method: 'PATCH',
@@ -75,38 +75,19 @@ export default function ViewApplicationDetails() {
                     'Content-Type': 'application/json',
                 }
             });
-
+    
             if (!updateScholarResponse.ok) {
                 throw new Error('Updating approved scholar failed');
             }
-
+    
             console.log('Approved scholar updated successfully');
-
-            // Create a notification
-            const notificationResponse = await fetch(`/api/notification/notifications/create`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    applicantId: applicant, // Pass the applicant's ID as recipientId
-                    senderId: currentUser._id, // Pass the current user's ID as senderId
-                    scholarshipProgramId: scholarshipId // Pass the scholarship program ID
-                })
-            });
-
-            if (!notificationResponse.ok) {
-                throw new Error('Notification creation failed');
-            }
-
-            console.log('Notification created successfully');
-
+    
             // Fetch updated application details to reflect the new status
             await fetchApplicationDetails();
-
+    
             setSuccessMessage('Application approved successfully!');
             setShowSnackbar(true);
-
+    
         } catch (error) {
             console.error('Error approving application:', error);
             setError('Failed to approve application.');
@@ -218,7 +199,7 @@ export default function ViewApplicationDetails() {
     return (
         <div className={`flex flex-col min-h-screen`}>
             <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''}`}>
-                <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} currentPath={`${currentUser.scholarshipProviderDetails.organizationName} / `} />
+                <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
                 <div className="max-w-6xl px-24 mx-auto my-20">
                     <div className='my-8 flex gap-2 items-center font-medium'>
                         <Link

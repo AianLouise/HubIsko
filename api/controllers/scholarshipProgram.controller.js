@@ -1,7 +1,7 @@
 import Scholarship from '../models/scholarshipProgram.model.js';
 import ScholarshipApplication from '../models/scholarshipApplication.model.js';
 import User from '../models/user.model.js';
-
+import Notification from '../models/notification.model.js';
 
 export const test = (req, res) => {
   res.json({
@@ -325,18 +325,18 @@ export const updateApplicationStatus = async (req, res) => {
   const { applicationStatus, rejectionNote, allowResubmission } = req.body;
 
   try {
+    // Prepare the fields to be updated based on the application status
     const updateFields = { applicationStatus };
 
-    // If the status is 'Rejected', add rejectionNote and allowResubmission to the update
     if (applicationStatus === 'Rejected') {
       updateFields.rejectionNote = rejectionNote || 'No specific reason provided';
       updateFields.allowResubmission = allowResubmission || false;
     } else if (applicationStatus === 'Approved') {
-      // If the application is approved, clear the rejection note and resubmission flag
       updateFields.rejectionNote = null;
       updateFields.allowResubmission = false;
     }
 
+    // Update the application status in the database
     const application = await ScholarshipApplication.findByIdAndUpdate(
       id,
       updateFields,
@@ -347,9 +347,55 @@ export const updateApplicationStatus = async (req, res) => {
       return res.status(404).json({ message: 'Application not found' });
     }
 
-    res.status(200).json(application);
+    // Fetch the scholarship program details to get the providerId and program name
+    const scholarshipProgramDetails = await Scholarship.findById(application.scholarshipProgram);
+    if (!scholarshipProgramDetails) {
+      return res.status(404).json({ message: 'Scholarship Program not found' });
+    }
+
+    const providerId = scholarshipProgramDetails.providerId;
+
+    // Fetch the applicant and provider details to get their names
+    const applicantDetails = await User.findById(application.applicant);
+    const providerDetails = await User.findById(providerId);
+
+    if (!applicantDetails || !providerDetails) {
+      return res.status(404).json({ message: 'Applicant or Provider not found' });
+    }
+
+    // Create notification based on application status
+    let notificationMessage = '';
+    if (applicationStatus === 'Rejected') {
+      notificationMessage = `Your application for the ${scholarshipProgramDetails.title} has been rejected. Reason: ${updateFields.rejectionNote}`;
+    } else if (applicationStatus === 'Approved') {
+      notificationMessage = `Congratulations! Your application for the ${scholarshipProgramDetails.title} has been approved.`;
+    } else {
+      notificationMessage = `Your application status for the ${scholarshipProgramDetails.title} has been updated to: ${applicationStatus}`;
+    }
+
+    const notification = new Notification({
+      recipientId: application.applicant, // The applicant is the recipient
+      senderId: providerId, // The provider is the sender
+      scholarshipId: application.scholarshipProgram,
+      type: 'application',
+      message: notificationMessage,
+      recipientName: `${applicantDetails.applicantDetails.firstName} ${applicantDetails.applicantDetails.lastName}`, // Save applicant's name as recipientName
+      senderName: providerDetails.scholarshipProviderDetails.organizationName, // Save provider's organization name as senderName
+    });
+
+    await notification.save();
+
+    // Respond with the updated application
+    res.status(200).json({
+      message: 'Application status updated successfully',
+      application,
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to update application status', error });
+    console.error('Error updating application status:', error);
+    res.status(500).json({
+      message: 'Failed to update application status',
+      error: error.message,
+    });
   }
 };
 

@@ -89,6 +89,8 @@ import EditScholarshipDetails from "./components/ViewScholarshipDetails/EditScho
 import EditScholarshipWebView from "./components/ViewScholarshipDetails/EditScholarshipWebView";
 import VerifyEmailUpdate from "./components/ProviderSettings/VerifyEmailUpdate";
 import ValidationResult from "./components/ViewScholarshipDetails/ValidationResult";
+import ProviderNotificationDetailPage from "./components/ProviderNotificationDetailPage";
+import ProviderAllNotification from "./components/ProviderAllNotifications";
 
 
 // import RegisterAsProvider from "./pages/RegisterAsProvider";
@@ -129,6 +131,11 @@ export default function App() {
         <Route path="/scholarship-application/:scholarshipId" element={<ScholarshipApplication />} />
 
         <Route path="/verify-email-update" element={<VerifyEmailUpdate />} />
+
+      
+
+
+   
 
         {/* <Route path="/others-profile/:id" element={<OthersProfile />} /> */}
         {/* Admin Routes */}
@@ -196,6 +203,8 @@ export default function App() {
           <Route path="/validation-page" element={<ValidationPage />} />
           <Route path="/validation/:id/scholars" element={<ValidationResult />} />
      
+          <Route path="/notification/:notificationId" element={<ProviderNotificationDetailPage />} />
+          <Route path="/notifications" element={<ProviderAllNotification />} />
         </Route>
 
         {/* Scholar Routes */}
@@ -216,12 +225,14 @@ export default function App() {
           <Route path="/application-detail/:id" element={<InboxedApplicationDetail />} />
           <Route path="/resubmit-application/:id" element={<ResubmitApplication />} />
           <Route path="/student-info" element={<StudentInfo />} />
-          <Route path="/notifications" element={<ApplicantAllNotification />} />
-          <Route path="/notifications/:notificationId" element={<ApplicantDetailedNotification />} />
+
           {/* <Route path="/profile-preview/:id" element={<ProfilePreview />} /> */}
           {/* <Route path="/post-details" element={<PostDetails />} /> */}
           {/* <Route path="/preview-profile" element={<PreviewProfile />} /> */}
           <Route path="/announcement/:announcementId" element={<AnnouncementView />} />
+
+          <Route path="/notifications/:notificationId" element={<ApplicantDetailedNotification />} />
+          <Route path="/notifications" element={<ApplicantAllNotification />} />
         </Route>
 
         <Route path="/unauthorized" element={<UnauthorizedPage />} />

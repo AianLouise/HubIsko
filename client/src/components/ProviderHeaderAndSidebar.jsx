@@ -72,24 +72,24 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
     const handleSignOut = async () => {
         const userId = currentUser ? currentUser._id : null;
         if (!userId) {
-          console.log('User ID is not available');
-          return;
+            console.log('User ID is not available');
+            return;
         }
-      
+
         try {
-          await fetch('/api/auth/signout', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ userId }),
-          });
-          dispatch(signOut());
-          navigate('/');
+            await fetch('/api/auth/signout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId }),
+            });
+            dispatch(signOut());
+            navigate('/');
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      };
+    };
 
     const generateBreadcrumb = () => {
         const pathnames = location.pathname.split('/').filter(x => x);
@@ -141,10 +141,58 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
         );
     };
 
+    const handleSeeAllNotifications = () => {
+        navigate('/notifications');
+    };
+
+    const handleNotificationClick = (notificationId) => {
+        navigate(`/notification/${notificationId}`);
+    };
+
+
+    const [dropdownVisible, setDropdownVisible] = useState(false);
+
+    const toggleDropdown2 = () => {
+        setDropdownVisible(!dropdownVisible);
+    };
+
+    const [notifications, setNotifications] = useState([]);
+
+    const userId = currentUser ? currentUser._id : null;
+
+    useEffect(() => {
+        // Fetch notifications when the component mounts
+        const fetchNotifications = async () => {
+            if (!userId) {
+                console.warn('User is not logged in. Skipping fetch notifications.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/notification/notifications/${userId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch notifications');
+                }
+                const data = await response.json();
+                setNotifications(data);
+            } catch (error) {
+                console.error('Error fetching notifications:', error);
+            }
+        };
+
+        fetchNotifications();
+    }, [userId]);
+
+    const truncateMessage = (message, maxLength) => {
+        if (message.length > maxLength) {
+            return message.substring(0, maxLength) + '...';
+        }
+        return message;
+    };
 
     return (
         <header className="bg-white text-gray-800 p-4 flex justify-between items-center shadow border-b w-full">
-            <div className="max-w-8xl w-full mx-auto px-20 flex justify-between items-center">
+            <div className="max-w-8xl w-full mx-auto pl-10 pr-28 flex justify-between items-center">
                 <div className='flex items-center gap-2'>
                     <button className="text-blue-600" onClick={toggleSidebar}>
                         <FontAwesomeIcon icon={faBars} className='w-4 h-4' />
@@ -154,35 +202,49 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
 
 
                 <div className="flex gap-4 items-center">
-                    <div className="relative">
-                        <button onClick={toggleNotification} className='relative w-full border rounded-full p-1 scale-150 hover:bg-slate-200 focus:bg-blue-600 group'>
-                            <IoIosNotifications className='w-4 h-4 text-blue-600 group-focus:text-white' />
-                        </button>
-                        {showNotification && (
-                            <div ref={notificationRef} className="absolute top-full right-0 mt-2 border bg-white text-gray-800 shadow-lg rounded-md p-4 w-96 z-50">
-                                <div className='flex flex-col justify-start'>
-                                    <span className='text-2xl text-left border-b py-2 w-full'>Notification Inbox</span>
-                                    <div className='flex gap-2 pt-4'>
-                                        <button className='border rounded-md p-2 px-4 hover:bg-slate-200 focus:bg-blue-600 focus:text-white'>All</button>
-                                        <button className='border rounded-md p-2 px-4 hover:bg-slate-200 focus:bg-blue-600 focus:text-white'>Unread</button>
-                                    </div>
-                                    <div className='flex flex-col items-start p-2 mt-4'>
-                                        <span>New Notifications</span>
-                                        <div className='flex flex-col gap-2 mt-2'>
-                                            <div className='flex flex-row text-sm w-full gap-4'>
-                                                <div className='bg-blue-600 w-24 h-auto rounded-full'></div>
-                                                <div className='flex flex-col text-left'>
-                                                    <span className='font-bold'>HubIsko</span>
-                                                    <span>Application for the scholarship has been approved ... see more</span>
+                    {currentUser && currentUser.role === 'scholarship_provider' && (
+                        <div className='font-semibold'>
+                                                       <button onClick={toggleNotification} className="relative w-full border rounded-full p-3 hover:bg-slate-200 focus:bg-blue-600 group">
+                                <IoIosNotifications className="w-4 h-4 text-blue-600 group-focus:text-white scale-150" />
+                                {showNotification && (
+                                    <div ref={notificationRef} className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 border bg-white text-gray-800 shadow-lg rounded-md p-4 w-96 z-50">
+                                        <div className="flex flex-col justify-start">
+                                            <span className="text-2xl text-left border-b py-2 w-full">Notification Inbox</span>
+                            
+                                            <div className="flex flex-col items-start p-2 mt-4">
+                                                <span>New Notifications</span>
+                                                <div className="flex flex-col gap-2 mt-2 max-h-64 overflow-y-auto">
+                                                    {notifications.length > 0 ? (
+                                                        notifications.map((notification) => (
+                                                            <div
+                                                                key={notification._id}
+                                                                className="flex flex-row hover:bg-slate-200 rounded-md p-2 text-sm w-full gap-4 cursor-pointer"
+                                                                onClick={() => handleNotificationClick(notification._id)}
+                                                            >
+                                                                <img
+                                                                    src={notification.senderId.profilePicture || 'default-avatar.png'}
+                                                                    alt="Sender's Avatar"
+                                                                    className="w-12 h-12 rounded-full object-cover"
+                                                                />
+                                                                <div className="flex flex-col text-left">
+                                                                    <span className="font-bold">{notification.senderId.name}</span> {/* Accessing the name property */}
+                                                                    <span className="text-sm">{truncateMessage(notification.message, 50)}
+                                                                        <span className='text-blue-600 font-semibold'>  See More</span></span>
+                                                                </div>
+                                                            </div>
+                                                        ))
+                                                    ) : (
+                                                        <div>No new notifications</div>
+                                                    )}
                                                 </div>
                                             </div>
-                                            <button onClick={ShowModal} className='bg-blue-600 text-white rounded-md p-2 mt-4 font-medium hover:bg-blue-800 transition ease-in-out'>See All Notifications</button>
+                                            <div onClick={handleSeeAllNotifications} className="bg-blue-600 text-white rounded-md p-2 mt-4 font-medium hover:bg-blue-800 transition ease-in-out cursor-pointer">See All Notifications</div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                                )}
+                            </button>
+                        </div>
+                    )}
 
                     <div className="relative" ref={dropdownRef}>
                         <img
@@ -215,8 +277,6 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
                             <IoClose className='w-4 h-4 text-blue-600' />
                         </button>
                     </div>
-
-
 
                     <nav className="">
                         <ul className="space-y-2">
@@ -279,8 +339,6 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
                                     Settings
                                 </Link>
                             </li>
-
-                         
                         </ul>
                     </nav>
                 </aside>

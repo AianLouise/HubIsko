@@ -1,5 +1,7 @@
 import ScholarshipApplication from '../models/scholarshipApplication.model.js';
-import Scholarship from '../models/scholarshipProgram.model.js';
+import Notification from '../models/notification.model.js';
+import ScholarshipProgram from '../models/scholarshipProgram.model.js'; // Import the ScholarshipProgram model
+import User from '../models/user.model.js'; // Assuming you have a User model to fetch user details
 
 export const test = (req, res) => {
     res.json({
@@ -80,6 +82,35 @@ export const createScholarshipApplication = async (req, res) => {
         });
 
         await newApplication.save();
+
+        // Fetch the scholarship program details to get the providerId and program name
+        const scholarshipProgramDetails = await ScholarshipProgram.findById(scholarshipProgram);
+        if (!scholarshipProgramDetails) {
+            return res.status(404).json({ message: 'Scholarship Program not found' });
+        }
+
+        const providerId = scholarshipProgramDetails.providerId;
+
+        // Fetch the applicant and provider details to get their names
+        const applicantDetails = await User.findById(applicant);
+        const providerDetails = await User.findById(providerId);
+
+        if (!applicantDetails || !providerDetails) {
+            return res.status(404).json({ message: 'Applicant or Provider not found' });
+        }
+
+        // Create notification
+        const notification = new Notification({
+            recipientId: providerId, // Use the providerId as the recipient
+            senderId: applicant, // The student is the sender
+            scholarshipId: scholarshipProgram,
+            type: 'application',
+            message: `${firstName} ${lastName} has submitted a scholarship application for the ${scholarshipProgramDetails.title}.`,
+            recipientName: providerDetails.scholarshipProviderDetails.organizationName, // Save provider's organization name as recipientName
+            senderName: `${applicantDetails.applicantDetails.firstName} ${applicantDetails.applicantDetails.lastName}`, // Save applicant's name as senderName
+        });
+
+        await notification.save();
 
         res.status(201).json({
             message: 'Scholarship application created successfully',

@@ -4,7 +4,7 @@ import Scholarship from '../models/scholarshipProgram.model.js';
 import User from '../models/user.model.js';
 
 export const createNotification = async (req, res) => {
-    const { applicantId, senderId, scholarshipProgramId } = req.body;
+    const { applicantId, senderId, scholarshipProgramId, message, type } = req.body;
 
     try {
         // Validate senderId (assuming senderId is the ID of the current user)
@@ -18,11 +18,23 @@ export const createNotification = async (req, res) => {
             return res.status(404).json({ message: 'Scholarship Program not found' });
         }
 
+        // Validate message
+        if (!message) {
+            return res.status(400).json({ message: 'Message is required' });
+        }
+
+        // Validate type
+        if (!type) {
+            return res.status(400).json({ message: 'Type is required' });
+        }
+
         // Create a new notification
         const notification = new Notification({
             recipientId: applicantId,
             senderId: senderId,
-            message: `Your application for the ${scholarshipProgram.title} has been approved.`,
+            scholarshipId: scholarshipProgramId,
+            type: type,
+            message: message,
         });
 
         await notification.save();
@@ -34,7 +46,6 @@ export const createNotification = async (req, res) => {
     }
 };
 
-// Controller to fetch notifications for a specific recipient
 export const getNotifications = async (req, res) => {
     const { recipientId } = req.params;
 
@@ -45,14 +56,10 @@ export const getNotifications = async (req, res) => {
 
     try {
         // Find notifications where the recipientId matches the user's ID
-        // and populate the senderId field with the sender's profile picture
+        // and populate the senderId field with the sender's profile picture and organization name
         const notifications = await Notification.find({ recipientId })
             .sort({ createdAt: -1 })
-            .populate('senderId', 'profilePicture scholarshipProviderDetails.organizationName');  // Populating the senderId with profilePicture
-
-        // if (!notifications.length) {
-        //     return res.status(404).json({ message: 'No notifications found' });
-        // }
+            .populate('senderId', 'profilePicture scholarshipProviderDetails.organizationName username');  // Populating the senderId with profilePicture, organizationName, and username
 
         res.status(200).json(notifications);
     } catch (error) {

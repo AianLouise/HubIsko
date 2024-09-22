@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-// import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import { useDispatch } from 'react-redux';
 import { signOut } from '../redux/user/userSlice';
 import { IoIosNotifications } from "react-icons/io";
@@ -20,22 +19,6 @@ import NewLogo from '../assets/NewLogoClean.png';
 export default function Header() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector(state => state.user);
-  // const [logoUrl, setLogoUrl] = useState('');
-
-  // useEffect(() => {
-  //   async function fetchLogoUrl() {
-  //     const storage = getStorage();
-  //     const logoRef = ref(storage, '/System Files/logo.jpg'); // Ensure this path is correct
-  //     try {
-  //       const url = await getDownloadURL(logoRef);
-  //       setLogoUrl(url);
-  //     } catch (error) {
-  //       console.error('Error fetching logo URL:', error);
-  //     }
-  //   }
-
-  //   fetchLogoUrl();
-  // }, []);
 
   const [showDropdown, setShowDropdown] = useState(false);
   const showDropdownRef = useRef(null);
@@ -87,7 +70,7 @@ export default function Header() {
       console.log('User ID is not available');
       return;
     }
-  
+
     try {
       await fetch('/api/auth/signout', {
         method: 'POST',
@@ -266,10 +249,6 @@ export default function Header() {
                   <div ref={notificationRef} className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 border bg-white text-gray-800 shadow-lg rounded-md p-4 w-96 z-50">
                     <div className="flex flex-col justify-start">
                       <span className="text-2xl text-left border-b py-2 w-full">Notification Inbox</span>
-                      <div className="flex gap-2 pt-4">
-                        <button className="border rounded-md p-2 px-4 hover:bg-slate-200 focus:bg-blue-600 focus:text-white">All</button>
-                        <button className="border rounded-md p-2 px-4 hover:bg-slate-200 focus:bg-blue-600 focus:text-white">Unread</button>
-                      </div>
                       <div className="flex flex-col items-start p-2 mt-4">
                         <span>New Notifications</span>
                         <div className="flex flex-col gap-2 mt-2 max-h-64 overflow-y-auto">

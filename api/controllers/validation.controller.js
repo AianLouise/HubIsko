@@ -1,5 +1,7 @@
 import Validation from '../models/validation.model.js';
 import ScholarshipProgram from '../models/scholarshipProgram.model.js';
+import Notification from '../models/notification.model.js';
+import User from '../models/user.model.js';
 
 export const test = (req, res) => {
     res.json({
@@ -107,6 +109,23 @@ export const postValidation = async (req, res) => {
         // Save the updated validation
         await validation.save();
 
+        // Create notifications for all approved scholars
+        const notifications = await Promise.all(scholarshipProgram.approvedScholars.map(async scholar => {
+            const recipientDetails = await User.findById(scholar._id);
+            return {
+                recipientId: scholar._id,
+                senderId: scholarshipProgram.providerId,
+                scholarshipId: scholarshipProgram._id,
+                type: 'validation',
+                message: `A new validation titled "${validation.validationTitle}" has been posted for the ${scholarshipProgram.title} scholarship program.`,
+                recipientName: `${recipientDetails.applicantDetails.firstName} ${recipientDetails.applicantDetails.lastName}`,
+                senderName: scholarshipProgram.organizationName
+            };
+        }));
+
+        // Save all notifications to the database
+        await Notification.insertMany(notifications);
+
         // Send the updated validation as a response
         res.status(200).json(validation);
     } catch (error) {
@@ -131,11 +150,46 @@ export const startValidation = async (req, res) => {
         validation.status = 'Ongoing';
         validation.dateStarted = new Date(); // Set the current date as the dateStarted
 
+        // Fetch the scholarship program to get the approved scholars
+        const scholarshipProgram = await ScholarshipProgram.findById(validation.scholarshipProgram).populate('approvedScholars');
+
+        if (!scholarshipProgram) {
+            return res.status(404).json({ message: 'Scholarship program not found' });
+        }
+
+        // Add approved scholars to validation results if not already present
+        const existingScholars = validation.validationResults.map(result => result.scholar.toString());
+        scholarshipProgram.approvedScholars.forEach(scholar => {
+            if (!existingScholars.includes(scholar._id.toString())) {
+                validation.validationResults.push({
+                    scholar: scholar._id,
+                    status: 'Pending'
+                });
+            }
+        });
+
         // Save the updated validation
         await validation.save();
 
+        // Create notifications for all approved scholars
+        const notifications = await Promise.all(scholarshipProgram.approvedScholars.map(async scholar => {
+            const recipientDetails = await User.findById(scholar._id);
+            return {
+                recipientId: scholar._id,
+                senderId: scholarshipProgram.providerId,
+                scholarshipId: scholarshipProgram._id,
+                type: 'validation',
+                message: `The validation titled "${validation.validationTitle}" for the ${scholarshipProgram.title} scholarship program is now ongoing.`,
+                recipientName: `${recipientDetails.applicantDetails.firstName} ${recipientDetails.applicantDetails.lastName}`,
+                senderName: scholarshipProgram.organizationName
+            };
+        }));
+
+        // Save all notifications to the database
+        await Notification.insertMany(notifications);
+
         // Send the updated validation as a response
-        res.status(200).json({ message: 'Validation started successfully', validation });
+        res.status(200).json(validation);
     } catch (error) {
         // Handle errors
         console.error('Error starting validation:', error);
@@ -232,6 +286,30 @@ export const completeValidation = async (req, res) => {
         validation.dateDone = new Date(); // Set the current date and time as dateDone
         await validation.save();
 
+        // Fetch the scholarship program to get the approved scholars
+        const scholarshipProgram = await ScholarshipProgram.findById(validation.scholarshipProgram).populate('approvedScholars');
+
+        if (!scholarshipProgram) {
+            return res.status(404).json({ message: 'Scholarship program not found' });
+        }
+
+        // Create notifications for all approved scholars
+        const notifications = await Promise.all(scholarshipProgram.approvedScholars.map(async scholar => {
+            const recipientDetails = await User.findById(scholar._id);
+            return {
+                recipientId: scholar._id,
+                senderId: scholarshipProgram.providerId,
+                scholarshipId: scholarshipProgram._id,
+                type: 'validation',
+                message: `The validation titled "${validation.validationTitle}" for the ${scholarshipProgram.title} scholarship program has been completed.`,
+                recipientName: `${recipientDetails.applicantDetails.firstName} ${recipientDetails.applicantDetails.lastName}`,
+                senderName: scholarshipProgram.organizationName
+            };
+        }));
+
+        // Save all notifications to the database
+        await Notification.insertMany(notifications);
+
         res.status(200).json({ message: 'Validation status updated to Completed successfully' });
     } catch (error) {
         console.error('Error updating validation status:', error);
@@ -310,6 +388,32 @@ export const approveValidationResult = async (req, res) => {
         result.status = 'Approved';
         await validation.save();
 
+        // Fetch the scholar details
+        const scholar = await User.findById(result.scholar);
+        if (!scholar) {
+            return res.status(404).json({ message: 'Scholar not found' });
+        }
+
+        // Fetch the scholarship program details
+        const scholarshipProgram = await ScholarshipProgram.findById(validation.scholarshipProgram);
+        if (!scholarshipProgram) {
+            return res.status(404).json({ message: 'Scholarship program not found' });
+        }
+
+        // Create a notification for the scholar
+        const notification = new Notification({
+            recipientId: scholar._id,
+            senderId: scholarshipProgram.providerId,
+            scholarshipId: scholarshipProgram._id,
+            type: 'validation',
+            message: `Your validation for "${validation.validationTitle}" has been approved.`,
+            recipientName: `${scholar.applicantDetails.firstName} ${scholar.applicantDetails.lastName}`,
+            senderName: scholarshipProgram.organizationName
+        });
+
+        // Save the notification to the database
+        await notification.save();
+
         res.status(200).json({ message: 'Validation result approved successfully' });
     } catch (error) {
         console.error('Error approving validation result:', error);
@@ -336,6 +440,32 @@ export const rejectValidationResult = async (req, res) => {
         result.status = 'Rejected';
         result.feedback = feedback; // Store feedback in the validation result
         await validation.save();
+
+        // Fetch the scholar details
+        const scholar = await User.findById(result.scholar);
+        if (!scholar) {
+            return res.status(404).json({ message: 'Scholar not found' });
+        }
+
+        // Fetch the scholarship program details
+        const scholarshipProgram = await ScholarshipProgram.findById(validation.scholarshipProgram);
+        if (!scholarshipProgram) {
+            return res.status(404).json({ message: 'Scholarship program not found' });
+        }
+
+        // Create a notification for the scholar
+        const notification = new Notification({
+            recipientId: scholar._id,
+            senderId: scholarshipProgram.providerId,
+            scholarshipId: scholarshipProgram._id,
+            type: 'validation',
+            message: `Your validation for "${validation.validationTitle}" has been rejected. Feedback: ${feedback}`,
+            recipientName: `${scholar.applicantDetails.firstName} ${scholar.applicantDetails.lastName}`,
+            senderName: scholarshipProgram.organizationName
+        });
+
+        // Save the notification to the database
+        await notification.save();
 
         res.status(200).json({ message: 'Validation result rejected successfully' });
     } catch (error) {
