@@ -1,5 +1,5 @@
 import express from "express";
-import { approveScholarshipProvider, countApprovedScholars, createAccount, getAllApplicants, getAllProviders, getAllScholarshipPrograms, getAllUsers, getApplicantById, getPendingScholarshipPrograms, getPendingScholarshipProviders, getScholarshipProgramDetailsById, getScholarshipProviderById, getTotalApplicants, getTotalApprovedPrograms, getTotalScholarshipProviders, getTotalScholarships, getTotalUnverifiedAccounts, getTotalUserAccounts, getUserForumPosts, getUserScholarshipPrograms, rejectScholarshipProgram, rejectScholarshipProvider, searchPendingApprovalPrograms, searchPendingVerificationProviders, searchPendingVerificationStudent, test, updateStudentDetails, verifyScholarshipProgram, verifyScholarshipProviderStatus } from '../controllers/admin.controller.js';
+import { approveScholarshipProvider, countApprovedScholars, createAccount, getAllApplicants, getAllProviders, getAllScholarshipPrograms, getAllUsers, getApplicantById, getPendingScholarshipPrograms, getPendingScholarshipProviders, getScholarshipProgramDetailsById, getScholarshipProviderById, getTotalApplicants, getTotalApprovedPrograms, getTotalScholarshipProviders, getTotalScholarships, getTotalUnverifiedAccounts, getTotalUserAccounts, getUserForumPosts, getUserScholarshipPrograms, rejectScholarshipProgram, rejectScholarshipProvider, searchPendingApprovalPrograms, searchPendingVerificationProviders, searchPendingVerificationStudent, test, updateProviderDetails, updateStudentDetails, verifyScholarshipProgram, verifyScholarshipProviderStatus } from '../controllers/admin.controller.js';
 
 const router = express.Router();
 
@@ -31,6 +31,8 @@ router.get('/scholarship-program/:id', getScholarshipProgramDetailsById);
 router.patch('/scholarships/:id/verify', verifyScholarshipProgram);
 router.patch('/scholarships/:id/reject', rejectScholarshipProgram);
 router.patch('/student/:id', updateStudentDetails);
+router.patch('/provider/:id', updateProviderDetails);
+
 router.get('/scholarship-programs', getAllScholarshipPrograms);
 router.get('/user/:userId/scholarship-programs', getUserScholarshipPrograms);
 router.get('/user/:userId/forum-posts', getUserForumPosts);

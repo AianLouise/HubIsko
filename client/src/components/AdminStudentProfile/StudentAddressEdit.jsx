@@ -246,6 +246,7 @@ export default function StudentAddressEdit() {
                                     setBarangayList([]);
                                 }}
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                disabled={!isEditing}
                             >
                                 <option value="">Select Region</option>
                                 {regionList.map((region) => (
@@ -267,6 +268,7 @@ export default function StudentAddressEdit() {
                                     setBarangayList([]);
                                 }}
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                disabled={!isEditing}
                             >
                                 <option value="">Select Province</option>
                                 {provinceList.map((province) => (
@@ -287,6 +289,7 @@ export default function StudentAddressEdit() {
                                     setBarangayList([]);
                                 }}
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                disabled={!isEditing}
                             >
                                 <option value="">Select City</option>
                                 {cityList.map((city) => (
@@ -304,6 +307,7 @@ export default function StudentAddressEdit() {
                                 value={selectedBarangay}
                                 onChange={(e) => setSelectedBarangay(e.target.value)}
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                disabled={!isEditing}
                             >
                                 <option value="">Select Barangay</option>
                                 {barangayList.map((barangay) => (
@@ -330,6 +334,7 @@ export default function StudentAddressEdit() {
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                 placeholder="Enter House No./Unit No./Bldg/Floor, Street, Subdivision"
                                 required
+                                disabled={!isEditing}
                             />
                         </div>
                     </div>

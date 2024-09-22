@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { IoMdArrowDropdown, IoMdPeople } from "react-icons/io";
 import { BiCheck } from "react-icons/bi";
 import Layout from "../../components/Layout";
-import ProviderAccountEdit from "../../components/AdminProviderProfile/ProviderAccountEdit";
+// import ProviderAccountEdit from "../../components/AdminProviderProfile/ProviderAccountEdit";
 import ProviderDetailsEdit from "../../components/AdminProviderProfile/ProviderDetailsEdit";
 import ProviderAddressEdit from "../../components/AdminProviderProfile/ProviderAddressEdit";
 import ProviderAbout from "./ProviderAbout";
@@ -117,7 +117,7 @@ export default function ProviderDetails() {
 
           {selectedTab === 'Organization Information' && (
             <>
-              <ProviderAccountEdit provider={provider} />
+              {/* <ProviderAccountEdit provider={provider} /> */}
               <ProviderDetailsEdit provider={provider} />
               <ProviderAddressEdit provider={provider} />
             </>

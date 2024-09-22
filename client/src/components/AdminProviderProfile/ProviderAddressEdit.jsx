@@ -6,14 +6,12 @@ export default function ProviderAddressEdit() {
     const { id } = useParams();
 
     const [provider, setProvider] = useState({
-        providerDetails: {
-            address: {
-                region: '',
-                province: '',
-                city: '',
-                barangay: '',
-                addressDetails: '',
-            }
+        scholarshipProviderDetails: {
+            region: '',
+            province: '',
+            city: '',
+            barangay: '',
+            addressDetails: '',
         },
     });
 
@@ -21,14 +19,12 @@ export default function ProviderAddressEdit() {
     const [notification, setNotification] = useState(''); // State for notification message
 
     const [formData, setFormData] = useState({
-        providerDetails: {
-            address: {
-                region: '',
-                province: '',
-                city: '',
-                barangay: '',
-                addressDetails: '',
-            }
+        scholarshipProviderDetails: {
+            region: '',
+            province: '',
+            city: '',
+            barangay: '',
+            addressDetails: '',
         }
     });
 
@@ -45,13 +41,18 @@ export default function ProviderAddressEdit() {
     useEffect(() => {
         const fetchProviderDetails = async () => {
             try {
-                const response = await fetch(`/api/admin/provider/${id}`);
+                const response = await fetch(`/api/admin/scholarship-provider/${id}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
+                console.log('Fetched data:', data); // Debugging log
                 setProvider(data.provider);
-                setFormData(data.provider); // Initialize formData with fetched data
+                setFormData(data.provider.scholarshipProviderDetails); // Initialize formData with fetched data
+                setSelectedRegion(data.provider.scholarshipProviderDetails.region);
+                setSelectedProvince(data.provider.scholarshipProviderDetails.province);
+                setSelectedCity(data.provider.scholarshipProviderDetails.city);
+                setSelectedBarangay(data.provider.scholarshipProviderDetails.barangay);
             } catch (error) {
                 console.error('Error fetching provider details:', error);
             }
@@ -64,19 +65,12 @@ export default function ProviderAddressEdit() {
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
-            providerDetails: {
-                ...prevData.providerDetails,
-                address: {
-                    ...prevData.providerDetails.address,
-                    [name]: value,
-                }
-            }
+            [name]: value,
         }));
     };
 
     const handleSaveChanges = async () => {
-        const { address } = formData.providerDetails;
-        const { region, province, city, barangay, addressDetails } = address;
+        const { region, province, city, barangay, addressDetails } = formData;
 
         if (!region || !province || !city || !barangay || !addressDetails) {
             setNotification('Please fill in all required fields.');
@@ -92,7 +86,7 @@ export default function ProviderAddressEdit() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({ scholarshipProviderDetails: formData }),
             });
 
             if (!response.ok) {
@@ -114,7 +108,7 @@ export default function ProviderAddressEdit() {
     };
 
     const handleCancel = () => {
-        setFormData(provider); // Revert changes
+        setFormData(provider.scholarshipProviderDetails); // Revert changes
         setIsEditing(false);
     };
 
@@ -133,16 +127,10 @@ export default function ProviderAddressEdit() {
             provinces(selectedRegion).then(setProvinceList);
             setFormData(prevState => ({
                 ...prevState,
-                providerDetails: {
-                    ...prevState.providerDetails,
-                    address: {
-                        ...prevState.providerDetails.address,
-                        region: selectedRegion,
-                        province: '',
-                        city: '',
-                        barangay: ''
-                    }
-                }
+                region: selectedRegion,
+                province: '',
+                city: '',
+                barangay: ''
             }));
         }
     }, [selectedRegion]);
@@ -153,15 +141,9 @@ export default function ProviderAddressEdit() {
             cities(selectedProvince).then(setCityList);
             setFormData(prevState => ({
                 ...prevState,
-                providerDetails: {
-                    ...prevState.providerDetails,
-                    address: {
-                        ...prevState.providerDetails.address,
-                        province: selectedProvince,
-                        city: '',
-                        barangay: ''
-                    }
-                }
+                province: selectedProvince,
+                city: '',
+                barangay: ''
             }));
         }
     }, [selectedProvince]);
@@ -172,14 +154,8 @@ export default function ProviderAddressEdit() {
             barangays(selectedCity).then(setBarangayList);
             setFormData(prevState => ({
                 ...prevState,
-                providerDetails: {
-                    ...prevState.providerDetails,
-                    address: {
-                        ...prevState.providerDetails.address,
-                        city: selectedCity,
-                        barangay: ''
-                    }
-                }
+                city: selectedCity,
+                barangay: ''
             }));
         }
     }, [selectedCity]);
@@ -189,33 +165,10 @@ export default function ProviderAddressEdit() {
         if (selectedBarangay) {
             setFormData(prevState => ({
                 ...prevState,
-                providerDetails: {
-                    ...prevState.providerDetails,
-                    address: {
-                        ...prevState.providerDetails.address,
-                        barangay: selectedBarangay
-                    }
-                }
+                barangay: selectedBarangay
             }));
         }
     }, [selectedBarangay]);
-
-    // Load initial data from formData
-    useEffect(() => {
-        if (!isEditing && formData && formData.providerDetails && formData.providerDetails.address) {
-            const dummyData = {
-                region: formData.providerDetails.address.region,
-                province: formData.providerDetails.address.province,
-                city: formData.providerDetails.address.city,
-                barangay: formData.providerDetails.address.barangay,
-            };
-
-            setSelectedRegion(dummyData.region);
-            setSelectedProvince(dummyData.province);
-            setSelectedCity(dummyData.city);
-            setSelectedBarangay(dummyData.barangay);
-        }
-    }, [formData]);
 
     if (!provider) {
         return <div>Loading...</div>;
@@ -246,6 +199,7 @@ export default function ProviderAddressEdit() {
                                     setBarangayList([]);
                                 }}
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                disabled={!isEditing}
                             >
                                 <option value="">Select Region</option>
                                 {regionList.map((region) => (
@@ -267,6 +221,7 @@ export default function ProviderAddressEdit() {
                                     setBarangayList([]);
                                 }}
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                disabled={!isEditing}
                             >
                                 <option value="">Select Province</option>
                                 {provinceList.map((province) => (
@@ -287,6 +242,7 @@ export default function ProviderAddressEdit() {
                                     setBarangayList([]);
                                 }}
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                disabled={!isEditing}
                             >
                                 <option value="">Select City</option>
                                 {cityList.map((city) => (
@@ -304,6 +260,7 @@ export default function ProviderAddressEdit() {
                                 value={selectedBarangay}
                                 onChange={(e) => setSelectedBarangay(e.target.value)}
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                disabled={!isEditing}
                             >
                                 <option value="">Select Barangay</option>
                                 {barangayList.map((barangay) => (
@@ -325,11 +282,12 @@ export default function ProviderAddressEdit() {
                             <input
                                 type="text"
                                 name="addressDetails"
-                                value={formData.providerDetails.address.addressDetails}
+                                value={formData.addressDetails || ''}
                                 onChange={handleChange}
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                                 placeholder="Enter House No./Unit No./Bldg/Floor, Street, Subdivision"
                                 required
+                                disabled={!isEditing}
                             />
                         </div>
                     </div>

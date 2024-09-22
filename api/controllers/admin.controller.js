@@ -436,6 +436,33 @@ export const updateStudentDetails = async (req, res) => {
   }
 };
 
+export const updateProviderDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedDetails = req.body;
+
+    const provider = await User.findById(id);
+
+    if (!provider) {
+      return res.status(404).json({ message: 'Provider not found' });
+    }
+
+    // Update provider details
+    Object.keys(updatedDetails).forEach(key => {
+      provider[key] = updatedDetails[key];
+    });
+
+    await provider.save();
+
+    res.status(200).json({ message: 'Provider details updated successfully', provider });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error updating provider details',
+      error: error.message,
+    });
+  }
+};
+
 export const getAllScholarshipPrograms = async (req, res) => {
   try {
     const scholarshipPrograms = await ScholarshipProgram.find(); // Assuming you have a ScholarshipProgram model

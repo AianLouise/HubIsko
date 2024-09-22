@@ -28,7 +28,7 @@ export default function ProviderAccountEdit() {
     useEffect(() => {
         const fetchProviderDetails = async () => {
             try {
-                const response = await fetch(`/api/admin/provider/${id}`);
+                const response = await fetch(`/api/admin/scholarship-provider/${id}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }

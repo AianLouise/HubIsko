@@ -32,11 +32,11 @@ const ProviderForumPost = () => {
     return <div>Loading...</div>;
   }
 
-  const filteredPosts = posts; // Apply any filtering logic if needed
+  const filteredPosts = Array.isArray(posts) ? posts : []; // Ensure filteredPosts is always an array
 
   return (
     <div className='grid grid-cols-1 sm:grid-rows-1 gap-8 pb-12'>
-      {posts.length === 0 ? (
+      {filteredPosts.length === 0 ? (
         <div className='flex flex-col items-center justify-center gap-4 h-20'>
           <p>No posts available.</p>
         </div>

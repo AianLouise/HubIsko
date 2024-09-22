@@ -87,15 +87,25 @@ export default function StudentDetailsEdit() {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        const [key, field] = name.split('.'); // Split the name into key and field
 
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [key]: {
-                ...prevFormData[key],
-                [field]: value,
-            },
-        }));
+        setFormData((prevData) => {
+            const updatedData = {
+                ...prevData,
+                applicantDetails: {
+                    ...prevData.applicantDetails,
+                    [name.split('.').pop()]: value
+                }
+            };
+
+            // Clear specific fields if civilStatus changes from Married to another status
+            if (name === 'applicantDetails.civilStatus' && value !== 'Married') {
+                updatedData.applicantDetails.maidenName = '';
+                updatedData.applicantDetails.spouseName = '';
+                updatedData.applicantDetails.spouseOccupation = '';
+            }
+
+            return updatedData;
+        });
     };
 
     const handleEditClick = () => {
@@ -104,6 +114,17 @@ export default function StudentDetailsEdit() {
     console.log(formData);
 
     const handleSaveChanges = async () => {
+        // Clear specific fields if civilStatus is not Married
+        setFormData((prevData) => {
+            const updatedData = { ...prevData };
+            if (updatedData.applicantDetails.civilStatus !== 'Married') {
+                updatedData.applicantDetails.maidenName = '';
+                updatedData.applicantDetails.spouseName = '';
+                updatedData.applicantDetails.spouseOccupation = '';
+            }
+            return updatedData;
+        });
+
         // Validate form data
         const { applicantDetails } = formData;
         const { firstName, lastName, middleName, birthdate, birthplace, gender, bloodType, civilStatus, contactNumber, address } = applicantDetails;
@@ -218,7 +239,7 @@ export default function StudentDetailsEdit() {
                                 disabled={!isEditing}
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                             >
-                                <option value="">Select an extension</option>
+                                <option value="">Select an extension (if applicable)</option>
                                 <option value="Jr.">Jr.</option>
                                 <option value="Sr.">Sr.</option>
                                 <option value="II">II</option>
@@ -297,7 +318,7 @@ export default function StudentDetailsEdit() {
                         <div className="mb-4">
                             <label className='block text-sm font-medium text-gray-700 mb-2'>Civil Status</label>
                             <select
-                                name="applicantDetails.civilStatus"
+                                name="civilStatus"
                                 value={formData.applicantDetails.civilStatus}
                                 onChange={handleInputChange}
                                 disabled={!isEditing}
@@ -311,47 +332,48 @@ export default function StudentDetailsEdit() {
                             </select>
                         </div>
 
-                        <div className="mb-4">
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>Maiden Name</label>
-                            <input
-                                type="text"
-                                name="applicantDetails.maidenName"
-                                placeholder="Enter your maiden name"
-                                value={formData.applicantDetails.maidenName}
-                                onChange={handleInputChange}
-                                readOnly={!isEditing}
-                                disabled={formData.applicantDetails.civilStatus !== 'Married'}
-                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                            />
-                        </div>
+                        {formData.applicantDetails.civilStatus === 'Married' && (
+                            <>
+                                <div className="mb-4">
+                                    <label className='block text-sm font-medium text-gray-700 mb-2'>Maiden Name</label>
+                                    <input
+                                        type="text"
+                                        name="maidenName"
+                                        placeholder="Enter your maiden name"
+                                        value={formData.applicantDetails.maidenName}
+                                        onChange={handleInputChange}
+                                        readOnly={!isEditing}
+                                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                    />
+                                </div>
 
-                        <div className="mb-4">
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>Spouse Name</label>
-                            <input
-                                type="text"
-                                name="applicantDetails.spouseName"
-                                placeholder="Enter your spouse name"
-                                value={formData.applicantDetails.spouseName}
-                                onChange={handleInputChange}
-                                readOnly={!isEditing}
-                                disabled={formData.applicantDetails.civilStatus !== 'Married'}
-                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                            />
-                        </div>
+                                <div className="mb-4">
+                                    <label className='block text-sm font-medium text-gray-700 mb-2'>Spouse Name</label>
+                                    <input
+                                        type="text"
+                                        name="spouseName"
+                                        placeholder="Enter your spouse name"
+                                        value={formData.applicantDetails.spouseName}
+                                        onChange={handleInputChange}
+                                        readOnly={!isEditing}
+                                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                    />
+                                </div>
 
-                        <div className="mb-4">
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>Spouse Occupation</label>
-                            <input
-                                type="text"
-                                name="applicantDetails.spouseOccupation"
-                                placeholder="Enter your spouse occupation"
-                                value={formData.applicantDetails.spouseOccupation}
-                                onChange={handleInputChange}
-                                readOnly={!isEditing}
-                                disabled={formData.applicantDetails.civilStatus !== 'Married'}
-                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                            />
-                        </div>
+                                <div className="mb-4">
+                                    <label className='block text-sm font-medium text-gray-700 mb-2'>Spouse Occupation</label>
+                                    <input
+                                        type="text"
+                                        name="spouseOccupation"
+                                        placeholder="Enter your spouse occupation"
+                                        value={formData.applicantDetails.spouseOccupation}
+                                        onChange={handleInputChange}
+                                        readOnly={!isEditing}
+                                        className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                    />
+                                </div>
+                            </>
+                        )}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
@@ -377,7 +399,7 @@ export default function StudentDetailsEdit() {
                             <input
                                 type="number"
                                 name="applicantDetails.height"
-                                placeholder="Enter your height"
+                                placeholder="Enter your height (cm)"
                                 value={formData.applicantDetails.height}
                                 onChange={handleInputChange}
                                 readOnly={!isEditing}
@@ -390,7 +412,7 @@ export default function StudentDetailsEdit() {
                             <input
                                 type="number"
                                 name="applicantDetails.weight"
-                                placeholder="Enter your weight"
+                                placeholder="Enter your weight (kg)"
                                 value={formData.applicantDetails.weight}
                                 onChange={handleInputChange}
                                 readOnly={!isEditing}
@@ -405,9 +427,16 @@ export default function StudentDetailsEdit() {
                                 name="applicantDetails.contactNumber"
                                 placeholder="Enter your contact number"
                                 value={formData.applicantDetails.contactNumber}
-                                onChange={handleInputChange}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    if (/^\d*$/.test(value) && value.length <= 11) {
+                                        handleInputChange(e);
+                                    }
+                                }}
                                 readOnly={!isEditing}
                                 className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                title="Please enter an 11-digit contact number"
+                                maxLength="11"
                             />
                         </div>
                     </div>
