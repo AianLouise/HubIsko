@@ -23,6 +23,7 @@ const PostScholarship = () => {
         applicationStartDate: '',
         applicationDeadline: '',
         minGPA: '',
+        duration: '',
         nationality: '',
         otherEligibility: '',
         startDate: '',

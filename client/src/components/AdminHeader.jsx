@@ -172,11 +172,11 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                         {dropdownOpen && (
                             <div className="absolute mt-2 right-0 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50 font-medium">
                                 <ul>
-                                    <Link to={'#'}>
+                                    {/* <Link to={'#'}>
                                         <li className="p-2 hover:bg-gray-100 cursor-pointer">
                                             Profile
                                         </li>
-                                    </Link>
+                                    </Link> */}
                                     <Link to={'/admin-settings'}>
                                         <li className="p-2 hover:bg-gray-100 cursor-pointer">
                                             Settings

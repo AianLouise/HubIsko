@@ -4,14 +4,17 @@ import { FaBook, FaGraduationCap, FaHandHolding, FaEnvelope, FaMapMarkerAlt, FaP
 import { FaRegCalendarXmark } from 'react-icons/fa6';
 import { MdOutlineRefresh } from 'react-icons/md';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import CustomNotification from '../../components/CustomNotification';
 
 export default function EditScholarshipWebView() {
     const id = useParams();
     const scholarshipId = id.id;
+    const navigate = useNavigate();
     const [programDetails, setProgramDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [notification, setNotification] = useState({ message: '', type: '' });
 
     const fetchProgramDetails = async () => {
         try {
@@ -78,8 +81,6 @@ export default function EditScholarshipWebView() {
             });
         }
     }, [programDetails]);
-
-    const [isEditMode, setIsEditMode] = useState(false);
 
     // Firebase storage reference
     const storage = getStorage();
@@ -174,39 +175,50 @@ export default function EditScholarshipWebView() {
         }));
     };
 
-    const [sections, setSections] = useState([
-        { id: 1, title: 'What is this scholarship for?', content: 'To support students in their academic journey.' },
-        { id: 2, title: 'What are the benefits?', content: 'Tuition, Books, Living Expenses' },
-        { id: 3, title: 'What are the qualifications?', content: 'High School Diploma' },
-        { id: 4, title: 'How can I apply?', content: 'Submit your application online.' },
-        { id: 5, title: 'What documents should I prepare?', content: 'Transcript of Records, Birth Certificate' },
-    ]);
-
-    // Sync sections with formData.sections
-    useEffect(() => {
+    const handleSectionChange = (index, field, value) => {
+        const updatedSections = [...formData.sections];
+        updatedSections[index][field] = value;
         setFormData((prevData) => ({
             ...prevData,
-            sections: sections,
+            sections: updatedSections,
         }));
-    }, [sections]);
-
-    const handleEdit = (id, field, value) => {
-        setSections(sections.map(section => section.id === id ? { ...section, [field]: value } : section));
     };
 
-    const handleAdd = () => {
-        const newSection = { id: Date.now(), title: 'New Section', content: 'New Content' };
-        setSections([...sections, newSection]);
-    };
-
-    const handleDelete = (id) => {
-        setSections(sections.filter(section => section.id !== id));
+    const handleSaveChanges = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+            if (!response.ok) throw new Error('Failed to update scholarship details');
+            const data = await response.json();
+            setProgramDetails(data);
+            setNotification({ message: 'Scholarship details updated successfully', type: 'success' });
+            setTimeout(() => {
+                navigate(-1); // Redirect to the desired page
+            }, 2000); // Adjust the delay as needed
+        } catch (error) {
+            console.error('Error updating scholarship details:', error);
+            setError(error.message);
+            setNotification({ message: error.message, type: 'error' });
+        }
     };
 
     return (
         <div>
             <main className='flex-grow bg-[#f8f8fb] font-medium'>
-                <div className='border-b mb-8 py-8'>
+                {notification.message && (
+                    <CustomNotification
+                        message={notification.message}
+                        type={notification.type}
+                        onClose={() => setNotification({ message: '', type: '' })}
+                    />
+                )}
+                <div className='border-b py-8'>
                     <div className='flex flex-row items-center mx-auto max-w-6xl gap-10 px-24'>
                         <div className='flex flex-col items-center'>
                             <span className='text-sm bg-blue-600 text-white px-6 rounded-md py-2'>Click to Upload an Image</span>
@@ -215,18 +227,16 @@ export default function EditScholarshipWebView() {
                                     src={formData.scholarshipImage || 'https://via.placeholder.com/150'}
                                     alt='Scholarship Logo'
                                     className='w-full h-full border-blue-500 hover:border-blue-800 border-4 object-cover rounded-md'
-                                    onClick={isEditMode ? handleImageClick : null}
-                                    style={{ cursor: isEditMode ? 'pointer' : 'default', opacity: scholarshipImage ? 1 : 0.3 }}
+                                    onClick={handleImageClick}
+                                    style={{ cursor: 'pointer', opacity: scholarshipImage ? 1 : 0.3 }}
                                 />
-                                {isEditMode && (
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleImageChange}
-                                        ref={fileInputRef}
-                                        style={{ display: 'none' }}
-                                    />
-                                )}
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    ref={fileInputRef}
+                                    style={{ display: 'none' }}
+                                />
                             </div>
                             {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                         </div>
@@ -285,18 +295,16 @@ export default function EditScholarshipWebView() {
                                     src={formData.bannerImage || 'https://via.placeholder.com/600x200'}
                                     alt='Scholarship Banner'
                                     className='w-full h-full border-blue-500 hover:border-blue-800 border-4 object-cover rounded-md'
-                                    onClick={isEditMode ? handleBannerImageClick : null}
-                                    style={{ cursor: isEditMode ? 'pointer' : 'default', opacity: bannerImage ? 1 : 0.3 }}
+                                    onClick={handleBannerImageClick}
+                                    style={{ cursor: 'pointer', opacity: bannerImage ? 1 : 0.3 }}
                                 />
-                                {isEditMode && (
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleBannerImageChange}
-                                        ref={bannerFileInputRef}
-                                        style={{ display: 'none' }}
-                                    />
-                                )}
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleBannerImageChange}
+                                    ref={bannerFileInputRef}
+                                    style={{ display: 'none' }}
+                                />
                             </div>
                             {errorMessage2 && <p className="text-red-500 text-center">{errorMessage2}</p>}
                         </div>
@@ -307,73 +315,40 @@ export default function EditScholarshipWebView() {
                         </div>
 
                         <div className='mb-20'>
-                            {sections.map(section => (
+                            {formData.sections.map((section, index) => (
                                 <div key={section.id} className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
                                     <div className='flex justify-between items-center bg-blue-600 p-4 rounded-t-md'>
-                                        {isEditMode ? (
-                                            <input
-                                                type='text'
-                                                value={section.title || ''}
-                                                onChange={(e) => handleEdit(section.id, 'title', e.target.value)}
-                                                className='font-bold text-xl text-white bg-blue-600 focus:bg-white focus:text-blue-600 flex-grow'
-                                                required
-                                            />
-                                        ) : (
-                                            <h3 className='font-bold text-xl text-white'>{section.title}</h3>
-                                        )}
-                                        {isEditMode && (
-                                            <button onClick={() => handleDelete(section.id)} className='text-white bg-red-500 hover:bg-red-700 border-2 ml-4 px-6 py-2 rounded-md'>
-                                                Delete
-                                            </button>
-                                        )}
-                                    </div>
-
-                                    {isEditMode ? (
-                                        <textarea
-                                            value={section.content || ''}
-                                            onChange={(e) => handleEdit(section.id, 'content', e.target.value)}
-                                            className='text-sm p-4'
-                                            required
+                                        <input
+                                            type="text"
+                                            value={section.title}
+                                            onChange={(e) => handleSectionChange(index, 'title', e.target.value)}
+                                            className='font-bold text-xl text-white bg-blue-600 rounded-t-md w-full'
                                         />
-                                    ) : (
-                                        <p className='text-sm p-4'>{section.content}</p>
-                                    )}
+                                    </div>
+                                    <textarea
+                                        value={section.content}
+                                        onChange={(e) => handleSectionChange(index, 'content', e.target.value)}
+                                        className='text-sm p-4 w-full'
+                                    />
                                 </div>
                             ))}
-
-                            {isEditMode && (
-                                <div className='flex justify-center'>
-                                    <button type="button" onClick={handleAdd} className='mt-4 px-6 py-2 w-[200px] hover:w-full hover:bg-blue-800 transition-all ease-in-out duration-500  bg-blue-600 text-white rounded-md'>
-                                        Add Section
-                                    </button>
-                                </div>
-                            )}
                         </div>
 
                         {/* FAQ Section */}
                         <div className="flex flex-col gap-2 mt-8 border rounded-md bg-white">
-                            {isEditMode ? (
-                                <>
-                                    <input
-                                        type="text"
-                                        value={formData.faqTitle || 'Frequently Asked Questions'}
-                                        onChange={(e) => handleFormDataChange('faqTitle', e.target.value)}
-                                        className="font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md"
-                                        required
-                                    />
-                                    <textarea
-                                        value={formData.faqDescription || 'For more details, visit our website.'}
-                                        onChange={(e) => handleFormDataChange('faqDescription', e.target.value)}
-                                        className="text-sm p-4"
-                                        required
-                                    />
-                                </>
-                            ) : (
-                                <>
-                                    <h3 className='font-bold text-xl text-blue-600 p-4'>{formData.faqTitle}</h3>
-                                    <p className='text-sm p-4'>{formData.faqDescription}</p>
-                                </>
-                            )}
+                            <input
+                                type="text"
+                                value={formData.faqTitle}
+                                onChange={(e) => handleFormDataChange('faqTitle', e.target.value)}
+                                className="font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md w-full"
+                                required
+                            />
+                            <textarea
+                                value={formData.faqDescription}
+                                onChange={(e) => handleFormDataChange('faqDescription', e.target.value)}
+                                className="text-sm p-4 whitespace-pre-line w-full"
+                                required
+                            />
 
                             <div className='border mx-8'></div>
                             <div className='items-center justify-center flex -translate-y-5'>
@@ -416,16 +391,17 @@ export default function EditScholarshipWebView() {
                                 </button>
                             </div>
                         </div>
+
+                        <div className='flex justify-end p-4'>
+                            <button
+                                type="button"
+                                onClick={handleSaveChanges}
+                                className='px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-300'
+                            >
+                                Save Changes
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div className='flex justify-center mb-8'>
-                    <button
-                        type="button"
-                        onClick={() => setIsEditMode(!isEditMode)}
-                        className='px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800 transition duration-300'
-                    >
-                        {isEditMode ? 'Save' : 'Edit'}
-                    </button>
                 </div>
             </main>
         </div>

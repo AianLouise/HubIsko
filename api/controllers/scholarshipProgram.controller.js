@@ -53,6 +53,7 @@ export const createScholarshipProgram = async (req, res) => {
       educationLevel,
       location,
       fieldOfStudy,
+      duration,
       selectionProcess,
       selectionCriteria,
       renewalPolicy,
@@ -113,6 +114,7 @@ export const getScholarshipProgramsByProviderId = async (req, res) => {
       numberOfScholarships: program.numberOfScholarships,
       amount: program.amount,
       fieldOfStudy: program.fieldOfStudy,
+      duration: program.duration,
       location: program.location,
       educationLevel: program.educationLevel,
       applicationStartDate: program.applicationStartDate,
@@ -156,6 +158,7 @@ export const getAllScholarshipPrograms = async (req, res) => {
       numberOfScholarships: program.numberOfScholarships,
       amount: program.amount,
       fieldOfStudy: program.fieldOfStudy,
+      duration: program.duration,
       location: program.location,
       educationLevel: program.educationLevel,
       applicationStartDate: program.applicationStartDate,
@@ -228,6 +231,7 @@ export const getScholarshipProgramById = async (req, res) => {
       numberOfScholarships: scholarshipProgram.numberOfScholarships,
       amount: scholarshipProgram.amount,
       fieldOfStudy: scholarshipProgram.fieldOfStudy,
+      duration: scholarshipProgram.duration,
       location: scholarshipProgram.location,
       educationLevel: scholarshipProgram.educationLevel,
       applicationStartDate: scholarshipProgram.applicationStartDate,
@@ -587,5 +591,18 @@ export const updateScholarshipStatus = async (req, res) => {
   } catch (error) {
       console.error('Error updating scholarship status:', error);
       res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+export const updateScholarshipDetails = async (req, res) => {
+  try {
+      const updatedScholarship = await Scholarship.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      if (!updatedScholarship) {
+          return res.status(404).json({ message: 'Scholarship not found' });
+      }
+      res.json(updatedScholarship);
+  } catch (error) {
+      console.error('Error updating scholarship details:', error);
+      res.status(500).json({ message: 'Server error' });
   }
 };
