@@ -1,97 +1,105 @@
-import React, { useState , useEffect } from 'react';
-import { FaPlus } from 'react-icons/fa';
-import { FaStar, FaWrench, FaRegHeart, FaRegEye } from 'react-icons/fa';
-import { BiCommentDots } from 'react-icons/bi';
-import { FaNewspaper } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import ScholarshipProviderDescription from '../../components/ProviderProfile/ScholarshipProviderDescription';
+import ScholarshipProviderScholarships from '../../components/ProviderProfile/ScholarshipProviderScholarships';
+import ScholarshipProviderPosts from '../../components/ProviderProfile/ScholarshipProviderPosts';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import { useSelector } from 'react-redux';
 
-export default function Profile() {
+export default function ProviderProfile() {
+    const navigate = useNavigate();
     const { currentUser } = useSelector((state) => state.user);
+    const userId = currentUser._id;
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
-
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
-    const [selectedTab, setSelectedTab] = useState('About');
+    useEffect(() => {
+        if (currentUser) {
+            if (currentUser.role !== 'scholarship_provider') {
+                navigate('/'); // Redirect to home if not a scholarship provider
+            }
+        }
+    }, [currentUser, navigate]);
 
-    const handleTabClick = (tab) => {
-        setSelectedTab(tab);
-      };
+    const [user, setUser] = useState(null);
+    const [selectedTab, setSelectedTab] = useState('Description'); // Default tab
 
-    
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await fetch(`/api/providerAccount/user/${userId}`);
+                const data = await response.json();
+                setUser(data);
+
+                // Set default tab based on user role
+                if (data.role === 'scholarship_provider') {
+                    setSelectedTab('Description');
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+
+        fetchUser();
+    }, [userId]);
+
+    if (!user) {
+        return <div>Loading...</div>;
+    }
+
+    const renderTabs = () => {
+        return (
+            <>
+                <button onClick={() => setSelectedTab('Description')} className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'Description' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}>Description</button>
+                <button onClick={() => setSelectedTab('Scholarships')} className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'Scholarships' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}>Scholarships</button>
+                <button onClick={() => setSelectedTab('Posts')} className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'Posts' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}>Posts</button>
+            </>
+        );
+    };
+
+    const renderProfileContent = () => {
+        if (user.role === 'scholarship_provider') {
+            if (selectedTab === 'Description') return <ScholarshipProviderDescription user={user} />;
+            if (selectedTab === 'Scholarships') return <ScholarshipProviderScholarships userId={user._id} />;
+            return <ScholarshipProviderPosts userId={user._id} />;
+        }
+        return <div>Unknown role</div>;
+    };
 
     return (
-        <div className={`flex flex-col min-h-screen`}>
-
+        <div className='flex flex-col min-h-screen'>
             <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''} `}>
-                <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} currentPath={`${currentUser.scholarshipProviderDetails.organizationName} / Settings`} />
-
-                <div className='max-w-8xl mx-24'>
-                    
-                    <div className='flex flex-col bg-white border border-b-0 shadow rounded-md-t px-6 py-8 mt-12'>
-                        <div className='flex gap-2 items-center'>
-                            <div className='bg-blue-600 rounded-full w-32 h-32'>
-                            </div>
-
-                            <div className='flex flex-col text-left gap-3 ml-4'>
-                                <h1 className='text-4xl font-bold'>Organization Name</h1>
-                                <h2 className='text-lg text-slate-500'>Scholars: (0) </h2>
-                            </div>
+                <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+                <div className='border-b mb-8 py-8'>
+                    <div className='flex flex-row items-center mx-auto max-w-6xl gap-4 lg:gap-10 px-4 lg:px-24'>
+                        <img
+                            src={user.profilePicture}
+                            alt={`${user.username}'s profile`}
+                            className='w-36 h-36 my-8 rounded-md object-cover'
+                        />
+                        <div className='flex flex-col items-start gap-2 lg:w-1/2 '>
+                            <span className='text-xl font-medium text-gray-600'>
+                                Organization
+                            </span>
+                            <span className='text-3xl font-bold text-gray-800'>
+                                {user.scholarshipProviderDetails?.organizationName || 'N/A'}
+                            </span>
+                            <span className='text-xl font-medium text-gray-600'>Followers: {user.followers}</span>
                         </div>
                     </div>
-                    <div className='bg-white flex items-center gap-2 px-10 border shadow rounded-b'>
-                        <nav className='h-12'>
-                            <ul className='flex items-center gap-8 font-medium'>
+                </div>
 
-                            <li>
-                                <button onClick={() => handleTabClick('About')} className='relative flex py-3 group hover:text-blue-600 '>
-                                <span>About</span>
-                                <span className={`absolute left-0 top-0 w-full h-[2px] bg-blue-600 transition-transform duration-200 ease-in-out group-hover:scale-x-100 ${selectedTab === 'About' ? 'text-blue-600 scale-x-100' : 'scale-x-0 '}`}></span>
-                                </button>
-                            </li>
-
-                            <li>
-                                <button onClick={() => handleTabClick('Organization')} className='relative flex py-3 group hover:text-blue-600 '>
-                                <span>Organization</span>
-                                <span className={`absolute left-0 top-0 w-full h-[2px] bg-blue-600 transition-transform duration-200 ease-in-out group-hover:scale-x-100 ${selectedTab === 'Organization' ? 'text-blue-600 scale-x-100' : 'scale-x-0 '}`}></span>
-                                </button>
-                            </li>
-
-                            <li>
-                                <button onClick={() => handleTabClick('Followers')} className='relative flex py-3 group hover:text-blue-600 '>
-                                <span>Followers</span>
-                                <span className={`absolute left-0 top-0 w-full h-[2px] bg-blue-600 transition-transform duration-200 ease-in-out group-hover:scale-x-100 ${selectedTab === 'Followers' ? 'text-blue-600 scale-x-100' : 'scale-x-0 '}`}></span>
-                                </button>
-                            </li>
-
-                            </ul>
-                        </nav>
+                <div className='flex flex-col gap-4 max-w-6xl lg:px-24 mx-auto px-2'>
+                    <div className='grid grid-cols-3 lg:flex lg:flex-row gap-4 justify-between font-semibold mb-6'>
+                        {renderTabs()}
                     </div>
-                    
-                    {selectedTab === 'About' && (
-                    <div className=' flex items-center justify-center bg-white border shadow rounded-md p-4 mt-10 h-[400px]'>
-                        <span>Container for About</span>
-                    </div>
-                    )}
 
-                    {selectedTab === 'Organization' && (
-                    <div className=' flex items-center justify-center bg-white border shadow rounded-md p-4 mt-10 h-[400px]'>
-                        <span>Container for Organization</span>
+                    <div>
+                        {renderProfileContent()}
                     </div>
-                    )}
-
-                    {selectedTab === 'Followers' && (
-                    <div className=' flex items-center justify-center bg-white border shadow rounded-md p-4 mt-10 h-[400px]'>
-                        <span>Container for Followers</span>
-                    </div>
-                    )}
-    
-
                 </div>
             </main>
-
         </div>
-    )
+    );
 }

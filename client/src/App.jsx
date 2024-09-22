@@ -191,7 +191,7 @@ export default function App() {
           <Route path="/view-scholarships/:id/scholarship-web-view" element={<EditScholarshipWebView />} />
 
           <Route path="/provider-settings" element={<Settings />} />
-          <Route path="/provider-profile" element={<ProviderProfile />} />
+          <Route path="/provider-profile/:id" element={<ProviderProfile />} />
 
           <Route path="/provider-forums" element={<ProviderForums />} />
           <Route path="/provider-forums/post/:postId" element={<ProviderForumDetail />} />
@@ -203,8 +203,8 @@ export default function App() {
           <Route path="/validation-page" element={<ValidationPage />} />
           <Route path="/validation/:id/scholars" element={<ValidationResult />} />
      
-          <Route path="/notification/:notificationId" element={<ProviderNotificationDetailPage />} />
-          <Route path="/notifications" element={<ProviderAllNotification />} />
+          <Route path="/provider-notification/:notificationId" element={<ProviderNotificationDetailPage />} />
+          <Route path="/provider-notifications" element={<ProviderAllNotification />} />
         </Route>
 
         {/* Scholar Routes */}

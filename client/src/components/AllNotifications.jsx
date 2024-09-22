@@ -54,7 +54,7 @@ const NotificationsPage = () => {
                 className="w-12 h-12 rounded-full object-cover border-2 border-blue-600"
               />
               <div className="flex flex-col text-left">
-                <span className="text-xl font-bold">{notification.senderId.scholarshipProviderDetails.organizationName}</span>
+                <span className="text-xl font-bold">{notification.senderName}</span>
                 <span className="text-sm">{notification.message}</span>
                 <span className="text-xs text-gray-500">{new Date(notification.createdAt).toLocaleString()}</span>
               </div>

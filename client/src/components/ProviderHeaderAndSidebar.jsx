@@ -62,7 +62,7 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
     };
 
     const handleProfileClick = () => {
-        navigate('/provider-profile');
+        navigate('/provider-profile/' + currentUser._id);
     };
 
     const handleSettingsClick = () => {
@@ -142,11 +142,11 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
     };
 
     const handleSeeAllNotifications = () => {
-        navigate('/notifications');
+        navigate('/provider-notifications');
     };
 
     const handleNotificationClick = (notificationId) => {
-        navigate(`/notification/${notificationId}`);
+        navigate(`/provider-notification/${notificationId}`);
     };
 
 
@@ -204,13 +204,13 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
                 <div className="flex gap-4 items-center">
                     {currentUser && currentUser.role === 'scholarship_provider' && (
                         <div className='font-semibold'>
-                                                       <button onClick={toggleNotification} className="relative w-full border rounded-full p-3 hover:bg-slate-200 focus:bg-blue-600 group">
+                            <button onClick={toggleNotification} className="relative w-full border rounded-full p-3 hover:bg-slate-200 focus:bg-blue-600 group">
                                 <IoIosNotifications className="w-4 h-4 text-blue-600 group-focus:text-white scale-150" />
                                 {showNotification && (
                                     <div ref={notificationRef} className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 border bg-white text-gray-800 shadow-lg rounded-md p-4 w-96 z-50">
                                         <div className="flex flex-col justify-start">
                                             <span className="text-2xl text-left border-b py-2 w-full">Notification Inbox</span>
-                            
+
                                             <div className="flex flex-col items-start p-2 mt-4">
                                                 <span>New Notifications</span>
                                                 <div className="flex flex-col gap-2 mt-2 max-h-64 overflow-y-auto">

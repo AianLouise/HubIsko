@@ -18,6 +18,7 @@ import ScholarRoutes from './routes/scholar.route.js';
 import AdminApp from './routes/adminApplication.route.js';
 import AdminForums from './routes/adminForums.route.js';
 import AdminProfile from './routes/adminProfile.route.js';
+import ProviderAccountRoutes from './routes/providerAccount.route.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import cors from 'cors';
@@ -64,6 +65,7 @@ app.use('/api/scholar', ScholarRoutes);
 app.use('/api/adminApp', AdminApp);
 app.use('/api/adminForums', AdminForums);
 app.use('/api/adminProfile', AdminProfile);
+app.use('/api/providerAccount', ProviderAccountRoutes);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'client', 'dist')));

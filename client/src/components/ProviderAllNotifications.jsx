@@ -39,7 +39,7 @@ const ProviderAllNotifications = () => {
   }, [userId]);
 
   const handleNotificationClick = (notificationId) => {
-    navigate(`/notifications/${notificationId}`);
+    navigate(`/provider-notification/${notificationId}`);
   };
 
   return (
