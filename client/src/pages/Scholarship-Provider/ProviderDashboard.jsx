@@ -166,7 +166,7 @@ export default function ProviderDashboard() {
 
                 <div className='overflow-y-auto max-h-48 flex flex-col gap-2'>
                   {applicationDetails.length > 0 ? (
-                    applicationDetails.slice(0, 3).map((application, index) => (
+                    applicationDetails.map((application, index) => (
                       <Link
                         key={index}
                         to={`/view-scholarships/${application.scholarshipProgram}`}

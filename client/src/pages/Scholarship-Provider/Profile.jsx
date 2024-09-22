@@ -23,7 +23,7 @@ export default function ProviderProfile() {
     }, [currentUser, navigate]);
 
     const [user, setUser] = useState(null);
-    const [selectedTab, setSelectedTab] = useState('Description'); // Default tab
+    const [selectedTab, setSelectedTab] = useState('Scholarships'); // Default tab
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -32,10 +32,10 @@ export default function ProviderProfile() {
                 const data = await response.json();
                 setUser(data);
 
-                // Set default tab based on user role
-                if (data.role === 'scholarship_provider') {
-                    setSelectedTab('Description');
-                }
+                // Remove this line to keep the default tab as 'Scholarships'
+                // if (data.role === 'scholarship_provider') {
+                //     setSelectedTab('Description');
+                // }
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
@@ -51,7 +51,6 @@ export default function ProviderProfile() {
     const renderTabs = () => {
         return (
             <>
-                <button onClick={() => setSelectedTab('Description')} className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'Description' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}>Description</button>
                 <button onClick={() => setSelectedTab('Scholarships')} className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'Scholarships' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}>Scholarships</button>
                 <button onClick={() => setSelectedTab('Posts')} className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'Posts' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}>Posts</button>
             </>
@@ -60,7 +59,6 @@ export default function ProviderProfile() {
 
     const renderProfileContent = () => {
         if (user.role === 'scholarship_provider') {
-            if (selectedTab === 'Description') return <ScholarshipProviderDescription user={user} />;
             if (selectedTab === 'Scholarships') return <ScholarshipProviderScholarships userId={user._id} />;
             return <ScholarshipProviderPosts userId={user._id} />;
         }
@@ -85,7 +83,7 @@ export default function ProviderProfile() {
                             <span className='text-3xl font-bold text-gray-800'>
                                 {user.scholarshipProviderDetails?.organizationName || 'N/A'}
                             </span>
-                            <span className='text-xl font-medium text-gray-600'>Followers: {user.followers}</span>
+                            {/* <span className='text-xl font-medium text-gray-600'>Followers: {user.followers}</span> */}
                         </div>
                     </div>
                 </div>
