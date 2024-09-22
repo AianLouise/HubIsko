@@ -175,10 +175,11 @@ export default function ViewScholarshipDetails() {
         setIsConfirmModalOpen(false);
     };
 
-    const handleStartProgram = () => {
+       const handleStartProgram = () => {
         updateScholarshipStatus(scholarshipProgram.id, 'Ongoing');
         closeConfirmModal();
         fetchProgramDetails(); // Refresh the fetch after updating the status
+        window.location.reload(); // Refresh the page
     };
 
     if (loading) {

@@ -137,12 +137,14 @@ const ValidationResult = () => {
                                 <BsArrowLeft className='w-6 h-6' /> Back to Scholarship
                             </button>
                         </div>
-                        <button
-                            onClick={() => openModal('Mark as Done')}
-                            className='bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-800'
-                        >
-                            Mark as Done
-                        </button>
+                        {validation.status !== 'Done' && (
+                            <button
+                                onClick={() => openModal('Mark as Done')}
+                                className='bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-800'
+                            >
+                                Mark as Done
+                            </button>
+                        )}
                     </div>
                     <div className="flex justify-end">
                         {errorMessage && (

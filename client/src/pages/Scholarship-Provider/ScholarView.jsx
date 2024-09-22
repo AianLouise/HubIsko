@@ -6,6 +6,7 @@ import { IoMdArrowDropdown } from 'react-icons/io';
 import ApplicationForm from '../ApplicationForm';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import Modal from 'react-modal';
+import { FaArrowLeft } from 'react-icons/fa6';
 
 export default function ScholarView() {
     const { currentUser } = useSelector((state) => state.user);
@@ -124,8 +125,9 @@ export default function ScholarView() {
                                 e.preventDefault();
                                 navigate(-1);
                             }}
-                            className='bg-white border rounded-md px-6 py-2 shadow hover:bg-slate-200'
+                            className='bg-white border rounded-md px-6 py-2 shadow hover:bg-slate-200 flex items-center gap-2'
                         >
+                            <FaArrowLeft className='text-blue-600' />
                             <span>{application?.scholarshipProgram.title}</span>
                         </Link>
                         <IoMdArrowDropdown className='-rotate-90 text-4xl text-blue-600' />

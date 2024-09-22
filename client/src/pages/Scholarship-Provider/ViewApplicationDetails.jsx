@@ -6,6 +6,7 @@ import ApplicationForm from '../ApplicationForm';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import Snackbar from '../../components/Snackbar';
 import Modal from 'react-modal';
+import { FaArrowLeft } from 'react-icons/fa6';
 
 export default function ViewApplicationDetails() {
     const { currentUser } = useSelector((state) => state.user);
@@ -134,25 +135,25 @@ export default function ViewApplicationDetails() {
             const data = await response.json();
             console.log('Application rejected:', data);
 
-            // Create a notification
-            const notificationResponse = await fetch(`/api/notification/notifications/create`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    applicantId: applicant, // Pass the applicant's ID as recipientId
-                    senderId: currentUser._id, // Pass the current user's ID as senderId
-                    scholarshipProgramId: application.scholarshipProgram._id, // Pass the scholarship program ID
-                    message: `Your application has been rejected. Reason: ${rejectionNote}. ${allowResubmission ? 'Please update and resubmit your application.' : ''}` // Notification message
-                })
-            });
+            // // Create a notification
+            // const notificationResponse = await fetch(`/api/notification/notifications/create`, {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify({
+            //         applicantId: applicant, // Pass the applicant's ID as recipientId
+            //         senderId: currentUser._id, // Pass the current user's ID as senderId
+            //         scholarshipProgramId: application.scholarshipProgram._id, // Pass the scholarship program ID
+            //         message: `Your application has been rejected. Reason: ${rejectionNote}. ${allowResubmission ? 'Please update and resubmit your application.' : ''}` // Notification message
+            //     })
+            // });
 
-            if (!notificationResponse.ok) {
-                throw new Error('Notification creation failed');
-            }
+            // if (!notificationResponse.ok) {
+            //     throw new Error('Notification creation failed');
+            // }
 
-            console.log('Notification created successfully');
+            // console.log('Notification created successfully');
 
             // Fetch updated application details to reflect the new status
             await fetchApplicationDetails();
@@ -227,8 +228,9 @@ export default function ViewApplicationDetails() {
                                 e.preventDefault();
                                 navigate(-1);
                             }}
-                            className='bg-white border rounded-md px-6 py-2 shadow hover:bg-slate-200'
+                            className='bg-white border rounded-md px-6 py-2 shadow hover:bg-slate-200 flex items-center gap-2'
                         >
+                            <FaArrowLeft className='text-blue-600' />
                             <span>{application.scholarshipProgram.title}</span>
                         </Link>
                         <IoMdArrowDropdown className='-rotate-90 text-4xl text-blue-600' />
@@ -264,16 +266,16 @@ export default function ViewApplicationDetails() {
                             <div className="mt-6 flex flex-col gap-4">
                                 <div className="flex justify-end gap-4">
                                     <button
-                                        className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-md"
-                                        onClick={openApproveModal}
-                                    >
-                                        Approve
-                                    </button>
-                                    <button
                                         className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-md"
                                         onClick={openRejectModal}
                                     >
                                         Reject with Note
+                                    </button>
+                                    <button
+                                        className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-md"
+                                        onClick={openApproveModal}
+                                    >
+                                        Approve
                                     </button>
                                 </div>
                             </div>
