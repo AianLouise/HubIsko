@@ -46,6 +46,9 @@ export default function ProgamDetails({ scholarshipProgram }) {
                     <strong>Level of Education:</strong> {scholarshipProgram.educationLevel}
                 </div>
                 <div className="bg-gray-100 p-4 rounded-lg">
+                    <strong>Duration:</strong> {scholarshipProgram.duration}
+                </div>
+                <div className="bg-gray-100 p-4 rounded-lg">
                     <strong>Location:</strong> {scholarshipProgram.location}
                 </div>
                 <div className="bg-gray-100 p-4 rounded-lg">
