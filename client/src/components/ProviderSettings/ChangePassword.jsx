@@ -48,12 +48,12 @@ const ChangePassword = () => {
     const validatePassword = () => {
         const errors = {};
         const { newPassword, confirmNewPassword, currentPassword } = passwordData;
-    
+
         // Current password validation
         if (!currentPassword) {
             errors.currentPassword = 'Current password is required.';
         }
-    
+
         // New password validation
         if (newPassword.length < 6) {
             errors.newPassword = 'Password must be at least 6 characters long.';
@@ -64,36 +64,40 @@ const ChangePassword = () => {
         if (!/[!@#$%^&*(),.?":{}|<>]/.test(newPassword)) {
             errors.newPassword = 'Password must contain at least one special character.';
         }
-    
+
         // Check if new passwords match
         if (newPassword !== confirmNewPassword) {
             errors.confirmNewPassword = 'New passwords do not match.';
         }
-    
+
+        // Check if new password is the same as the current password
+        if (newPassword === currentPassword) {
+            errors.newPassword = 'New password cannot be the same as the current password.';
+        }
+
         setPasswordErrors(errors);
         return Object.keys(errors).length === 0;
     };
-    
 
     const handleChangePassword = async (e) => {
         e.preventDefault();
-        
+
         // Reset previous notification and errors
         setNotification('');
         setPasswordErrors({});
-    
+
         // Run validation
         if (!validatePassword()) {
             return;
         }
-    
+
         // Proceed with password change request if validation passed
         const passwordDataToSend = {
             currentPassword: passwordData.currentPassword,
             newPassword: passwordData.newPassword,
             confirmNewPassword: passwordData.confirmNewPassword, // Include this
-        };        
-    
+        };
+
         try {
             const response = await fetch(`/api/provider/users/${userId}/change-password`, {
                 method: 'PUT',
@@ -102,7 +106,7 @@ const ChangePassword = () => {
                 },
                 body: JSON.stringify(passwordDataToSend),
             });
-    
+
             if (!response.ok) {
                 // Handle incorrect current password case
                 if (response.status === 400) {
@@ -116,18 +120,24 @@ const ChangePassword = () => {
                     throw new Error('Network response was not ok');
                 }
             }
-    
+
             setNotification('Password changed successfully.');
+            // Clear the input fields
+            setPasswordData({
+                currentPassword: '',
+                newPassword: '',
+                confirmNewPassword: '',
+            });
         } catch (error) {
             console.error('Error changing password:', error);
             setNotification('Error changing password.');
         }
-    
+
         // Clear notification after a short period
         setTimeout(() => {
             setNotification('');
         }, 3000);
-    };     
+    };
 
     const togglePasswordVisibility = (field) => {
         setShowPasswords((prevShowPasswords) => ({
