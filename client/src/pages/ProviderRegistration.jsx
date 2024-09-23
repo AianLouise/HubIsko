@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FaInfoCircle, FaUsers, FaGraduationCap, FaEllipsisH } from 'react-icons/fa';
+import { FaInfoCircle, FaUsers, FaGraduationCap, FaEllipsisH, FaSpinner, FaCheckCircle } from 'react-icons/fa';
 import { FaArrowRightLong } from "react-icons/fa6";
 import StepTemplate from '../components/ProviderRegistration/StepTemplate';
 import Step1 from '../components/ProviderRegistration/Step1';
@@ -357,18 +357,20 @@ const ProviderRegistration = () => {
                 />
             </form>
 
-            {loading && (
+               {loading && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-8 rounded-md shadow-lg text-center">
+                    <div className="bg-white p-8 rounded-md shadow-lg text-center flex flex-col items-center">
+                        <FaSpinner className="text-blue-500 text-4xl mb-4 animate-spin" />
                         <h2 className="text-2xl font-bold mb-4">Sending Email Verification</h2>
                         <p>Please wait while we send the verification link to your email address.</p>
                     </div>
                 </div>
             )}
-
+            
             {showModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-8 rounded-md shadow-lg text-center">
+                    <div className="bg-white p-8 rounded-md shadow-lg text-center flex flex-col items-center">
+                        <FaCheckCircle className="text-green-500 text-4xl mb-4" />
                         <h2 className="text-2xl font-bold mb-4">Thank You!</h2>
                         <p className="mb-4">Your registration was successful.</p>
                         <p className="mb-4">A verification link has been sent to your email address. Please check your inbox and verify your email.</p>

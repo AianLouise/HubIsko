@@ -91,10 +91,7 @@ const Step4 = ({ formData, setFormData }) => {
                     <p className="mt-4"><strong>13. Contact Us</strong></p>
                     <p>If you have any questions or concerns about these Terms or your registration as a scholarship provider, please contact us at:</p>
                     <p>HubIsko</p>
-                    <p>[Your Contact Information]</p>
-                    <p>Email: contact@hubisko.com</p>
-                    <p>Phone: [Your Phone Number]</p>
-                    <p>Address: [Your Address]</p>
+                    <p>Email: connectwithhubisko@gmail.com</p>
                 </div>
                 <label className="inline-flex items-center">
                     <input
