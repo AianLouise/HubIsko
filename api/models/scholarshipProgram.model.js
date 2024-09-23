@@ -10,7 +10,7 @@ const scholarshipProgramSchema = new mongoose.Schema({
   educationLevel: { type: String },
   location: { type: String },
   fieldOfStudy: { type: String },
-  applicationStartDate: { type: Date },
+  applicationStartDate: { type: Date, default: Date.now },
   applicationDeadline: { type: Date },
   duration: { type: String },
   selectionProcess: { type: String },

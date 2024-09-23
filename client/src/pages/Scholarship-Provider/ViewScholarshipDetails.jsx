@@ -175,7 +175,7 @@ export default function ViewScholarshipDetails() {
         setIsConfirmModalOpen(false);
     };
 
-       const handleStartProgram = () => {
+    const handleStartProgram = () => {
         updateScholarshipStatus(scholarshipProgram.id, 'Ongoing');
         closeConfirmModal();
         fetchProgramDetails(); // Refresh the fetch after updating the status
@@ -264,12 +264,23 @@ export default function ViewScholarshipDetails() {
                                 <p>Congratulations, your scholarship program has been published successfully!</p>
                                 <p className="mt-2">Let others know about it by sharing it on the <Link to="/provider-forums" className="text-indigo-600 underline">forums</Link>.</p>
                                 <p>You can also discuss your program and connect with potential applicants!</p>
-                                <button
-                                    className="mt-4 bg-indigo-500 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-600"
-                                    onClick={() => navigate('/provider-forums')}
-                                >
-                                    Go to Forums
-                                </button>
+                                <div className="mt-4 text-indigo-700">
+                                    <p className="text-sm">The program can be started when all slots are filled. If you want to start it early, you can do so by clicking the "Start Program" button below.</p>
+                                </div>
+                                <div className='flex gap-4 mt-4'>
+                                    <button
+                                        className="bg-indigo-500 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-600"
+                                        onClick={() => navigate('/provider-forums')}
+                                    >
+                                        Go to Forums
+                                    </button>
+                                    <button
+                                        className="bg-teal-500 text-white px-4 py-2 rounded-md shadow hover:bg-teal-600"
+                                        onClick={openConfirmModal}
+                                    >
+                                        Start Program
+                                    </button>
+                                </div>
                             </div>
                         )}
 

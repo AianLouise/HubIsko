@@ -150,6 +150,15 @@ export default function ScholarshipDashboardDetails() {
         fetchValidationResults();
     }, [userId]);
 
+    // Utility function to truncate text
+    const truncateText = (text, maxLength) => {
+        if (text.length > maxLength) {
+            return text.substring(0, maxLength) + '...';
+        }
+        return text;
+    };
+
+
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
@@ -252,8 +261,12 @@ export default function ScholarshipDashboardDetails() {
                                                             <span className='text-blue-600'>{scholarshipData.find((item) => item.scholarshipProgram._id === announcement.scholarshipProgram).scholarshipProgram.title}</span>
                                                         </div>
                                                     </div>
-                                                    <p className='bg-slate-200 p-4 rounded-md'>
-                                                        <span className='text-blue-600 font-bold'>@Students</span> {announcement.content}
+
+                                                    <p className='bg-slate-200 p-4 rounded-md whitespace-pre-line'>
+                                                        <div className="flex justify-between items-center">
+                                                            <h1 className="text-2xl font-bold text-blue-600">{announcement.title}</h1>
+                                                        </div>
+                                                        <span className='text-blue-600 font-bold'></span> {truncateText(announcement.content, 100)}
                                                     </p>
                                                     <span className='text-sm flex items-end justify-end w-full text-slate-600'>
                                                         Announced: {formatDistanceToNow(new Date(announcement.date), { addSuffix: true })}

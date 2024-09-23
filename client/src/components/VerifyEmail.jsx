@@ -56,12 +56,12 @@ const VerifyEmail = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f8f8fb] no-scrollbar justify-center items-center">
-      <div className="text-center px-8 py-10">
+      <div className="text-center px-8 py-10 bg-white rounded-lg shadow-lg">
         <h1 className="text-5xl font-bold text-slate-800 mb-8">
           Email Verification
         </h1>
         <div className="mt-8 flex justify-center">
-          <FaCheckCircle className="text-4xl text-blue-600" />
+          <FaCheckCircle className="text-6xl text-blue-500" />
         </div>
         <p className="text-lg text-slate-700 pt-6">{message}</p>
         {redirectMessage && <p className="text-md text-slate-600 pt-4">{redirectMessage}</p>}

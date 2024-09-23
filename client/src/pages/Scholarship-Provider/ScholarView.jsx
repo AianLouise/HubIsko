@@ -106,7 +106,7 @@ export default function ScholarView() {
                         <IoMdArrowDropdown className='-rotate-90 text-4xl text-blue-600' />
                         <div className='bg-white border rounded-md px-6 py-2 shadow'>
                             {scholar ? (
-                                <span className='text-blue-600 font-bold'>
+                                <span className='text-blue-600 font-medium'>
                                     {scholar.applicantDetails.firstName} {scholar.applicantDetails.lastName}
                                 </span>
                             ) : (
@@ -144,50 +144,56 @@ export default function ScholarView() {
                             </div>
                         )}
 
-                                                                        {activeTab === 'validation' && (
-                                                <div className='mb-8'>
-                                                    <h3 className='text-2xl font-bold mb-4'>Validation Results Posted by the Program</h3>
-                                                    {validationResults.length > 0 ? (
-                                                        validationResults
-                                                            .sort((a, b) => new Date(b.datePosted) - new Date(a.datePosted)) // Sort by datePosted in descending order
-                                                            .map((result, index) => (
-                                                                <div key={index} className='bg-white border-l-4 border-blue-500 text-black-700 p-4 rounded-md shadow relative mb-6'>
-                                                                    <div className='flex justify-between items-center mb-4'>
-                                                                        <h3 className='text-xl font-bold'>{result.validationTitle}</h3>
-                                                                        <div className='text-sm text-gray-500'>
-                                                                            {result.datePosted && (
-                                                                                <p>
-                                                                                    Date Posted: {new Date(result.datePosted).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {new Date(result.datePosted).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-                                                                                </p>
-                                                                            )}
-                                                                        </div>
-                                                                    </div>
-                                                                    <p className='mb-6'>{result.validationDescription}</p>
-                                                                    <div className='mb-4'>
-                                                                        <p className='font-medium text-gray-800'>Status:</p>
-                                                                        <p className='text-gray-700'>
-                                                                            {result.status}
-                                                                        </p>
-                                                                        {result.status === 'Rejected' && (
-                                                                            <p className='text-red-500'><strong>Feedback:</strong> {result.feedback}</p>
-                                                                        )}
-                                                                    </div>
-                                                                    {result.dateDone && (
-                                                                        <div className='absolute bottom-4 right-4 text-sm text-gray-500'>
-                                                                            <p className='font-medium text-gray-800'>Date Done:</p>
-                                                                            <p className='text-gray-700'>
-                                                                                {new Date(result.dateDone).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {new Date(result.dateDone).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-                                                                            </p>
-                                                                        </div>
-                                                                    )}
-                                                                    <span className='absolute top-0 right-0 bg-blue-500 text-white rounded-full px-3 py-1 text-xs'>Validation</span>
-                                                                </div>
-                                                            ))
-                                                    ) : (
-                                                        <p>No validation results available yet.</p>
+                        {activeTab === 'validation' && (
+                            <div className='mb-8'>
+                                <h3 className='text-2xl font-bold mb-4'>Validation Results Posted by the Program</h3>
+                                {validationResults.length > 0 ? (
+                                    validationResults
+                                        .filter(result => result.validationStatus === 'Done') // Filter results with validationStatus "Done"
+                                        .sort((a, b) => new Date(b.datePosted) - new Date(a.datePosted)) // Sort by datePosted in descending order
+                                        .map((result, index) => (
+                                            <div
+                                                key={index}
+                                                className={`bg-white border-l-4 text-black-700 p-4 rounded-md shadow relative mb-6 ${result.status === 'Approved' ? 'border-green-500 bg-green-100' :
+                                                        result.status === 'Rejected' ? 'border-red-500 bg-red-100' :
+                                                            'border-orange-500 bg-orange-100'
+                                                    }`}
+                                            >
+                                                <div className='flex justify-between items-center mb-4'>
+                                                    <h3 className='text-xl font-bold'>{result.validationTitle}</h3>
+                                                    <div className='text-sm text-gray-500'>
+                                                        {result.datePosted && (
+                                                            <p>
+                                                                Date Posted: {new Date(result.datePosted).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {new Date(result.datePosted).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div className='mb-4'>
+                                                    <p className='font-medium text-gray-800'>Status:</p>
+                                                    <p className='text-gray-700'>
+                                                        {result.status}
+                                                    </p>
+                                                    {result.status === 'Rejected' && (
+                                                        <p className='text-red-500'><strong>Feedback:</strong> {result.feedback}</p>
                                                     )}
                                                 </div>
-                                            )}
+                                                {result.dateDone && (
+                                                    <div className='absolute bottom-4 right-4 text-sm text-gray-500'>
+                                                        <p className='font-medium text-gray-800'>Date Done:</p>
+                                                        <p className='text-gray-700'>
+                                                            {new Date(result.dateDone).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {new Date(result.dateDone).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                                        </p>
+                                                    </div>
+                                                )}
+                                                <span className='absolute top-0 right-0 bg-blue-500 text-white rounded-full px-3 py-1 text-xs'>{result.validationStatus}</span>
+                                            </div>
+                                        ))
+                                ) : (
+                                    <p>No validation results available yet.</p>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             </main>

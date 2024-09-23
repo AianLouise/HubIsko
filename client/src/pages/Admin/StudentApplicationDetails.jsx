@@ -7,8 +7,10 @@ import ConfirmationModal from '../../components/ConfirmationModal';
 import { regions, provinces, cities, barangays } from 'select-philippines-address';
 import { FaFileAlt } from "react-icons/fa";
 import AdminImageModal from "../../components/AdminImageModal";
+import { useSelector } from "react-redux";
 
 export default function StudentApplicationDetails() {
+    const currentUser = useSelector((state) => state.user.currentUser);
     const { id } = useParams();
     const [student, setStudent] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -62,13 +64,17 @@ export default function StudentApplicationDetails() {
         fetchStudentDetails();
     }, [id]);
 
-    const handleApprove = async (studentId) => {
+     const handleApprove = async (studentId) => {
+        const userId = currentUser._id;
+        const username = currentUser.username; 
+
         try {
             const response = await fetch(`/api/adminApp/student/approve/${studentId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                body: JSON.stringify({ userId, username })
             });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -83,20 +89,23 @@ export default function StudentApplicationDetails() {
         }
     };
 
-    const handleReject = async (studentId) => {
+        const handleReject = async (studentId) => {
+        const userId = currentUser._id;
+        const username = currentUser.username;
+        
         try {
             const response = await fetch(`/api/adminApp/student/reject/${studentId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ rejectReason: rejectReason })
+                body: JSON.stringify({ rejectReason: rejectReason, userId, username })
             });
-
+    
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-
+    
             const data = await response.json();
             console.log('Decline reason updated:', data);
             setSuccessMessage('Application rejected successfully!');

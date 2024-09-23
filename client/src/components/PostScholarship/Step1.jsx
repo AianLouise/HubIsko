@@ -85,7 +85,7 @@ const Step1 = ({ formData, setFormData }) => {
                             name="amount"
                             value={formData.amount || ''}
                             onChange={handleChange}
-                            placeholder="Enter the amount (in PHP or USD)"
+                            placeholder="Enter the amount (in PHP)"
                             className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                         />

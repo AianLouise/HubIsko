@@ -37,7 +37,7 @@ const AnnouncementModal = ({ isOpen, onClose, onSubmit, addAnnouncement }) => {
                 // Reset form fields
                 setTitle('');
                 setContent('');
-                alert('Announcement posted successfully!');
+                // alert('Announcement posted successfully!');
                 onClose();
                 addAnnouncement(createdAnnouncement); // Add the new announcement to the list
             } else {
@@ -168,6 +168,13 @@ export default function PostAnnouncement() {
             return 0;
         });
 
+    const truncateText = (text, maxLength) => {
+        if (text.length > maxLength) {
+            return text.substring(0, maxLength) + '...';
+        }
+        return text;
+    };
+
     return (
         <div className="p-6 bg-white rounded-lg shadow-md">
             <h2 className="text-2xl font-bold mb-4 text-blue-600">Announcements</h2>
@@ -220,15 +227,13 @@ export default function PostAnnouncement() {
                                 <div className="bg-slate-200 p-4 rounded-md">
                                     <div className="flex justify-between items-center">
                                         <h3 className="text-xl font-bold text-blue-600 mb-2">{announcement.title}</h3>
-                                        <span className="text-sm text-slate-600">
-                                            Announced: {formatDistanceToNow(new Date(announcement.date), { addSuffix: true })}
-                                        </span>
                                     </div>
-                                    <p className="text-gray-700">
-                                        <span className="text-blue-600 font-bold">@Students:</span> {announcement.content}
+                                    <p className="text-gray-700 white whitespace-pre-line">
+                                        <span className="text-blue-600 font-bold"></span> {truncateText(announcement.content, 100)}
                                     </p>
                                 </div>
                                 <div className="border-t mt-2 pt-2">
+                                    
                                     <div className="flex justify-between items-center">
                                         <div className="flex gap-4">
                                             <div className="flex items-center gap-1">
@@ -239,11 +244,15 @@ export default function PostAnnouncement() {
                                                 <BiCommentDots className="w-6 h-6 text-blue-600" />
                                                 <span>{announcement.comments.length}</span>
                                             </div>
+                                            
                                         </div>
                                         {/* <div className="flex items-center gap-1">
                                             <FaRegEye className="w-6 h-6 text-blue-600" />
                                             <span>1.2k</span>
                                         </div> */}
+                                         <span className="text-sm text-slate-600">
+                                            Announced: {formatDistanceToNow(new Date(announcement.date), { addSuffix: true })}
+                                        </span>
                                     </div>
                                 </div>
                             </div>

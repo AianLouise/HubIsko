@@ -84,7 +84,7 @@ export default function ScholarshipsDataDisplay() {
                         </div>
                     </div>
 
-                    <div className='flex flex-col mx-auto max-w-6xl px-24 lg:flex-row gap-2'>
+                    <div className='flex flex-col items-center justify-center mx-auto max-w-6xl px-24 lg:flex-row gap-2'>
                         <div className='flex gap-4'>
                             <div className='flex items-center gap-4 bg-white border shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
                                 <FaBook className='text-blue-500 w-6 h-6' />

@@ -241,6 +241,14 @@ export default function ScholarDashboard() {
     }, 2000);
   };
 
+  // Utility function to truncate text
+  const truncateText = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
+    }
+    return text;
+  };
+
 
   if (loading) {
     return (
@@ -332,7 +340,7 @@ export default function ScholarDashboard() {
                     <div className='flex flex-col lg:flex-row gap-4 lg:gap-10 overflow-hidden'>
                       {sortedAnnouncements.slice(carouselIndex, carouselIndex + 2).map((announcement) => (
                         <div
-                          className='bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out cursor-pointer w-full lg:w-auto'
+                          className='bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out cursor-pointer w-full lg:w-[400px]'
                           key={announcement._id}
                           onClick={() => handleAnnouncementClick(announcement._id)}
                         >
@@ -353,8 +361,11 @@ export default function ScholarDashboard() {
                               </span>
                             </div>
                           </div>
-                          <p className='bg-slate-200 p-2 lg:p-4 rounded-md text-sm lg:text-base'>
-                            <span className='text-blue-600 font-bold'>@Students</span> {announcement.content}
+                          <p className='bg-slate-200 p-2 lg:p-4 rounded-md text-sm lg:text-base whitespace-pre-line'>
+                            <div className="flex justify-between items-center">
+                              <h1 className="text-xl font-bold text-blue-600">{truncateText(announcement.title, 25)}</h1>
+                            </div>
+                            <span className='text-blue-600 font-bold'></span> {truncateText(announcement.content, 100)}
                           </p>
                           <span className='text-xs lg:text-sm flex items-end justify-end w-full text-slate-600'>
                             Announced: {formatDistanceToNow(new Date(announcement.date), { addSuffix: true })}
@@ -371,10 +382,6 @@ export default function ScholarDashboard() {
                                   <span className='text-xs lg:text-base'>{announcement.comments.length}</span>
                                 </div>
                               </div>
-                              {/* <div className='flex flex-row gap-1 pr-2'>
-                                            <FaRegEye className='w-6 h-6 text-blue-600' />
-                                            <span>1.2k</span>
-                                          </div> */}
                             </div>
                           </div>
                         </div>
@@ -399,7 +406,7 @@ export default function ScholarDashboard() {
                     <div className='flex flex-col gap-4 overflow-hidden'>
                       {sortedAnnouncements.slice(carouselIndex, carouselIndex + 2).map((announcement) => (
                         <div
-                          className='bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out cursor-pointer w-full'
+                          className='bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out cursor-pointer w-full lg:w-[300px]'
                           key={announcement._id}
                           onClick={() => handleAnnouncementClick(announcement._id)}
                         >
@@ -421,7 +428,7 @@ export default function ScholarDashboard() {
                             </div>
                           </div>
                           <p className='bg-slate-200 p-2 rounded-md text-sm'>
-                            <span className='text-blue-600 font-bold'>@Students</span> {announcement.content}
+                            <span className='text-blue-600 font-bold'>@Students</span> {truncateText(announcement.content, 100)}
                           </p>
                           <span className='text-xs flex items-end justify-end w-full text-slate-600'>
                             Announced: {formatDistanceToNow(new Date(announcement.date), { addSuffix: true })}
@@ -438,10 +445,6 @@ export default function ScholarDashboard() {
                                   <span className='text-xs'>{announcement.comments.length}</span>
                                 </div>
                               </div>
-                              {/* <div className='flex flex-row gap-1 pr-2'>
-                                            <FaRegEye className='w-6 h-6 text-blue-600' />
-                                            <span>1.2k</span>
-                                          </div> */}
                             </div>
                           </div>
                         </div>
