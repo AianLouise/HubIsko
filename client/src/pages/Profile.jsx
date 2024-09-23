@@ -176,23 +176,19 @@ export default function Profile() {
       <Header />
       <AccountManagement />
       <main className="flex-grow bg-[#f8f8fb]">
-               <div className='border-b mb-8 py-8'>
+          <div className='border-b mb-8 py-8'>
             <div className='flex flex-row items-center mx-auto max-w-6xl gap-4 lg:gap-10 px-4 lg:px-24'>
                 <img
                     src={currentUser.profilePicture}
                     alt={`${currentUser.username}'s profile`}
                     className='w-36 h-36 my-8 rounded-md object-cover'
                 />
-                <div className='flex flex-col items-start gap-2 lg:w-1/2'>
+                <div className='flex flex-col items-start gap-2 lg:w-full'>
+                <div className="flex justify-between items-center w-full">
                     <span className='text-xl font-medium text-gray-600'>
                         {currentUser.role === 'scholarship_provider' ? 'Organization' : currentUser.role === 'applicant' ? 'Student' : currentUser.role === 'admin' ? 'Admin' : currentUser.role}
                     </span>
-                    <span className='text-3xl font-bold text-gray-800'>
-                        {currentUser.role === 'scholarship_provider' ? currentUser.scholarshipProviderDetails.organizationName : currentUser.username}
-                    </span>
-                    {/* <span className='text-xl font-medium text-gray-600'>Followers: {currentUser.followers}</span> */}
-                </div>
-                <div className='flex flex-col items-end lg:w-1/2'>
+                    <div className='hidden lg:flex flex-col lg:w-[150px]'>
                     <button
                         className='bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition ease-in-out'
                         onClick={() => navigate('/account-settings')}
@@ -200,6 +196,19 @@ export default function Profile() {
                         Edit Profile
                     </button>
                 </div>
+                </div>
+                    <span className='text-3xl font-bold text-gray-800'>
+                        {currentUser.role === 'scholarship_provider' ? currentUser.scholarshipProviderDetails.organizationName : currentUser.username}
+                    </span>
+                    {/* <span className='text-xl font-medium text-gray-600'>Followers: {currentUser.followers}</span> */}
+                    <button
+                        className='block lg:hidden w-full font-medium bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition ease-in-out'
+                        onClick={() => navigate('/account-settings')}
+                    >
+                        Edit Profile
+                    </button>
+                </div>
+              
             </div>
         </div>
 

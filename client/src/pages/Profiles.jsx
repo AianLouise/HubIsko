@@ -65,7 +65,7 @@ const Profiles = () => {
             case 'applicant':
                 return (
                     <>
-                        <button onClick={() => setSelectedTab('Posts')} className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'Posts' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}>Posts</button>
+                        <button onClick={() => setSelectedTab('Posts')} className={`border text-center rounded-xl w-full lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'Posts' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}>Posts</button>
                     </>
                 );
             case 'scholarship_provider':
@@ -125,7 +125,7 @@ const Profiles = () => {
                 </div>
 
                 <div className='flex flex-col gap-4 max-w-6xl lg:px-24 mx-auto px-2'>
-                    <div className='grid grid-cols-3 lg:flex lg:flex-row gap-4 justify-between font-semibold mb-6'>
+                    <div className='grid grid-cols-2 lg:grid-cols-3 lg:flex lg:flex-row gap-4 justify-between font-semibold mb-6'>
                         {renderTabs()}
                     </div>
 

@@ -8,6 +8,8 @@ import ListingIcon from '../assets/ListingIconwTexture.png'
 import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 import { useSelector } from 'react-redux';
 import { FaBook } from 'react-icons/fa6';
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+
 
 export default function ScholarshipListing() {
   useTokenExpiry();
@@ -36,6 +38,36 @@ export default function ScholarshipListing() {
   const [scholarships, setScholarships] = useState([]);
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 2;
+  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1024);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const handleNextPage = () => {
+    if ((currentPage + 1) * itemsPerPage < filteredProviders.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const filteredProviders = providers.filter((provider) => provider.status === 'Verified');
+  const paginatedProviders = filteredProviders.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
+
+  const allProviders = providers.filter((provider) => provider.status === 'Verified');
 
   useEffect(() => {
     const fetchScholarships = async () => {
@@ -140,7 +172,7 @@ export default function ScholarshipListing() {
                 <span className='hidden lg:block'>Available Scholarships</span>
                 <span className='block lg:hidden'>Available Scholarships</span>
               </div>
-              <p className='w-full lg:w-full text-lg text-slate-500 font-medium lg:text-left lg:pb-0'>
+              <p className='w-full lg:w-full p-4 px-6 lg:p-0 lg:px-0 lg:text-lg text-slate-500 font-medium lg:text-left lg:pb-0'>
                 Discover various scholarship options to support your educational journey. Browse now to find the best fit for your needs!
               </p>
             </div>
@@ -149,40 +181,57 @@ export default function ScholarshipListing() {
           </div>
         </div>
 
-        <div className='flex flex-col gap-4 justify-center items-left px-10 lg:mx-auto lg:max-w-6xl lg:px-24 my-8'>
-          <div className='flex gap-2 items-center justify-between'>
-            <span className='text-xl font-bold text-slate-600'>Organizations</span>
-          </div>
-          <div className='flex space-x-6 overflow-x-auto overflow-y-hidden h-32'>
-            {providers
-              .filter((provider) => provider.status === 'Verified')
-              .map((provider) => (
-                <Link to={`/profile/${provider._id}`} key={provider._id} className='flex flex-col items-center group flex-shrink-0'>
-                  <button className='flex flex-col items-center group space-y-2 relative'>
-                    <div className='w-16 h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden group-hover:bg-blue-800'>
-                      <img
-                        src={provider.profilePicture}
-                        alt={`${provider.scholarshipProviderDetails.organizationName}'s profile`}
-                        className='w-full h-full object-cover'
-                      />
-                    </div>
-                    <span
-                      className='font-medium max-w-[100px] text-ellipsis overflow-hidden whitespace-nowrap group-hover:tooltip'
-                      title={provider.scholarshipProviderDetails.organizationName}
-                    >
-                      {provider.scholarshipProviderDetails.organizationName.length > 15
-                        ? `${provider.scholarshipProviderDetails.organizationName.slice(0, 12)}...`
-                        : provider.scholarshipProviderDetails.organizationName}
-                    </span>
-                    {/* Tooltip for the organization name */}
-                  </button>
-                                    <div className='absolute top-full w-40 p-2 z-20 bg-white border-2 border-blue-500 shadow-lg text-center text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden sm:block'>
-                      {provider.scholarshipProviderDetails.organizationName}
-                    </div>
-                </Link>
-              ))}
-          </div>
+      <div className='flex flex-col gap-4 justify-center items-left px-10 lg:mx-auto lg:max-w-6xl lg:px-24 lg:my-8'>
+      <div className='flex gap-2 items-center justify-between'>
+        <span className='text-xl font-bold text-slate-600'>Organizations</span>
+      </div>
+      <div className='flex items-center justify-center p-4'>
+      {!isLargeScreen && (
+          <button
+            onClick={handlePreviousPage}
+            className='absolute left-8 bg-blue-600 text-white p-2 rounded-full z-10'
+            disabled={currentPage === 0}
+          >
+            <MdOutlineKeyboardArrowRight className='transform rotate-180' />
+          </button>
+        )}
+        <div className={`flex space-x-6 ${isLargeScreen ? 'overflow-x-hidden' : 'overflow-x-auto'} overflow-y-hidden lg:h-32 w-full mx-4`}>
+          {(isLargeScreen ? allProviders : paginatedProviders).map((provider) => (
+            <Link to={`/profile/${provider._id}`} key={provider._id} className='flex flex-col items-center group flex-shrink-0 relative'>
+              <button className='flex flex-col items-center group space-y-2 relative ml-4 lg:ml-0'>
+                <div className='w-12 h-12 lg:w-20 lg:h-20 rounded-full overflow-hidden group-hover:bg-blue-800'>
+                  <img
+                    src={provider.profilePicture}
+                    alt={`${provider.scholarshipProviderDetails.organizationName}'s profile`}
+                    className='w-full h-full object-cover'
+                  />
+                </div>
+                <span
+                  className='font-medium max-w-[100px] text-sm lg:text-ellipsis overflow-hidden whitespace-nowrap group-hover:tooltip'
+                  title={provider.scholarshipProviderDetails.organizationName}
+                >
+                  {provider.scholarshipProviderDetails.organizationName.length > 15
+                    ? `${provider.scholarshipProviderDetails.organizationName.slice(0, 12)}...`
+                    : provider.scholarshipProviderDetails.organizationName}
+                </span>
+              </button>
+              <div className='absolute w-40 p-2 z-20 bg-white border-2 border-blue-500 shadow-lg text-center text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden sm:block'>
+                {provider.scholarshipProviderDetails.organizationName}
+              </div>
+            </Link>
+          ))}
         </div>
+        {!isLargeScreen && (
+          <button
+            onClick={handleNextPage}
+            className='absolute right-8 bg-blue-600 text-white p-2 rounded-full z-10'
+            disabled={(currentPage + 1) * itemsPerPage >= providers.length}
+          >
+            <MdOutlineKeyboardArrowRight />
+          </button>
+        )}
+      </div>
+    </div>
 
         <div className='flex flex-col mx-auto max-w-6xl justify-center items-center px-10 lg:px-24'>
           <div className='flex flex-col w-full gap-4'>
