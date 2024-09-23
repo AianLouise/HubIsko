@@ -22,7 +22,7 @@ export default function Settings() {
             <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''}`}>
                 <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} currentPath={`${currentUser.scholarshipProviderDetails.organizationName} / Settings`} />
 
-                <div className="max-w-8xl mx-24 mt-12">
+                <div className="max-w-8xl mx-24 my-12">
                     <div className="bg-white border shadow rounded-md px-6 py-8">
                         <h1 className="text-4xl font-bold mb-4">Settings</h1>
                         <nav className="mb-8">
