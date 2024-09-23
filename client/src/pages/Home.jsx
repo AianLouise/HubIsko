@@ -201,7 +201,7 @@ export default function Home() {
 
                     {/* Text content */}
                     <div className='flex flex-col justify-center text-left w-[800px] px-10 lg:px-20 pt-16 pb-32 gap-3'>
-                      <FaSearch className='text-xl lg:text-6xl text-blue-600 my-4' />
+                      <FaSearch className='w-8 h-8 lg:w-16 lg:h-16 text-blue-600 my-4' />
 
                       <div className='text-2xl lg:text-4xl font-bold'>
                         Find Scholarships!
@@ -257,7 +257,7 @@ export default function Home() {
 
                     {/* Text content */}
                     <div className='flex flex-col justify-center text-left w-[800px] px-10 lg:px-20 pt-16 pb-32 gap-3'>
-                      <FaFastForward className='text-xl lg:text-6xl text-blue-600 my-4' />
+                      <FaFastForward className='w-8 h-8 lg:w-16 lg:h-16 text-blue-600 my-4' />
                       <div className='text-2xl lg:text-4xl font-bold'>
                         Automated Processing
                       </div>
@@ -309,11 +309,11 @@ export default function Home() {
                   </div>
 
                   {/* Content for 'Organization Tools' tab */}
-                  <div className='rounded-xl w-full h-[500px] lg:h-[600px] shadow-md flex flex-row'>
+                  <div className='rounded-xl w-full h-[500px] lg:h-[600px] lg:mt-0 mt-10 shadow-md flex flex-row'>
 
                     {/* Text content */}
-                    <div className='flex flex-col justify-center text-left w-[800px] px-10 lg:px-20 pt-16 pb-32 gap-3'>
-                      <FaTools className='text-3xl lg:text-6xl text-blue-600 my-4' />
+                    <div className='flex flex-col justify-center text-left w-[800px] px-10  lg:px-20 pt-16 pb-32 gap-3'>
+                      <FaTools className='w-16 h-16 text-blue-600 mb-4'/>
                       <div className='text-2xl lg:text-4xl font-bold'>
                         Scholar Tools
                       </div>
@@ -332,7 +332,7 @@ export default function Home() {
 
                       {/* Learn more link */}
                       <div className='flex flex-row'>
-                        <Link to="" className='flex flex-row items-center gap-2 text-blue-600 text-xl font-medium pt-4 hover:text-slate-700 group'>
+                        <Link to="" className='flex flex-row items-center gap-2 text-blue-600 text-xl font-medium hover:text-slate-700 group'>
                           <h2>Learn More</h2>
                           <FaArrowRight className='text-lg mt-1 font-normal group-hover:text-slate-700 group-hover:translate-x-2 transition ease-in-out' />
                         </Link>
@@ -368,7 +368,7 @@ export default function Home() {
 
                     {/* Text content */}
                     <div className='flex flex-col justify-center text-left w-[800px] px-10 lg:px-20 pt-16 pb-32 gap-3'>
-                      <MdForum className='text-xl lg:text-6xl text-blue-600 my-4' />
+                      <MdForum className='w-8 h-8 lg:w-16 lg:h-16 text-blue-600' />
                       <div className='text-2xl lg:text-4xl font-bold'>
                         Enhanced Security and Forums
                       </div>
