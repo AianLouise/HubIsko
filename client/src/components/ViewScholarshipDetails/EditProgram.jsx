@@ -1,30 +1,61 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaEdit, FaEye } from 'react-icons/fa';
 import { Link, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const EditProgram = () => {
     const { id } = useParams();
+    console.log('id:', id);
     const scholarshipId = id;
     const { currentUser } = useSelector((state) => state.user);
 
+    const [programDetails, setProgramDetails] = useState({});
+
+    const fetchProgramDetails = async () => {
+        try {
+            const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${id}`);
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+            setProgramDetails(data);
+        } catch (error) {
+            console.error('Error fetching program details:', error);
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchProgramDetails();
+    }, [id]);
+
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+
     const handleCompleteProgram = async () => {
         try {
-            const response = await fetch(`/api/scholarships/${scholarshipId}/complete`, {
-                method: 'POST',
+            const userId = currentUser._id;
+            const username = currentUser.username;
+
+            const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${id}/complete`, {
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                body: JSON.stringify({ userId, username })
             });
 
             if (!response.ok) {
-                throw new Error('Failed to complete the scholarship program');
+                throw new Error('Network response was not ok');
             }
 
-            alert('Scholarship program marked as complete');
+            const data = await response.json();
+            setSuccessMessage('Scholarship program marked as complete successfully!');
+            console.log('Scholarship program marked as complete:', data);
+            window.location.reload();
         } catch (error) {
-            console.error('Error completing scholarship program:', error);
-            alert('Error completing scholarship program');
+            setErrorMessage('Error marking scholarship program as complete');
+            console.error('Error marking scholarship program as complete:', error);
         }
     };
 
@@ -55,7 +86,7 @@ const EditProgram = () => {
                         Go to Scholarship Web View
                     </Link>
                 </div>
-                {currentUser.role === 'admin' && (
+                {currentUser.role === 'admin' && programDetails.status !== 'Completed' && (
                     <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
                         <div className="flex items-center mb-4">
                             <FaEdit className="w-6 h-6 text-blue-600 mr-2" />
@@ -68,6 +99,8 @@ const EditProgram = () => {
                         >
                             Mark as Complete
                         </button>
+                        {successMessage && <p className="text-green-600 mt-4">{successMessage}</p>}
+                        {errorMessage && <p className="text-red-600 mt-4">{errorMessage}</p>}
                     </div>
                 )}
             </div>

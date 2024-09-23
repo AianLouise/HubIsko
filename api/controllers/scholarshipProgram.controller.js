@@ -626,3 +626,38 @@ export const checkAvailableSlots = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+export const markAsComplete = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { userId, username } = req.body; // Extract userId and username from the request body
+
+    const scholarshipProgram = await Scholarship.findById(id);
+
+    if (!scholarshipProgram) {
+      return res.status(404).json({ message: 'Scholarship program not found' });
+    }
+
+    // Update the scholarship program status to Complete
+    scholarshipProgram.status = 'Completed';
+    await scholarshipProgram.save();
+
+    // Create a notification for the scholarship program completion
+    const notification = {
+      recipientId: scholarshipProgram.providerId, // Assuming providerId is the recipient
+      senderId: userId, // Use userId from the request body
+      type: 'completion',
+      message: `The scholarship program "${scholarshipProgram.title}" has been marked as complete.`,
+      recipientName: scholarshipProgram.organizationName, // Assuming providerName is available
+      senderName: username // Use username from the request body
+    };
+
+    // Save the notification to the database
+    await Notification.create(notification);
+
+    res.status(200).json({ message: 'Scholarship program marked as complete successfully', scholarshipProgram });
+  } catch (error) {
+    console.error('Error marking scholarship program as complete:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
