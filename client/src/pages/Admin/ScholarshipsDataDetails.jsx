@@ -1,12 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { IoMdArrowDropdown } from "react-icons/io";
+import ImageModal from "../../components/AdminImageModal";
 
 export default function ScholarshipsDataDetails() {
     const { id } = useParams();
     const [scholarshipDetails, setScholarshipDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedImageUrl, setSelectedImageUrl] = useState('');
+    const [selectedDocumentName, setSelectedDocumentName] = useState('');
+  
+    const handleViewDocument = (url, name) => {
+      setSelectedImageUrl(url);
+      setSelectedDocumentName(name);
+      setIsModalOpen(true);
+    };
+  
+    const handleCloseModal = () => {
+      setIsModalOpen(false);
+      setSelectedImageUrl('');
+      setSelectedDocumentName('');
+    };
 
     useEffect(() => {
         // Scroll to the top of the page when the component is mounted
@@ -429,17 +446,18 @@ export default function ScholarshipsDataDetails() {
                             <p className="text-sm font-medium text-slate-700">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Suscipit autem, est amet obcaecati possimus a quidem, ipsa consequatur impedit pariatur sunt quasi vel hic. Culpa nulla doloremque ipsam voluptas consequuntur?</p>
                         </div>
 
-                        <div className="bg-white p-8 py-12 flex flex-col rounded-md border shadow">
-                            <h2 className="text-2xl font-bold mb-4">Uploaded Provider Requirements</h2>
-                            {scholarshipDetails.providerRequirements && scholarshipDetails.providerRequirements
-                                .filter(doc => doc.url) // Filter documents that have a URL
-                                .map((doc) => (
-                                    <div className="flex items-center mt-4 p-4 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 transition-colors duration-200" key={doc._id}>
-                                        <span className="text-sm font-medium text-gray-700">{doc.name}</span>
-                                        <a href={doc.url} target="_blank" rel="noopener noreferrer" className="ml-auto text-indigo-600 hover:underline">View Document</a>
-                                    </div>
-                                ))}
-                        </div>
+                    <div className="bg-white p-8 py-12 flex flex-col rounded-md border shadow">
+      <h2 className="text-2xl font-bold mb-4">Uploaded Provider Requirements</h2>
+      {scholarshipDetails.providerRequirements && scholarshipDetails.providerRequirements
+        .filter(doc => doc.url) // Filter documents that have a URL
+        .map((doc) => (
+          <div className="flex items-center mt-4 p-4 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 transition-colors duration-200" key={doc._id}>
+            <span className="text-sm font-medium text-gray-700">{doc.name}</span>
+            <button onClick={() => handleViewDocument(doc.url, doc.name)} className="ml-auto text-indigo-600 hover:underline">View Document</button>
+          </div>
+        ))}
+      <ImageModal isOpen={isModalOpen} onClose={handleCloseModal} imageUrl={selectedImageUrl} documentName={selectedDocumentName} />
+    </div>
                     </div>
                 </div>
             </main>
