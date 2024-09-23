@@ -282,16 +282,16 @@ export default function Forums() {
                     </div>
 
                     <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl gap-2 lg:gap-10 lg:px-24 p-4'>
-                        <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl gap-2 lg:gap-10 lg:px-24 p-2'>
-                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                        <div className='flex flex-col lg:flex-row items-center gap-2 lg:gap-10 w-full'>
+                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 w-full border'>
                                 <FaBook className='text-blue-500 w-6 h-6' />
                                 <p className='text-base'>{scholarship.fieldOfStudy}</p>
                             </div>
-                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 w-full border'>
                                 <FaMapMarkerAlt className='text-blue-500 w-6 h-6' />
                                 <p className='text-base'>{scholarship.location}</p>
                             </div>
-                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 w-full border'>
                                 <FaGraduationCap className='text-blue-500 w-6 h-6' />
                                 <p className='text-base'>{scholarship.educationLevel}</p>
                             </div>
@@ -299,8 +299,8 @@ export default function Forums() {
                     </div>
 
                     <div className='max-w-6xl lg:px-24 p-4 mx-auto mb-20'>
-                        <div className='flex flex-col md:flex-row items-center justify-between gap-2'>
-                            <div className='flex flex-col md:flex-row gap-2 items-center'>
+                        <div className='flex flex-col md:flex-row justify-between gap-2'>
+                            <div className='flex flex-col md:flex-row gap-2 lg:items-center'>
                                 <span className='flex gap-1 bg-white border px-4 py-2 rounded-md shadow'>
                                     <MdOutlineRefresh className='w-6 h-6 text-blue-600' />
                                     Last update: {new Date(scholarship.dateUpdated).toLocaleDateString()}
