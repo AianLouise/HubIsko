@@ -17,7 +17,7 @@ const Profiles = () => {
     const currentUser = useSelector((state) => state.user.currentUser);
 
     const navigate = useNavigate();
-    const userId = currentUser._id;
+    const userId = currentUser ? currentUser._id : null;
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -103,7 +103,7 @@ const Profiles = () => {
 
     return (
         <div className='flex flex-col min-h-screen'>
-            {currentUser && currentUser.role === 'applicant' && <Header />}
+            {(!currentUser || currentUser.role === 'applicant') && <Header />}
             <main className={`flex-grow bg-[#f8f8fb] ${currentUser && currentUser.role === 'scholarship_provider' ? `transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''}` : 'no-scrollbar font-medium'}`}>
                 {currentUser && currentUser.role === 'scholarship_provider' && <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />}
                 <div className='border-b mb-8 py-8'>

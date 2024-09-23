@@ -7,8 +7,11 @@ import { AiFillFilePdf, AiFillFileWord } from 'react-icons/ai';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { IoMdArrowDropdown } from "react-icons/io";
 import Modal from 'react-modal';
+import { useSelector } from 'react-redux';
 
 const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, repliesVisibility, activeReplyBox, replies, handleReplyChange, handleReplyComment }) => {
+
+    const { currentUser } = useSelector((state) => state.user);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -296,18 +299,24 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
                         {/* Reply box, shown if activeReplyBox matches the comment ID */}
                         {activeReplyBox === comment._id && (
                             <div className="p-4">
-                                <textarea
-                                    className="w-full border rounded-md p-2"
-                                    placeholder="Write a reply..."
-                                    value={replies[comment._id] || ''}
-                                    onChange={(e) => handleReplyChange(comment._id, e.target.value)}
-                                ></textarea>
-                                <button
-                                    className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md"
-                                    onClick={() => handleReplyComment(comment._id)}
-                                >
-                                    Reply
-                                </button>
+                                {currentUser ? (
+                                    <>
+                                        <textarea
+                                            className="w-full border rounded-md p-2"
+                                            placeholder="Write a reply..."
+                                            value={replies[comment._id] || ''}
+                                            onChange={(e) => handleReplyChange(comment._id, e.target.value)}
+                                        ></textarea>
+                                        <button
+                                            className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md"
+                                            onClick={() => handleReplyComment(comment._id)}
+                                        >
+                                            Reply
+                                        </button>
+                                    </>
+                                ) : (
+                                    <p className="text-red-600">You must be logged in to reply to comments.</p>
+                                )}
                             </div>
                         )}
                     </div>
