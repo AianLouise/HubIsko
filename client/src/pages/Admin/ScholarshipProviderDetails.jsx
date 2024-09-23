@@ -9,6 +9,7 @@ import { FaFileAlt } from "react-icons/fa";
 import { BsBuildingFill } from "react-icons/bs";
 import { regions, provinces, cities, barangays } from 'select-philippines-address';
 import { useSelector } from "react-redux";
+import AdminImageModal from "../../components/AdminImageModal";
 
 export default function ScholarshipsProviderDetails() {
     const currentUser = useSelector((state) => state.user.currentUser);
@@ -27,6 +28,23 @@ export default function ScholarshipsProviderDetails() {
     const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
     const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
     const [rejectReason, setRejectReason] = useState('');
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedImageUrl, setSelectedImageUrl] = useState('');
+    const [selectedDocumentName, setSelectedDocumentName] = useState('');
+  
+    const handleViewDocument = (url, name) => {
+      setSelectedImageUrl(url);
+      setSelectedDocumentName(name);
+      setIsModalOpen(true);
+    };
+  
+    const handleCloseModal = () => {
+      setIsModalOpen(false);
+      setSelectedImageUrl('');
+      setSelectedDocumentName('');
+    };
+  
 
     const fetchProviderDetails = async () => {
         try {
@@ -303,90 +321,82 @@ export default function ScholarshipsProviderDetails() {
                         </div>
 
                         <div className="flex flex-col bg-white border p-4 py-6 rounded-md shadow">
-                            <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Documents</div>
-                            <div className="grid grid-cols-3 gap-8 my-4 py-4 px-8">
-                                <div className="">
-                                    <label className="block text-sm text-slate-400">Registration Certificate</label>
-                                    {provider.scholarshipProviderDetails.documents.registrationCertificate ? (
-                                        <a
-                                            href={provider.scholarshipProviderDetails.documents.registrationCertificate}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
-                                        >
-                                            View Document
-                                        </a>
-                                    ) : (
-                                        <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
-                                    )}
-                                </div>
+      <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Documents</div>
+      <div className="grid grid-cols-3 gap-8 my-4 py-4 px-8">
+        <div className="">
+          <label className="block text-sm text-slate-400">Registration Certificate</label>
+          {provider.scholarshipProviderDetails.documents.registrationCertificate ? (
+            <button
+              onClick={() => handleViewDocument(provider.scholarshipProviderDetails.documents.registrationCertificate, 'Registration Certificate')}
+              className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border w-full border-gray-300 rounded-md text-blue-600"
+            >
+              View Document
+            </button>
+          ) : (
+            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+          )}
+        </div>
 
-                                <div className="">
-                                    <label className="block text-sm text-slate-400">TIN</label>
-                                    {provider.scholarshipProviderDetails.documents.tin ? (
-                                        <a
-                                            href={provider.scholarshipProviderDetails.documents.tin}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
-                                        >
-                                            View Document
-                                        </a>
-                                    ) : (
-                                        <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
-                                    )}
-                                </div>
+        <div className="">
+          <label className="block text-sm text-slate-400">TIN</label>
+          {provider.scholarshipProviderDetails.documents.tin ? (
+            <button
+              onClick={() => handleViewDocument(provider.scholarshipProviderDetails.documents.tin, 'TIN')}
+              className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border w-full border-gray-300 rounded-md text-blue-600"
+            >
+              View Document
+            </button>
+          ) : (
+            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+          )}
+        </div>
 
-                                <div className="">
-                                    <label className="block text-sm text-slate-400">Proof of Address</label>
-                                    {provider.scholarshipProviderDetails.documents.proofOfAddress ? (
-                                        <a
-                                            href={provider.scholarshipProviderDetails.documents.proofOfAddress}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
-                                        >
-                                            View Document
-                                        </a>
-                                    ) : (
-                                        <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
-                                    )}
-                                </div>
+        <div className="">
+          <label className="block text-sm text-slate-400">Proof of Address</label>
+          {provider.scholarshipProviderDetails.documents.proofOfAddress ? (
+            <button
+              onClick={() => handleViewDocument(provider.scholarshipProviderDetails.documents.proofOfAddress, 'Proof of Address')}
+              className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border w-full border-gray-300 rounded-md text-blue-600"
+            >
+              View Document
+            </button>
+          ) : (
+            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+          )}
+        </div>
 
-                                <div className="">
-                                    <label className="block text-sm text-slate-400">Authorization Letter</label>
-                                    {provider.scholarshipProviderDetails.documents.authorizationLetter ? (
-                                        <a
-                                            href={provider.scholarshipProviderDetails.documents.authorizationLetter}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
-                                        >
-                                            View Document
-                                        </a>
-                                    ) : (
-                                        <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
-                                    )}
-                                </div>
+        <div className="">
+          <label className="block text-sm text-slate-400">Authorization Letter</label>
+          {provider.scholarshipProviderDetails.documents.authorizationLetter ? (
+            <button
+              onClick={() => handleViewDocument(provider.scholarshipProviderDetails.documents.authorizationLetter, 'Authorization Letter')}
+              className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border w-full border-gray-300 rounded-md text-blue-600"
+            >
+              View Document
+            </button>
+          ) : (
+            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+          )}
+        </div>
 
-                                <div className="">
-                                    <label className="block text-sm text-slate-400">ID Proof of Contact Person</label>
-                                    {provider.scholarshipProviderDetails.documents.idProofContactPerson ? (
-                                        <a
-                                            href={provider.scholarshipProviderDetails.documents.idProofContactPerson}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
-                                        >
-                                            View Document
-                                        </a>
-                                    ) : (
-                                        <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
-                                    )}
-                                </div>
-                            </div>
+        <div className="">
+          <label className="block text-sm text-slate-400">ID Proof of Contact Person</label>
+          {provider.scholarshipProviderDetails.documents.idProofContactPerson ? (
+            <button
+              onClick={() => handleViewDocument(provider.scholarshipProviderDetails.documents.idProofContactPerson, 'ID Proof of Contact Person')}
+              className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border w-full border-gray-300 rounded-md text-blue-600"
+            >
+              View Document
+            </button>
+          ) : (
+            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+          )}
+        </div>
+      </div>
+      <AdminImageModal isOpen={isModalOpen} onClose={handleCloseModal} imageUrl={selectedImageUrl} documentName={selectedDocumentName} />
+    </div>
 
-                        </div>
+                    
                         <div className="flex justify-end gap-4 mt-6">
                             {provider.status === 'Pending Verification' && (
                                 <>
