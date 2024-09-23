@@ -88,7 +88,7 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
 
     return (
         <div className="my-8">
-                <div onClick={toggleDropdown} className='mt-4 px-4 py-2 border flex bg-white rounded-md w-48 shadow cursor-pointer hover:bg-slate-200 group'>
+            <div onClick={toggleDropdown} className='mt-4 px-4 py-2 border flex bg-white rounded-md w-48 shadow cursor-pointer hover:bg-slate-200 group'>
                 <div className='flex flex-row justify-between w-full'>
                     <div>
                         <span>Sort by: </span>
@@ -115,7 +115,7 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
             {sortedComments.map(comment => (
                 <div key={comment._id} className='flex gap-2 w-full mb-4'>
                     {/* User avatar */}
-                    <Link to={'/others-profile'}>
+                    <Link to={`/profile/${comment.author._id}`}>
                         <img
                             src={comment.author.profilePicture || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToiRnzzyrDtkmRzlAvPPbh77E-Mvsk3brlxQ&s'}
                             alt={`${comment.author.username}'s profile`}

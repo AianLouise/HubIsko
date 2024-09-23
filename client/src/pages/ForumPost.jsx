@@ -25,19 +25,19 @@ export default function ForumPost() {
 
     const navigate = useNavigate();
     const { currentUser } = useSelector((state) => state.user);
-  
+
     useEffect(() => {
-      if (currentUser) {
-        if (currentUser.role === 'admin') {
-          navigate('/admin-dashboard');
-        } else if (currentUser.role === 'scholarship_provider') {
-          if (!currentUser.emailVerified) {
-            navigate('/verify-your-email', { state: { email: currentUser.email } });
-          } else {
-            navigate('/provider-dashboard');
-          }
+        if (currentUser) {
+            if (currentUser.role === 'admin') {
+                navigate('/admin-dashboard');
+            } else if (currentUser.role === 'scholarship_provider') {
+                if (!currentUser.emailVerified) {
+                    navigate('/verify-your-email', { state: { email: currentUser.email } });
+                } else {
+                    navigate('/provider-dashboard');
+                }
+            }
         }
-      }
     }, [currentUser, navigate]);
 
     const [loading, setLoading] = useState(false);
@@ -105,7 +105,7 @@ export default function ForumPost() {
 
             await response.json();
             // Refresh the page
-            window.location.reload();
+            fetchPostDetails();
         } catch (error) {
             console.error('Error adding reply:', error);
         } finally {
@@ -239,7 +239,7 @@ export default function ForumPost() {
             // Update the UI accordingly, e.g., clear the reply text
             setReplies(prevReplies => ({ ...prevReplies, [commentId]: '' }));
             // Optionally, fetch updated comments here to include the new reply
-            window.location.reload();
+            fetchPostDetails();
         } catch (error) {
             console.error('Failed to submit reply:', error);
             // Handle the error (e.g., show an error message to the user)

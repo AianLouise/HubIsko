@@ -17,7 +17,7 @@ export default function Profile() {
 
   const [ShowModal, setShowModal] = useState(false);
   const [ShowModal2, setShowModal2] = useState(false);
-  const [selectedTab, setSelectedTab] = useState('About');
+  const [selectedTab, setSelectedTab] = useState('Posts');
   const [posts, setPosts] = useState([]);
   const [username, setUsername] = useState('');
   const [profilePicture, setProfilePicture] = useState('');
@@ -190,7 +190,7 @@ export default function Profile() {
                     <span className='text-3xl font-bold text-gray-800'>
                         {currentUser.role === 'scholarship_provider' ? currentUser.scholarshipProviderDetails.organizationName : currentUser.username}
                     </span>
-                    <span className='text-xl font-medium text-gray-600'>Followers: {currentUser.followers}</span>
+                    {/* <span className='text-xl font-medium text-gray-600'>Followers: {currentUser.followers}</span> */}
                 </div>
                 <div className='flex flex-col items-end lg:w-1/2'>
                     <button
@@ -204,25 +204,25 @@ export default function Profile() {
         </div>
 
         <div className='flex flex-col gap-4 max-w-6xl lg:px-24 mx-auto px-2'>
-          <div className='grid grid-cols-2 lg:flex lg:flex-row gap-4 justify-between font-semibold mb-6'>
-            <button className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'About' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
+          <div className='grid grid-cols-1 lg:flex lg:flex-row gap-4 justify-between font-semibold mb-6'>
+            {/* <button className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'About' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
               onClick={() => handleTabClick('About')}
             >
               About
-            </button>
+            </button> */}
 
-            <button className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'Posts' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
+            <button className={`border text-center rounded-xl lg:w-full lg:px-16 py-4 ${selectedTab === 'Posts' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
               onClick={() => handleTabClick('Posts')}
             >
               Posts
             </button>
           </div>
 
-          {selectedTab === 'About' && (
+          {/* {selectedTab === 'About' && (
             <div className='border-2 rounded-md p-10 flex flex-col bg-white h-auto mb-20'>
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi, a. Libero id ad corrupti deserunt nisi repellendus quisquam dolores ipsum.
             </div>
-          )}
+          )} */}
 
           {selectedTab === 'Posts' && (
             <div className="mb-20">

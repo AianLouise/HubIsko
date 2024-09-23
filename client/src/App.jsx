@@ -41,6 +41,7 @@ import ScholarshipApplication from "./pages/ScholarshipApplicationForm";
 import AnnouncementDetails from "./components/ViewScholarshipDetails/AnnouncementDetails";
 import AnnouncementView from "./pages/AnnouncementView";
 import AccountSettings from "./pages/AccountSettings";
+import ApplicantProfilePage from "./pages/ApplicantProfilePage";
 
 // Admin Routes
 import AdminDashboard from "./pages/Admin/AdminDashboard";
@@ -70,6 +71,7 @@ import StudentApplications from "./pages/Admin/StudentApplications";
 import Layout from "./components/Layout";
 import StudentApplicationDetails from "./pages/Admin/StudentApplicationDetails";
 import AddAccount from "./pages/Admin/AddAccount";
+import AdminProfilePage from "./pages/Admin/AdminProfilePage";
 
 // Scholarship Provider Routes
 import ProviderDashboard from "./pages/Scholarship-Provider/ProviderDashboard";
@@ -91,6 +93,7 @@ import VerifyEmailUpdate from "./components/ProviderSettings/VerifyEmailUpdate";
 import ValidationResult from "./components/ViewScholarshipDetails/ValidationResult";
 import ProviderNotificationDetailPage from "./components/ProviderNotificationDetailPage";
 import ProviderAllNotification from "./components/ProviderAllNotifications";
+import ScholarshipProviderProfilePage from "./pages/Scholarship-Provider/ScholarshipProviderProfilePage";
 
 
 // import RegisterAsProvider from "./pages/RegisterAsProvider";
@@ -132,10 +135,12 @@ export default function App() {
 
         <Route path="/verify-email-update" element={<VerifyEmailUpdate />} />
 
-      
+
+        <Route path="/applicant-profile/:id" element={<ApplicantProfilePage />} />
+        <Route path="/scholarship-provider-profile/:id" element={<ScholarshipProviderProfilePage />} />
+        <Route path="/admin-profile/:id" element={<AdminProfilePage />} />
 
 
-   
 
         {/* <Route path="/others-profile/:id" element={<OthersProfile />} /> */}
         {/* Admin Routes */}
@@ -202,7 +207,7 @@ export default function App() {
 
           <Route path="/validation-page" element={<ValidationPage />} />
           <Route path="/validation/:id/scholars" element={<ValidationResult />} />
-     
+
           <Route path="/provider-notification/:notificationId" element={<ProviderNotificationDetailPage />} />
           <Route path="/provider-notification" element={<ProviderAllNotification />} />
         </Route>

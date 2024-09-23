@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import { useParams } from 'react-router-dom';
 import ApplicantProfile from '../components/Profiles/ApplicantProfile';
 import ApplicantPosts from '../components/Profiles/ApplicantPosts';
 import ScholarshipProviderDescription from '../components/Profiles/ScholarshipProviderDescription';
@@ -9,29 +7,8 @@ import ScholarshipProviderScholarships from '../components/Profiles/ScholarshipP
 import ScholarshipProviderPosts from '../components/Profiles/ScholarshipProviderPosts';
 import AdminAbout from '../components/Profiles/AdminAbout';
 import AdminPosts from '../components/Profiles/AdminPosts';
-import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
-import { useSelector } from 'react-redux';
 
-export default function OthersProfile() {
-    useTokenExpiry();
-
-    const navigate = useNavigate();
-    const { currentUser } = useSelector((state) => state.user);
-  
-    useEffect(() => {
-      if (currentUser) {
-        if (currentUser.role === 'admin') {
-          navigate('/admin-dashboard');
-        } else if (currentUser.role === 'scholarship_provider') {
-          if (!currentUser.emailVerified) {
-            navigate('/verify-your-email', { state: { email: currentUser.email } });
-          } else {
-            navigate('/provider-dashboard');
-          }
-        }
-      }
-    }, [currentUser, navigate]);
-
+const Profiles = () => {
     const { id } = useParams(); // Extract user ID from URL
     const [user, setUser] = useState(null);
     const [selectedTab, setSelectedTab] = useState(''); // Default tab
@@ -46,16 +23,16 @@ export default function OthersProfile() {
                 // Set default tab based on user role
                 switch (data.role) {
                     case 'applicant':
-                        setSelectedTab('Profile');
+                        setSelectedTab('Posts');
                         break;
                     case 'scholarship_provider':
-                        setSelectedTab('Description');
+                        setSelectedTab('Scholarships');
                         break;
                     case 'admin':
                         setSelectedTab('About');
                         break;
                     default:
-                        setSelectedTab('Profile');
+                        setSelectedTab('Posts');
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);
@@ -74,14 +51,12 @@ export default function OthersProfile() {
             case 'applicant':
                 return (
                     <>
-                        <button onClick={() => setSelectedTab('Profile')} className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'Profile' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}>Profile</button>
                         <button onClick={() => setSelectedTab('Posts')} className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'Posts' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}>Posts</button>
                     </>
                 );
             case 'scholarship_provider':
                 return (
                     <>
-                        <button onClick={() => setSelectedTab('Description')} className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'Description' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}>Description</button>
                         <button onClick={() => setSelectedTab('Scholarships')} className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'Scholarships' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}>Scholarships</button>
                         <button onClick={() => setSelectedTab('Posts')} className={`border text-center rounded-xl lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'Posts' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}>Posts</button>
                     </>
@@ -101,9 +76,8 @@ export default function OthersProfile() {
     const renderProfileContent = () => {
         switch (user.role) {
             case 'applicant':
-                return selectedTab === 'Profile' ? <ApplicantProfile user={user} /> : <ApplicantPosts userId={user._id} />;
+                return selectedTab === 'Posts' ? <ApplicantPosts user={user} /> : <ApplicantPosts userId={user._id} />;
             case 'scholarship_provider':
-                if (selectedTab === 'Description') return <ScholarshipProviderDescription user={user} />;
                 if (selectedTab === 'Scholarships') return <ScholarshipProviderScholarships userId={user._id} />;
                 return <ScholarshipProviderPosts userId={user._id} />;
             case 'admin':
@@ -115,7 +89,6 @@ export default function OthersProfile() {
 
     return (
         <div className='flex flex-col min-h-screen'>
-            <Header />
             <main className='flex-grow bg-[#f8f8fb] no-scrollbar font-medium'>
                 <div className='border-b mb-8 py-8'>
                     <div className='flex flex-row items-center mx-auto max-w-6xl gap-4 lg:gap-10 px-4 lg:px-24'>
@@ -131,7 +104,6 @@ export default function OthersProfile() {
                             <span className='text-3xl font-bold text-gray-800'>
                                 {user.role === 'scholarship_provider' ? user.scholarshipProviderDetails.organizationName : user.username}
                             </span>
-                            <span className='text-xl font-medium text-gray-600'>Followers: {user.followers}</span>
                         </div>
                     </div>
                 </div>
@@ -146,7 +118,8 @@ export default function OthersProfile() {
                     </div>
                 </div>
             </main>
-            <Footer />
         </div>
     );
-}
+};
+
+export default Profiles;

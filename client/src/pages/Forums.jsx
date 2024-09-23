@@ -170,7 +170,7 @@ export default function Forums() {
         <div className='max-w-6xl lg:px-24 px-2 mx-auto mt-10 lg:mt-20'>
 
 
-          <div className='flex gap-2 items-center pb-2 font-bold text-lg border-b mb-8'>
+          {/* <div className='flex gap-2 items-center pb-2 font-bold text-lg border-b mb-8'>
             <FaStar className='text-blue-600' />
             Featured Posts
           </div>
@@ -252,7 +252,7 @@ export default function Forums() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className='flex gap-2 items-center border-b my-4 py-2'>
             <FaNewspaper className='w-6 h-6 text-blue-600' />

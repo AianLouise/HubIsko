@@ -142,7 +142,7 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
     };
 
     const handleSeeAllNotifications = () => {
-        navigate('/provider-notifications');
+        navigate('/provider-notification');
     };
 
     const handleNotificationClick = (notificationId) => {
