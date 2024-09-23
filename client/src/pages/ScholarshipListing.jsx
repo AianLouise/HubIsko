@@ -334,8 +334,6 @@ export default function ScholarshipListing() {
                   className='border border-gray-300 p-2 pl-12 px-4 lg:px-8 lg:text-base lg:font-sm w-full lg:w-[500px] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition ease-in-out duration-150'
                 >
                   <option value="Undergraduate">Undergraduate</option>
-                  <option value="Graduate">Graduate</option>
-                  <option value="PhD">PhD</option>
                 </select>
               </div>
             </div>

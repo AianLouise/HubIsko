@@ -382,8 +382,6 @@ export default function PostScholarship() {
                       >
                         <option value="">Select category</option>
                         <option value="Undergraduate">Undergraduate</option>
-                        <option value="Graduate">Graduate</option>
-                        <option value="PhD">PhD</option>
                         {/* Add more options as needed */}
                       </select>
                     </div>
