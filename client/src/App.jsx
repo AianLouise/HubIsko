@@ -140,7 +140,10 @@ export default function App() {
         <Route path="/scholarship-provider-profile/:id" element={<ScholarshipProviderProfilePage />} />
         <Route path="/admin-profile/:id" element={<AdminProfilePage />} />
 
+        <Route path="/view-scholarships/:id/edit-program-details" element={<EditScholarshipDetails />} />
+        <Route path="/view-scholarships/:id/scholarship-web-view" element={<EditScholarshipWebView />} />
 
+        <Route path="/scholar-view/:id" element={<ScholarView />} />
 
         {/* <Route path="/others-profile/:id" element={<OthersProfile />} /> */}
         {/* Admin Routes */}
@@ -192,8 +195,7 @@ export default function App() {
           <Route path="/scholarships" element={<Scholarships />} />
           <Route path="/applications/:id" element={<ViewApplicationDetails />} />
           <Route path="/view-scholarships/:id" element={<ViewScholarshipDetails />} />
-          <Route path="/view-scholarships/:id/edit-program-details" element={<EditScholarshipDetails />} />
-          <Route path="/view-scholarships/:id/scholarship-web-view" element={<EditScholarshipWebView />} />
+
 
           <Route path="/provider-settings" element={<Settings />} />
           <Route path="/provider-profile/:id" element={<ProviderProfile />} />
@@ -202,7 +204,7 @@ export default function App() {
           <Route path="/provider-forums/post/:postId" element={<ProviderForumDetail />} />
           <Route path="/provider-create-forum-post" element={<ProviderCreateForumPost />} />
 
-          <Route path="/scholar-view/:id" element={<ScholarView />} />
+
           <Route path="/announcement/details/:announcementId" element={<AnnouncementDetails />} />
 
           <Route path="/validation-page" element={<ValidationPage />} />

@@ -244,7 +244,7 @@ export default function EditScholarshipWebView() {
                         <div className='flex flex-col gap-2 w-1/2'>
                             <div className='flex flex-row divide-x-2 divide-blue-200 mb-2'>
                                 <span className='text-xl font-bold text-gray-600 pr-4'>
-                                    {currentUser ? currentUser.scholarshipProviderDetails.organizationName : 'Scholarship Provider'}
+                                    {programDetails ? programDetails.organizationName : 'Scholarship Provider'}
                                 </span>
                                 <span className='text-xl font-medium text-gray-400 pl-4'>{new Date().toLocaleDateString('en-US')}</span>
                             </div>
@@ -386,7 +386,7 @@ export default function EditScholarshipWebView() {
                                     </div>
                                     <div className='flex flex-col justify-center text-left'>
                                         <span className='text-slate-600'>Visit our profile!</span>
-                                        <span className=''>{currentUser ? currentUser.scholarshipProviderDetails.organizationName : 'Scholarship Provider'}</span>
+                                        <span className=''>{programDetails ? programDetails.organizationName : 'Scholarship Provider'}</span>
                                     </div>
                                 </button>
                             </div>
