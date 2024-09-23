@@ -62,6 +62,7 @@ export default function Header() {
 
 
   const location = useLocation();
+  const isNotificationsPage = location.pathname === '/notifications';
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -135,9 +136,16 @@ export default function Header() {
         </Link>
 
         <div className='flex items-center gap-4 md:hidden'>
-          <Link to={'/notifications'} className="flex items-center text-white p-1.5 bg-blue-600 rounded-full"><IoIosNotifications className="w-6 h-6" /></Link>
-          <button className="bg-blue-600 text-white rounded-md p-2" onClick={toggleSidebar}><IoMenu className="w-6 h-6" /></button>
-        </div>
+        <Link
+          to={'/notifications'}
+          className={`flex items-center p-1.5 rounded-full ${isNotificationsPage ? 'bg-white text-blue-600 border' : 'bg-blue-600 text-white'}`}
+        >
+          <IoIosNotifications className="w-6 h-6" />
+        </Link>
+        <button className="bg-blue-600 text-white rounded-md p-2" onClick={toggleSidebar}>
+          <IoMenu className="w-6 h-6" />
+        </button>
+      </div>
 
         <div className={`fixed shadow-lg inset-0 z-50 flex justify-end transition-transform transform ${sidebarVisible ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="bg-white shadow-lg border w-64 p-4 h-full">
