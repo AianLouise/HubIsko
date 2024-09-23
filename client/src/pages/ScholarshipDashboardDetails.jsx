@@ -130,6 +130,26 @@ export default function ScholarshipDashboardDetails() {
         announcement.content.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    const [validationResults, setValidationResults] = useState([]);
+
+    // Fetch validation results by scholar ID
+    useEffect(() => {
+        const fetchValidationResults = async () => {
+            try {
+                const response = await fetch(`/api/validation/validation-results/scholar/${userId}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                setValidationResults(data);
+            } catch (error) {
+                console.error('Error fetching validation results:', error);
+            }
+        };
+
+        fetchValidationResults();
+    }, [userId]);
+
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
@@ -370,7 +390,31 @@ export default function ScholarshipDashboardDetails() {
                                                 </div>
                                                 <div className='mb-4'>
                                                     <p className='font-medium text-gray-800'>Validation Result:</p>
-                                                    <p className='text-gray-700'>{validation.validationResult || 'No validation result available yet.'}</p>
+                                                    <p className='text-gray-700'>
+                                                        {validationResults.length > 0 ? validationResults
+                                                            .filter(result => result.validationId === validation._id.toString())
+                                                            .map((result, index) => {
+                                                                let statusText;
+                                                                switch (result.status) {
+                                                                    case 'Pending':
+                                                                        statusText = 'Pending: Your validation is currently being processed.';
+                                                                        break;
+                                                                    case 'Approved':
+                                                                        statusText = 'Approved: Your validation has been successfully completed.';
+                                                                        break;
+                                                                    case 'Rejected':
+                                                                        statusText = `Rejected: Your validation has been rejected. Please review the feedback. Feedback: ${result.feedback}`;
+                                                                        break;
+                                                                    default:
+                                                                        statusText = 'Unknown status';
+                                                                }
+                                                                return (
+                                                                    <span key={index}>
+                                                                        {statusText}
+                                                                    </span>
+                                                                );
+                                                            }) : 'No validation result available yet.'}
+                                                    </p>
                                                 </div>
                                                 <span className='absolute top-0 right-0 bg-yellow-500 text-white rounded-full px-3 py-1 text-xs'>Ongoing</span>
                                             </div>
@@ -385,7 +429,7 @@ export default function ScholarshipDashboardDetails() {
                                     <h3 className='text-2xl font-bold mb-4'>Previous Document Validation</h3>
                                     {previousValidations.length > 0 ? (
                                         previousValidations.map(validation => (
-                                            <div key={validation._id} className='bg-white border-l-4 border-gray-500 text-black-700 p-4 rounded-md shadow relative mb-6'>
+                                            <div key={validation._id} className='bg-white border-l-4 border-blue-500 text-black-700 p-4 rounded-md shadow relative mb-6'>
                                                 <div className='flex justify-between items-center mb-4'>
                                                     <h3 className='text-xl font-bold'>{validation.validationTitle}</h3>
                                                     <div className='text-sm text-gray-500'>
@@ -429,9 +473,33 @@ export default function ScholarshipDashboardDetails() {
                                                 </div>
                                                 <div className='mb-4'>
                                                     <p className='font-medium text-gray-800'>Validation Result:</p>
-                                                    <p className='text-gray-700'>{validation.validationResult || 'No validation result available yet.'}</p>
+                                                    <p className='text-gray-700'>
+                                                        {validationResults.length > 0 ? validationResults
+                                                            .filter(result => result.validationId === validation._id.toString())
+                                                            .map((result, index) => {
+                                                                let statusText;
+                                                                switch (result.status) {
+                                                                    case 'Pending':
+                                                                        statusText = 'Pending: Your validation is currently being processed.';
+                                                                        break;
+                                                                    case 'Approved':
+                                                                        statusText = 'Approved: Your validation has been successfully completed.';
+                                                                        break;
+                                                                    case 'Rejected':
+                                                                        statusText = `Rejected: Your validation has been rejected. Please review the feedback. Feedback: ${result.feedback}`;
+                                                                        break;
+                                                                    default:
+                                                                        statusText = 'Unknown status';
+                                                                }
+                                                                return (
+                                                                    <span key={index}>
+                                                                        {statusText}
+                                                                    </span>
+                                                                );
+                                                            }) : 'No validation result available yet.'}
+                                                    </p>
                                                 </div>
-                                                <span className='absolute top-0 right-0 bg-gray-500 text-white rounded-full px-3 py-1 text-xs'>Completed</span>
+                                                <span className='absolute top-0 right-0 bg-blue-500 text-white rounded-full px-3 py-1 text-xs'>Done</span>
                                             </div>
                                         ))
                                     ) : (

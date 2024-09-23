@@ -156,7 +156,7 @@ export default function AdminDashboard() {
 
                 <div className='max-w-8xl mx-auto px-24 pt-5 gap-10 flex-col flex'>
                     <div className="flex justify-center h-full">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 w-full max-w-7xl">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 w-full max-w-7xl">
                             <Link to={'/accounts'} className="bg-white flex flex-col gap-2 shadow border rounded-md h-[200px] items-start p-6 hover:bg-slate-100 hover:-translate-y-2 transition ease-in-out group">
                                 <div className="flex items-center justify-between w-full">
                                     <h1 className="text-2xl font-semibold text-slate-600">Accounts</h1>

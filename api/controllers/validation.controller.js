@@ -504,24 +504,32 @@ export const getValidationResultByScholarId = async (req, res) => {
 
     try {
         // Find the validation results for the specific scholar
-        const validationResults = await Validation.find({ 'validationResults.scholar': scholarId }).populate({
-            path: 'validationResults.scholar',
-            select: 'applicantDetails.firstName applicantDetails.lastName profilePicture'
-        });
+        const validationResults = await Validation.find({ 'validationResults.scholar': scholarId });
 
         // Check if any validation results were found
         if (!validationResults || validationResults.length === 0) {
             return res.status(404).json({ message: 'Validation results not found for the specified scholar' });
         }
 
-        // Send the validation results as a response
-        res.status(200).json(validationResults);
+        // Extract the status, validation table ID, and feedback from the validation results
+        const resultsWithStatus = validationResults.flatMap(validation => 
+            validation.validationResults
+                .filter(result => result.scholar.toString() === scholarId)
+                .map(result => ({
+                    scholar: result.scholar,
+                    status: result.status,
+                    validationId: validation._id,
+                    feedback: result.feedback
+                }))
+        );
+
+        // Send the validation results with status, validation table ID, and feedback as a response
+        res.status(200).json(resultsWithStatus);
     } catch (error) {
         // Handle errors
         console.error('Error fetching validation results:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
-
 
  

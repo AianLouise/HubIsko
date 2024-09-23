@@ -19,6 +19,7 @@ export default function ScholarView() {
     const [scholar, setScholar] = useState(null);
     const [isValidated, setIsValidated] = useState(false);
     const [isTerminateModalOpen, setIsTerminateModalOpen] = useState(false);
+    const [validationResults, setValidationResults] = useState([]); // Added state for validation results
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
@@ -43,54 +44,6 @@ export default function ScholarView() {
 
         fetchScholar();
     }, [id]);
-
-    const handleValidationChange = () => {
-        setIsValidated(!isValidated);
-    };
-
-    const saveValidationStatus = async () => {
-        try {
-            const response = await fetch(`/api/scholar/validate/${id}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ isValidated }),
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            alert('Validation status saved successfully');
-        } catch (error) {
-            console.error('Error saving validation status:', error);
-        }
-    };
-
-    const terminateScholar = async () => {
-        try {
-            const response = await fetch(`/api/scholar/terminate/${id}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            alert('Scholar terminated successfully');
-            navigate(-1); // Navigate back after termination
-        } catch (error) {
-            console.error('Error terminating scholar:', error);
-        }
-    };
-
-    const openTerminateModal = () => {
-        setIsTerminateModalOpen(true);
-    };
-
-    const closeTerminateModal = () => {
-        setIsTerminateModalOpen(false);
-    };
 
     const [application, setApplication] = useState(null);
     const { id: applicationId } = useParams(); // Extract applicationId from the URL
@@ -145,7 +98,7 @@ export default function ScholarView() {
                     <div className="tabs flex justify-center border-b mb-6">
                         {[
                             { label: 'Application Details', value: 'scholars' },
-                            { label: 'Document Validation', value: 'validation' },
+                            { label: 'Validation', value: 'validation' },
                         ].map((tab) => (
                             <button
                                 key={tab.value}
@@ -173,65 +126,26 @@ export default function ScholarView() {
 
                         {activeTab === 'validation' && (
                             <div>
-                                <div className='bg-white rounded-md shadow border p-4'>
-                                    <label className='flex items-center'>
-                                        <input
-                                            type='checkbox'
-                                            checked={isValidated}
-                                            onChange={handleValidationChange}
-                                            className='mr-2'
-                                        />
-                                        Successfully Validated
-                                    </label>
-                                    <button
-                                        onClick={saveValidationStatus}
-                                        className='mt-4 px-4 py-2 bg-blue-600 text-white rounded-md'
-                                    >
-                                        Save Validation Status
-                                    </button>
-                                </div>
                                 <div className='bg-white rounded-md shadow border p-4 mt-4'>
-                                    <h3 className='text-xl font-bold mb-2'>Validation Result</h3>
-                                    <p>{isValidated ? 'The scholar has been successfully validated.' : 'The scholar has not been validated yet.'}</p>
-                                    <button
-                                        onClick={openTerminateModal}
-                                        className='mt-4 px-4 py-2 bg-red-600 text-white rounded-md'
-                                    >
-                                        Terminate Scholar
-                                    </button>
+                                    <h3 className='text-xl font-bold mb-2'>Validation Results Posted by the Program</h3>
+                                    {validationResults.length > 0 ? (
+                                        validationResults.map((result, index) => (
+                                            <div key={index} className='mb-4'>
+                                                <p><strong>Status:</strong> {result.status}</p>
+                                                {result.status === 'Rejected' && (
+                                                    <p><strong>Feedback:</strong> {result.feedback}</p>
+                                                )}
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No validation results available yet.</p>
+                                    )}
                                 </div>
                             </div>
                         )}
                     </div>
                 </div>
             </main>
-
-            <Modal
-                isOpen={isTerminateModalOpen}
-                onRequestClose={closeTerminateModal}
-                contentLabel="Confirm Termination"
-                className="fixed inset-0 flex items-center justify-center z-50"
-                overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
-            >
-                <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4 md:mx-auto">
-                    <h2 className="text-2xl font-bold mb-4">Confirm Termination</h2>
-                    <p>Are you sure you want to terminate this scholar?</p>
-                    <div className="flex justify-end gap-4 mt-4">
-                        <button
-                            className="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded-md"
-                            onClick={closeTerminateModal}
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-md"
-                            onClick={terminateScholar}
-                        >
-                            Confirm Termination
-                        </button>
-                    </div>
-                </div>
-            </Modal>
         </div>
     );
 }
