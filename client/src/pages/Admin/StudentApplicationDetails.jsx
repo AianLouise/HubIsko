@@ -6,6 +6,7 @@ import Snackbar from '../../components/Snackbar';
 import ConfirmationModal from '../../components/ConfirmationModal';
 import { regions, provinces, cities, barangays } from 'select-philippines-address';
 import { FaFileAlt } from "react-icons/fa";
+import AdminImageModal from "../../components/AdminImageModal";
 
 export default function StudentApplicationDetails() {
     const { id } = useParams();
@@ -20,6 +21,22 @@ export default function StudentApplicationDetails() {
     const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
     const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
     const [rejectReason, setRejectReason] = useState('');
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedImageUrl, setSelectedImageUrl] = useState('');
+    const [selectedDocumentName, setSelectedDocumentName] = useState('');
+  
+    const handleViewDocument = (url, name) => {
+      setSelectedImageUrl(url);
+      setSelectedDocumentName(name);
+      setIsModalOpen(true);
+    };
+  
+    const handleCloseModal = () => {
+      setIsModalOpen(false);
+      setSelectedImageUrl('');
+      setSelectedDocumentName('');
+    };
 
     const fetchStudentDetails = async () => {
         try {
@@ -438,13 +455,17 @@ export default function StudentApplicationDetails() {
                             <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Documents</div>
                             <div className="grid grid-cols-1 gap-8 my-4 py-10 items-center px-8">
                                 <div className="flex flex-col items-center">
-                                    <label className="block text-sm text-slate-600">Student ID File</label>
-                                    <a href={student.applicantDetails.studentIdFile} target="_blank" rel="noopener noreferrer" className="mt-1 block px-10 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600">
-                                        View Document
-                                    </a>
+                                <label className="block text-sm text-slate-600">Student ID File</label>
+                                <button
+                                    onClick={() => handleViewDocument(student.applicantDetails.studentIdFile, 'Student ID File')}
+                                    className="mt-1 block px-10 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
+                                >
+                                    View Document
+                                </button>
                                 </div>
                             </div>
-                        </div>
+                            <AdminImageModal isOpen={isModalOpen} onClose={handleCloseModal} imageUrl={selectedImageUrl} documentName={selectedDocumentName} />
+                            </div>
 
                         <div className="flex justify-end gap-4 mt-6">
                             {student.status === 'Pending Verification' && (
