@@ -511,7 +511,7 @@ export const getValidationResultByScholarId = async (req, res) => {
             return res.status(404).json({ message: 'Validation results not found for the specified scholar' });
         }
 
-        // Extract the status, validation table ID, and feedback from the validation results
+        // Extract the status, validation table ID, feedback, and validation title from the validation results
         const resultsWithStatus = validationResults.flatMap(validation => 
             validation.validationResults
                 .filter(result => result.scholar.toString() === scholarId)
@@ -519,11 +519,13 @@ export const getValidationResultByScholarId = async (req, res) => {
                     scholar: result.scholar,
                     status: result.status,
                     validationId: validation._id,
-                    feedback: result.feedback
+                    feedback: result.feedback,
+                    validationTitle: validation.validationTitle,
+                    dateDone: validation.dateDone
                 }))
         );
 
-        // Send the validation results with status, validation table ID, and feedback as a response
+        // Send the validation results with status, validation table ID, feedback, and validation title as a response
         res.status(200).json(resultsWithStatus);
     } catch (error) {
         // Handle errors
@@ -531,5 +533,3 @@ export const getValidationResultByScholarId = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
-
- 

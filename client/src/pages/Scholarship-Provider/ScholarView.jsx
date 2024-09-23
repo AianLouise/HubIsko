@@ -65,13 +65,32 @@ export default function ScholarView() {
         fetchApplicationDetails();
     }, [applicationId]);
 
+    // Fetch validation results by scholar ID
+    useEffect(() => {
+        const fetchValidationResults = async () => {
+            try {
+                const response = await fetch(`/api/validation/validation-results/scholar/${application?.applicant}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                setValidationResults(data);
+            } catch (error) {
+                console.error('Error fetching validation results:', error);
+            }
+        };
+
+        fetchValidationResults();
+    }, [application?.applicant]);
+
+    console.log(validationResults);
+
     return (
         <div className={`flex flex-col min-h-screen`}>
             <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''}`}>
                 <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} currentPath={`${currentUser.scholarshipProviderDetails.organizationName} / `} />
                 <div className='flex flex-col gap-4 py-12 max-w-6xl mx-auto justify-between p-4 lg:px-24'>
-
-                    <div className='my-8 flex gap-2 items-center font-medium'>
+                    <div className='my-8 flex gap-2 items-center'>
                         <Link
                             to="#"
                             onClick={(e) => {
@@ -83,6 +102,7 @@ export default function ScholarView() {
                             <FaArrowLeft className='text-blue-600' />
                             <span>{application?.scholarshipProgram.title}</span>
                         </Link>
+
                         <IoMdArrowDropdown className='-rotate-90 text-4xl text-blue-600' />
                         <div className='bg-white border rounded-md px-6 py-2 shadow'>
                             {scholar ? (
@@ -124,25 +144,50 @@ export default function ScholarView() {
                             </div>
                         )}
 
-                        {activeTab === 'validation' && (
-                            <div>
-                                <div className='bg-white rounded-md shadow border p-4 mt-4'>
-                                    <h3 className='text-xl font-bold mb-2'>Validation Results Posted by the Program</h3>
-                                    {validationResults.length > 0 ? (
-                                        validationResults.map((result, index) => (
-                                            <div key={index} className='mb-4'>
-                                                <p><strong>Status:</strong> {result.status}</p>
-                                                {result.status === 'Rejected' && (
-                                                    <p><strong>Feedback:</strong> {result.feedback}</p>
-                                                )}
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <p>No validation results available yet.</p>
-                                    )}
-                                </div>
-                            </div>
-                        )}
+                                                                        {activeTab === 'validation' && (
+                                                <div className='mb-8'>
+                                                    <h3 className='text-2xl font-bold mb-4'>Validation Results Posted by the Program</h3>
+                                                    {validationResults.length > 0 ? (
+                                                        validationResults
+                                                            .sort((a, b) => new Date(b.datePosted) - new Date(a.datePosted)) // Sort by datePosted in descending order
+                                                            .map((result, index) => (
+                                                                <div key={index} className='bg-white border-l-4 border-blue-500 text-black-700 p-4 rounded-md shadow relative mb-6'>
+                                                                    <div className='flex justify-between items-center mb-4'>
+                                                                        <h3 className='text-xl font-bold'>{result.validationTitle}</h3>
+                                                                        <div className='text-sm text-gray-500'>
+                                                                            {result.datePosted && (
+                                                                                <p>
+                                                                                    Date Posted: {new Date(result.datePosted).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {new Date(result.datePosted).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                                                                </p>
+                                                                            )}
+                                                                        </div>
+                                                                    </div>
+                                                                    <p className='mb-6'>{result.validationDescription}</p>
+                                                                    <div className='mb-4'>
+                                                                        <p className='font-medium text-gray-800'>Status:</p>
+                                                                        <p className='text-gray-700'>
+                                                                            {result.status}
+                                                                        </p>
+                                                                        {result.status === 'Rejected' && (
+                                                                            <p className='text-red-500'><strong>Feedback:</strong> {result.feedback}</p>
+                                                                        )}
+                                                                    </div>
+                                                                    {result.dateDone && (
+                                                                        <div className='absolute bottom-4 right-4 text-sm text-gray-500'>
+                                                                            <p className='font-medium text-gray-800'>Date Done:</p>
+                                                                            <p className='text-gray-700'>
+                                                                                {new Date(result.dateDone).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at {new Date(result.dateDone).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                                                            </p>
+                                                                        </div>
+                                                                    )}
+                                                                    <span className='absolute top-0 right-0 bg-blue-500 text-white rounded-full px-3 py-1 text-xs'>Validation</span>
+                                                                </div>
+                                                            ))
+                                                    ) : (
+                                                        <p>No validation results available yet.</p>
+                                                    )}
+                                                </div>
+                                            )}
                     </div>
                 </div>
             </main>
