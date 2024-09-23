@@ -521,7 +521,8 @@ export const getValidationResultByScholarId = async (req, res) => {
                     validationId: validation._id,
                     feedback: result.feedback,
                     validationTitle: validation.validationTitle,
-                    dateDone: validation.dateDone
+                    dateDone: validation.dateDone,
+                    validationStatus: validation.status
                 }))
         );
 

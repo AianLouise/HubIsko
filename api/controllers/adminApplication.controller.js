@@ -56,10 +56,26 @@ export const getStudentById = async (req, res) => {
 export const approveStudent = async (req, res) => {
   try {
     const { id } = req.params;
+    const { userId, username } = req.body; // Extract userId and username from the request body
+
     const student = await User.findByIdAndUpdate(id, { status: 'Verified' }, { new: true });
     if (!student) {
       return res.status(404).json({ message: 'Student not found' });
     }
+
+    // Create a notification for the approved student
+    const notification = {
+      recipientId: student._id,
+      senderId: userId, // Use userId from the request body
+      type: 'approval',
+      message: `Your account has been approved as a student.`,
+      recipientName: `${student.applicantDetails.firstName} ${student.applicantDetails.lastName}`,
+      senderName: username // Use username from the request body
+    };
+
+    // Save the notification to the database
+    await Notification.create(notification);
+
     res.status(200).json({ message: 'Student approved successfully', student });
   } catch (error) {
     res.status(500).json({
@@ -72,7 +88,7 @@ export const approveStudent = async (req, res) => {
 export const rejectStudent = async (req, res) => {
   try {
     const { id } = req.params;
-    const { rejectReason } = req.body;
+    const { rejectReason, userId, username } = req.body; // Extract userId and username from the request body
 
     const student = await User.findByIdAndUpdate(
       id,
@@ -83,6 +99,19 @@ export const rejectStudent = async (req, res) => {
     if (!student) {
       return res.status(404).json({ message: 'Student not found' });
     }
+
+    // Create a notification for the rejected student
+    const notification = {
+      recipientId: student._id,
+      senderId: userId, // Use userId from the request body
+      type: 'rejection',
+      message: `Your account has been rejected. Reason: ${rejectReason}`,
+      recipientName: `${student.firstName} ${student.lastName}`,
+      senderName: username // Use username from the request body
+    };
+
+    // Save the notification to the database
+    await Notification.create(notification);
 
     res.status(200).json({ message: 'Student rejected successfully', student });
   } catch (error) {

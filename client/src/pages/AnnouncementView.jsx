@@ -308,12 +308,10 @@ const AnnouncementView = () => {
                         <div className="bg-slate-200 p-4 rounded-md">
                             <div className="flex justify-between items-center">
                                 <h1 className="text-2xl font-bold text-blue-600">{announcement.title}</h1>
-                                <p className="text-sm text-slate-600">
-                                    Announced: {formatDistanceToNow(new Date(announcement.date), { addSuffix: true })}
-                                </p>
+
                             </div>
-                            <p className="text-gray-700">
-                                <span className="text-blue-600 font-bold">@Students:</span> {announcement.content}
+                            <p className="text-gray-700 whitespace-pre-line mt-4">
+                                <span className="text-blue-600 font-bold"></span> {announcement.content}
                             </p>
                         </div>
                         <div className="border-t mt-2">
@@ -332,6 +330,9 @@ const AnnouncementView = () => {
                                 <FaRegEye className="w-6 h-6 text-blue-600" />
                                 <span>1.2k</span>
                             </div> */}
+                                <p className="text-sm text-slate-600">
+                                    Announced: {formatDistanceToNow(new Date(announcement.date), { addSuffix: true })}
+                                </p>
                             </div>
                         </div>
 
