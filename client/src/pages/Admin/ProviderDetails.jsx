@@ -94,12 +94,12 @@ export default function ProviderDetails() {
               Organization Information
             </button>
 
-            <button
+            {/* <button
               className={`border text-center rounded-xl w-1/2 px-16 py-4 ${selectedTab === 'About' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
               onClick={() => handleTabClick('About')}
             >
               About
-            </button>
+            </button> */}
 
             <button
               className={`border text-center rounded-xl w-1/2 px-16 py-4 ${selectedTab === 'Scholarships' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}

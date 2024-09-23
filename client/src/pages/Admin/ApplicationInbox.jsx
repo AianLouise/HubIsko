@@ -163,7 +163,7 @@ export default function ApplicationInbox() {
           </div>
 
           {/* Activity Section */}
-          <div className="flex flex-col mt-10 mb-10">
+          {/* <div className="flex flex-col mt-10 mb-10">
             <span className="font-bold text-xl border-b w-full pb-2">
               Recent Activity
             </span>
@@ -187,7 +187,6 @@ export default function ApplicationInbox() {
               </div>
             </div>
             <div className="bg-white border rounded-md mt-4 divide-y">
-              {/* Scholarship Posted */}
               <Link
                 to={"/scholarships-data-details"}
                 className="flex justify-between items-center p-4 hover:bg-slate-200 group transition ease-in-out"
@@ -212,7 +211,6 @@ export default function ApplicationInbox() {
                   <PiArrowRightFill className="w-6 h-6" />
                 </div>
               </Link>
-              {/* Verification Request */}
               <div className="flex justify-between items-center p-4 hover:bg-slate-200 group transition ease-in-out">
                 <div className="flex items-center gap-4">
                   <div className="bg-blue-600 w-14 h-14 rounded-full"></div>
@@ -231,7 +229,6 @@ export default function ApplicationInbox() {
                   <PiArrowRightFill className="w-6 h-6" />
                 </div>
               </div>
-              {/* Application Sent */}
               <div className="flex justify-between items-center p-4 hover:bg-slate-200 group transition ease-in-out">
                 <div className="flex items-center gap-4">
                   <div className="bg-blue-600 w-14 h-14 rounded-full"></div>
@@ -252,7 +249,7 @@ export default function ApplicationInbox() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </main>
     </div>

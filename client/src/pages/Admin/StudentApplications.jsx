@@ -88,63 +88,26 @@ export default function StudentApplications() {
                                 Review and manage student applications.
                             </p>
                         </div>
-                        <div className="bg-blue-600 w-24 h-24 lg:w-36 lg:h-36 my-8 rounded-md flex items-center justify-center">
-                            <FaFileAlt className="text-white text-4xl lg:text-6xl" />
+                        <div className="bg-blue-600 w-44 h-44 lg:w-44 lg:h-44 my-8 rounded-md flex items-center justify-center">
+                            <div className="flex flex-col lg:flex-row gap-10">
+                                <div className="flex flex-col justify-center items-center h-full text-center">
+                                    <h2 className="text-sm lg:text-2xl font-semibold text-white">
+                                        Pending Applications
+                                    </h2>
+                                    <span className="text-xl lg:text-3xl font-bold text-white mt-2">
+                                        {students.length}
+                                    </span>
+                                    <p className="text-base text-white mt-2">
+                                        Applications awaiting review
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div className="max-w-8xl mx-auto px-6 lg:px-24 flex flex-col gap-10">
-                    <div className="flex flex-col lg:flex-row gap-10">
-                        <div className="flex flex-col justify-center items-center w-full lg:w-1/3 h-[200px] lg:h-[300px] bg-white shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105">
-                            <div className="flex flex-col justify-center items-center h-full text-center">
-                                <h2 className="text-3xl lg:text-4xl font-semibold text-slate-600">
-                                    Pending Applications
-                                </h2>
-                                <span className="text-5xl lg:text-6xl font-bold text-blue-600 mt-2">
-                                    {students.length}
-                                </span>
-                                <p className="text-lg text-gray-500 mt-2">
-                                    Applications awaiting review
-                                </p>
-                            </div>
-                        </div>
 
-                        <div className="w-full bg-white rounded-md shadow border">
-                            <h1 className="p-4 border-b text-lg font-semibold">
-                                Student Activities
-                            </h1>
-                            <div className="grid divide-y">
-                                <div className="flex justify-between items-center p-4">
-                                    <div className="flex">
-                                        <div className="bg-blue-600 w-10 h-10 rounded-full"></div>
-                                        <div className="flex flex-col ml-4">
-                                            <h1 className="text-lg font-semibold">John Doe</h1>
-                                            <p className="text-slate-500">Submitted an Application</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <GoDotFill className="text-blue-600" />
-                                        <span className="text-blue-600">1 hour ago</span>
-                                    </div>
-                                </div>
-
-                                <div className="flex justify-between items-center p-4">
-                                    <div className="flex">
-                                        <div className="bg-blue-600 w-10 h-10 rounded-full"></div>
-                                        <div className="flex flex-col ml-4">
-                                            <h1 className="text-lg font-semibold">Jane Smith</h1>
-                                            <p className="text-slate-500">Received a Scholarship</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <GoDotFill className="text-blue-600" />
-                                        <span className="text-blue-600">2 hours ago</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <div className="flex flex-col gap-4 h-screen pt-5">
                         <h1 className="text-xl font-semibold border-b pb-4">Student Applications</h1>

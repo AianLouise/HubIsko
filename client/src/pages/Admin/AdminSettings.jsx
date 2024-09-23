@@ -1,9 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { BsPencilFill } from "react-icons/bs";
 import LogHistory from "../../components/AdminSettings/LogHistory";
+import UpdateInformation from '../../components/AdminSettings/UpdateInformation';
+import UpdateAccountDetails from '../../components/AdminSettings/UpdateAccountDetails';
+import ChangePassword from '../../components/AdminSettings/ChangePassword';
+import { updateUserDetails } from '../../redux/user/userSlice';
+import { FaLock, FaUser } from "react-icons/fa6";
+import { FaUserEdit } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function AdminSettings() {
+    const { currentUser } = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+
     const [activityLogs, setActivityLogs] = useState([]);
+
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [selectedTab, setSelectedTab] = useState('Update Information');
+
+    const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+    const handleTabClick = (tab) => setSelectedTab(tab);
 
     useEffect(() => {
         const fetchActivityLogs = async () => {
@@ -23,42 +39,60 @@ export default function AdminSettings() {
         <div className="flex flex-col min-h-screen">
             <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
                 <div className="max-w-8xl flex flex-col gap-10 px-20 mt-10">
-                    <div className="flex gap-10">
-                        <div className="bg-white shadow border rounded-md p-8 w-1/2">
-                            <div className="flex justify-between">
-                                <span className="text-xl font-bold">Profile Information</span>
-                                <button className="flex gap-2 bg-blue-600 hover:bg-blue-800 text-white items-center px-4 py-2 rounded-md">
-                                    <BsPencilFill className="text-xl" />
-                                    Edit
-                                </button>
-                            </div>
+                    <div className="max-w-8xl mx-24 mt-12">
+                        <div className="bg-white border shadow rounded-md px-6 py-8">
+                            <h1 className="text-4xl font-bold mb-4">Settings</h1>
+                            <nav className="mb-8">
+                                <ul className="flex items-center gap-8 font-medium border-b-2 border-gray-200">
+                                    <li>
+                                        <button
+                                            onClick={() => handleTabClick('Update Information')}
+                                            className={`relative flex items-center py-3 px-4 group hover:text-blue-600 transition-colors duration-200 ease-in-out ${selectedTab === 'Update Information' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600'}`}
+                                        >
+                                            <FaUser className="mr-2" />
+                                            <span>Update Information</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            onClick={() => handleTabClick('Update Account Details')}
+                                            className={`relative flex items-center py-3 px-4 group hover:text-blue-600 transition-colors duration-200 ease-in-out ${selectedTab === 'Update Account Details' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600'}`}
+                                        >
+                                            <FaUserEdit className="mr-2" />
+                                            <span>Update Account Details</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            onClick={() => handleTabClick('Change Password')}
+                                            className={`relative flex items-center py-3 px-4 group hover:text-blue-600 transition-colors duration-200 ease-in-out ${selectedTab === 'Change Password' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600'}`}
+                                        >
+                                            <FaLock className="mr-2" />
+                                            <span>Change Password</span>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </nav>
 
-                            <div className="flex items-center gap-10 py-10 w-full border-b mb-10">
-                                <div className="bg-blue-600 w-40 h-40 rounded-full"></div>
+                            {selectedTab === 'Update Information' && (
+                                <UpdateInformation
+                                    currentUser={currentUser}
+                                    dispatch={dispatch}
+                                    updateUserDetails={updateUserDetails}
+                                />
+                            )}
 
-                                <div className="flex flex-col items-left gap-2">
-                                    <span className="text-slate-500">Admin</span>
-                                    <span className="text-xl font-bold">Aileen Valencia</span>
-                                    <span className="text-slate-500">aileen.valencia@example.com</span>
-                                </div>
-                            </div>
+                            {selectedTab === 'Update Account Details' && (
+                                <UpdateAccountDetails
+                                    currentUser={currentUser}
+                                />
+                            )}
 
-                            <div className="flex gap-6">
-                                <div className="w-1/2 flex flex-col gap-6">
-                                    <span className="text-slate-500">Phone</span>
-                                    <span className="text-lg font-semibold">09123456789</span>
-                                </div>
-                                <div className="w-1/2 flex flex-col gap-6">
-                                    <span className="text-slate-500">Address</span>
-                                    <span className="text-lg font-semibold">1234 Main Street, Anytown</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="flex flex-col bg-white shadow border rounded-md p-8 w-1/2">
-                            <span className="text-xl font-bold">Time Spent</span>
-                            <div className="border rounded-md items-center justify-center flex h-full my-10">
-                                <span>Container for Time graph</span>
-                            </div>
+                            {selectedTab === 'Change Password' && (
+                                <ChangePassword
+                                    currentUser={currentUser}
+                                />
+                            )}
                         </div>
                     </div>
 

@@ -224,7 +224,7 @@ export default function ProviderDashboard() {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-md shadow-md transition-all">
+          {/* <div className="bg-white p-6 rounded-md shadow-md transition-all">
             <h2 className="text-2xl font-bold text-slate-700 mb-4">Recent Activity</h2>
             <ul className="list-disc pl-5 text-slate-700">
               {activities.map(activity => (
@@ -234,7 +234,7 @@ export default function ProviderDashboard() {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
         </div>
       </main>
     </div>
