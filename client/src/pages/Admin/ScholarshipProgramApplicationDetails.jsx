@@ -6,8 +6,13 @@ import ScholarshipsDataDetails from "./ScholarshipsDataDetails";
 import ScholarshipsDataDisplay from "./ScholarshipsDataDisplay";
 import ConfirmationModal from "../../components/ConfirmationModal"; // Adjust the import path as needed
 import Snackbar from "../../components/Snackbar"; // Adjust the import path as needed
+import { useSelector } from "react-redux";
 
 export default function ScholarshipProgramApplicationDetails() {
+    const currentUser = useSelector((state) => state.user.currentUser);
+    const userId = currentUser._id;
+    const username = currentUser.username;
+
     const [currentStep, setCurrentStep] = useState(1);
     const [loading, setLoading] = useState(true);
     const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
@@ -49,19 +54,23 @@ export default function ScholarshipProgramApplicationDetails() {
         setIsVerifyModalOpen(true);
     };
 
-    const handleVerifyConfirm = async () => {
+     const handleVerifyConfirm = async () => {
         try {
+            const userId = currentUser._id;
+            const username = currentUser.username;
+    
             const response = await fetch(`/api/admin/scholarships/${scholarshipDetails._id}/verify`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                body: JSON.stringify({ userId, username })
             });
-
+    
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-
+    
             const data = await response.json();
             console.log('Scholarship program verified successfully', data);
             setSuccessMessage('Application approved successfully!');
@@ -86,20 +95,23 @@ export default function ScholarshipProgramApplicationDetails() {
         setRejectReason(e.target.value);
     };
 
-    const handleSubmit = async () => {
+       const handleSubmit = async () => {
         try {
+            const userId = currentUser._id;
+            const username = currentUser.username;
+    
             const response = await fetch(`/api/admin/scholarships/${scholarshipDetails._id}/reject`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ rejectReason: rejectReason })
+                body: JSON.stringify({ rejectReason: rejectReason, userId, username })
             });
-
+    
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-
+    
             const data = await response.json();
             console.log('Reject reason updated:', data);
             setSuccessMessage('Application rejected successfully!');

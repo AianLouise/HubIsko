@@ -2,6 +2,7 @@ import User from '../models/user.model.js'; // Import the User model
 import ScholarshipProgram from '../models/scholarshipProgram.model.js'; // Import the Scholarship model
 import ForumPost from '../models/forumPost.model.js'; // Import the ForumPost model
 import bcryptjs from 'bcryptjs'; // Import the bcryptjs library
+import Notification from '../models/notification.model.js'; // Adjust the import path as necessary
 
 export const test = (req, res) => {
   res.json({
@@ -305,10 +306,26 @@ export const getAllUsers = async (req, res) => {
 export const approveScholarshipProvider = async (req, res) => {
   try {
     const { id } = req.params;
+    const { userId, username } = req.body; // Extract userId and username from the request body
+
     const provider = await User.findByIdAndUpdate(id, { status: 'Verified' }, { new: true });
     if (!provider) {
       return res.status(404).json({ message: 'Scholarship provider not found' });
     }
+
+    // Create a notification for the approved scholarship provider
+    const notification = {
+      recipientId: provider._id,
+      senderId: userId, // Use userId from the request body
+      type: 'approval',
+      message: `Your account has been approved as a scholarship provider.`,
+      recipientName: `${provider.scholarshipProviderDetails.organizationName}`,
+      senderName: username // Use username from the request body
+    };
+
+    // Save the notification to the database
+    await Notification.create(notification);
+
     res.status(200).json({ message: 'Scholarship provider approved successfully', provider });
   } catch (error) {
     res.status(500).json({
@@ -321,7 +338,7 @@ export const approveScholarshipProvider = async (req, res) => {
 export const rejectScholarshipProvider = async (req, res) => {
   try {
     const { id } = req.params;
-    const { rejectReason } = req.body;
+    const { rejectReason, userId, username } = req.body; // Extract userId and username from the request body
 
     const provider = await User.findByIdAndUpdate(
       id,
@@ -332,6 +349,19 @@ export const rejectScholarshipProvider = async (req, res) => {
     if (!provider) {
       return res.status(404).json({ message: 'Scholarship provider not found' });
     }
+
+    // Create a notification for the rejected scholarship provider
+    const notification = {
+      recipientId: provider._id,
+      senderId: userId, // Use userId from the request body
+      type: 'rejection',
+      message: `Your account has been rejected as a scholarship provider. Reason: ${rejectReason}`,
+      recipientName: `${provider.scholarshipProviderDetails.organizationName}`,
+      senderName: username // Use username from the request body
+    };
+
+    // Save the notification to the database
+    await Notification.create(notification);
 
     res.status(200).json({ message: 'Scholarship provider rejected successfully', provider });
   } catch (error) {
@@ -361,6 +391,7 @@ export const getScholarshipProgramDetailsById = async (req, res) => {
 export const verifyScholarshipProgram = async (req, res) => {
   try {
     const { id } = req.params;
+    const { userId, username } = req.body; // Extract userId and username from the request body
 
     // Assuming you have a ScholarshipProgram model
     const scholarshipProgram = await ScholarshipProgram.findById(id);
@@ -374,6 +405,19 @@ export const verifyScholarshipProgram = async (req, res) => {
     scholarshipProgram.status = 'Approved';
     await scholarshipProgram.save();
 
+    // Create a notification for the verified scholarship program
+    const notification = {
+      recipientId: scholarshipProgram.providerId, // Assuming providerId is the recipient
+      senderId: userId, // Use userId from the request body
+      type: 'approval',
+      message: `Your scholarship program "${scholarshipProgram.title}" has been verified.`,
+      recipientName: scholarshipProgram.organizationName, // Assuming providerName is available
+      senderName: username // Use username from the request body
+    };
+
+    // Save the notification to the database
+    await Notification.create(notification);
+
     res.status(200).json({ message: 'Scholarship program verified successfully', scholarshipProgram });
   } catch (error) {
     res.status(500).json({
@@ -386,7 +430,7 @@ export const verifyScholarshipProgram = async (req, res) => {
 export const rejectScholarshipProgram = async (req, res) => {
   try {
     const { id } = req.params;
-    const { rejectReason } = req.body;
+    const { rejectReason, userId, username } = req.body; // Extract userId and username from the request body
 
     // Assuming you have a ScholarshipProgram model
     const scholarshipProgram = await ScholarshipProgram.findById(id);
@@ -399,6 +443,19 @@ export const rejectScholarshipProgram = async (req, res) => {
     scholarshipProgram.status = 'Rejected';
     scholarshipProgram.rejectReason = rejectReason;
     await scholarshipProgram.save();
+
+    // Create a notification for the rejected scholarship program
+    const notification = {
+      recipientId: scholarshipProgram.providerId, // Assuming providerId is the recipient
+      senderId: userId, // Use userId from the request body
+      type: 'rejection',
+      message: `Your scholarship program "${scholarshipProgram.title}" has been rejected. Reason: ${rejectReason}`,
+      recipientName: scholarshipProgram.providerName, // Assuming providerName is available
+      senderName: username // Use username from the request body
+    };
+
+    // Save the notification to the database
+    await Notification.create(notification);
 
     res.status(200).json({ message: 'Scholarship program rejected successfully', scholarshipProgram });
   } catch (error) {

@@ -8,8 +8,13 @@ import ConfirmationModal from '../../components/ConfirmationModal';
 import { FaFileAlt } from "react-icons/fa";
 import { BsBuildingFill } from "react-icons/bs";
 import { regions, provinces, cities, barangays } from 'select-philippines-address';
+import { useSelector } from "react-redux";
 
 export default function ScholarshipsProviderDetails() {
+    const currentUser = useSelector((state) => state.user.currentUser);
+    const userId = currentUser._id;
+    const username = currentUser.username;
+
     const { id } = useParams();
     const [provider, setProvider] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -49,15 +54,21 @@ export default function ScholarshipsProviderDetails() {
 
     const handleApprove = async (providerId) => {
         try {
+            const userId = currentUser._id;
+            const username = currentUser.username;
+    
             const response = await fetch(`/api/admin/scholarship-provider/approve/${providerId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                body: JSON.stringify({ userId, username }),
             });
+    
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
+    
             console.log(`Approved provider with id: ${providerId}`);
             setSuccessMessage('Application approved successfully!');
             setShowSnackbar(true);
@@ -68,20 +79,23 @@ export default function ScholarshipsProviderDetails() {
         }
     };
 
-    const handleReject = async (providerId) => {
+        const handleReject = async (providerId) => {
         try {
+            const userId = currentUser._id;
+            const username = currentUser.username;
+    
             const response = await fetch(`/api/admin/scholarship-provider/reject/${providerId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ rejectReason: rejectReason })
+                body: JSON.stringify({ rejectReason: rejectReason, userId, username })
             });
-
+    
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-
+    
             const data = await response.json();
             console.log('Decline reason updated:', data);
             setSuccessMessage('Application rejected successfully!');
