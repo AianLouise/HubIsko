@@ -14,6 +14,13 @@ const AdminForumViews = ({ isGridView, currentPage, handlePageChange, paginatedD
     navigate(`/admin-forums/post/${postId}`);
   };
 
+  const truncateText = (text, maxLength) => {
+    if (text.length <= maxLength) {
+      return text;
+    }
+    return text.substring(0, maxLength) + '...';
+  };
+
   return (
     <>
       {paginatedData.length === 0 ? (
@@ -26,7 +33,7 @@ const AdminForumViews = ({ isGridView, currentPage, handlePageChange, paginatedD
             <div className="flex flex-col justify-between h-full bg-slate-200 p-4 shadow overflow-y-auto">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 flex-grow">
                 {paginatedData.map((item) => (
-                  <div key={item.id} className="bg-white shadow rounded-lg p-6 relative">
+                  <div key={item.id} className="bg-white shadow rounded-lg p-6 relative flex flex-col justify-between">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-xl font-semibold text-gray-800">{item.title}</h3>
                       <div className='flex gap-2 items-center'>
@@ -38,9 +45,17 @@ const AdminForumViews = ({ isGridView, currentPage, handlePageChange, paginatedD
                         </button>
                       </div>
                     </div>
-                    <p className="text-gray-600 mb-4">{item.content}</p>
+                    <p className="text-gray-600 mb-4">{truncateText(item.content, 100)}</p>
                     <div className="text-gray-500 text-sm">
                       {new Date(item.createdAt).toLocaleString()}
+                    </div>
+                    <div className='flex justify-end'>
+                    <button 
+                          className="bg-blue-600 hover:bg-blue-700 px-3 py-1 text-white rounded-md flex items-center justify-end"
+                          onClick={() => handleViewPost(item._id)} // Add onClick event handler
+                        >
+                          <FaEdit className="mr-1" /> View Post
+                        </button>
                     </div>
                   </div>
                 ))}

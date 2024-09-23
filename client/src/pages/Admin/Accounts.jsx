@@ -237,7 +237,7 @@ export default function Accounts() {
                     </div>
 
                     <div className="flex justify-center">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-7xl">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-8xl">
                             <div className="flex flex-col gap-4 justify-center bg-white shadow border rounded-md p-8">
                                 <div className="flex items-center gap-4">
                                     <FaUsers className="w-8 h-8 text-blue-600" />
