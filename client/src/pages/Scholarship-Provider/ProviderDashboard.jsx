@@ -123,6 +123,13 @@ export default function ProviderDashboard() {
           </div>
         )}
 
+        {currentUser?.status === 'Rejected' && (
+          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 m-6 my-8 rounded-md mx-24" role="alert">
+            <p className="font-bold">Account Rejected</p>
+            <p>Your account has been rejected. Reason: {currentUser.rejectReason}</p>
+          </div>
+        )}
+
         <div className='bg-blue-500 mx-24 px-10 flex justify-between rounded-md text-white'>
           <div className={'flex w-full gap-4 items-center mx-auto'}>
             <div className='bg-white w-24 h-24 my-8 rounded-full overflow-hidden'>

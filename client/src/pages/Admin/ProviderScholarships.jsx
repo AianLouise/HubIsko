@@ -19,6 +19,8 @@ export default function ProviderScholarships({ provider }) {
     }
   };
 
+  console.log(scholarships);
+
   function truncateText(text, maxLength) {
     if (typeof text !== 'string') {
       return '';
@@ -38,11 +40,9 @@ export default function ProviderScholarships({ provider }) {
     fetchScholarships();
   }, [provider]);
 
-  const filteredScholarships = scholarships
-    .filter(scholarship =>
-      scholarship.status === 'Published' &&
-      scholarship.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+  const filteredScholarships = scholarships.filter(scholarship =>
+    scholarship.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className='p-4'>
@@ -119,10 +119,11 @@ export default function ProviderScholarships({ provider }) {
                         <p className='font-medium'>Eligibility: </p>
                       </div>
                       <p className='text-sm lg:hidden'>{truncateText(scholarship.fieldOfStudy, 50)}</p>
-                      <p className='text-sm lg:hidden'>{truncateText(scholarship.otherEligibility, 50)}</p>
+                      <p className='text-sm lg:hidden'>{truncateText(scholarship.location, 50)}</p>
+                      <p className='text-sm lg:hidden'>{truncateText(scholarship.educationLevel, 50)}</p>
                     </div>
                     <p className='w-full text-sm hidden lg:block'>
-                      {truncateText(scholarship.fieldOfStudy, 50)}, {truncateText(scholarship.otherEligibility, 50)}
+                      {truncateText(scholarship.fieldOfStudy, 50)}, {truncateText(scholarship.location, 50)}, {truncateText(scholarship.educationLevel, 50)}
                     </p>
                   </div>
                   <div className='flex lg:flex-row lg:gap-4'>
@@ -131,9 +132,9 @@ export default function ProviderScholarships({ provider }) {
                         <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
                         <p className='font-medium'>Deadline: </p>
                       </div>
-                      <p className='text-sm lg:hidden'>{formatDate(scholarship.endDate)}</p>
+                      <p className='text-sm lg:hidden'>{formatDate(scholarship.applicationDeadline)}</p>
                     </div>
-                    <p className='w-full text-sm hidden lg:block'>{formatDate(scholarship.endDate)}</p>
+                    <p className='w-full text-sm hidden lg:block'>{formatDate(scholarship.applicationDeadline)}</p>
                   </div>
                 </div>
                 <Link
@@ -141,7 +142,7 @@ export default function ProviderScholarships({ provider }) {
                   key={scholarship._id}
                   className='bg-blue-600 text-white p-2 flex justify-center items-center rounded-md my-4 text-sm lg:text-base font-medium hover:bg-blue-800 transition ease-in-out'
                 >
-                  More Details for Application
+                  View Scholarship
                 </Link>
               </div>
             </div>

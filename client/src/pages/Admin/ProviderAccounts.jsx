@@ -104,10 +104,11 @@ export default function ProviderAccounts() {
           <div className='flex gap-4'>
             <div className='overflow-x-auto rounded-md bg-white shadow border w-full'>
               <div className='flex justify-between items-center gap-4 p-4 py-0 rounded-md'>
-                <button className="flex gap-2 items-center bg-blue-600 rounded-md px-6 py-2 shadow text-white font-medium">
+                {/* <button className="flex gap-2 items-center bg-blue-600 rounded-md px-6 py-2 shadow text-white font-medium">
                   <IoAddCircleOutline className='w-6 h-6' />
                   Add Provider
-                </button>
+                </button> */}
+                <div></div>
                 <div className="flex items-center gap-4 p-4">
                   <input
                     type="text"

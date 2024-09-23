@@ -165,7 +165,7 @@ export default function StudentScholarship() {
                                     key={scholarship._id}
                                     className='bg-blue-600 text-white p-2 flex justify-center items-center rounded-md my-4 text-sm lg:text-base font-medium hover:bg-blue-800 transition ease-in-out'
                                 >
-                                    More Details for Application
+                                    View Scholarship
                                 </Link>
                             </div>
                         </div>

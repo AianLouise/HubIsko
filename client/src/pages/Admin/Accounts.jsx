@@ -228,12 +228,12 @@ export default function Accounts() {
                 <div className='max-w-8xl mx-auto px-24  gap-2 mt-4 flex-col flex'>
                     <div className="flex items-center justify-between pb-2">
                         <h1 className="text-xl font-bold">Accounts</h1>
-                        <Link to="/add-account"> {/* Change "/add-account" to your desired route */}
+                        {/* <Link to="/add-account">
                             <button className="flex items-center gap-2 px-6 py-2 rounded-md shadow bg-blue-600 text-white">
                                 <IoAddCircleOutline className="w-6 h-6" />
                                 Add an Account
                             </button>
-                        </Link>
+                        </Link> */}
                     </div>
 
                     <div className="flex justify-center">

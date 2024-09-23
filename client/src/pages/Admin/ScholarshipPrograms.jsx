@@ -287,7 +287,7 @@ export default function ScholarshipPrograms() {
 
                     </div>
 
-                    <span className="border-b pb-2 mt-10">Recent Activities</span>
+                    {/* <span className="border-b pb-2 mt-10">Recent Activities</span>
 
                     <div className="">
                         <div className="bg-white shadow border rounded-md group">
@@ -323,7 +323,7 @@ export default function ScholarshipPrograms() {
                                 ))}
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
 
             </main>
