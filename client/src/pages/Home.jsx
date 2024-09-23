@@ -221,7 +221,7 @@ export default function Home() {
 
                       {/* Learn more link */}
                       <div className='flex flex-row'>
-                        <Link to="" className='flex flex-row items-center gap-2 text-blue-600 text-xl font-medium pt-4 hover:text-slate-700 group'>
+                        <Link to="/about" className='flex flex-row items-center gap-2 text-blue-600 text-xl font-medium pt-4 hover:text-slate-700 group'>
                           <h2>Learn More</h2>
                           <FaArrowRight className='text-lg mt-1 font-normal group-hover:text-slate-700 group-hover:translate-x-2 transition ease-in-out' />
                         </Link>
@@ -277,7 +277,7 @@ export default function Home() {
 
                       {/* Learn more link */}
                       <div className='flex flex-row'>
-                        <Link to="" className='flex flex-row items-center gap-2 text-blue-600 text-xl font-medium pt-4 hover:text-slate-700 group'>
+                        <Link to="/about" className='flex flex-row items-center gap-2 text-blue-600 text-xl font-medium pt-4 hover:text-slate-700 group'>
                           <h2>Learn More</h2>
                           <FaArrowRight className='text-lg mt-1 font-normal group-hover:text-slate-700 group-hover:translate-x-2 transition ease-in-out' />
                         </Link>
@@ -332,7 +332,7 @@ export default function Home() {
 
                       {/* Learn more link */}
                       <div className='flex flex-row'>
-                        <Link to="" className='flex flex-row items-center gap-2 text-blue-600 text-xl font-medium hover:text-slate-700 group'>
+                        <Link to="/about" className='flex flex-row items-center gap-2 text-blue-600 text-xl font-medium hover:text-slate-700 group'>
                           <h2>Learn More</h2>
                           <FaArrowRight className='text-lg mt-1 font-normal group-hover:text-slate-700 group-hover:translate-x-2 transition ease-in-out' />
                         </Link>
@@ -384,7 +384,7 @@ export default function Home() {
 
                       {/* Learn more link */}
                       <div className='flex flex-row'>
-                        <Link to="" className='flex flex-row items-center gap-2 text-blue-600 text-xl font-medium pt-4 hover:text-slate-700 group'>
+                        <Link to="/about" className='flex flex-row items-center gap-2 text-blue-600 text-xl font-medium pt-4 hover:text-slate-700 group'>
                           <h2>Learn More</h2>
                           <FaArrowRight className='text-lg mt-1 font-normal group-hover:text-slate-700 group-hover:translate-x-2 transition ease-in-out' />
                         </Link>
