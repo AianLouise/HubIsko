@@ -45,16 +45,16 @@ export default function ScholarshipProgramApplications() {
                                 Review and manage scholarship program applications from scholarship providers.
                             </p>
                         </div>
-                        <div className="bg-blue-600 w-44 h-44 lg:w-44 lg:h-44 my-8 rounded-md flex items-center justify-center">
-                            <div className="flex flex-col lg:flex-row gap-10">
-                                <div className="flex flex-col justify-center items-center h-full text-center">
-                                    <h2 className="text-sm lg:text-2xl font-semibold text-white">
+                        <div className="bg-slate-200 border-2 border-blue-600 text-black w-44 h-44 lg:w-72 lg:h-44 my-8 p-2 rounded-md flex">
+                            <div className="flex flex-col justify-between text-left lg:flex-row">
+                                <div className="flex flex-col justify-between p-4">
+                                    <h2 className="text-sm lg:text-xl font-semibold tracking-wide">
                                         Pending Applications
                                     </h2>
-                                    <span className="text-xl lg:text-3xl font-bold text-white mt-2">
+                                    <span className="text-xl lg:text-4xl text-blue-600 font-bold">
                                         {programs.length}
                                     </span>
-                                    <p className="text-base text-white mt-2">
+                                    <p className="text-base text-slate-500">
                                         Applications awaiting review
                                     </p>
                                 </div>
