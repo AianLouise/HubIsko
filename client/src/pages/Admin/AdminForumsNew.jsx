@@ -189,7 +189,7 @@ export default function AdminForumsNew() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4">
+          {/* <div className="flex flex-col gap-4">
             <span className="border-b pb-2">Forum Activity</span>
 
             <div className="flex flex-col divide-y border shadow bg-white p-4 rounded-md">
@@ -203,7 +203,7 @@ export default function AdminForumsNew() {
                 <span>Name commented on: <span className="text-blue-600">Title of the post</span></span>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </main>
     </div>

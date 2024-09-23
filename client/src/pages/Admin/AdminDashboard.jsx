@@ -69,14 +69,26 @@ export default function AdminDashboard() {
                 const pendingProgramsData = await pendingProgramsResponse.json();
                 setPendingPrograms(pendingProgramsData.length);
 
-                     const forumPostResponse = await fetch('/api/adminForums/forum-posts');
+                const forumPostResponse = await fetch('/api/adminForums/forum-posts');
                 const forumPostData = await forumPostResponse.json();
-                setForumPost(forumPostData.length > 0 ? forumPostData.length : 0);
+                setForumPost(forumPostData.length);
 
-                const ApplicationInboxResponse = await fetch('/api/adminApp/users/pending-verification');
-                const ApplicationInboxData = await ApplicationInboxResponse.json();
-                const totalPendingVerifications = ApplicationInboxData.userCount + ApplicationInboxData.scholarshipProgramCount;
-                setApplicationInbox(totalPendingVerifications);
+                try {
+                    const ApplicationInboxResponse = await fetch('/api/adminApp/users/pending-verification');
+                    if (!ApplicationInboxResponse.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const ApplicationInboxData = await ApplicationInboxResponse.json();
+
+                    const userCount = typeof ApplicationInboxData.userCount === 'number' ? ApplicationInboxData.userCount : 0;
+                    const scholarshipProgramCount = typeof ApplicationInboxData.scholarshipProgramCount === 'number' ? ApplicationInboxData.scholarshipProgramCount : 0;
+
+                    const totalPendingVerifications = userCount + scholarshipProgramCount;
+                    setApplicationInbox(totalPendingVerifications);
+                } catch (error) {
+                    console.error('Error fetching pending verifications:', error);
+                    setApplicationInbox(0); // Set to 0 in case of an error
+                }
 
                 // Fetch recent activities
                 // const activitiesResponse = await fetch('/api/admin/recent-activities');
