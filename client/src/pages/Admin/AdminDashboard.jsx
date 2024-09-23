@@ -69,9 +69,9 @@ export default function AdminDashboard() {
                 const pendingProgramsData = await pendingProgramsResponse.json();
                 setPendingPrograms(pendingProgramsData.length);
 
-                const forumPostResponse = await fetch('/api/adminForums/forum-posts');
+                     const forumPostResponse = await fetch('/api/adminForums/forum-posts');
                 const forumPostData = await forumPostResponse.json();
-                setForumPost(forumPostData.length);
+                setForumPost(forumPostData.length > 0 ? forumPostData.length : 0);
 
                 const ApplicationInboxResponse = await fetch('/api/adminApp/users/pending-verification');
                 const ApplicationInboxData = await ApplicationInboxResponse.json();
