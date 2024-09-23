@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ApplicantProfile from '../components/Profiles/ApplicantProfile';
 import ApplicantPosts from '../components/Profiles/ApplicantPosts';
 import ScholarshipProviderDescription from '../components/Profiles/ScholarshipProviderDescription';
@@ -8,7 +8,21 @@ import ScholarshipProviderPosts from '../components/Profiles/ScholarshipProvider
 import AdminAbout from '../components/Profiles/AdminAbout';
 import AdminPosts from '../components/Profiles/AdminPosts';
 
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import { useSelector } from 'react-redux';
+import ProviderHeaderSidebar from '../components/ProviderHeaderAndSidebar';
+
 const Profiles = () => {
+    const currentUser = useSelector((state) => state.user.currentUser);
+
+    const navigate = useNavigate();
+    const userId = currentUser._id;
+
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
+    const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
     const { id } = useParams(); // Extract user ID from URL
     const [user, setUser] = useState(null);
     const [selectedTab, setSelectedTab] = useState(''); // Default tab
@@ -89,7 +103,9 @@ const Profiles = () => {
 
     return (
         <div className='flex flex-col min-h-screen'>
-            <main className='flex-grow bg-[#f8f8fb] no-scrollbar font-medium'>
+            {currentUser && currentUser.role === 'applicant' && <Header />}
+            <main className={`flex-grow bg-[#f8f8fb] ${currentUser && currentUser.role === 'scholarship_provider' ? `transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''}` : 'no-scrollbar font-medium'}`}>
+                {currentUser && currentUser.role === 'scholarship_provider' && <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />}
                 <div className='border-b mb-8 py-8'>
                     <div className='flex flex-row items-center mx-auto max-w-6xl gap-4 lg:gap-10 px-4 lg:px-24'>
                         <img
@@ -118,6 +134,7 @@ const Profiles = () => {
                     </div>
                 </div>
             </main>
+            {currentUser && currentUser.role === 'applicant' && <Footer />}
         </div>
     );
 };
