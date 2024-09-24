@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import ScholarshipProgram from "../models/scholarshipProgram.model.js";
+import Notification from "../models/notification.model.js";
 
 export const test = (req, res) => {
     res.json({

@@ -27,17 +27,17 @@ export default function StudentApplicationDetails() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedImageUrl, setSelectedImageUrl] = useState('');
     const [selectedDocumentName, setSelectedDocumentName] = useState('');
-  
+
     const handleViewDocument = (url, name) => {
-      setSelectedImageUrl(url);
-      setSelectedDocumentName(name);
-      setIsModalOpen(true);
+        setSelectedImageUrl(url);
+        setSelectedDocumentName(name);
+        setIsModalOpen(true);
     };
-  
+
     const handleCloseModal = () => {
-      setIsModalOpen(false);
-      setSelectedImageUrl('');
-      setSelectedDocumentName('');
+        setIsModalOpen(false);
+        setSelectedImageUrl('');
+        setSelectedDocumentName('');
     };
 
     const fetchStudentDetails = async () => {
@@ -64,9 +64,11 @@ export default function StudentApplicationDetails() {
         fetchStudentDetails();
     }, [id]);
 
-     const handleApprove = async (studentId) => {
+    const handleApprove = async (studentId) => {
         const userId = currentUser._id;
-        const username = currentUser.username; 
+        const username = currentUser.username;
+
+        console.log('Approving student:', userId, username);
 
         try {
             const response = await fetch(`/api/adminApp/student/approve/${studentId}`, {
@@ -89,10 +91,10 @@ export default function StudentApplicationDetails() {
         }
     };
 
-        const handleReject = async (studentId) => {
+    const handleReject = async (studentId) => {
         const userId = currentUser._id;
         const username = currentUser.username;
-        
+
         try {
             const response = await fetch(`/api/adminApp/student/reject/${studentId}`, {
                 method: 'PATCH',
@@ -101,11 +103,11 @@ export default function StudentApplicationDetails() {
                 },
                 body: JSON.stringify({ rejectReason: rejectReason, userId, username })
             });
-    
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-    
+
             const data = await response.json();
             console.log('Decline reason updated:', data);
             setSuccessMessage('Application rejected successfully!');
@@ -464,17 +466,17 @@ export default function StudentApplicationDetails() {
                             <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Documents</div>
                             <div className="grid grid-cols-1 gap-8 my-4 py-10 items-center px-8">
                                 <div className="flex flex-col items-center">
-                                <label className="block text-sm text-slate-600">Student ID File</label>
-                                <button
-                                    onClick={() => handleViewDocument(student.applicantDetails.studentIdFile, 'Student ID File')}
-                                    className="mt-1 block px-10 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
-                                >
-                                    View Document
-                                </button>
+                                    <label className="block text-sm text-slate-600">Student ID File</label>
+                                    <button
+                                        onClick={() => handleViewDocument(student.applicantDetails.studentIdFile, 'Student ID File')}
+                                        className="mt-1 block px-10 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
+                                    >
+                                        View Document
+                                    </button>
                                 </div>
                             </div>
                             <AdminImageModal isOpen={isModalOpen} onClose={handleCloseModal} imageUrl={selectedImageUrl} documentName={selectedDocumentName} />
-                            </div>
+                        </div>
 
                         <div className="flex justify-end gap-4 mt-6">
                             {student.status === 'Pending Verification' && (
