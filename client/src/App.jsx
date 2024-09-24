@@ -145,6 +145,8 @@ export default function App() {
 
         <Route path="/scholar-view/:id" element={<ScholarView />} />
 
+        <Route path="/about" element={<About />} />
+
         {/* <Route path="/others-profile/:id" element={<OthersProfile />} /> */}
         {/* Admin Routes */}
         {/* <Route path="/notifications" element={<NotificationsPage />} />
@@ -224,7 +226,7 @@ export default function App() {
           <Route path="/password-and-security" element={<PasswordAndSecurity2 />} />
           <Route path="/account-settings" element={<AccountSettings />} />
           <Route path="/change-password" element={<ChangePassword />} />
-          <Route path="/about" element={<About />} />
+
           <Route path="/CoRH" element={<CompleteOrReturnHome />} />
 
           <Route path="/applying-stages/:scholarshipId" element={<ApplyingStages />} />
