@@ -791,7 +791,7 @@ const ScholarshipApplicationForm = () => {
                     </div>
 
 
-                    <div className='lg:hidden flex flex-col min-h-screen'>
+                    <div className='lg:hidden flex flex-col lg:min-h-screen'>
                         <div className='flex justify-between items-center px-6 py-2 text-sm text-slate-500'>
                             <span>Requirement</span>
                             <span>Stages</span>
