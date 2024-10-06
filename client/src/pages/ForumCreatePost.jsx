@@ -8,6 +8,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { format } from 'date-fns';
 import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
+import { v4 as uuidv4 } from 'uuid'; // Import UUID library
 
 export default function CreateForumPost() {
     useTokenExpiry();
@@ -75,7 +76,7 @@ export default function CreateForumPost() {
             const file = fileObj.file;
             const fileExtension = file.name.split('.').pop(); // Extract the file extension
             const fileNameWithoutExtension = file.name.replace(/\.[^/.]+$/, ""); // Remove the extension from the original file name
-            const uniqueIdentifier = `${Date.now()}_${Math.floor(Math.random() * 10000)}`; // Generate a unique identifier
+            const uniqueIdentifier = uuidv4(); // Generate a unique identifier
             const fileName = `${fileNameWithoutExtension}_${uniqueIdentifier}.${fileExtension}`; // Create the unique file name
             const storageRef = ref(storage, `forum_uploads/${fileName}`);
             await uploadBytes(storageRef, file);

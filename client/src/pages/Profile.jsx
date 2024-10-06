@@ -10,6 +10,7 @@ import { BiCommentDots, BiPlus } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { format } from 'date-fns';
+import { v4 as uuidv4 } from 'uuid'; // Import UUID library
 
 export default function Profile() {
 
@@ -19,7 +20,6 @@ export default function Profile() {
   const [ShowModal2, setShowModal2] = useState(false);
   const [selectedTab, setSelectedTab] = useState('Posts');
   const [posts, setPosts] = useState([]);
-  const [username, setUsername] = useState('');
   const [profilePicture, setProfilePicture] = useState('');
   const [attachments, setAttachments] = useState([]);
   const [formData, setFormData] = useState({ title: '', content: '' });
@@ -28,6 +28,8 @@ export default function Profile() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredPosts, setFilteredPosts] = useState([]);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
 
 
   const handleFileChange = (event) => {
@@ -69,7 +71,8 @@ export default function Profile() {
       const file = fileObj.file;
       const fileExtension = file.name.split('.').pop(); // Extract the file extension
       const fileNameWithoutExtension = file.name.replace(/\.[^/.]+$/, ""); // Remove the extension from the original file name
-      const fileName = `${currentUser.username}_${fileNameWithoutExtension}_${format(new Date(), 'yyyyMMdd')}.${fileExtension}`;
+      const uniqueIdentifier = uuidv4(); // Generate a unique identifier
+      const fileName = `${currentUser.applicantDetails.firstName}_${currentUser.applicantDetails.lastName}_${fileNameWithoutExtension}_${uniqueIdentifier}.${fileExtension}`; // Create the unique file name
       const storageRef = ref(storage, `forum_uploads/${fileName}`);
       await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(storageRef);
@@ -124,28 +127,31 @@ export default function Profile() {
     );
   }, [searchQuery, posts]);
 
-  const fetchPosts = async () => {
-    try {
-      const response = await fetch(`/api/profile/forum-posts/${currentUser._id}`);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+    const fetchPosts = async () => {
+      try {
+          const response = await fetch(`/api/profile/forum-posts/${currentUser._id}`);
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          if (data && data.forumPosts) {
+              setPosts(data.forumPosts); // Set forum posts
+              setFirstName(data.firstName); // Set first name
+              setLastName(data.lastName); // Set last name
+              setProfilePicture(data.profilePicture); // Set profile picture
+          } else {
+              setPosts([]); // Set to empty array if no forum posts
+              setFirstName(''); // Clear first name if no forum posts
+              setLastName(''); // Clear last name if no forum posts
+              setProfilePicture(''); // Clear profile picture if no forum posts
+          }
+      } catch (error) {
+          console.error('Error fetching posts:', error);
+          setPosts([]); // Set to empty array on error
+          setFirstName(''); // Clear first name on error
+          setLastName(''); // Clear last name on error
+          setProfilePicture(''); // Clear profile picture on error
       }
-      const data = await response.json();
-      if (data && data.forumPosts) {
-        setPosts(data.forumPosts); // Set forum posts
-        setUsername(data.username); // Set username
-        setProfilePicture(data.profilePicture); // Set profile picture
-      } else {
-        setPosts([]); // Set to empty array if no forum posts
-        setUsername(''); // Clear username if no forum posts
-        setProfilePicture(''); // Clear profile picture if no forum posts
-      }
-    } catch (error) {
-      console.error('Error fetching posts:', error);
-      setPosts([]); // Set to empty array on error
-      setUsername(''); // Clear username on error
-      setProfilePicture(''); // Clear profile picture on error
-    }
   };
 
   const handleSearchChange = (e) => {
@@ -176,40 +182,40 @@ export default function Profile() {
       <Header />
       <AccountManagement />
       <main className="flex-grow bg-[#f8f8fb]">
-          <div className='border-b mb-8 py-8'>
-            <div className='flex flex-row items-center mx-auto max-w-6xl gap-4 lg:gap-10 px-4 lg:px-24'>
-                <img
-                    src={currentUser.profilePicture}
-                    alt={`${currentUser.username}'s profile`}
-                    className='w-36 h-36 my-8 rounded-md object-cover'
-                />
-                <div className='flex flex-col items-start gap-2 lg:w-full'>
-                <div className="flex justify-between items-center w-full">
-                    <span className='text-xl font-medium text-gray-600'>
-                        {currentUser.role === 'scholarship_provider' ? 'Organization' : currentUser.role === 'applicant' ? 'Student' : currentUser.role === 'admin' ? 'Admin' : currentUser.role}
-                    </span>
-                    <div className='hidden lg:flex flex-col lg:w-[150px]'>
-                    <button
-                        className='bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition ease-in-out'
-                        onClick={() => navigate('/account-settings')}
-                    >
-                        Edit Profile
-                    </button>
+        <div className='border-b mb-8 py-8'>
+          <div className='flex flex-row items-center mx-auto max-w-6xl gap-4 lg:gap-10 px-4 lg:px-24'>
+            <img
+              src={currentUser.profilePicture}
+              alt={`${currentUser.applicantDetails.firstName} ${currentUser.applicantDetails.lastName}'s profile`}
+              className='w-36 h-36 my-8 rounded-md object-cover'
+            />
+            <div className='flex flex-col items-start gap-2 lg:w-full'>
+              <div className="flex justify-between items-center w-full">
+                <span className='text-xl font-medium text-gray-600'>
+                  {currentUser.role === 'scholarship_provider' ? 'Organization' : currentUser.role === 'applicant' ? 'Student' : currentUser.role === 'admin' ? 'Admin' : currentUser.role}
+                </span>
+                <div className='hidden lg:flex flex-col lg:w-[150px]'>
+                  <button
+                    className='bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition ease-in-out'
+                    onClick={() => navigate('/account-settings')}
+                  >
+                    Edit Profile
+                  </button>
                 </div>
-                </div>
-                    <span className='text-3xl font-bold text-gray-800'>
-                        {currentUser.role === 'scholarship_provider' ? currentUser.scholarshipProviderDetails.organizationName : currentUser.username}
-                    </span>
-                    {/* <span className='text-xl font-medium text-gray-600'>Followers: {currentUser.followers}</span> */}
-                    <button
-                        className='block lg:hidden w-full font-medium bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition ease-in-out'
-                        onClick={() => navigate('/account-settings')}
-                    >
-                        Edit Profile
-                    </button>
-                </div>
-              
+              </div>
+              <span className='text-3xl font-bold text-gray-800'>
+                {currentUser.role === 'scholarship_provider' ? currentUser.scholarshipProviderDetails.organizationName : `${currentUser.applicantDetails.firstName} ${currentUser.applicantDetails.lastName}`}
+              </span>
+              {/* <span className='text-xl font-medium text-gray-600'>Followers: {currentUser.followers}</span> */}
+              <button
+                className='block lg:hidden w-full font-medium bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition ease-in-out'
+                onClick={() => navigate('/account-settings')}
+              >
+                Edit Profile
+              </button>
             </div>
+
+          </div>
         </div>
 
         <div className='flex flex-col gap-4 max-w-6xl lg:px-24 mx-auto px-2'>
@@ -271,11 +277,11 @@ export default function Profile() {
                           <div className='flex flex-row gap-3'>
                             <img
                               src={profilePicture || 'default-profile-pic-url'} // Use a default profile picture if not available
-                              alt={`${username}'s profile`}
+                              alt={`${currentUser.applicantDetails.firstName} ${currentUser.applicantDetails.lastName}'s profile`}
                               className='w-12 h-12 rounded-full object-cover' // Add object-cover to maintain aspect ratio
                             />
                             <div className='flex flex-col'>
-                              <span className='font-medium'>{username}</span>
+                              <span className='font-medium'>{firstName} {lastName}</span>
                               <span className='text-sm text-slate-500'>
                                 {new Date(post.createdAt).toLocaleString('en-US', {
                                   year: 'numeric',

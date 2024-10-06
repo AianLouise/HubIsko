@@ -117,7 +117,7 @@ const Profiles = () => {
                     <div className='flex flex-row items-center mx-auto max-w-6xl gap-4 lg:gap-10 px-4 lg:px-24'>
                         <img
                             src={user.profilePicture}
-                            alt={`${user.username}'s profile`}
+                            alt={`${user.applicantDetails.firstName} ${user.applicantDetails.lastName}'s profile`}
                             className='w-36 h-36 my-8 rounded-md object-cover'
                         />
                         <div className='flex flex-col items-start gap-2 lg:w-1/2 '>
@@ -125,7 +125,7 @@ const Profiles = () => {
                                 {user.role === 'scholarship_provider' ? 'Organization' : user.role === 'applicant' ? 'Student' : user.role === 'admin' ? 'Admin' : user.role}
                             </span>
                             <span className='text-3xl font-bold text-gray-800'>
-                                {user.role === 'scholarship_provider' ? user.scholarshipProviderDetails.organizationName : user.username}
+                                {user.role === 'scholarship_provider' ? user.scholarshipProviderDetails.organizationName : `${user.applicantDetails.firstName} ${user.applicantDetails.lastName}`}
                             </span>
                         </div>
                     </div>

@@ -61,8 +61,14 @@ export const getForumPostsByUserId = async (req, res) => {
             return res.status(404).json({ message: 'No forum posts found for this user' });
         }
 
-        // Send the forum posts, username, and profile picture as a JSON response
-        res.json({ username: user.username, profilePicture: user.profilePicture, forumPosts });
+        // Send the forum posts, firstName, lastName, and profile picture as a JSON response
+        res.json({
+            firstName: user.applicantDetails.firstName,
+            firstName: user.applicantDetails.firstName,
+            lastName: user.applicantDetails.lastName,
+            profilePicture: user.profilePicture,
+            forumPosts
+        });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });
     }
