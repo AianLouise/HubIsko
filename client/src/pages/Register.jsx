@@ -41,7 +41,6 @@ const ConfirmPasswordRequirements = ({ requirements }) => {
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -178,9 +177,9 @@ export default function SignUp() {
   };
 
   const validateForm = () => {
-    const { username, email, password, confirmPassword, firstName, lastName } = formData;
+    const { email, password, confirmPassword, firstName, lastName } = formData;
     let valid = true;
-    if (!username || !email || !password || !confirmPassword || !firstName || !lastName) {
+    if (!email || !password || !confirmPassword || !firstName || !lastName) {
       setErrors((prevErrors) => ({ ...prevErrors, global: 'Please fill in all fields' }));
       valid = false;
     }
@@ -251,10 +250,6 @@ export default function SignUp() {
             <div className='w-full'>
               <input type="email" id="email" placeholder="Email Address" className='border bg-white p-3 rounded-lg focus:outline-blue-600 w-full' onChange={handleChange} required />
               {errors.email && <span className='text-red-500 text-sm'>{errors.email}</span>}
-            </div>
-            <div className='w-full'>
-              <input type="text" id="username" placeholder="Username" className='border bg-white p-3 rounded-lg focus:outline-blue-600 w-full' onChange={handleChange} required />
-              {errors.username && <span className='text-red-500 text-sm'>{errors.username}</span>}
             </div>
 
             <div className="relative w-full">
