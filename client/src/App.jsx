@@ -20,12 +20,12 @@ import ScholarDashboard from "./pages/ScholarDashboard";
 import RegisterAsProvider from "./pages/ProviderRegistration";
 import CompleteProfileConfirmation from "./pages/CompleteProfileConfirmation";
 import AccountManagement from "./pages/AccountManagement";
-import PasswordAndSecurity from "./pages/PasswordAndSecurity";
+// import PasswordAndSecurity from "./pages/PasswordAndSecurity";
 import ChangePassword from "./components/ChangePassword";
 import Forums from "./pages/Forums";
 import ApplicationDetails from "./pages/ApplicationDetails";
 import ForumPost from "./pages/ForumPost";
-import ApplyingStages from "./pages/ApplyingStages";
+// import ApplyingStages from "./pages/ApplyingStages";
 import ApplicationBox from "./pages/ApplicationBox";
 import InboxedApplicationDetail from "./pages/InboxedApplicationDetail";
 import StudentInfo from "./pages/StudentInfo";
@@ -229,7 +229,7 @@ export default function App() {
 
           <Route path="/CoRH" element={<CompleteOrReturnHome />} />
 
-          <Route path="/applying-stages/:scholarshipId" element={<ApplyingStages />} />
+          {/* <Route path="/applying-stages/:scholarshipId" element={<ApplyingStages />} /> */}
           <Route path="/application-box" element={<ApplicationBox />} />
           <Route path="/application-detail/:id" element={<InboxedApplicationDetail />} />
           <Route path="/resubmit-application/:id" element={<ResubmitApplication />} />

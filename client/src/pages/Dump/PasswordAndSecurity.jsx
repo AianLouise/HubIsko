@@ -6,7 +6,7 @@ import {
   ref,
   uploadBytesResumable,
 } from 'firebase/storage';
-import { app } from '../firebase';
+import { app } from '../../firebase';
 import { useDispatch } from 'react-redux';
 import {
   updateUserStart,
@@ -16,13 +16,13 @@ import {
   deleteUserSuccess,
   deleteUserFail,
   signOut
-} from '../redux/user/userSlice';
-import Header from '../components/Header';
-import AccountManagement from './AccountManagement';
+} from '../../redux/user/userSlice';
+import Header from '../../components/Header';
+import AccountManagement from '../AccountManagement';
 
 import { IoPerson } from "react-icons/io5";
 import { FaEye } from "react-icons/fa";
-import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
+import useTokenExpiry from '../../hooks/useTokenExpiry'; // Adjust the import path
 
 
 export default function PasswordAndSecurity() {
