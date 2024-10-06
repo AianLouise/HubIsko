@@ -84,7 +84,7 @@ const ProviderRegistration = () => {
             authorizationLetter: '',
             idProofContactPerson: '',
         },
-        agreeTerms: false,
+        agreePrivacy: false,
     });
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -159,6 +159,11 @@ const ProviderRegistration = () => {
             validate: () => {
                 const errors = {};
 
+                // Validate username
+                if (!formData.username) {
+                    errors.username = 'Username is required';
+                }
+
                 // Validate email
                 if (!formData.email) {
                     errors.email = 'Email is required';
@@ -224,8 +229,8 @@ const ProviderRegistration = () => {
             content: <Step4 formData={formData} setFormData={setFormData} />,
             validate: () => {
                 const errors = {};
-                if (!formData.agreeTerms) {
-                    errors.agreeTerms = 'You must agree to the terms and conditions.';
+                if (!formData.agreePrivacy) {
+                    errors.agreePrivacy = 'You must agree to the terms and conditions.';
                 }
                 return errors;
             }
@@ -240,7 +245,7 @@ const ProviderRegistration = () => {
         const newErrors = {};
 
         // Add validation for step 4
-        if (!formData.agreeTerms) newErrors.agreeTerms = 'You must agree to the Terms and Conditions';
+        if (!formData.agreePrivacy) newErrors.agreePrivacy = 'You must agree to the Terms and Conditions';
 
         // Other validation logic...
 

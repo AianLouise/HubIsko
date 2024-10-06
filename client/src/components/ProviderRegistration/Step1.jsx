@@ -429,7 +429,9 @@ const Step1 = ({ formData, setFormData }) => {
                 <hr className="col-span-2" />
 
                 <div className="mb-4 col-span-2">
-                    <label htmlFor="website" className="block text-sm font-medium text-gray-700">Website or Social Media Account</label>
+                    <label htmlFor="website" className="block text-sm font-medium text-gray-700">
+                        Website or Social Media Account <span className="text-red-500">*</span>
+                    </label>
                     <input
                         type="text"
                         name="website"
@@ -438,9 +440,10 @@ const Step1 = ({ formData, setFormData }) => {
                         onChange={handleChange}
                         className="mt-1 p-2 w-full border rounded-md"
                         placeholder="Official website URL or social media account of the organization"
+                        required
                     />
                     <div className="mt-1 text-xs text-gray-600">
-                        Please provide the official website URL or a social media account link (e.g., Facebook, LinkedIn) of your organization.
+                        Please provide the official website URL or a social media account link (e.g., Facebook, Instagram) of your organization.
                     </div>
                 </div>
             </div>

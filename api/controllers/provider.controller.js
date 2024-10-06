@@ -37,7 +37,7 @@ export const signupAsProvider = async (req, res) => {
       city,
       barangay,
       website,
-      agreeTerms,
+      agreePrivacy,
       profilePicture,
       documents, // This should contain the document URLs
     } = req.body;
@@ -66,7 +66,7 @@ export const signupAsProvider = async (req, res) => {
         city,
         barangay,
         website,
-        agreeTerms,
+        agreePrivacy,
         documents: {
           registrationCertificate: documents.registrationCertificate,
           tin: documents.tin,

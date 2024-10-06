@@ -215,7 +215,7 @@ const scholarshipProviderSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  agreeTerms: {
+  agreePrivacy: {
     type: Boolean,
     required: false,
   },
