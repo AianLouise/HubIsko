@@ -23,7 +23,7 @@ export const createPost = async (req, res) => {
 
 export const getPosts = async (req, res) => {
   try {
-    const posts = await ForumPost.find().populate('author', ['username', 'email', 'profilePicture']);
+    const posts = await ForumPost.find().populate('author', ['applicantDetails.firstName','applicantDetails.lastName' , 'email', 'profilePicture']);
     const modifiedPosts = posts.map(post => ({
       ...post.toObject(),
       totalLikes: post.likes.length,
@@ -40,19 +40,19 @@ export const getPosts = async (req, res) => {
 export const getPostById = async (req, res) => {
   try {
     const post = await ForumPost.findById(req.params.postId)
-      .populate('author', ['username', 'email', 'profilePicture', 'role']) // Include profilePicture
+      .populate('author', ['applicantDetails.firstName', 'applicantDetails.lastName', 'email', 'profilePicture', 'role']) // Include firstName and lastName
       .populate({
         path: 'comments',
         populate: [
           {
             path: 'author',
-            select: 'username profilePicture' // Include profilePicture
+            select: 'applicantDetails.firstName applicantDetails.lastName profilePicture' // Include firstName and lastName
           },
           {
             path: 'replies',
             populate: {
               path: 'author',
-              select: 'username profilePicture' // Include profilePicture
+              select: 'applicantDetails.firstName applicantDetails.lastName profilePicture' // Include firstName and lastName
             }
           }
         ]

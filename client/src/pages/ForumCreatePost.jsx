@@ -15,19 +15,19 @@ export default function CreateForumPost() {
 
     const navigate = useNavigate();
     const { currentUser } = useSelector((state) => state.user);
-  
+
     useEffect(() => {
-      if (currentUser) {
-        if (currentUser.role === 'admin') {
-          navigate('/admin-dashboard');
-        } else if (currentUser.role === 'scholarship_provider') {
-          if (!currentUser.emailVerified) {
-            navigate('/verify-your-email', { state: { email: currentUser.email } });
-          } else {
-            navigate('/provider-dashboard');
-          }
+        if (currentUser) {
+            if (currentUser.role === 'admin') {
+                navigate('/admin-dashboard');
+            } else if (currentUser.role === 'scholarship_provider') {
+                if (!currentUser.emailVerified) {
+                    navigate('/verify-your-email', { state: { email: currentUser.email } });
+                } else {
+                    navigate('/provider-dashboard');
+                }
+            }
         }
-      }
     }, [currentUser, navigate]);
 
     const [formData, setFormData] = useState({ title: '', content: '' });
@@ -75,7 +75,8 @@ export default function CreateForumPost() {
             const file = fileObj.file;
             const fileExtension = file.name.split('.').pop(); // Extract the file extension
             const fileNameWithoutExtension = file.name.replace(/\.[^/.]+$/, ""); // Remove the extension from the original file name
-            const fileName = `${currentUser.username}_${fileNameWithoutExtension}_${format(new Date(), 'yyyyMMdd')}.${fileExtension}`;
+            const uniqueIdentifier = `${Date.now()}_${Math.floor(Math.random() * 10000)}`; // Generate a unique identifier
+            const fileName = `${fileNameWithoutExtension}_${uniqueIdentifier}.${fileExtension}`; // Create the unique file name
             const storageRef = ref(storage, `forum_uploads/${fileName}`);
             await uploadBytes(storageRef, file);
             const downloadURL = await getDownloadURL(storageRef);

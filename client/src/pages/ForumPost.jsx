@@ -329,16 +329,18 @@ export default function ForumPost() {
                     </div>
 
                     <div className='border shadow p-4 rounded-md bg-white'>
-                        <div className='flex gap-4'>
+                                              <div className='flex gap-4'>
                             <Link to={`/profile/${post.author._id}`}>
                                 <img
                                     src={post.author.profilePicture}
-                                    alt={`${post.author.username}'s profile`}
+                                    alt={`${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}'s profile`}
                                     className='w-12 h-12 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
                                 />
                             </Link>
                             <div className='flex flex-col'>
-                                <span className='font-bold text-lg'>{post.author.username}</span>
+                                <span className='font-bold text-lg'>
+                                    {post.author.applicantDetails.firstName} {post.author.applicantDetails.lastName}
+                                </span>
                                 <span className='text-sm text-slate-500'>
                                     {new Date(post.createdAt).toLocaleString('en-US', {
                                         year: 'numeric',

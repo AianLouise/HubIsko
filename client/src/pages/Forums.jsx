@@ -265,11 +265,13 @@ export default function Forums() {
                 <div className='flex flex-row gap-3'>
                   <img
                     src={post.author.profilePicture || 'default-profile-pic-url'}
-                    alt={`${post.author.username}'s profile`}
+                    alt={`${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}'s profile`}
                     className='w-12 h-12 rounded-full'
                   />
                   <div className='flex flex-col'>
-                    <span className='font-medium'>{post.author.username}</span>
+                    <span className='font-medium'>
+                      {post.author.applicantDetails.firstName} {post.author.applicantDetails.lastName}
+                    </span>
                     <span className='text-sm text-slate-500'>
                       {new Date(post.createdAt).toLocaleString('en-US', {
                         year: 'numeric',
