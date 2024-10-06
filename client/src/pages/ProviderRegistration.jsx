@@ -159,11 +159,6 @@ const ProviderRegistration = () => {
             validate: () => {
                 const errors = {};
 
-                // Validate username
-                if (!formData.username) {
-                    errors.username = 'Username is required';
-                }
-
                 // Validate email
                 if (!formData.email) {
                     errors.email = 'Email is required';

@@ -99,15 +99,27 @@ const Step2 = ({ formData, setFormData }) => {
             <h2 className="text-2xl font-bold mb-6">Enter Account Information</h2>
             <div className='grid grid-cols-2 gap-4'>
                 <div className="mb-4 col-span-2">
-                    <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
-                    <input type="text" name="username" id="username" value={formData.username} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Enter your username" />
-                </div>
-                <div className="mb-4 col-span-2">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
-                    <input type="email" name="email" id="email" value={formData.email} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" placeholder="Enter your email address" />
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                        Email Address <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className="mt-1 p-2 w-full border rounded-md"
+                        placeholder="Enter your email address"
+                        required
+                    />
+                    <div className="mt-1 text-xs text-gray-600">
+                        Please enter a valid email address. This will be used for account-related communications.
+                    </div>
                 </div>
                 <div className="mb-4 col-span-2 relative">
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                        Password <span className="text-red-500">*</span>
+                    </label>
                     <div className="relative">
                         <input
                             type={showPassword ? 'text' : 'password'}
@@ -117,6 +129,7 @@ const Step2 = ({ formData, setFormData }) => {
                             onChange={handleChange}
                             className="mt-1 p-2 w-full border rounded-md pr-10"
                             placeholder="Choose a strong password"
+                            required
                         />
                         <button
                             type="button"
@@ -127,9 +140,14 @@ const Step2 = ({ formData, setFormData }) => {
                         </button>
                     </div>
                     {isPasswordTouched && <PasswordRequirements requirements={passwordRequirements} />}
+                    <div className="mt-1 text-xs text-gray-600">
+                        Your password should be at least 6 characters long, contain at least one uppercase letter, and one special character.
+                    </div>
                 </div>
                 <div className="mb-4 col-span-2 relative">
-                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                        Confirm Password <span className="text-red-500">*</span>
+                    </label>
                     <div className="relative">
                         <input
                             type={showConfirmPassword ? 'text' : 'password'}
@@ -139,6 +157,7 @@ const Step2 = ({ formData, setFormData }) => {
                             onChange={handleChange}
                             className="mt-1 p-2 w-full border rounded-md pr-10"
                             placeholder="Re-enter your password"
+                            required
                         />
                         <button
                             type="button"
@@ -149,6 +168,9 @@ const Step2 = ({ formData, setFormData }) => {
                         </button>
                     </div>
                     {isConfirmPasswordTouched && <ConfirmPasswordRequirements requirements={confirmPasswordRequirements} />}
+                    <div className="mt-1 text-xs text-gray-600">
+                        Please re-enter your password to confirm it matches the one you entered above.
+                    </div>
                 </div>
             </div>
         </div>
