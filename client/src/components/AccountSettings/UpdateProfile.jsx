@@ -13,7 +13,6 @@ const UpdateProfile = () => {
     const userId = currentUser._id;
 
     const [formData, setFormData] = useState({
-        username: '',
         profilePicture: currentUser.profilePicture,
     });
     const [notification, setNotification] = useState({ message: '', type: '' });
@@ -32,7 +31,6 @@ const UpdateProfile = () => {
                 }
                 const user = await response.json();
                 setFormData({
-                    username: user.username,
                     profilePicture: user.profilePicture
                 });
                 setProfilePicturePreview(user.profilePicture);
@@ -90,7 +88,6 @@ const UpdateProfile = () => {
             }
 
             const updatedFormData = {
-                username: formData.username,
                 profilePicture: profilePictureUrl,
             };
             console.log('Updated form data:', updatedFormData);
@@ -113,7 +110,6 @@ const UpdateProfile = () => {
             // Update the currentUser state in Redux
             dispatch(updateUserSuccess({
                 ...currentUser,
-                username: updatedFormData.username,
                 profilePicture: profilePictureUrl,
             }));
 
@@ -163,19 +159,6 @@ const UpdateProfile = () => {
                         />
                     </div>
                     <p className='text-sm text-gray-500'>Click to change profile picture</p>
-                </div>
-                <div className='flex flex-col gap-1'>
-                    <span className='font-medium text-slate-500'>Username</span>
-                    <input
-                        type='text'
-                        id='username'
-                        name='username'
-                        placeholder='Username'
-                        value={formData.username}
-                        onChange={handleChange}
-                        className='bg-slate-100 rounded-lg p-3'
-                        required
-                    />
                 </div>
                 <div className='w-full flex flex-row justify-end my-4 mt-8'>
                     <button type='submit' className='bg-blue-600 px-10 font-medium text-white p-3 rounded-lg hover:bg-blue-800 transition ease-in-out'>

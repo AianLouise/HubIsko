@@ -217,19 +217,18 @@ export const verifyEmail = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
     const { userId } = req.params; // Get userId from request params
-    const { username, profilePicture } = req.body;
+    const { profilePicture } = req.body;
 
     try {
         // Validate incoming data
-        if (!username || !profilePicture) {
-            return res.status(400).json({ message: 'All fields are required' });
+        if (!profilePicture) {
+            return res.status(400).json({ message: 'Profile picture is required' });
         }
 
         // Find and update the user profile
         const updatedUser = await User.findByIdAndUpdate(
             userId, // Use userId from params
             {
-                username,
                 profilePicture, // URL of the uploaded profile picture
             },
             { new: true } // Return the updated user
