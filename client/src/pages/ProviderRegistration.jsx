@@ -73,7 +73,6 @@ const ProviderRegistration = () => {
         barangay: '',
         addressDetails: '',
         website: '',
-        username: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -158,11 +157,6 @@ const ProviderRegistration = () => {
             content: <Step2 formData={formData} setFormData={setFormData} />,
             validate: () => {
                 const errors = {};
-
-                // Validate username
-                if (!formData.username) {
-                    errors.username = 'Username is required';
-                }
 
                 // Validate email
                 if (!formData.email) {

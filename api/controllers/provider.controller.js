@@ -22,7 +22,6 @@ export const signupAsProvider = async (req, res) => {
 
   try {
     const {
-      username,
       email,
       password,
       contactPersonName,
@@ -44,7 +43,6 @@ export const signupAsProvider = async (req, res) => {
 
     // Create new user object with document fields
     const newUser = new User({
-      username,
       email,
       password: bcrypt.hashSync(password, 8),
       role: 'scholarship_provider',
