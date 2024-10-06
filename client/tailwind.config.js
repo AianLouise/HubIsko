@@ -7,6 +7,10 @@ export default {
   theme: {
 
     extend: {
+      fontFamily: {
+        sans: ['CustomFont', 'Helvetica', 'Arial', 'sans-serif'],
+        // Add other custom fonts if needed
+      },
       keyframes: {
         fadeIn: {
           '0%': { opacity: 0 },
