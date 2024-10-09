@@ -47,7 +47,7 @@ const ProviderNotificationDetailPage = () => {
                             className="w-16 h-16 rounded-full object-cover border-2 border-blue-600"
                         />
                         <div className="flex flex-col">
-                            <span className="text-xl font-bold">{notification.senderName}</span> {/* Accessing the username property */}
+                            <span className="text-xl font-bold">{notification.senderName}</span>
                             <span className="text-sm text-gray-500">{new Date(notification.createdAt).toLocaleString()}</span>
                         </div>
                     </div>

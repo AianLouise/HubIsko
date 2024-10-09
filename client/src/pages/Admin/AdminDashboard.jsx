@@ -153,9 +153,8 @@ export default function AdminDashboard() {
                                 />
                             </div>
                             <div className='flex flex-col gap-1'>
-                                <h1 className='text-2xl font-bold'>Welcome {currentUser.username}!</h1>
-                                <p className='text-sm font-medium tracking-wide'>Here is your dashboard!</p>
-
+                                <h1 className='text-2xl font-bold'>Welcome {currentUser.adminDetails.firstName}!</h1>
+                                <p className='text-sm font-medium tracking-wide'>Here is your admin dashboard!</p>
                             </div>
                         </div>
 

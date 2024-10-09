@@ -306,7 +306,7 @@ export const getScholarshipProgramDetailsById = async (req, res) => {
 export const verifyScholarshipProgram = async (req, res) => {
   try {
     const { id } = req.params;
-    const { userId, username } = req.body; // Extract userId and username from the request body
+    const { userId } = req.body; // Extract userId and username from the request body
 
     // Assuming you have a ScholarshipProgram model
     const scholarshipProgram = await ScholarshipProgram.findById(id);
@@ -327,7 +327,7 @@ export const verifyScholarshipProgram = async (req, res) => {
       type: 'approval',
       message: `Your scholarship program "${scholarshipProgram.title}" has been verified.`,
       recipientName: scholarshipProgram.organizationName, // Assuming providerName is available
-      senderName: username // Use username from the request body
+      senderName: "Admin",
     };
 
     // Save the notification to the database
@@ -345,7 +345,7 @@ export const verifyScholarshipProgram = async (req, res) => {
 export const rejectScholarshipProgram = async (req, res) => {
   try {
     const { id } = req.params;
-    const { rejectReason, userId, username } = req.body; // Extract userId and username from the request body
+    const { rejectReason, userId } = req.body;
 
     // Assuming you have a ScholarshipProgram model
     const scholarshipProgram = await ScholarshipProgram.findById(id);
@@ -366,7 +366,7 @@ export const rejectScholarshipProgram = async (req, res) => {
       type: 'rejection',
       message: `Your scholarship program "${scholarshipProgram.title}" has been rejected. Reason: ${rejectReason}`,
       recipientName: scholarshipProgram.providerName, // Assuming providerName is available
-      senderName: username // Use username from the request body
+      senderName: 'Admin' // Use a default sender name or fetch it from the database if needed
     };
 
     // Save the notification to the database

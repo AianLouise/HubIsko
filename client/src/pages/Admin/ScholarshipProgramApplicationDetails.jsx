@@ -10,8 +10,6 @@ import { useSelector } from "react-redux";
 
 export default function ScholarshipProgramApplicationDetails() {
     const currentUser = useSelector((state) => state.user.currentUser);
-    const userId = currentUser._id;
-    const username = currentUser.username;
 
     const [currentStep, setCurrentStep] = useState(1);
     const [loading, setLoading] = useState(true);
@@ -57,14 +55,13 @@ export default function ScholarshipProgramApplicationDetails() {
      const handleVerifyConfirm = async () => {
         try {
             const userId = currentUser._id;
-            const username = currentUser.username;
     
             const response = await fetch(`/api/admin/scholarships/${scholarshipDetails._id}/verify`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ userId, username })
+                body: JSON.stringify({ userId })
             });
     
             if (!response.ok) {
@@ -98,14 +95,13 @@ export default function ScholarshipProgramApplicationDetails() {
        const handleSubmit = async () => {
         try {
             const userId = currentUser._id;
-            const username = currentUser.username;
     
             const response = await fetch(`/api/admin/scholarships/${scholarshipDetails._id}/reject`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ rejectReason: rejectReason, userId, username })
+                body: JSON.stringify({ rejectReason: rejectReason, userId })
             });
     
             if (!response.ok) {

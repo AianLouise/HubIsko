@@ -743,7 +743,7 @@ export default function ResubmitApplication() {
                 const file = fileObj.file;
                 const fileExtension = file.name.split('.').pop(); // Extract the file extension
                 const fileNameWithoutExtension = file.name.replace(/\.[^/.]+$/, ""); // Remove the extension from the original file name
-                const fileName = `${currentUser.username}_${fileNameWithoutExtension.replace(/\s+/g, '_')}_${uuidv4()}.${fileExtension}`;
+                const fileName = `${fileNameWithoutExtension.replace(/\s+/g, '_')}_${uuidv4()}.${fileExtension}`;
                 const storageRef = ref(storage, `scholarship_application_documents/${fileName}`);
                 await uploadBytes(storageRef, file);
                 const downloadURL = await getDownloadURL(storageRef);

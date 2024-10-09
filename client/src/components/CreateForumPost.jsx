@@ -54,7 +54,7 @@ export default function CreateForumPost() {
             const file = fileObj.file;
             const fileExtension = file.name.split('.').pop(); // Extract the file extension
             const fileNameWithoutExtension = file.name.replace(/\.[^/.]+$/, ""); // Remove the extension from the original file name
-            const fileName = `${currentUser.username}_${fileNameWithoutExtension}_${format(new Date(), 'yyyyMMdd')}.${fileExtension}`;
+            const fileName = `${fileNameWithoutExtension}_${format(new Date(), 'yyyyMMdd')}.${fileExtension}`;
             const storageRef = ref(storage, `forum_uploads/${fileName}`);
             await uploadBytes(storageRef, file);
             const downloadURL = await getDownloadURL(storageRef);
