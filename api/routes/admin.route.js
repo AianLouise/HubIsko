@@ -1,5 +1,5 @@
 import express from "express";
-import { approveScholarshipProvider, countApprovedScholars, createAccount, getAllApplicants, getAllProviders, getAllScholarshipPrograms, getAllUsers, getApplicantById, getPendingScholarshipPrograms, getPendingScholarshipProviders, getScholarshipProgramDetailsById, getScholarshipProviderById, getTotalApplicants, getTotalApprovedPrograms, getTotalScholarshipProviders, getTotalScholarships, getTotalUnverifiedAccounts, getTotalUserAccounts, getUserForumPosts, getUserScholarshipPrograms, rejectScholarshipProgram, rejectScholarshipProvider, searchPendingApprovalPrograms, searchPendingVerificationProviders, searchPendingVerificationStudent, test, updateProviderDetails, updateStudentDetails, verifyScholarshipProgram, verifyScholarshipProviderStatus } from '../controllers/admin.controller.js';
+import { countApprovedScholars, createAccount, getAllApplicants, getAllProviders, getAllScholarshipPrograms, getAllUsers, getApplicantById, getPendingScholarshipPrograms, getPendingScholarshipProviders, getScholarshipProgramDetailsById, getScholarshipProviderById, getTotalApplicants, getTotalApprovedPrograms, getTotalScholarshipProviders, getTotalScholarships, getTotalUnverifiedAccounts, getTotalUserAccounts, getUserForumPosts, getUserScholarshipPrograms, rejectScholarshipProgram, searchPendingApprovalPrograms, test, updateProviderDetails, updateStudentDetails, verifyScholarshipProgram, verifyScholarshipProviderStatus } from '../controllers/admin.controller.js';
 
 const router = express.Router();
 
@@ -18,14 +18,10 @@ router.get('/pending-scholarship-programs', getPendingScholarshipPrograms);
 router.get('/scholarship-provider/:id', getScholarshipProviderById);
 
 router.put('/verify-scholarship-provider-status/:id', verifyScholarshipProviderStatus);
-router.get('/search-pending-verification-providers', searchPendingVerificationProviders);
-router.get('/search-pending-verification-students', searchPendingVerificationStudent);
+
 router.get('/search-pending-approval-programs', searchPendingApprovalPrograms);
 router.get('/count-approved-scholars', countApprovedScholars);
 router.get('/all-users', getAllUsers);
-
-router.patch('/scholarship-provider/approve/:id', approveScholarshipProvider);
-router.patch('/scholarship-provider/reject/:id', rejectScholarshipProvider);
 
 router.get('/scholarship-program/:id', getScholarshipProgramDetailsById);
 router.patch('/scholarships/:id/verify', verifyScholarshipProgram);

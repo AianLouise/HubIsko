@@ -54,10 +54,26 @@ export const getStudentById = async (req, res) => {
     }
 };
 
+export const searchPendingVerificationStudent = async (req, res) => {
+  try {
+    const pendingStudents = await User.find({
+      role: 'applicant',
+      status: 'Pending Verification',
+    });
+
+    res.status(200).json(pendingStudents);
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error searching for pending verification scholarship providers',
+      error: error.message,
+    });
+  }
+};
+
 export const approveStudent = async (req, res) => {
   try {
     const { id } = req.params;
-    const { userId, username } = req.body; // Extract userId and username from the request body
+    const { userId } = req.body; // Extract userId from the request body
 
     const student = await User.findByIdAndUpdate(id, { status: 'Verified' }, { new: true });
     if (!student) {
@@ -71,7 +87,7 @@ export const approveStudent = async (req, res) => {
       type: 'approval',
       message: `Your account has been approved as a student.`,
       recipientName: `${student.applicantDetails.firstName} ${student.applicantDetails.lastName}`,
-      senderName: username // Use username from the request body
+      senderName: 'Admin' // Use a default sender name or fetch it from the database if needed
     };
 
     // Save the notification to the database
@@ -89,7 +105,7 @@ export const approveStudent = async (req, res) => {
 export const rejectStudent = async (req, res) => {
   try {
     const { id } = req.params;
-    const { rejectReason, userId, username } = req.body; // Extract userId and username from the request body
+    const { rejectReason, userId } = req.body; // Extract userId from the request body
 
     const student = await User.findByIdAndUpdate(
       id,
@@ -108,7 +124,7 @@ export const rejectStudent = async (req, res) => {
       type: 'rejection',
       message: `Your account has been rejected. Reason: ${rejectReason}`,
       recipientName: `${student.firstName} ${student.lastName}`,
-      senderName: username // Use username from the request body
+      senderName: 'Admin' // Use a default sender name or fetch it from the database if needed
     };
 
     // Save the notification to the database
@@ -118,6 +134,91 @@ export const rejectStudent = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: 'Error rejecting student',
+      error: error.message,
+    });
+  }
+};
+
+export const searchPendingVerificationProviders = async (req, res) => {
+  try {
+    const pendingProviders = await User.find({
+      role: 'scholarship_provider',
+      status: 'Pending Verification',
+    });
+
+    res.status(200).json(pendingProviders);
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error searching for pending verification scholarship providers',
+      error: error.message,
+    });
+  }
+};
+
+export const approveScholarshipProvider = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { userId } = req.body; // Extract userId from the request body
+
+    const provider = await User.findByIdAndUpdate(id, { status: 'Verified' }, { new: true });
+    if (!provider) {
+      return res.status(404).json({ message: 'Scholarship provider not found' });
+    }
+
+    // Create a notification for the approved scholarship provider
+    const notification = {
+      recipientId: provider._id,
+      senderId: userId, // Use userId from the request body
+      type: 'approval',
+      message: `Your account has been approved as a scholarship provider.`,
+      recipientName: `${provider.scholarshipProviderDetails.organizationName}`,
+      senderName: 'Admin' // Use a default sender name or fetch it from the database if needed
+    };
+
+    // Save the notification to the database
+    await Notification.create(notification);
+
+    res.status(200).json({ message: 'Scholarship provider approved successfully', provider });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error approving scholarship provider',
+      error: error.message,
+    });
+  }
+};
+
+export const rejectScholarshipProvider = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { rejectReason, userId } = req.body; // Extract userId from the request body
+
+    const provider = await User.findByIdAndUpdate(
+      id,
+      { status: 'Rejected', rejectReason: rejectReason },
+      { new: true }
+    );
+
+    if (!provider) {
+      return res.status(404).json({ message: 'Scholarship provider not found' });
+    }
+
+    // Create a notification for the rejected scholarship provider
+    const notification = {
+      recipientId: provider._id,
+      senderId: userId, // Use userId from the request body
+      type: 'rejection',
+      message: `Your account has been rejected as a scholarship provider. Reason: ${rejectReason}`,
+      recipientName: `${provider.scholarshipProviderDetails.organizationName}`,
+      senderName: 'Admin' // Use a default sender name or fetch it from the database if needed
+    };
+
+    // Save the notification to the database
+    await Notification.create(notification);
+
+    res.status(200).json({ message: 'Scholarship provider rejected successfully', provider });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error rejecting scholarship provider',
       error: error.message,
     });
   }

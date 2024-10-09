@@ -34,7 +34,7 @@ export default function StudentApplications() {
 
     const fetchPendingApprovalStudents = async () => {
         try {
-            const response = await fetch("/api/admin/search-pending-verification-students");
+            const response = await fetch("/api/adminApp/search-pending-verification-students");
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }

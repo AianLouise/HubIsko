@@ -161,7 +161,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                     {generateBreadcrumb()}
                 </div>
                 <div className="flex gap-2 items-center">
-                    <span className="text-base">{currentUser.username}</span>
+                    <span className="text-base">{currentUser.adminDetails.firstName}</span>
                     <div className="relative" ref={dropdownRef}>
                         <img
                             src={currentUser.profilePicture || 'https://via.placeholder.com/40'}

@@ -33,7 +33,7 @@ export default function ScholarshipProviderApplications() {
 
     const fetchPendingApprovalProviders = async () => {
         try {
-            const response = await fetch("/api/admin/search-pending-verification-providers");
+            const response = await fetch("/api/adminApp/search-pending-verification-providers");
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }

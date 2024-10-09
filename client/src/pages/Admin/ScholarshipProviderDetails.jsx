@@ -14,7 +14,6 @@ import AdminImageModal from "../../components/AdminImageModal";
 export default function ScholarshipsProviderDetails() {
     const currentUser = useSelector((state) => state.user.currentUser);
     const userId = currentUser._id;
-    const username = currentUser.username;
 
     const { id } = useParams();
     const [provider, setProvider] = useState(null);
@@ -73,14 +72,13 @@ export default function ScholarshipsProviderDetails() {
     const handleApprove = async (providerId) => {
         try {
             const userId = currentUser._id;
-            const username = currentUser.username;
     
-            const response = await fetch(`/api/admin/scholarship-provider/approve/${providerId}`, {
+            const response = await fetch(`/api/adminApp/scholarship-provider/approve/${providerId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ userId, username }),
+                body: JSON.stringify({ userId }),
             });
     
             if (!response.ok) {
@@ -100,14 +98,13 @@ export default function ScholarshipsProviderDetails() {
         const handleReject = async (providerId) => {
         try {
             const userId = currentUser._id;
-            const username = currentUser.username;
     
-            const response = await fetch(`/api/admin/scholarship-provider/reject/${providerId}`, {
+            const response = await fetch(`/api/adminApp/scholarship-provider/reject/${providerId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ rejectReason: rejectReason, userId, username })
+                body: JSON.stringify({ rejectReason: rejectReason, userId })
             });
     
             if (!response.ok) {

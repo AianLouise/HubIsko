@@ -66,9 +66,8 @@ export default function StudentApplicationDetails() {
 
     const handleApprove = async (studentId) => {
         const userId = currentUser._id;
-        const username = currentUser.username;
 
-        console.log('Approving student:', userId, username);
+        console.log('Approving student:', userId);
 
         try {
             const response = await fetch(`/api/adminApp/student/approve/${studentId}`, {
@@ -76,7 +75,7 @@ export default function StudentApplicationDetails() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ userId, username })
+                body: JSON.stringify({ userId })
             });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -91,23 +90,22 @@ export default function StudentApplicationDetails() {
         }
     };
 
-    const handleReject = async (studentId) => {
+      const handleReject = async (studentId) => {
         const userId = currentUser._id;
-        const username = currentUser.username;
-
+    
         try {
             const response = await fetch(`/api/adminApp/student/reject/${studentId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ rejectReason: rejectReason, userId, username })
+                body: JSON.stringify({ rejectReason: rejectReason, userId })
             });
-
+    
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-
+    
             const data = await response.json();
             console.log('Decline reason updated:', data);
             setSuccessMessage('Application rejected successfully!');

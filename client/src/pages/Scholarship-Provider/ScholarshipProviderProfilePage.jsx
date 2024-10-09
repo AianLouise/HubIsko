@@ -5,9 +5,7 @@ import ProfileContent from '../Profiles';
 const ScholarshipProviderProfilePage = () => {
     return (
         <div>
-
             <ProfileContent />
-
         </div>
     );
 };

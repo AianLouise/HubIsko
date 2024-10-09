@@ -83,7 +83,7 @@ import PostScholarship from "./pages/Scholarship-Provider/PostScholarship2";
 import ViewScholarshipDetails from "./pages/Scholarship-Provider/ViewScholarshipDetails";
 import ViewApplicationDetails from "./pages/Scholarship-Provider/ViewApplicationDetails";
 import Settings from "./pages/Scholarship-Provider/Settings";
-import ProviderProfile from "./pages/Scholarship-Provider/Profile";
+import ProviderProfile from "./pages/Scholarship-Provider/ProviderProfile";
 import ProviderCreateForumPost from "./pages/Scholarship-Provider/ProviderCreateForumPost";
 import ScholarView from "./pages/Scholarship-Provider/ScholarView";
 import ValidationPage from "./pages/Scholarship-Provider/ValidationPage";
@@ -100,7 +100,6 @@ import ScholarshipProviderProfilePage from "./pages/Scholarship-Provider/Scholar
 // import OthersProfile from "./pages/Dump/OthersProfile";
 // import NotificationsPage from "./components/notification";
 // import NotificationDetailPage from "./components/NotificationDetailPage";
-// import PreviewProfile from "./pages/Scholarship-Provider/PreviewProfile";
 // import ProfilePreview from "./pages/Dump/ProfilePreview";
 // import PostDetails from "./pages/Dump/PostDetails";
 
@@ -237,7 +236,6 @@ export default function App() {
 
           {/* <Route path="/profile-preview/:id" element={<ProfilePreview />} /> */}
           {/* <Route path="/post-details" element={<PostDetails />} /> */}
-          {/* <Route path="/preview-profile" element={<PreviewProfile />} /> */}
           <Route path="/announcement/:announcementId" element={<AnnouncementView />} />
 
           <Route path="/notifications/:notificationId" element={<ApplicantDetailedNotification />} />
