@@ -155,6 +155,11 @@ const applicantSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  certificateOfRegistrationFile: {
+    type: String,
+    default: '',
+  },
+
 }, { _id: false });
 
 // Sub-schema for Scholarship Provider

@@ -185,7 +185,8 @@ export const CompleteProfile = async (req, res, next) => {
           "applicantDetails.education.college.school": req.body.education.college.school,
           "applicantDetails.education.college.course": req.body.education.college.course,
           "applicantDetails.education.college.yearGraduated": req.body.education.college.yearGraduated,
-          "applicantDetails.studentIdFile": req.body.studentIdFile // Added studentIdFile
+          "applicantDetails.studentIdFile": req.body.studentIdFile,
+          "applicantDetails.certificateOfRegistrationFile": req.body.certificateOfRegistrationFile 
         }
       },
       { new: true } // Return the modified document rather than the original.

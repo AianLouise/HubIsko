@@ -77,6 +77,7 @@ export default function CompleteProfile() {
       }
     },
     studentIdFile: '',
+    certificateOfRegistrationFile: '',
   });
 
   const [showModal, setShowModal] = useState(false);
@@ -183,6 +184,7 @@ export default function CompleteProfile() {
       'education.college.school': 'College School',
       'education.college.course': 'College Course',
       studentIdFile: 'Student ID Image',
+      certificateOfRegistrationFile: 'Certificate of Registration Image',
     };
 
     // Check if all required fields are filled and collect missing fields
@@ -217,10 +219,11 @@ export default function CompleteProfile() {
 
   const handleConfirmSubmit = async () => {
     setIsLoading(true);
-
+  
     let profilePictureUrl = '';
     let studentIdFileUrl = '';
-
+    let certificateOfRegistrationFileUrl = '';
+  
     try {
       // Upload profile picture if it exists
       if (formData.profilePicture) {
@@ -228,21 +231,29 @@ export default function CompleteProfile() {
         await uploadBytes(storageRef, formData.profilePicture);
         profilePictureUrl = await getDownloadURL(storageRef);
       }
-
+  
       // Upload student ID file if it exists
       if (formData.studentIdFile) {
         const studentIdRef = ref(storage, `studentIdFiles/${formData.studentIdFile.name}`);
         await uploadBytes(studentIdRef, formData.studentIdFile);
         studentIdFileUrl = await getDownloadURL(studentIdRef);
       }
-
+  
+      // Upload certificate of registration file if it exists
+      if (formData.certificateOfRegistrationFile) {
+        const certificateOfRegistrationRef = ref(storage, `certificateOfRegistrationFiles/${formData.certificateOfRegistrationFile.name}`);
+        await uploadBytes(certificateOfRegistrationRef, formData.certificateOfRegistrationFile);
+        certificateOfRegistrationFileUrl = await getDownloadURL(certificateOfRegistrationRef);
+      }
+  
       const updatedFormData = {
         ...formData,
         profilePicture: profilePictureUrl,
         studentIdFile: studentIdFileUrl, // Include the student ID file URL
+        certificateOfRegistrationFile: certificateOfRegistrationFileUrl, // Include the certificate of registration file URL
       };
       console.log('Updated form data:', updatedFormData);
-
+  
       const response = await fetch('/api/user/complete-profile', {
         method: 'POST',
         headers: {
@@ -250,14 +261,14 @@ export default function CompleteProfile() {
         },
         body: JSON.stringify(updatedFormData),
       });
-
+  
       if (!response.ok) {
         throw new Error('Network response was not ok.');
       }
-
+  
       const data = await response.json();
       console.log('Success:', data);
-
+  
       // Update the currentUser state in Redux
       dispatch(updateUserSuccess({
         ...currentUser,
@@ -268,9 +279,10 @@ export default function CompleteProfile() {
         },
         profilePicture: profilePictureUrl, // Update the profilePicture in currentUser
         studentIdFile: studentIdFileUrl, // Update the studentIdFile in currentUser
+        certificateOfRegistrationFile: certificateOfRegistrationFileUrl, // Update the certificateOfRegistrationFile in currentUser
         status: 'Pending Verification', // Update the status to Pending verification
       }));
-
+  
       navigate('/complete-profile-confirmation');
     } catch (error) {
       console.error('Error:', error);
@@ -432,6 +444,27 @@ export default function CompleteProfile() {
           ...prevFormData,
           studentIdFile: null // Clear the file in formData
         }));
+      }
+    }
+  };
+
+  const [selectedCorImage, setSelectedCorImage] = useState(null);
+  const [corErrorMessage, setCorErrorMessage] = useState('');
+
+    const handleCorImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const fileType = file.type;
+      const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+      if (validImageTypes.includes(fileType)) {
+        setSelectedCorImage(URL.createObjectURL(file));
+        setCorErrorMessage('');
+        setFormData(prevFormData => ({
+          ...prevFormData,
+          certificateOfRegistrationFile: file // Store the file in formData
+        }));
+      } else {
+        setCorErrorMessage('Invalid file type. Please upload an image file (JPG, PNG, GIF).');
       }
     }
   };
@@ -1179,6 +1212,39 @@ export default function CompleteProfile() {
                 )}
               </div>
             </div>
+
+            <div className="p-4 flex flex-col items-center">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Upload Certificate of Registration (COR) Image
+              </label>
+              <p className="text-gray-500 text-sm mb-4 text-center">
+                Please upload a clear image of your Certificate of Registration. Accepted formats are JPG, PNG, and GIF.
+              </p>
+              <div className="mt-1 flex flex-col items-center">
+                <label className="relative bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50" title="Click to choose a file">
+                  <span>Choose File</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleCorImageChange}
+                  />
+                </label>
+                {corErrorMessage && (
+                  <p className="text-red-500 text-sm mt-2">{corErrorMessage}</p>
+                )}
+                {selectedCorImage ? (
+                  <div className="mt-4">
+                    <img src={selectedCorImage} alt="Selected COR" className="max-w-xs rounded border border-gray-300" />
+                  </div>
+                ) : (
+                  <div className="mt-4 w-full max-w-xs h-40 flex items-center justify-center border-2 border-dashed border-gray-300 rounded">
+                    <span className="text-gray-500">No image selected</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
             <div className="flex justify-end space-x-2 px-4 py-4">
               <button
                 onClick={handlePrevious}
@@ -1307,7 +1373,7 @@ export default function CompleteProfile() {
                   </div>
                 </div>
 
-                <div className="border-t border-gray-200 pt-4">
+                          <div className="border-t border-gray-200 pt-4">
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">Student ID</h3>
                   <div className="flex flex-col items-center gap-2">
                     <p className="text-xs text-gray-600">
@@ -1324,7 +1390,24 @@ export default function CompleteProfile() {
                     )}
                   </div>
                 </div>
-
+                
+                <div className="border-t border-gray-200 pt-4">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Certificate of Registration (COR)</h3>
+                  <div className="flex flex-col items-center gap-2">
+                    <p className="text-xs text-gray-600">
+                      <span className="font-semibold">COR File:</span> {formData.certificateOfRegistrationFile ? formData.certificateOfRegistrationFile.name : 'N/A'}
+                    </p>
+                    {formData.certificateOfRegistrationFile && (
+                      <div className="w-48 h-48 border border-gray-300 flex items-center justify-center overflow-hidden cursor-pointer" onClick={handleImageClick}>
+                        <img
+                          src={URL.createObjectURL(formData.certificateOfRegistrationFile)}
+                          alt="Certificate of Registration"
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
                 {/* Image Modal */}
                 {showImageModal && (
                   <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 p-4">
