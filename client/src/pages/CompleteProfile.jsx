@@ -15,113 +15,6 @@ export default function CompleteProfile() {
 
   const [currentStep, setCurrentStep] = useState(1);
 
-    const handleNext = () => {
-    // List of required fields for each step
-    const stepRequiredFields = {
-      1: [
-        'profilePicture',
-        'firstName',
-        'lastName',
-        'birthdate',
-        'gender',
-        'bloodType',
-        'civilStatus',
-        'religion',
-        'height',
-        'weight',
-        'birthplace',
-        'contactNumber',
-        'region',
-        'province',
-        'city',
-        'barangay',
-        'addressDetails'
-      ],
-      2: [
-        'education.elementary.school',
-        'education.elementary.award',
-        'education.elementary.yearGraduated',
-        'education.juniorHighSchool.school',
-        'education.juniorHighSchool.award',
-        'education.juniorHighSchool.yearGraduated',
-        'education.seniorHighSchool.school',
-        'education.seniorHighSchool.award',
-        'education.seniorHighSchool.yearGraduated',
-        'education.college.school',
-        'education.college.course'
-      ],
-      3: [
-        'studentIdFile',
-        'certificateOfRegistrationFile'
-      ]
-    };
-  
-    // Mapping of field keys to display names
-    const fieldDisplayNames = {
-      profilePicture: 'Profile Picture',
-      firstName: 'First Name',
-      lastName: 'Last Name',
-      birthdate: 'Birthdate',
-      gender: 'Gender',
-      bloodType: 'Blood Type',
-      civilStatus: 'Civil Status',
-      religion: 'Religion',
-      height: 'Height',
-      weight: 'Weight',
-      birthplace: 'Birthplace',
-      contactNumber: 'Contact Number',
-      addressDetails: 'Address Details',
-      region: 'Region Name',
-      province: 'Province Name',
-      city: 'City Name',
-      barangay: 'Barangay Name',
-      'education.elementary.school': 'Elementary School',
-      'education.elementary.award': 'Elementary Award',
-      'education.elementary.yearGraduated': 'Elementary Year Graduated',
-      'education.juniorHighSchool.school': 'Junior High School',
-      'education.juniorHighSchool.award': 'Junior High Award',
-      'education.juniorHighSchool.yearGraduated': 'Junior High Year Graduated',
-      'education.seniorHighSchool.school': 'Senior High School',
-      'education.seniorHighSchool.award': 'Senior High Award',
-      'education.seniorHighSchool.yearGraduated': 'Senior High Year Graduated',
-      'education.college.school': 'College School',
-      'education.college.course': 'College Course',
-      studentIdFile: 'Student ID Image',
-      certificateOfRegistrationFile: 'Certificate of Registration Image'
-    };
-  
-    // Get the required fields for the current step
-    const requiredFields = stepRequiredFields[currentStep];
-  
-    // Check if all required fields for the current step are filled
-    const missingFields = requiredFields.filter(field => {
-      const keys = field.split('.');
-      let value = formData;
-      for (const key of keys) {
-        value = value[key];
-        if (value === undefined || value === '') {
-          return true;
-        }
-      }
-      return false;
-    });
-  
-    if (missingFields.length === 0) {
-      setCurrentStep((prevStep) => prevStep + 1);
-    } else {
-      const topMostMissingField = missingFields[0];
-      const topMostMissingFieldName = fieldDisplayNames[topMostMissingField];
-      setNotification({
-        show: true,
-        message: `The following required field is missing: ${topMostMissingFieldName}. Please complete it before proceeding to the next step.`
-      });
-    }
-  };
-
-  const handlePrevious = () => {
-    setCurrentStep((prevStep) => prevStep - 1);
-  };
-
   const [formData, setFormData] = useState({
     profilePicture: '',
     firstName: '',
@@ -170,6 +63,120 @@ export default function CompleteProfile() {
     studentIdFile: '',
     certificateOfRegistrationFile: '',
   });
+
+  const handleNext = () => {
+    // Log the current civilStatus value
+    console.log('Current civilStatus:', formData.civilStatus);
+
+    // List of required fields for each step
+    const stepRequiredFields = {
+      1: [
+        'profilePicture',
+        'firstName',
+        'lastName',
+        'birthdate',
+        'gender',
+        'bloodType',
+        'civilStatus',
+        ...(formData.civilStatus === 'Married' ? ['maidenName', 'spouseName', 'spouseOccupation'] : []),
+        'religion',
+        'height',
+        'weight',
+        'birthplace',
+        'contactNumber',
+        'region',
+        'province',
+        'city',
+        'barangay',
+        'addressDetails',
+      ],
+      2: [
+        'education.elementary.school',
+        'education.elementary.award',
+        'education.elementary.yearGraduated',
+        'education.juniorHighSchool.school',
+        'education.juniorHighSchool.award',
+        'education.juniorHighSchool.yearGraduated',
+        'education.seniorHighSchool.school',
+        'education.seniorHighSchool.award',
+        'education.seniorHighSchool.yearGraduated',
+        'education.college.school',
+        'education.college.course'
+      ],
+      3: [
+        'studentIdFile',
+        'certificateOfRegistrationFile'
+      ]
+    };
+
+    // Mapping of field keys to display names
+    const fieldDisplayNames = {
+      profilePicture: 'Profile Picture',
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      birthdate: 'Birthdate',
+      gender: 'Gender',
+      bloodType: 'Blood Type',
+      civilStatus: 'Civil Status',
+      religion: 'Religion',
+      height: 'Height',
+      weight: 'Weight',
+      birthplace: 'Birthplace',
+      contactNumber: 'Contact Number',
+      addressDetails: 'Address Details',
+      maidenName: 'Maiden Name',
+      spouseName: 'Name of Spouse',
+      spouseOccupation: 'Occupation of Spouse',
+      region: 'Region Name',
+      province: 'Province Name',
+      city: 'City Name',
+      barangay: 'Barangay Name',
+      'education.elementary.school': 'Elementary School',
+      'education.elementary.award': 'Elementary Award',
+      'education.elementary.yearGraduated': 'Elementary Year Graduated',
+      'education.juniorHighSchool.school': 'Junior High School',
+      'education.juniorHighSchool.award': 'Junior High Award',
+      'education.juniorHighSchool.yearGraduated': 'Junior High Year Graduated',
+      'education.seniorHighSchool.school': 'Senior High School',
+      'education.seniorHighSchool.award': 'Senior High Award',
+      'education.seniorHighSchool.yearGraduated': 'Senior High Year Graduated',
+      'education.college.school': 'College School',
+      'education.college.course': 'College Course',
+      studentIdFile: 'Student ID Image',
+      certificateOfRegistrationFile: 'Certificate of Registration Image'
+    };
+
+    // Get the required fields for the current step
+    const requiredFields = stepRequiredFields[currentStep];
+
+    // Check if all required fields for the current step are filled
+    const missingFields = requiredFields.filter(field => {
+      const keys = field.split('.');
+      let value = formData;
+      for (const key of keys) {
+        value = value[key];
+        if (value === undefined || value === '') {
+          return true;
+        }
+      }
+      return false;
+    });
+
+    if (missingFields.length === 0) {
+      setCurrentStep((prevStep) => prevStep + 1);
+    } else {
+      const topMostMissingField = missingFields[0];
+      const topMostMissingFieldName = fieldDisplayNames[topMostMissingField];
+      setNotification({
+        show: true,
+        message: `The following required field is missing: ${topMostMissingFieldName}. Please complete it before proceeding to the next step.`
+      });
+    }
+  };
+
+  const handlePrevious = () => {
+    setCurrentStep((prevStep) => prevStep - 1);
+  };
 
   const [showModal, setShowModal] = useState(false);
   const [notification, setNotification] = useState({ show: false, message: '' });
@@ -395,89 +402,89 @@ export default function CompleteProfile() {
   // Get today's date in YYYY-MM-DD format
   const today = new Date().toISOString().split('T')[0];
 
-    const [regionList, setRegionList] = useState([]);
-    const [provinceList, setProvinceList] = useState([]);
-    const [cityList, setCityList] = useState([]);
-    const [barangayList, setBarangayList] = useState([]);
-    
-    const [selectedRegion, setSelectedRegion] = useState('');
-    const [selectedProvince, setSelectedProvince] = useState('');
-    const [selectedCity, setSelectedCity] = useState('');
-    const [selectedBarangay, setSelectedBarangay] = useState('');
-    
-    // Fetch all regions on component mount
-    useEffect(() => {
-        regions().then(setRegionList);
-    }, []);
-    
-    // Fetch provinces when a region is selected
-    useEffect(() => {
-        if (selectedRegion) {
-            console.log(`Selected Region: ${selectedRegion}`);
-            provinces(selectedRegion).then(setProvinceList);
-            setFormData(prevState => ({
-                ...prevState,
-                region: selectedRegion,
-                province: '',
-                city: '',
-                barangay: ''
-            }));
-        }
-    }, [selectedRegion]);
-    
-    // Fetch cities when a province is selected
-    useEffect(() => {
-        if (selectedProvince) {
-            console.log(`Selected Province: ${selectedProvince}`);
-            cities(selectedProvince).then(setCityList);
-            setFormData(prevState => ({
-                ...prevState,
-                province: selectedProvince,
-                city: '',
-                barangay: ''
-            }));
-        }
-    }, [selectedProvince]);
-    
-    // Fetch barangays when a city is selected
-    useEffect(() => {
-        if (selectedCity) {
-            console.log(`Selected City: ${selectedCity}`);
-            barangays(selectedCity).then(setBarangayList);
-            setFormData(prevState => ({
-                ...prevState,
-                city: selectedCity,
-                barangay: ''
-            }));
-        }
-    }, [selectedCity]);
-    
-    // Update formData when barangay is selected
-    useEffect(() => {
-        if (selectedBarangay) {
-            console.log(`Selected Barangay: ${selectedBarangay}`);
-            setFormData(prevState => ({
-                ...prevState,
-                barangay: selectedBarangay
-            }));
-        }
-    }, [selectedBarangay]);
-    
-    // Load initial data from formData
-    useEffect(() => {
-        if (formData.region) {
-            setSelectedRegion(formData.region);
-        }
-        if (formData.province) {
-            setSelectedProvince(formData.province);
-        }
-        if (formData.city) {
-            setSelectedCity(formData.city);
-        }
-        if (formData.barangay) {
-            setSelectedBarangay(formData.barangay);
-        }
-    }, [formData]);
+  const [regionList, setRegionList] = useState([]);
+  const [provinceList, setProvinceList] = useState([]);
+  const [cityList, setCityList] = useState([]);
+  const [barangayList, setBarangayList] = useState([]);
+
+  const [selectedRegion, setSelectedRegion] = useState('');
+  const [selectedProvince, setSelectedProvince] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedBarangay, setSelectedBarangay] = useState('');
+
+  // Fetch all regions on component mount
+  useEffect(() => {
+    regions().then(setRegionList);
+  }, []);
+
+  // Fetch provinces when a region is selected
+  useEffect(() => {
+    if (selectedRegion) {
+      console.log(`Selected Region: ${selectedRegion}`);
+      provinces(selectedRegion).then(setProvinceList);
+      setFormData(prevState => ({
+        ...prevState,
+        region: selectedRegion,
+        province: '',
+        city: '',
+        barangay: ''
+      }));
+    }
+  }, [selectedRegion]);
+
+  // Fetch cities when a province is selected
+  useEffect(() => {
+    if (selectedProvince) {
+      console.log(`Selected Province: ${selectedProvince}`);
+      cities(selectedProvince).then(setCityList);
+      setFormData(prevState => ({
+        ...prevState,
+        province: selectedProvince,
+        city: '',
+        barangay: ''
+      }));
+    }
+  }, [selectedProvince]);
+
+  // Fetch barangays when a city is selected
+  useEffect(() => {
+    if (selectedCity) {
+      console.log(`Selected City: ${selectedCity}`);
+      barangays(selectedCity).then(setBarangayList);
+      setFormData(prevState => ({
+        ...prevState,
+        city: selectedCity,
+        barangay: ''
+      }));
+    }
+  }, [selectedCity]);
+
+  // Update formData when barangay is selected
+  useEffect(() => {
+    if (selectedBarangay) {
+      console.log(`Selected Barangay: ${selectedBarangay}`);
+      setFormData(prevState => ({
+        ...prevState,
+        barangay: selectedBarangay
+      }));
+    }
+  }, [selectedBarangay]);
+
+  // Load initial data from formData
+  useEffect(() => {
+    if (formData.region) {
+      setSelectedRegion(formData.region);
+    }
+    if (formData.province) {
+      setSelectedProvince(formData.province);
+    }
+    if (formData.city) {
+      setSelectedCity(formData.city);
+    }
+    if (formData.barangay) {
+      setSelectedBarangay(formData.barangay);
+    }
+  }, [formData]);
 
   const handleEducationChange = (e, level) => {
     const { name, value } = e.target;
@@ -730,6 +737,7 @@ export default function CompleteProfile() {
                       onChange={handleChange}
                       placeholder="Enter maiden name"
                       disabled={isSingleWidowedOrDivorced}
+                      required
                       className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
                     />
                   </div>
@@ -743,6 +751,7 @@ export default function CompleteProfile() {
                       onChange={handleChange}
                       placeholder="Enter name of spouse"
                       disabled={isSingleWidowedOrDivorced}
+                      required
                       className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
                     />
                   </div>
@@ -756,6 +765,7 @@ export default function CompleteProfile() {
                       onChange={handleChange}
                       placeholder="Enter occupation of spouse"
                       disabled={isSingleWidowedOrDivorced}
+                      required
                       className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
                     />
                   </div>
@@ -851,6 +861,7 @@ export default function CompleteProfile() {
                     setBarangayList([]);
                   }}
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  required
                 >
                   <option value="">Select Region</option>
                   {regionList.map((region) => (
@@ -872,6 +883,7 @@ export default function CompleteProfile() {
                     setBarangayList([]);
                   }}
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  required
                 >
                   <option value="">Select Province</option>
                   {provinceList.map((province) => (
@@ -892,6 +904,7 @@ export default function CompleteProfile() {
                     setBarangayList([]);
                   }}
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  required
                 >
                   <option value="">Select City</option>
                   {cityList.map((city) => (
@@ -909,6 +922,7 @@ export default function CompleteProfile() {
                   value={selectedBarangay}
                   onChange={(e) => setSelectedBarangay(e.target.value)}
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  required
                 >
                   <option value="">Select Barangay</option>
                   {barangayList.map((barangay) => (
@@ -919,7 +933,7 @@ export default function CompleteProfile() {
                 </select>
               </div>
 
-              {/*  */}
+              {/* Address Details */}
               <div className='w-full flex flex-col lg:col-span-1 mb-4'>
                 <label className='hidden lg:block text-sm font-medium text-gray-700 mb-2'>
                   House No./Unit No./Bldg/Floor, Street, Subdivision
