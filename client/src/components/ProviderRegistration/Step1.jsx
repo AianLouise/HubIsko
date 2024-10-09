@@ -57,6 +57,9 @@ const Step1 = ({ formData, setFormData }) => {
     useEffect(() => {
         if (selectedRegion) {
             provinces(selectedRegion).then(setProvinceList);
+            setSelectedProvince(''); // Clear province
+            setSelectedCity(''); // Clear city
+            setSelectedBarangay(''); // Clear barangay
             setFormData(prevState => ({
                 ...prevState,
                 region: selectedRegion,
@@ -71,6 +74,8 @@ const Step1 = ({ formData, setFormData }) => {
     useEffect(() => {
         if (selectedProvince) {
             cities(selectedProvince).then(setCityList);
+            setSelectedCity(''); // Clear city
+            setSelectedBarangay(''); // Clear barangay
             setFormData(prevState => ({
                 ...prevState,
                 province: selectedProvince,
@@ -84,6 +89,7 @@ const Step1 = ({ formData, setFormData }) => {
     useEffect(() => {
         if (selectedCity) {
             barangays(selectedCity).then(setBarangayList);
+            setSelectedBarangay(''); // Clear barangay
             setFormData(prevState => ({
                 ...prevState,
                 city: selectedCity,
