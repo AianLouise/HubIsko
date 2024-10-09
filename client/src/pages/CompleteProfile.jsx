@@ -15,18 +15,112 @@ export default function CompleteProfile() {
 
   const [currentStep, setCurrentStep] = useState(1);
 
-  const handleNext = () => {
-    setCurrentStep((prevStep) => prevStep + 1);
+    const handleNext = () => {
+    // List of required fields for each step
+    const stepRequiredFields = {
+      1: [
+        'profilePicture',
+        'firstName',
+        'lastName',
+        'birthdate',
+        'gender',
+        'bloodType',
+        'civilStatus',
+        'religion',
+        'height',
+        'weight',
+        'birthplace',
+        'contactNumber',
+        'region',
+        'province',
+        'city',
+        'barangay',
+        'addressDetails'
+      ],
+      2: [
+        'education.elementary.school',
+        'education.elementary.award',
+        'education.elementary.yearGraduated',
+        'education.juniorHighSchool.school',
+        'education.juniorHighSchool.award',
+        'education.juniorHighSchool.yearGraduated',
+        'education.seniorHighSchool.school',
+        'education.seniorHighSchool.award',
+        'education.seniorHighSchool.yearGraduated',
+        'education.college.school',
+        'education.college.course'
+      ],
+      3: [
+        'studentIdFile',
+        'certificateOfRegistrationFile'
+      ]
+    };
+  
+    // Mapping of field keys to display names
+    const fieldDisplayNames = {
+      profilePicture: 'Profile Picture',
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      birthdate: 'Birthdate',
+      gender: 'Gender',
+      bloodType: 'Blood Type',
+      civilStatus: 'Civil Status',
+      religion: 'Religion',
+      height: 'Height',
+      weight: 'Weight',
+      birthplace: 'Birthplace',
+      contactNumber: 'Contact Number',
+      addressDetails: 'Address Details',
+      region: 'Region Name',
+      province: 'Province Name',
+      city: 'City Name',
+      barangay: 'Barangay Name',
+      'education.elementary.school': 'Elementary School',
+      'education.elementary.award': 'Elementary Award',
+      'education.elementary.yearGraduated': 'Elementary Year Graduated',
+      'education.juniorHighSchool.school': 'Junior High School',
+      'education.juniorHighSchool.award': 'Junior High Award',
+      'education.juniorHighSchool.yearGraduated': 'Junior High Year Graduated',
+      'education.seniorHighSchool.school': 'Senior High School',
+      'education.seniorHighSchool.award': 'Senior High Award',
+      'education.seniorHighSchool.yearGraduated': 'Senior High Year Graduated',
+      'education.college.school': 'College School',
+      'education.college.course': 'College Course',
+      studentIdFile: 'Student ID Image',
+      certificateOfRegistrationFile: 'Certificate of Registration Image'
+    };
+  
+    // Get the required fields for the current step
+    const requiredFields = stepRequiredFields[currentStep];
+  
+    // Check if all required fields for the current step are filled
+    const missingFields = requiredFields.filter(field => {
+      const keys = field.split('.');
+      let value = formData;
+      for (const key of keys) {
+        value = value[key];
+        if (value === undefined || value === '') {
+          return true;
+        }
+      }
+      return false;
+    });
+  
+    if (missingFields.length === 0) {
+      setCurrentStep((prevStep) => prevStep + 1);
+    } else {
+      const topMostMissingField = missingFields[0];
+      const topMostMissingFieldName = fieldDisplayNames[topMostMissingField];
+      setNotification({
+        show: true,
+        message: `The following required field is missing: ${topMostMissingFieldName}. Please complete it before proceeding to the next step.`
+      });
+    }
   };
 
   const handlePrevious = () => {
     setCurrentStep((prevStep) => prevStep - 1);
   };
-
-  // useEffect(() => {
-  //   window.scrollTo({ top: 0, behavior: 'smooth' });
-  // },);
-
 
   const [formData, setFormData] = useState({
     profilePicture: '',
@@ -48,11 +142,8 @@ export default function CompleteProfile() {
     contactNumber: '',
     addressDetails: '',
     region: '',
-    regionCode: '',
     province: '',
-    provinceCode: '',
     city: '',
-    cityCode: '',
     barangay: '',
     education: {
       elementary: {
@@ -133,10 +224,10 @@ export default function CompleteProfile() {
       'birthplace',
       'contactNumber',
       'addressDetails',
-      'barangayName',
-      'cityName',
-      'provinceName',
-      'regionName',
+      'barangay',
+      'city',
+      'province',
+      'region',
       // Added education fields
       'education.elementary.school',
       'education.elementary.award',
@@ -150,6 +241,7 @@ export default function CompleteProfile() {
       'education.college.school',
       'education.college.course',
       'studentIdFile',
+      'certificateOfRegistrationFile'
     ];
 
     // Mapping of field keys to display names
@@ -167,10 +259,10 @@ export default function CompleteProfile() {
       birthplace: 'Birthplace',
       contactNumber: 'Contact Number',
       addressDetails: 'Address Details',
-      barangayName: 'Barangay Name',
-      cityName: 'City Name',
-      provinceName: 'Province Name',
-      regionName: 'Region Name',
+      barangay: 'Barangay Name',
+      city: 'City Name',
+      province: 'Province Name',
+      region: 'Region Name',
       // Added education fields
       'education.elementary.school': 'Elementary School',
       'education.elementary.award': 'Elementary Award',
@@ -219,11 +311,11 @@ export default function CompleteProfile() {
 
   const handleConfirmSubmit = async () => {
     setIsLoading(true);
-  
+
     let profilePictureUrl = '';
     let studentIdFileUrl = '';
     let certificateOfRegistrationFileUrl = '';
-  
+
     try {
       // Upload profile picture if it exists
       if (formData.profilePicture) {
@@ -231,21 +323,21 @@ export default function CompleteProfile() {
         await uploadBytes(storageRef, formData.profilePicture);
         profilePictureUrl = await getDownloadURL(storageRef);
       }
-  
+
       // Upload student ID file if it exists
       if (formData.studentIdFile) {
         const studentIdRef = ref(storage, `studentIdFiles/${formData.studentIdFile.name}`);
         await uploadBytes(studentIdRef, formData.studentIdFile);
         studentIdFileUrl = await getDownloadURL(studentIdRef);
       }
-  
+
       // Upload certificate of registration file if it exists
       if (formData.certificateOfRegistrationFile) {
         const certificateOfRegistrationRef = ref(storage, `certificateOfRegistrationFiles/${formData.certificateOfRegistrationFile.name}`);
         await uploadBytes(certificateOfRegistrationRef, formData.certificateOfRegistrationFile);
         certificateOfRegistrationFileUrl = await getDownloadURL(certificateOfRegistrationRef);
       }
-  
+
       const updatedFormData = {
         ...formData,
         profilePicture: profilePictureUrl,
@@ -253,7 +345,7 @@ export default function CompleteProfile() {
         certificateOfRegistrationFile: certificateOfRegistrationFileUrl, // Include the certificate of registration file URL
       };
       console.log('Updated form data:', updatedFormData);
-  
+
       const response = await fetch('/api/user/complete-profile', {
         method: 'POST',
         headers: {
@@ -261,14 +353,14 @@ export default function CompleteProfile() {
         },
         body: JSON.stringify(updatedFormData),
       });
-  
+
       if (!response.ok) {
         throw new Error('Network response was not ok.');
       }
-  
+
       const data = await response.json();
       console.log('Success:', data);
-  
+
       // Update the currentUser state in Redux
       dispatch(updateUserSuccess({
         ...currentUser,
@@ -282,7 +374,7 @@ export default function CompleteProfile() {
         certificateOfRegistrationFile: certificateOfRegistrationFileUrl, // Update the certificateOfRegistrationFile in currentUser
         status: 'Pending Verification', // Update the status to Pending verification
       }));
-  
+
       navigate('/complete-profile-confirmation');
     } catch (error) {
       console.error('Error:', error);
@@ -303,111 +395,89 @@ export default function CompleteProfile() {
   // Get today's date in YYYY-MM-DD format
   const today = new Date().toISOString().split('T')[0];
 
-  const [regionList, setRegionList] = useState([]);
-  const [provinceList, setProvinceList] = useState([]);
-  const [cityList, setCityList] = useState([]);
-  const [barangayList, setBarangayList] = useState([]);
-
-  const [selectedRegion, setSelectedRegion] = useState('');
-  const [selectedProvince, setSelectedProvince] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
-  const [selectedBarangay, setSelectedBarangay] = useState('');
-
-  // New state to store full address names
-  const [fullAddress, setFullAddress] = useState({
-    regionName: '',
-    provinceName: '',
-    cityName: '',
-    barangayName: ''
-  });
-
-  // Fetch all regions on component mount
-  useEffect(() => {
-    regions().then(setRegionList);
-  }, []);
-
-  // Fetch provinces when a region is selected
-  useEffect(() => {
-    if (selectedRegion) {
-      provinces(selectedRegion).then(data => {
-        setProvinceList(data);
-        const regionName = regionList.find(region => region.region_code === selectedRegion)?.region_name;
-        setFormData(prevState => ({
-          ...prevState,
-          region: selectedRegion,
-          regionName: regionName, // Save full region name
-          province: '',
-          city: '',
-          barangay: ''
-        }));
-        setFullAddress(prevState => ({ ...prevState, regionName }));
-      });
-    }
-  }, [selectedRegion, regionList]);
-
-  // Fetch cities when a province is selected
-  useEffect(() => {
-    if (selectedProvince) {
-      cities(selectedProvince).then(data => {
-        setCityList(data);
-        const provinceName = provinceList.find(province => province.province_code === selectedProvince)?.province_name;
-        setFormData(prevState => ({
-          ...prevState,
-          province: selectedProvince,
-          provinceName: provinceName, // Save full province name
-          city: '',
-          barangay: ''
-        }));
-        setFullAddress(prevState => ({ ...prevState, provinceName }));
-      });
-    }
-  }, [selectedProvince, provinceList]);
-
-  // Fetch barangays when a city is selected
-  useEffect(() => {
-    if (selectedCity) {
-      barangays(selectedCity).then(data => {
-        setBarangayList(data);
-        const cityName = cityList.find(city => city.city_code === selectedCity)?.city_name;
-        setFormData(prevState => ({
-          ...prevState,
-          city: selectedCity,
-          cityName: cityName, // Save full city name
-          barangay: ''
-        }));
-        setFullAddress(prevState => ({ ...prevState, cityName }));
-      });
-    }
-  }, [selectedCity, cityList]);
-
-  // Update formData when barangay is selected
-  useEffect(() => {
-    if (selectedBarangay) {
-      const barangayName = barangayList.find(barangay => barangay.brgy_code === selectedBarangay)?.brgy_name;
-      setFormData(prevState => ({
-        ...prevState,
-        barangay: selectedBarangay,
-        barangayName: barangayName // Save full barangay name
-      }));
-      setFullAddress(prevState => ({ ...prevState, barangayName }));
-    }
-  }, [selectedBarangay, barangayList]);
-
-  // Load initial data from formData
-  useEffect(() => {
-    if (formData.region) {
-      setSelectedRegion(formData.region);
-    }
-    if (formData.province) {
-      setSelectedProvince(formData.province);
-    }
-    if (formData.city) {
-      setSelectedCity(formData.city);
-    }
-    if (formData.barangay) {
-      setSelectedBarangay(formData.barangay);
-    }
-  }, [formData]);
+    const [regionList, setRegionList] = useState([]);
+    const [provinceList, setProvinceList] = useState([]);
+    const [cityList, setCityList] = useState([]);
+    const [barangayList, setBarangayList] = useState([]);
+    
+    const [selectedRegion, setSelectedRegion] = useState('');
+    const [selectedProvince, setSelectedProvince] = useState('');
+    const [selectedCity, setSelectedCity] = useState('');
+    const [selectedBarangay, setSelectedBarangay] = useState('');
+    
+    // Fetch all regions on component mount
+    useEffect(() => {
+        regions().then(setRegionList);
+    }, []);
+    
+    // Fetch provinces when a region is selected
+    useEffect(() => {
+        if (selectedRegion) {
+            console.log(`Selected Region: ${selectedRegion}`);
+            provinces(selectedRegion).then(setProvinceList);
+            setFormData(prevState => ({
+                ...prevState,
+                region: selectedRegion,
+                province: '',
+                city: '',
+                barangay: ''
+            }));
+        }
+    }, [selectedRegion]);
+    
+    // Fetch cities when a province is selected
+    useEffect(() => {
+        if (selectedProvince) {
+            console.log(`Selected Province: ${selectedProvince}`);
+            cities(selectedProvince).then(setCityList);
+            setFormData(prevState => ({
+                ...prevState,
+                province: selectedProvince,
+                city: '',
+                barangay: ''
+            }));
+        }
+    }, [selectedProvince]);
+    
+    // Fetch barangays when a city is selected
+    useEffect(() => {
+        if (selectedCity) {
+            console.log(`Selected City: ${selectedCity}`);
+            barangays(selectedCity).then(setBarangayList);
+            setFormData(prevState => ({
+                ...prevState,
+                city: selectedCity,
+                barangay: ''
+            }));
+        }
+    }, [selectedCity]);
+    
+    // Update formData when barangay is selected
+    useEffect(() => {
+        if (selectedBarangay) {
+            console.log(`Selected Barangay: ${selectedBarangay}`);
+            setFormData(prevState => ({
+                ...prevState,
+                barangay: selectedBarangay
+            }));
+        }
+    }, [selectedBarangay]);
+    
+    // Load initial data from formData
+    useEffect(() => {
+        if (formData.region) {
+            setSelectedRegion(formData.region);
+        }
+        if (formData.province) {
+            setSelectedProvince(formData.province);
+        }
+        if (formData.city) {
+            setSelectedCity(formData.city);
+        }
+        if (formData.barangay) {
+            setSelectedBarangay(formData.barangay);
+        }
+    }, [formData]);
 
   const handleEducationChange = (e, level) => {
     const { name, value } = e.target;
@@ -451,7 +521,7 @@ export default function CompleteProfile() {
   const [selectedCorImage, setSelectedCorImage] = useState(null);
   const [corErrorMessage, setCorErrorMessage] = useState('');
 
-    const handleCorImageChange = (event) => {
+  const handleCorImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       const fileType = file.type;
@@ -1373,7 +1443,7 @@ export default function CompleteProfile() {
                   </div>
                 </div>
 
-                          <div className="border-t border-gray-200 pt-4">
+                <div className="border-t border-gray-200 pt-4">
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">Student ID</h3>
                   <div className="flex flex-col items-center gap-2">
                     <p className="text-xs text-gray-600">
@@ -1390,7 +1460,7 @@ export default function CompleteProfile() {
                     )}
                   </div>
                 </div>
-                
+
                 <div className="border-t border-gray-200 pt-4">
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">Certificate of Registration (COR)</h3>
                   <div className="flex flex-col items-center gap-2">
