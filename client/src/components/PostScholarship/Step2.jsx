@@ -13,8 +13,6 @@ const Step2 = ({ formData, setFormData }) => {
         window.scrollTo(0, 0);
     }, []);
 
-    const [errors, setErrors] = useState({});
-
     useEffect(() => {
         if (formData.requiredDocuments) {
             const updatedDocuments = documents.map(doc => ({
@@ -25,8 +23,17 @@ const Step2 = ({ formData, setFormData }) => {
         }
     }, [formData.requiredDocuments]);
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+    useEffect(() => {
+        if (formData.documents) {
+            setDocuments(formData.documents);
+        }
+    }, [formData.documents]);
+
+    const updateFormData = (key, value) => {
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            [key]: value
+        }));
     };
 
     const handleDocumentChange = (index, field, value) => {
@@ -38,16 +45,26 @@ const Step2 = ({ formData, setFormData }) => {
             const updatedRequiredDocuments = value
                 ? [...(formData.requiredDocuments || []), updatedDocuments[index]]
                 : (formData.requiredDocuments || []).filter(doc => doc.id !== updatedDocuments[index].id);
-            setFormData({ ...formData, requiredDocuments: updatedRequiredDocuments });
+            updateFormData('requiredDocuments', updatedRequiredDocuments);
 
             // Log the selected required documents
             console.log('Selected required documents:', updatedRequiredDocuments);
         }
+
+        updateFormData('documents', updatedDocuments);
     };
 
     const handleAddDocument = () => {
         const newDocument = { id: Date.now(), name: '', required: false, editable: true };
-        setDocuments([...documents, newDocument]);
+        const updatedDocuments = [...documents, newDocument];
+        setDocuments(updatedDocuments);
+        updateFormData('documents', updatedDocuments);
+    };
+
+    const handleRemoveDocument = (index) => {
+        const updatedDocuments = documents.filter((_, i) => i !== index);
+        setDocuments(updatedDocuments);
+        updateFormData('documents', updatedDocuments);
     };
 
     return (
@@ -71,6 +88,7 @@ const Step2 = ({ formData, setFormData }) => {
                             onChange={(e) => handleDocumentChange(index, 'required', e.target.checked)}
                             className="mr-2"
                             required
+                            disabled={!doc.name}
                         />
                         <input
                             type="text"
@@ -81,6 +99,15 @@ const Step2 = ({ formData, setFormData }) => {
                             readOnly={!doc.editable}
                             required
                         />
+                        {doc.editable && (
+                            <button
+                                type="button"
+                                onClick={() => handleRemoveDocument(index)}
+                                className="text-red-600 hover:text-red-800"
+                            >
+                                Remove
+                            </button>
+                        )}
                     </div>
                 ))}
 
@@ -105,7 +132,7 @@ const Step2 = ({ formData, setFormData }) => {
                     placeholder="Enter detailed instructions for document submission"
                     rows="4"
                     value={formData.documentGuidelines || ''}
-                    onChange={handleChange}
+                    onChange={(e) => updateFormData('documentGuidelines', e.target.value)}
                     required
                 ></textarea>
             </div>
