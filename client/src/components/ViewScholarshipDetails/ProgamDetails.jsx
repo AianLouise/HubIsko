@@ -1,90 +1,87 @@
-import React from 'react'
+import React from 'react';
 import { FaCheckCircle, FaTimesCircle, FaExclamationCircle } from 'react-icons/fa';
+
+const statusConfig = {
+    'Pending Approval': { color: 'bg-yellow-500', icon: <FaExclamationCircle className="mr-2" /> },
+    'Approved': { color: 'bg-blue-500', icon: <FaCheckCircle className="mr-2" /> },
+    'Published': { color: 'bg-indigo-500', icon: <FaCheckCircle className="mr-2" /> },
+    'Ongoing': { color: 'bg-teal-500', icon: <FaCheckCircle className="mr-2" /> },
+    'Rejected': { color: 'bg-red-500', icon: <FaTimesCircle className="mr-2" /> },
+    'Archived': { color: 'bg-gray-500', icon: <FaExclamationCircle className="mr-2" /> },
+    'Cancelled': { color: 'bg-orange-500', icon: <FaTimesCircle className="mr-2" /> },
+    'Completed': { color: 'bg-purple-500', icon: <FaCheckCircle className="mr-2" /> },
+};
+
+const StatusBadge = ({ status }) => {
+    const { color, icon } = statusConfig[status] || statusConfig['Pending Approval'];
+    return (
+        <span className={`flex items-center px-3 py-1 rounded-full text-white font-semibold ${color}`}>
+            {icon}
+            {status}
+        </span>
+    );
+};
+
+const DetailItem = ({ label, children }) => (
+    <div className="border border-gray-300 p-4 rounded-lg shadow-sm">
+        <strong className="block text-gray-700 mb-2">{label}:</strong>
+        <div className="text-gray-900">{children}</div>
+    </div>
+);
+
+const DisbursementMethod = ({ method, bankName }) => (
+    <div>
+        {method}
+        {method === 'Bank Transfer' && (
+            <div className="mt-2">
+                <strong className="block text-gray-700 mb-2">Bank Name:</strong> {bankName}
+            </div>
+        )}
+    </div>
+);
 
 export default function ProgamDetails({ scholarshipProgram }) {
     return (
         <div className="p-6 bg-white rounded-lg shadow-md">
-
             <div className="flex items-center mb-4">
-                <span className={`flex items-center px-3 py-1 rounded-full text-white font-semibold ${scholarshipProgram.status === 'Pending Approval' ? 'bg-yellow-500' :
-                    scholarshipProgram.status === 'Approved' ? 'bg-blue-500' :
-                        scholarshipProgram.status === 'Published' ? 'bg-indigo-500' :
-                            scholarshipProgram.status === 'Ongoing' ? 'bg-teal-500' :
-                                scholarshipProgram.status === 'Rejected' ? 'bg-red-500' :
-                                    scholarshipProgram.status === 'Archived' ? 'bg-gray-500' :
-                                        scholarshipProgram.status === 'Cancelled' ? 'bg-orange-500' :
-                                            scholarshipProgram.status === 'Completed' ? 'bg-purple-500' :
-                                                'bg-yellow-500'
-                    }`}>
-                    {scholarshipProgram.status === 'Pending Approval' && <FaExclamationCircle className="mr-2" />}
-                    {scholarshipProgram.status === 'Approved' && <FaCheckCircle className="mr-2" />}
-                    {scholarshipProgram.status === 'Published' && <FaCheckCircle className="mr-2" />}
-                    {scholarshipProgram.status === 'Ongoing' && <FaCheckCircle className="mr-2" />}
-                    {scholarshipProgram.status === 'Rejected' && <FaTimesCircle className="mr-2" />}
-                    {scholarshipProgram.status === 'Archived' && <FaExclamationCircle className="mr-2" />}
-                    {scholarshipProgram.status === 'Cancelled' && <FaTimesCircle className="mr-2" />}
-                    {scholarshipProgram.status === 'Completed' && <FaCheckCircle className="mr-2" />}
-                    {scholarshipProgram.status}
-                </span>
+                <StatusBadge status={scholarshipProgram.status} />
             </div>
             <h2 className="text-2xl font-bold mb-4">Program Details</h2>
-
             <div className="grid grid-cols-1 gap-4">
-                <div className="bg-gray-100 p-4 rounded-lg">
-                    <strong>Scholarship Title:</strong> {scholarshipProgram.title}
-                </div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                    <strong>Scholarship Description:</strong> {scholarshipProgram.description}
-                </div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                    <strong>Amount:</strong> {scholarshipProgram.amount}
-                </div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                    <strong>Total Slots:</strong> {scholarshipProgram.numberOfScholarships}
-                </div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                    <strong>Level of Education:</strong> {scholarshipProgram.educationLevel}
-                </div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                    <strong>Duration:</strong> {scholarshipProgram.duration}
-                </div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                    <strong>Location:</strong> {scholarshipProgram.location}
-                </div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                    <strong>Field of Study:</strong> {scholarshipProgram.fieldOfStudy}
-                </div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                    <strong>Selection Process:</strong> {scholarshipProgram.selectionProcess}
-                </div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                    <strong>Selection Criteria:</strong>
+                <DetailItem label="Scholarship Title">{scholarshipProgram.title}</DetailItem>
+                <DetailItem label="Scholarship Description">{scholarshipProgram.description}</DetailItem>
+                <DetailItem label="Amount">{scholarshipProgram.amount}</DetailItem>
+                <DetailItem label="Total Slots">{scholarshipProgram.numberOfScholarships}</DetailItem>
+                <DetailItem label="Level of Education">{scholarshipProgram.educationLevel}</DetailItem>
+                <DetailItem label="Duration">{scholarshipProgram.duration}</DetailItem>
+                <DetailItem label="Location">{scholarshipProgram.location}</DetailItem>
+                <DetailItem label="Field of Study">
+                    <ul className="grid grid-cols-1 md:grid-cols-2 list-disc list-inside gap-2 ml-4">
+                        {scholarshipProgram.fieldOfStudy.map((field, index) => (
+                            <li key={index}>{field}</li>
+                        ))}
+                    </ul>
+                </DetailItem>
+                <DetailItem label="Selection Process">{scholarshipProgram.selectionProcess}</DetailItem>
+                <DetailItem label="Selection Criteria">
                     <ol>
                         {scholarshipProgram.selectionCriteria.split('\n').map((criteria, index) => (
                             <li key={index}>{criteria}</li>
                         ))}
                     </ol>
-                </div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                    <strong>Renewal Policy:</strong> {scholarshipProgram.renewalPolicy}
-                </div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                    <strong>Renewal Duration:</strong> {scholarshipProgram.renewalDuration}
-                </div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                    <strong>Disbursement Schedule:</strong> {scholarshipProgram.disbursementSchedule}
-                </div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                    <strong>Disbursement Method:</strong> {scholarshipProgram.disbursementMethod}
-                </div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                    <strong>Contact Email:</strong> {scholarshipProgram.contactEmail}
-                </div>
-                <div className="bg-gray-100 p-4 rounded-lg">
-                    <strong>Contact Phone:</strong> {scholarshipProgram.contactPhone}
-                </div>
+                </DetailItem>
+                <DetailItem label="Renewal Policy">{scholarshipProgram.renewalPolicy}</DetailItem>
+                <DetailItem label="Renewal Duration">{scholarshipProgram.renewalDuration}</DetailItem>
+                <DetailItem label="Disbursement Schedule">{scholarshipProgram.disbursementSchedule}</DetailItem>
+                <DetailItem label="Disbursement Method">
+                    <DisbursementMethod 
+                        method={scholarshipProgram.disbursementMethod} 
+                        bankName={scholarshipProgram.bankName} 
+                    />
+                </DetailItem>
+                <DetailItem label="Contact Email">{scholarshipProgram.contactEmail}</DetailItem>
+                <DetailItem label="Contact Phone">{scholarshipProgram.contactPhone}</DetailItem>
             </div>
-            {/* Additional details can be included here */}
         </div>
-    )
+    );
 }

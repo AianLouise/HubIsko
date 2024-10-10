@@ -247,6 +247,7 @@ export const getScholarshipProgramById = async (req, res) => {
       renewalDuration: scholarshipProgram.renewalDuration,
       disbursementSchedule: scholarshipProgram.disbursementSchedule,
       disbursementMethod: scholarshipProgram.disbursementMethod,
+      bankName: scholarshipProgram.bankName,
       contactEmail: scholarshipProgram.contactEmail,
       contactPhone: scholarshipProgram.contactPhone,
       providerId: scholarshipProgram.providerId,

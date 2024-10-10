@@ -132,6 +132,7 @@ const Step3 = ({ formData, setFormData }) => {
         setSections(sections.filter(section => section.id !== id));
     };
 
+    const isOpenForAllCourses = formData.fieldOfStudy.includes('Open for All Courses');
 
     return (
         <div>
@@ -177,21 +178,30 @@ const Step3 = ({ formData, setFormData }) => {
                         </div>
                     </div>
 
-                    <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl gap-2 lg:gap-10 lg:px-24 p-4'>
-                        <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl gap-2 lg:gap-10 lg:px-24 p-2'>
-                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                    <div className='flex flex-col items-center mx-auto max-w-6xl gap-8 lg:px-24 p-4'>
+                        <div className='flex flex-col gap-2 bg-white shadow-md rounded-md p-6 px-10 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                            <div className='flex items-center gap-4'>
                                 <FaBook className='text-blue-500 w-6 h-6' />
-                                <p className='text-base'>{formData.fieldOfStudy}</p>
+                                <p className='text-base font-semibold'>Field of Study</p>
                             </div>
-                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
-                                <FaMapMarkerAlt className='text-blue-500 w-6 h-6' />
-                                <p className='text-base'>{formData.location}</p>
-                            </div>
-                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
-                                <FaGraduationCap className='text-blue-500 w-6 h-6' />
-                                <p className='text-base'>{formData.educationLevel}</p>
-                            </div>
+                            <ul className='grid grid-cols-1 md:grid-cols-2 list-disc list-inside gap-2 mx-auto'>
+                                {formData.fieldOfStudy.map((course, index) => (
+                                    <li key={index} className='text-base'>{course}</li>
+                                ))}
+                            </ul>
                         </div>
+                        {!isOpenForAllCourses && (
+                            <div className='flex flex-col lg:flex-row items-center justify-center w-full gap-4'>
+                                <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300 w-full lg:w-auto'>
+                                    <FaMapMarkerAlt className='text-blue-500 w-6 h-6' />
+                                    <p className='text-base'>{formData.location}</p>
+                                </div>
+                                <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300 w-full lg:w-auto'>
+                                    <FaGraduationCap className='text-blue-500 w-6 h-6' />
+                                    <p className='text-base'>{formData.educationLevel}</p>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     <div className='max-w-6xl px-24 mx-auto mb-20 mt-3'>

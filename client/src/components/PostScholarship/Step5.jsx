@@ -8,57 +8,57 @@ const Step5 = ({ formData, setFormData }) => {
 
     return (
         <div className="bg-white p-8 rounded-md shadow border">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Terms and Conditions</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Data Privacy</h2>
             <p className="text-sm text-gray-600 mb-4">
-                Please read the following terms and conditions carefully before submitting your scholarship program. By submitting your scholarship program, you agree to comply with these terms and conditions.
+                Please read the following data privacy policy carefully before submitting your scholarship program. By submitting your scholarship program, you agree to comply with this data privacy policy.
             </p>
             <div className="h-80 overflow-y-auto text-sm text-gray-600 space-y-4">
                 <div>
-                    <h3 className="text-lg font-semibold text-gray-700">1. Eligibility</h3>
+                    <h3 className="text-lg font-semibold text-gray-700">1. Data Collection</h3>
                     <p>
-                        The provider must be a legitimate organization or individual with the capacity to offer and manage the scholarship program. Verification of the provider's status may be required.
+                        We collect personal data from applicants to process and manage the scholarship program. This includes but is not limited to names, contact information, educational background, and other relevant details.
                     </p>
                 </div>
                 <div>
-                    <h3 className="text-lg font-semibold text-gray-700">2. Documentation</h3>
+                    <h3 className="text-lg font-semibold text-gray-700">2. Data Usage</h3>
                     <p>
-                        All required documents must be submitted, including proof of the provider's legitimacy and capability to administer the scholarship. This includes but is not limited to business registration, tax identification, and financial statements.
+                        The collected data will be used solely for the purpose of administering the scholarship program. This includes evaluating applications, communicating with applicants, and fulfilling any legal or regulatory requirements.
                     </p>
                 </div>
                 <div>
-                    <h3 className="text-lg font-semibold text-gray-700">3. Accuracy of Information</h3>
+                    <h3 className="text-lg font-semibold text-gray-700">3. Data Sharing</h3>
                     <p>
-                        The provider must ensure that all information provided in the scholarship program submission is accurate, complete, and up-to-date. Any false or misleading information may result in the disqualification or termination of the scholarship program.
+                        We do not share personal data with third parties except as necessary to administer the scholarship program or as required by law. Any third-party service providers are required to comply with our data privacy standards.
                     </p>
                 </div>
                 <div>
-                    <h3 className="text-lg font-semibold text-gray-700">4. Compliance</h3>
+                    <h3 className="text-lg font-semibold text-gray-700">4. Data Security</h3>
                     <p>
-                        The provider must adhere to all relevant local, state, and national laws and regulations related to the offering and administration of the scholarship. This includes compliance with anti-discrimination laws and financial regulations.
+                        We implement appropriate technical and organizational measures to protect personal data against unauthorized access, alteration, disclosure, or destruction. This includes encryption, access controls, and regular security assessments.
                     </p>
                 </div>
                 <div>
-                    <h3 className="text-lg font-semibold text-gray-700">5. Non-Discrimination</h3>
+                    <h3 className="text-lg font-semibold text-gray-700">5. Data Retention</h3>
                     <p>
-                        The scholarship program must be conducted in a non-discriminatory manner. The provider must ensure that the scholarship is accessible to all eligible applicants regardless of race, gender, religion, disability, sexual orientation, or any other protected characteristic.
+                        Personal data will be retained only for as long as necessary to fulfill the purposes for which it was collected or as required by law. Once the data is no longer needed, it will be securely deleted or anonymized.
                     </p>
                 </div>
                 <div>
-                    <h3 className="text-lg font-semibold text-gray-700">6. Termination</h3>
+                    <h3 className="text-lg font-semibold text-gray-700">6. Data Access and Correction</h3>
                     <p>
-                        The provider reserves the right to terminate the scholarship program at any time. In such cases, the provider must honor all current commitments to applicants and notify all stakeholders as soon as possible.
+                        Applicants have the right to access their personal data and request corrections if the data is inaccurate or incomplete. Requests for access or correction should be directed to our data privacy officer.
                     </p>
                 </div>
                 <div>
-                    <h3 className="text-lg font-semibold text-gray-700">7. Liability</h3>
+                    <h3 className="text-lg font-semibold text-gray-700">7. Consent</h3>
                     <p>
-                        The provider shall not be liable for any damages or losses resulting from the scholarship program. This includes any issues related to the administration of the scholarship, delays, or errors in processing.
+                        By submitting your application, you consent to the collection, use, and processing of your personal data as described in this policy. You have the right to withdraw your consent at any time, but this may affect your eligibility for the scholarship program.
                     </p>
                 </div>
                 <div>
-                    <h3 className="text-lg font-semibold text-gray-700">8. Privacy</h3>
+                    <h3 className="text-lg font-semibold text-gray-700">8. Contact Information</h3>
                     <p>
-                        The provider agrees to handle all personal data collected during the scholarship application process in accordance with applicable privacy laws and regulations. Data must be kept confidential and used only for the purpose of managing the scholarship program.
+                        If you have any questions or concerns about this data privacy policy or our data handling practices, please contact our data privacy officer at [contact information].
                     </p>
                 </div>
             </div>
@@ -73,11 +73,10 @@ const Step5 = ({ formData, setFormData }) => {
                     required
                 />
                 <label htmlFor="agree" className="text-gray-700 text-sm">
-                    I have read and agree to the terms and conditions.
+                    I have read and agree to the data privacy policy.
                 </label>
             </div>
         </div>
-
     );
 };
 
