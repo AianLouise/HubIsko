@@ -201,8 +201,8 @@ export default function Forums() {
         } else if (scholarship?.numberOfScholarships == scholarship?.approvedScholars) {
             setNotification('Applications are closed as the slots are full. Please check back later.');
         } else if (
-            scholarship?.fieldOfStudy !== 'Open for All Courses' &&
-            scholarship?.fieldOfStudy !== userDetails?.applicantDetails?.education?.college?.course
+            !scholarship?.fieldOfStudy.includes('Open for All Courses') &&
+            !scholarship?.fieldOfStudy.includes(userDetails?.applicantDetails?.education?.college?.course)
         ) {
             setNotification('You are not eligible to apply for this scholarship based on your field of study.');
         } else if (

@@ -62,7 +62,7 @@ const scholarshipProgramSchema = new mongoose.Schema({
       'Cancelled',
       'Completed'
     ],
-    default: 'Pending Approval'
+    default: 'Approved'
   },
   rejectReason: {
       type: String,
