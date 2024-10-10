@@ -17,7 +17,7 @@ const PostScholarship = () => {
         description: '',
         educationLevel: '',
         location: '',
-        fieldOfStudy: '',
+        fieldOfStudy: [],
         numberOfScholarships: '',
         amount: '',
         applicationStartDate: '',
@@ -34,6 +34,7 @@ const PostScholarship = () => {
         renewalDuration: '',
         disbursementSchedule: '',
         disbursementMethod: '',
+        bankName: '',
         contactEmail: '',
         contactPhone: '',
         providerId: currentUser ? currentUser._id : '',
@@ -44,7 +45,7 @@ const PostScholarship = () => {
         bannerImage: '',
         providerRequirements: ''
     });
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(true);
     const [currentPage, setCurrentPage] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [notification, setNotification] = useState(null);

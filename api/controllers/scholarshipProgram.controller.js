@@ -30,6 +30,7 @@ export const createScholarshipProgram = async (req, res) => {
       renewalDuration,
       disbursementSchedule,
       disbursementMethod,
+      bankName,
       contactEmail,
       contactPhone,
       providerId,
@@ -44,6 +45,9 @@ export const createScholarshipProgram = async (req, res) => {
       providerRequirements
     } = req.body;
 
+    // Ensure fieldOfStudy is an array
+    const fieldOfStudyArray = Array.isArray(fieldOfStudy) ? fieldOfStudy : [fieldOfStudy];
+
     // Create a new Scholarship document
     const newScholarship = new Scholarship({
       title,
@@ -52,7 +56,7 @@ export const createScholarshipProgram = async (req, res) => {
       amount,
       educationLevel,
       location,
-      fieldOfStudy,
+      fieldOfStudy: fieldOfStudyArray,
       duration,
       selectionProcess,
       selectionCriteria,
@@ -60,6 +64,7 @@ export const createScholarshipProgram = async (req, res) => {
       renewalDuration,
       disbursementSchedule,
       disbursementMethod,
+      bankName,
       contactEmail,
       contactPhone,
       providerId,
