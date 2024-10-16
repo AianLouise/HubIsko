@@ -395,7 +395,7 @@ export default function ScholarshipListing() {
               </div>
             ) : (
               filteredScholarships.map((scholarship) => (
-                <div key={scholarship.id} className='border bg-white rounded-lg pt-4 px-4 shadow-sm gap-2 mb-10 hover:-translate-y-1 transition ease-in-out'>
+                <div key={scholarship.id} className='border bg-white rounded-lg pt-4 px-4 shadow-sm gap-2 mb-10 hover:-translate-y-1 transition ease-in-out flex flex-col justify-between'>
                   <div className='flex flex-row items-center justify-start px-5 mt-5'>
                     <div className='lg:hidden flex-shrink-0'>
                       <div className='rounded-full w-14 h-14 overflow-hidden border-2 border-blue-500'>
@@ -455,19 +455,19 @@ export default function ScholarshipListing() {
                         </div>
                         <p className='w-full text-sm hidden lg:block'>{truncateText(scholarship.description, 50)}</p>
                       </div>
-                      <div className='flex lg:flex-row lg:gap-4'>
-                        <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
-                          <div className='flex lg:gap-0 gap-2'>
-                            <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
-                            <p className='font-medium'>Eligibility: </p>
+                                     <div className='flex lg:flex-row lg:gap-4'>
+                          <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
+                              <div className='flex lg:gap-0 gap-2'>
+                                  <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
+                                  <p className='font-medium'>Eligibility: </p>
+                              </div>
+                              <p className='text-sm lg:hidden'>{truncateText(scholarship.fieldOfStudy.join(', '), 50)}</p>
+                              <p className='text-sm lg:hidden'>{truncateText(scholarship.location, 50)}</p>
+                              <p className='text-sm lg:hidden'>{truncateText(scholarship.educationLevel, 50)}</p>
                           </div>
-                          <p className='text-sm lg:hidden'>{truncateText(scholarship.fieldOfStudy, 50)}</p>
-                          <p className='text-sm lg:hidden'>{truncateText(scholarship.location, 50)}</p>
-                          <p className='text-sm lg:hidden'>{truncateText(scholarship.educationLevel, 50)}</p>
-                        </div>
-                        <p className='w-full text-sm hidden lg:block'>
-                          {truncateText(scholarship.fieldOfStudy, 50)}, {truncateText(scholarship.location, 50)}, {truncateText(scholarship.educationLevel, 50)}
-                        </p>
+                          <p className='w-full text-sm hidden lg:block'>
+                              {truncateText(scholarship.fieldOfStudy.join(', '), 50)}, {truncateText(scholarship.location, 50)}, {truncateText(scholarship.educationLevel, 50)}
+                          </p>
                       </div>
                       <div className='flex lg:flex-row lg:gap-4'>
                         <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>

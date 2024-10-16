@@ -247,6 +247,8 @@ export default function Forums() {
         );
     }
 
+    const isOpenForAllCourses = scholarship.fieldOfStudy.includes('Open for All Courses');
+
     return (
         <div className='min-h-screen flex flex-col'>
             <Header />
@@ -281,17 +283,26 @@ export default function Forums() {
                         </div>
                     </div>
 
-                    <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl gap-2 lg:gap-10 lg:px-24 p-4'>
-                        <div className='flex flex-col lg:flex-row items-center gap-2 lg:gap-10 w-full'>
-                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 w-full border'>
+                    <div className='flex flex-col items-center mx-auto max-w-6xl gap-8 lg:px-24 p-4'>
+                        <div className='flex flex-col gap-2 bg-white shadow-md rounded-md p-6 px-10 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                            <div className='flex items-center gap-4'>
                                 <FaBook className='text-blue-500 w-6 h-6' />
-                                <p className='text-base'>{scholarship.fieldOfStudy}</p>
+                                <p className='text-base font-semibold'>Field of Study</p>
                             </div>
-                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 w-full border'>
+                            {scholarship.fieldOfStudy && (
+                                <ul className='grid grid-cols-1 md:grid-cols-2 list-disc list-inside gap-2 mx-auto'>
+                                    {scholarship.fieldOfStudy.map((course, index) => (
+                                        <li key={index} className='text-base'>{course}</li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+                        <div className='flex flex-col lg:flex-row items-center justify-center w-full gap-4'>
+                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300 w-full lg:w-auto'>
                                 <FaMapMarkerAlt className='text-blue-500 w-6 h-6' />
                                 <p className='text-base'>{scholarship.location}</p>
                             </div>
-                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 w-full border'>
+                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300 w-full lg:w-auto'>
                                 <FaGraduationCap className='text-blue-500 w-6 h-6' />
                                 <p className='text-base'>{scholarship.educationLevel}</p>
                             </div>
