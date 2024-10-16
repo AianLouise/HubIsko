@@ -60,7 +60,7 @@ const EditProgram = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md mt-10">
+        <div className="p-6 bg-white rounded-lg shadow-md">
             <h2 className="text-3xl font-bold mb-6 text-blue-600">Edit Program</h2>
             <p className="text-gray-700 mb-6">
                 Make changes to the scholarship program settings below.

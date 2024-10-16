@@ -310,7 +310,7 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
                                 </Link>
                             </li>
 
-                            <li>
+                            {/* <li>
                                 <Link
                                     to={'/validation-page'}
                                     className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/validation-page' ? 'bg-blue-600 text-white' : ''}`}
@@ -318,7 +318,7 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
                                     <MdDocumentScanner className={`w-4 h-4 ${location.pathname === '/validation-page' ? 'text-white' : 'text-blue-600'}`} />
                                     Validation
                                 </Link>
-                            </li>
+                            </li> */}
 
                             <li>
                                 <Link

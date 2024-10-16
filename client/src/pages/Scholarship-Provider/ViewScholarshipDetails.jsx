@@ -353,7 +353,7 @@ export default function ViewScholarshipDetails() {
                             { label: 'Program Details', value: 'details' },
                             { label: 'Edit Program', value: 'edit' },
                             { label: 'Post Announcement', value: 'announcement' },
-                            { label: 'Validation', value: 'validation' },
+                            // { label: 'Validation', value: 'validation' },
                             { label: 'View Scholars', value: 'scholars' },
                             { label: 'Scholar Applications', value: 'applications' },
                         ].map((tab) => (
@@ -384,9 +384,9 @@ export default function ViewScholarshipDetails() {
                             <PostAnnouncement />
                         )}
 
-                        {activeTab === 'validation' && scholarshipProgram?.status !== 'Pending Approval' && scholarshipProgram?.status !== 'Rejected' && (
+                        {/* {activeTab === 'validation' && scholarshipProgram?.status !== 'Pending Approval' && scholarshipProgram?.status !== 'Rejected' && (
                             <Validation />
-                        )}
+                        )} */}
 
                         {activeTab === 'scholars' && scholarshipProgram?.status !== 'Pending Approval' && scholarshipProgram?.status !== 'Rejected' && (
                             <ViewScholars

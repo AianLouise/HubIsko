@@ -46,7 +46,7 @@ export default function ProgamDetails({ scholarshipProgram }) {
             <div className="flex items-center mb-4">
                 <StatusBadge status={scholarshipProgram.status} />
             </div>
-            <h2 className="text-2xl font-bold mb-4">Program Details</h2>
+                 <h2 className="text-2xl font-bold mb-4 text-blue-600">Program Details</h2>
             <div className="grid grid-cols-1 gap-4">
                 <DetailItem label="Scholarship Title">{scholarshipProgram.title}</DetailItem>
                 <DetailItem label="Scholarship Description">{scholarshipProgram.description}</DetailItem>
