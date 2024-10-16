@@ -472,6 +472,15 @@ export default function StudentApplicationDetails() {
                                         View Document
                                     </button>
                                 </div>
+                                <div className="flex flex-col items-center">
+                                    <label className="block text-sm text-slate-600">Certificate of Registration File</label>
+                                    <button
+                                        onClick={() => handleViewDocument(student.applicantDetails.certificateOfRegistrationFile, 'Certificate of Registration File')}
+                                        className="mt-1 block px-10 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border border-gray-300 rounded-md text-blue-600"
+                                    >
+                                        View Document
+                                    </button>
+                                </div>
                             </div>
                             <AdminImageModal isOpen={isModalOpen} onClose={handleCloseModal} imageUrl={selectedImageUrl} documentName={selectedDocumentName} />
                         </div>
