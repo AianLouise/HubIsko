@@ -279,90 +279,6 @@ const ScholarshipApplicationForm = () => {
 
     const steps = [
         {
-            title: 'Personal Information',
-            description: 'Fill out your personal information below',
-            content: <Step1 formData={formData} setFormData={setFormData} />,
-            validate: (formData) => {
-                const errors = {};
-
-                // Validate first name
-                if (!formData.firstName || formData.firstName.trim() === '') {
-                    errors.firstName = 'First name is required';
-                }
-
-                // Validate last name
-                if (!formData.lastName || formData.lastName.trim() === '') {
-                    errors.lastName = 'Last name is required';
-                }
-
-                // Validate birthdate
-                if (!formData.birthdate) {
-                    errors.birthdate = 'Birthdate is required';
-                } else {
-                    const today = new Date().toISOString().split('T')[0];
-                    if (formData.birthdate > today) {
-                        errors.birthdate = 'Birthdate cannot be in the future';
-                    }
-                }
-
-                // Validate gender
-                if (!formData.gender || formData.gender.trim() === '') {
-                    errors.gender = 'Gender is required';
-                }
-
-                // Validate blood type
-                if (!formData.bloodType || formData.bloodType.trim() === '') {
-                    errors.bloodType = 'Blood type is required';
-                }
-
-                // Validate civil status
-                if (!formData.civilStatus || formData.civilStatus.trim() === '') {
-                    errors.civilStatus = 'Civil status is required';
-                }
-
-                // Validate email
-                if (!formData.email || formData.email.trim() === '') {
-                    errors.email = 'Email is required';
-                } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-                    errors.email = 'Email is invalid';
-                }
-
-                // Validate contact number
-                if (!formData.contactNumber || formData.contactNumber.trim() === '') {
-                    errors.contactNumber = 'Contact number is required';
-                } else if (!/^\d+$/.test(formData.contactNumber)) {
-                    errors.contactNumber = 'Contact number is invalid';
-                }
-
-                // Validate address details
-                if (!formData.addressDetails || formData.addressDetails.trim() === '') {
-                    errors.addressDetails = 'Address details are required';
-                }
-
-                // Validate region
-                if (!formData.region || formData.region.trim() === '') {
-                    errors.region = 'Region is required';
-                }
-
-                // Validate province
-                if (!formData.province || formData.province.trim() === '') {
-                    errors.province = 'Province is required';
-                }
-
-                // Validate city
-                if (!formData.city || formData.city.trim() === '') {
-                    errors.city = 'City is required';
-                }
-
-                // Validate barangay
-                if (!formData.barangay || formData.barangay.trim() === '') {
-                    errors.barangay = 'Barangay is required';
-                }
-
-                return errors;
-            },
-        },
-        {
             title: 'Custodian',
             description: 'Provide custodian details',
             content: <Step2 formData={formData} setFormData={setFormData} />,
@@ -457,59 +373,6 @@ const ScholarshipApplicationForm = () => {
                 } else {
                     errors.general = 'Please provide details for either parents or a guardian';
                 }
-
-                return errors;
-            },
-        },
-        {
-            title: 'Education',
-            description: 'Provide your educational background',
-            content: <Step3 formData={formData} setFormData={setFormData} />,
-            validate: (formData) => {
-                const errors = {};
-
-                // // Validate elementary education details
-                // if (!formData.education.elementary.school || formData.education.elementary.school.trim() === '') {
-                //     errors.elementarySchool = 'Elementary school name is required';
-                // }
-                // if (!formData.education.elementary.yearGraduated || formData.education.elementary.yearGraduated.trim() === '') {
-                //     errors.elementaryYearGraduated = 'Elementary year graduated is required';
-                // } else if (!/^\d{4}$/.test(formData.education.elementary.yearGraduated)) {
-                //     errors.elementaryYearGraduated = 'Elementary year graduated must be a valid year';
-                // }
-
-                // // Validate junior high school education details
-                // if (!formData.education.juniorHighSchool.school || formData.education.juniorHighSchool.school.trim() === '') {
-                //     errors.juniorHighSchool = 'Junior high school name is required';
-                // }
-                // if (!formData.education.juniorHighSchool.yearGraduated || formData.education.juniorHighSchool.yearGraduated.trim() === '') {
-                //     errors.juniorHighSchoolYearGraduated = 'Junior high school year graduated is required';
-                // } else if (!/^\d{4}$/.test(formData.education.juniorHighSchool.yearGraduated)) {
-                //     errors.juniorHighSchoolYearGraduated = 'Junior high school year graduated must be a valid year';
-                // }
-
-                // // Validate senior high school education details
-                // if (!formData.education.seniorHighSchool.school || formData.education.seniorHighSchool.school.trim() === '') {
-                //     errors.seniorHighSchool = 'Senior high school name is required';
-                // }
-                // if (!formData.education.seniorHighSchool.yearGraduated || formData.education.seniorHighSchool.yearGraduated.trim() === '') {
-                //     errors.seniorHighSchoolYearGraduated = 'Senior high school year graduated is required';
-                // } else if (!/^\d{4}$/.test(formData.education.seniorHighSchool.yearGraduated)) {
-                //     errors.seniorHighSchoolYearGraduated = 'Senior high school year graduated must be a valid year';
-                // }
-
-                // // Validate college education details
-                // if (!formData.education.college.school || formData.education.college.school.trim() === '') {
-                //     errors.collegeSchool = 'College school name is required';
-                // }
-                // if (!formData.education.college.course || formData.education.college.course.trim() === '') {
-                //     errors.collegeCourse = 'College course is required';
-                // }
-                // // if (!formData.education.college.yearGraduated || formData.education.college.yearGraduated.trim() === '') {
-                // //     errors.collegeYearGraduated = 'College year graduated is required';
-                // // } else if (!/^\d{4}$/.test(formData.education.college.yearGraduated)) {
-                // //     errors.collegeYearGraduated = 'College year graduated must be a valid year';
-                // // }
 
                 return errors;
             },
@@ -657,18 +520,13 @@ const ScholarshipApplicationForm = () => {
                         }
                     });
                 }
-                // else {
-                //     requiredDocuments.forEach(doc => {
-                //         errors[doc.name] = `${doc.name} is required.`;
-                //     });
-                // }
 
                 return errors;
             },
         },
         {
-            title: 'Terms and Conditions',
-            description: 'Please read and agree to the terms and conditions before submitting your application',
+            title: 'Data Privacy',
+            description: 'Please read and agree to the data privacy policy before submitting your application',
             content: <Step6 formData={formData} setFormData={setFormData} />,
             validate: (formData) => {
                 const errors = {};
@@ -757,9 +615,10 @@ const ScholarshipApplicationForm = () => {
                             <span className="block sm:inline">{notification}</span>
                         </div>
                     )}
+
                     <div className='hidden lg:block'>
                         <div className='flex lg:justify-center lg:gap-5 lg:mt-4 mb-8'>
-                            {[0, 1, 2, 3, 4, 5].map((step) => (
+                            {[0, 1, 2, 3].map((step) => (
                                 <React.Fragment key={step}>
                                     <div className='flex flex-col gap-1 items-center text-center'>
                                         <span className={`text-xl font-bold ${currentPage === step ? 'text-blue-600' : 'lg:block hidden text-gray-400'}`}>{step + 1}</span>
@@ -768,28 +627,23 @@ const ScholarshipApplicationForm = () => {
                                             onClick={() => setCurrentPage(step)}
                                             disabled={currentPage !== step}
                                         >
-                                            {step === 0 && <FaInfoCircle className={currentPage === step ? 'text-white' : 'text-blue-600'} />}
-                                            {step === 1 && <FaUsers className={currentPage === step ? 'text-white' : 'text-blue-600'} />}
-                                            {step === 2 && <FaGraduationCap className={currentPage === step ? 'text-white' : 'text-blue-600'} />}
-                                            {step === 3 && <FaEllipsisH className={currentPage === step ? 'text-white' : 'text-blue-600'} />}
-                                            {step === 4 && <FaUpload className={currentPage === step ? 'text-white' : 'text-blue-600'} />}
-                                            {step === 5 && <FaFileContract className={currentPage === step ? 'text-white' : 'text-blue-600'} />}
+                                            {step === 0 && <FaUsers className={currentPage === step ? 'text-white' : 'text-blue-600'} />}
+                                            {step === 1 && <FaEllipsisH className={currentPage === step ? 'text-white' : 'text-blue-600'} />}
+                                            {step === 2 && <FaUpload className={currentPage === step ? 'text-white' : 'text-blue-600'} />}
+                                            {step === 3 && <FaFileContract className={currentPage === step ? 'text-white' : 'text-blue-600'} />}
                                         </button>
                                         <span className='text-sm text-slate-600'>
-                                            {step === 0 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'} ><>Personal <br /> Information</></span>}
-                                            {step === 1 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}>Custodian</span>}
-                                            {step === 2 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}>Education</span>}
-                                            {step === 3 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}>Others</span>}
-                                            {step === 4 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}><>Upload <br /> Requirements</></span>}
-                                            {step === 5 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}><>Terms and <br /> Conditions</></span>}
+                                            {step === 0 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}>Custodian</span>}
+                                            {step === 1 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}>Others</span>}
+                                            {step === 2 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}><>Upload <br /> Requirements</></span>}
+                                            {step === 3 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}><>Terms and <br /> Conditions</></span>}
                                         </span>
                                     </div>
-                                    {step < 5 && <FaArrowRightLong className='lg:block hidden text-4xl text-blue-600 mt-10' />}
+                                    {step < 3 && <FaArrowRightLong className='lg:block hidden text-4xl text-blue-600 mt-10' />}
                                 </React.Fragment>
                             ))}
                         </div>
                     </div>
-
 
                     <div className='lg:hidden flex flex-col lg:min-h-screen'>
                         <div className='flex justify-between items-center px-6 py-2 text-sm text-slate-500'>
@@ -797,47 +651,35 @@ const ScholarshipApplicationForm = () => {
                             <span>Stages</span>
                         </div>
 
-                        {[0, 1, 2, 3, 4, 5].map((step) => (
+                        {[0, 1, 2, 3].map((step) => (
                             <React.Fragment key={step}>
                                 <div className={`border-2 border-blue-600 rounded-md shadow w-full py-2 px-4 flex justify-between items-center ${currentPage === step ? 'flex' : 'hidden'} `}>
                                     <div className={`gap-2 items-center text-blue-600 ${step === 0 ? 'flex' : 'hidden'}`}>
-                                        <FaInfoCircle className='text-2xl' />
-                                        <span className='font-bold'>Basic Information</span>
-                                    </div>
-
-                                    <div className={`gap-2 items-center text-blue-600 ${step === 1 ? 'flex' : 'hidden'}`}>
                                         <FaUsers className='text-2xl' />
                                         <span className='font-bold'>Custodian</span>
                                     </div>
 
-                                    <div className={`gap-2 items-center text-blue-600 ${step === 2 ? 'flex' : 'hidden'}`}>
-                                        <FaGraduationCap className='text-2xl' />
-                                        <span className='font-bold'>Education</span>
-                                    </div>
-
-                                    <div className={`gap-2 items-center text-blue-600 ${step === 3 ? 'flex' : 'hidden'}`}>
+                                    <div className={`gap-2 items-center text-blue-600 ${step === 1 ? 'flex' : 'hidden'}`}>
                                         <FaEllipsisH className='text-2xl' />
                                         <span className='font-bold'>Others</span>
                                     </div>
 
-                                    <div className={`gap-2 items-center text-blue-600 ${step === 4 ? 'flex' : 'hidden'}`}>
+                                    <div className={`gap-2 items-center text-blue-600 ${step === 2 ? 'flex' : 'hidden'}`}>
                                         <FaUpload className='text-2xl' />
                                         <span className='font-bold'>Upload Requirements</span>
                                     </div>
 
-                                    <div className={`gap-2 items-center text-blue-600 ${step === 5 ? 'flex' : 'hidden'}`}>
+                                    <div className={`gap-2 items-center text-blue-600 ${step === 3 ? 'flex' : 'hidden'}`}>
                                         <FaFileContract className='text-2xl' />
                                         <span className='font-bold'>Terms and Conditions</span>
                                     </div>
 
-
                                     <div>
-                                        <span className='text-blue-600 text-4xl font-bold'> {currentPage}<span className='text-slate-400'>/5</span></span>
+                                        <span className='text-blue-600 text-4xl font-bold'> {currentPage}<span className='text-slate-400'>/3</span></span>
                                     </div>
                                 </div>
                             </React.Fragment>
                         ))}
-
                     </div>
 
 
