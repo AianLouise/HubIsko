@@ -2,14 +2,13 @@ import React from 'react';
 import { FaCheckCircle, FaTimesCircle, FaExclamationCircle } from 'react-icons/fa';
 
 const statusConfig = {
-    'Pending Approval': { color: 'bg-yellow-500', icon: <FaExclamationCircle className="mr-2" /> },
-    'Approved': { color: 'bg-blue-500', icon: <FaCheckCircle className="mr-2" /> },
     'Published': { color: 'bg-indigo-500', icon: <FaCheckCircle className="mr-2" /> },
     'Ongoing': { color: 'bg-teal-500', icon: <FaCheckCircle className="mr-2" /> },
     'Rejected': { color: 'bg-red-500', icon: <FaTimesCircle className="mr-2" /> },
     'Archived': { color: 'bg-gray-500', icon: <FaExclamationCircle className="mr-2" /> },
     'Cancelled': { color: 'bg-orange-500', icon: <FaTimesCircle className="mr-2" /> },
     'Completed': { color: 'bg-purple-500', icon: <FaCheckCircle className="mr-2" /> },
+    'Awaiting Publication': { color: 'bg-yellow-500', icon: <FaExclamationCircle className="mr-2" /> },
 };
 
 const StatusBadge = ({ status }) => {

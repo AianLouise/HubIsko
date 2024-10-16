@@ -209,12 +209,12 @@ export default function ViewScholarshipDetails() {
                         </div>
 
                         {/* Congratulatory Message */}
-                        {scholarshipProgram?.status === 'Approved' && (
-                            <div className="bg-blue-100 text-blue-700 p-4 mb-6 rounded-md shadow-md">
-                                <h2 className="text-2xl font-bold">Congratulations!</h2>
-                                <p>Your scholarship program has been approved. You can now publish it to make it visible to students.</p>
+                        {scholarshipProgram?.status === 'Awaiting Publication' && (
+                            <div className="bg-yellow-100 text-yellow-700 p-4 mb-6 rounded-md shadow-md">
+                                <h2 className="text-xl font-bold mb-2">Awaiting Publication</h2>
+                                <p>Your scholarship program is awaiting publication. You can now publish it to make it visible to students.</p>
                                 <button
-                                    className="mt-4 bg-indigo-500 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-600"
+                                    className="mt-4 bg-yellow-500 text-white px-4 py-2 rounded-md shadow hover:bg-yellow-600"
                                     onClick={() => setShowPublishModal(true)}
                                 >
                                     Publish Program
@@ -247,7 +247,7 @@ export default function ViewScholarshipDetails() {
                                             Cancel
                                         </button>
                                         <button
-                                            className="bg-indigo-500 text-white px-4 py-2 rounded-md"
+                                            className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
                                             onClick={handlePublish}
                                         >
                                             Confirm

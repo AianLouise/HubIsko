@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { LuArchive } from "react-icons/lu";
 import { MdOutlinePlayLesson } from "react-icons/md";
 import { MdOutlinePendingActions } from "react-icons/md";
-import { FaRegThumbsUp } from "react-icons/fa";
+import { FaExclamationCircle, FaRegThumbsUp } from "react-icons/fa";
 
 export default function Scholarships() {
   useEffect(() => {
@@ -71,8 +71,7 @@ export default function Scholarships() {
       if (filter === 'All') return true;
       if (filter === 'Ongoing') return scholarship.status === 'Ongoing';
       if (filter === 'Published') return scholarship.status === 'Published';
-      if (filter === 'Approved') return scholarship.status === 'Approved';
-      if (filter === 'Pending') return scholarship.status === 'Pending Approval';
+      if (filter === 'Awaiting Publication') return scholarship.status === 'Awaiting Publication';
       if (filter === 'Completed') return scholarship.status === 'Completed';
       if (filter === 'Rejected') return scholarship.status === 'Rejected';
       return false;
@@ -92,10 +91,10 @@ export default function Scholarships() {
     ? scholarships.filter(scholarship => scholarship.status === 'Ongoing').length
     : 0;
 
-  // Calculate the service rating (example: average rating from user feedback)
-  const serviceRating = Array.isArray(scholarships) && scholarships.length > 0
-    ? (scholarships.reduce((acc, scholarship) => acc + (scholarship.rating || 0), 0) / scholarships.length).toFixed(2)
-    : 'N/A';
+  // Calculate the number of awaiting publication programs
+  const awaitingPublicationPrograms = Array.isArray(scholarships)
+    ? scholarships.filter(scholarship => scholarship.status === 'Awaiting Publication').length
+    : 0;
 
   const truncateDescription = (description, maxLength) => {
     if (description.length <= maxLength) {
@@ -177,97 +176,89 @@ export default function Scholarships() {
 
             <div className='flex flex-col gap-3 bg-white border shadow p-8 py-6 rounded-md'>
               <div className='flex justify-between items-center'>
-                <h1 className='text-base font-medium'>Service Rating</h1>
-                <div className='bg-blue-200 px-3 py-2 rounded-md'>
-                  <FaRegThumbsUp className='text-2xl text-blue-600' />
+                <h1 className='text-base font-medium'>Awaiting Publication</h1>
+                <div className='bg-yellow-200 px-3 py-2 rounded-md'>
+                  <FaExclamationCircle className='text-2xl text-yellow-600' />
                 </div>
               </div>
-              <span className='text-4xl font-bold tracking-wide'>{serviceRating}%</span>
+              <span className='text-4xl font-bold tracking-wide'>{awaitingPublicationPrograms}</span>
             </div>
           </div>
-
         </div>
 
         <div className='max-w-8xl mx-auto px-24 mt-4 flex-col flex'>
-          <div className='flex gap-10'>
-            {loading ? (
-              <div className="flex justify-center items-center h-screen">
-                <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                </svg>
-              </div>
-            ) : error ? (
-              <div className="flex justify-center items-center h-screen">
-                <p className="text-red-600 font-bold">{error}</p>
-              </div>
-            ) : !Array.isArray(scholarships) || scholarships.length === 0 ? (
-              <div className="flex justify-center items-center h-full w-full">
-                <p className="text-gray-600 font-medium text-center">No scholarships available at the moment.</p>
-              </div>
-            ) : (
-              <div className="overflow-x-auto border shadow rounded-md bg-white w-full mb-10 h-screen">
-                <div className="flex justify-between p-6 border-b items-center gap-2">
-                  <div className='flex gap-2 font-medium text-sm'>
-                    <button
-                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'All' ? 'bg-slate-200' : ''}`}
-                      onClick={() => handleFilterChange('All')}
-                    >
-                      All <span className={`${filter === 'All' ? 'text-blue-600' : 'text-blue-600'}`}>({scholarships.length})</span>
-                    </button>
+          {loading ? (
+            <div className="flex justify-center items-center w-full h-screen">
+              <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+            </div>
+          ) : error ? (
+            <div className="flex justify-center items-center w-full h-screen">
+              <p className="text-red-600 font-bold">{error}</p>
+            </div>
+          ) : !Array.isArray(scholarships) || scholarships.length === 0 ? (
+            <div className="flex justify-center items-center h-full w-full">
+              <p className="text-gray-600 font-medium text-center">No scholarships available at the moment.</p>
+            </div>
+          ) : (
+            <>
+              <div className="flex justify-between p-6 border-b items-center gap-2 bg-white shadow rounded-md mb-4">
+                <div className='flex gap-2 font-medium text-sm'>
+                  <button
+                    className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'All' ? 'bg-slate-200' : ''}`}
+                    onClick={() => handleFilterChange('All')}
+                  >
+                    All <span className={`${filter === 'All' ? 'text-blue-600' : 'text-blue-600'}`}>({scholarships.length})</span>
+                  </button>
 
-                    <button
-                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Ongoing' ? 'bg-teal-500 text-white' : ''}`}
-                      onClick={() => handleFilterChange('Ongoing')}
-                    >
-                      Ongoing <span className={`${filter === 'Ongoing' ? 'text-white' : 'text-teal-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Ongoing').length})</span>
-                    </button>
+                  <button
+                    className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Ongoing' ? 'bg-teal-500 text-white' : ''}`}
+                    onClick={() => handleFilterChange('Ongoing')}
+                  >
+                    Ongoing <span className={`${filter === 'Ongoing' ? 'text-white' : 'text-teal-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Ongoing').length})</span>
+                  </button>
 
-                    <button
-                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Published' ? 'bg-indigo-500 text-white' : ''}`}
-                      onClick={() => handleFilterChange('Published')}
-                    >
-                      Published <span className={`${filter === 'Published' ? 'text-white' : 'text-indigo-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Published').length})</span>
-                    </button>
+                  <button
+                    className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Published' ? 'bg-indigo-500 text-white' : ''}`}
+                    onClick={() => handleFilterChange('Published')}
+                  >
+                    Published <span className={`${filter === 'Published' ? 'text-white' : 'text-indigo-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Published').length})</span>
+                  </button>
 
-                    <button
-                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Approved' ? 'bg-blue-500 text-white' : ''}`}
-                      onClick={() => handleFilterChange('Approved')}
-                    >
-                      Approved <span className={`${filter === 'Approved' ? 'text-white' : 'text-blue-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Approved').length})</span>
-                    </button>
+                  <button
+                    className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Awaiting Publication' ? 'bg-yellow-500 text-white' : ''}`}
+                    onClick={() => handleFilterChange('Awaiting Publication')}
+                  >
+                    Awaiting Publication <span className={`${filter === 'Awaiting Publication' ? 'text-white' : 'text-yellow-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Awaiting Publication').length})</span>
+                  </button>
 
-                    <button
-                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Pending' ? 'bg-yellow-500 text-white' : ''}`}
-                      onClick={() => handleFilterChange('Pending')}
-                    >
-                      Pending Approval <span className={`${filter === 'Pending' ? 'text-white' : 'text-yellow-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Pending Approval').length})</span>
-                    </button>
+                  <button
+                    className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Completed' ? 'bg-purple-500 text-white' : ''}`}
+                    onClick={() => handleFilterChange('Completed')}
+                  >
+                    Completed <span className={`${filter === 'Completed' ? 'text-white' : 'text-purple-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Completed').length})</span>
+                  </button>
 
-                    <button
-                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Completed' ? 'bg-purple-500 text-white' : ''}`}
-                      onClick={() => handleFilterChange('Completed')}
-                    >
-                      Completed <span className={`${filter === 'Completed' ? 'text-white' : 'text-purple-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Completed').length})</span>
-                    </button>
-
-                    <button
-                      className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Rejected' ? 'bg-red-500 text-white' : ''}`}
-                      onClick={() => handleFilterChange('Rejected')}
-                    >
-                      Rejected <span className={`${filter === 'Rejected' ? 'text-white' : 'text-red-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Rejected').length})</span>
-                    </button>
-                  </div>
-
-                  <input
-                    type="text"
-                    placeholder='Search Scholarships'
-                    className='p-2 border rounded-md'
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                  />
+                  <button
+                    className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Rejected' ? 'bg-red-500 text-white' : ''}`}
+                    onClick={() => handleFilterChange('Rejected')}
+                  >
+                    Rejected <span className={`${filter === 'Rejected' ? 'text-white' : 'text-red-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Rejected').length})</span>
+                  </button>
                 </div>
 
+                <input
+                  type="text"
+                  placeholder='Search Scholarships'
+                  className='p-2 border rounded-md'
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                />
+              </div>
+
+              <div className="overflow-x-auto border shadow rounded-md bg-white w-full mb-10 h-screen">
                 <div className="">
                   {filteredScholarships.length === 0 ? (
                     <div className="flex justify-center items-center h-full py-4">
@@ -308,14 +299,13 @@ export default function Scholarships() {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <span className={`text-base font-medium 
-                                  ${scholarship.status === 'Pending Approval' ? 'bg-yellow-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                  ${scholarship.status === 'Approved' ? 'bg-blue-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                  ${scholarship.status === 'Published' ? 'bg-indigo-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                  ${scholarship.status === 'Ongoing' ? 'bg-teal-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                  ${scholarship.status === 'Rejected' ? 'bg-red-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                  ${scholarship.status === 'Archived' ? 'bg-gray-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                  ${scholarship.status === 'Cancelled' ? 'bg-orange-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                  ${scholarship.status === 'Completed' ? 'bg-purple-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''}`}>
+                                                              ${scholarship.status === 'Published' ? 'bg-indigo-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                                              ${scholarship.status === 'Ongoing' ? 'bg-teal-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                                              ${scholarship.status === 'Rejected' ? 'bg-red-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                                              ${scholarship.status === 'Archived' ? 'bg-gray-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                                              ${scholarship.status === 'Cancelled' ? 'bg-orange-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                                              ${scholarship.status === 'Completed' ? 'bg-purple-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                                              ${scholarship.status === 'Awaiting Publication' ? 'bg-yellow-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''}`}>
                                 {scholarship.status}
                               </span>
                             </td>
@@ -335,10 +325,9 @@ export default function Scholarships() {
                   )}
                 </div>
               </div>
-            )}
-          </div>
+            </>
+          )}
         </div>
-
 
       </main>
     </div>
