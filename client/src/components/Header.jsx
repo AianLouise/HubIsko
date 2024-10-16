@@ -136,16 +136,16 @@ export default function Header() {
         </Link>
 
         <div className='flex items-center gap-4 md:hidden'>
-        <Link
-          to={'/notifications'}
-          className={`flex items-center p-1.5 rounded-full ${isNotificationsPage ? 'bg-white text-blue-600 border' : 'bg-blue-600 text-white'}`}
-        >
-          <IoIosNotifications className="w-6 h-6" />
-        </Link>
-        <button className="bg-blue-600 text-white rounded-md p-2" onClick={toggleSidebar}>
-          <IoMenu className="w-6 h-6" />
-        </button>
-      </div>
+          <Link
+            to={'/notifications'}
+            className={`flex items-center p-1.5 rounded-full ${isNotificationsPage ? 'bg-white text-blue-600 border' : 'bg-blue-600 text-white'}`}
+          >
+            <IoIosNotifications className="w-6 h-6" />
+          </Link>
+          <button className="bg-blue-600 text-white rounded-md p-2" onClick={toggleSidebar}>
+            <IoMenu className="w-6 h-6" />
+          </button>
+        </div>
 
         <div className={`fixed shadow-lg inset-0 z-50 flex justify-end transition-transform transform ${sidebarVisible ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="bg-white shadow-lg border w-64 p-4 h-full">
@@ -268,14 +268,20 @@ export default function Header() {
                                 onClick={() => handleNotificationClick(notification._id)}
                               >
                                 <img
-                                  src={notification.senderId.profilePicture || 'default-avatar.png'}
+                                  src={notification.senderId?.profilePicture || 'default-avatar.png'}
                                   alt="Sender's Avatar"
                                   className="w-12 h-12 rounded-full object-cover"
                                 />
                                 <div className="flex flex-col text-left">
-                                  <span className="font-bold">{notification.senderId.scholarshipProviderDetails.organizationName}</span>
-                                  <span className="text-sm">{truncateMessage(notification.message, 50)}
-                                    <span className='text-blue-600 font-semibold'>  See More</span></span>
+                                  {notification.senderId?.role === 'scholarship_provider' && (
+                                    <span className="font-bold">{notification.senderId.scholarshipProviderDetails?.organizationName || 'Unknown Organization'}</span>
+                                  )}
+                                  {notification.senderId?.role === 'admin' && (
+                                    <span className="font-bold">{notification.senderId.username || 'Unknown User'}</span>
+                                  )}
+                                  <span className="text-sm font-normal">{truncateMessage(notification.message, 50)}
+                                    <span className='text-blue-600 font-semibold'>  See More</span>
+                                  </span>
                                 </div>
                               </div>
                             ))
@@ -291,7 +297,6 @@ export default function Header() {
               </button>
             </div>
           )}
-
 
           {currentUser ? (
             <div ref={showDropdownRef} className="relative"> {/* This div wraps both the image and the dropdown */}

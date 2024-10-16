@@ -352,7 +352,7 @@ userSchema.statics.createDefaultAdmin = async function() {
   const User = this;
   const defaultAdmin = {
     email: 'admin@example.com',
-    username: 'admin',
+    username: 'HubIsko',
     password: 'Admin123@',
     profilePicture: 'https://firebasestorage.googleapis.com/v0/b/hubisko-21f8a.appspot.com/o/System%2FNewLogo.png?alt=media&token=9bcfb221-c954-44ef-9d4f-130f1d880a8e',
     role: 'admin',
