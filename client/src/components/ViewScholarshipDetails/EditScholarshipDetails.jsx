@@ -255,125 +255,125 @@ export default function EditScholarshipDetails() {
                         </div>
 
                         <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Field of Study</label>
-                        <p className="text-sm text-gray-500 mb-2">Please select the field of study relevant to the scholarship program.</p>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                            {[
-                                "Open for All Courses",
-                                "BS in Accounting",
-                                "BS in Aerospace Engineering",
-                                "BS in Agricultural Engineering",
-                                "BS in Agriculture",
-                                "BA in Anthropology",
-                                "BS in Applied Mathematics",
-                                "BS in Architecture",
-                                "BA in Art Studies",
-                                "BS in Astronomy",
-                                "BS in Biochemistry",
-                                "BS in Biology",
-                                "BS in Biomedical Engineering",
-                                "BS in Business Administration",
-                                "BS in Business Management",
-                                "BS in Chemical Engineering",
-                                "BS in Chemistry",
-                                "BS in Civil Engineering",
-                                "BA in Communication",
-                                "BS in Computer Engineering",
-                                "BS in Computer Science",
-                                "BS in Criminology",
-                                "BS in Dentistry",
-                                "BA in Development Communication",
-                                "BS in Digital Media Arts",
-                                "BA in Economics",
-                                "BS in Education",
-                                "BS in Electrical Engineering",
-                                "BS in Electronics Engineering",
-                                "BS in Elementary Education",
-                                "BS in Environmental Engineering",
-                                "BS in Environmental Science",
-                                "BS in Fashion Design",
-                                "BS in Finance",
-                                "BA in Fine Arts",
-                                "BS in Food Science",
-                                "BS in Forestry",
-                                "BS in Forensic Science",
-                                "BS in Geodetic Engineering",
-                                "BA in Geography",
-                                "BS in Geology",
-                                "BS in Graphic Design",
-                                "BS in Health Sciences",
-                                "BA in History",
-                                "BS in Hospitality Management",
-                                "BS in Hotel and Restaurant Management",
-                                "BS in Human Resource Development",
-                                "BS in Industrial Design",
-                                "BS in Industrial Engineering",
-                                "BS in Information Systems",
-                                "BS in Information Technology",
-                                "BS in Interior Design",
-                                "BA in International Relations",
-                                "BA in Journalism",
-                                "BS in Landscape Architecture",
-                                "BA in Law",
-                                "BA in Linguistics",
-                                "BS in Management Accounting",
-                                "BS in Marine Biology",
-                                "BS in Marine Engineering",
-                                "BS in Marine Transportation",
-                                "BS in Marketing",
-                                "BS in Materials Science",
-                                "BS in Mathematics",
-                                "BS in Mechanical Engineering",
-                                "BA in Media Studies",
-                                "BS in Medical Laboratory Science",
-                                "BS in Medicine",
-                                "BS in Metallurgical Engineering",
-                                "BS in Microbiology",
-                                "BS in Midwifery",
-                                "BS in Mining Engineering",
-                                "BS in Molecular Biology",
-                                "BS in Multimedia Arts",
-                                "BS in Music",
-                                "BS in Nanotechnology",
-                                "BS in Nursing",
-                                "BS in Nutrition",
-                                "BS in Occupational Therapy",
-                                "BS in Oceanography",
-                                "BS in Pharmacy",
-                                "BS in Physical Therapy",
-                                "BS in Physics",
-                                "BS in Political Science",
-                                "BS in Psychology",
-                                "BS in Public Health",
-                                "BS in Radiologic Technology",
-                                "BS in Real Estate Management",
-                                "BA in Religious Studies",
-                                "BA in Social Work",
-                                "BS in Sociology",
-                                "BS in Software Engineering",
-                                "BS in Statistics",
-                                "BS in Tourism Management",
-                                "BS in Veterinary Medicine",
-                                "BS in Zoology"
-                            ].map((field) => (
-                                <div key={field} className="flex items-center">
-                                    <input
-                                        type="checkbox"
-                                        name="fieldOfStudy"
-                                        value={field}
-                                        checked={formData.fieldOfStudy.includes(field)}
-                                        onChange={handleFieldOfStudyChange}
-                                        className="mr-2"
-                                        disabled={
-                                            formData.fieldOfStudy.includes("Open for All Courses") &&
-                                            field !== "Open for All Courses"
-                                        }
-                                    />
-                                    <label className="text-gray-700">{field}</label>
-                                </div>
-                            ))}
+                            <label className="block text-gray-700 font-semibold mb-2">Field of Study</label>
+                            <p className="text-sm text-gray-500 mb-2">Please select the field of study relevant to the scholarship program.</p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                                {[
+                                    "Open for All Courses",
+                                    "BS in Accounting",
+                                    "BS in Aerospace Engineering",
+                                    "BS in Agricultural Engineering",
+                                    "BS in Agriculture",
+                                    "BA in Anthropology",
+                                    "BS in Applied Mathematics",
+                                    "BS in Architecture",
+                                    "BA in Art Studies",
+                                    "BS in Astronomy",
+                                    "BS in Biochemistry",
+                                    "BS in Biology",
+                                    "BS in Biomedical Engineering",
+                                    "BS in Business Administration",
+                                    "BS in Business Management",
+                                    "BS in Chemical Engineering",
+                                    "BS in Chemistry",
+                                    "BS in Civil Engineering",
+                                    "BA in Communication",
+                                    "BS in Computer Engineering",
+                                    "BS in Computer Science",
+                                    "BS in Criminology",
+                                    "BS in Dentistry",
+                                    "BA in Development Communication",
+                                    "BS in Digital Media Arts",
+                                    "BA in Economics",
+                                    "BS in Education",
+                                    "BS in Electrical Engineering",
+                                    "BS in Electronics Engineering",
+                                    "BS in Elementary Education",
+                                    "BS in Environmental Engineering",
+                                    "BS in Environmental Science",
+                                    "BS in Fashion Design",
+                                    "BS in Finance",
+                                    "BA in Fine Arts",
+                                    "BS in Food Science",
+                                    "BS in Forestry",
+                                    "BS in Forensic Science",
+                                    "BS in Geodetic Engineering",
+                                    "BA in Geography",
+                                    "BS in Geology",
+                                    "BS in Graphic Design",
+                                    "BS in Health Sciences",
+                                    "BA in History",
+                                    "BS in Hospitality Management",
+                                    "BS in Hotel and Restaurant Management",
+                                    "BS in Human Resource Development",
+                                    "BS in Industrial Design",
+                                    "BS in Industrial Engineering",
+                                    "BS in Information Systems",
+                                    "BS in Information Technology",
+                                    "BS in Interior Design",
+                                    "BA in International Relations",
+                                    "BA in Journalism",
+                                    "BS in Landscape Architecture",
+                                    "BA in Law",
+                                    "BA in Linguistics",
+                                    "BS in Management Accounting",
+                                    "BS in Marine Biology",
+                                    "BS in Marine Engineering",
+                                    "BS in Marine Transportation",
+                                    "BS in Marketing",
+                                    "BS in Materials Science",
+                                    "BS in Mathematics",
+                                    "BS in Mechanical Engineering",
+                                    "BA in Media Studies",
+                                    "BS in Medical Laboratory Science",
+                                    "BS in Medicine",
+                                    "BS in Metallurgical Engineering",
+                                    "BS in Microbiology",
+                                    "BS in Midwifery",
+                                    "BS in Mining Engineering",
+                                    "BS in Molecular Biology",
+                                    "BS in Multimedia Arts",
+                                    "BS in Music",
+                                    "BS in Nanotechnology",
+                                    "BS in Nursing",
+                                    "BS in Nutrition",
+                                    "BS in Occupational Therapy",
+                                    "BS in Oceanography",
+                                    "BS in Pharmacy",
+                                    "BS in Physical Therapy",
+                                    "BS in Physics",
+                                    "BS in Political Science",
+                                    "BS in Psychology",
+                                    "BS in Public Health",
+                                    "BS in Radiologic Technology",
+                                    "BS in Real Estate Management",
+                                    "BA in Religious Studies",
+                                    "BA in Social Work",
+                                    "BS in Sociology",
+                                    "BS in Software Engineering",
+                                    "BS in Statistics",
+                                    "BS in Tourism Management",
+                                    "BS in Veterinary Medicine",
+                                    "BS in Zoology"
+                                ].map((field) => (
+                                    <div key={field} className="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            name="fieldOfStudy"
+                                            value={field}
+                                            checked={formData.fieldOfStudy.includes(field)}
+                                            onChange={handleFieldOfStudyChange}
+                                            className="mr-2"
+                                            disabled={
+                                                formData.fieldOfStudy.includes("Open for All Courses") &&
+                                                field !== "Open for All Courses"
+                                            }
+                                        />
+                                        <label className="text-gray-700">{field}</label>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>
 
@@ -391,11 +391,10 @@ export default function EditScholarshipDetails() {
                                 required
                             >
                                 <option value="" disabled>Select duration</option>
-                                <option value="1 year">1 year</option>
-                                <option value="2 years">2 years</option>
-                                <option value="3 years">3 years</option>
-                                <option value="4 years">4 years</option>
-                                <option value="5 years">5 years</option>
+                                <option value="up-to-1-year">Up to 1 year</option>
+                                <option value="up-to-2-years">Up to 2 years</option>
+                                <option value="up-to-3-years">Up to 3 years</option>
+                                <option value="up-to-4-years">Up to 4 years (or until graduation, depending on the course)</option>
                             </select>
                         </div>
                     </div>
@@ -461,53 +460,53 @@ export default function EditScholarshipDetails() {
                 </div>
 
                 <div className='bg-white p-8 py-12 flex flex-col rounded-md border shadow'>
-                <h2 className="text-2xl font-bold mb-4 border-b-2 pb-4">Disbursement Details (Optional)</h2>
-                <div className='flex flex-col gap-4 px-4 space-y-1 mt-4'>
+                    <h2 className="text-2xl font-bold mb-4 border-b-2 pb-4">Disbursement Details (Optional)</h2>
+                    <div className='flex flex-col gap-4 px-4 space-y-1 mt-4'>
 
-                    <div>
-                        <label className="block text-gray-700">Disbursement Schedule</label>
-                        <p className="text-sm text-gray-500 mb-2">Please describe the schedule for disbursing the scholarship funds.</p>
-                        <textarea
-                            name="disbursementSchedule"
-                            value={formData.disbursementSchedule || ''}
-                            onChange={handleChange}
-                            placeholder="Describe the disbursement schedule"
-                            className="w-full p-2 border border-gray-300 rounded"
-                        ></textarea>
-                    </div>
-
-                    <div>
-                        <label className="block text-gray-700">Disbursement Method</label>
-                        <p className="text-sm text-gray-500 mb-2">Please select the method by which the scholarship funds will be disbursed.</p>
-                        <select
-                            name="disbursementMethod"
-                            value={formData.disbursementMethod || ''}
-                            onChange={handleChange}
-                            className="w-full p-2 border border-gray-300 rounded"
-                        >
-                            <option value="">Select method</option>
-                            <option value="Bank Transfer">Bank Transfer</option>
-                            <option value="Check">Check</option>
-                            <option value="Tuition Payment to Institution">Tuition Payment to Institution</option>
-                        </select>
-                    </div>
-
-                    {formData.disbursementMethod === 'Bank Transfer' && (
                         <div>
-                            <label className="block text-gray-700">Bank Name</label>
-                            <p className="text-sm text-gray-500 mb-2">Please specify the bank name for the transfer.</p>
-                            <input
-                                type="text"
-                                name="bankName"
-                                value={formData.bankName}
+                            <label className="block text-gray-700">Disbursement Schedule</label>
+                            <p className="text-sm text-gray-500 mb-2">Please describe the schedule for disbursing the scholarship funds.</p>
+                            <textarea
+                                name="disbursementSchedule"
+                                value={formData.disbursementSchedule || ''}
+                                onChange={handleChange}
+                                placeholder="Describe the disbursement schedule"
+                                className="w-full p-2 border border-gray-300 rounded"
+                            ></textarea>
+                        </div>
+
+                        <div>
+                            <label className="block text-gray-700">Disbursement Method</label>
+                            <p className="text-sm text-gray-500 mb-2">Please select the method by which the scholarship funds will be disbursed.</p>
+                            <select
+                                name="disbursementMethod"
+                                value={formData.disbursementMethod || ''}
                                 onChange={handleChange}
                                 className="w-full p-2 border border-gray-300 rounded"
-                                placeholder="Enter bank name"
-                            />
+                            >
+                                <option value="">Select method</option>
+                                <option value="Bank Transfer">Bank Transfer</option>
+                                <option value="Check">Check</option>
+                                <option value="Tuition Payment to Institution">Tuition Payment to Institution</option>
+                            </select>
                         </div>
-                    )}
+
+                        {formData.disbursementMethod === 'Bank Transfer' && (
+                            <div>
+                                <label className="block text-gray-700">Bank Name</label>
+                                <p className="text-sm text-gray-500 mb-2">Please specify the bank name for the transfer.</p>
+                                <input
+                                    type="text"
+                                    name="bankName"
+                                    value={formData.bankName}
+                                    onChange={handleChange}
+                                    className="w-full p-2 border border-gray-300 rounded"
+                                    placeholder="Enter bank name"
+                                />
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </div>
 
                 <div className='bg-white p-8 py-12 flex flex-col rounded-md border shadow'>
                     <h2 className="text-2xl font-bold mb-4 border-b-2 pb-4">Contact Information</h2>

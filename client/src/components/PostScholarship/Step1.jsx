@@ -289,15 +289,15 @@ const Step1 = ({ formData, setFormData }) => {
                             required
                         >
                             <option value="" disabled>Select duration</option>
-                            <option value="1 year">1 year</option>
-                            <option value="2 years">2 years</option>
-                            <option value="3 years">3 years</option>
-                            <option value="4 years">4 years</option>
-                            <option value="5 years">5 years</option>
+                            <option value="up-to-1-year">Up to 1 year</option>
+                            <option value="up-to-2-years">Up to 2 years</option>
+                            <option value="up-to-3-years">Up to 3 years</option>
+                            <option value="up-to-4-years">Up to 4 years (or until graduation, depending on the course)</option>
                         </select>
                     </div>
                 </div>
             </div>
+
 
 
             <div className='bg-white p-8 py-12 flex flex-col rounded-md border shadow'>

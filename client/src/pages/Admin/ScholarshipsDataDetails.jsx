@@ -12,17 +12,17 @@ export default function ScholarshipsDataDetails() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedImageUrl, setSelectedImageUrl] = useState('');
     const [selectedDocumentName, setSelectedDocumentName] = useState('');
-  
+
     const handleViewDocument = (url, name) => {
-      setSelectedImageUrl(url);
-      setSelectedDocumentName(name);
-      setIsModalOpen(true);
+        setSelectedImageUrl(url);
+        setSelectedDocumentName(name);
+        setIsModalOpen(true);
     };
-  
+
     const handleCloseModal = () => {
-      setIsModalOpen(false);
-      setSelectedImageUrl('');
-      setSelectedDocumentName('');
+        setIsModalOpen(false);
+        setSelectedImageUrl('');
+        setSelectedDocumentName('');
     };
 
     useEffect(() => {
@@ -278,23 +278,23 @@ export default function ScholarshipsDataDetails() {
                         </div>
 
                         <div className='bg-white p-8 py-12 flex flex-col rounded-md border shadow'>
-                            <h2 className="text-2xl font-bold mb-4 border-b-2 pb-4">Scholarship Duration (Admin Review)</h2>
+                            <h2 className="text-2xl font-bold mb-4 border-b-2 pb-4">Scholarship Duration</h2>
                             <div className='flex flex-col gap-4 px-4 space-y-1 mt-4'>
                                 <div>
                                     <label className="block text-gray-700">Duration</label>
-                                    <p className="text-sm text-gray-500 mb-2">Review the duration for the scholarship program.</p>
+                                    <p className="text-sm text-gray-500 mb-2">Please select the duration for the scholarship.</p>
                                     <select
                                         name="duration"
-                                        value={scholarshipDetails.duration}
+                                        value={formData.duration || ''}
+                                        onChange={handleChange}
                                         className="w-full p-2 border border-gray-300 rounded"
-                                        disabled
+                                        required
                                     >
                                         <option value="" disabled>Select duration</option>
-                                        <option value="1 year">1 year</option>
-                                        <option value="2 years">2 years</option>
-                                        <option value="3 years">3 years</option>
-                                        <option value="4 years">4 years</option>
-                                        <option value="5 years">5 years</option>
+                                        <option value="up-to-1-year">Up to 1 year</option>
+                                        <option value="up-to-2-years">Up to 2 years</option>
+                                        <option value="up-to-3-years">Up to 3 years</option>
+                                        <option value="up-to-4-years">Up to 4 years (or until graduation, depending on the course)</option>
                                     </select>
                                 </div>
                             </div>
@@ -444,18 +444,18 @@ export default function ScholarshipsDataDetails() {
                             <p className="text-sm font-medium text-slate-700">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Suscipit autem, est amet obcaecati possimus a quidem, ipsa consequatur impedit pariatur sunt quasi vel hic. Culpa nulla doloremque ipsam voluptas consequuntur?</p>
                         </div>
 
-                    <div className="bg-white p-8 py-12 flex flex-col rounded-md border shadow">
-      <h2 className="text-2xl font-bold mb-4">Uploaded Provider Requirements</h2>
-      {scholarshipDetails.providerRequirements && scholarshipDetails.providerRequirements
-        .filter(doc => doc.url) // Filter documents that have a URL
-        .map((doc) => (
-          <div className="flex items-center mt-4 p-4 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 transition-colors duration-200" key={doc._id}>
-            <span className="text-sm font-medium text-gray-700">{doc.name}</span>
-            <button onClick={() => handleViewDocument(doc.url, doc.name)} className="ml-auto text-indigo-600 hover:underline">View Document</button>
-          </div>
-        ))}
-      <ImageModal isOpen={isModalOpen} onClose={handleCloseModal} imageUrl={selectedImageUrl} documentName={selectedDocumentName} />
-    </div>
+                        <div className="bg-white p-8 py-12 flex flex-col rounded-md border shadow">
+                            <h2 className="text-2xl font-bold mb-4">Uploaded Provider Requirements</h2>
+                            {scholarshipDetails.providerRequirements && scholarshipDetails.providerRequirements
+                                .filter(doc => doc.url) // Filter documents that have a URL
+                                .map((doc) => (
+                                    <div className="flex items-center mt-4 p-4 bg-gray-100 rounded-lg shadow-md hover:bg-gray-200 transition-colors duration-200" key={doc._id}>
+                                        <span className="text-sm font-medium text-gray-700">{doc.name}</span>
+                                        <button onClick={() => handleViewDocument(doc.url, doc.name)} className="ml-auto text-indigo-600 hover:underline">View Document</button>
+                                    </div>
+                                ))}
+                            <ImageModal isOpen={isModalOpen} onClose={handleCloseModal} imageUrl={selectedImageUrl} documentName={selectedDocumentName} />
+                        </div>
                     </div>
                 </div>
             </main>
