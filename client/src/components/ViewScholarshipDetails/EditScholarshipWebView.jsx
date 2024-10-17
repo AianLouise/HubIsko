@@ -39,9 +39,10 @@ export default function EditScholarshipWebView() {
     const [formData, setFormData] = useState({
         title: programDetails?.title || 'Scholarship Title',
         amount: programDetails?.amount || 'Full Scholarship',
-        fieldOfStudy: programDetails?.fieldOfStudy || 'Computer Science',
+        fieldOfStudy: programDetails?.fieldOfStudy || [],
         location: programDetails?.location || 'United States',
         educationLevel: programDetails?.educationLevel || 'Undergraduate',
+        applicationDeadline: programDetails?.applicationDeadline || new Date().toISOString(),
         scholarshipImage: programDetails?.scholarshipImage || 'https://via.placeholder.com/150',
         bannerImage: programDetails?.bannerImage || 'https://via.placeholder.com/600x200',
         sections: programDetails?.sections || [
@@ -62,9 +63,10 @@ export default function EditScholarshipWebView() {
             setFormData({
                 title: programDetails.title || 'Scholarship Title',
                 amount: programDetails.amount || 'Full Scholarship',
-                fieldOfStudy: programDetails.fieldOfStudy || 'Computer Science',
+                fieldOfStudy: programDetails.fieldOfStudy || [],
                 location: programDetails.location || 'United States',
                 educationLevel: programDetails.educationLevel || 'Undergraduate',
+                applicationDeadline: programDetails.applicationDeadline || new Date().toISOString(),
                 scholarshipImage: programDetails.scholarshipImage || 'https://via.placeholder.com/150',
                 bannerImage: programDetails.bannerImage || 'https://via.placeholder.com/600x200',
                 sections: programDetails.sections || [
@@ -208,6 +210,11 @@ export default function EditScholarshipWebView() {
         }
     };
 
+    const formatDate = (dateString) => {
+        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString('en-US', options);
+    };
+
     return (
         <div>
             <main className='flex-grow bg-[#f8f8fb] font-medium'>
@@ -219,6 +226,15 @@ export default function EditScholarshipWebView() {
                     />
                 )}
                 <div className='border-b py-8'>
+                    <div className="text-center my-8">
+                        <h2 className="text-3xl font-extrabold text-blue-600">
+                            Edit Scholarship Details
+                        </h2>
+                        <p className="text-sm font-normal text-gray-500 mt-2">
+                            Update the scholarship information below to ensure all details are accurate and up-to-date.
+                        </p>
+                    </div>
+
                     <div className='flex flex-row items-center mx-auto max-w-6xl gap-10 px-24'>
                         <div className='flex flex-col items-center'>
                             <span className='text-sm bg-blue-600 text-white px-6 rounded-md py-2'>Click to Upload an Image</span>
@@ -241,7 +257,7 @@ export default function EditScholarshipWebView() {
                             {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                         </div>
 
-                        <div className='flex flex-col gap-2 w-1/2'>
+                        <div className='flex flex-col gap-2'>
                             <div className='flex flex-row divide-x-2 divide-blue-200 mb-2'>
                                 <span className='text-xl font-bold text-gray-600 pr-4'>
                                     {programDetails ? programDetails.organizationName : 'Scholarship Provider'}
@@ -259,17 +275,26 @@ export default function EditScholarshipWebView() {
                         </div>
                     </div>
 
-                    <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl gap-2 lg:gap-10 lg:px-24 p-4'>
-                        <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl gap-2 lg:gap-10 lg:px-24 p-2'>
-                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                    <div className='flex flex-col items-center mx-auto max-w-6xl gap-8 lg:px-24 p-4'>
+                        <div className='flex flex-col gap-2 bg-white shadow-md rounded-md p-6 px-10 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                            <div className='flex items-center gap-4'>
                                 <FaBook className='text-blue-500 w-6 h-6' />
-                                <p className='text-base'>{formData.fieldOfStudy}</p>
+                                <p className='text-base font-semibold'>Field of Study</p>
                             </div>
-                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                            {formData.fieldOfStudy && (
+                                <ul className='grid grid-cols-1 md:grid-cols-2 list-disc list-inside gap-2 mx-auto'>
+                                    {formData.fieldOfStudy.map((course, index) => (
+                                        <li key={index} className='text-base'>{course}</li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+                        <div className='flex flex-col lg:flex-row items-center justify-center w-full gap-4'>
+                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300 w-full lg:w-auto'>
                                 <FaMapMarkerAlt className='text-blue-500 w-6 h-6' />
                                 <p className='text-base'>{formData.location}</p>
                             </div>
-                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300 w-full lg:w-auto'>
                                 <FaGraduationCap className='text-blue-500 w-6 h-6' />
                                 <p className='text-base'>{formData.educationLevel}</p>
                             </div>
@@ -284,7 +309,7 @@ export default function EditScholarshipWebView() {
                             </span>
                             <span className='flex gap-2 bg-white border px-4 py-2 rounded-md shadow items-center'>
                                 <FaRegCalendarXmark className='text-red-500' />
-                                Deadline:  No deadline set
+                                Deadline:  {formatDate(formData.applicationDeadline)}
                             </span>
                         </div>
 

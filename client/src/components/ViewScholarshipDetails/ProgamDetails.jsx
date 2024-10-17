@@ -7,7 +7,7 @@ const statusConfig = {
     'Rejected': { color: 'bg-red-500', icon: <FaTimesCircle className="mr-2" /> },
     'Archived': { color: 'bg-gray-500', icon: <FaExclamationCircle className="mr-2" /> },
     'Cancelled': { color: 'bg-orange-500', icon: <FaTimesCircle className="mr-2" /> },
-    'Completed': { color: 'bg-purple-500', icon: <FaCheckCircle className="mr-2" /> },
+    'Completed': { color: 'bg-green-500', icon: <FaCheckCircle className="mr-2" /> },
     'Awaiting Publication': { color: 'bg-yellow-500', icon: <FaExclamationCircle className="mr-2" /> },
 };
 

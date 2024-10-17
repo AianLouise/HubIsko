@@ -86,23 +86,21 @@ const EditProgram = () => {
                         Go to Scholarship Web View
                     </Link>
                 </div>
-                {currentUser.role === 'admin' && programDetails.status !== 'Completed' && (
-                    <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-                        <div className="flex items-center mb-4">
-                            <FaEdit className="w-6 h-6 text-blue-600 mr-2" />
-                            <h3 className="text-2xl font-semibold text-gray-800">Complete Scholarship Program</h3>
-                        </div>
-                        <p className="text-gray-600 mb-4">Mark the scholarship program as complete when all tasks are finished.</p>
-                        <button
-                            onClick={handleCompleteProgram}
-                            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition ease-in-out"
-                        >
-                            Mark as Complete
-                        </button>
-                        {successMessage && <p className="text-green-600 mt-4">{successMessage}</p>}
-                        {errorMessage && <p className="text-red-600 mt-4">{errorMessage}</p>}
+                <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <div className="flex items-center mb-4">
+                        <FaEdit className="w-6 h-6 text-blue-600 mr-2" />
+                        <h3 className="text-2xl font-semibold text-gray-800">Complete Scholarship Program</h3>
                     </div>
-                )}
+                    <p className="text-gray-600 mb-4">Mark the scholarship program as complete when all tasks are finished.</p>
+                    <button
+                        onClick={handleCompleteProgram}
+                        className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition ease-in-out"
+                    >
+                        Mark as Complete
+                    </button>
+                    {successMessage && <p className="text-green-600 mt-4">{successMessage}</p>}
+                    {errorMessage && <p className="text-red-600 mt-4">{errorMessage}</p>}
+                </div>
             </div>
         </div>
     );

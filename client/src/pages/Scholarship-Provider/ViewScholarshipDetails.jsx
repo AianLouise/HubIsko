@@ -334,6 +334,14 @@ export default function ViewScholarshipDetails() {
                             </div>
                         )}
 
+                        {/* Completed Status Message */}
+                        {scholarshipProgram?.status === 'Completed' && (
+                            <div className="bg-green-100 text-green-700 p-4 mb-6 rounded-md shadow-md">
+                                <h2 className="text-xl font-bold mb-2">Program Completed!</h2>
+                                <p>The scholarship program has been successfully completed. Please review the final reports and make any necessary announcements for scholars.</p>
+                            </div>
+                        )}
+
                         {/* Rejected Status Message */}
                         {scholarshipProgram?.status === 'Rejected' && (
                             <div className="bg-red-100 text-red-700 p-4 mb-6 rounded-md shadow-md">
