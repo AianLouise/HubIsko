@@ -298,8 +298,9 @@ export const getScholarshipApplications = async (req, res) => {
   try {
     const { id } = req.params; // Extract id from URL parameters
 
-    // Query the scholarshipApplication table
-    const applications = await ScholarshipApplication.find({ scholarshipProgram: id });
+    // Query the scholarshipApplication table and populate the applicant field
+    const applications = await ScholarshipApplication.find({ scholarshipProgram: id })
+      .populate('applicant'); // Populate applicant with specific fields
 
     if (!applications || applications.length === 0) {
       return res.status(404).json({ message: 'No applications found for this scholarship program' });
@@ -508,7 +509,9 @@ export const getApprovedScholarInfo = async (req, res) => {
     // Find details of each approved scholar's application using their _id
     const scholarDetails = await Promise.all(
       approvedScholars.map(async (scholar) => {
-        const application = await ScholarshipApplication.findOne({ applicant: scholar._id });
+        const application = await ScholarshipApplication.findOne({ applicant: scholar._id })
+          .populate('applicant'); // Populate applicant with specific fields
+
         if (!application) {
           console.warn(`Scholarship application not found for scholar ID: ${scholar._id}`);
           return null; // Skip this scholar if application not found

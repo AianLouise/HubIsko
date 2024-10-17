@@ -6,7 +6,7 @@ import ApplicationForm from '../ApplicationForm';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import Snackbar from '../../components/Snackbar';
 import Modal from 'react-modal';
-import { FaArrowLeft } from 'react-icons/fa6';
+import { FaArrowLeft, FaUser } from 'react-icons/fa'; // Import the FaUser icon
 
 export default function ViewApplicationDetails() {
     const { currentUser } = useSelector((state) => state.user);
@@ -49,9 +49,9 @@ export default function ViewApplicationDetails() {
         fetchApplicationDetails();
     }, [applicationId]);
 
-    const handleApprove = async (applicationId, applicant, scholarshipId) => {
+        const handleApprove = async (applicationId, applicantId, scholarshipId) => {
         console.log(`Starting approval process for application ID: ${applicationId}`);
-
+    
         try {
             // Fetch available slots for the scholarship program
             const slotsResponse = await fetch(`/api/scholarshipProgram/scholarships/${scholarshipId}/available-slots`);
@@ -59,7 +59,7 @@ export default function ViewApplicationDetails() {
                 throw new Error('Failed to fetch available slots');
             }
             const slotsData = await slotsResponse.json();
-
+    
             // Check if there are available slots
             if (slotsData.availableSlots <= 0) {
                 setError('No available slots in the scholarship program.');
@@ -67,7 +67,7 @@ export default function ViewApplicationDetails() {
                 setShowSnackbar(true);
                 return;
             }
-
+    
             // Approve the application
             const response = await fetch(`/api/scholarshipProgram/applications/${applicationId}/status`, {
                 method: 'PATCH',
@@ -76,34 +76,34 @@ export default function ViewApplicationDetails() {
                 },
                 body: JSON.stringify({ applicationStatus: 'Approved' })
             });
-
+    
             if (!response.ok) {
                 throw new Error('Approval failed');
             }
-
+    
             const data = await response.json();
             console.log('Application approved:', data);
-
+    
             // Update the approvedScholar field in the scholarshipProgram table
-            const updateScholarResponse = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipId}/approve-scholar/${applicant}`, {
+            const updateScholarResponse = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipId}/approve-scholar/${applicantId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 }
             });
-
+    
             if (!updateScholarResponse.ok) {
                 throw new Error('Updating approved scholar failed');
             }
-
+    
             console.log('Approved scholar updated successfully');
-
+    
             // Fetch updated application details to reflect the new status
             await fetchApplicationDetails();
-
+    
             setSuccessMessage('Application approved successfully!');
             setShowSnackbar(true);
-
+    
         } catch (error) {
             console.error('Error approving application:', error);
             setError('Failed to approve application.');
@@ -111,10 +111,10 @@ export default function ViewApplicationDetails() {
             setShowSnackbar(true);
         }
     };
-
-    const handleReject = async (applicationId, applicant, rejectionNote, allowResubmission) => {
+    
+    const handleReject = async (applicationId, applicantId, rejectionNote, allowResubmission) => {
         console.log(`Starting rejection process for application ID: ${applicationId}`);
-
+    
         try {
             const response = await fetch(`/api/scholarshipProgram/applications/${applicationId}/status`, {
                 method: 'PATCH',
@@ -127,46 +127,36 @@ export default function ViewApplicationDetails() {
                     allowResubmission: allowResubmission // Use the allowResubmission parameter
                 })
             });
-
+    
             if (!response.ok) {
                 throw new Error('Rejection failed');
             }
-
+    
             const data = await response.json();
             console.log('Application rejected:', data);
-
-            // // Create a notification
-            // const notificationResponse = await fetch(`/api/notification/notifications/create`, {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify({
-            //         applicantId: applicant, // Pass the applicant's ID as recipientId
-            //         senderId: currentUser._id, // Pass the current user's ID as senderId
-            //         scholarshipProgramId: application.scholarshipProgram._id, // Pass the scholarship program ID
-            //         message: `Your application has been rejected. Reason: ${rejectionNote}. ${allowResubmission ? 'Please update and resubmit your application.' : ''}` // Notification message
-            //     })
-            // });
-
-            // if (!notificationResponse.ok) {
-            //     throw new Error('Notification creation failed');
-            // }
-
-            // console.log('Notification created successfully');
-
+    
             // Fetch updated application details to reflect the new status
             await fetchApplicationDetails();
-
+    
             setSuccessMessage('Application rejected successfully.');
             setShowSnackbar(true);
-
+    
         } catch (error) {
             console.error('Error rejecting application:', error);
             setError('Failed to reject application.');
             setSuccessMessage('Failed to reject application.');
             setShowSnackbar(true);
         }
+    };
+    
+    const confirmReject = () => {
+        handleReject(application._id, application.applicant._id, rejectionNote, allowResubmission);
+        closeRejectModal();
+    };
+    
+    const confirmApprove = () => {
+        handleApprove(application._id, application.applicant._id, application.scholarshipProgram._id);
+        closeApproveModal();
     };
 
     const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
@@ -187,16 +177,6 @@ export default function ViewApplicationDetails() {
 
     const closeApproveModal = () => {
         setIsApproveModalOpen(false);
-    };
-
-    const confirmReject = () => {
-        handleReject(application._id, application.applicant, rejectionNote, allowResubmission);
-        closeRejectModal();
-    };
-
-    const confirmApprove = () => {
-        handleApprove(application._id, application.applicant, application.scholarshipProgram._id);
-        closeApproveModal();
     };
 
     const closeSnackbar = () => setShowSnackbar(false);
@@ -221,7 +201,7 @@ export default function ViewApplicationDetails() {
             <main className={`flex-grow bg-[#f8f8fb] transition-all duration-200 ease-in-out ${sidebarOpen ? 'ml-64' : ''}`}>
                 <ProviderHeaderSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
                 <div className="max-w-6xl px-24 mx-auto my-20">
-                    <div className='my-8 flex gap-2 items-center font-medium'>
+                    <div className='my-8 flex gap-2 items-center'>
                         <Link
                             to="#"
                             onClick={(e) => {
@@ -234,9 +214,10 @@ export default function ViewApplicationDetails() {
                             <span>{application.scholarshipProgram.title}</span>
                         </Link>
                         <IoMdArrowDropdown className='-rotate-90 text-4xl text-blue-600' />
-                        <div className='bg-white border rounded-md px-6 py-2 shadow'>
-                            <span className='text-blue-600 font-bold'>
-                                {application.firstName} {application.lastName}
+                        <div className='bg-white border rounded-md px-6 py-2 shadow flex items-center gap-2'>
+                            <FaUser className='text-blue-600' /> {/* Add the FaUser icon */}
+                            <span className='text-blue-600'>
+                                {application.applicant.applicantDetails.firstName} {application.applicant.applicantDetails.lastName}
                             </span>
                         </div>
                     </div>

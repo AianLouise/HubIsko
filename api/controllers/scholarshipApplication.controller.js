@@ -12,73 +12,27 @@ export const test = (req, res) => {
 export const createScholarshipApplication = async (req, res) => {
     try {
         const {
-            firstName,
-            lastName,
-            middleName,
-            nameExtension,
-            birthdate,
-            gender,
-            bloodType,
-            civilStatus,
-            maidenName,
-            spouseName,
-            spouseOccupation,
-            religion,
-            height,
-            weight,
-            birthplace,
-            email,
-            contactNumber,
-            addressDetails,
-            region,
-            province,
-            city,
-            barangay,
+            applicant,
             father,
             mother,
             guardian,
-            education,
             relatives,
             workExperience,
             skillsAndQualifications,
             documents,
             scholarshipProgram,
-            applicant,
         } = req.body;
 
         const newApplication = new ScholarshipApplication({
-            firstName,
-            lastName,
-            middleName,
-            nameExtension,
-            birthdate,
-            gender,
-            bloodType,
-            civilStatus,
-            maidenName,
-            spouseName,
-            spouseOccupation,
-            religion,
-            height,
-            weight,
-            birthplace,
-            email,
-            contactNumber,
-            addressDetails,
-            region,
-            province,
-            city,
-            barangay,
+            applicant,
             father,
             mother,
             guardian,
-            education,
             relatives,
             workExperience,
             skillsAndQualifications,
             documents,
             scholarshipProgram,
-            applicant,
         });
 
         await newApplication.save();
@@ -105,9 +59,9 @@ export const createScholarshipApplication = async (req, res) => {
             senderId: applicant, // The student is the sender
             scholarshipId: scholarshipProgram,
             type: 'application',
-            message: `${firstName} ${lastName} has submitted a scholarship application for the ${scholarshipProgramDetails.title}.`,
+            message: `${applicantDetails.firstName} ${applicantDetails.lastName} has submitted a scholarship application for the ${scholarshipProgramDetails.title}.`,
             recipientName: providerDetails.scholarshipProviderDetails.organizationName, // Save provider's organization name as recipientName
-            senderName: `${applicantDetails.applicantDetails.firstName} ${applicantDetails.applicantDetails.lastName}`, // Save applicant's name as senderName
+            senderName: `${applicantDetails.firstName} ${applicantDetails.lastName}`, // Save applicant's name as senderName
         });
 
         await notification.save();
@@ -142,7 +96,9 @@ export const getScholarshipApplications = async (req, res) => {
 export const getApplicationDetailsById = async (req, res) => {
     try {
         const { id } = req.params; // Extract applicationId from the URL parameters
-        const application = await ScholarshipApplication.findById(id).populate('scholarshipProgram');
+        const application = await ScholarshipApplication.findById(id)
+            .populate('scholarshipProgram')
+            .populate('applicant'); // Populate applicant with only the name field
 
         if (!application) {
             return res.status(404).json({ message: 'Application not found' });

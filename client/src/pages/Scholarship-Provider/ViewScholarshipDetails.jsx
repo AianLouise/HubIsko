@@ -55,6 +55,7 @@ export default function ViewScholarshipDetails() {
                 if (!response.ok) throw new Error('Network response was not ok');
                 const data = await response.json();
                 setApplications(data);
+                console.log('Applications:', data);
             } catch (error) {
                 console.error('Error fetching program applications:', error);
                 setError(error.message);
@@ -260,7 +261,7 @@ export default function ViewScholarshipDetails() {
                         {/* Message to share on forums after publishing */}
                         {showShareMessage && (
                             <div className="bg-indigo-100 text-indigo-700 p-4 mt-6 rounded-md shadow-md">
-                                <h3 className="text-xl font-bold">Share Your Scholarship Program!</h3>
+                                <h3 className="text-xl font-bold mb-2">Share Your Scholarship Program!</h3>
                                 <p>Congratulations, your scholarship program has been published successfully!</p>
                                 <p className="mt-2">Let others know about it by sharing it on the <Link to="/provider-forums" className="text-indigo-600 underline">forums</Link>.</p>
                                 <p>You can also discuss your program and connect with potential applicants!</p>
@@ -287,7 +288,7 @@ export default function ViewScholarshipDetails() {
                         {/* Ongoing Message */}
                         {showOngoingMessage && scholarshipProgram?.status === 'Published' && (
                             <div className="bg-teal-100 text-teal-700 p-4 mb-6 rounded-md shadow-md">
-                                <h2 className="text-2xl font-bold">Slots are Filled!</h2>
+                                <h2 className="text-2xl font-bold mb-2">Slots are Filled!</h2>
                                 <p>All slots for this scholarship program have been filled. You can now start the program.</p>
                                 <button
                                     className="mt-4 bg-teal-500 text-white px-4 py-2 rounded-md shadow hover:bg-teal-600"
@@ -328,15 +329,15 @@ export default function ViewScholarshipDetails() {
                         {/* Ongoing Status Message */}
                         {scholarshipProgram?.status === 'Ongoing' && (
                             <div className="bg-teal-100 text-teal-700 p-4 mb-6 rounded-md shadow-md">
-                                <h2 className="text-xl font-bold">Program is Ongoing!</h2>
-                                <p>The scholarship program is currently ongoing. Stay tuned for updates and announcements.</p>
+                                <h2 className="text-xl font-bold mb-2">Program is Ongoing!</h2>
+                                <p>The scholarship program is currently ongoing. Please monitor the progress and manage the applications as needed. Remember to make any necessary announcements for scholars.</p>
                             </div>
                         )}
 
                         {/* Rejected Status Message */}
                         {scholarshipProgram?.status === 'Rejected' && (
                             <div className="bg-red-100 text-red-700 p-4 mb-6 rounded-md shadow-md">
-                                <h2 className="text-xl font-bold mb-1">Application Rejected</h2>
+                                <h2 className="text-xl font-bold mb-2">Application Rejected</h2>
                                 <p>Unfortunately, your scholarship program application has been rejected.</p>
                                 {scholarshipProgram?.rejectReason && (
                                     <p className="mt-2"><strong>Reason:</strong> {scholarshipProgram.rejectReason}</p>

@@ -35,7 +35,7 @@ export default function ScholarApplication({ applications, error }) {
 
     const filteredApplications = applications
         .filter(application =>
-            `${application.firstName} ${application.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
+            `${application.applicant.applicantDetails.firstName} ${application.applicant.applicantDetails.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
         )
         .sort((a, b) => {
             if (a.applicationStatus.toLowerCase() === 'pending' && b.applicationStatus.toLowerCase() !== 'pending') {
@@ -104,7 +104,7 @@ export default function ScholarApplication({ applications, error }) {
                             ) : (
                                 filteredApplications.map(application => (
                                     <tr key={application._id} className="hover:bg-gray-100">
-                                        <td className="py-2 px-4 border-b text-center">{`${application.firstName} ${application.lastName}`}</td>
+                                        <td className="py-2 px-4 border-b text-center">{`${application.applicant.applicantDetails.firstName} ${application.applicant.applicantDetails.lastName}`}</td>
                                         <td className="py-2 px-4 border-b text-center">
                                             <span className={`inline-block w-3 h-3 mr-2 rounded-full ${getStatusColor(application.applicationStatus)}`}></span>
                                             {toSentenceCase(application.applicationStatus)}
@@ -112,7 +112,7 @@ export default function ScholarApplication({ applications, error }) {
                                         <td className="py-2 px-4 border-b text-center">{new Date(application.submissionDate).toLocaleDateString()}</td>
                                         <td className="py-2 px-4 border-b text-center">
                                             <Link to={`/applications/${application._id}`} className="text-white bg-blue-600 px-4 py-1 rounded-md hover:bg-blue-800">
-                                                View Details
+                                                View Application
                                             </Link>
                                         </td>
                                     </tr>

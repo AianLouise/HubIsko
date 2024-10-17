@@ -16,9 +16,12 @@ router.get('/applicant-details/:id', getApplicantDetails);
 router.patch('/applications/:id/status', updateApplicationStatus);
 
 router.patch('/scholarship-programs/:programId/approve-scholar/:userId', addApprovedScholar);
+
 router.get('/provider/:providerId/applications', getAllApplicationsForProvider);
 router.get("/:programId/required-documents", getRequiredDocuments);
+
 router.get('/:programId/approved-scholar-info', getApprovedScholarInfo);
+
 router.get('/:programId/has-applied/:userId', hasUserApplied);
 router.post('/scholarship-programs/:id/publish', publishScholarshipProgram);
 router.put('/update-status/:id', updateScholarshipStatus);

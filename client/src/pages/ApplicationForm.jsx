@@ -32,6 +32,7 @@ export default function ApplicationForm() {
                 }
                 const data = await response.json();
                 setApplication(data);
+                console.log(data);
             } catch (error) {
                 console.error('Error fetching application details:', error);
             }
@@ -54,36 +55,36 @@ export default function ApplicationForm() {
     };
 
     useEffect(() => {
-        if (application && application.region) {
+        if (application && application.applicant.applicantDetails.address.region) {
             regions().then((regionList) => {
-                const region = regionList.find((r) => r.region_code === application.region);
+                const region = regionList.find((r) => r.region_code === application.applicant.applicantDetails.address.region);
                 setRegionName(region ? region.region_name : '');
             });
         }
     }, [application]);
 
     useEffect(() => {
-        if (application && application.province) {
-            provinces(application.region).then((provinceList) => {
-                const province = provinceList.find((p) => p.province_code === application.province);
+        if (application && application.applicant.applicantDetails.address.province) {
+            provinces(application.applicant.applicantDetails.address.region).then((provinceList) => {
+                const province = provinceList.find((p) => p.province_code === application.applicant.applicantDetails.address.province);
                 setProvinceName(province ? province.province_name : '');
             });
         }
     }, [application]);
 
     useEffect(() => {
-        if (application && application.city) {
-            cities(application.province).then((cityList) => {
-                const city = cityList.find((c) => c.city_code === application.city);
+        if (application && application.applicant.applicantDetails.address.city) {
+            cities(application.applicant.applicantDetails.address.province).then((cityList) => {
+                const city = cityList.find((c) => c.city_code === application.applicant.applicantDetails.address.city);
                 setCityName(city ? city.city_name : '');
             });
         }
     }, [application]);
 
     useEffect(() => {
-        if (application && application.barangay) {
-            barangays(application.city).then((barangayList) => {
-                const barangay = barangayList.find((b) => b.brgy_code === application.barangay);
+        if (application && application.applicant.applicantDetails.address.barangay) {
+            barangays(application.applicant.applicantDetails.address.city).then((barangayList) => {
+                const barangay = barangayList.find((b) => b.brgy_code === application.applicant.applicantDetails.address.barangay);
                 setBarangayName(barangay ? barangay.brgy_name : '');
             });
         }
@@ -161,65 +162,85 @@ export default function ApplicationForm() {
                     )}
 
                     <div className="mt-4 p-2 sm:p-4 py-6">
-                        <div className="mb-4">
-                            <p className="text-lg font-semibold"><strong>Applicant Name:</strong> {`${application.firstName} ${application.middleName} ${application.lastName}`}</p>
-                            {/* <p><strong>Email:</strong> {application.email}</p> */}
+                        <div>
+                            <p className="text-lg font-semibold">
+                                <strong>Name:</strong> {`${application.applicant.applicantDetails.lastName}, ${application.applicant.applicantDetails.firstName} ${application.applicant.applicantDetails.middleName}`}
+                            </p>
+                            <p><strong>Email:</strong> {application.applicant.email}</p>
                             <p className="text-sm text-gray-600"><strong>Submitted Date:</strong> {new Date(application.createdAt).toLocaleDateString()}</p>
                         </div>
+                    </div>
 
-                        {/* Personal Details */}
-                        <div className="mb-4">
-                            <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Personal Details</h3>
-                            <div className="px-2 sm:px-4 pt-2 rounded-lg space-y-1">
-                                <p className="text-sm"><strong>Birthdate:</strong> {application.birthdate}</p>
-                                <p className="text-sm"><strong>Gender:</strong> {application.gender}</p>
-                                <p className="text-sm"><strong>Blood Type:</strong> {application.bloodType}</p>
-                                <p className="text-sm"><strong>Civil Status:</strong> {application.civilStatus}</p>
-                                {application.civilStatus === 'Married' && (
-                                    <div>
-                                        <p className="text-sm"><strong>Maiden Name:</strong> {application.maidenName}</p>
-                                        <p className="text-sm"><strong>Spouse Name:</strong> {application.spouseName}</p>
-                                        <p className="text-sm"><strong>Spouse Occupation:</strong> {application.spouseOccupation}</p>
-                                    </div>
-                                )}
-                                <p className="text-sm"><strong>Religion:</strong> {application.religion}</p>
-                                <p className="text-sm"><strong>Height:</strong> {application.height}</p>
-                                <p className="text-sm"><strong>Weight:</strong> {application.weight}</p>
-                                <p className="text-sm"><strong>Birthplace:</strong> {application.birthplace}</p>
-                                <p className="text-sm"><strong>Contact Number:</strong> {application.contactNumber}</p>
-                                <p className="text-sm">
-                                    <strong>Address:</strong> {`${application.addressDetails}, ${barangayName}, ${cityName}, ${provinceName}, ${regionName}`}
-                                </p>
-                            </div>
+                    {/* Personal Details */}
+                    <div className="p-2 sm:p-4 py-6">
+                        <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Personal Details</h3>
+                        <div className="px-2 sm:px-4 pt-2 rounded-lg space-y-1">
+                            <p className="text-sm"><strong>Birthdate:</strong> {application.applicant.applicantDetails.birthdate}</p>
+                            <p className="text-sm"><strong>Gender:</strong> {application.applicant.applicantDetails.gender}</p>
+                            <p className="text-sm"><strong>Blood Type:</strong> {application.applicant.applicantDetails.bloodType}</p>
+                            <p className="text-sm"><strong>Civil Status:</strong> {application.applicant.applicantDetails.civilStatus}</p>
+                            {application.applicant.applicantDetails.civilStatus === 'Married' && (
+                                <div>
+                                    <p className="text-sm"><strong>Maiden Name:</strong> {application.applicant.applicantDetails.maidenName}</p>
+                                    <p className="text-sm"><strong>Spouse Name:</strong> {application.applicant.applicantDetails.spouseName}</p>
+                                    <p className="text-sm"><strong>Spouse Occupation:</strong> {application.applicant.applicantDetails.spouseOccupation}</p>
+                                </div>
+                            )}
+                            <p className="text-sm"><strong>Religion:</strong> {application.applicant.applicantDetails.religion}</p>
+                            <p className="text-sm"><strong>Height:</strong> {application.applicant.applicantDetails.height}</p>
+                            <p className="text-sm"><strong>Weight:</strong> {application.applicant.applicantDetails.weight}</p>
+                            <p className="text-sm"><strong>Birthplace:</strong> {application.applicant.applicantDetails.birthplace}</p>
+                            <p className="text-sm"><strong>Contact Number:</strong> {application.applicant.applicantDetails.contactNumber}</p>
+                            <p className="text-sm">
+                                <strong>Address:</strong> {`${application.applicant.applicantDetails.address.addressDetails}, ${barangayName}, ${cityName}, ${provinceName}, ${regionName}`}
+                            </p>
                         </div>
                     </div>
 
                     {/* Education Details */}
-                    <div className="p-2 sm:p-4">
+                    <div className="p-2 sm:p-4 py-6">
                         <div className="my-2">
                             <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Educational Background</h3>
                             <div className="px-2 sm:px-4 pt-2 rounded-lg space-y-1">
-                                <p className="text-sm mb-2"><strong>Elementary:</strong> {application.education?.elementary?.school} ({application.education?.elementary?.yearGraduated})</p>
-                                <p className="text-sm mb-2"><strong>Junior High School:</strong> {application.education?.juniorHighSchool?.school} ({application.education?.juniorHighSchool?.yearGraduated})</p>
-                                <p className="text-sm mb-2"><strong>Senior High School:</strong> {application.education?.seniorHighSchool?.school} ({application.education?.seniorHighSchool?.yearGraduated})</p>
-                                <p className="text-sm"><strong>College:</strong> {application.education?.college?.school} - {application.education?.college?.course}</p>
+                                <p className="text-sm mb-2"><strong>Elementary:</strong> {application.applicant.applicantDetails.education?.elementary?.school} ({application.applicant.applicantDetails.education?.elementary?.yearGraduated})</p>
+                                <p className="text-sm mb-2"><strong>Junior High School:</strong> {application.applicant.applicantDetails.education?.juniorHighSchool?.school} ({application.applicant.applicantDetails.education?.juniorHighSchool?.yearGraduated})</p>
+                                <p className="text-sm mb-2"><strong>Senior High School:</strong> {application.applicant.applicantDetails.education?.seniorHighSchool?.school} ({application.applicant.applicantDetails.education?.seniorHighSchool?.yearGraduated})</p>
+                                <p className="text-sm"><strong>College:</strong> {application.applicant.applicantDetails.education?.college?.school} - {application.applicant.applicantDetails.education?.college?.course}</p>
                             </div>
                         </div>
                     </div>
 
-                    <div className="mt-4 p-2 sm:p-4 py-6">
+                    <div className="p-2 sm:p-4 py-6">
                         <div className="my-2">
                             <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Family Details</h3>
                             <div className="px-2 sm:px-4 pt-2 rounded-lg shadow-s">
-                                <p className="text-sm mb-2"><strong>Father:</strong> {`${application.father?.firstName} ${application.father?.middleName} ${application.father?.lastName}`} (Occupation: {application.father?.occupation})</p>
-                                <p className="text-sm mb-2"><strong>Mother:</strong> {`${application.mother?.firstName} ${application.mother?.middleName} ${application.mother?.lastName}`} (Occupation: {application.mother?.occupation})</p>
-                                <p className="text-sm"><strong>Guardian:</strong> {application.guardian ? `${application.guardian?.firstName} ${application.guardian?.middleName} ${application.guardian?.lastName}` : "N/A"}</p>
+                                {application.guardian.firstName && !application.father.firstName && !application.mother.firstName ? (
+                                    <p className="text-sm">
+                                        <strong>Guardian:</strong> {`${application.guardian.firstName} ${application.guardian.middleName} ${application.guardian.lastName}`} (Occupation: {application.guardian.occupation})
+                                    </p>
+                                ) : (
+                                    <>
+                                        {application.father.firstName && (
+                                            <p className="text-sm mb-2">
+                                                <strong>Father:</strong> {`${application.father.firstName} ${application.father.middleName} ${application.father.lastName}`} (Occupation: {application.father.occupation})
+                                            </p>
+                                        )}
+                                        {application.mother.firstName && (
+                                            <p className="text-sm mb-2">
+                                                <strong>Mother:</strong> {`${application.mother.firstName} ${application.mother.middleName} ${application.mother.lastName}`} (Occupation: {application.mother.occupation})
+                                            </p>
+                                        )}
+                                    </>
+                                )}
+                                {!application.father.firstName && !application.mother.firstName && !application.guardian.firstName && (
+                                    <p className="text-sm">No family details available.</p>
+                                )}
                             </div>
                         </div>
                     </div>
 
                     {application.workExperience && application.workExperience.length > 0 && (
-                        <div className="mt-4 p-2 sm:p-4">
+                        <div className="p-2 sm:p-4">
                             <div className="my-2">
                                 <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Work Experiences</h3>
                                 <div className="px-2 sm:px-4 pt-2 rounded-lg">
@@ -240,7 +261,7 @@ export default function ApplicationForm() {
                     )}
 
                     {application.skillsAndQualifications && application.skillsAndQualifications.length > 0 && (
-                        <div className="mt-4 p-2 sm:p-4">
+                        <div className="p-2 sm:p-4">
                             <div className="my-2">
                                 <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Skills and Qualifications</h3>
                                 <div className="px-2 sm:px-4 pt-2 rounded-lg">
@@ -257,7 +278,7 @@ export default function ApplicationForm() {
                         </div>
                     )}
 
-                    <div className="mt-4 p-2 sm:p-4">
+                    <div className="p-2 sm:p-4">
                         <div className="my-2">
                             <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Documents</h3>
                             <div className="px-2 sm:px-4 pt-2">

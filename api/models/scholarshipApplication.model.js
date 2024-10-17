@@ -2,93 +2,20 @@ import mongoose from 'mongoose';
 
 // Main schema for Scholarship Application
 const scholarshipApplicationSchema = new mongoose.Schema({
-    firstName: {
-        type: String,
-        required: false,
+    scholarshipProgram: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ScholarshipProgram',
+        required: true
     },
-    lastName: {
+    applicationStatus: {
         type: String,
-        required: false,
+        enum: ['Pending', 'Approved', 'Rejected', 'Completed'],
+        default: 'Pending',
     },
-    middleName: {
-        type: String,
-        required: false,
-    },
-    nameExtension: {
-        type: String,
-        required: false,
-      },
-    birthdate: {
-        type: String,
-        required: false,
-    },
-    gender: {
-        type: String,
-        required: false,
-    },
-    bloodType: {
-        type: String,
-        required: false,
-    },
-    civilStatus: {
-        type: String,
-        required: false,
-    },
-    maidenName: {
-        type: String,
-        required: false,
-    },
-    spouseName: {
-        type: String,
-        required: false,
-    },
-    spouseOccupation: {
-        type: String,
-        required: false,
-    },
-    religion: {
-        type: String,
-        required: false,
-    },
-    height: {
-        type: Number,
-        required: false,
-    },
-    weight: {
-        type: Number,
-        required: false,
-    },
-    birthplace: {
-        type: String,
-        required: false,
-    },
-    email: {
-        type: String,
-        required: false,
-    },
-    contactNumber: {
-        type: String,
-        required: false,
-    },
-    addressDetails: {
-        type: String,
-        required: false,
-    },
-    region: {
-        type: String,
-        required: false,
-    },
-    province: {
-        type: String,
-        required: false,
-    },
-    city: {
-        type: String,
-        required: false,
-    },
-    barangay: {
-        type: String,
-        required: false,
+    applicant: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     },
     father: {
         firstName: {
@@ -180,64 +107,6 @@ const scholarshipApplicationSchema = new mongoose.Schema({
             required: false,
         }
     },
-    education: {
-        elementary: {
-            school: {
-                type: String,
-                required: false,
-            },
-            award: {
-                type: String,
-                required: false,
-            },
-            yearGraduated: {
-                type: Number,
-                required: false,
-            }
-        },
-        juniorHighSchool: {
-            school: {
-                type: String,
-                required: false,
-            },
-            award: {
-                type: String,
-                required: false,
-            },
-            yearGraduated: {
-                type: Number,
-                required: false,
-            }
-        },
-        seniorHighSchool: {
-            school: {
-                type: String,
-                required: false,
-            },
-            award: {
-                type: String,
-                required: false,
-            },
-            yearGraduated: {
-                type: Number,
-                required: false,
-            }
-        },
-        college: {
-            school: {
-                type: String,
-                required: false,
-            },
-            course: {
-                type: String,
-                required: false,
-            },
-            yearGraduated: {
-                type: Number,
-                required: false,
-            }
-        }
-    },
     relatives: [{
         name: {
             type: String,
@@ -288,21 +157,6 @@ const scholarshipApplicationSchema = new mongoose.Schema({
         type: Map,
         of: String,
         required: false,
-    },
-    scholarshipProgram: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'ScholarshipProgram',
-        required: true
-    },
-    applicant: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Applicant',
-        required: true
-    },
-    applicationStatus: {
-        type: String,
-        enum: ['Pending', 'Approved', 'Rejected', 'Completed'], // Updated to sentence case
-        default: 'Pending', // Updated to sentence case
     },
     submissionDate: {
         type: Date, default: Date.now
