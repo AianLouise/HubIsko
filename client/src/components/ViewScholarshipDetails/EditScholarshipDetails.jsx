@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import CustomNotification from '../../components/CustomNotification';
+import { FaArrowLeft } from 'react-icons/fa6';
 
 export default function EditScholarshipDetails() {
     const id = useParams();
@@ -142,7 +143,7 @@ export default function EditScholarshipDetails() {
     }, []);
 
     return (
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col">
             {notification.message && (
                 <CustomNotification
                     message={notification.message}
@@ -150,6 +151,25 @@ export default function EditScholarshipDetails() {
                     onClose={() => setNotification({ message: '', type: '' })}
                 />
             )}
+            <div className="my-8 text-center relative">
+                <button
+                    type="button"
+                    onClick={() => navigate(-1)}
+                    className="absolute left-10 flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                >
+                    <FaArrowLeft className="mr-2" />
+                    <span>Back</span>
+                </button>
+                <div className="inline-block">
+                    <h2 className="text-3xl font-extrabold text-blue-600">
+                        Edit Scholarship Details
+                    </h2>
+                    <p className="text-sm font-normal text-gray-500 mt-2">
+                        Update the scholarship information below to ensure all details are accurate and up-to-date.
+                    </p>
+                </div>
+            </div>
+
             <form onSubmit={handleSaveChanges}>
                 <div className='bg-white p-8 py-12 flex flex-col rounded-md border shadow'>
                     <h2 className="text-2xl font-bold mb-4 border-b-2 pb-4">Scholarship Details</h2>

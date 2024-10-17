@@ -6,6 +6,7 @@ import { MdOutlineRefresh } from 'react-icons/md';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useParams, useNavigate } from 'react-router-dom';
 import CustomNotification from '../../components/CustomNotification';
+import { FaArrowLeft } from 'react-icons/fa';
 
 export default function EditScholarshipWebView() {
     const id = useParams();
@@ -242,13 +243,23 @@ export default function EditScholarshipWebView() {
                     />
                 )}
                 <div className='border-b py-8'>
-                    <div className="text-center my-8">
-                        <h2 className="text-3xl font-extrabold text-blue-600">
-                            Edit Scholarship Details
-                        </h2>
-                        <p className="text-sm font-normal text-gray-500 mt-2">
-                            Update the scholarship information below to ensure all details are accurate and up-to-date.
-                        </p>
+                    <div className="my-8 text-center relative">
+                        <button
+                            type="button"
+                            onClick={() => navigate(-1)}
+                            className="absolute left-10 flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                        >
+                            <FaArrowLeft className="mr-2" />
+                            <span>Back</span>
+                        </button>
+                        <div className="inline-block">
+                            <h2 className="text-3xl font-extrabold text-blue-600">
+                                Edit Scholarship Web View
+                            </h2>
+                            <p className="text-sm font-normal text-gray-500 mt-2">
+                                Update the scholarship web view information below to ensure all details are accurate and up-to-date.
+                            </p>
+                        </div>
                     </div>
 
                     <div className='flex flex-row items-center mx-auto max-w-6xl gap-10 px-24'>
