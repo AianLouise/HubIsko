@@ -84,6 +84,22 @@ export default function EditScholarshipWebView() {
         }
     }, [programDetails]);
 
+    const handleAdd = () => {
+        const newSection = { id: Date.now(), title: 'New Section', content: 'New Content' };
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            sections: [...prevFormData.sections, newSection]
+        }));
+    };
+
+    const handleDelete = (id) => {
+        console.log('Deleting section with id:', id); // Debugging line
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            sections: prevFormData.sections.filter(section => section._id !== id)
+        }));
+    };
+
     // Firebase storage reference
     const storage = getStorage();
 
@@ -349,6 +365,13 @@ export default function EditScholarshipWebView() {
                                             onChange={(e) => handleSectionChange(index, 'title', e.target.value)}
                                             className='font-bold text-xl text-white bg-blue-600 rounded-t-md w-full'
                                         />
+                                        <button
+                                            type="button"
+                                            onClick={() => handleDelete(section._id)}
+                                            className='ml-4 px-4 py-2 bg-red-600 text-white rounded-md'
+                                        >
+                                            Delete
+                                        </button>
                                     </div>
                                     <textarea
                                         value={section.content}
@@ -357,6 +380,12 @@ export default function EditScholarshipWebView() {
                                     />
                                 </div>
                             ))}
+
+                            <div className='flex justify-center'>
+                                <button type="button" onClick={handleAdd} className='mt-4 px-6 py-2 w-[200px] hover:w-full hover:bg-blue-800 transition-all ease-in-out duration-500 bg-blue-600 text-white rounded-md'>
+                                    Add Section
+                                </button>
+                            </div>
                         </div>
 
                         {/* FAQ Section */}
