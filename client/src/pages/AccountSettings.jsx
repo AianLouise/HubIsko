@@ -19,9 +19,18 @@ export default function AccountSettings() {
             <Header />
             <AccountManagement />
             <div className='max-w-[950px] mx-auto flex flex-col gap-10 pt-10 text-sm lg:text-base py-10'>
-                <UpdateProfile />
-                <ChangePassword />
-                <ChangeEmail />
+                <div className="flex flex-col gap-5">
+                    <h2 className="text-lg lg:text-lg font-bold text-blue-700">
+                        Welcome to your account settings
+                    </h2>
+                    <p className="text-base lg:text-base text-slate-600 mb-6">
+                        Here you can view and update your profile details, change your password, and update your email address.
+                        Please ensure all information is accurate and up-to-date.
+                    </p>
+                    <UpdateProfile />
+                    <ChangePassword />
+                    <ChangeEmail />
+                </div>
             </div>
         </div>
     );
