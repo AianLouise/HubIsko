@@ -14,7 +14,7 @@ import { BsChatLeftTextFill } from "react-icons/bs";
 import { IoPersonCircleSharp, IoInformationCircle } from "react-icons/io5";
 import { useLocation } from 'react-router-dom';
 import { useRef } from 'react';
-import NewLogo from '../assets/NewLogoClean.png';
+import NewLogo from '../assets/NewLogo.png';
 
 export default function Header() {
   const dispatch = useDispatch();

@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from 'react-icons/fa';
+import logo from '../assets/NewLogo.png'; // Adjust the path to your logo file
 
 export default function Footer() {
   return (
@@ -8,9 +9,12 @@ export default function Footer() {
         {/* Footer Content */}
         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center">
           {/* Left Section: Logo and Info */}
-          <div className="text-center lg:text-left mb-6 lg:mb-0">
-            <h1 className="text-2xl font-bold mb-2">HubIsko</h1>
-            <p>&copy; {new Date().getFullYear()} All rights reserved.</p>
+          <div className="text-center lg:text-left mb-6 lg:mb-0 flex items-center justify-center lg:justify-start">
+            <img src={logo} alt="HubIsko Logo" className="w-10 h-10 mr-2 filter invert brightness-0" />
+            <div>
+              <h1 className="text-2xl font-bold mb-2">HubIsko</h1>
+              <p>&copy; {new Date().getFullYear()} All rights reserved.</p>
+            </div>
           </div>
 
           {/* Center Section: Links */}
