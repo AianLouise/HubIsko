@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
 import ForumsIcon from '../../assets/ForumsIcon.png';
+import { FiSearch } from 'react-icons/fi';
 
 export default function Forums() {
     useEffect(() => {
@@ -106,11 +107,10 @@ export default function Forums() {
                         </div>
 
                         <div className='flex flex-row lg:items-center lg:justify-center gap-4'>
-
                             <select
                                 name="postFilter"
                                 id="postFilter"
-                                className="bg-white border rounded-lg p-3 w-60 font-bold text-left hidden lg:block"
+                                className="bg-white border rounded-lg p-3 h-12 w-60 text-left hidden lg:block"
                                 aria-label="Filter posts by type"
                             >
                                 <option value="all">All posts</option>
@@ -123,25 +123,28 @@ export default function Forums() {
                                 </div>
                             )}
 
-
                             <button
                                 onClick={handleCreatePostClick}
-                                className="flex gap-2 w-full lg:w-[187.062px] mx-2 lg:mx-0 items-center lg:justify-center bg-blue-600 p-3 rounded-md border hover:bg-blue-800 transition ease-in-out"
+                                className="flex gap-2 w-full lg:w-[187.062px] mx-2 lg:mx-0 items-center lg:justify-center bg-blue-600 p-3 h-12 rounded-md border hover:bg-blue-800 transition ease-in-out"
                             >
                                 <FaPlus className="w-5 h-5 text-white" />
                                 <span className="font-medium text-white">Create a New post</span>
                             </button>
-
                         </div>
 
                         <div className='hidden lg:block'>
-                            <input
-                                type="text"
-                                placeholder='Search Posts'
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className='border-2 p-2 px-6 w-full text-lg font-medium rounded-md focus:outline-blue-400'
-                            />
+                            <div className='relative'>
+                                <input
+                                    type="text"
+                                    placeholder='Search Posts'
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className='border p-3 h-12 w-full font-medium rounded-md focus:outline-blue-400 pr-10'
+                                />
+                                <button className='absolute right-2 top-1/2 transform -translate-y-1/2 text-blue-600'>
+                                    <FiSearch className="h-6 w-6" />
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -149,90 +152,89 @@ export default function Forums() {
                 {/* Forum Posts */}
                 <div className='max-w-6xl lg:px-24 px-2 mx-auto mt-10 lg:mt-20'>
 
-
                     {/* <div className='flex gap-2 items-center pb-2 font-bold text-lg border-b mb-8'>
-            <FaStar className='text-blue-600' />
-            Featured Posts
-          </div>
+                            <FaStar className='text-blue-600' />
+                            Featured Posts
+                        </div>
 
-          <div className='grid lg:grid-cols-2 gap-2'>
+                        <div className='grid lg:grid-cols-2 gap-2'>
 
-            <div className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow'>
-              <div className='flex flex-row gap-4 mb-2'>
-                <div className='bg-blue-600 rounded-full w-12 h-12 text-white flex items-center justify-center'>
-                  <FaWrench className='w-6 h-6' />
-                </div>
-                <div className='flex flex-col'>
-                  <span className='font-medium'>Admin</span>
-                  <span className='text-sm text-slate-500'>July 10, 2024</span>
-                </div>
-              </div>
+                            <div className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow'>
+                            <div className='flex flex-row gap-4 mb-2'>
+                                <div className='bg-blue-600 rounded-full w-12 h-12 text-white flex items-center justify-center'>
+                                <FaWrench className='w-6 h-6' />
+                                </div>
+                                <div className='flex flex-col'>
+                                <span className='font-medium'>Admin</span>
+                                <span className='text-sm text-slate-500'>July 10, 2024</span>
+                                </div>
+                            </div>
 
-              <span className='font-bold'>Frequently Asked Questions (FAQs)</span>
-              <span className='text-sm'>This Post contains Questions and Answers regarding forums and scholarship listing.</span>
-              <div className='border-t mt-2'>
-                <div className='flex flex-row justify-between mt-3 gap-2'>
-
-
-                  <div className='flex flex-row gap-2'>
-                    <div className='flex flex-row gap-1 px-2'>
-                      <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
-                      <span>123</span>
-                    </div>
-
-                    <div className='flex flex-row gap-1'>
-                      <BiCommentDots className='w-6 h-6 text-blue-600' />
-                      <span>10</span>
-                    </div>
-                  </div>
-
-                  <div className='flex flex-row gap-1 pr-2'>
-                    <FaRegEye className='w-6 h-6 text-blue-600' />
-                    <span>1.2k</span>
-                  </div>
-
-                </div>
-              </div>
-            </div>
+                            <span className='font-bold'>Frequently Asked Questions (FAQs)</span>
+                            <span className='text-sm'>This Post contains Questions and Answers regarding forums and scholarship listing.</span>
+                            <div className='border-t mt-2'>
+                                <div className='flex flex-row justify-between mt-3 gap-2'>
 
 
-            <div className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow'>
-              <div className='flex flex-row gap-4 mb-2'>
-                <div className='bg-blue-600 rounded-full w-12 h-12 text-white flex items-center justify-center'>
-                  <FaWrench className='w-6 h-6' />
-                </div>
-                <div className='flex flex-col'>
-                  <span className='font-medium'>Admin</span>
-                  <span className='text-sm text-slate-500'>July 10, 2024</span>
-                </div>
-              </div>
+                                <div className='flex flex-row gap-2'>
+                                    <div className='flex flex-row gap-1 px-2'>
+                                    <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
+                                    <span>123</span>
+                                    </div>
 
-              <span className='font-bold'>System Announcements</span>
-              <span className='text-sm'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Lorem ipsum dolor sit.</span>
-              <div className='border-t mt-2'>
-                <div className='flex flex-row justify-between mt-3 gap-2'>
+                                    <div className='flex flex-row gap-1'>
+                                    <BiCommentDots className='w-6 h-6 text-blue-600' />
+                                    <span>10</span>
+                                    </div>
+                                </div>
+
+                                <div className='flex flex-row gap-1 pr-2'>
+                                    <FaRegEye className='w-6 h-6 text-blue-600' />
+                                    <span>1.2k</span>
+                                </div>
+
+                                </div>
+                            </div>
+                            </div>
 
 
-                  <div className='flex flex-row gap-2'>
-                    <div className='flex flex-row gap-1 px-2'>
-                      <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
-                      <span>123</span>
-                    </div>
+                            <div className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow'>
+                            <div className='flex flex-row gap-4 mb-2'>
+                                <div className='bg-blue-600 rounded-full w-12 h-12 text-white flex items-center justify-center'>
+                                <FaWrench className='w-6 h-6' />
+                                </div>
+                                <div className='flex flex-col'>
+                                <span className='font-medium'>Admin</span>
+                                <span className='text-sm text-slate-500'>July 10, 2024</span>
+                                </div>
+                            </div>
 
-                    <div className='flex flex-row gap-1'>
-                      <BiCommentDots className='w-6 h-6 text-blue-600' />
-                      <span>10</span>
-                    </div>
-                  </div>
+                            <span className='font-bold'>System Announcements</span>
+                            <span className='text-sm'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Lorem ipsum dolor sit.</span>
+                            <div className='border-t mt-2'>
+                                <div className='flex flex-row justify-between mt-3 gap-2'>
 
-                  <div className='flex flex-row gap-1 pr-2'>
-                    <FaRegEye className='w-6 h-6 text-blue-600' />
-                    <span>1.2k</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> */}
+
+                                <div className='flex flex-row gap-2'>
+                                    <div className='flex flex-row gap-1 px-2'>
+                                    <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
+                                    <span>123</span>
+                                    </div>
+
+                                    <div className='flex flex-row gap-1'>
+                                    <BiCommentDots className='w-6 h-6 text-blue-600' />
+                                    <span>10</span>
+                                    </div>
+                                </div>
+
+                                <div className='flex flex-row gap-1 pr-2'>
+                                    <FaRegEye className='w-6 h-6 text-blue-600' />
+                                    <span>1.2k</span>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div> */}
 
                     <div className='flex gap-2 items-center border-b my-4 py-2'>
                         <FaNewspaper className='w-6 h-6 text-blue-600' />

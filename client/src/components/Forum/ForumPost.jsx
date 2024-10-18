@@ -300,16 +300,16 @@ export default function ForumPost() {
 
                     <div className='flex gap-1 mt-10 items-center'>
                         <Link to='/Forums'>
-                            <button className='bg-white border shadow px-4 py-1 mr-2 rounded-md hover:bg-slate-200 transition ease-in-out flex items-center gap-2'>
+                            <button className='bg-white border shadow px-4 py-1 mr-2 rounded-md hover:bg-slate-200 transition ease-in-out flex items-center gap-2 font-medium'>
                                 <MdForum className='text-blue-600' />
                                 Forums
                             </button>
                         </Link>
                         <IoMdArrowDropdown className='-rotate-90 text-2xl text-blue-600' />
-                        <button className='bg-white border shadow px-4 py-1 ml-2 rounded-md hover:bg-slate-200 transition ease-in-out flex items-center gap-2'>
+                        <div className='flex items-center gap-2 bg-white border shadow px-4 py-1 ml-2 rounded-md'>
                             <MdOutlineForum className='text-blue-600' />
-                            {post.title}
-                        </button>
+                            <span className='font-medium text-blue-600'>{post.title}</span>
+                        </div>
                     </div>
 
                     <div className='border shadow p-4 rounded-md bg-white'>
