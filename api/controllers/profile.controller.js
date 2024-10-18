@@ -129,6 +129,33 @@ export const editAddress = async (req, res) => {
     }
 };
 
+export const editEducation = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { education } = req.body; // Extract the education object from the request body
+
+        // Find the user by ID
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Update user's education information
+        if (education) {
+            user.applicantDetails.education = { ...user.applicantDetails.education, ...education };
+        }
+
+        // Save the updated user information
+        await user.save();
+
+        // Send the updated user information as a response
+        res.json({ message: 'Education updated successfully', user });
+    } catch (error) {
+        // Handle server errors
+        res.status(500).json({ message: 'Server error', error });
+    }
+};
+
 export const requestEmailUpdate = async (req, res) => {
     try {
         const userId = req.params.userId; // Ensure this matches your route parameter

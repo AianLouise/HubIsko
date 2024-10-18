@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
 import { RiEditFill, RiSaveFill, RiCloseFill } from "react-icons/ri";
 import { regions, provinces, cities, barangays } from 'select-philippines-address';
+import CustomNotification from "../CustomNotification";
 
 const AddressInformation = () => {
     const { currentUser } = useSelector((state) => state.user);
@@ -32,6 +33,7 @@ const AddressInformation = () => {
     const [selectedBarangay, setSelectedBarangay] = useState('');
 
     const [errors, setErrors] = useState({});
+    const [notification, setNotification] = useState(null);
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -140,6 +142,7 @@ const AddressInformation = () => {
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
+            setNotification({ type: 'error', message: 'Please fill out all required fields' });
             return;
         }
 
@@ -180,9 +183,25 @@ const AddressInformation = () => {
             });
             setErrors({}); // Clear errors after successful save
             setIsEditing(false);
+
+            // Show success notification
+            setNotification({
+                type: 'success',
+                message: 'Address updated successfully!'
+            });
         } catch (error) {
             console.error('Error updating address:', error);
+
+            // Show error notification
+            setNotification({
+                type: 'error',
+                message: 'Failed to update address. Please try again.'
+            });
         }
+    };
+
+    const handleCloseNotification = () => {
+        setNotification(null);
     };
 
     const inputBaseClasses = "block w-full p-2 rounded-lg border transition duration-200";
@@ -325,6 +344,13 @@ const AddressInformation = () => {
                     {errors.addressDetails && <p className="text-red-500 text-sm">{errors.addressDetails}</p>}
                 </div>
             </div>
+            {notification && (
+                <CustomNotification
+                    type={notification.type}
+                    message={notification.message}
+                    onClose={handleCloseNotification}
+                />
+            )}
         </div>
     );
 };
