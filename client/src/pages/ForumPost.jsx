@@ -26,6 +26,10 @@ export default function CreateForumPost() {
         }
     }, [currentUser, navigate]);
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    });
+
     return (
         <div className='flex flex-col min-h-screen'>
             <Header />
