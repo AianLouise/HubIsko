@@ -13,7 +13,6 @@ import { v4 as uuidv4 } from 'uuid'; // Import UUID library
 export default function CreateForumPost() {
     useTokenExpiry();
 
-
     const navigate = useNavigate();
     const { currentUser } = useSelector((state) => state.user);
 
@@ -35,6 +34,7 @@ export default function CreateForumPost() {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [submitTrigger, setSubmitTrigger] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
 
     const handleFileChange = (event) => {
         const files = Array.from(event.target.files);
@@ -64,9 +64,23 @@ export default function CreateForumPost() {
         }));
     };
 
+    const validateForm = () => {
+        const newErrors = {};
+        if (!formData.title) newErrors.title = 'Title is required';
+        if (!formData.content) newErrors.content = 'Content is required';
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSubmitTrigger(true);
+
+        if (!validateForm()) {
+            setLoading(false);
+            return;
+        }
+
         setLoading(true);
 
         const storage = getStorage();
@@ -122,9 +136,10 @@ export default function CreateForumPost() {
     return (
         <div className='flex flex-col min-h-screen'>
             <Header />
-            <main className='flex-grow bg-[#f8f8fb] no-scrollbar'>
+            <main className='flex-grow bg-[#f8f8fb] no-scrollbar h-screen flex items-center justify-center'>
                 <div className='max-w-3xl mx-auto px-4 py-10'>
                     <h1 className='text-3xl font-bold text-gray-800 mb-6 text-center'>Create a New Post</h1>
+                    <p className='text-center text-gray-600 mb-6'>Fill out the form below to create a new post. Make sure to provide a descriptive title and detailed content.</p>
                     <form onSubmit={handleSubmit} className='bg-white p-6 rounded-md shadow-md'>
                         <div className='mb-4'>
                             <label htmlFor="title" className='block text-lg font-medium text-gray-700 mb-2'>
@@ -139,6 +154,8 @@ export default function CreateForumPost() {
                                 className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500'
                                 placeholder="Enter the title of your post"
                             />
+                            {errors.title && <p className='text-sm text-red-500 mt-1'>{errors.title}</p>}
+                            <p className='text-sm text-gray-500 mt-1'>Provide a clear and concise title for your post.</p>
                         </div>
                         <div className='mb-4'>
                             <label htmlFor="content" className='block text-lg font-medium text-gray-700 mb-2'>
@@ -152,6 +169,8 @@ export default function CreateForumPost() {
                                 className='mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500'
                                 placeholder="Enter the content of your post"
                             />
+                            {errors.content && <p className='text-sm text-red-500 mt-1'>{errors.content}</p>}
+                            <p className='text-sm text-gray-500 mt-1'>Write the main content of your post here. Be as detailed as possible.</p>
                         </div>
                         <div className='mb-4 flex flex-col items-center'>
                             <div className='flex items-center'>
