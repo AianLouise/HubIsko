@@ -45,8 +45,27 @@ export default function Forums() {
         }
     };
 
-    const handlePostClick = (postId) => {
-        navigate(`/forums/post/${postId}`);
+      const handlePostClick = (postId) => {
+        if (!currentUser) {
+            setNotification('You must be logged in to view the post.');
+            setTimeout(() => setNotification(''), 3000);
+        } else {
+            switch (currentUser.role) {
+                case 'applicant':
+                    navigate(`/forums/post/${postId}`);
+                    break;
+                case 'scholarship_provider':
+                    navigate(`/provider/post/${postId}`);
+                    break;
+                case 'admin':
+                    navigate(`/admin/post/${postId}`);
+                    break;
+                default:
+                    setNotification('Invalid user role.');
+                    setTimeout(() => setNotification(''), 3000);
+                    break;
+            }
+        }
     };
 
     const handleCreatePostClick = () => {
@@ -54,7 +73,21 @@ export default function Forums() {
             setNotification('You must be logged in to create a new post.');
             setTimeout(() => setNotification(''), 3000);
         } else {
-            navigate('/forums/create-post');
+            switch (currentUser.role) {
+                case 'applicant':
+                    navigate('/forums/create-post');
+                    break;
+                case 'scholarship_provider':
+                    navigate('/provider/create-post');
+                    break;
+                case 'admin':
+                    navigate('/admin/create-post');
+                    break;
+                default:
+                    setNotification('Invalid user role.');
+                    setTimeout(() => setNotification(''), 3000);
+                    break;
+            }
         }
     };
 

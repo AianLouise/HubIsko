@@ -322,7 +322,7 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
 
                             <li>
                                 <Link
-                                    to={'/provider-forums'}
+                                    to={'/provider/forums'}
                                     className={`flex items-center gap-2 text-gray-800 py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white group ${location.pathname === '/provider-forums' ? 'bg-blue-600 text-white' : ''}`}
                                 >
                                     <MdForum className={`w-4 h-4 ${location.pathname === '/provider-forums' ? 'text-white' : 'text-blue-600'}`} />

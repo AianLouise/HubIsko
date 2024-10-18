@@ -201,9 +201,9 @@ export default function App() {
           <Route path="/provider-settings" element={<Settings />} />
           <Route path="/provider-profile/:id" element={<ProviderProfile />} />
 
-          <Route path="/provider-forums" element={<ProviderForums />} />
-          <Route path="/provider-forums/post/:postId" element={<ProviderForumDetail />} />
-          <Route path="/provider-create-forum-post" element={<ProviderCreateForumPost />} />
+          <Route path="/provider/forums" element={<ProviderForums />} />
+          <Route path="/provider/post/:postId" element={<ProviderForumDetail />} />
+          <Route path="/provider/create-post" element={<ProviderCreateForumPost />} />
 
 
           <Route path="/announcement/details/:announcementId" element={<AnnouncementDetails />} />

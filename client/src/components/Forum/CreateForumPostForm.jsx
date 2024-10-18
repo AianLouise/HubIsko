@@ -52,19 +52,19 @@ export default function CreateForumPostForm() {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = async (e) => {
+      const handleSubmit = async (e) => {
         e.preventDefault();
         setSubmitTrigger(true);
-
+    
         if (!validateForm()) {
             setLoading(false);
             return;
         }
-
+    
         setLoading(true);
-
+    
         const storage = getStorage();
-
+    
         // Upload files to Firebase and get the file URLs along with fileType and fileName
         const uploadedFiles = await Promise.all(selectedFiles.map(async (fileObj) => {
             const file = fileObj.file;
@@ -81,14 +81,14 @@ export default function CreateForumPostForm() {
                 fileName: fileName
             }; // Save the download URL, fileType, and fileName in the database
         }));
-
+    
         // Send post data to the backend
         const postData = {
             ...formData,
             author: currentUser._id,
             attachmentUrls: uploadedFiles // Save file paths in the database
         };
-
+    
         try {
             const response = await fetch('/api/forums/post', {
                 method: 'POST',
@@ -97,14 +97,29 @@ export default function CreateForumPostForm() {
                 },
                 body: JSON.stringify(postData)
             });
-
+    
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
+    
             const result = await response.json();
             console.log('Success:', result);
-            navigate('/forums');
+    
+            // Navigate based on user role
+            switch (currentUser.role) {
+                case 'applicant':
+                    navigate('/forums');
+                    break;
+                case 'scholarship_provider':
+                    navigate('/provider/forums');
+                    break;
+                case 'admin':
+                    navigate('/admin/posts');
+                    break;
+                default:
+                    console.error('Invalid user role.');
+                    break;
+            }
         } catch (error) {
             console.error('Error:', error);
         } finally {
