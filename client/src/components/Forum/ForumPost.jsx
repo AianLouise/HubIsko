@@ -87,6 +87,10 @@ export default function ForumPost() {
             await response.json();
             // Refresh the page
             fetchPostDetails();
+
+            // Clear the inputs
+            setCommentContent('');
+            setSelectedFiles([]);
         } catch (error) {
             console.error('Error adding reply:', error);
         } finally {

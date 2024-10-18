@@ -246,7 +246,7 @@ export default function Forums() {
                                     <img
                                         src={post.author.profilePicture || 'default-profile-pic-url'}
                                         alt={`${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}'s profile`}
-                                        className='w-12 h-12 rounded-full'
+                                        className='w-12 h-12 rounded-full object-cover'
                                     />
                                     <div className='flex flex-col'>
                                         <span className='font-medium'>

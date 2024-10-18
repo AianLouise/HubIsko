@@ -20,30 +20,6 @@ const CommentForm = ({
                 onChange={(e) => setCommentContent(e.target.value)}
                 required
             />
-            <div className='w-full flex justify-end items-center'>
-                <button
-                    type="button"
-                    className='bg-blue-600 p-3 rounded-md mx-2 hover:bg-blue-800 flex items-center justify-center'
-                    onClick={handleAttachmentClick}
-                >
-                    <AiOutlinePaperClip className='w-6 h-6 text-white' />
-                </button>
-                <input
-                    type="file"
-                    id="fileInput"
-                    className="hidden"
-                    accept=".jpg,.jpeg,.png,.gif,.pdf,.docx"
-                    multiple
-                    onChange={handleFileChange}
-                />
-                <button
-                    type="submit"
-                    className={`bg-blue-600 text-white p-3 rounded-md mx-2 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-800 transition ease-in-out'}`}
-                    disabled={loading}
-                >
-                    {loading ? 'Adding...' : 'Add Reply'}
-                </button>
-            </div>
 
             {selectedFiles.length > 0 && (
                 <div className="mt-4">
@@ -91,6 +67,31 @@ const CommentForm = ({
                     </ul>
                 </div>
             )}
+
+            <div className='w-full flex justify-end items-center mt-4'>
+                <button
+                    type="button"
+                    className='bg-blue-600 p-3 rounded-md mx-2 hover:bg-blue-800 flex items-center justify-center'
+                    onClick={handleAttachmentClick}
+                >
+                    <AiOutlinePaperClip className='w-6 h-6 text-white' />
+                </button>
+                <input
+                    type="file"
+                    id="fileInput"
+                    className="hidden"
+                    accept=".jpg,.jpeg,.png,.gif,.pdf,.docx"
+                    multiple
+                    onChange={handleFileChange}
+                />
+                <button
+                    type="submit"
+                    className={`bg-blue-600 text-white p-3 rounded-md mx-2 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-800 transition ease-in-out'}`}
+                    disabled={loading}
+                >
+                    {loading ? 'Adding...' : 'Add Reply'}
+                </button>
+            </div>
         </form>
     );
 };
