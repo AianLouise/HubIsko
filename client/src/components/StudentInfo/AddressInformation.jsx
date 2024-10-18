@@ -31,6 +31,8 @@ const AddressInformation = () => {
     const [selectedCity, setSelectedCity] = useState('');
     const [selectedBarangay, setSelectedBarangay] = useState('');
 
+    const [errors, setErrors] = useState({});
+
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
@@ -129,6 +131,18 @@ const AddressInformation = () => {
     };
 
     const handleSave = async () => {
+        const newErrors = {};
+        if (!selectedRegion || selectedRegion === '') newErrors.region = 'Region is required';
+        if (!selectedProvince || selectedProvince === '') newErrors.province = 'Province is required';
+        if (!selectedCity || selectedCity === '') newErrors.city = 'City is required';
+        if (!selectedBarangay || selectedBarangay === '') newErrors.barangay = 'Barangay is required';
+        if (!formData.applicantDetails.address.addressDetails) newErrors.addressDetails = 'Detailed address is required';
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
+
         console.log('Saving address:', formData.applicantDetails.address);
         try {
             const response = await fetch(`/api/profile/user/${userId}/address`, {
@@ -164,6 +178,7 @@ const AddressInformation = () => {
                     },
                 },
             });
+            setErrors({}); // Clear errors after successful save
             setIsEditing(false);
         } catch (error) {
             console.error('Error updating address:', error);
@@ -212,6 +227,9 @@ const AddressInformation = () => {
                             setProvinceList([]); // Reset on region change
                             setCityList([]);
                             setBarangayList([]);
+                            setSelectedProvince('');
+                            setSelectedCity('');
+                            setSelectedBarangay('');
                         }}
                         className={getInputClasses(isEditing)}
                         disabled={!isEditing}
@@ -223,6 +241,7 @@ const AddressInformation = () => {
                             </option>
                         ))}
                     </select>
+                    {errors.region && <p className="text-red-500 text-sm">{errors.region}</p>}
                 </div>
 
                 {/* Province Selector */}
@@ -234,6 +253,8 @@ const AddressInformation = () => {
                             setSelectedProvince(e.target.value);
                             setCityList([]);
                             setBarangayList([]);
+                            setSelectedCity('');
+                            setSelectedBarangay('');
                         }}
                         className={getInputClasses(isEditing)}
                         disabled={!isEditing}
@@ -245,6 +266,7 @@ const AddressInformation = () => {
                             </option>
                         ))}
                     </select>
+                    {errors.province && <p className="text-red-500 text-sm">{errors.province}</p>}
                 </div>
 
                 {/* City Selector */}
@@ -255,6 +277,7 @@ const AddressInformation = () => {
                         onChange={(e) => {
                             setSelectedCity(e.target.value);
                             setBarangayList([]);
+                            setSelectedBarangay('');
                         }}
                         className={getInputClasses(isEditing)}
                         disabled={!isEditing}
@@ -266,6 +289,7 @@ const AddressInformation = () => {
                             </option>
                         ))}
                     </select>
+                    {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
                 </div>
 
                 {/* Barangay Selector */}
@@ -284,6 +308,7 @@ const AddressInformation = () => {
                             </option>
                         ))}
                     </select>
+                    {errors.barangay && <p className="text-red-500 text-sm">{errors.barangay}</p>}
                 </div>
 
                 {/* Address Details */}
@@ -297,6 +322,7 @@ const AddressInformation = () => {
                         rows="4"
                         disabled={!isEditing}
                     />
+                    {errors.addressDetails && <p className="text-red-500 text-sm">{errors.addressDetails}</p>}
                 </div>
             </div>
         </div>
