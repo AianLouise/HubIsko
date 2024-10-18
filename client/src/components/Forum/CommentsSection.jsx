@@ -121,17 +121,17 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
                     <Link to={`/profile/${comment.author._id}`}>
                         <img
                             src={comment.author.profilePicture || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToiRnzzyrDtkmRzlAvPPbh77E-Mvsk3brlxQ&s'}
-                            alt={`${comment.author.username}'s profile`}
+                            alt={`${comment.author.applicantDetails.firstName}'s profile`}
                             className='w-10 h-10 mt-2 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
                         />
                     </Link>
                     {/* Comment container */}
                     <div className='flex flex-col bg-white border rounded-md w-full shadow'>
                         {/* Comment content */}
-                        <div className='flex flex-col'>
-                            <div className='pt-4'>
-                                <span className='p-4 text-lg font-bold'>{comment.author.username}</span>
-                                <span className='text-sm text-gray-500'>
+                        <div className='flex flex-col px-4 pt-4'>
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="text-lg font-semibold text-gray-700">{post.author.applicantDetails.firstName} {post.author.applicantDetails.lastName}</span>
+                                <span className="text-xs text-gray-500">
                                     {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
                                 </span>
                             </div>
@@ -226,7 +226,7 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
                         </div>
 
                         {/* Comment actions: likes, replies, views */}
-                        <div className='flex flex-row justify-between px-4 py-3 gap-2 mt-4'>
+                        <div className='flex flex-row justify-between px-4 py-3 gap-2'>
                             <div className='flex flex-row gap-2'>
                                 {/* Like button and count */}
                                 <div className='flex flex-row gap-1 px-2'>
@@ -266,12 +266,12 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
                                         {/* User avatar */}
                                         <img
                                             src={reply.author.profilePicture}
-                                            alt={`${reply.author.username}'s profile`}
+                                            alt={`${post.author.applicantDetails.firstName}'s profile`}
                                             className="w-10 h-10 rounded-full object-cover"
                                         />
                                         <div className="flex flex-col bg-white border border-gray-200 rounded-lg w-full shadow-sm p-4">
                                             <div className="flex justify-between items-center mb-2">
-                                                <span className="text-sm font-semibold text-gray-700">{reply.author.username}</span>
+                                                <span className="text-sm font-semibold text-gray-700">{post.author.applicantDetails.firstName} {post.author.applicantDetails.lastName}</span>
                                                 <span className="text-xs text-gray-500">
                                                     {formatDistanceToNow(new Date(reply.createdAt), { addSuffix: true })}
                                                 </span>

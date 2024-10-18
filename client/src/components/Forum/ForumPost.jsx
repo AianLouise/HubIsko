@@ -309,7 +309,7 @@ export default function ForumPost() {
                     </div>
 
                     <div className='border shadow p-4 rounded-md bg-white'>
-                                              <div className='flex gap-4'>
+                        <div className='flex gap-4'>
                             <Link to={`/profile/${post.author._id}`}>
                                 <img
                                     src={post.author.profilePicture}
