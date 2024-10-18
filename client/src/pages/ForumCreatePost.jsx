@@ -33,7 +33,7 @@ export default function CreateForumPost() {
     return (
         <div className='flex flex-col min-h-screen'>
             <Header />
-            <main className='flex-grow bg-[#f8f8fb] no-scrollbar h-screen flex items-center justify-center'>
+            <main className='flex-grow bg-[#f8f8fb] no-scrollbar flex items-center justify-center'>
                 <CreateForumPostForm />
             </main>
             <Footer />

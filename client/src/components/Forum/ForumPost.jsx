@@ -346,7 +346,7 @@ export default function ForumPost() {
                             {Array.isArray(post.attachmentUrls) && post.attachmentUrls.length > 0 && (
                                 <div className='p-4 border-t'>
                                     {/* Display images */}
-                                    <div className='grid grid-cols-2 gap-4'>
+                                    <div className={post.attachmentUrls.filter(att => att.fileType.startsWith('image/')).length === 1 ? 'flex justify-center' : 'grid grid-cols-2 gap-4'}>
                                         {post.attachmentUrls
                                             .filter(att => att.fileType.startsWith('image/'))
                                             .slice(0, 3)

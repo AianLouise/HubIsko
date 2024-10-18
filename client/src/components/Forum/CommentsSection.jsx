@@ -142,7 +142,7 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
                             {Array.isArray(comment.attachmentUrls) && comment.attachmentUrls.length > 0 && (
                                 <div className='p-4 border-t'>
                                     {/* Display images */}
-                                    <div className='grid grid-cols-2 gap-4'>
+                                    <div className={comment.attachmentUrls.filter(att => att.fileType.startsWith('image/')).length === 1 ? 'flex justify-center' : 'grid grid-cols-2 gap-4'}>
                                         {comment.attachmentUrls
                                             .filter(att => att.fileType.startsWith('image/'))
                                             .slice(0, 3)
