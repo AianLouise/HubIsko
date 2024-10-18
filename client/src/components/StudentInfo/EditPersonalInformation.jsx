@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RiEditFill, RiSaveFill, RiCloseFill } from "react-icons/ri";
 import CustomNotification from '../CustomNotification';
 
@@ -38,6 +38,7 @@ export default function EditPersonalInformation() {
             contactNumber: '',
         },
     });
+    const [errors, setErrors] = useState({}); // Initialize errors state
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -49,14 +50,13 @@ export default function EditPersonalInformation() {
 
                 const user = await response.json();
 
-                // Corrected syntax for setFormData
                 setFormData({
                     applicantDetails: {
                         firstName: user.applicantDetails.firstName,
                         middleName: user.applicantDetails.middleName,
                         lastName: user.applicantDetails.lastName,
                         nameExtension: user.applicantDetails.nameExtension,
-                        birthdate: formatDate(user.applicantDetails.birthdate), // If needed, format the date
+                        birthdate: formatDate(user.applicantDetails.birthdate),
                         gender: user.applicantDetails.gender,
                         bloodType: user.applicantDetails.bloodType,
                         civilStatus: user.applicantDetails.civilStatus,
@@ -76,7 +76,7 @@ export default function EditPersonalInformation() {
                         middleName: user.applicantDetails.middleName,
                         lastName: user.applicantDetails.lastName,
                         nameExtension: user.applicantDetails.nameExtension,
-                        birthdate: formatDate(user.applicantDetails.birthdate), // If needed, format the date
+                        birthdate: formatDate(user.applicantDetails.birthdate),
                         gender: user.applicantDetails.gender,
                         bloodType: user.applicantDetails.bloodType,
                         civilStatus: user.applicantDetails.civilStatus,
@@ -103,16 +103,68 @@ export default function EditPersonalInformation() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            applicantDetails: {
-                ...prevFormData.applicantDetails,
-                [name]: value,
-            },
-        }));
+        // Prevent negative numbers for height and weight
+        if ((name === 'height' || name === 'weight') && value < 0) {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                [name]: 'Value cannot be negative',
+            }));
+            return;
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                [name]: '',
+            }));
+        }
+
+        setFormData((prevFormData) => {
+            const updatedFormData = {
+                ...prevFormData,
+                applicantDetails: {
+                    ...prevFormData.applicantDetails,
+                    [name]: value,
+                },
+            };
+
+            if (name === 'civilStatus' && value !== 'Married') {
+                updatedFormData.applicantDetails.maidenName = '';
+                updatedFormData.applicantDetails.spouseName = '';
+                updatedFormData.applicantDetails.spouseOccupation = '';
+            }
+
+            return updatedFormData;
+        });
+    };
+
+    const validateForm = () => {
+        const newErrors = {};
+        const requiredFields = ['firstName', 'lastName', 'birthdate', 'height', 'weight', 'birthplace', 'contactNumber'];
+
+        requiredFields.forEach(field => {
+            if (!formData.applicantDetails[field]) {
+                newErrors[field] = 'This field is required';
+            }
+        });
+
+        if (formData.applicantDetails.civilStatus === 'Married') {
+            const marriedFields = ['maidenName', 'spouseName', 'spouseOccupation'];
+            marriedFields.forEach(field => {
+                if (!formData.applicantDetails[field]) {
+                    newErrors[field] = 'This field is required';
+                }
+            });
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
     const handleSave = async () => {
+        if (!validateForm()) {
+            setNotification({ type: 'error', message: 'Please fill out all required fields' });
+            return;
+        }
+
         const formattedData = {
             ...formData,
             birthdate: formatDate(formData.birthdate)
@@ -130,8 +182,8 @@ export default function EditPersonalInformation() {
             });
 
             if (response.ok) {
-                const updatedUser = await response.json(); // Assuming the updated user data is returned
-                setIsEditing(false); // Exit editing mode after successful save
+                const updatedUser = await response.json();
+                setIsEditing(false);
                 setNotification({ type: 'success', message: 'User information updated successfully' });
             } else {
                 throw new Error('Failed to update information');
@@ -147,7 +199,6 @@ export default function EditPersonalInformation() {
     };
 
     const handleCancel = () => {
-        // Logic to reset the form data to its original state
         setFormData(originalFormData);
         toggleEdit();
     };
@@ -200,7 +251,9 @@ export default function EditPersonalInformation() {
                         value={formData.applicantDetails.firstName}
                         onChange={handleChange}
                         disabled={!isEditing}
+                        required
                     />
+                    {errors.firstName && <span className="text-red-500 text-sm">{errors.firstName}</span>}
                 </div>
                 <div className="flex flex-col gap-2">
                     <label className="block text-sm font-medium text-gray-700">Last Name</label>
@@ -211,7 +264,9 @@ export default function EditPersonalInformation() {
                         value={formData.applicantDetails.lastName}
                         onChange={handleChange}
                         disabled={!isEditing}
+                        required
                     />
+                    {errors.lastName && <span className="text-red-500 text-sm">{errors.lastName}</span>}
                 </div>
                 <div className="flex flex-col gap-2">
                     <label className="block text-sm font-medium text-gray-700">Middle Name</label>
@@ -253,7 +308,9 @@ export default function EditPersonalInformation() {
                         value={formData.applicantDetails.birthdate}
                         onChange={handleChange}
                         disabled={!isEditing}
+                        required
                     />
+                    {errors.birthdate && <span className="text-red-500 text-sm">{errors.birthdate}</span>}
                 </div>
                 <div className="flex flex-col gap-2">
                     <label className="block text-sm font-medium text-gray-700">Gender</label>
@@ -263,12 +320,14 @@ export default function EditPersonalInformation() {
                         value={formData.applicantDetails.gender}
                         onChange={handleChange}
                         disabled={!isEditing}
+                        required
                     >
-                        <option value="">Select</option>
+                        <option value="" disabled>Select</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                         <option value="Other">Other</option>
                     </select>
+                    {errors.gender && <span className="text-red-500 text-sm">{errors.gender}</span>}
                 </div>
                 <div className="flex flex-col gap-2">
                     <label className="block text-sm font-medium text-gray-700">Blood Type</label>
@@ -279,7 +338,7 @@ export default function EditPersonalInformation() {
                         onChange={handleChange}
                         disabled={!isEditing}
                     >
-                        <option value="">Select</option>
+                        <option value="" disabled>Select</option>
                         <option value="A+">A+</option>
                         <option value="A-">A-</option>
                         <option value="B+">B+</option>
@@ -316,8 +375,9 @@ export default function EditPersonalInformation() {
                         value={formData.applicantDetails.civilStatus}
                         onChange={handleChange}
                         disabled={!isEditing}
+                        required
                     >
-                        <option value="">Select</option>
+                        <option value="" disabled>Select</option>
                         <option value="Single">Single</option>
                         <option value="Married">Married</option>
                         <option value="Divorced">Divorced</option>
@@ -336,7 +396,9 @@ export default function EditPersonalInformation() {
                                 value={formData.applicantDetails.maidenName}
                                 onChange={handleChange}
                                 disabled={!isEditing}
+                                required={formData.applicantDetails.civilStatus === 'Married'}
                             />
+                            {errors.maidenName && <span className="text-red-500 text-sm">{errors.maidenName}</span>}
                         </div>
                         <div className="flex flex-col gap-2">
                             <label className="block text-sm font-medium text-gray-700">Spouse Name</label>
@@ -347,7 +409,9 @@ export default function EditPersonalInformation() {
                                 value={formData.applicantDetails.spouseName}
                                 onChange={handleChange}
                                 disabled={!isEditing}
+                                required={formData.applicantDetails.civilStatus === 'Married'}
                             />
+                            {errors.spouseName && <span className="text-red-500 text-sm">{errors.spouseName}</span>}
                         </div>
                         <div className="flex flex-col gap-2">
                             <label className="block text-sm font-medium text-gray-700">Spouse Occupation</label>
@@ -358,7 +422,9 @@ export default function EditPersonalInformation() {
                                 value={formData.applicantDetails.spouseOccupation}
                                 onChange={handleChange}
                                 disabled={!isEditing}
+                                required={formData.applicantDetails.civilStatus === 'Married'}
                             />
+                            {errors.spouseOccupation && <span className="text-red-500 text-sm">{errors.spouseOccupation}</span>}
                         </div>
                     </>
                 )}
@@ -373,7 +439,9 @@ export default function EditPersonalInformation() {
                         value={formData.applicantDetails.height}
                         onChange={handleChange}
                         disabled={!isEditing}
+                        required
                     />
+                    {errors.height && <span className="text-red-500 text-sm">{errors.height}</span>}
                 </div>
                 <div className="flex flex-col gap-2">
                     <label className="block text-sm font-medium text-gray-700">Weight (kg)</label>
@@ -384,7 +452,9 @@ export default function EditPersonalInformation() {
                         value={formData.applicantDetails.weight}
                         onChange={handleChange}
                         disabled={!isEditing}
+                        required
                     />
+                    {errors.weight && <span className="text-red-500 text-sm">{errors.weight}</span>}
                 </div>
                 <div className="flex flex-col gap-2">
                     <label className="block text-sm font-medium text-gray-700">Birthplace</label>
@@ -395,7 +465,9 @@ export default function EditPersonalInformation() {
                         value={formData.applicantDetails.birthplace}
                         onChange={handleChange}
                         disabled={!isEditing}
+                        required
                     />
+                    {errors.birthplace && <span className="text-red-500 text-sm">{errors.birthplace}</span>}
                 </div>
                 <div className="flex flex-col gap-2">
                     <label className="block text-sm font-medium text-gray-700">Contact Number</label>
@@ -406,7 +478,9 @@ export default function EditPersonalInformation() {
                         value={formData.applicantDetails.contactNumber}
                         onChange={handleChange}
                         disabled={!isEditing}
+                        required
                     />
+                    {errors.contactNumber && <span className="text-red-500 text-sm">{errors.contactNumber}</span>}
                 </div>
             </div>
             {notification && (
