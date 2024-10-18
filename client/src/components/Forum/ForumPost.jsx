@@ -299,7 +299,7 @@ export default function ForumPost() {
                 <div className='flex flex-col gap-8 mx-auto max-w-6xl p-2 lg:px-24'>
 
                     <div className='flex gap-1 mt-10 items-center'>
-                        <Link to='/Forums'>
+                        <Link to={post.author.role === 'applicant' ? '/Forums' : '/provider/forums'}>
                             <button className='bg-white border shadow px-4 py-1 mr-2 rounded-md hover:bg-slate-200 transition ease-in-out flex items-center gap-2 font-medium'>
                                 <MdForum className='text-blue-600' />
                                 Forums
@@ -317,13 +317,17 @@ export default function ForumPost() {
                             <Link to={`/profile/${post.author._id}`}>
                                 <img
                                     src={post.author.profilePicture}
-                                    alt={`${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}'s profile`}
+                                    alt={`${post.author.role === 'applicant'
+                                        ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}`
+                                        : `${post.author.scholarshipProviderDetails.organizationName}`}'s profile`}
                                     className='w-12 h-12 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
                                 />
                             </Link>
                             <div className='flex flex-col'>
                                 <span className='font-bold text-lg'>
-                                    {post.author.applicantDetails.firstName} {post.author.applicantDetails.lastName}
+                                    {post.author.role === 'applicant'
+                                        ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}`
+                                        : `${post.author.scholarshipProviderDetails.organizationName}`}
                                 </span>
                                 <span className='text-sm text-slate-500'>
                                     {new Date(post.createdAt).toLocaleString('en-US', {

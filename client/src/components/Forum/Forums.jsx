@@ -45,7 +45,7 @@ export default function Forums() {
         }
     };
 
-      const handlePostClick = (postId) => {
+    const handlePostClick = (postId) => {
         if (!currentUser) {
             setNotification('You must be logged in to view the post.');
             setTimeout(() => setNotification(''), 3000);
@@ -280,12 +280,16 @@ export default function Forums() {
                                 <div className='flex flex-row gap-3'>
                                     <img
                                         src={post.author.profilePicture || 'default-profile-pic-url'}
-                                        alt={`${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}'s profile`}
+                                        alt={`${post.author.role === 'applicant'
+                                            ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}`
+                                            : `${post.author.scholarshipProviderDetails.organizationName}`}'s profile`}
                                         className='w-12 h-12 rounded-full object-cover'
                                     />
                                     <div className='flex flex-col'>
                                         <span className='font-medium'>
-                                            {post.author.applicantDetails.firstName} {post.author.applicantDetails.lastName}
+                                            {post.author.role === 'applicant'
+                                                ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}`
+                                                : `${post.author.scholarshipProviderDetails.organizationName}`}
                                         </span>
                                         <span className='text-sm text-slate-500'>
                                             {new Date(post.createdAt).toLocaleString('en-US', {

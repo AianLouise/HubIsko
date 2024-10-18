@@ -23,11 +23,14 @@ export const createPost = async (req, res) => {
 
 export const getPosts = async (req, res) => {
   try {
-    const posts = await ForumPost.find().populate('author', ['applicantDetails.firstName','applicantDetails.lastName' , 'email', 'profilePicture']);
+    const posts = await ForumPost.find().populate('author', ['role', 'applicantDetails', 'scholarshipProviderDetails', 'email', 'profilePicture']);
     const modifiedPosts = posts.map(post => ({
       ...post.toObject(),
       totalLikes: post.likes.length,
       totalComments: post.comments.length,
+      authorName: post.author.role === 'applicant'
+        ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}`
+        : `${post.author.scholarshipProviderDetails.organizationName}`
     }));
     
     res.json(modifiedPosts);
@@ -40,19 +43,26 @@ export const getPosts = async (req, res) => {
 export const getPostById = async (req, res) => {
   try {
     const post = await ForumPost.findById(req.params.postId)
-      .populate('author', ['applicantDetails.firstName', 'applicantDetails.lastName', 'email', 'profilePicture', 'role']) // Include firstName and lastName
+      .populate('author', [
+        'applicantDetails.firstName',
+        'applicantDetails.lastName',
+        'scholarshipProviderDetails.organizationName',
+        'email',
+        'profilePicture',
+        'role'
+      ]) // Include firstName, lastName, and organizationName
       .populate({
         path: 'comments',
         populate: [
           {
             path: 'author',
-            select: 'applicantDetails.firstName applicantDetails.lastName profilePicture' // Include firstName and lastName
+            select: 'applicantDetails.firstName applicantDetails.lastName scholarshipProviderDetails.organizationName profilePicture role' // Include firstName, lastName, and organizationName
           },
           {
             path: 'replies',
             populate: {
               path: 'author',
-              select: 'applicantDetails.firstName applicantDetails.lastName profilePicture' // Include firstName and lastName
+              select: 'applicantDetails.firstName applicantDetails.lastName scholarshipProviderDetails.organizationName profilePicture role' // Include firstName, lastName, and organizationName
             }
           }
         ]
