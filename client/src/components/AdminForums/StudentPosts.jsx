@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AdminForumViews from './AdminForumViews';
 
-const StudentPosts = ({ isGridView, currentPage, handlePageChange, itemsPerGrid, itemsPerPage }) => {
+const StudentPosts = ({ isGridView, currentPage, handlePageChange, itemsPerGrid, itemsPerPage, searchQuery, sortOrder }) => {
   const [studentPostsData, setStudentPostsData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -33,7 +33,23 @@ const StudentPosts = ({ isGridView, currentPage, handlePageChange, itemsPerGrid,
     return <div>Error: {error}</div>;
   }
 
-  const paginatedData = studentPostsData.slice((currentPage - 1) * (isGridView ? itemsPerGrid : itemsPerPage), currentPage * (isGridView ? itemsPerGrid : itemsPerPage));
+  // Filter posts based on search query
+  const filteredPosts = studentPostsData.filter(post =>
+    post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    post.content.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Sort posts based on sort order
+  const sortedPosts = filteredPosts.sort((a, b) => {
+    if (sortOrder === 'newest') {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    } else if (sortOrder === 'oldest') {
+      return new Date(a.createdAt) - new Date(b.createdAt);
+    }
+    return 0;
+  });
+
+  const paginatedData = sortedPosts.slice((currentPage - 1) * (isGridView ? itemsPerGrid : itemsPerPage), currentPage * (isGridView ? itemsPerGrid : itemsPerPage));
 
   return (
     <AdminForumViews
@@ -43,7 +59,7 @@ const StudentPosts = ({ isGridView, currentPage, handlePageChange, itemsPerGrid,
       paginatedData={paginatedData}
       itemsPerGrid={itemsPerGrid}
       itemsPerPage={itemsPerPage}
-      fillerData={studentPostsData}
+      fillerData={sortedPosts} // Pass sorted posts for pagination
     />
   );
 };

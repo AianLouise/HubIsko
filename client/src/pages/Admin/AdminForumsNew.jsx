@@ -142,7 +142,7 @@ export default function AdminForumsNew() {
                 </div>
               </div>
 
-              <span>Posts: {totalPosts}</span>
+              <span className="mt-10">Posts: {totalPosts}</span>
             </div>
 
             {/* Section 2 */}
