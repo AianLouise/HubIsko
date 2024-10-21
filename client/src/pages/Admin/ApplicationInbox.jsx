@@ -14,61 +14,23 @@ export default function ApplicationInbox() {
     document.title = "Application Inbox | HubIsko";
   }, []);
 
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [totalAccounts, setTotalAccounts] = useState(0);
-  const [totalScholarships, setTotalScholarships] = useState(0);
-  const [totalScholars, setTotalScholars] = useState(0);
   const [pendingProviders, setPendingProviders] = useState(0);
-  const [pendingPrograms, setPendingPrograms] = useState(0); // New State for Pending Programs
-  const [pendingStudents, setPendingStudents] = useState(0); // New State for Pending Students
-  const [activities, setActivities] = useState([]); // State for Activities
+  const [pendingStudents, setPendingStudents] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch total number of accounts
-        const accountsResponse = await fetch('/api/admin/total-accounts');
-        const accountsData = await accountsResponse.json();
-        setTotalAccounts(accountsData.totalAccounts);
-
-        // Fetch total number of scholarships
-        const scholarshipsResponse = await fetch('/api/admin/total-scholarships');
-        const scholarshipsData = await scholarshipsResponse.json();
-        setTotalScholarships(scholarshipsData.totalScholarships);
-
-        // Fetch total number of approved scholars
-        const scholarsResponse = await fetch('/api/admin/count-approved-scholars');
-        const scholarsData = await scholarsResponse.json();
-        setTotalScholars(scholarsData.count);
 
         // Fetch total number of pending providers
-        const pendingProvidersResponse = await fetch('/api/admin/search-pending-verification-providers');
+        const pendingProvidersResponse = await fetch('/api/adminApp/search-pending-verification-providers');
         const pendingProvidersData = await pendingProvidersResponse.json();
         setPendingProviders(pendingProvidersData.length);
 
-        // Fetch total number of pending programs
-        const pendingProgramsResponse = await fetch('/api/admin/search-pending-approval-programs');
-        const pendingProgramsData = await pendingProgramsResponse.json();
-        setPendingPrograms(pendingProgramsData.length);
-
         // Fetch total number of pending students
-        const pendingStudentsResponse = await fetch('/api/admin/search-pending-verification-students');
+        const pendingStudentsResponse = await fetch('/api/adminApp/search-pending-verification-students');
         const pendingStudentsData = await pendingStudentsResponse.json();
         setPendingStudents(pendingStudentsData.length);
-
-        // Fetch recent activities
-        // const activitiesResponse = await fetch('/api/admin/recent-activities');
-        // const activitiesData = await activitiesResponse.json();
-        // setActivities(activitiesData.activities);
-
-        // Dummy data for activities
-        setActivities([
-          { id: 1, actor: "DepEd", action: "Posted a Scholarship", time: "1 hour ago" },
-          { id: 2, actor: "John Doe", action: "Sent an Application to DepEd", time: "2 hours ago" },
-          { id: 3, actor: "TESDA", action: "Approved an Application", time: "3 hours ago" },
-          { id: 4, actor: "CHED", action: "Posted a Scholarship", time: "4 hours ago" },
-        ]);
 
         setLoading(false);
       } catch (error) {
@@ -114,7 +76,7 @@ export default function ApplicationInbox() {
             <div className="flex flex-col gap-2 w-1/2">
               <h1 className="text-4xl font-bold text-gray-800">Application Inbox</h1>
               <p className="text-lg text-slate-500 font-medium">
-                Manage student, scholarship programs and scholarship provider applications.
+                Manage student and scholarship provider applications.
               </p>
             </div>
             <div className="bg-blue-600 w-24 h-24 lg:w-36 lg:h-36 my-8 rounded-md flex items-center justify-center">
@@ -123,47 +85,34 @@ export default function ApplicationInbox() {
           </div>
         </div>
         <div className="max-w-8xl mx-auto px-24 gap-10 flex-col flex">
-
-          <div className="grid grid-cols-3 gap-8">
-            <Link
-              to="/scholarship-program-applications"
-              className="bg-white text-blue-600 rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:bg-gray-100 hover:-translate-y-2 transition ease-in-out"
-            >
-              <FaGraduationCap className="text-4xl mb-2 text-blue-600" />
-              <span className="text-lg font-semibold">Scholarship Program Applications</span>
-              <span className="text-4xl font-bold">{pendingPrograms}</span>
-              <span className="text-sm flex items-center mt-2 font-normal">
-                Click to view the list of applications for scholarship program
-              </span>
-            </Link>
-
-            <Link
-              to="/scholarship-provider-applications"
-              className="bg-white text-blue-600 rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:bg-gray-100 hover:-translate-y-2 transition ease-in-out"
-            >
-              <FaUniversity className="text-4xl mb-2 text-blue-600" />
-              <span className="text-lg font-semibold">Scholarship Provider Applications</span>
-              <span className="text-4xl font-bold">{pendingProviders}</span>
-              <span className="text-sm flex items-center mt-2 font-normal">
-                Click to view the list of applications for scholarship provider
-              </span>
-            </Link>
-
+          <div className="grid grid-cols-1 md:grid-cols-2 justify-items-center max-w-4xl mx-auto gap-10">
             <Link
               to="/student-applications"
-              className="bg-white text-blue-600 rounded-md shadow-lg p-6 flex flex-col justify-center items-center hover:bg-gray-100 hover:-translate-y-2 transition ease-in-out"
+              className="bg-white text-blue-600 rounded-md shadow-lg p-6 w-96 flex flex-col justify-center items-center hover:bg-blue-600 hover:text-white hover:-translate-y-2 transition ease-in-out"
             >
-              <FaUserGraduate className="text-4xl mb-2 text-blue-600" />
+              <FaUserGraduate className="text-4xl mb-2" />
               <span className="text-lg font-semibold">Student Applications</span>
               <span className="text-4xl font-bold">{pendingStudents}</span>
               <span className="text-sm flex items-center mt-2 font-normal">
                 Click to view the list of applications for students
               </span>
             </Link>
+
+            <Link
+              to="/scholarship-provider-applications"
+              className="bg-white text-blue-600 rounded-md shadow-lg p-6 w-96 flex flex-col justify-center items-center hover:bg-blue-600 hover:text-white hover:-translate-y-2 transition ease-in-out"
+            >
+              <FaUniversity className="text-4xl mb-2" />
+              <span className="text-lg font-semibold">Scholarship Provider Applications</span>
+              <span className="text-4xl font-bold">{pendingProviders}</span>
+              <span className="text-sm flex items-center mt-2 font-normal">
+                Click to view the list of applications for scholarship provider
+              </span>
+            </Link>
           </div>
 
           {/* Activity Section */}
-          {/* <div className="flex flex-col mt-10 mb-10">
+          <div className="flex flex-col mt-10 mb-10">
             <span className="font-bold text-xl border-b w-full pb-2">
               Recent Activity
             </span>
@@ -249,7 +198,7 @@ export default function ApplicationInbox() {
                 </div>
               </div>
             </div>
-          </div> */}
+          </div>
         </div>
       </main>
     </div>
