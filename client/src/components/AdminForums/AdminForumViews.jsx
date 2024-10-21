@@ -30,7 +30,7 @@ const AdminForumViews = ({ isGridView, currentPage, handlePageChange, paginatedD
       ) : (
         <>
           {isGridView ? (
-            <div className="flex flex-col justify-between h-full bg-slate-200 p-4 shadow overflow-y-auto">
+            <div className="flex flex-col justify-between border rounded-md bg-white shadow-lg p-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 flex-grow">
                 {paginatedData.map((item) => (
                   <div key={item.id} className="bg-white shadow rounded-lg p-6 relative flex flex-col justify-between">
@@ -46,21 +46,21 @@ const AdminForumViews = ({ isGridView, currentPage, handlePageChange, paginatedD
                       </div>
                     </div>
                     <p className="text-gray-600 mb-4">{truncateText(item.content, 100)}</p>
-                    <div className="text-gray-500 text-sm">
+                    <div className="text-gray-500 text-sm mb-4">
                       {new Date(item.createdAt).toLocaleString()}
                     </div>
                     <div className='flex justify-end'>
-                    <button 
-                          className="bg-blue-600 hover:bg-blue-700 px-3 py-1 text-white rounded-md flex items-center justify-end"
-                          onClick={() => handleViewPost(item._id)} // Add onClick event handler
-                        >
-                          <FaEdit className="mr-1" /> View Post
-                        </button>
+                      <button
+                        className="bg-blue-600 hover:bg-blue-700 px-3 py-1 text-white rounded-md flex items-center justify-end"
+                        onClick={() => handleViewPost(item._id)} // Add onClick event handler
+                      >
+                        <FaEdit className="mr-1" /> View Post
+                      </button>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="flex justify-end items-center py-5 px-8 mt-8">
+              <div className="flex justify-end items-center py-5 px-8 mt-4">
                 <div className='flex gap-2 items-center bg-white rounded-md border shadow px-6 py-2'>
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
@@ -85,7 +85,7 @@ const AdminForumViews = ({ isGridView, currentPage, handlePageChange, paginatedD
               </div>
             </div>
           ) : (
-            <div className="flex flex-col justify-between border rounded-md bg-white h-full overflow-y-auto shadow-lg">
+            <div className="flex flex-col justify-between border rounded-md bg-white h-full shadow-lg">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
@@ -95,28 +95,32 @@ const AdminForumViews = ({ isGridView, currentPage, handlePageChange, paginatedD
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {paginatedData.map((item) => (
-                    <tr key={item.id} className="hover:bg-gray-100">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.title}</td>
-                      <td className="px-6 py-4 whitespace-nowrap max-w-xs overflow-hidden text-ellipsis text-sm text-gray-500">
-                        {item.content}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(item.createdAt).toLocaleString()}
-                      </td>
-                      <td className="flex gap-2 items-center px-6 py-4 whitespace-nowrap">
-                        <button
-                          className="bg-blue-600 hover:bg-blue-700 px-3 py-1 text-white rounded-md flex items-center"
-                          onClick={() => handleViewPost(item._id)} // Add onClick event handler
-                        >
-                          <FaEdit className="mr-1" /> View Post
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
               </table>
+              <div className="flex-grow overflow-y-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {paginatedData.map((item) => (
+                      <tr key={item.id} className="hover:bg-gray-100">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.title}</td>
+                        <td className="px-6 py-4 whitespace-nowrap max-w-xs overflow-hidden text-ellipsis text-sm text-gray-500">
+                          {item.content}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {new Date(item.createdAt).toLocaleString()}
+                        </td>
+                        <td className="flex gap-2 items-center px-6 py-4 whitespace-nowrap">
+                          <button
+                            className="bg-blue-600 hover:bg-blue-700 px-3 py-1 text-white rounded-md flex items-center"
+                            onClick={() => handleViewPost(item._id)} // Add onClick event handler
+                          >
+                            <FaEdit className="mr-1" /> View Post
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
               <div className="flex justify-end gap-4 items-center py-4 px-8 bg-gray-50 border-t">
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}

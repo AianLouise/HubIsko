@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { MdClearAll } from "react-icons/md";
 import { PiStudentFill } from "react-icons/pi";
-import { FaBuilding, FaWrench } from "react-icons/fa6";
-import { IoMegaphoneSharp } from "react-icons/io5";
+import { FaBuilding, FaPlus, FaWrench } from "react-icons/fa6";
 import { FaList } from "react-icons/fa";
 import { BsFillGridFill } from "react-icons/bs";
 import AllPosts from "../../components/AdminForums/Allposts";
 import StudentPosts from "../../components/AdminForums/StudentPosts";
 import ProviderPosts from "../../components/AdminForums/ProviderPosts";
-import AnnouncementsPosts from "../../components/AdminForums/AnnouncementPosts";
 import AdminPosts from "../../components/AdminForums/AdminPosts";
 
 export default function AdminForumsNew() {
@@ -16,6 +14,8 @@ export default function AdminForumsNew() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedView, setSelectedView] = useState("All Posts");
   const [totalPosts, setTotalPosts] = useState(0);
+  const [searchQuery, setSearchQuery] = useState(""); // Add search query state
+  const [sortOrder, setSortOrder] = useState(""); // Add sort order state
   const itemsPerPage = 6;
   const itemsPerGrid = 6;
 
@@ -50,6 +50,8 @@ export default function AdminForumsNew() {
             handlePageChange={handlePageChange}
             itemsPerGrid={itemsPerGrid}
             itemsPerPage={itemsPerPage}
+            searchQuery={searchQuery} // Pass search query
+            sortOrder={sortOrder} // Pass sort order
           />
         );
       case "Student Posts":
@@ -60,6 +62,8 @@ export default function AdminForumsNew() {
             handlePageChange={handlePageChange}
             itemsPerGrid={itemsPerGrid}
             itemsPerPage={itemsPerPage}
+            searchQuery={searchQuery} // Pass search query
+            sortOrder={sortOrder} // Pass sort order
           />
         );
       case "Provider Posts":
@@ -69,14 +73,8 @@ export default function AdminForumsNew() {
           handlePageChange={handlePageChange}
           itemsPerGrid={itemsPerGrid}
           itemsPerPage={itemsPerPage}
-        />;
-      case "Announcements":
-        return <AnnouncementsPosts
-          isGridView={isGridView}
-          currentPage={currentPage}
-          handlePageChange={handlePageChange}
-          itemsPerGrid={itemsPerGrid}
-          itemsPerPage={itemsPerPage}
+          searchQuery={searchQuery} // Pass search query
+          sortOrder={sortOrder} // Pass sort order
         />;
       case "Admin Posts":
         return <AdminPosts
@@ -85,7 +83,8 @@ export default function AdminForumsNew() {
           handlePageChange={handlePageChange}
           itemsPerGrid={itemsPerGrid}
           itemsPerPage={itemsPerPage}
-
+          searchQuery={searchQuery} // Pass search query
+          sortOrder={sortOrder} // Pass sort order
         />;
       default:
         return <AllPosts />;
@@ -93,18 +92,19 @@ export default function AdminForumsNew() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen font-medium text-slate-700">
-      <main className="flex-grow bg-[#f8f8fb] pb-24">
+    <div className="flex flex-col min-h-screen font-medium text-slate-700 bg-[#f8f8fb]">
+      <main className="flex-grow pb-24">
         <div className="max-w-8xl mx-auto px-24 gap-10 flex-col flex mt-8">
           <h1 className="text-2xl font-bold text-slate-900 tracking-wide">Forums</h1>
 
-          <div className="flex gap-10 h-[550px]">
+          <div className="flex gap-10">
 
             {/* Section 1 */}
-            <div className="flex flex-col justify-between w-1/6 bg-white shadow border rounded-md p-4 h-full">
+            <div className="flex flex-col justify-between w-1/6 bg-white shadow border rounded-md p-4">
               <div className="flex flex-col items-center">
-                <button className="bg-blue-600 w-full text-white px-6 py-2 mb-4 rounded-md">
-                  Create a New post
+                <button className="bg-blue-600 w-full text-white px-6 py-2 mb-4 rounded-md flex items-center justify-center">
+                  <FaPlus className="mr-2" /> {/* Add the icon */}
+                  Create a New Post
                 </button>
 
                 <div className="flex flex-col gap-2 w-full items-start justify-start">
@@ -133,14 +133,6 @@ export default function AdminForumsNew() {
                   </button>
 
                   <button
-                    onClick={() => setSelectedView("Announcements")}
-                    className={`flex items-center gap-2 ${selectedView === "Announcements" ? 'bg-blue-600 text-white' : 'bg-slate-100  hover:bg-slate-300  hover:text-slate-800'} text-slate-500 w-full text-left p-2 px-4 rounded-md`}
-                  >
-                    <IoMegaphoneSharp className="text-xl" />
-                    Announcements
-                  </button>
-
-                  <button
                     onClick={() => setSelectedView("Admin Posts")}
                     className={`flex items-center gap-2 ${selectedView === "Admin Posts" ? 'bg-blue-600 text-white' : 'bg-slate-100  hover:bg-slate-300  hover:text-slate-800'} text-slate-500 w-full text-left p-2 px-4 rounded-md`}
                   >
@@ -154,19 +146,29 @@ export default function AdminForumsNew() {
             </div>
 
             {/* Section 2 */}
-            <div className="flex flex-col gap-4 w-5/6 h-full">
+            <div className="flex flex-col gap-4 w-5/6">
 
               <h1 className="text-2xl font-bold border-b pb-2 text-slate-900 tracking-wide">
                 {selectedView}
               </h1>
               <div className="flex gap-4 justify-between items-center">
                 <div className="flex gap-4 items-center">
-                  <input type="text" placeholder="Search" className="border rounded-md p-2 px-4" />
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    className="border rounded-md p-2 px-4"
+                    value={searchQuery} // Bind search query state
+                    onChange={(e) => setSearchQuery(e.target.value)} // Update search query state
+                  />
 
-                  <select className="border rounded-md p-2 text-blue-600 px-4">
+                  <select
+                    className="border rounded-md p-2 text-blue-600 px-4 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                    value={sortOrder} // Bind sort order state
+                    onChange={(e) => setSortOrder(e.target.value)} // Update sort order state
+                  >
                     <option value=''>Sort by</option>
-                    <option value=''>Newest</option>
-                    <option value=''>Oldest</option>
+                    <option value='newest'>Newest</option>
+                    <option value='oldest'>Oldest</option>
                   </select>
                 </div>
                 <div className="flex gap-2 items-center">
@@ -188,22 +190,6 @@ export default function AdminForumsNew() {
               {renderSelectedView()}
             </div>
           </div>
-
-          {/* <div className="flex flex-col gap-4">
-            <span className="border-b pb-2">Forum Activity</span>
-
-            <div className="flex flex-col divide-y border shadow bg-white p-4 rounded-md">
-              <div className="flex items-center py-4 gap-2">
-                <div className="bg-blue-600 w-10 h-10 rounded-full"></div>
-                <span>Name posted: <span className="text-blue-600">Title of the post</span></span>
-              </div>
-
-              <div className="flex items-center py-4 gap-2">
-                <div className="bg-blue-600 w-10 h-10 rounded-full"></div>
-                <span>Name commented on: <span className="text-blue-600">Title of the post</span></span>
-              </div>
-            </div>
-          </div> */}
         </div>
       </main>
     </div>

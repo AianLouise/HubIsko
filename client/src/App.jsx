@@ -179,8 +179,8 @@ export default function App() {
             <Route path="student-applications" element={<StudentApplications />} />
             <Route path="student-applications/:id" element={<StudentApplicationDetails />} />
 
-            <Route path="admin-forums" element={<AdminForums />} />
-            <Route path="admin-forums/new" element={<AdminForumsNew />} />
+            {/* <Route path="admin-forums" element={<AdminForums />} /> */}
+            <Route path="admin-forums" element={<AdminForumsNew />} />
             <Route path="admin-forums/post/:postId" element={<AdminForumDetail />} />
             <Route path="admin-create-forum-post" element={<AdminCreateForumPost />} />
 
