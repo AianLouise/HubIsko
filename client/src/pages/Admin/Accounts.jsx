@@ -6,7 +6,7 @@ import { PiArrowRightFill } from "react-icons/pi";
 import { GoDotFill } from "react-icons/go";
 import Layout from "../../components/Layout";
 import { FaUsers } from "react-icons/fa";
-import { FaUserClock } from "react-icons/fa6";
+import { FaUser, FaUserClock } from "react-icons/fa6";
 import { RiGraduationCapFill } from "react-icons/ri";
 import { FaBuildingCircleCheck } from "react-icons/fa6";
 import { IoAddCircleOutline } from 'react-icons/io5';
@@ -215,19 +215,20 @@ export default function Accounts() {
         <div className="flex flex-col min-h-screen font-medium text-slate-700 bg-[#f8f8fb]">
 
             <main className="flex-grow ">
-                {/* <div className='border-b mb-8'>
+                <div className='border-b mb-8'>
                     <div className={'flex items-center mx-auto justify-between px-24'}>
                         <div className='flex flex-col gap-2 w-1/2'>
                             <h1 className='text-4xl font-bold text-gray-800'>Accounts</h1>
                             <p className='text-lg text-slate-500 font-medium'>Manage all types of accounts here.</p>
                         </div>
-                        <div className='bg-blue-600 w-36 h-36 my-8 rounded-md'></div>
+                        <div className='bg-blue-600 w-36 h-36 my-8 rounded-md flex justify-center items-center'>
+                            <FaUser className='text-white text-6xl' />
+                        </div>
                     </div>
-                </div> */}
+                </div>
 
                 <div className='max-w-8xl mx-auto px-24  gap-2 mt-4 flex-col flex'>
                     <div className="flex items-center justify-between pb-2">
-                        <h1 className="text-xl font-bold">Accounts</h1>
                         {/* <Link to="/add-account">
                             <button className="flex items-center gap-2 px-6 py-2 rounded-md shadow bg-blue-600 text-white">
                                 <IoAddCircleOutline className="w-6 h-6" />
@@ -238,47 +239,47 @@ export default function Accounts() {
 
                     <div className="flex justify-center">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-8xl">
-                            <div className="flex flex-col gap-4 justify-center bg-white shadow border rounded-md p-8">
-                                <div className="flex items-center gap-4">
-                                    <FaUsers className="w-8 h-8 text-blue-600" />
-                                    <h2 className="text-lg font-semibold text-slate-500 tracking-wide">Total Accounts</h2>
+                            <div className="flex flex-col gap-2 justify-center bg-white shadow border rounded-md p-4">
+                                <div className="flex items-center gap-2">
+                                    <FaUsers className="w-6 h-6 text-blue-600" />
+                                    <h2 className="text-md font-semibold text-slate-500 tracking-wide">Total Accounts</h2>
                                 </div>
-                                <div className="flex flex-col gap-4">
-                                    <span className="text-6xl font-bold text-left">{totalAccounts}</span>
-                                    <span className="text-slate-400">+0 new accounts</span>
-                                </div>
-                            </div>
-
-                            <div className="flex flex-col gap-4 justify-center bg-white shadow border rounded-md p-8">
-                                <div className="flex items-center gap-3">
-                                    <FaUserClock className="w-8 h-8 text-blue-600" />
-                                    <h2 className="text-lg font-semibold text-slate-500">Unverified Accounts</h2>
-                                </div>
-                                <div className="flex flex-col gap-3">
-                                    <span className="text-6xl font-bold text-left">{totalUnverifiedAccounts}</span>
-                                    <span className="text-slate-400">+0 pending</span>
+                                <div className="flex flex-col gap-2">
+                                    <span className="text-4xl font-bold text-left">{totalAccounts}</span>
+                                    <span className="text-slate-400 text-sm">+0 new accounts</span>
                                 </div>
                             </div>
 
-                            <div className="flex flex-col gap-4 justify-center bg-white shadow border rounded-md p-8">
-                                <div className="flex items-center gap-3">
-                                    <RiGraduationCapFill className="w-8 h-8 text-blue-600" />
-                                    <h2 className="text-lg font-semibold text-slate-500">Total Students</h2>
+                            <div className="flex flex-col gap-2 justify-center bg-white shadow border rounded-md p-4">
+                                <div className="flex items-center gap-2">
+                                    <FaUserClock className="w-6 h-6 text-blue-600" />
+                                    <h2 className="text-md font-semibold text-slate-500">Unverified Accounts</h2>
                                 </div>
-                                <div className="flex flex-col gap-4">
-                                    <span className="text-6xl font-bold text-left">{totalApplicants}</span>
-                                    <span className="text-slate-400">+0 new students</span>
+                                <div className="flex flex-col gap-2">
+                                    <span className="text-4xl font-bold text-left">{totalUnverifiedAccounts}</span>
+                                    <span className="text-slate-400 text-sm">+0 pending</span>
                                 </div>
                             </div>
 
-                            <div className="flex flex-col gap-4 justify-center bg-white shadow border rounded-md p-8">
-                                <div className="flex items-center gap-3">
-                                    <FaBuildingCircleCheck className="w-8 h-8 text-blue-600" />
-                                    <h2 className="text-lg font-semibold text-slate-500">Scholarship Providers</h2>
+                            <div className="flex flex-col gap-2 justify-center bg-white shadow border rounded-md p-4">
+                                <div className="flex items-center gap-2">
+                                    <RiGraduationCapFill className="w-6 h-6 text-blue-600" />
+                                    <h2 className="text-md font-semibold text-slate-500">Total Students</h2>
                                 </div>
-                                <div className="flex flex-col gap-4">
-                                    <span className="text-6xl font-bold text-left">{totalScholarshipProviders}</span>
-                                    <span className="text-slate-400">+0 new providers</span>
+                                <div className="flex flex-col gap-2">
+                                    <span className="text-4xl font-bold text-left">{totalApplicants}</span>
+                                    <span className="text-slate-400 text-sm">+0 new students</span>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col gap-2 justify-center bg-white shadow border rounded-md p-4">
+                                <div className="flex items-center gap-2">
+                                    <FaBuildingCircleCheck className="w-6 h-6 text-blue-600" />
+                                    <h2 className="text-md font-semibold text-slate-500">Scholarship Providers</h2>
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <span className="text-4xl font-bold text-left">{totalScholarshipProviders}</span>
+                                    <span className="text-slate-400 text-sm">+0 new providers</span>
                                 </div>
                             </div>
                         </div>
