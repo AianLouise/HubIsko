@@ -235,10 +235,10 @@ export default function Scholarships() {
                   </button>
 
                   <button
-                    className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Completed' ? 'bg-purple-500 text-white' : ''}`}
+                    className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Completed' ? 'bg-green-500 text-white' : ''}`}
                     onClick={() => handleFilterChange('Completed')}
                   >
-                    Completed <span className={`${filter === 'Completed' ? 'text-white' : 'text-purple-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Completed').length})</span>
+                    Completed <span className={`${filter === 'Completed' ? 'text-white' : 'text-green-600'}`}>({scholarships.filter(scholarship => scholarship.status === 'Completed').length})</span>
                   </button>
 
                   <button

@@ -11,7 +11,7 @@ import { PiStudentFill } from "react-icons/pi";
 import { BsBuildingFill } from "react-icons/bs";
 import { BsInboxFill } from "react-icons/bs";
 import { HiDocument } from "react-icons/hi2";
-import { FaGoogleScholar, FaGraduationCap } from "react-icons/fa6";
+import { FaBullhorn, FaGoogleScholar, FaGraduationCap } from "react-icons/fa6";
 import { FaFileCircleQuestion } from "react-icons/fa6";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -315,14 +315,25 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                             </Link>
                                         </li>
 
-                                        <li className="ml-4">
+                                        <li>
+                                            <Link
+                                                to={'/scholarship-announcements'}
+                                                className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-announcements' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}
+                                            >
+                                                <FaBullhorn className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-announcements' ? ' text-white' : ''}`} />
+                                                Scholarship Announcements
+                                            </Link>
+                                        </li>
+
+                                        {/* <li className="ml-4">
                                             <Link to={'/scholarship-program-applications'}
                                                 className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md 
                                                 ${location.pathname === '/scholarship-program-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                                 <FaFileAlt className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-program-applications' ? ' text-white' : ''}`} />
                                                 Scholarship Program Applications
                                             </Link>
-                                        </li>
+                                        </li> */}
+
                                         {/* <li>
                                         <Link to={'/scholarship-applications'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
                                             <HiDocument className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-applications' ? ' text-white' : ''}`} />
