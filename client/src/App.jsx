@@ -95,6 +95,7 @@ import ProviderNotificationDetailPage from "./components/ProviderNotificationDet
 import ProviderAllNotification from "./components/ProviderAllNotifications";
 import ScholarshipProviderProfilePage from "./pages/Scholarship-Provider/ScholarshipProviderProfilePage";
 import AdminLogHistory from "./pages/Admin/AdminLogHistory";
+import ScholarshipAnnouncements from "./pages/Admin/ScholarshipAnnouncements";
 
 
 // import RegisterAsProvider from "./pages/RegisterAsProvider";
@@ -171,6 +172,7 @@ export default function App() {
 
             <Route path="scholarship-program-applications/:id" element={<ScholarshipProgramApplicationDetails />} />
             <Route path="scholarship-programs" element={<ScholarshipPrograms />} />
+            <Route path="scholarship-announcements" element={<ScholarshipAnnouncements />} />
             <Route path="scholarship-program/:id" element={<ScholarshipProgramDetails />} />
 
             <Route path="scholarship-provider-applications" element={<ScholarshipProviderApplications />} />

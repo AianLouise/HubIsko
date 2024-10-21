@@ -51,6 +51,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
 
         if (location.pathname.startsWith('/scholarship-programs')
             || location.pathname.startsWith('/scholarship-program-applications')
+            || location.pathname.startsWith('/scholarship-announcements')
             || location.pathname.startsWith('/scholarship-applications')
 
         ) {
