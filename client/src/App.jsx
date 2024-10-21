@@ -94,6 +94,7 @@ import ValidationResult from "./components/ViewScholarshipDetails/ValidationResu
 import ProviderNotificationDetailPage from "./components/ProviderNotificationDetailPage";
 import ProviderAllNotification from "./components/ProviderAllNotifications";
 import ScholarshipProviderProfilePage from "./pages/Scholarship-Provider/ScholarshipProviderProfilePage";
+import AdminLogHistory from "./pages/Admin/AdminLogHistory";
 
 
 // import RegisterAsProvider from "./pages/RegisterAsProvider";
@@ -185,6 +186,7 @@ export default function App() {
 
             <Route path="add-account" element={<AddAccount />} />
 
+            <Route path="log-history" element={<AdminLogHistory />} />
           </Route>
         </Route>
 

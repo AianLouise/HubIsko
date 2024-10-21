@@ -1,12 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { IoMdArrowRoundForward } from "react-icons/io";
 
-const LogHistory = ({ activityLogs }) => {
+const LogHistory = () => {
+    const [activityLogs, setActivityLogs] = useState([]);
     const [filteredLogs, setFilteredLogs] = useState([]);
     const [filter, setFilter] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const logsPerPage = 10;
+
+    useEffect(() => {
+        const fetchActivityLogs = async () => {
+            try {
+                const response = await fetch('/api/activity/activity-logs'); // Adjust the endpoint as necessary
+                const data = await response.json();
+                setActivityLogs(Array.isArray(data) ? data : []); // Ensure data is an array
+            } catch (error) {
+                console.error('Error fetching activity logs:', error);
+            }
+        };
+
+        fetchActivityLogs();
+    }, []);
 
     useEffect(() => {
         let logs = activityLogs;
@@ -47,29 +61,23 @@ const LogHistory = ({ activityLogs }) => {
     };
 
     return (
-        <div className="flex flex-col gap-4 mb-10">
-            <div className="border-t-2 mt-4">
-                <div className="flex items-center w-full justify-center">
-                    <span className="bg-[#f8f8fb] px-8 -translate-y-3 text-xl text-slate-500">Log History</span>
-                </div>
-            </div>
-
-            <div className="flex justify-between">
+        <div className="flex flex-col gap-4">
+            <div className="flex justify-between items-center mb-4">
                 <div className="flex gap-4">
                     <button
-                        className="px-4 py-2 rounded-md bg-white border shadow"
+                        className={`px-4 py-2 rounded-md ${filter === 'all' ? 'bg-blue-600 text-white' : 'bg-white border shadow'}`}
                         onClick={() => setFilter('all')}
                     >
                         All Activity ({activityLogs.length})
                     </button>
                     <button
-                        className="px-4 py-2 rounded-md bg-white border shadow"
+                        className={`px-4 py-2 rounded-md ${filter === 'account' ? 'bg-blue-600 text-white' : 'bg-white border shadow'}`}
                         onClick={() => setFilter('account')}
                     >
                         Accounts ({activityLogs.filter(log => log.type === 'account').length})
                     </button>
                     <button
-                        className="px-4 py-2 rounded-md bg-white border shadow"
+                        className={`px-4 py-2 rounded-md ${filter === 'scholarship' ? 'bg-blue-600 text-white' : 'bg-white border shadow'}`}
                         onClick={() => setFilter('scholarship')}
                     >
                         Scholarships ({activityLogs.filter(log => log.type === 'scholarship').length})
@@ -85,7 +93,7 @@ const LogHistory = ({ activityLogs }) => {
                 />
             </div>
 
-            <div className="flex bg-white p-4 border shadow rounded-md mt-4">
+            <div className="bg-white p-4 border shadow rounded-md">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                         <tr>
@@ -144,7 +152,7 @@ const LogHistory = ({ activityLogs }) => {
                 </table>
             </div>
 
-            <div className="flex justify-between mt-4 mb-20">
+            <div className="flex justify-between mt-4">
                 <button
                     onClick={handlePreviousPage}
                     disabled={currentPage === 1}

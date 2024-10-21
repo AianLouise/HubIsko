@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BsPencilFill } from "react-icons/bs";
-import LogHistory from "../../components/AdminSettings/LogHistory";
+import { FaCog } from "react-icons/fa"; // Import the icon
 import UpdateInformation from '../../components/AdminSettings/UpdateInformation';
 import UpdateAccountDetails from '../../components/AdminSettings/UpdateAccountDetails';
 import ChangePassword from '../../components/AdminSettings/ChangePassword';
@@ -13,35 +13,24 @@ export default function AdminSettings() {
     const { currentUser } = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
-    const [activityLogs, setActivityLogs] = useState([]);
-
-    const [sidebarOpen, setSidebarOpen] = useState(false);
     const [selectedTab, setSelectedTab] = useState('Update Information');
 
-    const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
     const handleTabClick = (tab) => setSelectedTab(tab);
 
-    useEffect(() => {
-        const fetchActivityLogs = async () => {
-            try {
-                const response = await fetch('/api/activity/activity-logs'); // Adjust the endpoint as necessary
-                const data = await response.json();
-                setActivityLogs(Array.isArray(data) ? data : []); // Ensure data is an array
-            } catch (error) {
-                console.error('Error fetching activity logs:', error);
-            }
-        };
-
-        fetchActivityLogs();
-    }, []);
-
     return (
-        <div className="flex flex-col min-h-screen">
-            <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
-                <div className="max-w-8xl flex flex-col gap-10 px-20 mt-10">
-                    <div className="max-w-8xl mx-24 mt-12">
-                        <div className="bg-white border shadow rounded-md px-6 py-8">
-                            <h1 className="text-4xl font-bold mb-4">Settings</h1>
+        <div className="flex flex-col min-h-screen bg-gray-100">
+            <header className="bg-white shadow">
+                <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+                        <FaCog className="mr-4 text-blue-600" /> {/* Add the icon */}
+                        Settings
+                    </h1>
+                </div>
+            </header>
+            <main className="flex-grow">
+                <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+                    <div className="px-4 py-6 sm:px-0">
+                        <div className="bg-white shadow rounded-lg p-6">
                             <nav className="mb-8">
                                 <ul className="flex items-center gap-8 font-medium border-b-2 border-gray-200">
                                     <li>
@@ -95,8 +84,6 @@ export default function AdminSettings() {
                             )}
                         </div>
                     </div>
-
-                    <LogHistory activityLogs={activityLogs} />
                 </div>
             </main>
         </div>

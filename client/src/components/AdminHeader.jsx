@@ -17,7 +17,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from '../redux/user/userSlice';
 import Logo from '../assets/NewLogoClean.png';
-import { FaCog, FaFileAlt, FaUniversity } from 'react-icons/fa'; // Import the new icon
+import { FaCog, FaFileAlt, FaHistory, FaUniversity } from 'react-icons/fa'; // Import the new icon
 
 
 export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
@@ -372,9 +372,16 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                             </li> */}
 
                             <li>
-                                <Link to={"/admin-forums/new"} className={`flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/admin-forums' ? 'bg-blue-600 text-white' : ''}`}>
-                                    <MdForum className={`w-5 h-5 text-blue-600 ${location.pathname == '/admin-forums' ? 'text-white' : ''}`} /> {/* Updated icon */}
+                                <Link to={"/admin-forums/new"} className={`flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/admin-forums/new' ? 'bg-blue-600 text-white' : ''}`}>
+                                    <MdForum className={`w-5 h-5 text-blue-600 ${location.pathname == '/admin-forums/new' ? 'text-white' : ''}`} /> {/* Updated icon */}
                                     Forums
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link to={"/log-history"} className={`flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/log-history' ? 'bg-blue-600 text-white' : ''}`}>
+                                    <FaHistory className={`w-5 h-5 text-blue-600 ${location.pathname === '/log-history' ? 'text-white' : ''}`} /> {/* Updated icon */}
+                                    Log History
                                 </Link>
                             </li>
 
