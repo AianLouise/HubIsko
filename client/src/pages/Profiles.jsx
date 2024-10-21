@@ -117,7 +117,11 @@ const Profiles = () => {
                     <div className='flex flex-row items-center mx-auto max-w-6xl gap-4 lg:gap-10 px-4 lg:px-24'>
                         <img
                             src={user.profilePicture}
-                            alt={`${user.applicantDetails.firstName} ${user.applicantDetails.lastName}'s profile`}
+                            alt={
+                                user.role === 'scholarship_provider'
+                                    ? `${user.scholarshipProviderDetails.organizationName}'s profile`
+                                    : `${user.applicantDetails.firstName} ${user.applicantDetails.middleName ? user.applicantDetails.middleName.charAt(0) + '. ' : ''}${user.applicantDetails.lastName}'s profile`
+                            }
                             className='w-36 h-36 my-8 rounded-md object-cover'
                         />
                         <div className='flex flex-col items-start gap-2 lg:w-1/2 '>

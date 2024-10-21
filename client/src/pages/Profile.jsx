@@ -320,10 +320,6 @@ export default function Profile() {
                                   <span>{post.totalComments}</span>
                                 </div>
                               </div>
-                              <div className='flex flex-row gap-1 pr-2'>
-                                <FaRegEye className='w-6 h-6 text-blue-600' />
-                                <span>{post.views}</span>
-                              </div>
                             </div>
                           </div>
                         </div>
