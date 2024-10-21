@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 import { regions, provinces, cities, barangays } from 'select-philippines-address';
 import Modal from 'react-modal';
+import ImageModal from '../components/AdminImageModal';
 
 export default function ApplicationForm() {
     useTokenExpiry();
@@ -103,6 +104,19 @@ export default function ApplicationForm() {
     const handleResubmit = () => {
         closeModal();
         navigate(`/resubmit-application/${application._id}`); // Navigate to the resubmit application page
+    };
+
+    const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
+    const [selectedDocument, setSelectedDocument] = useState({ name: '', url: '' });
+
+    const openDocumentModal = (name, url) => {
+        setSelectedDocument({ name, url });
+        setIsDocumentModalOpen(true);
+    };
+
+    const closeDocumentModal = () => {
+        setIsDocumentModalOpen(false);
+        setSelectedDocument({ name: '', url: '' });
     };
 
     if (!application || !currentUser) {
@@ -287,7 +301,7 @@ export default function ApplicationForm() {
                                         <strong className="w-1/3 text-sm">{key.replace(/_/g, ' ')}:</strong>
                                         <div className="w-2/3 flex justify-end items-center">
                                             <button
-                                                onClick={() => window.open(value, '_blank')}
+                                                onClick={() => openDocumentModal(key, value)}
                                                 className="ml-2 bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 text-xs"
                                             >
                                                 View Document
@@ -297,6 +311,12 @@ export default function ApplicationForm() {
                                 ))}
                             </div>
                         </div>
+                        <ImageModal
+                            isOpen={isDocumentModalOpen}
+                            onClose={closeDocumentModal}
+                            imageUrl={selectedDocument.url}
+                            documentName={selectedDocument.name}
+                        />
                     </div>
 
                     {/* Modal for resubmission confirmation */}
