@@ -233,7 +233,7 @@ export default function PostAnnouncement() {
                                     </p>
                                 </div>
                                 <div className="border-t mt-2 pt-2">
-                                    
+
                                     <div className="flex justify-between items-center">
                                         <div className="flex gap-4">
                                             <div className="flex items-center gap-1">
@@ -244,13 +244,13 @@ export default function PostAnnouncement() {
                                                 <BiCommentDots className="w-6 h-6 text-blue-600" />
                                                 <span>{announcement.comments.length}</span>
                                             </div>
-                                            
+
                                         </div>
                                         {/* <div className="flex items-center gap-1">
                                             <FaRegEye className="w-6 h-6 text-blue-600" />
                                             <span>1.2k</span>
                                         </div> */}
-                                         <span className="text-sm text-slate-600">
+                                        <span className="text-sm text-slate-600">
                                             Announced: {formatDistanceToNow(new Date(announcement.date), { addSuffix: true })}
                                         </span>
                                     </div>

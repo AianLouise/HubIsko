@@ -60,7 +60,7 @@ export default function ScholarApplications() {
       return application.applicationStatus === filter;
     })
     .filter((application) => {
-      const fullName = `${application.firstName} ${application.lastName}`.toLowerCase();
+      const fullName = `${application.applicantDetails.firstName} ${application.applicantDetails.lastName}`.toLowerCase();
       const scholarshipTitle = application.scholarshipProgram.title.toLowerCase();
       return fullName.includes(searchQuery.toLowerCase()) || scholarshipTitle.includes(searchQuery.toLowerCase());
     })
@@ -158,22 +158,24 @@ export default function ScholarApplications() {
             ) : filteredApplications.length === 0 ? (
               <div className="p-6 text-center text-gray-500">No applications available at the moment.</div>
             ) : (
-              <table className="w-full border-2 border-gray-200">
+              <table className="w-full border-collapse">
                 <thead>
                   <tr className="bg-slate-100">
-                    <th className="border border-gray-200 p-2">#No</th>
-                    <th className="border border-gray-200 p-2">Name</th>
-                    <th className="border border-gray-200 p-2">Scholarship Program</th>
-                    <th className="border border-gray-200 p-2">Date</th>
-                    <th className="border border-gray-200 p-2">Status</th>
-                    <th className="border border-gray-200 p-2">Actions</th>
+                    <th className="border border-gray-200 p-2 text-left">No</th>
+                    <th className="border border-gray-200 p-2 text-left">Name</th>
+                    <th className="border border-gray-200 p-2 text-left">Scholarship Program</th>
+                    <th className="border border-gray-200 p-2 text-left">Date</th>
+                    <th className="border border-gray-200 p-2 text-left">Status</th>
+                    <th className="border border-gray-200 p-2 text-left">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredApplications.map((application, index) => (
-                    <tr key={application._id} className="hover:bg-gray-100 text-center">
+                    <tr key={application._id} className="hover:bg-gray-100">
                       <td className="border border-gray-200 p-2">{index + 1}</td>
-                      <td className="border border-gray-200 p-2">{`${application.firstName} ${application.lastName}`}</td>
+                      <td className="border border-gray-200 p-2">
+                        {`${application.applicantDetails.applicantDetails.lastName}, ${application.applicantDetails.applicantDetails.firstName} ${application.applicantDetails.applicantDetails.middleName ? application.applicantDetails.applicantDetails.middleName.charAt(0) + '.' : ''}`}
+                      </td>
                       <td className="border border-gray-200 p-2">{application.scholarshipProgram.title}</td>
                       <td className="border border-gray-200 p-2">{new Date(application.submissionDate).toLocaleDateString()}</td>
                       <td className="border border-gray-200 p-2">

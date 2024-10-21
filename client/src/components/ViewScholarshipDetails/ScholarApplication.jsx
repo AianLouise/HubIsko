@@ -38,12 +38,6 @@ export default function ScholarApplication({ applications, error }) {
             `${application.applicant.applicantDetails.firstName} ${application.applicant.applicantDetails.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
         )
         .sort((a, b) => {
-            if (a.applicationStatus.toLowerCase() === 'pending' && b.applicationStatus.toLowerCase() !== 'pending') {
-                return -1;
-            }
-            if (a.applicationStatus.toLowerCase() !== 'pending' && b.applicationStatus.toLowerCase() === 'pending') {
-                return 1;
-            }
             if (sortOrder === 'recent') {
                 return new Date(b.submissionDate) - new Date(a.submissionDate);
             } else {
@@ -73,7 +67,7 @@ export default function ScholarApplication({ applications, error }) {
                             onClick={toggleSortOrder}
                         >
                             <BiFilter className='w-6 h-6 text-blue-600' />
-                            <span>{sortOrder === 'recent' ? 'Recent' : 'Oldest'}</span>
+                            <span>{sortOrder === 'recent' ? 'Sort by Oldest' : 'Sort by Recent'}</span>
                         </button>
                     </div>
                 </div>
@@ -104,7 +98,9 @@ export default function ScholarApplication({ applications, error }) {
                             ) : (
                                 filteredApplications.map(application => (
                                     <tr key={application._id} className="hover:bg-gray-100">
-                                        <td className="py-2 px-4 border-b text-center">{`${application.applicant.applicantDetails.firstName} ${application.applicant.applicantDetails.lastName}`}</td>
+                                        <td className="py-2 px-4 border-b text-center">
+                                            {`${application.applicant.applicantDetails.lastName}, ${application.applicant.applicantDetails.firstName} ${application.applicant.applicantDetails.middleName ? application.applicant.applicantDetails.middleName.charAt(0) + '.' : ''}`}
+                                        </td>
                                         <td className="py-2 px-4 border-b text-center">
                                             <span className={`inline-block w-3 h-3 mr-2 rounded-full ${getStatusColor(application.applicationStatus)}`}></span>
                                             {toSentenceCase(application.applicationStatus)}

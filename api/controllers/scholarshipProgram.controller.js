@@ -455,7 +455,18 @@ export const getAllApplicationsForProvider = async (req, res) => {
     // Flatten the array of arrays
     const allApplications = applications.flat();
 
-    res.status(200).json(allApplications);
+    // Fetch applicant details for each application
+    const applicationsWithApplicantDetails = await Promise.all(
+      allApplications.map(async (application) => {
+        const applicantDetails = await User.findById(application.applicant);
+        return {
+          ...application.toObject(),
+          applicantDetails,
+        };
+      })
+    );
+
+    res.status(200).json(applicationsWithApplicantDetails);
   } catch (error) {
     console.error('Error fetching applications for provider:', error);
     res.status(500).json({ message: 'Internal server error' });
