@@ -552,6 +552,9 @@ export default function CompleteProfile() {
     setShowImageModal(true);
   };
 
+  const Datetoday = new Date();
+  const maxDate = new Date(Datetoday.setFullYear(Datetoday.getFullYear() - 15)).toISOString().split('T')[0];
+
   return (
     <div className=' min-h-screen flex flex-col items-center'>
       {notification.show && (
@@ -668,7 +671,7 @@ export default function CompleteProfile() {
                   onChange={handleChange}
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   required
-                  max={today} // Set the max attribute to today's date
+                  max={maxDate} // Set the max attribute to the calculated date
                 />
               </div>
 

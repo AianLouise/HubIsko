@@ -207,6 +207,9 @@ export default function EditPersonalInformation() {
         setNotification(null);
     };
 
+    const today = new Date();
+    const maxDate = new Date(today.setFullYear(today.getFullYear() - 15)).toISOString().split('T')[0];  
+
     const inputBaseClasses = "block w-full p-2 rounded-lg border transition duration-200";
 
     const inputClasses = isEditing
@@ -309,9 +312,11 @@ export default function EditPersonalInformation() {
                         onChange={handleChange}
                         disabled={!isEditing}
                         required
+                        max={maxDate} // Set the max attribute to the calculated date
                     />
                     {errors.birthdate && <span className="text-red-500 text-sm">{errors.birthdate}</span>}
                 </div>
+
                 <div className="flex flex-col gap-2">
                     <label className="block text-sm font-medium text-gray-700">Gender</label>
                     <select
