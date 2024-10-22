@@ -161,73 +161,79 @@ export default function ProviderDashboard() {
         </div>
 
         <div className='max-w-8xl mx-auto px-24 my-8 gap-10 flex-col flex'>
-          <div className='grid grid-cols-2 gap-10'>
-            <div className="flex divide-x bg-white p-6 rounded-md shadow-md transition-all">
-              <div className='flex flex-col w-1/2 items-center'>
-                <h2 className="text-xl font-semibold text-slate-700">Applications Received</h2>
-                <p className="text-8xl font-bold flex h-full justify-center items-center text-blue-600">{applicationsCount}</p>
-              </div>
+          <div className="min-h-screen bg-gray-100 p-6">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
+              <div className="bg-white p-6 rounded-lg shadow-md transition-all hover:shadow-lg">
+                <div className="flex flex-col items-center mb-6">
+                  <h2 className="text-2xl font-semibold text-gray-700">Applications Received</h2>
+                  <p className="text-6xl font-bold text-blue-600">{applicationsCount}</p>
+                </div>
 
-              <div className='px-4 flex flex-col gap-2 w-full'>
-                <span className='font-medium text-slate-700'>Received Applications</span>
-
-                <div className='overflow-y-auto max-h-48 flex flex-col gap-2'>
-                  {applicationDetails.length > 0 ? (
-                    applicationDetails.map((application, index) => (
-                      <Link
-                        key={index}
-                        to={`/view-scholarships/${application.scholarshipProgram}`}
-                        className='flex gap-2 justify-between border rounded-md w-full p-2 hover:bg-slate-200 transition-all'
-                      >
-                        <div className='flex gap-2 items-center text-left'>
-                          <div className='w-10 h-10 rounded-full overflow-hidden'>
-                            <img src={application.profilePicture} alt={`${application.firstName} ${application.lastName}`} className='w-full h-full object-cover' />
+                <div className="flex flex-col gap-4">
+                  <span className="font-medium text-gray-700">Recent Applications</span>
+                  <div className="overflow-y-auto max-h-48 flex flex-col gap-2">
+                    {applicationDetails.length > 0 ? (
+                      applicationDetails.slice(0, 5).map((application, index) => (
+                        <Link
+                          key={index}
+                          to={`/view-scholarships/${application.scholarshipProgram}`}
+                          className="flex gap-4 items-center border rounded-md p-3 hover:bg-gray-100 transition-all"
+                        >
+                          <div className="w-12 h-12 rounded-full overflow-hidden">
+                            <img
+                              src={application.profilePicture}
+                              alt={`${application.firstName} ${application.lastName}`}
+                              className="w-full h-full object-cover"
+                            />
                           </div>
-                          <span className='font-medium'>
-                            <span className='text-black font-normal'>{application.firstName} {application.lastName}</span> <span className='text-blue-600 font-normal'>sent a new application</span>
-                          </span>
-                        </div>
-                      </Link>
-                    ))
-                  ) : (
-                    <p className='text-slate-500'>No applications received yet.</p>
-                  )}
+                          <div className="flex flex-col">
+                            <span className="font-medium text-black">
+                              {application.lastName}, {application.firstName} {application.middleName ? application.middleName.charAt(0) + '.' : ''}
+                            </span>
+                            <span className="text-blue-600">sent a new application</span>
+                          </div>
+                        </Link>
+                      ))
+                    ) : (
+                      <p className="text-gray-500">No applications received yet.</p>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="flex flex-col gap-8">
-              <Link to="/scholar-applications">
-                <div className="flex justify-between items-center bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2 hover:bg-slate-100 group ease-in-out">
-                  <div className="flex items-center gap-4">
-                    <FaFileAlt className="text-3xl text-blue-500" /> {/* Add icon */}
-                    <div>
-                      <h2 className="text-xl font-semibold text-slate-700">Total Applications</h2>
-                      <p className="text-2xl font-bold text-left text-slate-700">{applicationsCount}</p>
+              <div className="flex flex-col gap-8">
+                <Link to="/scholar-applications">
+                  <div className="flex justify-between items-center bg-white p-6 rounded-lg shadow-md transition-all hover:shadow-lg hover:bg-gray-100 group">
+                    <div className="flex items-center gap-4">
+                      <FaFileAlt className="text-3xl text-blue-500" />
+                      <div>
+                        <h2 className="text-xl font-semibold text-gray-700">Total Applications</h2>
+                        <p className="text-2xl font-bold text-gray-700">{applicationsCount}</p>
+                      </div>
+                    </div>
+                    <div className="hidden items-center text-blue-500 font-medium gap-2 group-hover:flex">
+                      <span>View</span>
+                      <BiSolidRightArrow className="w-6 h-6" />
                     </div>
                   </div>
-                  <div className='hidden items-center text-blue-500 font-medium gap-2 group-hover:flex ease-in-out transition'>
-                    <span>View</span>
-                    <BiSolidRightArrow className='w-6 h-6' />
-                  </div>
-                </div>
-              </Link>
+                </Link>
 
-              <Link to="/scholarships">
-                <div className="flex justify-between items-center bg-white p-6 rounded-md shadow-md transition-all hover:-translate-y-2 hover:bg-slate-100 group ease-in-out">
-                  <div className="flex items-center gap-4">
-                    <FaUniversity className="text-3xl text-blue-500" /> {/* Add icon */}
-                    <div>
-                      <h2 className="text-xl font-semibold text-slate-700">Total Scholarship Programs</h2>
-                      <p className="text-2xl font-bold text-left text-slate-700">{Array.isArray(scholarships) ? scholarships.length : 0}</p>
+                <Link to="/scholarships">
+                  <div className="flex justify-between items-center bg-white p-6 rounded-lg shadow-md transition-all hover:shadow-lg hover:bg-gray-100 group">
+                    <div className="flex items-center gap-4">
+                      <FaUniversity className="text-3xl text-blue-500" />
+                      <div>
+                        <h2 className="text-xl font-semibold text-gray-700">Total Scholarship Programs</h2>
+                        <p className="text-2xl font-bold text-gray-700">{Array.isArray(scholarships) ? scholarships.length : 0}</p>
+                      </div>
+                    </div>
+                    <div className="hidden items-center text-blue-500 font-medium gap-2 group-hover:flex">
+                      <span>View</span>
+                      <BiSolidRightArrow className="w-6 h-6" />
                     </div>
                   </div>
-                  <div className='hidden items-center text-blue-500 font-medium gap-2 group-hover:flex ease-in-out transition'>
-                    <span>View</span>
-                    <BiSolidRightArrow className='w-6 h-6' />
-                  </div>
-                </div>
-              </Link>
+                </Link>
+              </div>
             </div>
           </div>
 

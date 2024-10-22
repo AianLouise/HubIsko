@@ -224,10 +224,11 @@ export const getScholarshipProgramsByProvider = async (req, res) => {
         const user = await User.findById(application.applicant);
 
         applicationDetails.push({
-          firstName: application.firstName,
-          lastName: application.lastName,
-          applicationDate: application.applicationDate,
-          status: application.status,
+          firstName: user.applicantDetails.firstName,
+          lastName: user.applicantDetails.lastName,
+          middleName: user.applicantDetails.middleName,
+          submissionDate: application.submissionDate,
+          applicationStatus: application.applicationStatus,
           profilePicture: user.profilePicture, // Add profilePicture from the User table
           scholarshipProgram: application.scholarshipProgram, // Add scholarshipProgram title
           // Add other relevant fields from the application as needed
