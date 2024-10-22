@@ -779,3 +779,27 @@ export const undoComplete = async (req, res) => {
         res.status(500).json({ message: 'Failed to undo the completion of the scholarship program', error: error.message });
     }
 };
+
+export const rePublish = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // Find the scholarship program by id
+        const scholarship = await Scholarship.findById(id);
+        if (!scholarship) {
+            return res.status(404).json({ message: 'Scholarship program not found' });
+        }
+
+        // Update the status to 'Published'
+        scholarship.status = 'Published';
+
+        // Save the updated scholarship program
+        await scholarship.save();
+
+        // Respond with the updated scholarship program
+        res.status(200).json(scholarship);
+    } catch (error) {
+        console.error('Error republishing the scholarship program:', error);
+        res.status(500).json({ message: 'Failed to republish the scholarship program', error: error.message });
+    }
+};

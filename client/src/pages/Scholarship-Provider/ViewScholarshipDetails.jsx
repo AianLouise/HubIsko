@@ -9,7 +9,7 @@ import ScholarshipApplication from '../../components/ViewScholarshipDetails/Scho
 import Validation from '../../components/ViewScholarshipDetails/Validation';
 import EditProgram from '../../components/ViewScholarshipDetails/EditProgram';
 import Modal from 'react-modal';
-import { FaInfoCircle, FaEdit, FaBullhorn, FaUsers, FaFileAlt } from 'react-icons/fa';
+import { FaInfoCircle, FaEdit, FaBullhorn, FaUsers, FaFileAlt, FaRedo } from 'react-icons/fa';
 import { FaPlay, FaCalendarPlus, FaPause, FaPlayCircle } from 'react-icons/fa';
 import { FaComments, FaPaperPlane } from 'react-icons/fa6';
 
@@ -277,6 +277,43 @@ export default function ViewScholarshipDetails() {
         }
     };
 
+    const [isConfirmModalOpen2, setIsConfirmModalOpen2] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const handleOpenApplication = () => {
+        setIsConfirmModalOpen2(true);
+    };
+
+    const confirmOpenApplication = async () => {
+        try {
+            const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipProgram.id}/republish`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            setSuccessMessage('Scholarship program republished successfully!');
+            console.log('Scholarship program republished:', data);
+            setIsConfirmModalOpen2(false);
+            fetchProgramDetails(); // Refresh program details
+        } catch (error) {
+            setErrorMessage('Error republishing scholarship program');
+            console.error('Error republishing scholarship program:', error);
+            setIsConfirmModalOpen2(false);
+        }
+    };
+
+    const cancelOpenApplication = () => {
+        setIsConfirmModalOpen2(false);
+    };
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -372,7 +409,7 @@ export default function ViewScholarshipDetails() {
                                             <FaComments className="mr-2" />
                                             Go to Forums
                                         </button>
-                                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-blue-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
+                                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-indigo-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
                                             Discuss your program and connect with potential applicants.
                                         </div>
                                     </div>
@@ -384,7 +421,7 @@ export default function ViewScholarshipDetails() {
                                             <FaPlay className="mr-2" />
                                             Start Program
                                         </button>
-                                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-blue-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
+                                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-teal-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
                                             Start the program early if all slots are filled.
                                         </div>
                                     </div>
@@ -396,7 +433,7 @@ export default function ViewScholarshipDetails() {
                                             <FaCalendarPlus className="mr-2" />
                                             Extend Application Deadline
                                         </button>
-                                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-blue-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
+                                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-yellow-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
                                             Extend the application deadline to allow more applications.
                                         </div>
                                     </div>
@@ -409,7 +446,7 @@ export default function ViewScholarshipDetails() {
                                                 <FaPause className="mr-2" />
                                                 Pause Program
                                             </button>
-                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-blue-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
+                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-orange-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
                                                 Temporarily remove the program from the listing.
                                             </div>
                                         </div>
@@ -422,7 +459,7 @@ export default function ViewScholarshipDetails() {
                                                 <FaPlayCircle className="mr-2" />
                                                 Resume Program
                                             </button>
-                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-blue-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
+                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-green-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
                                                 Resume the paused program and make it available again.
                                             </div>
                                         </div>
@@ -561,6 +598,37 @@ export default function ViewScholarshipDetails() {
                             <div className="bg-teal-100 text-teal-700 p-4 mb-6 rounded-md shadow-md">
                                 <h2 className="text-xl font-bold mb-2">Program is Ongoing!</h2>
                                 <p>The scholarship program is currently ongoing. Please monitor the progress and manage the applications as needed. Remember to make any necessary announcements for scholars.</p>
+                                <p className="text-sm text-teal-700 mt-4">Click the button below to republish the program and open applications again.</p>
+                                <button
+                                    className="bg-indigo-500 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-600 flex items-center mt-2"
+                                    onClick={handleOpenApplication}
+                                >
+                                    <FaRedo className="mr-2" />
+                                    Republish Program to Open Application
+                                </button>
+                            </div>
+                        )}
+
+                        {isConfirmModalOpen2 && (
+                            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                                <div className="bg-white p-6 rounded-md shadow-md">
+                                    <h3 className="text-xl font-bold mb-4">Confirm Republish</h3>
+                                    <p>Are you sure you want to republish this program to open applications?</p>
+                                    <div className="mt-6 flex justify-end space-x-4">
+                                        <button
+                                            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
+                                            onClick={cancelOpenApplication}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+                                            onClick={confirmOpenApplication}
+                                        >
+                                            Confirm
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         )}
 
