@@ -23,13 +23,15 @@ export const createPost = async (req, res) => {
 
 export const getPosts = async (req, res) => {
   try {
-    const posts = await ForumPost.find().populate('author', ['role', 'applicantDetails', 'scholarshipProviderDetails', 'email', 'profilePicture']);
+    const posts = await ForumPost.find().populate('author', ['role', 'applicantDetails', 'scholarshipProviderDetails', 'email', 'profilePicture', 'username']);
     const modifiedPosts = posts.map(post => ({
       ...post.toObject(),
       totalLikes: post.likes.length,
       totalComments: post.comments.length,
       authorName: post.author.role === 'applicant'
-        ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}`
+        ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.middleName ? post.author.applicantDetails.middleName.charAt(0) + '.' : ''} ${post.author.applicantDetails.lastName}`
+        : post.author.role === 'admin'
+        ? `${post.author.username}`
         : `${post.author.scholarshipProviderDetails.organizationName}`
     }));
     
@@ -46,23 +48,25 @@ export const getPostById = async (req, res) => {
       .populate('author', [
         'applicantDetails.firstName',
         'applicantDetails.lastName',
+        'applicantDetails.middleName',
         'scholarshipProviderDetails.organizationName',
         'email',
         'profilePicture',
-        'role'
-      ]) // Include firstName, lastName, and organizationName
+        'role',
+        'username' // Include username for admin
+      ]) // Include firstName, lastName, middleName, organizationName, and username
       .populate({
         path: 'comments',
         populate: [
           {
             path: 'author',
-            select: 'applicantDetails.firstName applicantDetails.lastName scholarshipProviderDetails.organizationName profilePicture role' // Include firstName, lastName, and organizationName
+            select: 'applicantDetails.firstName applicantDetails.lastName applicantDetails.middleName scholarshipProviderDetails.organizationName profilePicture role username' // Include firstName, lastName, middleName, organizationName, and username
           },
           {
             path: 'replies',
             populate: {
               path: 'author',
-              select: 'applicantDetails.firstName applicantDetails.lastName scholarshipProviderDetails.organizationName profilePicture role' // Include firstName, lastName, and organizationName
+              select: 'applicantDetails.firstName applicantDetails.lastName applicantDetails.middleName scholarshipProviderDetails.organizationName profilePicture role username' // Include firstName, lastName, middleName, organizationName, and username
             }
           }
         ]
@@ -88,7 +92,12 @@ export const getPostById = async (req, res) => {
       totalLikes,
       totalComments,
       totalViews, // Include totalViews in the response
-      attachments: post.attachmentUrls // Include attachments in the response
+      attachments: post.attachmentUrls, // Include attachments in the response
+      authorName: post.author.role === 'applicant'
+        ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.middleName ? post.author.applicantDetails.middleName.charAt(0) + '.' : ''} ${post.author.applicantDetails.lastName}`
+        : post.author.role === 'admin'
+        ? `${post.author.username}`
+        : `${post.author.scholarshipProviderDetails.organizationName}`
     });
   } catch (err) {
     console.error(err.message);

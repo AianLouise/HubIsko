@@ -123,7 +123,9 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
                             src={comment.author.profilePicture || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToiRnzzyrDtkmRzlAvPPbh77E-Mvsk3brlxQ&s'}
                             alt={`${comment.author.role === 'applicant'
                                 ? comment.author.applicantDetails.firstName
-                                : comment.author.scholarshipProviderDetails.organizationName}'s profile`}
+                                : comment.author.role === 'admin'
+                                    ? comment.author.username
+                                    : comment.author.scholarshipProviderDetails.organizationName}'s profile`}
                             className='w-10 h-10 mt-2 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
                         />
                     </Link>
@@ -135,7 +137,9 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
                                 <span className="text-lg font-semibold text-gray-700">
                                     {comment.author.role === 'applicant'
                                         ? `${comment.author.applicantDetails.firstName} ${comment.author.applicantDetails.lastName}`
-                                        : `${comment.author.scholarshipProviderDetails.organizationName}`}
+                                        : comment.author.role === 'admin'
+                                            ? `${comment.author.username}`
+                                            : `${comment.author.scholarshipProviderDetails.organizationName}`}
                                 </span>
                                 <span className="text-xs text-gray-500">
                                     {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
@@ -272,9 +276,11 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
                                         {/* User avatar */}
                                         <img
                                             src={reply.author.profilePicture}
-                                            alt={`${post.author.role === 'applicant'
-                                                ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}`
-                                                : `${post.author.scholarshipProviderDetails.organizationName}`}'s profile`}
+                                            alt={`${reply.author.role === 'applicant'
+                                                ? `${reply.author.applicantDetails.firstName} ${reply.author.applicantDetails.lastName}`
+                                                : reply.author.role === 'admin'
+                                                    ? `${reply.author.username}`
+                                                    : `${reply.author.scholarshipProviderDetails.organizationName}`}'s profile`}
                                             className="w-10 h-10 rounded-full object-cover"
                                         />
                                         <div className="flex flex-col bg-white border border-gray-200 rounded-lg w-full shadow-sm p-4">
@@ -282,7 +288,9 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
                                                 <span className="text-sm font-semibold text-gray-700">
                                                     {post.author.role === 'applicant'
                                                         ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}`
-                                                        : `${post.author.scholarshipProviderDetails.organizationName}`}
+                                                        : post.author.role === 'admin'
+                                                            ? `${post.author.username}`
+                                                            : `${post.author.scholarshipProviderDetails.organizationName}`}
                                                 </span>
                                                 <span className="text-xs text-gray-500">
                                                     {formatDistanceToNow(new Date(reply.createdAt), { addSuffix: true })}

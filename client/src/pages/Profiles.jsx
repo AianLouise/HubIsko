@@ -120,7 +120,9 @@ const Profiles = () => {
                             alt={
                                 user.role === 'scholarship_provider'
                                     ? `${user.scholarshipProviderDetails.organizationName}'s profile`
-                                    : `${user.applicantDetails.firstName} ${user.applicantDetails.middleName ? user.applicantDetails.middleName.charAt(0) + '. ' : ''}${user.applicantDetails.lastName}'s profile`
+                                    : user.role === 'admin'
+                                        ? `${user.username}'s profile`
+                                        : `${user.applicantDetails.firstName} ${user.applicantDetails.middleName ? user.applicantDetails.middleName.charAt(0) + '. ' : ''}${user.applicantDetails.lastName}'s profile`
                             }
                             className='w-36 h-36 my-8 rounded-md object-cover'
                         />
@@ -129,7 +131,11 @@ const Profiles = () => {
                                 {user.role === 'scholarship_provider' ? 'Organization' : user.role === 'applicant' ? 'Student' : user.role === 'admin' ? 'Admin' : user.role}
                             </span>
                             <span className='text-3xl font-bold text-gray-800'>
-                                {user.role === 'scholarship_provider' ? user.scholarshipProviderDetails.organizationName : `${user.applicantDetails.firstName} ${user.applicantDetails.lastName}`}
+                                {user.role === 'scholarship_provider'
+                                    ? user.scholarshipProviderDetails.organizationName
+                                    : user.role === 'admin'
+                                        ? user.username
+                                        : `${user.applicantDetails.firstName} ${user.applicantDetails.lastName}`}
                             </span>
                         </div>
                     </div>

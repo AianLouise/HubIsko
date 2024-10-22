@@ -282,14 +282,18 @@ export default function Forums() {
                                         src={post.author.profilePicture || 'default-profile-pic-url'}
                                         alt={`${post.author.role === 'applicant'
                                             ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}`
-                                            : `${post.author.scholarshipProviderDetails.organizationName}`}'s profile`}
+                                            : post.author.role === 'admin'
+                                                ? `${post.author.username}`
+                                                : `${post.author.scholarshipProviderDetails.organizationName}`}'s profile`}
                                         className='w-12 h-12 rounded-full object-cover'
                                     />
                                     <div className='flex flex-col'>
                                         <span className='font-medium'>
                                             {post.author.role === 'applicant'
                                                 ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}`
-                                                : `${post.author.scholarshipProviderDetails.organizationName}`}
+                                                : post.author.role === 'admin'
+                                                    ? `${post.author.username}`
+                                                    : `${post.author.scholarshipProviderDetails.organizationName}`}
                                         </span>
                                         <span className='text-sm text-slate-500'>
                                             {new Date(post.createdAt).toLocaleString('en-US', {
