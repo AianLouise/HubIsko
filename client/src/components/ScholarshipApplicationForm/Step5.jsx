@@ -24,7 +24,7 @@ const Step5 = ({ formData, setFormData, errors, scholarship, requiredDocuments }
           ...prevState,
           documents: {
             ...prevState.documents,
-            [docName]: { file }
+            [docName]: file
           }
         };
         console.log('Updated formData:', updatedFormData); // Log the updated formData
@@ -95,7 +95,7 @@ const Step5 = ({ formData, setFormData, errors, scholarship, requiredDocuments }
                     )}
                   </div>
                   {uploadedFiles[doc.name] && (
-                    <p className='text-xs mt-1'>Uploaded: {uploadedFiles[doc.name]?.file?.name}</p>
+                    <p className='text-xs mt-1'>Uploaded: {uploadedFiles[doc.name]?.name}</p>
                   )}
                   {fileErrors[doc.name] && (
                     <p className='text-sm text-red-600 mt-1'>{fileErrors[doc.name]}</p>
