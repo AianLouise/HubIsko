@@ -299,7 +299,11 @@ export default function ForumPost() {
                 <div className='flex flex-col gap-8 mx-auto max-w-6xl p-2 lg:px-24'>
 
                     <div className='flex gap-1 mt-10 items-center'>
-                        <Link to={post.author.role === 'applicant' ? '/Forums' : '/provider/forums'}>
+                        <Link to={
+                            currentUser.role === 'applicant' ? '/Forums' :
+                                currentUser.role === 'admin' ? '/admin-forums' :
+                                    '/provider/forums'
+                        }>
                             <button className='bg-white border shadow px-4 py-1 mr-2 rounded-md hover:bg-slate-200 transition ease-in-out flex items-center gap-2 font-medium'>
                                 <MdForum className='text-blue-600' />
                                 Forums
@@ -319,7 +323,9 @@ export default function ForumPost() {
                                     src={post.author.profilePicture}
                                     alt={`${post.author.role === 'applicant'
                                         ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}`
-                                        : `${post.author.scholarshipProviderDetails.organizationName}`}'s profile`}
+                                        : post.author.role === 'admin'
+                                            ? `${post.author.username}`
+                                            : `${post.author.scholarshipProviderDetails.organizationName}`}'s profile`}
                                     className='w-12 h-12 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
                                 />
                             </Link>
@@ -327,7 +333,9 @@ export default function ForumPost() {
                                 <span className='font-bold text-lg'>
                                     {post.author.role === 'applicant'
                                         ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}`
-                                        : `${post.author.scholarshipProviderDetails.organizationName}`}
+                                        : post.author.role === 'admin'
+                                            ? `${post.author.username}`
+                                            : `${post.author.scholarshipProviderDetails.organizationName}`}
                                 </span>
                                 <span className='text-sm text-slate-500'>
                                     {new Date(post.createdAt).toLocaleString('en-US', {
