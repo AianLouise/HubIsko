@@ -39,13 +39,22 @@ const DisbursementMethod = ({ method, bankName }) => (
     </div>
 );
 
+const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+};
+
 export default function ProgamDetails({ scholarshipProgram }) {
     return (
         <div className="p-6 bg-white rounded-lg shadow-md">
             <div className="flex items-center mb-4">
                 <StatusBadge status={scholarshipProgram.status} />
+                {scholarshipProgram.status === 'Published' && (
+                    <p className="ml-4 bg-blue-100 text-blue-800 px-3 py-1 rounded-md shadow-md">
+                        Application Deadline: {formatDate(scholarshipProgram.applicationDeadline)}
+                    </p>
+                )}
             </div>
-                 <h2 className="text-2xl font-bold mb-4 text-blue-600">Program Details</h2>
+            <h2 className="text-2xl font-bold mb-4 text-blue-600">Program Details</h2>
             <div className="grid grid-cols-1 gap-4">
                 <DetailItem label="Scholarship Title">{scholarshipProgram.title}</DetailItem>
                 <DetailItem label="Scholarship Description">{scholarshipProgram.description}</DetailItem>
@@ -73,9 +82,9 @@ export default function ProgamDetails({ scholarshipProgram }) {
                 <DetailItem label="Renewal Duration">{scholarshipProgram.renewalDuration}</DetailItem>
                 <DetailItem label="Disbursement Schedule">{scholarshipProgram.disbursementSchedule}</DetailItem>
                 <DetailItem label="Disbursement Method">
-                    <DisbursementMethod 
-                        method={scholarshipProgram.disbursementMethod} 
-                        bankName={scholarshipProgram.bankName} 
+                    <DisbursementMethod
+                        method={scholarshipProgram.disbursementMethod}
+                        bankName={scholarshipProgram.bankName}
                     />
                 </DetailItem>
                 <DetailItem label="Contact Email">{scholarshipProgram.contactEmail}</DetailItem>

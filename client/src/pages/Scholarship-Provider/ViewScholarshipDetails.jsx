@@ -30,6 +30,11 @@ export default function ViewScholarshipDetails() {
     const [applicationDeadline, setApplicationDeadline] = useState('');
     const [showShareMessage, setShowShareMessage] = useState(false);
 
+    const [isExtendModalOpen, setIsExtendModalOpen] = useState(false);
+    const [newApplicationDeadline, setNewApplicationDeadline] = useState('');
+    const [currentApplicationDeadline, setCurrentApplicationDeadline] = useState('');
+    const [isDeadlineExpired, setIsDeadlineExpired] = useState(false);
+
     const fetchProgramDetails = async () => {
         try {
             const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${id}`);
@@ -39,6 +44,9 @@ export default function ViewScholarshipDetails() {
             if (data.status === 'Published') {
                 setShowShareMessage(true);
             }
+            setApplicationDeadline(data.applicationDeadline);
+            setCurrentApplicationDeadline(data.applicationDeadline);
+            console.log('Program details:', data);
         } catch (error) {
             console.error('Error fetching program details:', error);
             setError(error.message);
@@ -184,6 +192,40 @@ export default function ViewScholarshipDetails() {
         window.location.reload(); // Refresh the page
     };
 
+    // 
+    useEffect(() => {
+        // Check if the application deadline has expired
+        if (currentApplicationDeadline) {
+            const deadlineDate = new Date(currentApplicationDeadline);
+            const today = new Date();
+            setIsDeadlineExpired(deadlineDate < today);
+        }
+    }, [currentApplicationDeadline]);
+
+    const extendApplicationDeadline = () => {
+        setIsExtendModalOpen(true);
+    };
+
+    const confirmExtendDeadline = async () => {
+        try {
+            const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${id}/extend-deadline`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ newDeadline: newApplicationDeadline }), // Include the new application deadline in the request body
+            });
+            if (!response.ok) throw new Error('Failed to extend the application deadline');
+            await response.json();
+            setIsExtendModalOpen(false);
+            console.log('Extending deadline to:', newApplicationDeadline);
+            fetchProgramDetails(); // Refresh the fetch after extending the deadline
+        } catch (error) {
+            console.error('Error extending the application deadline:', error);
+            setError(error.message);
+        }
+    };
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -282,6 +324,51 @@ export default function ViewScholarshipDetails() {
                                     >
                                         Start Program
                                     </button>
+                                    <button
+                                        className="bg-yellow-500 text-white px-4 py-2 rounded-md shadow hover:bg-yellow-600"
+                                        onClick={extendApplicationDeadline}
+                                    >
+                                        Extend Application Deadline
+                                    </button>
+                                </div>
+                                {isDeadlineExpired && (
+                                    <div className="mt-4 bg-red-100 text-red-700 p-4 rounded-md shadow-md">
+                                        <p>The application deadline has expired. Please extend the deadline to allow new applications.</p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                        {isExtendModalOpen && (
+                            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                                <div className="bg-white p-6 rounded-md shadow-md">
+                                    <h3 className="text-xl font-bold mb-4">Extend Application Deadline</h3>
+                                    <p>Current Application Deadline: {new Date(currentApplicationDeadline).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                                    <p>Are you sure you want to extend the application deadline?</p>
+                                    <div className="mt-4">
+                                        <label className="block text-gray-700 font-semibold mb-2">New Application Deadline</label>
+                                        <input
+                                            type="date"
+                                            value={newApplicationDeadline}
+                                            onChange={(e) => setNewApplicationDeadline(e.target.value)}
+                                            className="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                                            min={getTodayDate()} // Set the min attribute to today's date
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mt-6 flex justify-end space-x-4">
+                                        <button
+                                            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
+                                            onClick={() => setIsExtendModalOpen(false)}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
+                                            onClick={confirmExtendDeadline}
+                                        >
+                                            Confirm
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         )}

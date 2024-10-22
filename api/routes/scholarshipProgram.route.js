@@ -1,5 +1,5 @@
 import express from "express";
-import { addApprovedScholar, getApprovedScholarInfo, createScholarshipProgram, getAllApplicationsForProvider, getAllScholarshipPrograms, getApplicantDetails, getOrganizationName, getRequiredDocuments, getScholarshipApplications, getScholarshipProgramById, getScholarshipProgramsByProviderId, getScholarshipProviders, test, updateApplicationStatus, hasUserApplied, publishScholarshipProgram, updateScholarshipStatus, updateScholarshipDetails, checkAvailableSlots, markAsComplete } from '../controllers/scholarshipProgram.controller.js';
+import { addApprovedScholar, getApprovedScholarInfo, createScholarshipProgram, getAllApplicationsForProvider, getAllScholarshipPrograms, getApplicantDetails, getOrganizationName, getRequiredDocuments, getScholarshipApplications, getScholarshipProgramById, getScholarshipProgramsByProviderId, getScholarshipProviders, test, updateApplicationStatus, hasUserApplied, publishScholarshipProgram, updateScholarshipStatus, updateScholarshipDetails, checkAvailableSlots, markAsComplete, extendDeadline } from '../controllers/scholarshipProgram.controller.js';
 
 const router = express.Router();
 
@@ -24,6 +24,7 @@ router.get('/:programId/approved-scholar-info', getApprovedScholarInfo);
 
 router.get('/:programId/has-applied/:userId', hasUserApplied);
 router.post('/scholarship-programs/:id/publish', publishScholarshipProgram);
+router.put('/scholarship-programs/:id/extend-deadline', extendDeadline);
 router.put('/update-status/:id', updateScholarshipStatus);
 
 router.put('/scholarship-programs/:id', updateScholarshipDetails);
