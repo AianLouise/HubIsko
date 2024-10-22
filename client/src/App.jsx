@@ -184,7 +184,7 @@ export default function App() {
             {/* <Route path="admin-forums" element={<AdminForums />} /> */}
             <Route path="admin-forums" element={<AdminForumsNew />} />
             <Route path="admin-forums/post/:postId" element={<AdminForumDetail />} />
-            <Route path="admin-create-forum-post" element={<AdminCreateForumPost />} />
+            <Route path="admin-forums/create-post" element={<AdminCreateForumPost />} />
 
             <Route path="add-account" element={<AddAccount />} />
 

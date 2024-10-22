@@ -114,7 +114,7 @@ export default function CreateForumPostForm() {
                     navigate('/provider/forums');
                     break;
                 case 'admin':
-                    navigate('/admin/posts');
+                    navigate('/admin-forums');
                     break;
                 default:
                     console.error('Invalid user role.');

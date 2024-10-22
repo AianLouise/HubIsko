@@ -4,6 +4,7 @@ import { PiStudentFill } from "react-icons/pi";
 import { FaBuilding, FaPlus, FaWrench } from "react-icons/fa6";
 import { FaList } from "react-icons/fa";
 import { BsFillGridFill } from "react-icons/bs";
+import { Link } from "react-router-dom";
 import AllPosts from "../../components/AdminForums/Allposts";
 import StudentPosts from "../../components/AdminForums/StudentPosts";
 import ProviderPosts from "../../components/AdminForums/ProviderPosts";
@@ -102,10 +103,12 @@ export default function AdminForumsNew() {
             {/* Section 1 */}
             <div className="flex flex-col justify-between w-1/6 bg-white shadow border rounded-md p-4">
               <div className="flex flex-col items-center">
-                <button className="bg-blue-600 w-full text-white px-6 py-2 mb-4 rounded-md flex items-center justify-center">
-                  <FaPlus className="mr-2" /> {/* Add the icon */}
-                  Create a New Post
-                </button>
+                <Link to="/admin-forums/create-post">
+                  <button className="bg-blue-600 w-full text-white px-6 py-2 mb-4 rounded-md flex items-center justify-center">
+                    <FaPlus className="mr-2" /> {/* Add the icon */}
+                    Create a New Post
+                  </button>
+                </Link>
 
                 <div className="flex flex-col gap-2 w-full items-start justify-start">
                   <button
