@@ -50,24 +50,16 @@ export default function AdminDashboard() {
                 const scholarshipsData = await scholarshipsResponse.json();
                 setTotalScholarships(scholarshipsData.totalScholarships);
 
-                // Fetch total number of approved scholars
-                const scholarsResponse = await fetch('/api/admin/count-approved-scholars');
-                const scholarsData = await scholarsResponse.json();
-                setTotalScholars(scholarsData.count);
-
                 // Fetch total number of pending providers
-                const pendingProvidersResponse = await fetch('/api/admin/search-pending-verification-providers');
+                const pendingProvidersResponse = await fetch('/api/adminApp/search-pending-verification-providers');
                 const pendingProvidersData = await pendingProvidersResponse.json();
                 setPendingProviders(pendingProvidersData.length);
 
-                const pendingStudentsResponse = await fetch('/api/admin/search-pending-verification-students');
+                const pendingStudentsResponse = await fetch('/api/adminApp/search-pending-verification-students');
                 const pendingStudentsData = await pendingStudentsResponse.json();
                 setPendingStudents(pendingStudentsData.length);
 
-                // Fetch total number of pending programs
-                const pendingProgramsResponse = await fetch('/api/admin/search-pending-approval-programs');
-                const pendingProgramsData = await pendingProgramsResponse.json();
-                setPendingPrograms(pendingProgramsData.length);
+                console.log('Pending Students and Providers:', pendingStudentsData.length, pendingProvidersData.length);
 
                 const forumPostResponse = await fetch('/api/adminForums/forum-posts');
                 const forumPostData = await forumPostResponse.json();
@@ -200,7 +192,7 @@ export default function AdminDashboard() {
                                     <span className="text-6xl font-bold text-left text-blue-600">{totalScholarships}</span>
                                     <div className="flex justify-between items-center">
                                         <span className="text-base text-slate-500 flex gap-3 truncate">
-                                            {pendingPrograms} <span>Pending verification</span>
+
                                         </span>
                                         <div className="hidden group-hover:flex gap-2 items-center text-blue-600">
                                             View
