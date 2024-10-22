@@ -14,6 +14,10 @@ import { v4 as uuidv4 } from 'uuid'; // Import UUID library
 
 export default function Profile() {
 
+  useEffect(() => {
+    document.title = "Profile | HubIsko";
+}, []);
+
   const currentUser = useSelector((state) => state.user.currentUser);
 
   const [ShowModal, setShowModal] = useState(false);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from 'react-redux';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -12,6 +12,10 @@ import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 export default function StudentInfo() {
   useTokenExpiry();
   const { currentUser } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    document.title = "Student Info | HubIsko";
+}, []);
 
   return (
     <div className="flex flex-col min-h-screen">
