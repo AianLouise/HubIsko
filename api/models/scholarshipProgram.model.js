@@ -43,13 +43,13 @@ const scholarshipProgramSchema = new mongoose.Schema({
   ], // Array of sections with title and content
   faqTitle: { type: String }, // Added FAQ title field
   faqDescription: { type: String }, // Added FAQ description field
-  providerRequirements: [
-    {
-      id: { type: String },
-      name: { type: String },
-      url: { type: String }
-    }
-  ], // Array of provider requirements with id and url
+  // providerRequirements: [
+  //   {
+  //     id: { type: String },
+  //     name: { type: String },
+  //     url: { type: String }
+  //   }
+  // ], // Array of provider requirements with id and url
    status: {
       type: String,
       enum: [

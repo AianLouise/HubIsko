@@ -4,7 +4,6 @@ import StepTemplate from '../../components/PostScholarship/StepTemplate';
 import Step1 from '../../components/PostScholarship/Step1';
 import Step2 from '../../components/PostScholarship/Step2';
 import Step3 from '../../components/PostScholarship/Step3';
-import Step4 from '../../components/PostScholarship/Step4';
 import Step5 from '../../components/PostScholarship/Step5';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import { useSelector } from 'react-redux';
@@ -43,7 +42,7 @@ const PostScholarship = () => {
         faqDescription: 'For more details, visit our website.',
         scholarshipImage: '',
         bannerImage: '',
-        providerRequirements: ''
+        // providerRequirements: ''
     });
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [currentPage, setCurrentPage] = useState(0);
@@ -116,19 +115,6 @@ const PostScholarship = () => {
                             errors[`sectionContent${index}`] = `Content for section ${index + 1} is required`;
                         }
                     });
-                }
-                return errors;
-            },
-        },
-        {
-            title: 'Upload Documents for Review',
-            description: 'Upload documents so that the HubIsko can review and decide if the provider can offer this scholarship program',
-            content: <Step4 formData={formData} setFormData={setFormData} setNotification={setNotification} />,
-            validate: (formData) => {
-                const errors = {};
-                const hasUploadedDocument = formData.providerRequirements && formData.providerRequirements.some(req => req.url);
-                if (!hasUploadedDocument) {
-                    errors.providerRequirements = 'At least one document must be uploaded.';
                 }
                 return errors;
             },
