@@ -18,13 +18,13 @@ export default function StudentInfo() {
       <Header />
       <AccountManagement />
       <main className="flex-grow bg-[#f8f8fb] font-medium text-slate-700">
-        <div className="max-w-6xl lg:px-24 mx-auto my-4 lg:my-10">
+        <div className="max-w-6xl px-4 lg:px-24 mx-auto my-4 lg:my-10">
           {currentUser.applicantDetails.profileComplete ? (
             <div className="flex flex-col gap-5">
-              <h2 className="text-lg lg:text-lg font-bold text-blue-700">
+              <h2 className="text-lg lg:text-lg font-bold text-blue-700 text-center lg:text-left">
                 Welcome to your student information portal
               </h2>
-              <p className="text-base lg:text-base text-slate-600 mb-6">
+              <p className="text-base lg:text-base text-slate-600 mb-6 text-center lg:text-left">
                 Here you can view and update your personal details, address information, and educational background.
                 Please ensure all information is accurate and up-to-date.
               </p>
@@ -34,7 +34,7 @@ export default function StudentInfo() {
               <EducationInformation />
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center mt-20 lg:mt-40">
+            <div className="flex flex-col items-center justify-center mt-20 lg:mt-40 text-center">
               <span className="text-2xl font-medium">Your account isn't verified yet.</span>
               <span className="text-slate-600">Complete your profile first to gain access to your student info.</span>
               <Link to={'/verify-profile'}>

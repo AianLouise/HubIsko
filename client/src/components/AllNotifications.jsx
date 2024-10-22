@@ -38,7 +38,7 @@ const NotificationsPage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md space-y-6 mt-10">
+    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md space-y-6 mt-10 mb-10">
       <h2 className="text-xl font-bold mb-4 text-blue-600">All Notifications</h2>
       <div className="flex flex-col gap-6">
         {notifications.length > 0 ? (

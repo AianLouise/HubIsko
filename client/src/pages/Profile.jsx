@@ -52,6 +52,8 @@ export default function Profile() {
     document.getElementById('fileInput').click();
   };
 
+  const [successMessage, setSuccessMessage] = useState('');
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -102,11 +104,19 @@ export default function Profile() {
       const result = await response.json();
       console.log('Success:', result);
 
+      // Show success message
+      setSuccessMessage('Post submitted successfully!');
+
       // Reset form and close modal
       setFormData({ title: '', content: '' });
       setSelectedFiles([]);
       handleCloseModal2();
       fetchPosts(); // Fetch posts again to update the list
+
+      // Hide success message after a few seconds
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 3000);
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -127,31 +137,31 @@ export default function Profile() {
     );
   }, [searchQuery, posts]);
 
-    const fetchPosts = async () => {
-      try {
-          const response = await fetch(`/api/profile/forum-posts/${currentUser._id}`);
-          if (!response.ok) {
-              throw new Error('Network response was not ok');
-          }
-          const data = await response.json();
-          if (data && data.forumPosts) {
-              setPosts(data.forumPosts); // Set forum posts
-              setFirstName(data.firstName); // Set first name
-              setLastName(data.lastName); // Set last name
-              setProfilePicture(data.profilePicture); // Set profile picture
-          } else {
-              setPosts([]); // Set to empty array if no forum posts
-              setFirstName(''); // Clear first name if no forum posts
-              setLastName(''); // Clear last name if no forum posts
-              setProfilePicture(''); // Clear profile picture if no forum posts
-          }
-      } catch (error) {
-          console.error('Error fetching posts:', error);
-          setPosts([]); // Set to empty array on error
-          setFirstName(''); // Clear first name on error
-          setLastName(''); // Clear last name on error
-          setProfilePicture(''); // Clear profile picture on error
+  const fetchPosts = async () => {
+    try {
+      const response = await fetch(`/api/profile/forum-posts/${currentUser._id}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
+      const data = await response.json();
+      if (data && data.forumPosts) {
+        setPosts(data.forumPosts); // Set forum posts
+        setFirstName(data.firstName); // Set first name
+        setLastName(data.lastName); // Set last name
+        setProfilePicture(data.profilePicture); // Set profile picture
+      } else {
+        setPosts([]); // Set to empty array if no forum posts
+        setFirstName(''); // Clear first name if no forum posts
+        setLastName(''); // Clear last name if no forum posts
+        setProfilePicture(''); // Clear profile picture if no forum posts
+      }
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      setPosts([]); // Set to empty array on error
+      setFirstName(''); // Clear first name on error
+      setLastName(''); // Clear last name on error
+      setProfilePicture(''); // Clear profile picture on error
+    }
   };
 
   const handleSearchChange = (e) => {
