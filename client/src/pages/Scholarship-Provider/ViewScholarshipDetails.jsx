@@ -10,8 +10,8 @@ import Validation from '../../components/ViewScholarshipDetails/Validation';
 import EditProgram from '../../components/ViewScholarshipDetails/EditProgram';
 import Modal from 'react-modal';
 import { FaInfoCircle, FaEdit, FaBullhorn, FaUsers, FaFileAlt } from 'react-icons/fa';
-import { FaForumbee, FaPlay, FaCalendarPlus, FaPause, FaPlayCircle } from 'react-icons/fa';
-import { FaComments } from 'react-icons/fa6';
+import { FaPlay, FaCalendarPlus, FaPause, FaPlayCircle } from 'react-icons/fa';
+import { FaComments, FaPaperPlane } from 'react-icons/fa6';
 
 export default function ViewScholarshipDetails() {
     const { currentUser } = useSelector((state) => state.user);
@@ -46,7 +46,7 @@ export default function ViewScholarshipDetails() {
             if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
             setProgramDetails(data);
-            if (data.status === 'Published') {
+            if (data.status === 'Published' || data.status === 'Paused') {
                 setShowShareMessage(true);
             }
             setApplicationDeadline(data.applicationDeadline);
@@ -309,9 +309,10 @@ export default function ViewScholarshipDetails() {
                                 <h2 className="text-xl font-bold mb-2">Awaiting Publication</h2>
                                 <p>Your scholarship program is awaiting publication. You can now publish it to make it visible to students.</p>
                                 <button
-                                    className="mt-4 bg-yellow-500 text-white px-4 py-2 rounded-md shadow hover:bg-yellow-600"
+                                    className="mt-4 bg-yellow-500 text-white px-4 py-2 rounded-md shadow hover:bg-yellow-600 flex items-center"
                                     onClick={() => setShowPublishModal(true)}
                                 >
+                                    <FaPaperPlane className="mr-2" />
                                     Publish Program
                                 </button>
                             </div>
@@ -357,7 +358,7 @@ export default function ViewScholarshipDetails() {
                             <div className="bg-indigo-100 text-indigo-700 p-4 mt-6 rounded-md shadow-md">
                                 <h3 className="text-xl font-bold mb-2">Share Your Scholarship Program!</h3>
                                 <p>Congratulations, your scholarship program has been published successfully!</p>
-                                <p className="mt-2">Let others know about it by sharing it on the <Link to="/provider-forums" className="text-indigo-600 underline">forums</Link>.</p>
+                                <p className="mt-2">Let others know about it by sharing it on the <Link to="/provider/forums" className="text-indigo-600 underline">forums</Link>.</p>
                                 <p>You can also discuss your program and connect with potential applicants!</p>
                                 <div className="mt-4 text-indigo-700">
                                     <p className="text-sm">The program can be started when all slots are filled. If you want to start it early, you can do so by clicking the "Start Program" button below.</p>
@@ -366,7 +367,7 @@ export default function ViewScholarshipDetails() {
                                     <div className="relative group">
                                         <button
                                             className="bg-indigo-500 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-600 flex items-center"
-                                            onClick={() => navigate('/provider-forums')}
+                                            onClick={() => navigate('/provider/forums')}
                                         >
                                             <FaComments className="mr-2" />
                                             Go to Forums

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaCheckCircle, FaTimesCircle, FaExclamationCircle } from 'react-icons/fa';
+import { FaCheckCircle, FaTimesCircle, FaExclamationCircle, FaPauseCircle } from 'react-icons/fa';
 
 const statusConfig = {
     'Published': { color: 'bg-indigo-500', icon: <FaCheckCircle className="mr-2" /> },
@@ -9,6 +9,7 @@ const statusConfig = {
     'Cancelled': { color: 'bg-orange-500', icon: <FaTimesCircle className="mr-2" /> },
     'Completed': { color: 'bg-green-500', icon: <FaCheckCircle className="mr-2" /> },
     'Awaiting Publication': { color: 'bg-yellow-500', icon: <FaExclamationCircle className="mr-2" /> },
+    'Paused': { color: 'bg-orange-500', icon: <FaPauseCircle className="mr-2" /> },
 };
 
 const StatusBadge = ({ status }) => {
