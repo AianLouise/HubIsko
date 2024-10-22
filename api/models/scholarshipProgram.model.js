@@ -61,7 +61,8 @@ const scholarshipProgramSchema = new mongoose.Schema({
         'Archived',
         'Cancelled',
         'Completed',
-        'Awaiting Publication'
+        'Awaiting Publication',
+        'Paused'
       ],
       default: 'Awaiting Publication'
     },

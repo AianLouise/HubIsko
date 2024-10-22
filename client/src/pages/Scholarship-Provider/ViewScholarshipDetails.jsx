@@ -10,6 +10,8 @@ import Validation from '../../components/ViewScholarshipDetails/Validation';
 import EditProgram from '../../components/ViewScholarshipDetails/EditProgram';
 import Modal from 'react-modal';
 import { FaInfoCircle, FaEdit, FaBullhorn, FaUsers, FaFileAlt } from 'react-icons/fa';
+import { FaForumbee, FaPlay, FaCalendarPlus, FaPause, FaPlayCircle } from 'react-icons/fa';
+import { FaComments } from 'react-icons/fa6';
 
 export default function ViewScholarshipDetails() {
     const { currentUser } = useSelector((state) => state.user);
@@ -34,6 +36,9 @@ export default function ViewScholarshipDetails() {
     const [newApplicationDeadline, setNewApplicationDeadline] = useState('');
     const [currentApplicationDeadline, setCurrentApplicationDeadline] = useState('');
     const [isDeadlineExpired, setIsDeadlineExpired] = useState(false);
+    const [isPauseModalOpen, setIsPauseModalOpen] = useState(false);
+    const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
+
 
     const fetchProgramDetails = async () => {
         try {
@@ -206,9 +211,55 @@ export default function ViewScholarshipDetails() {
         setIsExtendModalOpen(true);
     };
 
+    const openPauseConfirmModal = () => {
+        setIsPauseModalOpen(true);
+    };
+
+    const openResumeConfirmModal = () => {
+        setIsResumeModalOpen(true);
+    };
+
+    const confirmPauseProgram = async () => {
+        try {
+            const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipProgram.id}/pause`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) throw new Error('Failed to pause the program');
+            await response.json();
+            setIsPauseModalOpen(false);
+            console.log('Program paused successfully');
+            fetchProgramDetails(); // Refresh the fetch after pausing the program
+        } catch (error) {
+            console.error('Error pausing the program:', error);
+            setError(error.message);
+        }
+    };
+
+    const confirmResumeProgram = async () => {
+        try {
+            const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipProgram.id}/resume`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) throw new Error('Failed to resume the program');
+            await response.json();
+            setIsResumeModalOpen(false);
+            console.log('Program resumed successfully');
+            fetchProgramDetails(); // Refresh the fetch after resuming the program
+        } catch (error) {
+            console.error('Error resuming the program:', error);
+            setError(error.message);
+        }
+    };
+
     const confirmExtendDeadline = async () => {
         try {
-            const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${id}/extend-deadline`, {
+            const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipProgram.id}/extend-deadline`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -312,24 +363,69 @@ export default function ViewScholarshipDetails() {
                                     <p className="text-sm">The program can be started when all slots are filled. If you want to start it early, you can do so by clicking the "Start Program" button below.</p>
                                 </div>
                                 <div className='flex gap-4 mt-4'>
-                                    <button
-                                        className="bg-indigo-500 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-600"
-                                        onClick={() => navigate('/provider-forums')}
-                                    >
-                                        Go to Forums
-                                    </button>
-                                    <button
-                                        className="bg-teal-500 text-white px-4 py-2 rounded-md shadow hover:bg-teal-600"
-                                        onClick={openConfirmModal}
-                                    >
-                                        Start Program
-                                    </button>
-                                    <button
-                                        className="bg-yellow-500 text-white px-4 py-2 rounded-md shadow hover:bg-yellow-600"
-                                        onClick={extendApplicationDeadline}
-                                    >
-                                        Extend Application Deadline
-                                    </button>
+                                    <div className="relative group">
+                                        <button
+                                            className="bg-indigo-500 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-600 flex items-center"
+                                            onClick={() => navigate('/provider-forums')}
+                                        >
+                                            <FaComments className="mr-2" />
+                                            Go to Forums
+                                        </button>
+                                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-blue-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
+                                            Discuss your program and connect with potential applicants.
+                                        </div>
+                                    </div>
+                                    <div className="relative group">
+                                        <button
+                                            className="bg-teal-500 text-white px-4 py-2 rounded-md shadow hover:bg-teal-600 flex items-center"
+                                            onClick={openConfirmModal}
+                                        >
+                                            <FaPlay className="mr-2" />
+                                            Start Program
+                                        </button>
+                                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-blue-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
+                                            Start the program early if all slots are filled.
+                                        </div>
+                                    </div>
+                                    <div className="relative group">
+                                        <button
+                                            className="bg-yellow-500 text-white px-4 py-2 rounded-md shadow hover:bg-yellow-600 flex items-center"
+                                            onClick={extendApplicationDeadline}
+                                        >
+                                            <FaCalendarPlus className="mr-2" />
+                                            Extend Application Deadline
+                                        </button>
+                                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-blue-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
+                                            Extend the application deadline to allow more applications.
+                                        </div>
+                                    </div>
+                                    {scholarshipProgram.status === 'Published' ? (
+                                        <div className="relative group">
+                                            <button
+                                                className="bg-orange-500 text-white px-4 py-2 rounded-md shadow hover:bg-orange-600 flex items-center"
+                                                onClick={openPauseConfirmModal}
+                                            >
+                                                <FaPause className="mr-2" />
+                                                Pause Program
+                                            </button>
+                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-blue-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
+                                                Temporarily remove the program from the listing.
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="relative group">
+                                            <button
+                                                className="bg-green-500 text-white px-4 py-2 rounded-md shadow hover:bg-green-600 flex items-center"
+                                                onClick={openResumeConfirmModal}
+                                            >
+                                                <FaPlayCircle className="mr-2" />
+                                                Resume Program
+                                            </button>
+                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-blue-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
+                                                Resume the paused program and make it available again.
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                                 {isDeadlineExpired && (
                                     <div className="mt-4 bg-red-100 text-red-700 p-4 rounded-md shadow-md">
@@ -338,6 +434,51 @@ export default function ViewScholarshipDetails() {
                                 )}
                             </div>
                         )}
+                        {isPauseModalOpen && (
+                            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                                <div className="bg-white p-6 rounded-md shadow-md">
+                                    <h3 className="text-xl font-bold mb-4">Pause Program</h3>
+                                    <p>Are you sure you want to pause this program?</p>
+                                    <div className="mt-6 flex justify-end space-x-4">
+                                        <button
+                                            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
+                                            onClick={() => setIsPauseModalOpen(false)}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600"
+                                            onClick={confirmPauseProgram}
+                                        >
+                                            Confirm
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        {isResumeModalOpen && (
+                            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                                <div className="bg-white p-6 rounded-md shadow-md">
+                                    <h3 className="text-xl font-bold mb-4">Resume Program</h3>
+                                    <p>Are you sure you want to resume this program?</p>
+                                    <div className="mt-6 flex justify-end space-x-4">
+                                        <button
+                                            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
+                                            onClick={() => setIsResumeModalOpen(false)}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+                                            onClick={confirmResumeProgram}
+                                        >
+                                            Confirm
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         {isExtendModalOpen && (
                             <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
                                 <div className="bg-white p-6 rounded-md shadow-md">
