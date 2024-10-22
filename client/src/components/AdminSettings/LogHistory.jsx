@@ -34,7 +34,13 @@ const LogHistory = () => {
                 log.action.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 log.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 log.details.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                (log.userId && log.userId.username.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                (log.userId && (
+                    log.userId.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    log.userId.applicantDetails?.firstName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    log.userId.applicantDetails?.lastName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    log.userId.applicantDetails?.middleName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    log.userId.scholarshipProviderDetails?.organizationName?.toLowerCase().includes(searchQuery.toLowerCase())
+                )) ||
                 log._id.toLowerCase().includes(searchQuery.toLowerCase())
             );
         }
@@ -58,6 +64,16 @@ const LogHistory = () => {
         if (currentPage > 1) {
             setCurrentPage(currentPage - 1);
         }
+    };
+
+    const getUserDisplayName = (user) => {
+        if (!user) return 'N/A';
+        if (user.applicantDetails?.firstName || user.applicantDetails?.lastName || user.applicantDetails?.middleName) {
+            const middleInitial = user.applicantDetails.middleName ? `${user.applicantDetails.middleName.charAt(0)}.` : '';
+            return `${user.applicantDetails.lastName || ''}, ${user.applicantDetails.firstName || ''} ${middleInitial}`.trim();
+        }
+        if (user.scholarshipProviderDetails?.organizationName) return user.scholarshipProviderDetails.organizationName;
+        return user.username || 'N/A';
     };
 
     return (
@@ -94,25 +110,25 @@ const LogHistory = () => {
             </div>
 
             <div className="bg-white p-4 border shadow rounded-md">
-                <table className="min-w-full divide-y divide-gray-200">
+                <table className="min-w-full divide-y divide-gray-200 text-center">
                     <thead className="bg-gray-50">
                         <tr>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Activity
                             </th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Type
                             </th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Date
                             </th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Details
                             </th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 User
                             </th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 ID
                             </th>
                         </tr>
@@ -140,7 +156,7 @@ const LogHistory = () => {
                                         <div className="text-sm text-gray-900">{log.details}</div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{log.userId ? log.userId.username : 'N/A'}</div>
+                                        <div className="text-sm text-gray-900">{getUserDisplayName(log.userId)}</div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="text-sm text-gray-900">{log._id}</div>

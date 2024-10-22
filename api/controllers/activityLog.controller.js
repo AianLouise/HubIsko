@@ -18,12 +18,16 @@ export const createActivityLog = async (req, res) => {
 
 // Get all activity logs
 export const getActivityLogs = async (req, res) => {
-  try {
-    const logs = await ActivityLog.find().populate('userId', 'username');
-    res.status(200).json(logs);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching activity logs', error });
-  }
+    try {
+        const logs = await ActivityLog.find()
+            .populate({
+                path: 'userId',
+                select: 'username applicantDetails.firstName applicantDetails.lastName applicantDetails.middleName scholarshipProviderDetails.organizationName',
+            });
+        res.status(200).json(logs);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching activity logs', error });
+    }
 };
 
 // Update an activity log

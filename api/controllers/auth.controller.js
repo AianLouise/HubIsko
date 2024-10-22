@@ -281,7 +281,7 @@ export const signout = async (req, res) => {
     // Create a new log entry
     await ActivityLog.create({
       userId: userId, // Use the userId from the request body
-      action: 'signout',
+      action: 'SIGNOUT', // Set the action to 'SIGNOUT'
       type: 'account',
       details: 'User signed out successfully'
     });
