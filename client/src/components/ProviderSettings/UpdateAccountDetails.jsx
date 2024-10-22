@@ -7,7 +7,6 @@ const UpdateAccountDetails = () => {
     const userId = currentUser._id;
 
     const [profileFormData, setProfileFormData] = useState({
-        username: '',
         profilePicture: '',
         currentEmail: '',
         newEmail: '',
@@ -27,7 +26,6 @@ const UpdateAccountDetails = () => {
                 }
                 const user = await response.json();
                 setProfileFormData({
-                    username: user.username,
                     profilePicture: user.profilePicture || '',
                     currentEmail: user.email,
                     newEmail: '',
@@ -85,7 +83,6 @@ const UpdateAccountDetails = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    username: profileFormData.username,
                     profilePicture: profilePictureUrl
                 }),
             });
@@ -192,17 +189,6 @@ const UpdateAccountDetails = () => {
                                 </div>
                             )}
                         </label>
-                    </div>
-                    <div>
-                        <label className='block text-sm font-medium text-gray-700'>Username</label>
-                        <input
-                            type='text'
-                            name='username'
-                            className='mt-1 p-2 border rounded-md w-full'
-                            value={profileFormData.username}
-                            onChange={handleInputChange}
-                            required
-                        />
                     </div>
                     <button type='submit' className='w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300'>
                         Update Profile
