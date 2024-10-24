@@ -646,7 +646,7 @@ const ScholarshipApplicationForm = () => {
                                             {step === 0 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}>Custodian</span>}
                                             {step === 1 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}>Others</span>}
                                             {step === 2 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}><>Upload <br /> Requirements</></span>}
-                                            {step === 3 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}><>Terms and <br /> Conditions</></span>}
+                                            {step === 3 && <span className={currentPage === step ? 'block' : 'lg:flex hidden'}><>Data <br /> Privacy</></span>}
                                         </span>
                                     </div>
                                     {step < 3 && <FaArrowRightLong className='lg:block hidden text-4xl text-blue-600 mt-10' />}

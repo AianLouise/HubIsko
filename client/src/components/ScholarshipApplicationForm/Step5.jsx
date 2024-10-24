@@ -32,7 +32,7 @@ const Step5 = ({ formData, setFormData, errors, scholarship, requiredDocuments }
       });
       setUploadedFiles(prevState => ({
         ...prevState,
-        [docName]: file
+        [docName]: { file } // Wrap file in an object
       }));
       setFileErrors(prevState => ({
         ...prevState,
@@ -47,10 +47,18 @@ const Step5 = ({ formData, setFormData, errors, scholarship, requiredDocuments }
   };
 
   const handleViewFile = (docName) => {
-    const file = uploadedFiles[docName];
+    const fileObject = uploadedFiles[docName];
+    const file = fileObject?.file; // Access the file property
     if (file) {
-      const fileURL = URL.createObjectURL(file);
-      window.open(fileURL, '_blank');
+      if (file instanceof Blob) {
+        const fileURL = URL.createObjectURL(file);
+        console.log('Opening file URL:', fileURL); // Log the file URL
+        window.open(fileURL, '_blank');
+      } else {
+        console.error('Invalid file object:', file); // Log invalid file object
+      }
+    } else {
+      console.log('No file found for:', docName); // Log if no file is found
     }
   };
 
@@ -84,7 +92,7 @@ const Step5 = ({ formData, setFormData, errors, scholarship, requiredDocuments }
                       className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                       onChange={(e) => handleFileChange(e, doc.name)}
                     />
-                    {uploadedFiles[doc.name] && (
+                    {uploadedFiles[doc.name]?.file && (
                       <button
                         className='hidden lg:inline ml-2 bg-blue-600 text-white text-sm py-1 px-2 rounded hover:bg-blue-700 transition duration-200'
                         type='button'
@@ -94,8 +102,8 @@ const Step5 = ({ formData, setFormData, errors, scholarship, requiredDocuments }
                       </button>
                     )}
                   </div>
-                  {uploadedFiles[doc.name] && (
-                    <p className='text-xs mt-1'>Uploaded: {uploadedFiles[doc.name]?.name}</p>
+                  {uploadedFiles[doc.name]?.file && (
+                    <p className='text-xs mt-1'>Uploaded: {uploadedFiles[doc.name].file.name}</p>
                   )}
                   {fileErrors[doc.name] && (
                     <p className='text-sm text-red-600 mt-1'>{fileErrors[doc.name]}</p>
