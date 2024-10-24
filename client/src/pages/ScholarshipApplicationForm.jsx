@@ -536,15 +536,15 @@ const ScholarshipApplicationForm = () => {
         }
     ];
 
-    const handleSubmit = async (e) => {
+       const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-
+    
         console.log('Form Data:', formData);
-
+    
         // Upload files to Firebase and get the file URLs
         const uploadedFilePaths = await Promise.all(Object.entries(formData.documents).map(async ([docType, fileObj]) => {
-            if (fileObj) {
+            if (fileObj && fileObj.file) {
                 const file = fileObj.file;
                 const fileExtension = file.name.split('.').pop(); // Extract the file extension
                 const fileNameWithoutExtension = file.name.replace(/\.[^/.]+$/, ""); // Remove the extension from the original file name
@@ -556,15 +556,15 @@ const ScholarshipApplicationForm = () => {
             }
             return { [docType]: null };
         }));
-
+    
         // Combine the uploaded file URLs with the rest of the form data
         const updatedFormData = {
             ...formData,
             documents: Object.assign({}, ...uploadedFilePaths),
         };
-
+    
         console.log('Updated Form Data:', updatedFormData);
-
+    
         // Send scholarship application data to the backend
         try {
             const response = await fetch('/api/scholarshipApplication/create-application', {
@@ -574,11 +574,11 @@ const ScholarshipApplicationForm = () => {
                 },
                 body: JSON.stringify(updatedFormData)
             });
-
+    
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
+    
             const result = await response.json();
             console.log('Success:', result);
             // Handle success (e.g., show a success message, redirect, etc.)
