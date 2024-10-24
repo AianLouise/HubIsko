@@ -15,9 +15,16 @@ const Step3 = ({ formData, setFormData }) => {
     const [scholarshipImage, setScholarshipImage] = useState('https://via.placeholder.com/150');
     const fileInputRef = useRef(null);
 
+    const [loading, setLoading] = useState(true); // Loading state
+
     useEffect(() => {
         // Scroll to the top of the page when the component is mounted
         window.scrollTo(0, 0);
+
+        // Simulate data loading
+        setTimeout(() => {
+            setLoading(false); // Set loading to false after data is loaded
+        }, 2000); // Adjust the timeout as needed
     }, []);
 
     console.log(formData);
@@ -133,6 +140,17 @@ const Step3 = ({ formData, setFormData }) => {
     };
 
     const isOpenForAllCourses = formData.fieldOfStudy.includes('Open for All Courses');
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+            </div>
+        );
+    }
 
     return (
         <div>

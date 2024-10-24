@@ -120,8 +120,8 @@ const PostScholarship = () => {
             },
         },
         {
-            title: 'Terms and Conditions',
-            description: 'Please read and agree to the terms and conditions before submitting your scholarship program.',
+            title: 'Data Privacy',
+            description: 'Please read and agree to the data privacy policy before submitting your scholarship program.',
             content: <Step5 formData={formData} setFormData={setFormData} />,
             validate: (formData) => {
                 const errors = {};
