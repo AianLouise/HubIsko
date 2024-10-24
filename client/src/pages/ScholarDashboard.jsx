@@ -468,14 +468,15 @@ export default function ScholarDashboard() {
 
             {/* If no Scholarship yet */}
             {/* <div className='flex flex-col items-center justify-center gap-2 my-20 text-slate-500 font-medium'>
-          You currently have no scholarship announcements.
-          <button className='flex gap-2 items-center text-base lg:text-lg bg-blue-600 rounded-md px-6 py-2 text-white fond-medium hover:bg-blue-800 group transition ease-in-out'>
-            Why?
-          </button>
-        </div> */}
+              You currently have no scholarship announcements.
+              <button className='flex gap-2 items-center text-base lg:text-lg bg-blue-600 rounded-md px-6 py-2 text-white fond-medium hover:bg-blue-800 group transition ease-in-out'>
+                Why?
+              </button>
+            </div> */}
 
 
           </div>
+
           <span className='font-bold text-xl lg:text-2xl'>Scholarship Applications</span>
 
           {/* <div className='mb-2'>
@@ -554,8 +555,7 @@ export default function ScholarDashboard() {
             </div>
           </div>
 
-          <div className="lg:grid gap-4 lg:max-h-[350px] mb-10">
-            {/* Overview of approved applications */}
+          <div className="lg:grid gap-4">
             <div className="bg-white shadow rounded-lg col-span-1 md:col-span-2">
               <div className='flex items-center justify-between font-semibold text-xl w-full p-4 rounded-t-lg border-b'>
                 <h2 className='font-bold text-xl'>Inbox</h2>
@@ -568,7 +568,7 @@ export default function ScholarDashboard() {
                 </button>
               </div>
 
-              <div className="space-y-4 p-4 text-slate-800 h-96">
+              <div className="space-y-4 p-4 text-slate-800">
                 {filteredApplications.length === 0 ? (
                   <div className='h-full flex flex-col gap-2 justify-center items-center'>
                     <span className='text-xl font-medium text-slate-500'>You have no applications yet.</span>
@@ -580,9 +580,9 @@ export default function ScholarDashboard() {
                     </Link>
                   </div>
                 ) : (
-                  <div className="overflow-y-auto max-h-[800px] h-64">
+                  <div className="overflow-y-auto max-h-[800px]">
                     <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="">
+                      <thead>
                         <tr>
                           <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Title
@@ -674,8 +674,6 @@ export default function ScholarDashboard() {
               </div>
             </div>
           </div>
-
-
         </div>
       </main>
       <Footer />

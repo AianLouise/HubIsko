@@ -24,7 +24,7 @@ const Step5 = ({ formData, setFormData, errors, scholarship, requiredDocuments }
           ...prevState,
           documents: {
             ...prevState.documents,
-            [docName]: file
+            [docName]: { file } // Wrap file in an object
           }
         };
         console.log('Updated formData:', updatedFormData); // Log the updated formData
