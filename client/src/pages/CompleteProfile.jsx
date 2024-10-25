@@ -66,42 +66,42 @@ export default function CompleteProfile() {
 
   const handleNext = () => {
     console.log('Current civilStatus:', formData.civilStatus);
-  
+
     const stepRequiredFields = {
       1: [
-        'profilePicture', 'firstName', 'lastName', 'birthdate', 'gender', 
-        'bloodType', 'civilStatus', ...(formData.civilStatus === 'Married' ? 
-        ['maidenName', 'spouseName', 'spouseOccupation'] : []), 
-        'religion', 'height', 'weight', 'birthplace', 'contactNumber', 
+        'profilePicture', 'firstName', 'lastName', 'birthdate', 'gender',
+        'bloodType', 'civilStatus', ...(formData.civilStatus === 'Married' ?
+          ['maidenName', 'spouseName', 'spouseOccupation'] : []),
+        'religion', 'height', 'weight', 'birthplace', 'contactNumber',
         'region', 'province', 'city', 'barangay', 'addressDetails'
       ],
       2: [
-        'education.elementary.school', 'education.elementary.award', 
-        'education.elementary.yearGraduated', 'education.juniorHighSchool.school', 
-        'education.juniorHighSchool.award', 'education.juniorHighSchool.yearGraduated', 
-        'education.seniorHighSchool.school', 'education.seniorHighSchool.award', 
-        'education.seniorHighSchool.yearGraduated', 'education.college.school', 
+        'education.elementary.school', 'education.elementary.award',
+        'education.elementary.yearGraduated', 'education.juniorHighSchool.school',
+        'education.juniorHighSchool.award', 'education.juniorHighSchool.yearGraduated',
+        'education.seniorHighSchool.school', 'education.seniorHighSchool.award',
+        'education.seniorHighSchool.yearGraduated', 'education.college.school',
         'education.college.course'
       ],
       3: ['studentIdFile', 'certificateOfRegistrationFile']
     };
-  
+
     const fieldDisplayNames = {
-      profilePicture: 'Profile Picture', firstName: 'First Name', lastName: 'Last Name', 
-      birthdate: 'Birthdate', gender: 'Gender', bloodType: 'Blood Type', 
-      civilStatus: 'Civil Status', religion: 'Religion', height: 'Height', weight: 'Weight', 
-      birthplace: 'Birthplace', contactNumber: 'Contact Number', addressDetails: 'Address Details', 
-      maidenName: 'Maiden Name', spouseName: 'Name of Spouse', spouseOccupation: 'Occupation of Spouse', 
-      region: 'Region Name', province: 'Province Name', city: 'City Name', barangay: 'Barangay Name', 
-      'education.elementary.school': 'Elementary School', 'education.elementary.award': 'Elementary Award', 
-      'education.elementary.yearGraduated': 'Elementary Year Graduated', 
-      'education.juniorHighSchool.school': 'Junior High School', 'education.juniorHighSchool.award': 'Junior High Award', 
-      'education.juniorHighSchool.yearGraduated': 'Junior High Year Graduated', 'education.seniorHighSchool.school': 'Senior High School', 
-      'education.seniorHighSchool.award': 'Senior High Award', 'education.seniorHighSchool.yearGraduated': 'Senior High Year Graduated', 
-      'education.college.school': 'College School', 'education.college.course': 'College Course', 
+      profilePicture: 'Profile Picture', firstName: 'First Name', lastName: 'Last Name',
+      birthdate: 'Birthdate', gender: 'Gender', bloodType: 'Blood Type',
+      civilStatus: 'Civil Status', religion: 'Religion', height: 'Height', weight: 'Weight',
+      birthplace: 'Birthplace', contactNumber: 'Contact Number', addressDetails: 'Address Details',
+      maidenName: 'Maiden Name', spouseName: 'Name of Spouse', spouseOccupation: 'Occupation of Spouse',
+      region: 'Region Name', province: 'Province Name', city: 'City Name', barangay: 'Barangay Name',
+      'education.elementary.school': 'Elementary School', 'education.elementary.award': 'Elementary Award',
+      'education.elementary.yearGraduated': 'Elementary Year Graduated',
+      'education.juniorHighSchool.school': 'Junior High School', 'education.juniorHighSchool.award': 'Junior High Award',
+      'education.juniorHighSchool.yearGraduated': 'Junior High Year Graduated', 'education.seniorHighSchool.school': 'Senior High School',
+      'education.seniorHighSchool.award': 'Senior High Award', 'education.seniorHighSchool.yearGraduated': 'Senior High Year Graduated',
+      'education.college.school': 'College School', 'education.college.course': 'College Course',
       studentIdFile: 'Student ID Image', certificateOfRegistrationFile: 'Certificate of Registration Image'
     };
-  
+
     const requiredFields = stepRequiredFields[currentStep];
     const missingFields = requiredFields.filter(field => {
       const keys = field.split('.');
@@ -114,9 +114,9 @@ export default function CompleteProfile() {
       }
       return false;
     });
-  
+
     const isBirthdateValid = new Date(formData.birthdate) <= new Date(maxDate);
-  
+
     if (missingFields.length === 0 && isBirthdateValid) {
       setCurrentStep((prevStep) => prevStep + 1);
     } else {
@@ -124,12 +124,12 @@ export default function CompleteProfile() {
       const topMostMissingFieldName = fieldDisplayNames[topMostMissingField];
       setNotification({
         show: true,
-        message: missingFields.length > 0 ? 
+        message: missingFields.length > 0 ?
           `The following required field is missing: ${topMostMissingFieldName}. Please complete it before proceeding to the next step.` :
           `The birthdate entered is invalid. Please enter a valid birthdate before proceeding to the next step.`
       });
     }
-  };  
+  };
 
   const handlePrevious = () => {
     setCurrentStep((prevStep) => prevStep - 1);
@@ -369,6 +369,11 @@ export default function CompleteProfile() {
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedBarangay, setSelectedBarangay] = useState('');
 
+  const [regionName, setRegionName] = useState('');
+  const [provinceName, setProvinceName] = useState('');
+  const [cityName, setCityName] = useState('');
+  const [barangayName, setBarangayName] = useState('');
+
   // Fetch all regions on component mount
   useEffect(() => {
     regions().then(setRegionList);
@@ -379,13 +384,22 @@ export default function CompleteProfile() {
     if (selectedRegion) {
       console.log(`Selected Region: ${selectedRegion}`);
       provinces(selectedRegion).then(setProvinceList);
-      setFormData(prevState => ({
-        ...prevState,
-        region: selectedRegion,
-        province: '',
-        city: '',
-        barangay: ''
-      }));
+      regions().then((regionList) => {
+        const region = regionList.find((r) => r.region_code === selectedRegion);
+        const regionName = region ? region.region_name : '';
+        setRegionName(regionName);
+        setFormData(prevState => ({
+          ...prevState,
+          region: selectedRegion,
+          regionName: regionName,
+          province: '',
+          provinceName: '',
+          city: '',
+          cityName: '',
+          barangay: '',
+          barangayName: ''
+        }));
+      });
     }
   }, [selectedRegion]);
 
@@ -394,12 +408,20 @@ export default function CompleteProfile() {
     if (selectedProvince) {
       console.log(`Selected Province: ${selectedProvince}`);
       cities(selectedProvince).then(setCityList);
-      setFormData(prevState => ({
-        ...prevState,
-        province: selectedProvince,
-        city: '',
-        barangay: ''
-      }));
+      provinces(selectedRegion).then((provinceList) => {
+        const province = provinceList.find((p) => p.province_code === selectedProvince);
+        const provinceName = province ? province.province_name : '';
+        setProvinceName(provinceName);
+        setFormData(prevState => ({
+          ...prevState,
+          province: selectedProvince,
+          provinceName: provinceName,
+          city: '',
+          cityName: '',
+          barangay: '',
+          barangayName: ''
+        }));
+      });
     }
   }, [selectedProvince]);
 
@@ -408,11 +430,18 @@ export default function CompleteProfile() {
     if (selectedCity) {
       console.log(`Selected City: ${selectedCity}`);
       barangays(selectedCity).then(setBarangayList);
-      setFormData(prevState => ({
-        ...prevState,
-        city: selectedCity,
-        barangay: ''
-      }));
+      cities(selectedProvince).then((cityList) => {
+        const city = cityList.find((c) => c.city_code === selectedCity);
+        const cityName = city ? city.city_name : '';
+        setCityName(cityName);
+        setFormData(prevState => ({
+          ...prevState,
+          city: selectedCity,
+          cityName: cityName,
+          barangay: '',
+          barangayName: ''
+        }));
+      });
     }
   }, [selectedCity]);
 
@@ -420,10 +449,16 @@ export default function CompleteProfile() {
   useEffect(() => {
     if (selectedBarangay) {
       console.log(`Selected Barangay: ${selectedBarangay}`);
-      setFormData(prevState => ({
-        ...prevState,
-        barangay: selectedBarangay
-      }));
+      barangays(selectedCity).then((barangayList) => {
+        const barangay = barangayList.find((b) => b.brgy_code === selectedBarangay);
+        const barangayName = barangay ? barangay.brgy_name : '';
+        setBarangayName(barangayName);
+        setFormData(prevState => ({
+          ...prevState,
+          barangay: selectedBarangay,
+          barangayName: barangayName
+        }));
+      });
     }
   }, [selectedBarangay]);
 
