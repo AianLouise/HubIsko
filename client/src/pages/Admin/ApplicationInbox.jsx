@@ -112,7 +112,7 @@ export default function ApplicationInbox() {
           </div>
 
           {/* Activity Section */}
-          <div className="flex flex-col mt-10 mb-10">
+          {/* <div className="flex flex-col mt-10 mb-10">
             <span className="font-bold text-xl border-b w-full pb-2">
               Recent Activity
             </span>
@@ -198,7 +198,7 @@ export default function ApplicationInbox() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </main>
     </div>

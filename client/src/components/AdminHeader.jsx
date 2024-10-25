@@ -316,7 +316,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                             </Link>
                                         </li>
 
-                                        <li>
+                                        {/* <li>
                                             <Link
                                                 to={'/scholarship-announcements'}
                                                 className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-announcements' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}
@@ -324,7 +324,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                                 <FaBullhorn className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-announcements' ? ' text-white' : ''}`} />
                                                 Scholarship Announcements
                                             </Link>
-                                        </li>
+                                        </li> */}
 
                                         {/* <li className="ml-4">
                                             <Link to={'/scholarship-program-applications'}
