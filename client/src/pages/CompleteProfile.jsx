@@ -65,91 +65,44 @@ export default function CompleteProfile() {
   });
 
   const handleNext = () => {
-    // Log the current civilStatus value
     console.log('Current civilStatus:', formData.civilStatus);
-
-    // List of required fields for each step
+  
     const stepRequiredFields = {
       1: [
-        'profilePicture',
-        'firstName',
-        'lastName',
-        'birthdate',
-        'gender',
-        'bloodType',
-        'civilStatus',
-        ...(formData.civilStatus === 'Married' ? ['maidenName', 'spouseName', 'spouseOccupation'] : []),
-        'religion',
-        'height',
-        'weight',
-        'birthplace',
-        'contactNumber',
-        'region',
-        'province',
-        'city',
-        'barangay',
-        'addressDetails',
+        'profilePicture', 'firstName', 'lastName', 'birthdate', 'gender', 
+        'bloodType', 'civilStatus', ...(formData.civilStatus === 'Married' ? 
+        ['maidenName', 'spouseName', 'spouseOccupation'] : []), 
+        'religion', 'height', 'weight', 'birthplace', 'contactNumber', 
+        'region', 'province', 'city', 'barangay', 'addressDetails'
       ],
       2: [
-        'education.elementary.school',
-        'education.elementary.award',
-        'education.elementary.yearGraduated',
-        'education.juniorHighSchool.school',
-        'education.juniorHighSchool.award',
-        'education.juniorHighSchool.yearGraduated',
-        'education.seniorHighSchool.school',
-        'education.seniorHighSchool.award',
-        'education.seniorHighSchool.yearGraduated',
-        'education.college.school',
+        'education.elementary.school', 'education.elementary.award', 
+        'education.elementary.yearGraduated', 'education.juniorHighSchool.school', 
+        'education.juniorHighSchool.award', 'education.juniorHighSchool.yearGraduated', 
+        'education.seniorHighSchool.school', 'education.seniorHighSchool.award', 
+        'education.seniorHighSchool.yearGraduated', 'education.college.school', 
         'education.college.course'
       ],
-      3: [
-        'studentIdFile',
-        'certificateOfRegistrationFile'
-      ]
+      3: ['studentIdFile', 'certificateOfRegistrationFile']
     };
-
-    // Mapping of field keys to display names
+  
     const fieldDisplayNames = {
-      profilePicture: 'Profile Picture',
-      firstName: 'First Name',
-      lastName: 'Last Name',
-      birthdate: 'Birthdate',
-      gender: 'Gender',
-      bloodType: 'Blood Type',
-      civilStatus: 'Civil Status',
-      religion: 'Religion',
-      height: 'Height',
-      weight: 'Weight',
-      birthplace: 'Birthplace',
-      contactNumber: 'Contact Number',
-      addressDetails: 'Address Details',
-      maidenName: 'Maiden Name',
-      spouseName: 'Name of Spouse',
-      spouseOccupation: 'Occupation of Spouse',
-      region: 'Region Name',
-      province: 'Province Name',
-      city: 'City Name',
-      barangay: 'Barangay Name',
-      'education.elementary.school': 'Elementary School',
-      'education.elementary.award': 'Elementary Award',
-      'education.elementary.yearGraduated': 'Elementary Year Graduated',
-      'education.juniorHighSchool.school': 'Junior High School',
-      'education.juniorHighSchool.award': 'Junior High Award',
-      'education.juniorHighSchool.yearGraduated': 'Junior High Year Graduated',
-      'education.seniorHighSchool.school': 'Senior High School',
-      'education.seniorHighSchool.award': 'Senior High Award',
-      'education.seniorHighSchool.yearGraduated': 'Senior High Year Graduated',
-      'education.college.school': 'College School',
-      'education.college.course': 'College Course',
-      studentIdFile: 'Student ID Image',
-      certificateOfRegistrationFile: 'Certificate of Registration Image'
+      profilePicture: 'Profile Picture', firstName: 'First Name', lastName: 'Last Name', 
+      birthdate: 'Birthdate', gender: 'Gender', bloodType: 'Blood Type', 
+      civilStatus: 'Civil Status', religion: 'Religion', height: 'Height', weight: 'Weight', 
+      birthplace: 'Birthplace', contactNumber: 'Contact Number', addressDetails: 'Address Details', 
+      maidenName: 'Maiden Name', spouseName: 'Name of Spouse', spouseOccupation: 'Occupation of Spouse', 
+      region: 'Region Name', province: 'Province Name', city: 'City Name', barangay: 'Barangay Name', 
+      'education.elementary.school': 'Elementary School', 'education.elementary.award': 'Elementary Award', 
+      'education.elementary.yearGraduated': 'Elementary Year Graduated', 
+      'education.juniorHighSchool.school': 'Junior High School', 'education.juniorHighSchool.award': 'Junior High Award', 
+      'education.juniorHighSchool.yearGraduated': 'Junior High Year Graduated', 'education.seniorHighSchool.school': 'Senior High School', 
+      'education.seniorHighSchool.award': 'Senior High Award', 'education.seniorHighSchool.yearGraduated': 'Senior High Year Graduated', 
+      'education.college.school': 'College School', 'education.college.course': 'College Course', 
+      studentIdFile: 'Student ID Image', certificateOfRegistrationFile: 'Certificate of Registration Image'
     };
-
-    // Get the required fields for the current step
+  
     const requiredFields = stepRequiredFields[currentStep];
-
-    // Check if all required fields for the current step are filled
     const missingFields = requiredFields.filter(field => {
       const keys = field.split('.');
       let value = formData;
@@ -161,18 +114,22 @@ export default function CompleteProfile() {
       }
       return false;
     });
-
-    if (missingFields.length === 0) {
+  
+    const isBirthdateValid = new Date(formData.birthdate) <= new Date(maxDate);
+  
+    if (missingFields.length === 0 && isBirthdateValid) {
       setCurrentStep((prevStep) => prevStep + 1);
     } else {
       const topMostMissingField = missingFields[0];
       const topMostMissingFieldName = fieldDisplayNames[topMostMissingField];
       setNotification({
         show: true,
-        message: `The following required field is missing: ${topMostMissingFieldName}. Please complete it before proceeding to the next step.`
+        message: missingFields.length > 0 ? 
+          `The following required field is missing: ${topMostMissingFieldName}. Please complete it before proceeding to the next step.` :
+          `The birthdate entered is invalid. Please enter a valid birthdate before proceeding to the next step.`
       });
     }
-  };
+  };  
 
   const handlePrevious = () => {
     setCurrentStep((prevStep) => prevStep - 1);
