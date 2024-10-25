@@ -118,73 +118,29 @@ export const resubmitApplication = async (req, res) => {
     try {
         const { id } = req.params; // Extract applicationId from the URL parameters
         const {
-            firstName,
-            lastName,
-            middleName,
-            nameExtension,
-            birthdate,
-            gender,
-            bloodType,
-            civilStatus,
-            maidenName,
-            spouseName,
-            spouseOccupation,
-            religion,
-            height,
-            weight,
-            birthplace,
-            email,
-            contactNumber,
-            addressDetails,
-            town,
-            barangay,
-            province,
+            applicant,
             father,
             mother,
             guardian,
-            education,
             relatives,
             workExperience,
             skillsAndQualifications,
             documents,
             scholarshipProgram,
-            applicant,
         } = req.body;
 
         const updatedApplication = await ScholarshipApplication.findByIdAndUpdate(
             id,
             {
-                firstName,
-                lastName,
-                middleName,
-                nameExtension,
-                birthdate,
-                gender,
-                bloodType,
-                civilStatus,
-                maidenName,
-                spouseName,
-                spouseOccupation,
-                religion,
-                height,
-                weight,
-                birthplace,
-                email,
-                contactNumber,
-                addressDetails,
-                town,
-                barangay,
-                province,
+                applicant,
                 father,
                 mother,
                 guardian,
-                education,
                 relatives,
                 workExperience,
                 skillsAndQualifications,
                 documents,
                 scholarshipProgram,
-                applicant,
                 applicationStatus: 'Pending', // Add applicationStatus with value 'Pending'
             },
             { new: true }
@@ -193,6 +149,35 @@ export const resubmitApplication = async (req, res) => {
         if (!updatedApplication) {
             return res.status(404).json({ message: 'Application not found' });
         }
+
+        // Fetch the scholarship program details to get the providerId and program name
+        const scholarshipProgramDetails = await ScholarshipProgram.findById(scholarshipProgram);
+        if (!scholarshipProgramDetails) {
+            return res.status(404).json({ message: 'Scholarship Program not found' });
+        }
+
+        const providerId = scholarshipProgramDetails.providerId;
+
+        // Fetch the applicant and provider details to get their names
+        const applicantDetails = await User.findById(applicant);
+        const providerDetails = await User.findById(providerId);
+
+        if (!applicantDetails || !providerDetails) {
+            return res.status(404).json({ message: 'Applicant or Provider not found' });
+        }
+
+        // Create notification
+        const notification = new Notification({
+            recipientId: providerId, // Use the providerId as the recipient
+            senderId: applicant, // The student is the sender
+            scholarshipId: scholarshipProgram,
+            type: 'application',
+            message: `${applicantDetails.firstName} ${applicantDetails.lastName} has resubmitted a scholarship application for the ${scholarshipProgramDetails.title}.`,
+            recipientName: providerDetails.scholarshipProviderDetails.organizationName, // Save provider's organization name as recipientName
+            senderName: `${applicantDetails.firstName} ${applicantDetails.lastName}`, // Save applicant's name as senderName
+        });
+
+        await notification.save();
 
         res.status(200).json({
             message: 'Scholarship application resubmitted successfully',

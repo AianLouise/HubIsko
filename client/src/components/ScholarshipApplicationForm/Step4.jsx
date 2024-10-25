@@ -18,7 +18,7 @@ const Step4 = ({ formData, setFormData, errors, visibleRelativeIndex, setVisible
       ...formData,
       relatives: updatedRelatives,
     });
-  };
+  }; 
 
   const addRelative = () => {
     if (visibleRelativeIndex < formData.relatives.length - 1) {

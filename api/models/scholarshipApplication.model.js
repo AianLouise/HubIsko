@@ -135,7 +135,7 @@ const scholarshipApplicationSchema = new mongoose.Schema({
             required: false,
         },
         monthlySalary: {
-            type: Number,
+            type: String,
             required: false,
         },
         statusOfAppointment: {
