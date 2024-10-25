@@ -9,6 +9,9 @@ import ScholarshipApplication from '../../components/ViewScholarshipDetails/Scho
 import Validation from '../../components/ViewScholarshipDetails/Validation';
 import EditProgram from '../../components/ViewScholarshipDetails/EditProgram';
 import Modal from 'react-modal';
+import { FaComments, FaPaperPlane } from 'react-icons/fa6';
+import { FaInfoCircle, FaEdit, FaBullhorn, FaUsers, FaFileAlt, FaRedo } from 'react-icons/fa';
+import { FaPlay, FaCalendarPlus, FaPause, FaPlayCircle } from 'react-icons/fa';
 
 export default function ScholarshipProgramDetails() {
     const { currentUser } = useSelector((state) => state.user);
@@ -29,15 +32,26 @@ export default function ScholarshipProgramDetails() {
     const [applicationDeadline, setApplicationDeadline] = useState('');
     const [showShareMessage, setShowShareMessage] = useState(false);
 
+    const [isExtendModalOpen, setIsExtendModalOpen] = useState(false);
+    const [newApplicationDeadline, setNewApplicationDeadline] = useState('');
+    const [currentApplicationDeadline, setCurrentApplicationDeadline] = useState('');
+    const [isDeadlineExpired, setIsDeadlineExpired] = useState(false);
+    const [isPauseModalOpen, setIsPauseModalOpen] = useState(false);
+    const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
+
+
     const fetchProgramDetails = async () => {
         try {
             const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${id}`);
             if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
             setProgramDetails(data);
-            if (data.status === 'Published') {
+            if (data.status === 'Published' || data.status === 'Paused') {
                 setShowShareMessage(true);
             }
+            setApplicationDeadline(data.applicationDeadline);
+            setCurrentApplicationDeadline(data.applicationDeadline);
+            console.log('Program details:', data);
         } catch (error) {
             console.error('Error fetching program details:', error);
             setError(error.message);
@@ -55,6 +69,7 @@ export default function ScholarshipProgramDetails() {
                 if (!response.ok) throw new Error('Network response was not ok');
                 const data = await response.json();
                 setApplications(data);
+                console.log('Applications:', data);
             } catch (error) {
                 console.error('Error fetching program applications:', error);
                 setError(error.message);
@@ -175,11 +190,128 @@ export default function ScholarshipProgramDetails() {
         setIsConfirmModalOpen(false);
     };
 
-       const handleStartProgram = () => {
+    const handleStartProgram = () => {
         updateScholarshipStatus(scholarshipProgram.id, 'Ongoing');
         closeConfirmModal();
         fetchProgramDetails(); // Refresh the fetch after updating the status
         window.location.reload(); // Refresh the page
+    };
+
+    // 
+    useEffect(() => {
+        // Check if the application deadline has expired
+        if (currentApplicationDeadline) {
+            const deadlineDate = new Date(currentApplicationDeadline);
+            const today = new Date();
+            setIsDeadlineExpired(deadlineDate < today);
+        }
+    }, [currentApplicationDeadline]);
+
+    const extendApplicationDeadline = () => {
+        setIsExtendModalOpen(true);
+    };
+
+    const openPauseConfirmModal = () => {
+        setIsPauseModalOpen(true);
+    };
+
+    const openResumeConfirmModal = () => {
+        setIsResumeModalOpen(true);
+    };
+
+    const confirmPauseProgram = async () => {
+        try {
+            const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipProgram.id}/pause`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) throw new Error('Failed to pause the program');
+            await response.json();
+            setIsPauseModalOpen(false);
+            console.log('Program paused successfully');
+            fetchProgramDetails(); // Refresh the fetch after pausing the program
+        } catch (error) {
+            console.error('Error pausing the program:', error);
+            setError(error.message);
+        }
+    };
+
+    const confirmResumeProgram = async () => {
+        try {
+            const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipProgram.id}/resume`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) throw new Error('Failed to resume the program');
+            await response.json();
+            setIsResumeModalOpen(false);
+            console.log('Program resumed successfully');
+            fetchProgramDetails(); // Refresh the fetch after resuming the program
+        } catch (error) {
+            console.error('Error resuming the program:', error);
+            setError(error.message);
+        }
+    };
+
+    const confirmExtendDeadline = async () => {
+        try {
+            const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipProgram.id}/extend-deadline`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ newDeadline: newApplicationDeadline }), // Include the new application deadline in the request body
+            });
+            if (!response.ok) throw new Error('Failed to extend the application deadline');
+            await response.json();
+            setIsExtendModalOpen(false);
+            console.log('Extending deadline to:', newApplicationDeadline);
+            fetchProgramDetails(); // Refresh the fetch after extending the deadline
+        } catch (error) {
+            console.error('Error extending the application deadline:', error);
+            setError(error.message);
+        }
+    };
+
+    const [isConfirmModalOpen2, setIsConfirmModalOpen2] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const handleOpenApplication = () => {
+        setIsConfirmModalOpen2(true);
+    };
+
+    const confirmOpenApplication = async () => {
+        try {
+            const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipProgram.id}/republish`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            setSuccessMessage('Scholarship program republished successfully!');
+            console.log('Scholarship program republished:', data);
+            setIsConfirmModalOpen2(false);
+            fetchProgramDetails(); // Refresh program details
+        } catch (error) {
+            setErrorMessage('Error republishing scholarship program');
+            console.error('Error republishing scholarship program:', error);
+            setIsConfirmModalOpen2(false);
+        }
+    };
+
+    const cancelOpenApplication = () => {
+        setIsConfirmModalOpen2(false);
     };
 
     if (loading) {
@@ -208,14 +340,15 @@ export default function ScholarshipProgramDetails() {
                         </div>
 
                         {/* Congratulatory Message */}
-                        {scholarshipProgram?.status === 'Approved' && (
-                            <div className="bg-blue-100 text-blue-700 p-4 mb-6 rounded-md shadow-md">
-                                <h2 className="text-2xl font-bold">Congratulations!</h2>
-                                <p>Your scholarship program has been approved. You can now publish it to make it visible to students.</p>
+                        {scholarshipProgram?.status === 'Awaiting Publication' && (
+                            <div className="bg-yellow-100 text-yellow-700 p-4 mb-6 rounded-md shadow-md">
+                                <h2 className="text-xl font-bold mb-2">Awaiting Publication</h2>
+                                <p>Your scholarship program is awaiting publication. You can now publish it to make it visible to students.</p>
                                 <button
-                                    className="mt-4 bg-indigo-500 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-600"
+                                    className="mt-4 bg-yellow-500 text-white px-4 py-2 rounded-md shadow hover:bg-yellow-600 flex items-center"
                                     onClick={() => setShowPublishModal(true)}
                                 >
+                                    <FaPaperPlane className="mr-2" />
                                     Publish Program
                                 </button>
                             </div>
@@ -246,7 +379,7 @@ export default function ScholarshipProgramDetails() {
                                             Cancel
                                         </button>
                                         <button
-                                            className="bg-indigo-500 text-white px-4 py-2 rounded-md"
+                                            className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
                                             onClick={handlePublish}
                                         >
                                             Confirm
@@ -259,23 +392,169 @@ export default function ScholarshipProgramDetails() {
                         {/* Message to share on forums after publishing */}
                         {showShareMessage && (
                             <div className="bg-indigo-100 text-indigo-700 p-4 mt-6 rounded-md shadow-md">
-                                <h3 className="text-xl font-bold">Share Your Scholarship Program!</h3>
+                                <h3 className="text-xl font-bold mb-2">Share Your Scholarship Program!</h3>
                                 <p>Congratulations, your scholarship program has been published successfully!</p>
-                                <p className="mt-2">Let others know about it by sharing it on the <Link to="/provider-forums" className="text-indigo-600 underline">forums</Link>.</p>
+                                <p className="mt-2">Let others know about it by sharing it on the <Link to="/provider/forums" className="text-indigo-600 underline">forums</Link>.</p>
                                 <p>You can also discuss your program and connect with potential applicants!</p>
-                                <button
-                                    className="mt-4 bg-indigo-500 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-600"
-                                    onClick={() => navigate('/provider-forums')}
-                                >
-                                    Go to Forums
-                                </button>
+                                <div className="mt-4 text-indigo-700">
+                                    <p className="text-sm">The program can be started when all slots are filled. If you want to start it early, you can do so by clicking the "Start Program" button below.</p>
+                                </div>
+                                <div className='flex gap-4 mt-4'>
+                                    <div className="relative group">
+                                        <button
+                                            className="bg-indigo-500 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-600 flex items-center"
+                                            onClick={() => navigate('/provider/forums')}
+                                        >
+                                            <FaComments className="mr-2" />
+                                            Go to Forums
+                                        </button>
+                                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-indigo-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
+                                            Discuss your program and connect with potential applicants.
+                                        </div>
+                                    </div>
+                                    <div className="relative group">
+                                        <button
+                                            className="bg-teal-500 text-white px-4 py-2 rounded-md shadow hover:bg-teal-600 flex items-center"
+                                            onClick={openConfirmModal}
+                                        >
+                                            <FaPlay className="mr-2" />
+                                            Start Program
+                                        </button>
+                                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-teal-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
+                                            Start the program early if all slots are filled.
+                                        </div>
+                                    </div>
+                                    <div className="relative group">
+                                        <button
+                                            className="bg-yellow-500 text-white px-4 py-2 rounded-md shadow hover:bg-yellow-600 flex items-center"
+                                            onClick={extendApplicationDeadline}
+                                        >
+                                            <FaCalendarPlus className="mr-2" />
+                                            Extend Application Deadline
+                                        </button>
+                                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-yellow-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
+                                            Extend the application deadline to allow more applications.
+                                        </div>
+                                    </div>
+                                    {scholarshipProgram.status === 'Published' ? (
+                                        <div className="relative group">
+                                            <button
+                                                className="bg-orange-500 text-white px-4 py-2 rounded-md shadow hover:bg-orange-600 flex items-center"
+                                                onClick={openPauseConfirmModal}
+                                            >
+                                                <FaPause className="mr-2" />
+                                                Pause Program
+                                            </button>
+                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-orange-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
+                                                Temporarily remove the program from the listing.
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="relative group">
+                                            <button
+                                                className="bg-green-500 text-white px-4 py-2 rounded-md shadow hover:bg-green-600 flex items-center"
+                                                onClick={openResumeConfirmModal}
+                                            >
+                                                <FaPlayCircle className="mr-2" />
+                                                Resume Program
+                                            </button>
+                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-green-800 text-white text-xs rounded py-1 px-2 w-48 text-center">
+                                                Resume the paused program and make it available again.
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                                {isDeadlineExpired && (
+                                    <div className="mt-4 bg-red-100 text-red-700 p-4 rounded-md shadow-md">
+                                        <p>The application deadline has expired. Please extend the deadline to allow new applications.</p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                        {isPauseModalOpen && (
+                            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                                <div className="bg-white p-6 rounded-md shadow-md">
+                                    <h3 className="text-xl font-bold mb-4">Pause Program</h3>
+                                    <p>Are you sure you want to pause this program?</p>
+                                    <div className="mt-6 flex justify-end space-x-4">
+                                        <button
+                                            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
+                                            onClick={() => setIsPauseModalOpen(false)}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600"
+                                            onClick={confirmPauseProgram}
+                                        >
+                                            Confirm
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        {isResumeModalOpen && (
+                            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                                <div className="bg-white p-6 rounded-md shadow-md">
+                                    <h3 className="text-xl font-bold mb-4">Resume Program</h3>
+                                    <p>Are you sure you want to resume this program?</p>
+                                    <div className="mt-6 flex justify-end space-x-4">
+                                        <button
+                                            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
+                                            onClick={() => setIsResumeModalOpen(false)}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+                                            onClick={confirmResumeProgram}
+                                        >
+                                            Confirm
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {isExtendModalOpen && (
+                            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                                <div className="bg-white p-6 rounded-md shadow-md">
+                                    <h3 className="text-xl font-bold mb-4">Extend Application Deadline</h3>
+                                    <p>Current Application Deadline: {new Date(currentApplicationDeadline).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                                    <p>Are you sure you want to extend the application deadline?</p>
+                                    <div className="mt-4">
+                                        <label className="block text-gray-700 font-semibold mb-2">New Application Deadline</label>
+                                        <input
+                                            type="date"
+                                            value={newApplicationDeadline}
+                                            onChange={(e) => setNewApplicationDeadline(e.target.value)}
+                                            className="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                                            min={getTodayDate()} // Set the min attribute to today's date
+                                            required
+                                        />
+                                    </div>
+                                    <div className="mt-6 flex justify-end space-x-4">
+                                        <button
+                                            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
+                                            onClick={() => setIsExtendModalOpen(false)}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
+                                            onClick={confirmExtendDeadline}
+                                        >
+                                            Confirm
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         )}
 
                         {/* Ongoing Message */}
                         {showOngoingMessage && scholarshipProgram?.status === 'Published' && (
                             <div className="bg-teal-100 text-teal-700 p-4 mb-6 rounded-md shadow-md">
-                                <h2 className="text-2xl font-bold">Slots are Filled!</h2>
+                                <h2 className="text-2xl font-bold mb-2">Slots are Filled!</h2>
                                 <p>All slots for this scholarship program have been filled. You can now start the program.</p>
                                 <button
                                     className="mt-4 bg-teal-500 text-white px-4 py-2 rounded-md shadow hover:bg-teal-600"
@@ -316,15 +595,54 @@ export default function ScholarshipProgramDetails() {
                         {/* Ongoing Status Message */}
                         {scholarshipProgram?.status === 'Ongoing' && (
                             <div className="bg-teal-100 text-teal-700 p-4 mb-6 rounded-md shadow-md">
-                                <h2 className="text-xl font-bold">Program is Ongoing!</h2>
-                                <p>The scholarship program is currently ongoing. Stay tuned for updates and announcements.</p>
+                                <h2 className="text-xl font-bold mb-2">Program is Ongoing!</h2>
+                                <p>The scholarship program is currently ongoing. Please monitor the progress and manage the applications as needed. Remember to make any necessary announcements for scholars.</p>
+                                <p className="text-sm text-teal-700 mt-4">Click the button below to republish the program and open applications again.</p>
+                                <button
+                                    className="bg-indigo-500 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-600 flex items-center mt-2"
+                                    onClick={handleOpenApplication}
+                                >
+                                    <FaRedo className="mr-2" />
+                                    Republish Program to Open Application
+                                </button>
+                            </div>
+                        )}
+
+                        {isConfirmModalOpen2 && (
+                            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                                <div className="bg-white p-6 rounded-md shadow-md">
+                                    <h3 className="text-xl font-bold mb-4">Confirm Republish</h3>
+                                    <p>Are you sure you want to republish this program to open applications?</p>
+                                    <div className="mt-6 flex justify-end space-x-4">
+                                        <button
+                                            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
+                                            onClick={cancelOpenApplication}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+                                            onClick={confirmOpenApplication}
+                                        >
+                                            Confirm
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Completed Status Message */}
+                        {scholarshipProgram?.status === 'Completed' && (
+                            <div className="bg-green-100 text-green-700 p-4 mb-6 rounded-md shadow-md">
+                                <h2 className="text-xl font-bold mb-2">Program Completed!</h2>
+                                <p>The scholarship program has been successfully completed. Please review the final reports and make any necessary announcements for scholars.</p>
                             </div>
                         )}
 
                         {/* Rejected Status Message */}
                         {scholarshipProgram?.status === 'Rejected' && (
                             <div className="bg-red-100 text-red-700 p-4 mb-6 rounded-md shadow-md">
-                                <h2 className="text-xl font-bold mb-1">Application Rejected</h2>
+                                <h2 className="text-xl font-bold mb-2">Application Rejected</h2>
                                 <p>Unfortunately, your scholarship program application has been rejected.</p>
                                 {scholarshipProgram?.rejectReason && (
                                     <p className="mt-2"><strong>Reason:</strong> {scholarshipProgram.rejectReason}</p>
@@ -341,7 +659,7 @@ export default function ScholarshipProgramDetails() {
                             { label: 'Program Details', value: 'details' },
                             { label: 'Edit Program', value: 'edit' },
                             { label: 'Post Announcement', value: 'announcement' },
-                            { label: 'Validation', value: 'validation' },
+                            // { label: 'Validation', value: 'validation' },
                             { label: 'View Scholars', value: 'scholars' },
                             { label: 'Scholar Applications', value: 'applications' },
                         ].map((tab) => (
@@ -372,9 +690,9 @@ export default function ScholarshipProgramDetails() {
                             <PostAnnouncement />
                         )}
 
-                        {activeTab === 'validation' && scholarshipProgram?.status !== 'Pending Approval' && scholarshipProgram?.status !== 'Rejected' && (
+                        {/* {activeTab === 'validation' && scholarshipProgram?.status !== 'Pending Approval' && scholarshipProgram?.status !== 'Rejected' && (
                             <Validation />
-                        )}
+                        )} */}
 
                         {activeTab === 'scholars' && scholarshipProgram?.status !== 'Pending Approval' && scholarshipProgram?.status !== 'Rejected' && (
                             <ViewScholars

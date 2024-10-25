@@ -80,12 +80,12 @@ export default function ScholarshipPrograms() {
                         <div className={'flex gap-2 mx-auto px-24 h-44'}>
                             <div className='flex items-center justify-between w-full h-28'>
                                 <h1 className='text-2xl font-bold '>Scholarship Programs</h1>
-                                <Link to={'/add-scholarship-program'}>
+                                {/* <Link to={'/add-scholarship-program'}>
                                     <button className='bg-white text-blue-600 px-4 py-2 shadow rounded-md font-medium flex items-center gap-2 hover:bg-slate-200'>
                                         <IoAddCircleOutline className='w-6 h-6' />
                                         Add Program
                                     </button>
-                                </Link>
+                                </Link> */}
                             </div>
                         </div>
                     </div>
@@ -205,7 +205,7 @@ export default function ScholarshipPrograms() {
                                                 Status
                                             </th>
                                             <th scope="col" className="px-6 py-3 text-left text-xs uppercase tracking-wider">
-                                                Applications
+                                                Slots
                                             </th>
                                             <th scope="col" className="px-6 py-3 text-left text-xs uppercase tracking-wider">
                                                 Actions
@@ -213,40 +213,44 @@ export default function ScholarshipPrograms() {
                                         </tr>
                                     </thead>
                                     <tbody className="bg-white divide-y divide-gray-200">
-                                        {filteredPrograms.map((program) => (
-                                            <tr key={program.id}>
+                                        {filteredPrograms.map((scholarship) => (
+                                            <tr key={scholarship._id}>
                                                 <td className="px-6 flex gap-4 items-center py-4 whitespace-nowrap">
                                                     <div
                                                         className='w-16 h-16 rounded-md'
                                                         style={{
-                                                            backgroundImage: `url(${program.scholarshipImage})`,
+                                                            backgroundImage: `url(${scholarship.bannerImage})`,
                                                             backgroundSize: 'cover',
                                                             backgroundPosition: 'center'
                                                         }}
                                                     ></div>
-                                                    <h1 className='text-base font-medium text-gray-800 break-words'>{program.title}</h1>
+
+                                                    <h1 className='text-base font-medium text-gray-800 break-words'>{scholarship.title}</h1>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                     <span className={`text-base font-medium 
-                                                        ${program.status === 'Published' ? 'bg-indigo-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                                        ${program.status === 'Ongoing' ? 'bg-teal-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                                        ${program.status === 'Rejected' ? 'bg-red-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                                        ${program.status === 'Completed' ? 'bg-green-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                                        ${program.status === 'Awaiting Publication' ? 'bg-yellow-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''}`}>
-                                                        {program.status}
+                                                              ${scholarship.status === 'Published' ? 'bg-indigo-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                                              ${scholarship.status === 'Ongoing' ? 'bg-teal-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                                              ${scholarship.status === 'Rejected' ? 'bg-red-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                                              ${scholarship.status === 'Archived' ? 'bg-gray-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                                              ${scholarship.status === 'Cancelled' ? 'bg-orange-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                                              ${scholarship.status === 'Completed' ? 'bg-green-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                                              ${scholarship.status === 'Awaiting Publication' ? 'bg-yellow-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''}`}>
+                                                        {scholarship.status}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
-                                                    <span className='text-slate-600'>0</span>
+                                                    <span className='text-slate-600'>{scholarship.approvedScholars}/{scholarship.numberOfScholarships}</span>
                                                 </td>
+
                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                     <Link
-                                                        to={program.status === 'Pending Approval'
-                                                            ? `/scholarship-program-applications/${program._id}`
-                                                            : `/scholarship-program/${program._id}`}
+                                                        to={scholarship.status === 'Pending Approval'
+                                                            ? `/scholarship-program-applications/${scholarship._id}`
+                                                            : `/scholarship-program/${scholarship._id}`}
                                                         className="bg-blue-600 text-white px-4 ml-2 py-1 rounded-md hover:bg-blue-800 whitespace-nowrap"
                                                     >
-                                                        {program.status === 'Pending Approval' ? 'Verify' : 'View Details'}
+                                                        {scholarship.status === 'Pending Approval' ? 'Verify' : 'View Details'}
                                                     </Link>
                                                 </td>
                                             </tr>
