@@ -196,27 +196,27 @@ const Step1 = ({ formData, setFormData }) => {
                         )}
                     </div>
 
-                    <div className="mb-4">
-                        <label htmlFor="organizationType" className="block text-sm font-medium text-gray-700 mb-2">
-                            Organization Type <span className="text-red-500">*</span>
-                        </label>
-                        <select
-                            name="organizationType"
-                            id="organizationType"
-                            value={formData.organizationType}
-                            onChange={handleChange}
-                            className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-                            required
-                        >
-                            <option value="" disabled>Select organization type</option>
-                            <option value="Non-profit">Non-profit (e.g., charities, NGOs)</option>
-                            <option value="Educational Institution">Educational Institution (e.g., schools, universities)</option>
-                            <option value="Corporate">Corporate (e.g., businesses, companies)</option>
-                            <option value="Government">Government (e.g., federal, state, local agencies)</option>
-                        </select>
-                        <div className="mt-1 text-xs text-gray-600">
-                            Please select the type of organization you are registering. This helps us categorize your organization correctly.
-                        </div>
+                                <div className="mb-4">
+                      <label htmlFor="organizationType" className="block text-sm font-medium text-gray-700 mb-2">
+                        Organization Type <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        name="organizationType"
+                        id="organizationType"
+                        value={formData.organizationType}
+                        onChange={handleChange}
+                        className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        required
+                      >
+                        <option value="" disabled>Select organization type</option>
+                        <option value="Government Agencies">Government Agencies (e.g., federal, state, local agencies)</option>
+                        <option value="Private Corporations">Private Corporations (e.g., business, companies)</option>
+                        <option value="Non-Governmental Organizations">Non-Governmental Organizations (e.g., charities, non-profit organization/foundations)</option>
+                        <option value="Educational Foundations">Educational Foundations (e.g., schools, universities)</option>
+                      </select>
+                      <div className="mt-1 text-xs text-gray-600">
+                        Please select the type of organization you are registering. This helps us categorize your organization correctly.
+                      </div>
                     </div>
 
                     <div className="mb-4">
