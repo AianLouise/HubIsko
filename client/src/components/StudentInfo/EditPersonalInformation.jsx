@@ -134,6 +134,15 @@ export default function EditPersonalInformation() {
 
             return updatedFormData;
         });
+
+        // Validation for contact number
+        if (name === 'contactNumber') {
+            const isValid = /^09\d{9}$/.test(value);
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                contactNumber: isValid ? '' : 'Please enter a valid 11-digit phone number starting with 09',
+            }));
+        }
     };
 
     const validateForm = () => {
@@ -162,6 +171,13 @@ export default function EditPersonalInformation() {
     const handleSave = async () => {
         if (!validateForm()) {
             setNotification({ type: 'error', message: 'Please fill out all required fields' });
+            return;
+        }
+
+        const isContactNumberValid = /^09\d{9}$/.test(formData.applicantDetails.contactNumber);
+
+        if (!isContactNumberValid) {
+            setNotification({ type: 'error', message: 'Please enter a valid 11-digit phone number starting with 09' });
             return;
         }
 
@@ -208,7 +224,7 @@ export default function EditPersonalInformation() {
     };
 
     const today = new Date();
-    const maxDate = new Date(today.setFullYear(today.getFullYear() - 15)).toISOString().split('T')[0];  
+    const maxDate = new Date(today.setFullYear(today.getFullYear() - 15)).toISOString().split('T')[0];
 
     const inputBaseClasses = "block w-full p-2 rounded-lg border transition duration-200";
 
@@ -482,8 +498,15 @@ export default function EditPersonalInformation() {
                         className={inputClasses}
                         value={formData.applicantDetails.contactNumber}
                         onChange={handleChange}
+                        onInput={(e) => {
+                            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                        }}
                         disabled={!isEditing}
+                        maxLength="11"
+                        pattern="09\d{9}"
+                        title="Please enter a valid 11-digit phone number starting with 09"
                         required
+                        inputMode="numeric"
                     />
                     {errors.contactNumber && <span className="text-red-500 text-sm">{errors.contactNumber}</span>}
                 </div>
