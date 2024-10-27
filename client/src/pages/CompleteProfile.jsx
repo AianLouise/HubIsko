@@ -117,16 +117,24 @@ export default function CompleteProfile() {
 
     const isBirthdateValid = new Date(formData.birthdate) <= new Date(maxDate);
 
-    if (missingFields.length === 0 && isBirthdateValid) {
+    const isContactNumberValid = /^09\d{9}$/.test(formData.contactNumber);
+
+    if (missingFields.length === 0 && isBirthdateValid && isContactNumberValid) {
       setCurrentStep((prevStep) => prevStep + 1);
     } else {
-      const topMostMissingField = missingFields[0];
-      const topMostMissingFieldName = fieldDisplayNames[topMostMissingField];
+      let message = '';
+      if (missingFields.length > 0) {
+        const topMostMissingField = missingFields[0];
+        const topMostMissingFieldName = fieldDisplayNames[topMostMissingField];
+        message = `The following required field is missing: ${topMostMissingFieldName}. Please complete it before proceeding to the next step.`;
+      } else if (!isBirthdateValid) {
+        message = 'The birthdate entered is invalid. Please enter a valid birthdate before proceeding to the next step.';
+      } else if (!isContactNumberValid) {
+        message = 'The contact number entered is invalid. Please enter a valid 11-digit phone number starting with 09.';
+      }
       setNotification({
         show: true,
-        message: missingFields.length > 0 ?
-          `The following required field is missing: ${topMostMissingFieldName}. Please complete it before proceeding to the next step.` :
-          `The birthdate entered is invalid. Please enter a valid birthdate before proceeding to the next step.`
+        message: message
       });
     }
   };
@@ -578,7 +586,6 @@ export default function CompleteProfile() {
                       accept="image/*"
                       onChange={handleFileChange}
                       className='absolute inset-0 w-full h-full opacity-0 cursor-pointer'
-                      required
                     />
                     <div className='w-24 h-24 rounded-full border border-gray-300 flex items-center justify-center overflow-hidden'>
                       <img
@@ -829,15 +836,15 @@ export default function CompleteProfile() {
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>Contact Number</label>
                 <input
-                  type="number"
+                  type="text"
                   name="contactNumber"
                   value={formData.contactNumber}
                   onChange={handleChange}
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter contact number"
                   maxLength="11"
-                  pattern="\d{11}"
-                  title="Please enter a valid 11-digit phone number"
+                  pattern="09\d{9}"
+                  title="Please enter a valid 11-digit phone number starting with 09"
                   required
                 />
               </div>
