@@ -31,29 +31,29 @@ const validateEmail = async (email) => {
 const ProviderRegistration = () => {
     const navigate = useNavigate();
     const { currentUser } = useSelector((state) => state.user);
-  
+
     useEffect(() => {
-      if (currentUser) {
-        if (currentUser.role === 'admin') {
-          navigate('/admin-dashboard');
-        } else if (currentUser.role === 'scholarship_provider') {
-          if (!currentUser.emailVerified) {
-            navigate('/verify-your-email', { state: { email: currentUser.email } });
-          } else {
-            navigate('/provider-dashboard');
-          }
-        } else if (currentUser.role === 'applicant') {
-          if (!currentUser.emailVerified) {
-            navigate('/verify-your-email', { state: { email: currentUser.email } });
-          } else if (!currentUser.applicantDetails.profileComplete) {
-            navigate('/CoRH', { state: { userId: currentUser._id } });
-          } else {
-            navigate('/');
-          }
-        } else {
-          navigate('/');
+        if (currentUser) {
+            if (currentUser.role === 'admin') {
+                navigate('/admin-dashboard');
+            } else if (currentUser.role === 'scholarship_provider') {
+                if (!currentUser.emailVerified) {
+                    navigate('/verify-your-email', { state: { email: currentUser.email } });
+                } else {
+                    navigate('/provider-dashboard');
+                }
+            } else if (currentUser.role === 'applicant') {
+                if (!currentUser.emailVerified) {
+                    navigate('/verify-your-email', { state: { email: currentUser.email } });
+                } else if (!currentUser.applicantDetails.profileComplete) {
+                    navigate('/CoRH', { state: { userId: currentUser._id } });
+                } else {
+                    navigate('/');
+                }
+            } else {
+                navigate('/');
+            }
         }
-      }
     }, [currentUser, navigate]);
     const [loading, setLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -141,7 +141,13 @@ const ProviderRegistration = () => {
                 if (!formData.registrationNumber) errors.registrationNumber = 'Registration number is required';
                 if (!formData.contactPersonName) errors.contactPersonName = 'Contact person name is required';
                 if (!formData.contactPersonPosition) errors.contactPersonPosition = 'Contact person position is required';
-                if (!formData.contactPersonNumber) errors.contactPersonNumber = 'Contact person number is required';
+                if (!formData.contactPersonNumber) {
+                    errors.contactPersonNumber = 'Contact person number is required';
+                } else if (!/^\d{11}$/.test(formData.contactPersonNumber)) {
+                    errors.contactPersonNumber = 'Contact person number must be exactly 11 digits';
+                } else if (!/^09\d{9}$/.test(formData.contactPersonNumber)) {
+                    errors.contactPersonNumber = 'Contact person number must be a valid PH phone number starting with 09';
+                }
                 if (!formData.region) errors.region = 'Region is required';
                 if (!formData.province) errors.province = 'Province is required';
                 if (!formData.city) errors.city = 'City is required';
@@ -218,13 +224,13 @@ const ProviderRegistration = () => {
             }
         },
         {
-            title: 'Terms and Conditions',
-            description: 'Please read and agree to the terms and conditions before submitting your application',
+            title: 'Data Privacy',
+            description: 'Please read and agree to the data privacy policy before submitting your application',
             content: <Step4 formData={formData} setFormData={setFormData} />,
             validate: () => {
                 const errors = {};
                 if (!formData.agreePrivacy) {
-                    errors.agreePrivacy = 'You must agree to the terms and conditions.';
+                    errors.agreePrivacy = 'You must agree to the Data Privacy Policy.';
                 }
                 return errors;
             }
@@ -239,7 +245,7 @@ const ProviderRegistration = () => {
         const newErrors = {};
 
         // Add validation for step 4
-        if (!formData.agreePrivacy) newErrors.agreePrivacy = 'You must agree to the Terms and Conditions';
+        if (!formData.agreePrivacy) newErrors.agreePrivacy = 'You must agree to the Data Privacy Policy';
 
         // Other validation logic...
 
@@ -309,11 +315,10 @@ const ProviderRegistration = () => {
             <div className="flex flex-col items-center mt-8">
                 <span className='text-2xl text-slate-500'>Let's get your organization setup!</span>
                 <span className='text-sm mt-2 text-slate-500'>We'll guide you step by step!</span>
-
-                <div className='flex justify-center items-center gap-4 mt-4 mb-8'>
+                <div className='flex justify-center items-center gap-8 mt-4 mb-8'>
                     {[0, 1, 2, 3].map((step, index) => (
                         <React.Fragment key={index}>
-                            <div className='flex flex-col gap-1 items-center text-center'>
+                            <div className='flex flex-col gap-2 items-center text-center'>
                                 <span className={`text-xl font-bold ${currentPage === index ? 'text-blue-600' : 'text-gray-400'}`}>{step + 1}</span>
                                 <button
                                     className={`w-12 h-12 shadow rounded-md flex items-center justify-center ${currentPage === index ? 'bg-blue-600' : 'border'}`}
@@ -329,7 +334,7 @@ const ProviderRegistration = () => {
                                     {index === 0 && "Organization Information"}
                                     {index === 1 && "Account Information"}
                                     {index === 2 && "Documents Information"}
-                                    {index === 3 && "Terms and Conditions"}
+                                    {index === 3 && "Data Privacy"}
                                 </span>
                             </div>
                             {index < 3 && <FaArrowRightLong className='text-4xl text-blue-600' />}
@@ -351,7 +356,7 @@ const ProviderRegistration = () => {
                 />
             </form>
 
-               {loading && (
+            {loading && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-8 rounded-md shadow-lg text-center flex flex-col items-center">
                         <FaSpinner className="text-blue-500 text-4xl mb-4 animate-spin" />
@@ -360,7 +365,7 @@ const ProviderRegistration = () => {
                     </div>
                 </div>
             )}
-            
+
             {showModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-8 rounded-md shadow-lg text-center flex flex-col items-center">
