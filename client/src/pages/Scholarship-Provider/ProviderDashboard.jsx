@@ -161,7 +161,7 @@ export default function ProviderDashboard() {
         </div>
 
         <div className='max-w-8xl mx-auto px-24 my-8 gap-10 flex-col flex'>
-          <div className="min-h-screen bg-gray-100 p-6">
+          <div className="min-h-screen p-6">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
               <div className="bg-white p-6 rounded-lg shadow-md transition-all hover:shadow-lg">
                 <div className="flex flex-col items-center mb-6">

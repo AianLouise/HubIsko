@@ -136,12 +136,14 @@ export default function Header() {
         </Link>
 
         <div className='flex items-center gap-4 md:hidden'>
-          <Link
-            to={'/notifications'}
-            className={`flex items-center p-1.5 rounded-full ${isNotificationsPage ? 'bg-white text-blue-600 border' : 'bg-blue-600 text-white'}`}
-          >
-            <IoIosNotifications className="w-6 h-6" />
-          </Link>
+          {currentUser && (
+            <Link
+              to={'/notifications'}
+              className={`flex items-center p-1.5 rounded-full ${isNotificationsPage ? 'bg-white text-blue-600 border' : 'bg-blue-600 text-white'}`}
+            >
+              <IoIosNotifications className="w-6 h-6" />
+            </Link>
+          )}
           <button className="bg-blue-600 text-white rounded-md p-2" onClick={toggleSidebar}>
             <IoMenu className="w-6 h-6" />
           </button>

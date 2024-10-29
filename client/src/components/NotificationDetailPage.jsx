@@ -34,7 +34,7 @@ const NotificationDetailPage = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md space-y-6 mt-10">
+    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-xl font-bold mb-6 text-blue-600">Notification Details</h2>
       <div className="flex flex-row items-center gap-4">
         <img
