@@ -12,6 +12,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useSelector } from 'react-redux';
 import ProviderHeaderSidebar from '../components/ProviderHeaderAndSidebar';
+import { FaBuilding, FaEnvelope, FaGlobe } from 'react-icons/fa';
 
 const Profiles = () => {
     const currentUser = useSelector((state) => state.user.currentUser);
@@ -137,6 +138,26 @@ const Profiles = () => {
                                         ? user.username
                                         : `${user.applicantDetails.firstName} ${user.applicantDetails.lastName}`}
                             </span>
+                            {user.role === 'scholarship_provider' && (
+                                <>
+                                    <div className='flex items-center text-lg text-gray-600'>
+                                        <FaBuilding className='mr-2' />
+                                        {user.scholarshipProviderDetails.organizationType}
+                                    </div>
+                                    {user.scholarshipProviderDetails.email && (
+                                        <div className='flex items-center text-lg text-gray-600'>
+                                            <FaEnvelope className='mr-2' />
+                                            {user.scholarshipProviderDetails.email}
+                                        </div>
+                                    )}
+                                    {user.scholarshipProviderDetails.website && (
+                                        <div className='flex items-center text-lg text-gray-600'>
+                                            <FaGlobe className='mr-2' />
+                                            {user.scholarshipProviderDetails.website}
+                                        </div>
+                                    )}
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>

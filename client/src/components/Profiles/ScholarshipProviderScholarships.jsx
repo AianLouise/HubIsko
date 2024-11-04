@@ -95,7 +95,7 @@ const ScholarshipProviderScholarships = ({ userId }) => {
                     <div className='flex text-blue-600 text-left justify-center font-bold'>
                       <div className='flex flex-row bg-white gap-2 px-2 items-center'>
                         <FaHandHolding className='text-xl flex-shrink-0' />
-                        {scholarship.amount}
+                        {truncateText(scholarship.amount, 50)}
                       </div>
                     </div>
                   </div>
@@ -117,11 +117,12 @@ const ScholarshipProviderScholarships = ({ userId }) => {
                         <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
                         <p className='font-medium'>Eligibility: </p>
                       </div>
-                      <p className='text-sm lg:hidden'>{truncateText(scholarship.fieldOfStudy, 50)}</p>
-                      <p className='text-sm lg:hidden'>{truncateText(scholarship.otherEligibility, 50)}</p>
+                      <p className='text-sm lg:hidden'>{truncateText(scholarship.fieldOfStudy.join(', '), 50)}</p>
+                      <p className='text-sm lg:hidden'>{truncateText(scholarship.location, 50)}</p>
+                      <p className='text-sm lg:hidden'>{truncateText(scholarship.educationLevel, 50)}</p>
                     </div>
                     <p className='w-full text-sm hidden lg:block'>
-                      {truncateText(scholarship.fieldOfStudy, 50)}, {truncateText(scholarship.otherEligibility, 50)}
+                      {truncateText(scholarship.fieldOfStudy.join(', '), 50)}, {truncateText(scholarship.location, 50)}, {truncateText(scholarship.educationLevel, 50)}
                     </p>
                   </div>
                   <div className='flex lg:flex-row lg:gap-4'>
@@ -130,9 +131,9 @@ const ScholarshipProviderScholarships = ({ userId }) => {
                         <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
                         <p className='font-medium'>Deadline: </p>
                       </div>
-                      <p className='text-sm lg:hidden'>{formatDate(scholarship.endDate)}</p>
+                      <p className='text-sm lg:hidden'>{formatDate(scholarship.applicationDeadline)}</p>
                     </div>
-                    <p className='w-full text-sm hidden lg:block'>{formatDate(scholarship.endDate)}</p>
+                    <p className='w-full text-sm hidden lg:block'>{formatDate(scholarship.applicationDeadline)}</p>
                   </div>
                 </div>
                 <Link

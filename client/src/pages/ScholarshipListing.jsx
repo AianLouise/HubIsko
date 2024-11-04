@@ -181,57 +181,57 @@ export default function ScholarshipListing() {
           </div>
         </div>
 
-      <div className='flex flex-col gap-4 justify-center items-left px-10 lg:mx-auto lg:max-w-6xl lg:px-24 lg:my-8'>
-      <div className='flex gap-2 items-center justify-between'>
-        <span className='text-xl font-bold text-slate-600'>Organizations</span>
-      </div>
-      <div className='flex items-center justify-center p-4'>
-      {!isLargeScreen && (
-          <button
-            onClick={handlePreviousPage}
-            className='absolute left-8 bg-blue-600 text-white p-2 rounded-full z-10'
-            disabled={currentPage === 0}
-          >
-            <MdOutlineKeyboardArrowRight className='transform rotate-180' />
-          </button>
-        )}
-        <div className={`flex space-x-6 ${isLargeScreen ? 'overflow-x-hidden' : 'overflow-x-auto'} overflow-y-hidden lg:h-32 w-full mx-4`}>
-          {(isLargeScreen ? allProviders : paginatedProviders).map((provider) => (
-            <Link to={`/profile/${provider._id}`} key={provider._id} className='flex flex-col items-center group flex-shrink-0 relative'>
-              <button className='flex flex-col items-center group space-y-2 relative ml-4 lg:ml-0'>
-                <div className='w-12 h-12 lg:w-20 lg:h-20 rounded-full overflow-hidden group-hover:bg-blue-800'>
-                  <img
-                    src={provider.profilePicture}
-                    alt={`${provider.scholarshipProviderDetails.organizationName}'s profile`}
-                    className='w-full h-full object-cover'
-                  />
-                </div>
-                <span
-                  className='font-medium max-w-[100px] text-sm lg:text-ellipsis overflow-hidden whitespace-nowrap group-hover:tooltip'
-                  title={provider.scholarshipProviderDetails.organizationName}
-                >
-                  {provider.scholarshipProviderDetails.organizationName.length > 15
-                    ? `${provider.scholarshipProviderDetails.organizationName.slice(0, 12)}...`
-                    : provider.scholarshipProviderDetails.organizationName}
-                </span>
+        <div className='flex flex-col gap-4 justify-center items-left px-10 lg:mx-auto lg:max-w-6xl lg:px-24 lg:my-8'>
+          <div className='flex gap-2 items-center justify-between'>
+            <span className='text-xl font-bold text-slate-600'>Organizations</span>
+          </div>
+          <div className='flex items-center justify-center p-4'>
+            {!isLargeScreen && (
+              <button
+                onClick={handlePreviousPage}
+                className='absolute left-8 bg-blue-600 text-white p-2 rounded-full z-10'
+                disabled={currentPage === 0}
+              >
+                <MdOutlineKeyboardArrowRight className='transform rotate-180' />
               </button>
-              <div className='absolute mt-14 p-2 z-20 bg-white border-2 border-blue-500 shadow-lg text-center text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden sm:block'>
-                {provider.scholarshipProviderDetails.organizationName}
-              </div>
-            </Link>
-          ))}
+            )}
+            <div className={`flex space-x-6 ${isLargeScreen ? 'overflow-x-hidden' : 'overflow-x-auto'} overflow-y-hidden lg:h-32 w-full mx-4`}>
+              {(isLargeScreen ? allProviders : paginatedProviders).map((provider) => (
+                <Link to={`/profile/${provider._id}`} key={provider._id} className='flex flex-col items-center group flex-shrink-0 relative'>
+                  <button className='flex flex-col items-center group space-y-2 relative ml-4 lg:ml-0'>
+                    <div className='w-12 h-12 lg:w-20 lg:h-20 rounded-full overflow-hidden group-hover:bg-blue-800'>
+                      <img
+                        src={provider.profilePicture}
+                        alt={`${provider.scholarshipProviderDetails.organizationName}'s profile`}
+                        className='w-full h-full object-cover'
+                      />
+                    </div>
+                    <span
+                      className='font-medium max-w-[100px] text-sm lg:text-ellipsis overflow-hidden whitespace-nowrap group-hover:tooltip'
+                      title={provider.scholarshipProviderDetails.organizationName}
+                    >
+                      {provider.scholarshipProviderDetails.organizationName.length > 15
+                        ? `${provider.scholarshipProviderDetails.organizationName.slice(0, 12)}...`
+                        : provider.scholarshipProviderDetails.organizationName}
+                    </span>
+                  </button>
+                  <div className='absolute mt-14 p-2 z-20 bg-white border-2 border-blue-500 shadow-lg text-center text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden sm:block'>
+                    {provider.scholarshipProviderDetails.organizationName}
+                  </div>
+                </Link>
+              ))}
+            </div>
+            {!isLargeScreen && (
+              <button
+                onClick={handleNextPage}
+                className='absolute right-8 bg-blue-600 text-white p-2 rounded-full z-10'
+                disabled={(currentPage + 1) * itemsPerPage >= providers.length}
+              >
+                <MdOutlineKeyboardArrowRight />
+              </button>
+            )}
+          </div>
         </div>
-        {!isLargeScreen && (
-          <button
-            onClick={handleNextPage}
-            className='absolute right-8 bg-blue-600 text-white p-2 rounded-full z-10'
-            disabled={(currentPage + 1) * itemsPerPage >= providers.length}
-          >
-            <MdOutlineKeyboardArrowRight />
-          </button>
-        )}
-      </div>
-    </div>
 
         <div className='flex flex-col mx-auto max-w-6xl justify-center items-center px-10 lg:px-24'>
           <div className='flex flex-col w-full gap-4'>
@@ -455,19 +455,19 @@ export default function ScholarshipListing() {
                         </div>
                         <p className='w-full text-sm hidden lg:block'>{truncateText(scholarship.description, 50)}</p>
                       </div>
-                                     <div className='flex lg:flex-row lg:gap-4'>
-                          <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
-                              <div className='flex lg:gap-0 gap-2'>
-                                  <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
-                                  <p className='font-medium'>Eligibility: </p>
-                              </div>
-                              <p className='text-sm lg:hidden'>{truncateText(scholarship.fieldOfStudy.join(', '), 50)}</p>
-                              <p className='text-sm lg:hidden'>{truncateText(scholarship.location, 50)}</p>
-                              <p className='text-sm lg:hidden'>{truncateText(scholarship.educationLevel, 50)}</p>
+                      <div className='flex lg:flex-row lg:gap-4'>
+                        <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
+                          <div className='flex lg:gap-0 gap-2'>
+                            <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
+                            <p className='font-medium'>Eligibility: </p>
                           </div>
-                          <p className='w-full text-sm hidden lg:block'>
-                              {truncateText(scholarship.fieldOfStudy.join(', '), 50)}, {truncateText(scholarship.location, 50)}, {truncateText(scholarship.educationLevel, 50)}
-                          </p>
+                          <p className='text-sm lg:hidden'>{truncateText(scholarship.fieldOfStudy.join(', '), 50)}</p>
+                          <p className='text-sm lg:hidden'>{truncateText(scholarship.location, 50)}</p>
+                          <p className='text-sm lg:hidden'>{truncateText(scholarship.educationLevel, 50)}</p>
+                        </div>
+                        <p className='w-full text-sm hidden lg:block'>
+                          {truncateText(scholarship.fieldOfStudy.join(', '), 50)}, {truncateText(scholarship.location, 50)}, {truncateText(scholarship.educationLevel, 50)}
+                        </p>
                       </div>
                       <div className='flex lg:flex-row lg:gap-4'>
                         <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
