@@ -136,7 +136,7 @@ export default function ApplicationForm() {
                 <div className="flex justify-between items-center">
                     <span className="text-2xl">Submitted details for: <span className='text-blue-600 font-bold'>{application.scholarshipProgram.title}</span></span>
                 </div>
-                <div className="mt-4">
+                <div id="scholar-details" className="mt-4">
                     {/* Application Status */}
                     <div className={`border px-4 py-3 rounded relative mb-4 ${getStatusClass(application.applicationStatus)}`} role="alert">
                         <strong className="font-bold">Application Status:</strong>
@@ -339,6 +339,7 @@ export default function ApplicationForm() {
                         </div>
                     </Modal>
                 </div>
+
             </div>
         </div>
     )

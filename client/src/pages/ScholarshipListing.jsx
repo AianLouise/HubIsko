@@ -428,7 +428,7 @@ export default function ScholarshipListing() {
                         <div className='flex text-blue-600 text-left justify-center font-bold'>
                           <div className='flex flex-row bg-white gap-2 px-2 items-center'>
                             <FaHandHolding className='text-xl flex-shrink-0' />
-                            {scholarship.amount}
+                            {truncateText(scholarship.amount, 50)}
                           </div>
                         </div>
                       </div>

@@ -209,10 +209,10 @@ const Step1 = ({ formData, setFormData }) => {
                             required
                         >
                             <option value="" disabled>Select organization type</option>
-                            <option value="Government Agencies">Government Agencies (e.g., federal, state, local agencies)</option>
-                            <option value="Private Corporations">Private Corporations (e.g., business, companies)</option>
-                            <option value="Non-Governmental Organizations">Non-Governmental Organizations (e.g., charities, non-profit organization/foundations)</option>
-                            <option value="Educational Foundations">Educational Foundations (e.g., schools, universities)</option>
+                            <option value="Government Agency">Government Agency (e.g., federal, state, local agencies)</option>
+                            <option value="Private Corporation">Private Corporation (e.g., business, companies)</option>
+                            <option value="Non-Governmental Organization">Non-Governmental Organization (e.g., charities, non-profit organization/foundations)</option>
+                            <option value="Educational Foundation">Educational Foundation (e.g., schools, universities)</option>
                         </select>
                         <div className="mt-1 text-xs text-gray-600">
                             Please select the type of organization you are registering. This helps us categorize your organization correctly.

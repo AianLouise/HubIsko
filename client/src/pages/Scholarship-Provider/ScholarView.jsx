@@ -23,7 +23,7 @@ export default function ScholarView() {
     const handleTabChange = (tab) => {
         setActiveTab(tab);
     };
-    
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -67,6 +67,15 @@ export default function ScholarView() {
 
         fetchApplicationDetails();
     }, [applicationId]);
+
+    const printScholarDetails = () => {
+        const printContents = document.getElementById('scholar-details').innerHTML;
+        const originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+        window.location.reload(); // Reload the page to restore the original content
+    };
 
     return (
         <div className={`flex flex-col min-h-screen`}>
@@ -121,9 +130,14 @@ export default function ScholarView() {
                             <div className='flex flex-col gap-4'>
                                 <div className='flex justify-between items-center gap-4'>
                                     <span className='text-2xl font-bold'>Scholar Details</span>
+                                    <div className="flex justify-end">
+                                        <button onClick={printScholarDetails} className="bg-blue-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-blue-800">
+                                            Print Scholar Details
+                                        </button>
+                                    </div>
                                 </div>
 
-                                <ApplicationForm />
+                                <ApplicationForm printScholarDetails={printScholarDetails} />
                             </div>
                         )}
                     </div>

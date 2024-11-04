@@ -286,11 +286,11 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
                                         <div className="flex flex-col bg-white border border-gray-200 rounded-lg w-full shadow-sm p-4">
                                             <div className="flex justify-between items-center mb-2">
                                                 <span className="text-sm font-semibold text-gray-700">
-                                                    {post.author.role === 'applicant'
-                                                        ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}`
-                                                        : post.author.role === 'admin'
-                                                            ? `${post.author.username}`
-                                                            : `${post.author.scholarshipProviderDetails.organizationName}`}
+                                                    {reply.author.role === 'applicant'
+                                                        ? `${reply.author.applicantDetails.firstName} ${reply.author.applicantDetails.lastName}`
+                                                        : reply.author.role === 'admin'
+                                                            ? `${reply.author.username}`
+                                                            : `${reply.author.scholarshipProviderDetails.organizationName}`}
                                                 </span>
                                                 <span className="text-xs text-gray-500">
                                                     {formatDistanceToNow(new Date(reply.createdAt), { addSuffix: true })}
@@ -301,13 +301,13 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
                                                 {/* Like button and count */}
                                                 <div className='flex flex-row gap-1 px-2'>
                                                     <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
-                                                    <span>{comment.likes ? comment.likes.length : 0}</span>
+                                                    <span>{reply.likes ? reply.likes.length : 0}</span>
                                                 </div>
 
                                                 {/* Reply button and count */}
-                                                <div className='flex flex-row gap-1' onClick={() => toggleReplyBox(comment._id)}>
+                                                <div className='flex flex-row gap-1' onClick={() => toggleReplyBox(reply._id)}>
                                                     <BiCommentDots className='w-6 h-6 text-blue-600' />
-                                                    <span>{comment.replies ? comment.replies.length : 0}</span>
+                                                    <span>{reply.replies ? reply.replies.length : 0}</span>
                                                 </div>
                                             </div>
                                         </div>

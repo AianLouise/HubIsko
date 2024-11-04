@@ -46,6 +46,7 @@ export default function EditScholarshipWebView() {
         applicationDeadline: programDetails?.applicationDeadline || new Date().toISOString(),
         scholarshipImage: programDetails?.scholarshipImage || 'https://via.placeholder.com/150',
         bannerImage: programDetails?.bannerImage || 'https://via.placeholder.com/600x200',
+        description: programDetails?.description || '',
         sections: programDetails?.sections || [
             { id: 1, title: 'What is this scholarship for?', content: 'To support students in their academic journey.' },
             { id: 2, title: 'What are the benefits?', content: 'Tuition, Books, Living Expenses' },
@@ -70,6 +71,7 @@ export default function EditScholarshipWebView() {
                 applicationDeadline: programDetails.applicationDeadline || new Date().toISOString(),
                 scholarshipImage: programDetails.scholarshipImage || 'https://via.placeholder.com/150',
                 bannerImage: programDetails.bannerImage || 'https://via.placeholder.com/600x200',
+                description: programDetails.description || '',
                 sections: programDetails.sections || [
                     { id: 1, title: 'What is this scholarship for?', content: 'To support students in their academic journey.' },
                     { id: 2, title: 'What are the benefits?', content: 'Tuition, Books, Living Expenses' },
@@ -361,6 +363,15 @@ export default function EditScholarshipWebView() {
                             {errorMessage2 && <p className="text-red-500 text-center">{errorMessage2}</p>}
                         </div>
 
+                        <div>
+                            {formData.description && (
+                                <div className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
+                                    <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>Description</span>
+                                    <span className='text-sm px-4 pb-4 whitespace-pre-line'>{formData.description}</span>
+                                </div>
+                            )}
+                        </div>
+                        
                         <div className='mt-12 flex flex-col justify-center items-center gap-2'>
                             <h2 className='font-bold text-xl text-slate-700'>Description or Frequently Asked Questions!</h2>
                             <span className='text-slate-500'>You can freely edit the title and description of the sections by just clicking!</span>

@@ -254,6 +254,15 @@ const Step3 = ({ formData, setFormData }) => {
                             </div>
                             {errorMessage2 && <p className="text-red-500 text-center">{errorMessage2}</p>}
                         </div>
+                        
+                        <div>
+                            {formData.description && (
+                                <div className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
+                                    <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>Description</span>
+                                    <span className='text-sm px-4 pb-4 whitespace-pre-line'>{formData.description}</span>
+                                </div>
+                            )}
+                        </div>
 
                         <div className='mt-12 flex flex-col justify-center items-center gap-2'>
                             <h2 className='font-bold text-xl text-slate-700'>Description or Frequently Asked Questions!</h2>
@@ -296,7 +305,7 @@ const Step3 = ({ formData, setFormData }) => {
                         <div className="flex flex-col gap-2 mt-8 border rounded-md bg-white">
                             <input
                                 type="text"
-                                value={formData.faqTitle || 'Frequently Asked Questions'}
+                                value={formData.faqTitle || 'For more details'}
                                 onChange={(e) => handleFormDataChange('faqTitle', e.target.value)}
                                 className="font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md"
                                 required
