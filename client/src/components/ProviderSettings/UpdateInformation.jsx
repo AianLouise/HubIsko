@@ -144,14 +144,20 @@ const UpdateInformation = ({ currentUser, dispatch, updateUserDetails }) => {
                 </div>
                 <div className='mb-4'>
                     <label className='block text-xs font-medium text-gray-700'>Organization Type</label>
-                    <input
-                        type='text'
+                    <select
                         name='organizationType'
-                        className='mt-1 p-2 border rounded-md w-full text-sm'
+                        id='organizationType'
                         value={formData.scholarshipProviderDetails.organizationType}
                         onChange={handleInputChange}
+                        className='mt-1 p-2 border rounded-md w-full text-sm'
                         required
-                    />
+                    >
+                        <option value='' disabled>Select organization type</option>
+                        <option value='Government Agency'>Government Agency (e.g., federal, state, local agencies)</option>
+                        <option value='Private Corporation'>Private Corporation (e.g., business, companies)</option>
+                        <option value='Non-Governmental Organization'>Non-Governmental Organization (e.g., charities, non-profit organization/foundations)</option>
+                        <option value='Educational Foundation'>Educational Foundation (e.g., schools, universities)</option>
+                    </select>
                 </div>
                 <div className='mb-4'>
                     <label className='block text-xs font-medium text-gray-700'>Website</label>
