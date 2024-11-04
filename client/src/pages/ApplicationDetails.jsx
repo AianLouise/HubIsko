@@ -266,7 +266,7 @@ export default function Forums() {
 
                         </div>
                         <h1 className='text-4xl block lg:hidden font-bold text-gray-800 mb-8'>{scholarship.title}</h1>
-                        <div className='flex flex-col lg:gap-2 lg:w-1/2'>
+                        <div className='flex flex-col lg:gap-2 lg:w-2/3 xl:w-3/4'>
                             <div className='flex flex-row divide-x-2 divide-blue-200 mb-2'>
                                 <span className='text-lg lg:text-xl font-bold text-gray-600 pr-4'>{scholarship.organizationName}</span>
                                 {/* need date posted */}
@@ -338,6 +338,12 @@ export default function Forums() {
                         </div>
 
                         <div>
+                            {scholarship.description && (
+                                <div className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
+                                    <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>Description</span>
+                                    <span className='text-sm px-4 pb-4 whitespace-pre-line'>{scholarship.description}</span>
+                                </div>
+                            )}
                             {scholarship.sections && scholarship.sections.length > 0 ? (
                                 scholarship.sections.map((section, index) => (
                                     <div key={index} className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>

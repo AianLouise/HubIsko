@@ -38,8 +38,8 @@ const PostScholarship = () => {
         contactPhone: '',
         providerId: currentUser ? currentUser._id : '',
         organizationName: currentUser ? currentUser.scholarshipProviderDetails.organizationName : '',
-        faqTitle: 'Frequently Asked Questions',
-        faqDescription: 'For more details, visit our website.',
+        faqTitle: 'For more details',
+        faqDescription: 'For more details, visit our website or contact us directly.',
         scholarshipImage: '',
         bannerImage: '',
         // providerRequirements: ''
