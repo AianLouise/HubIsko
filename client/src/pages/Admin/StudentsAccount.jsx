@@ -160,13 +160,13 @@ export default function Students() {
                         <td className='py-2 px-4 border-b border-gray-200'>{(currentPage - 1) * itemsPerPage + index + 1}</td>
                         <td className='py-2 px-4 border-b border-gray-200'>
                           <div className="flex gap-2 items-center">
-                            <img src={applicant.profilePicture} alt="Profile" className="rounded-full h-6 w-6" />
+                            <img src={applicant.profilePicture} alt="Profile" className="rounded-full h-6 w-6 object-cover" />
                             {`${applicant.applicantDetails.firstName} ${applicant.applicantDetails.middleName} ${applicant.applicantDetails.lastName}`}
                           </div>
                         </td>
                         <td className='py-2 px-4 border-b border-gray-200'>{applicant.email}</td>
                         <td className='py-2 px-4 border-b border-gray-200'>{new Date(applicant.createdAt).toLocaleDateString()}</td>
-                                               <td className='py-2 px-4 border-b border-gray-200 flex justify-center items-center'>
+                        <td className='py-2 px-4 border-b border-gray-200 flex justify-center items-center'>
                           <span className={`w-3 h-3 rounded-full ${statusColors[applicant.status]} mr-2`}></span>
                           {applicant.status}
                         </td>
@@ -174,7 +174,7 @@ export default function Students() {
                           <div className="flex justify-center items-center gap-2">
                             <Link to={`/student-details/${applicant._id}`} className=''>
                               <MdPreview className='w-6 h-6 text-blue-600 hover:text-blue-800' />
-                            </Link> 
+                            </Link>
                           </div>
                         </td>
                       </tr>

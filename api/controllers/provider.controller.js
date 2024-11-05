@@ -243,6 +243,8 @@ export const getScholarshipProgramsByProvider = async (req, res) => {
   }
 };
 
+import ActivityLog from '../models/activityLog.model.js'; // Ensure the correct path
+
 export const updateUserInfo = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -254,6 +256,16 @@ export const updateUserInfo = async (req, res) => {
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
     }
+
+    // Create an activity log entry for updating user information
+    const activityLog = new ActivityLog({
+      userId: userId,
+      action: 'UPDATE',
+      type: 'account',
+      details: 'User information updated.'
+    });
+
+    await activityLog.save();
 
     res.status(200).json({ message: 'User information updated successfully', user: updatedUser });
   } catch (error) {
@@ -345,6 +357,16 @@ export const verifyEmailUpdate = async (req, res) => {
     user.emailVerificationToken = null;
     await user.save();
 
+    // Create an activity log entry for email verification
+    const activityLog = new ActivityLog({
+      userId: userId,
+      action: 'UPDATE_EMAIL',
+      type: 'account',
+      details: 'User email verified and updated.'
+    });
+
+    await activityLog.save();
+
     res.status(200).json({ message: 'Email verified and updated successfully', user });
   } catch (error) {
     res.status(500).json({ message: 'Error verifying email change', error: error.message });
@@ -378,6 +400,16 @@ export const changePassword = async (req, res) => {
     user.password = hashedPassword;
     await user.save();
 
+    // Create an activity log entry for password change
+    const activityLog = new ActivityLog({
+      userId: userId,
+      action: 'CHANGE_PASSWORD',
+      type: 'account',
+      details: 'User password changed.'
+    });
+
+    await activityLog.save();
+
     return res.status(200).json({ message: 'Password changed successfully.' });
   } catch (error) {
     console.error(error);
@@ -403,6 +435,16 @@ export const updateProfile = async (req, res) => {
     if (!updatedUser) {
       return res.status(404).json({ error: 'User not found.' });
     }
+
+    // Create an activity log entry for updating profile
+    const activityLog = new ActivityLog({
+      userId: userId,
+      action: 'UPDATE',
+      type: 'account',
+      details: 'User profile updated.'
+    });
+
+    await activityLog.save();
 
     return res.status(200).json({ message: 'Profile updated successfully.', user: updatedUser });
   } catch (error) {
