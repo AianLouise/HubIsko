@@ -240,17 +240,15 @@ export default function ScholarshipPrograms() {
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
-                                                    <span className='text-slate-600'>{scholarship.approvedScholars}/{scholarship.numberOfScholarships}</span>
+                                                    <span className='text-slate-600'>{scholarship.approvedScholars.length}/{scholarship.numberOfScholarships}</span>
                                                 </td>
 
                                                 <td className="px-6 py-4 whitespace-nowrap">
                                                     <Link
-                                                        to={scholarship.status === 'Pending Approval'
-                                                            ? `/scholarship-program-applications/${scholarship._id}`
-                                                            : `/scholarship-program/${scholarship._id}`}
+                                                        to={`/scholarship-program/${scholarship._id}`}
                                                         className="bg-blue-600 text-white px-4 ml-2 py-1 rounded-md hover:bg-blue-800 whitespace-nowrap"
                                                     >
-                                                        {scholarship.status === 'Pending Approval' ? 'Verify' : 'View Details'}
+                                                        View Details
                                                     </Link>
                                                 </td>
                                             </tr>
