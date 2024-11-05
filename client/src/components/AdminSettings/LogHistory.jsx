@@ -48,6 +48,10 @@ const LogHistory = () => {
         setFilteredLogs(logs);
     }, [filter, searchQuery, activityLogs]);
 
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [filter]);
+
     // Pagination logic
     const indexOfLastLog = currentPage * logsPerPage;
     const indexOfFirstLog = indexOfLastLog - logsPerPage;
@@ -110,62 +114,64 @@ const LogHistory = () => {
             </div>
 
             <div className="bg-white p-4 border shadow rounded-md">
-                <table className="min-w-full divide-y divide-gray-200 text-center">
-                    <thead className="bg-gray-50">
-                        <tr>
-                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Activity
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Type
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Date
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Details
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                User
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                ID
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                        {Array.isArray(currentLogs) && currentLogs.length === 0 ? (
+                <div className="overflow-auto" style={{ maxHeight: '400px' }}>
+                    <table className="min-w-full divide-y divide-gray-200 text-center">
+                        <thead className="bg-gray-50">
                             <tr>
-                                <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
-                                    No activity logs available.
-                                </td>
+                                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Activity
+                                </th>
+                                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Type
+                                </th>
+                                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Date
+                                </th>
+                                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Details
+                                </th>
+                                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    User
+                                </th>
+                                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    ID
+                                </th>
                             </tr>
-                        ) : (
-                            currentLogs.map((log) => (
-                                <tr key={log._id}>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{log.action}</div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{log.type}</div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-500">{new Date(log.timestamp).toLocaleDateString()}</div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{log.details}</div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{getUserDisplayName(log.userId)}</div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{log._id}</div>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {Array.isArray(currentLogs) && currentLogs.length === 0 ? (
+                                <tr>
+                                    <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
+                                        No activity logs available.
                                     </td>
                                 </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                            ) : (
+                                currentLogs.map((log) => (
+                                    <tr key={log._id}>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="text-sm text-gray-900">{log.action}</div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="text-sm text-gray-900">{log.type}</div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="text-sm text-gray-500">{new Date(log.timestamp).toLocaleDateString()}</div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="text-sm text-gray-900">{log.details}</div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="text-sm text-gray-900">{getUserDisplayName(log.userId)}</div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="text-sm text-gray-900">{log._id}</div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div className="flex justify-between mt-4">

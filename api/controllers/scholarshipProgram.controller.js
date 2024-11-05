@@ -9,6 +9,8 @@ export const test = (req, res) => {
   });
 };
 
+import ActivityLog from '../models/activityLog.model.js';
+
 export const createScholarshipProgram = async (req, res) => {
   try {
     // Log the request body for debugging
@@ -42,7 +44,8 @@ export const createScholarshipProgram = async (req, res) => {
       sections,
       faqTitle,
       faqDescription,
-      providerRequirements
+      providerRequirements,
+
     } = req.body;
 
     // Ensure fieldOfStudy is an array
@@ -81,6 +84,16 @@ export const createScholarshipProgram = async (req, res) => {
 
     // Save the Scholarship document to the database
     const savedScholarship = await newScholarship.save();
+
+    // Create an activity log entry for creating a scholarship program
+    const activityLog = new ActivityLog({
+      userId: providerId,
+      action: 'CREATE',
+      type: 'scholarship',
+      details: `Scholarship program created: ${title}`
+    });
+
+    await activityLog.save();
 
     // Send success response
     res.status(201).json({
