@@ -4,8 +4,8 @@ import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import { useSelector } from 'react-redux';
 import ProgramDetails from '../../components/ViewScholarshipDetails/ProgamDetails';
 import PostAnnouncement from '../../components/ViewScholarshipDetails/PostAnnouncement';
-import ViewScholars from '../../components/ViewScholarshipDetails/ViewScholars';
-import ScholarshipApplication from '../../components/ViewScholarshipDetails/ScholarApplication';
+import ViewScholars from '../../components/ViewScholarshipDetails/ViewScholars-admin';
+import ScholarshipApplication from '../../components/ViewScholarshipDetails/ScholarApplication-admin';
 import Validation from '../../components/ViewScholarshipDetails/Validation';
 import EditProgram from '../../components/ViewScholarshipDetails/EditProgram';
 import Modal from 'react-modal';
@@ -17,6 +17,10 @@ export default function ScholarshipProgramDetails() {
     const { currentUser } = useSelector((state) => state.user);
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     const { id } = useParams();
     const navigate = useNavigate();
@@ -658,7 +662,7 @@ export default function ScholarshipProgramDetails() {
                         {[
                             { label: 'Program Details', value: 'details' },
                             { label: 'Edit Program', value: 'edit' },
-                            { label: 'Post Announcement', value: 'announcement' },
+                            // { label: 'Post Announcement', value: 'announcement' },
                             // { label: 'Validation', value: 'validation' },
                             { label: 'View Scholars', value: 'scholars' },
                             { label: 'Scholar Applications', value: 'applications' },
