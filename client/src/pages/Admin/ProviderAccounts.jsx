@@ -5,6 +5,17 @@ import Layout from "../../components/Layout";
 import { MdPreview, MdDelete } from 'react-icons/md';
 import { IoAddCircleOutline } from 'react-icons/io5';
 
+const statusColors = {
+  'Verify Account': 'bg-gray-400',
+  'Pending Verification': 'bg-yellow-500',
+  'Verified': 'bg-green-500',
+  'Rejected': 'bg-red-500',
+  'Active': 'bg-blue-500',
+  'Inactive': 'bg-gray-600',
+  'Suspended': 'bg-orange-500',
+  'Pending Approval': 'bg-purple-500',
+};
+
 export default function ProviderAccounts() {
   useEffect(() => {
     document.title = "Scholarship Provider | HubIsko";
@@ -123,6 +134,7 @@ export default function ProviderAccounts() {
                   </button>
                 </div>
               </div>
+
               <table className='w-full border-t text-center'>
                 <thead>
                   <tr className='bg-slate-100'>
@@ -130,13 +142,14 @@ export default function ProviderAccounts() {
                     <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Organization</th>
                     <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Email</th>
                     <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Contact Person</th>
+                    <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Status</th>
                     <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredProviders.length === 0 ? (
                     <tr>
-                      <td colSpan="5" className="py-4 text-center text-gray-500">
+                      <td colSpan="6" className="py-4 text-center text-gray-500">
                         No providers found.
                       </td>
                     </tr>
@@ -144,14 +157,18 @@ export default function ProviderAccounts() {
                     currentProviders.map((provider, index) => (
                       <tr key={provider._id} className="font-normal tracking-wide hover:bg-slate-200">
                         <td className='py-2 px-4 border-b border-gray-200'>{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                        <td className='py-2 px-4 border-b border-gray-200'>
+                        <td className='py-2 px-4 border-b border-gray-200 text-left'>
                           <div className="flex gap-2 items-center">
-                            <img src={provider.profilePicture} alt="Profile" className="rounded-full h-6 w-6" />
+                            <img src={provider.profilePicture} alt="Profile" className="rounded-full h-6 w-6 object-cover" />
                             {provider.scholarshipProviderDetails.organizationName}
                           </div>
                         </td>
                         <td className='py-2 px-4 border-b border-gray-200'>{provider.email}</td>
                         <td className='py-2 px-4 border-b border-gray-200'>{provider.scholarshipProviderDetails.contactPersonName}</td>
+                        <td className='py-2 px-4 border-b border-gray-200 flex justify-center items-center'>
+                          <span className={`w-3 h-3 rounded-full ${statusColors[provider.status]} mr-2`}></span>
+                          {provider.status}
+                        </td>
                         <td className='py-2 px-4 border-b border-gray-200'>
                           <div className="flex justify-center items-center gap-2">
                             <Link to={`/provider-details/${provider._id}`} className=''>

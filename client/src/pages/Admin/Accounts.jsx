@@ -326,7 +326,7 @@ export default function Accounts() {
                                 <div className="flex justify-between items-center gap-2">
                                     <input
                                         type="text"
-                                        placeholder="Search for a scholarship program"
+                                        placeholder="Search for a user"
                                         className="w-96 px-4 py-2 border rounded-md"
                                         value={searchQuery}
                                         onChange={handleSearchChange}
@@ -365,7 +365,7 @@ export default function Accounts() {
                                             return (
                                                 <tr key={account._id} className="hover:bg-gray-100">
                                                     <td className="p-4 flex items-center">
-                                                        <img src={account.profilePicture} alt={fullName} className="w-10 h-10 rounded-full mr-4" />
+                                                        <img src={account.profilePicture} alt={fullName} className="w-10 h-10 rounded-full mr-4 object-cover" />
                                                         {fullName}
                                                     </td>
                                                     <td className="p-4">{account.email}</td>

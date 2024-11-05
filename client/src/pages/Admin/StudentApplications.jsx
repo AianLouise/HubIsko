@@ -128,14 +128,14 @@ export default function StudentApplications() {
                             </button>
                         </div>
 
-                        <table className="w-full mt-4 border border-gray-200 bg-white rounded-lg shadow-md text-center">
+                                                <table className="w-full mt-4 border border-gray-200 bg-white rounded-lg shadow-md">
                             <thead className="bg-slate-100">
                                 <tr>
-                                    <th className="border border-gray-200 p-2">Student Name</th>
-                                    <th className="border border-gray-200 p-2">Email</th>
-                                    <th className="border border-gray-200 p-2">Contact Number</th>
-                                    <th className="border border-gray-200 p-2">Status</th>
-                                    <th className="border border-gray-200 p-2">Action</th>
+                                    <th className="border border-gray-200 p-2 text-left">Student Name</th>
+                                    <th className="border border-gray-200 p-2 text-center">Email</th>
+                                    <th className="border border-gray-200 p-2 text-center">Contact Number</th>
+                                    <th className="border border-gray-200 p-2 text-center">Status</th>
+                                    <th className="border border-gray-200 p-2 text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -150,19 +150,19 @@ export default function StudentApplications() {
                                 ) : (
                                     filteredStudents.map((student) => (
                                         <tr key={student._id} className="hover:bg-gray-100">
-                                            <td className="p-2">
-                                                <div className="flex gap-2 items-center justify-center">
-                                                    <img src={student.profilePicture} alt="Profile" className="rounded-full h-6 w-6" />
+                                            <td className="p-2 text-left">
+                                                <div className="flex gap-2 items-center">
+                                                    <img src={student.profilePicture} alt="Profile" className="rounded-full h-6 w-6 object-cover" />
                                                     {student.applicantDetails.firstName} {student.applicantDetails.lastName}
                                                 </div>
                                             </td>
-                                            <td className="p-2">{student.email}</td>
-                                            <td className="p-2">{student.applicantDetails.contactNumber}</td>
-                                            <td className="p-4">
+                                            <td className="p-2 text-center">{student.email}</td>
+                                            <td className="p-2 text-center">{student.applicantDetails.contactNumber}</td>
+                                            <td className="p-4 text-center">
                                                 <span className={`inline-block w-3 h-3 mr-2 rounded-full ${getStatusColor(student.status)}`}></span>
                                                 {toSentenceCase(student.status)}
                                             </td>
-                                            <td className="p-4">
+                                            <td className="p-4 text-center">
                                                 <Link
                                                     to={`/student-applications/${student._id}`}
                                                     className="bg-blue-600 hover:bg-blue-800 px-4 py-2 rounded-md text-white"
