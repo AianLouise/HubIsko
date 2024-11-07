@@ -92,22 +92,47 @@ export const getAnnouncementById = async (req, res) => {
         // Fetch the user details for each comment's author and each reply's author
         const commentsWithAuthorDetails = await Promise.all(
             announcement.comments.map(async (comment) => {
-                const author = await User.findById(comment.author, 'username profilePicture');
+                const author = await User.findById(comment.author);
+
+                // Determine the name based on the role
+                let authorName;
+                if (author.role === 'admin') {
+                    authorName = author.username;
+                          } else if (author.role === 'applicant') {
+                    authorName = `${author.applicantDetails.firstName} ${author.applicantDetails.lastName}`;
+                } else if (author.role === 'scholarship_provider') {
+                    authorName = author.scholarshipProviderDetails.organizationName;
+                } else {
+                    authorName = author.username; // Default to username if role is not matched
+                }
 
                 // Fetch the user details for each reply's author
                 const repliesWithAuthorDetails = await Promise.all(
                     comment.replies.map(async (reply) => {
-                        const replyAuthor = await User.findById(reply.author, 'username profilePicture');
+                        const replyAuthor = await User.findById(reply.author);
+
+                        // Determine the name based on the role
+                        let replyAuthorName;
+                        if (replyAuthor.role === 'admin') {
+                            replyAuthorName = replyAuthor.username;
+                        } else if (replyAuthor.role === 'applicant') {
+                            replyAuthorName = replyAuthor.applicantDetails.firstName;
+                        } else if (replyAuthor.role === 'scholarship_provider') {
+                            replyAuthorName = replyAuthor.scholarshipProviderDetails.organizationName;
+                        } else {
+                            replyAuthorName = replyAuthor.username; // Default to username if role is not matched
+                        }
+
                         return {
                             ...reply.toObject(),
-                            author: replyAuthor ? replyAuthor.toObject() : null
+                            author: replyAuthor ? { ...replyAuthor.toObject(), name: replyAuthorName } : null
                         };
                     })
                 );
 
                 return {
                     ...comment.toObject(),
-                    author: author ? author.toObject() : null,
+                    author: author ? { ...author.toObject(), name: authorName } : null,
                     replies: repliesWithAuthorDetails
                 };
             })

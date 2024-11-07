@@ -204,51 +204,49 @@ export default function ScholarshipDashboardDetails() {
                                 <div className='relative'>
                                     {filteredAnnouncements.length > 0 ? (
                                         <div className='flex flex-col gap-4 mx-10 lg:mx-0'>
-                                            {filteredAnnouncements.map((announcement) => (
-                                                <div
-                                                    className='bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out cursor-pointer w-full'
-                                                    key={announcement._id}
-                                                    onClick={() => handleAnnouncementClick(announcement._id)}
-                                                >
-                                                    <div className='flex gap-2'>
-                                                        <div className='bg-white w-12 h-12 rounded-md overflow-hidden'>
-                                                            <img src={scholarshipData.find((item) => item.scholarshipProgram._id === announcement.scholarshipProgram).scholarshipProgram.scholarshipImage} alt="Scholarship" className="w-full h-full object-cover" />
+                                            {filteredAnnouncements
+                                                .filter((announcement) => announcement.status !== 'Deleted')
+                                                .map((announcement) => (
+                                                    <div
+                                                        className='bg-white border p-4 rounded-md flex flex-col gap-4 hover:-translate-y-1 hover:shadow-lg transition ease-in-out cursor-pointer w-full'
+                                                        key={announcement._id}
+                                                        onClick={() => handleAnnouncementClick(announcement._id)}
+                                                    >
+                                                        <div className='flex gap-2'>
+                                                            <div className='bg-white w-12 h-12 rounded-md overflow-hidden'>
+                                                                <img src={scholarshipData.find((item) => item.scholarshipProgram._id === announcement.scholarshipProgram).scholarshipProgram.scholarshipImage} alt="Scholarship" className="w-full h-full object-cover" />
+                                                            </div>
+                                                            <div className='flex flex-col'>
+                                                                <span className='font-bold'>{scholarshipData.find((item) => item.scholarshipProgram._id === announcement.scholarshipProgram).scholarshipProgram.organizationName}</span>
+                                                                <span className='text-blue-600'>{scholarshipData.find((item) => item.scholarshipProgram._id === announcement.scholarshipProgram).scholarshipProgram.title}</span>
+                                                            </div>
                                                         </div>
-                                                        <div className='flex flex-col'>
-                                                            <span className='font-bold'>{scholarshipData.find((item) => item.scholarshipProgram._id === announcement.scholarshipProgram).scholarshipProgram.organizationName}</span>
-                                                            <span className='text-blue-600'>{scholarshipData.find((item) => item.scholarshipProgram._id === announcement.scholarshipProgram).scholarshipProgram.title}</span>
-                                                        </div>
-                                                    </div>
 
-                                                    <p className='bg-slate-200 p-4 rounded-md whitespace-pre-line'>
-                                                        <div className="flex justify-between items-center">
-                                                            <h1 className="text-2xl font-bold text-blue-600">{announcement.title}</h1>
-                                                        </div>
-                                                        <span className='text-blue-600 font-bold'></span> {truncateText(announcement.content, 100)}
-                                                    </p>
-                                                    <span className='text-sm flex items-end justify-end w-full text-slate-600'>
-                                                        Announced: {formatDistanceToNow(new Date(announcement.date), { addSuffix: true })}
-                                                    </span>
-                                                    <div className='border-t mt-2'>
-                                                        <div className='flex flex-row justify-between mt-2 gap-2'>
-                                                            <div className='flex flex-row gap-2'>
-                                                                <div className='flex flex-row gap-1 px-2'>
-                                                                    <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
-                                                                    <span>{announcement.likesCount}</span>
-                                                                </div>
-                                                                <div className='flex flex-row gap-1'>
-                                                                    <BiCommentDots className='w-6 h-6 text-blue-600' />
-                                                                    <span>{announcement.comments.length}</span>
+                                                        <p className='bg-slate-200 p-4 rounded-md whitespace-pre-line'>
+                                                            <div className="flex justify-between items-center">
+                                                                <h1 className="text-2xl font-bold text-blue-600">{announcement.title}</h1>
+                                                            </div>
+                                                            <span className='text-blue-600 font-bold'></span> {truncateText(announcement.content, 100)}
+                                                        </p>
+                                                        <span className='text-sm flex items-end justify-end w-full text-slate-600'>
+                                                            Announced: {formatDistanceToNow(new Date(announcement.date), { addSuffix: true })}
+                                                        </span>
+                                                        <div className='border-t mt-2'>
+                                                            <div className='flex flex-row justify-between mt-2 gap-2'>
+                                                                <div className='flex flex-row gap-2'>
+                                                                    <div className='flex flex-row gap-1 px-2'>
+                                                                        <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
+                                                                        <span>{announcement.likesCount}</span>
+                                                                    </div>
+                                                                    <div className='flex flex-row gap-1'>
+                                                                        <BiCommentDots className='w-6 h-6 text-blue-600' />
+                                                                        <span>{announcement.comments.length}</span>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            {/* <div className='flex flex-row gap-1 pr-2'>
-                                                                <FaRegEye className='w-6 h-6 text-blue-600' />
-                                                                <span>1.2k</span>
-                                                            </div> */}
                                                         </div>
                                                     </div>
-                                                </div>
-                                            ))}
+                                                ))}
                                         </div>
                                     ) : (
                                         <div className='flex items-center justify-center h-52'>
