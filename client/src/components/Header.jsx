@@ -304,11 +304,11 @@ export default function Header() {
             <div ref={showDropdownRef} className="relative"> {/* This div wraps both the image and the dropdown */}
               <img src={currentUser.profilePicture} alt='profile' className='h-10 w-10 rounded-full object-cover cursor-pointer' onClick={toggleDropdown} />
               {showDropdown && (
-                <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
+                <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20 font-medium text-center">
                   {/* Dropdown items here */}
                   <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Manage Account</Link>
                   <Link to='/about' className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>About</Link>
-                  <button onClick={handleSignOut} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign Out</button>
+                  <button onClick={handleSignOut} className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-red-600 hover:text-white">Sign out</button>
                 </div>
               )}
             </div>

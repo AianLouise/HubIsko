@@ -250,15 +250,15 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, curr
                         <img
                             src={currentUser.profilePicture || 'https://via.placeholder.com/40'}
                             alt="Profile"
-                            className="h-9 w-9 rounded-full object-cover" // Add object-cover class
+                            className="h-9 w-9 rounded-full object-cover cursor-pointer" // Add cursor-pointer class
                             onClick={toggleDropdown}
                         />
                         {dropdownOpen && (
-                            <div className="absolute mt-2 right-0 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50 font-medium">
+                            <div className="absolute mt-2 left-1/2 transform -translate-x-1/2 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50 font-medium text-center">
                                 <ul>
                                     <li className="p-2 hover:bg-gray-100 cursor-pointer" onClick={handleProfileClick}>Profile</li>
                                     <li className="p-2 hover:bg-gray-100 cursor-pointer" onClick={handleSettingsClick}>Settings</li>
-                                    <li className="p-2 hover:bg-gray-100 cursor-pointer" onClick={handleSignOut}>Sign out</li>
+                                    <li className="p-2 hover:bg-red-600 hover:text-white cursor-pointer" onClick={handleSignOut}>Sign out</li>
                                 </ul>
                             </div>
                         )}
