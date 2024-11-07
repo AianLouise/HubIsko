@@ -16,7 +16,7 @@ export default function Profile() {
 
   useEffect(() => {
     document.title = "Profile | HubIsko";
-}, []);
+  }, []);
 
   const currentUser = useSelector((state) => state.user.currentUser);
 
@@ -32,7 +32,7 @@ export default function Profile() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredPosts, setFilteredPosts] = useState([]);
-  const [firstName, setFirstName] = useState('');
+  const [name, setName] = useState('');
   const [lastName, setLastName] = useState('');
 
 
@@ -150,20 +150,17 @@ export default function Profile() {
       const data = await response.json();
       if (data && data.forumPosts) {
         setPosts(data.forumPosts); // Set forum posts
-        setFirstName(data.firstName); // Set first name
-        setLastName(data.lastName); // Set last name
+        setName(data.name); // Set first name
         setProfilePicture(data.profilePicture); // Set profile picture
       } else {
         setPosts([]); // Set to empty array if no forum posts
-        setFirstName(''); // Clear first name if no forum posts
-        setLastName(''); // Clear last name if no forum posts
+        setName(''); // Clear first name if no forum posts
         setProfilePicture(''); // Clear profile picture if no forum posts
       }
     } catch (error) {
       console.error('Error fetching posts:', error);
       setPosts([]); // Set to empty array on error
-      setFirstName(''); // Clear first name on error
-      setLastName(''); // Clear last name on error
+      setName(''); // Clear first name on error
       setProfilePicture(''); // Clear profile picture on error
     }
   };
@@ -295,7 +292,7 @@ export default function Profile() {
                               className='w-12 h-12 rounded-full object-cover' // Add object-cover to maintain aspect ratio
                             />
                             <div className='flex flex-col'>
-                              <span className='font-medium'>{firstName} {lastName}</span>
+                              <span className='font-medium'>{name}</span>
                               <span className='text-sm text-slate-500'>
                                 {new Date(post.createdAt).toLocaleString('en-US', {
                                   year: 'numeric',
