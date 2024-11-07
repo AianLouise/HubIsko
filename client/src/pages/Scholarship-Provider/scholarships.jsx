@@ -16,7 +16,7 @@ export default function Scholarships() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-});
+  });
 
   const { currentUser } = useSelector((state) => state.user);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -55,7 +55,7 @@ export default function Scholarships() {
     if (currentUser?.status !== 'Verified') {
       e.preventDefault(); // Prevent the default link behavior
       setShowMessage(true);
-      setTimeout(() => setShowMessage(false), 3000); // Hide the message after 3 seconds
+      setTimeout(() => setShowMessage(false), 5000); // Hide the message after 5 seconds
     }
   };
 
@@ -132,7 +132,7 @@ export default function Scholarships() {
                 <h1 className='text-2xl font-bold '>Scholarship Programs</h1>
 
                 {showMessage && (
-                  <div className="fixed top-4 right-4 bg-yellow-100 text-yellow-700 border-l-4 border-yellow-500 px-4 py-2 rounded shadow-lg fade-out">
+                  <div className={`fixed top-4 right-4 bg-yellow-100 text-yellow-700 border-l-4 border-yellow-500 px-4 py-2 rounded shadow-lg transition-opacity duration-500 ${!showMessage ? 'opacity-0' : 'opacity-100'}`}>
                     Your account is under verification. You cannot post a scholarship at this time.
                   </div>
                 )}

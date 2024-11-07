@@ -212,7 +212,7 @@ export default function ProviderDashboard() {
                       <FaFileAlt className="text-3xl text-blue-500" />
                       <div>
                         <h2 className="text-xl font-semibold text-gray-700">Total Applications</h2>
-                        <p className="text-2xl font-bold text-gray-700">{applicationsCount}</p>
+                        <p className="text-2xl font-medium text-gray-700">{applicationsCount}</p>
                       </div>
                     </div>
                     <div className="hidden items-center text-blue-500 font-medium gap-2 group-hover:flex">
@@ -228,7 +228,7 @@ export default function ProviderDashboard() {
                       <FaUniversity className="text-3xl text-blue-500" />
                       <div>
                         <h2 className="text-xl font-semibold text-gray-700">Total Scholarship Programs</h2>
-                        <p className="text-2xl font-bold text-gray-700">{Array.isArray(scholarships) ? scholarships.length : 0}</p>
+                        <p className="text-2xl font-medium text-gray-700">{Array.isArray(scholarships) ? scholarships.length : 0}</p>
                       </div>
                     </div>
                     <div className="hidden items-center text-blue-500 font-medium gap-2 group-hover:flex">
