@@ -2,14 +2,13 @@ import Scholarship from '../models/scholarshipProgram.model.js';
 import ScholarshipApplication from '../models/scholarshipApplication.model.js';
 import User from '../models/user.model.js';
 import Notification from '../models/notification.model.js';
+import ActivityLog from '../models/activityLog.model.js'; // Adjust the import path as necessary
 
 export const test = (req, res) => {
   res.json({
     message: 'API is working!',
   });
 };
-
-import ActivityLog from '../models/activityLog.model.js';
 
 export const createScholarshipProgram = async (req, res) => {
   try {
@@ -599,6 +598,16 @@ export const publishScholarshipProgram = async (req, res) => {
     program.applicationStartDate = Date.now(); // Set the application start date to the current date and time
     await program.save();
 
+    // Create an activity log entry for publishing the scholarship program
+    const activityLog = new ActivityLog({
+      userId: program.providerId,
+      action: 'PUBLISH',
+      type: 'scholarship',
+      details: `Scholarship program published: ${program.title}`
+    });
+
+    await activityLog.save();
+
     res.status(200).json({ message: 'Scholarship Program successfully published', program });
   } catch (error) {
     console.error('Error publishing scholarship program:', error);
@@ -607,76 +616,106 @@ export const publishScholarshipProgram = async (req, res) => {
 };
 
 export const extendDeadline = async (req, res) => {
-    const { id } = req.params;
-    const { newDeadline } = req.body;
+  const { id } = req.params;
+  const { newDeadline } = req.body;
 
-    try {
-        // Find the scholarship program by id
-        const scholarship = await Scholarship.findById(id);
-        if (!scholarship) {
-            return res.status(404).json({ message: 'Scholarship program not found' });
-        }
-
-        // Update the deadline
-        scholarship.applicationDeadline = newDeadline;
-
-        // Save the updated scholarship program
-        await scholarship.save();
-
-        // Respond with the updated scholarship program
-        res.status(200).json(scholarship);
-    } catch (error) {
-        console.error('Error extending the application deadline:', error);
-        res.status(500).json({ message: 'Failed to extend the application deadline', error: error.message });
+  try {
+    // Find the scholarship program by id
+    const scholarship = await Scholarship.findById(id);
+    if (!scholarship) {
+      return res.status(404).json({ message: 'Scholarship program not found' });
     }
+
+    // Update the deadline
+    scholarship.applicationDeadline = newDeadline;
+
+    // Save the updated scholarship program
+    await scholarship.save();
+
+    // Create an activity log entry for extending the application deadline
+    const activityLog = new ActivityLog({
+      userId: scholarship.providerId,
+      action: 'EXTEND_DEADLINE',
+      type: 'scholarship',
+      details: `Application deadline extended for scholarship program: ${scholarship.title}`
+    });
+
+    await activityLog.save();
+
+    // Respond with the updated scholarship program
+    res.status(200).json(scholarship);
+  } catch (error) {
+    console.error('Error extending the application deadline:', error);
+    res.status(500).json({ message: 'Failed to extend the application deadline', error: error.message });
+  }
 };
 
 export const pauseScholarshipProgram = async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    try {
-        // Find the scholarship program by id
-        const scholarship = await Scholarship.findById(id);
-        if (!scholarship) {
-            return res.status(404).json({ message: 'Scholarship program not found' });
-        }
-
-        // Update the status to 'Paused'
-        scholarship.status = 'Paused';
-
-        // Save the updated scholarship program
-        await scholarship.save();
-
-        // Respond with the updated scholarship program
-        res.status(200).json(scholarship);
-    } catch (error) {
-        console.error('Error pausing the scholarship program:', error);
-        res.status(500).json({ message: 'Failed to pause the scholarship program', error: error.message });
+  try {
+    // Find the scholarship program by id
+    const scholarship = await Scholarship.findById(id);
+    if (!scholarship) {
+      return res.status(404).json({ message: 'Scholarship program not found' });
     }
+
+    // Update the status to 'Paused'
+    scholarship.status = 'Paused';
+
+    // Save the updated scholarship program
+    await scholarship.save();
+
+    // Create an activity log entry for pausing the scholarship program
+    const activityLog = new ActivityLog({
+      userId: scholarship.providerId,
+      action: 'PAUSE',
+      type: 'scholarship',
+      details: `Scholarship program paused: ${scholarship.title}`
+    });
+
+    await activityLog.save();
+
+    // Respond with the updated scholarship program
+    res.status(200).json(scholarship);
+  } catch (error) {
+    console.error('Error pausing the scholarship program:', error);
+    res.status(500).json({ message: 'Failed to pause the scholarship program', error: error.message });
+  }
 };
 
 export const resumeScholarshipProgram = async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    try {
-        // Find the scholarship program by id
-        const scholarship = await Scholarship.findById(id);
-        if (!scholarship) {
-            return res.status(404).json({ message: 'Scholarship program not found' });
-        }
-
-        // Update the status to 'Published'
-        scholarship.status = 'Published';
-
-        // Save the updated scholarship program
-        await scholarship.save();
-
-        // Respond with the updated scholarship program
-        res.status(200).json(scholarship);
-    } catch (error) {
-        console.error('Error resuming the scholarship program:', error);
-        res.status(500).json({ message: 'Failed to resume the scholarship program', error: error.message });
+  try {
+    // Find the scholarship program by id
+    const scholarship = await Scholarship.findById(id);
+    if (!scholarship) {
+      return res.status(404).json({ message: 'Scholarship program not found' });
     }
+
+    // Update the status to 'Published'
+    scholarship.status = 'Published';
+
+    // Save the updated scholarship program
+    await scholarship.save();
+
+    // Create an activity log entry for resuming the scholarship program
+    const activityLog = new ActivityLog({
+      userId: scholarship.providerId,
+      action: 'RESUME',
+      type: 'scholarship',
+      details: `Scholarship program resumed: ${scholarship.title}`
+    });
+
+    await activityLog.save();
+
+    // Respond with the updated scholarship program
+    res.status(200).json(scholarship);
+  } catch (error) {
+    console.error('Error resuming the scholarship program:', error);
+    res.status(500).json({ message: 'Failed to resume the scholarship program', error: error.message });
+  }
 };
 
 export const updateScholarshipStatus = async (req, res) => {
@@ -694,6 +733,16 @@ export const updateScholarshipStatus = async (req, res) => {
       return res.status(404).json({ message: 'Scholarship program not found' });
     }
 
+    // Create an activity log entry for starting the scholarship program
+    const activityLog = new ActivityLog({
+      userId: updatedProgram.providerId,
+      action: 'START',
+      type: 'scholarship',
+      details: `Scholarship program status updated to ${status}: ${updatedProgram.title}`
+    });
+
+    await activityLog.save();
+
     res.status(200).json(updatedProgram);
   } catch (error) {
     console.error('Error updating scholarship status:', error);
@@ -707,6 +756,17 @@ export const updateScholarshipDetails = async (req, res) => {
     if (!updatedScholarship) {
       return res.status(404).json({ message: 'Scholarship not found' });
     }
+
+    // Create an activity log entry for updating the scholarship details
+    const activityLog = new ActivityLog({
+      userId: updatedScholarship.providerId,
+      action: 'UPDATE',
+      type: 'scholarship',
+      details: `Scholarship program updated: ${updatedScholarship.title}`
+    });
+
+    await activityLog.save();
+
     res.json(updatedScholarship);
   } catch (error) {
     console.error('Error updating scholarship details:', error);
@@ -756,11 +816,21 @@ export const markAsComplete = async (req, res) => {
       type: 'completion',
       message: `The scholarship program "${scholarshipProgram.title}" has been marked as complete.`,
       recipientName: scholarshipProgram.organizationName, // Assuming providerName is available
-      senderName: username // Use username from the request body
+      senderName: scholarshipProgram.organizationName // Use username from the request body
     };
 
     // Save the notification to the database
     await Notification.create(notification);
+
+    // Create an activity log entry for marking the scholarship program as complete
+    const activityLog = new ActivityLog({
+      userId: scholarshipProgram.providerId,
+      action: 'COMPLETE',
+      type: 'scholarship',
+      details: `Scholarship program marked as complete: ${scholarshipProgram.title}`
+    });
+
+    await activityLog.save();
 
     res.status(200).json({ message: 'Scholarship program marked as complete successfully', scholarshipProgram });
   } catch (error) {
@@ -770,49 +840,69 @@ export const markAsComplete = async (req, res) => {
 };
 
 export const undoComplete = async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    try {
-        // Find the scholarship program by id
-        const scholarship = await Scholarship.findById(id);
-        if (!scholarship) {
-            return res.status(404).json({ message: 'Scholarship program not found' });
-        }
-
-        // Update the status to 'Ongoing'
-        scholarship.status = 'Ongoing';
-
-        // Save the updated scholarship program
-        await scholarship.save();
-
-        // Respond with the updated scholarship program
-        res.status(200).json(scholarship);
-    } catch (error) {
-        console.error('Error undoing the completion of the scholarship program:', error);
-        res.status(500).json({ message: 'Failed to undo the completion of the scholarship program', error: error.message });
+  try {
+    // Find the scholarship program by id
+    const scholarship = await Scholarship.findById(id);
+    if (!scholarship) {
+      return res.status(404).json({ message: 'Scholarship program not found' });
     }
+
+    // Update the status to 'Ongoing'
+    scholarship.status = 'Ongoing';
+
+    // Save the updated scholarship program
+    await scholarship.save();
+
+    // Create an activity log entry for undoing the completion of the scholarship program
+    const activityLog = new ActivityLog({
+      userId: scholarship.providerId,
+      action: 'UNDO_COMPLETE',
+      type: 'scholarship',
+      details: `Scholarship program completion undone: ${scholarship.title}`
+    });
+
+    await activityLog.save();
+
+    // Respond with the updated scholarship program
+    res.status(200).json(scholarship);
+  } catch (error) {
+    console.error('Error undoing the completion of the scholarship program:', error);
+    res.status(500).json({ message: 'Failed to undo the completion of the scholarship program', error: error.message });
+  }
 };
 
 export const rePublish = async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    try {
-        // Find the scholarship program by id
-        const scholarship = await Scholarship.findById(id);
-        if (!scholarship) {
-            return res.status(404).json({ message: 'Scholarship program not found' });
-        }
-
-        // Update the status to 'Published'
-        scholarship.status = 'Published';
-
-        // Save the updated scholarship program
-        await scholarship.save();
-
-        // Respond with the updated scholarship program
-        res.status(200).json(scholarship);
-    } catch (error) {
-        console.error('Error republishing the scholarship program:', error);
-        res.status(500).json({ message: 'Failed to republish the scholarship program', error: error.message });
+  try {
+    // Find the scholarship program by id
+    const scholarship = await Scholarship.findById(id);
+    if (!scholarship) {
+      return res.status(404).json({ message: 'Scholarship program not found' });
     }
+
+    // Update the status to 'Published'
+    scholarship.status = 'Published';
+
+    // Save the updated scholarship program
+    await scholarship.save();
+
+    // Create an activity log entry for republishing the scholarship program
+    const activityLog = new ActivityLog({
+      userId: scholarship.providerId,
+      action: 'REPUBLISH',
+      type: 'scholarship',
+      details: `Scholarship program republished: ${scholarship.title}`
+    });
+
+    await activityLog.save();
+
+    // Respond with the updated scholarship program
+    res.status(200).json(scholarship);
+  } catch (error) {
+    console.error('Error republishing the scholarship program:', error);
+    res.status(500).json({ message: 'Failed to republish the scholarship program', error: error.message });
+  }
 };

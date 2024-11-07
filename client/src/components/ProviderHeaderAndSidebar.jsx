@@ -21,7 +21,7 @@ import { MdDocumentScanner } from "react-icons/md";
 import Logo from '../assets/NewLogoClean.png';
 
 
-export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar, currentPath }) {
+export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
     const { currentUser } = useSelector((state) => state.user);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);

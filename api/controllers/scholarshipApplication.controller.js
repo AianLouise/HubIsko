@@ -9,6 +9,8 @@ export const test = (req, res) => {
     });
 };
 
+import ActivityLog from '../models/activityLog.model.js'; // Adjust the import path as necessary
+
 export const createScholarshipApplication = async (req, res) => {
     try {
         const {
@@ -74,13 +76,24 @@ export const createScholarshipApplication = async (req, res) => {
             senderId: applicant, // The student is the sender
             scholarshipId: scholarshipProgram,
             type: 'application',
-            message: `${applicantDetails.firstName} ${applicantDetails.lastName} has submitted a scholarship application for the ${scholarshipProgramDetails.title}.`,
+            message: `${applicantDetails.applicantDetails.firstName} ${applicantDetails.applicantDetails.lastName} has submitted a scholarship application for the ${scholarshipProgramDetails.title}.`,
             recipientName: providerDetails.scholarshipProviderDetails.organizationName, // Save provider's organization name as recipientName
-            senderName: `${applicantDetails.firstName} ${applicantDetails.lastName}`, // Save applicant's name as senderName
+            senderName: `${applicantDetails.applicantDetails.firstName} ${applicantDetails.applicantDetails.lastName}`, // Save applicant's name as senderName
         });
 
         await notification.save();
         console.log('Notification saved:', notification);
+
+        // Create an activity log entry for creating a scholarship application
+        const activityLog = new ActivityLog({
+            userId: applicant,
+            action: 'CREATE_APPLICATION',
+            type: 'scholarship',
+            details: `Scholarship application created by ${applicantDetails.applicantDetails.firstName} ${applicantDetails.applicantDetails.lastName} for program: ${scholarshipProgramDetails.title}`
+        });
+
+        await activityLog.save();
+        console.log('Activity log saved:', activityLog);
 
         res.status(201).json({
             message: 'Scholarship application created successfully',

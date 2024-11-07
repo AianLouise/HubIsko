@@ -27,14 +27,13 @@ router.post('/scholarship-programs/:id/publish', publishScholarshipProgram);
 router.put('/scholarship-programs/:id/extend-deadline', extendDeadline);
 router.put('/scholarship-programs/:id/pause', pauseScholarshipProgram);
 router.put('/scholarship-programs/:id/resume', resumeScholarshipProgram);
-
+router.patch('/scholarship-programs/:id/complete', markAsComplete);
+router.patch('/scholarship-programs/:id/undo-complete', undoComplete);
+router.patch('/scholarship-programs/:id/republish', rePublish);
 router.put('/update-status/:id', updateScholarshipStatus);
 
 router.put('/scholarship-programs/:id', updateScholarshipDetails);
 
 router.get('/scholarships/:id/available-slots', checkAvailableSlots);
-router.patch('/scholarship-programs/:id/complete', markAsComplete);
-router.patch('/scholarship-programs/:id/undo-complete', undoComplete);
-router.patch('/scholarship-programs/:id/republish', rePublish);
 
 export default router;
