@@ -23,6 +23,17 @@ export const createScholarshipApplication = async (req, res) => {
             scholarshipProgram,
         } = req.body;
 
+        console.log('Request body:', req.body);
+
+        // Sanitize the keys in the documents object
+        const sanitizedDocuments = {};
+        for (const key in documents) {
+            if (documents.hasOwnProperty(key)) {
+                const sanitizedKey = key.replace(/\./g, '_');
+                sanitizedDocuments[sanitizedKey] = documents[key];
+            }
+        }
+
         const newApplication = new ScholarshipApplication({
             applicant,
             father,
@@ -31,17 +42,19 @@ export const createScholarshipApplication = async (req, res) => {
             relatives,
             workExperience,
             skillsAndQualifications,
-            documents,
+            documents: sanitizedDocuments,
             scholarshipProgram,
         });
 
         await newApplication.save();
+        console.log('New application saved:', newApplication);
 
         // Fetch the scholarship program details to get the providerId and program name
         const scholarshipProgramDetails = await ScholarshipProgram.findById(scholarshipProgram);
         if (!scholarshipProgramDetails) {
             return res.status(404).json({ message: 'Scholarship Program not found' });
         }
+        console.log('Scholarship program details:', scholarshipProgramDetails);
 
         const providerId = scholarshipProgramDetails.providerId;
 
@@ -52,6 +65,8 @@ export const createScholarshipApplication = async (req, res) => {
         if (!applicantDetails || !providerDetails) {
             return res.status(404).json({ message: 'Applicant or Provider not found' });
         }
+        console.log('Applicant details:', applicantDetails);
+        console.log('Provider details:', providerDetails);
 
         // Create notification
         const notification = new Notification({
@@ -65,12 +80,14 @@ export const createScholarshipApplication = async (req, res) => {
         });
 
         await notification.save();
+        console.log('Notification saved:', notification);
 
         res.status(201).json({
             message: 'Scholarship application created successfully',
             application: newApplication
         });
     } catch (error) {
+        console.error('Error creating scholarship application:', error);
         res.status(500).json({
             message: 'Error creating scholarship application',
             error: error.message
