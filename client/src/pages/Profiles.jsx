@@ -158,6 +158,18 @@ const Profiles = () => {
                                     )}
                                 </>
                             )}
+                            {user.role === 'admin' && (
+                                <>
+                                    {user.email && (
+                                        <>
+                                            <div className='flex items-center text-lg text-gray-600'>
+                                                <FaEnvelope className='mr-2' />
+                                                connectwithhubisko@gmail.com
+                                            </div>
+                                        </>
+                                    )}
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
