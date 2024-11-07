@@ -224,13 +224,13 @@ const Step1 = ({ formData, setFormData }) => {
                             Registration Number <span className="text-red-500">*</span>
                         </label>
                         <input
-                            type="number"
+                            type="text"
                             name="registrationNumber"
                             id="registrationNumber"
                             value={formData.registrationNumber}
                             onChange={handleChange}
                             className="mt-1 p-2 w-full border rounded-md"
-                            placeholder="Official registration or incorporation number"
+                            placeholder="SEC Reg. No.: CN199301543"
                             required
                         />
                         <div className="mt-1 text-xs text-gray-600">
