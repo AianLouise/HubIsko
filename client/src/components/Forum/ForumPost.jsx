@@ -318,7 +318,19 @@ export default function ForumPost() {
 
                     <div className='border shadow p-4 rounded-md bg-white'>
                         <div className='flex gap-4'>
-                            <Link to={`/profile/${post.author._id}`}>
+                            <Link
+                                to={
+                                    currentUser && currentUser._id === post.author._id
+                                        ? post.author.role === 'admin'
+                                            ? `/admin-profile/${post.author._id}`
+                                            : post.author.role === 'scholarship_provider'
+                                                ? `/provider-profile/${post.author._id}`
+                                                : post.author.role === 'applicant'
+                                                    ? `/profile`
+                                                    : `/profile/${post.author._id}`
+                                        : `/profile/${post.author._id}`
+                                }
+                            >
                                 <img
                                     src={post.author.profilePicture}
                                     alt={`${post.author.role === 'applicant'
