@@ -88,7 +88,7 @@ export const approveStudent = async (req, res) => {
       type: 'approval',
       message: `Your account has been approved as a student.`,
       recipientName: `${student.applicantDetails.firstName} ${student.applicantDetails.lastName}`,
-      senderName: 'Admin' // Use a default sender name or fetch it from the database if needed
+      senderName: 'HubIsko Administrator' // Use a default sender name or fetch it from the database if needed
     };
 
     // Save the notification to the database
@@ -135,7 +135,7 @@ export const rejectStudent = async (req, res) => {
       type: 'rejection',
       message: `Your account has been rejected. Reason: ${rejectReason}`,
       recipientName: `${student.applicantDetails.firstName} ${student.applicantDetails.lastName}`,
-      senderName: 'Admin' // Use a default sender name or fetch it from the database if needed
+      senderName: 'HubIsko Administrator' // Use a default sender name or fetch it from the database if needed
     };
 
     // Save the notification to the database
@@ -193,7 +193,7 @@ export const approveScholarshipProvider = async (req, res) => {
       type: 'approval',
       message: `Your account has been approved as a scholarship provider.`,
       recipientName: `${provider.scholarshipProviderDetails.organizationName}`,
-      senderName: 'Admin' // Use a default sender name or fetch it from the database if needed
+      senderName: 'HubIsko Administrator' // Use a default sender name or fetch it from the database if needed
     };
 
     // Save the notification to the database
@@ -240,7 +240,7 @@ export const rejectScholarshipProvider = async (req, res) => {
       type: 'rejection',
       message: `Your account has been rejected as a scholarship provider. Reason: ${rejectReason}`,
       recipientName: `${provider.scholarshipProviderDetails.organizationName}`,
-      senderName: 'Admin' // Use a default sender name or fetch it from the database if needed
+      senderName: 'HubIsko Administrator' // Use a default sender name or fetch it from the database if needed
     };
 
     // Save the notification to the database
