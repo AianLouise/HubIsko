@@ -71,14 +71,14 @@ const ScholarshipProviderScholarships = ({ userId }) => {
         />
       </div>
 
-      {filteredScholarships.length === 0 ? (
-        <div className='text-center py-10'>
-          <p>No scholarships available at the moment.</p>
-        </div>
-      ) : (
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-700 pb-12'>
-          {filteredScholarships.map((scholarship) => (
-            <div key={scholarship._id} className='border bg-white rounded-lg pt-4 px-4 shadow-sm gap-2 mb-10 hover:-translate-y-1 transition ease-in-out'>
+      <div className='grid grid-cols-1 md:grid-cols-2 w-full gap-4 text-slate-700 mt-10'>
+        {filteredScholarships.length === 0 ? (
+          <div className='col-span-full text-center text-gray-500 py-20'>
+            No scholarships available at the moment.
+          </div>
+        ) : (
+          filteredScholarships.map((scholarship) => (
+            <div key={scholarship._id} className='border bg-white rounded-lg pt-4 px-4 shadow-sm gap-2 mb-10 hover:-translate-y-1 transition ease-in-out flex flex-col justify-between'>
               <div className='flex flex-row items-center justify-start px-5 mt-5'>
                 <div className='lg:hidden flex-shrink-0'>
                   <div className='rounded-full w-14 h-14 overflow-hidden border-2 border-blue-500'>
@@ -111,7 +111,7 @@ const ScholarshipProviderScholarships = ({ userId }) => {
                     <div className='flex text-blue-600 text-left justify-center font-bold'>
                       <div className='flex flex-row bg-white gap-2 px-2 items-center'>
                         <FaHandHolding className='text-xl flex-shrink-0' />
-                        {scholarship.amount}
+                        {truncateText(scholarship.amount, 50)}
                       </div>
                     </div>
                   </div>
@@ -133,11 +133,12 @@ const ScholarshipProviderScholarships = ({ userId }) => {
                         <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
                         <p className='font-medium'>Eligibility: </p>
                       </div>
-                      <p className='text-sm lg:hidden'>{truncateText(scholarship.fieldOfStudy, 50)}</p>
-                      <p className='text-sm lg:hidden'>{truncateText(scholarship.otherEligibility, 50)}</p>
+                      <p className='text-sm lg:hidden'>{truncateText(scholarship.fieldOfStudy.join(', '), 50)}</p>
+                      <p className='text-sm lg:hidden'>{truncateText(scholarship.location, 50)}</p>
+                      <p className='text-sm lg:hidden'>{truncateText(scholarship.educationLevel, 50)}</p>
                     </div>
                     <p className='w-full text-sm hidden lg:block'>
-                      {truncateText(scholarship.fieldOfStudy, 50)}, {truncateText(scholarship.otherEligibility, 50)}
+                      {truncateText(scholarship.fieldOfStudy.join(', '), 50)}, {truncateText(scholarship.location, 50)}, {truncateText(scholarship.educationLevel, 50)}
                     </p>
                   </div>
                   <div className='flex lg:flex-row lg:gap-4'>
@@ -146,9 +147,9 @@ const ScholarshipProviderScholarships = ({ userId }) => {
                         <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
                         <p className='font-medium'>Deadline: </p>
                       </div>
-                      <p className='text-sm lg:hidden'>{formatDate(scholarship.endDate)}</p>
+                      <p className='text-sm lg:hidden'>{formatDate(scholarship.applicationDeadline)}</p>
                     </div>
-                    <p className='w-full text-sm hidden lg:block'>{formatDate(scholarship.endDate)}</p>
+                    <p className='w-full text-sm hidden lg:block'>{formatDate(scholarship.applicationDeadline)}</p>
                   </div>
                 </div>
                 <Link
@@ -156,13 +157,13 @@ const ScholarshipProviderScholarships = ({ userId }) => {
                   key={scholarship._id}
                   className='bg-blue-600 text-white p-2 flex justify-center items-center rounded-md my-4 text-sm lg:text-base font-medium hover:bg-blue-800 transition ease-in-out'
                 >
-                  View Scholarship
+                  View Scholarship Details
                 </Link>
               </div>
             </div>
-          ))}
-        </div>
-      )}
+          ))
+        )}
+      </div>
     </div>
   );
 };
