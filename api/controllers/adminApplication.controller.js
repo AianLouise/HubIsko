@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import ScholarshipProgram from "../models/scholarshipProgram.model.js";
 import Notification from "../models/notification.model.js";
+import ActivityLog from '../models/activityLog.model.js'; // Adjust the import path as necessary
 
 export const test = (req, res) => {
     res.json({
@@ -93,6 +94,16 @@ export const approveStudent = async (req, res) => {
     // Save the notification to the database
     await Notification.create(notification);
 
+    // Create an activity log entry for approving the student
+    const activityLog = new ActivityLog({
+      userId: userId,
+      action: 'APPROVE_STUDENT',
+      type: 'account',
+      details: `Student account approved for ${student.applicantDetails.firstName} ${student.applicantDetails.lastName}`
+    });
+
+    await activityLog.save();
+
     res.status(200).json({ message: 'Student approved successfully', student });
   } catch (error) {
     res.status(500).json({
@@ -123,12 +134,22 @@ export const rejectStudent = async (req, res) => {
       senderId: userId, // Use userId from the request body
       type: 'rejection',
       message: `Your account has been rejected. Reason: ${rejectReason}`,
-      recipientName: `${student.firstName} ${student.lastName}`,
+      recipientName: `${student.applicantDetails.firstName} ${student.applicantDetails.lastName}`,
       senderName: 'Admin' // Use a default sender name or fetch it from the database if needed
     };
 
     // Save the notification to the database
     await Notification.create(notification);
+
+    // Create an activity log entry for rejecting the student
+    const activityLog = new ActivityLog({
+      userId: userId,
+      action: 'REJECT_STUDENT',
+      type: 'account',
+      details: `Student account rejected for ${student.applicantDetails.firstName} ${student.applicantDetails.lastName}. Reason: ${rejectReason}`
+    });
+
+    await activityLog.save();
 
     res.status(200).json({ message: 'Student rejected successfully', student });
   } catch (error) {
@@ -178,6 +199,16 @@ export const approveScholarshipProvider = async (req, res) => {
     // Save the notification to the database
     await Notification.create(notification);
 
+    // Create an activity log entry for approving the scholarship provider
+    const activityLog = new ActivityLog({
+      userId: userId,
+      action: 'APPROVE_SCHOLARSHIP_PROVIDER',
+      type: 'account',
+      details: `Scholarship provider account approved for ${provider.scholarshipProviderDetails.organizationName}`
+    });
+
+    await activityLog.save();
+
     res.status(200).json({ message: 'Scholarship provider approved successfully', provider });
   } catch (error) {
     res.status(500).json({
@@ -214,6 +245,16 @@ export const rejectScholarshipProvider = async (req, res) => {
 
     // Save the notification to the database
     await Notification.create(notification);
+
+    // Create an activity log entry for rejecting the scholarship provider
+    const activityLog = new ActivityLog({
+      userId: userId,
+      action: 'REJECT_SCHOLARSHIP_PROVIDER',
+      type: 'account',
+      details: `Scholarship provider account rejected for ${provider.scholarshipProviderDetails.organizationName}. Reason: ${rejectReason}`
+    });
+
+    await activityLog.save();
 
     res.status(200).json({ message: 'Scholarship provider rejected successfully', provider });
   } catch (error) {
