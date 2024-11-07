@@ -140,7 +140,7 @@ export default function Forums() {
                         </div>
 
                         <div className='flex flex-row lg:items-center lg:justify-center gap-4'>
-                            <select
+                            {/* <select
                                 name="postFilter"
                                 id="postFilter"
                                 className="bg-white border rounded-lg p-3 h-12 w-60 text-left hidden lg:block"
@@ -148,7 +148,7 @@ export default function Forums() {
                             >
                                 <option value="all">All posts</option>
                                 <option value="myPosts">My posts</option>
-                            </select>
+                            </select> */}
 
                             {notification && (
                                 <div className="fixed top-4 right-4 bg-red-500 text-white p-3 rounded-md shadow-lg">
