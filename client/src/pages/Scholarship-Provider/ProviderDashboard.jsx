@@ -12,6 +12,10 @@ export default function ProviderDashboard() {
     document.title = "Dashboard | HubIsko";
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
+
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const orgName = currentUser?.scholarshipProviderDetails.organizationName;
   const userId = currentUser?._id;

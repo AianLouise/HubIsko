@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import ForumPost from '../../components/Forum/ForumPost';
 
 export default function ProviderForumDetail() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);

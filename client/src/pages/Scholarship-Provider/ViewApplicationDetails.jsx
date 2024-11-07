@@ -11,6 +11,10 @@ import { FaArrowLeft, FaUser } from 'react-icons/fa'; // Import the FaUser icon
 export default function ViewApplicationDetails() {
     const { currentUser } = useSelector((state) => state.user);
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    });
+
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);

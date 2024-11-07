@@ -4,6 +4,10 @@ import { useSelector } from 'react-redux';
 import Forums from '../../components/Forum/Forums';
 
 export default function ProviderForums() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
+
   const { currentUser } = useSelector((state) => state.user);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);

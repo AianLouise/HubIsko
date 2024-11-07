@@ -9,6 +9,10 @@ import Modal from 'react-modal';
 import { FaArrowLeft, FaUser } from 'react-icons/fa6';
 
 export default function ScholarView() {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    });
+
     const { currentUser } = useSelector((state) => state.user);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);

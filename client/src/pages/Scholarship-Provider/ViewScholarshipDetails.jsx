@@ -14,6 +14,10 @@ import { FaPlay, FaCalendarPlus, FaPause, FaPlayCircle } from 'react-icons/fa';
 import { FaComments, FaPaperPlane } from 'react-icons/fa6';
 
 export default function ViewScholarshipDetails() {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    });
+
     const { currentUser } = useSelector((state) => state.user);
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);

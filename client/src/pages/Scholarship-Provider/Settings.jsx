@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaUser, FaLock, FaUserEdit } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
@@ -8,6 +8,14 @@ import ChangePassword from '../../components/ProviderSettings/ChangePassword';
 import { updateUserDetails } from '../../redux/user/userSlice';
 
 export default function Settings() {
+    useEffect(() => {
+        document.title = "Settings | HubIsko";
+      }, []);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    });
+
     const { currentUser } = useSelector((state) => state.user);
     const dispatch = useDispatch();
 

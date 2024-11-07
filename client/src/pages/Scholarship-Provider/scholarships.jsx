@@ -14,6 +14,10 @@ export default function Scholarships() {
     document.title = "Scholarship Program | HubIsko";
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+});
+
   const { currentUser } = useSelector((state) => state.user);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);

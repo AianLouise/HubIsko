@@ -7,6 +7,10 @@ import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
 import { useSelector } from 'react-redux';
 
 export default function ProviderProfile() {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    });
+
     const navigate = useNavigate();
     const { currentUser } = useSelector((state) => state.user);
     const userId = currentUser._id;
