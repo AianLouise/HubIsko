@@ -55,10 +55,6 @@ const ScholarshipProviderScholarships = ({ userId }) => {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
   return (
     <div className='p-4'>
       <div className='mb-4'>
