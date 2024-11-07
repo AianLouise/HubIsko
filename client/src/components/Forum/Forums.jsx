@@ -55,7 +55,7 @@ export default function Forums() {
                     navigate(`/forums/post/${postId}`);
                     break;
                 case 'scholarship_provider':
-                    navigate(`/provider/post/${postId}`);
+                    navigate(`/provider-forums/post/${postId}`);
                     break;
                 case 'admin':
                     navigate(`/admin/post/${postId}`);

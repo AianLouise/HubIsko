@@ -43,7 +43,6 @@ export const getScholarshipProgramsByProviderId = async (req, res) => {
 };
 
 // Function to get all forum posts by user ID (author)
-
 export const getForumPostsByUserId = async (req, res) => {
     try {
         const userId = req.params.id; // Get the user ID from the URL
@@ -61,13 +60,25 @@ export const getForumPostsByUserId = async (req, res) => {
             return res.status(404).json({ message: 'No forum posts found for this user' });
         }
 
-        // Send the forum posts, firstName, lastName, and profile picture as a JSON response
+        // Determine the name based on the user's role
+        let name;
+        if (user.role === 'scholarship_provider') {
+            name = user.scholarshipProviderDetails.organizationName;
+        } else {
+            name = `${user.applicantDetails.firstName} ${user.applicantDetails.lastName}`;
+        }
+
+        // Calculate total likes and total comments
+        const totalLikes = forumPosts.reduce((sum, post) => sum + post.likes.length, 0);
+        const totalComments = forumPosts.reduce((sum, post) => sum + post.comments.length, 0);
+
+        // Send the forum posts, name, profile picture, total likes, and total comments as a JSON response
         res.json({
-            firstName: user.applicantDetails.firstName,
-            firstName: user.applicantDetails.firstName,
-            lastName: user.applicantDetails.lastName,
+            name,
             profilePicture: user.profilePicture,
-            forumPosts
+            forumPosts,
+            totalLikes,
+            totalComments
         });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });

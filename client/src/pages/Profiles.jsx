@@ -72,9 +72,9 @@ const Profiles = () => {
         switch (user.role) {
             case 'applicant':
                 return (
-                    <>
-                        <button onClick={() => setSelectedTab('Posts')} className={`border text-center rounded-xl w-full lg:w-1/2 lg:px-16 py-4 ${selectedTab === 'Posts' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}>Posts</button>
-                    </>
+                    <div className='w-full'>
+                        <button onClick={() => setSelectedTab('Posts')} className={`border text-center rounded-xl w-full lg:w-full lg:px-16 py-4 ${selectedTab === 'Posts' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}>Posts</button>
+                    </div>
                 );
             case 'scholarship_provider':
                 return (
@@ -98,12 +98,12 @@ const Profiles = () => {
     const renderProfileContent = () => {
         switch (user.role) {
             case 'applicant':
-                return selectedTab === 'Posts' ? <ApplicantPosts user={user} /> : <ApplicantPosts userId={user._id} />;
+                return selectedTab === 'Posts' ? <ApplicantPosts userId={user._id} /> : <ApplicantPosts userId={user._id} />;
             case 'scholarship_provider':
                 if (selectedTab === 'Scholarships') return <ScholarshipProviderScholarships userId={user._id} />;
                 return <ScholarshipProviderPosts userId={user._id} />;
             case 'admin':
-                return selectedTab === 'About' ? <AdminAbout user={user} /> : <AdminPosts userId={user._id} />;
+                return selectedTab === 'About' ? <AdminAbout userId={user._id} /> : <AdminPosts userId={user._id} />;
             default:
                 return <div>Unknown role</div>;
         }
@@ -175,7 +175,7 @@ const Profiles = () => {
                 </div>
 
                 <div className='flex flex-col gap-4 max-w-6xl lg:px-24 mx-auto px-2'>
-                    <div className='grid grid-cols-2 lg:grid-cols-3 lg:flex lg:flex-row gap-4 justify-between font-semibold mb-6'>
+                    <div className={`grid ${user.role === 'applicant' ? 'grid-cols-1' : 'grid-cols-2 lg:grid-cols-3'} lg:flex lg:flex-row gap-4 justify-between font-semibold mb-6`}>
                         {renderTabs()}
                     </div>
 

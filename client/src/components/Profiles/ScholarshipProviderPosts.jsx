@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 const ScholarshipProviderPosts = ({ userId }) => {
   const [posts, setPosts] = useState([]);
   const [username, setUsername] = useState('');
+  const [totalLikes, setTotalLikes] = useState(0);
+  const [totalComments, setTotalComments] = useState(0);
   const [profilePicture, setProfilePicture] = useState('');
 
   // Function to fetch forum posts by user ID
@@ -18,7 +20,9 @@ const ScholarshipProviderPosts = ({ userId }) => {
       const data = await response.json();
       if (data && data.forumPosts) {
         setPosts(data.forumPosts); // Set forum posts
-        setUsername(data.username); // Set username
+        setUsername(data.name); // Set username
+        setTotalLikes(data.totalLikes); // Set total likes  
+        setTotalComments(data.totalComments); // Set total comments
         setProfilePicture(data.profilePicture); // Set profile picture
       } else {
         setPosts([]); // Set to empty array if no forum posts
@@ -77,16 +81,12 @@ const ScholarshipProviderPosts = ({ userId }) => {
                       <div className='flex flex-row gap-2'>
                         <div className='flex flex-row gap-1 px-2'>
                           <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
-                          <span>{post.totalLikes}</span>
+                          <span>{totalLikes}</span>
                         </div>
                         <div className='flex flex-row gap-1'>
                           <BiCommentDots className='w-6 h-6 text-blue-600' />
-                          <span>{post.totalComments}</span>
+                          <span>{totalComments}</span>
                         </div>
-                      </div>
-                      <div className='flex flex-row gap-1 pr-2'>
-                        <FaRegEye className='w-6 h-6 text-blue-600' />
-                        <span>{post.views}</span>
                       </div>
                     </div>
                   </div>

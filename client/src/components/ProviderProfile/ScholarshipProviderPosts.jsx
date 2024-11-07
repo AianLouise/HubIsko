@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { FaRegHeart, FaRegEye } from "react-icons/fa";
 import { BiCommentDots } from "react-icons/bi";
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const ScholarshipProviderPosts = ({ userId }) => {
+  const currentUser = useSelector((state) => state.user.currentUser);
+
   const [posts, setPosts] = useState([]);
   const [username, setUsername] = useState('');
   const [profilePicture, setProfilePicture] = useState('');
@@ -18,7 +21,7 @@ const ScholarshipProviderPosts = ({ userId }) => {
       const data = await response.json();
       if (data && data.forumPosts) {
         setPosts(data.forumPosts); // Set forum posts
-        setUsername(data.username); // Set username
+        setUsername(data.name); // Set username
         setProfilePicture(data.profilePicture); // Set profile picture
       } else {
         setPosts([]); // Set to empty array if no forum posts
@@ -48,7 +51,16 @@ const ScholarshipProviderPosts = ({ userId }) => {
           posts
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort posts by creation date in descending order
             .map((post) => (
-              <Link to={`/provider-forums/post/${post._id}`} key={post._id}>
+              <Link
+                to={
+                  currentUser.role === 'admin'
+                    ? `/admin-forums/post/${post._id}`
+                    : currentUser.role === 'scholarship_provider'
+                      ? `/provider-forums/post/${post._id}`
+                      : `/forums/post/${post._id}`
+                }
+                key={post._id}
+              >
                 <div className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow cursor-pointer hover:bg-slate-100 hover:-translate-y-1 transition ease-in-out'>
                   <div className='flex flex-row gap-3'>
                     <img
@@ -83,10 +95,6 @@ const ScholarshipProviderPosts = ({ userId }) => {
                           <BiCommentDots className='w-6 h-6 text-blue-600' />
                           <span>{post.totalComments}</span>
                         </div>
-                      </div>
-                      <div className='flex flex-row gap-1 pr-2'>
-                        <FaRegEye className='w-6 h-6 text-blue-600' />
-                        <span>{post.views}</span>
                       </div>
                     </div>
                   </div>
