@@ -17,6 +17,20 @@ const statusColors = {
   'Pending Approval': 'bg-purple-500',
 };
 
+const getAccountLink = (account) => {
+  const buttonText = account.status === 'Pending Verification' ? 'Verify' : 'View Details';
+
+  if (account.role === 'applicant') {
+    const route = account.status === 'Pending Verification' ? `/student-applications/${account._id}` : `/student-details/${account._id}`;
+    return <Link to={route} className="bg-blue-600 hover:bg-blue-800 px-4 py-1 rounded-md text-white">{buttonText}</Link>;
+  } else if (account.role === 'scholarship_provider') {
+    const route = account.status === 'Pending Verification' ? `/scholarship-provider-applications/${account._id}` : `/provider-details/${account._id}`;
+    return <Link to={route} className="bg-blue-600 hover:bg-blue-800 px-4 py-1 rounded-md text-white">{buttonText}</Link>;
+  } else {
+    return null;
+  }
+};
+
 export default function Students() {
   useEffect(() => {
     document.title = "Students | HubIsko";
@@ -156,25 +170,25 @@ export default function Students() {
                     </tr>
                   ) : (
                     currentApplicants.map((applicant, index) => (
-                      <tr key={applicant._id} className="font-normal tracking-wide hover:bg-slate-200">
-                        <td className='py-2 px-4 border-b border-gray-200'>{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                        <td className='py-2 px-4 border-b border-gray-200'>
+                      <tr key={applicant._id} className="font-normal tracking-wide hover:bg-slate-200 border-b">
+                        <td className='py-2 px-4 border-gray-200'>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                        <td className='py-2 px-4 border-gray-200'>
                           <div className="flex gap-2 items-center">
                             <img src={applicant.profilePicture} alt="Profile" className="rounded-full h-6 w-6 object-cover" />
                             {`${applicant.applicantDetails.firstName} ${applicant.applicantDetails.middleName} ${applicant.applicantDetails.lastName}`}
                           </div>
                         </td>
-                        <td className='py-2 px-4 border-b border-gray-200'>{applicant.email}</td>
-                        <td className='py-2 px-4 border-b border-gray-200'>{new Date(applicant.createdAt).toLocaleDateString()}</td>
-                        <td className='py-2 px-4 border-b border-gray-200 flex justify-center items-center'>
-                          <span className={`w-3 h-3 rounded-full ${statusColors[applicant.status]} mr-2`}></span>
-                          {applicant.status}
+                        <td className='py-2 px-4 border-gray-200'>{applicant.email}</td>
+                        <td className='py-2 px-4 border-gray-200'>{new Date(applicant.createdAt).toLocaleDateString()}</td>
+                        <td className='py-2 px-4 border-gray-200'>
+                          <div className="flex items-center justify-center">
+                            <span className={`w-3 h-3 rounded-full ${statusColors[applicant.status]} mr-2`}></span>
+                            {applicant.status}
+                          </div>
                         </td>
-                        <td className='py-2 px-4 border-b border-gray-200'>
+                        <td className='py-2 px-4 border-gray-200'>
                           <div className="flex justify-center items-center gap-2">
-                            <Link to={`/student-details/${applicant._id}`} className=''>
-                              <MdPreview className='w-6 h-6 text-blue-600 hover:text-blue-800' />
-                            </Link>
+                            {getAccountLink(applicant)}
                           </div>
                         </td>
                       </tr>

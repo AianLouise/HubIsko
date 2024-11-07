@@ -242,6 +242,14 @@ export default function ScholarshipsProviderDetails() {
 
                         <div className="flex flex-col bg-white border p-4 py-6 rounded-md shadow">
                             <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Scholarship Provider Details</div>
+                            <div className="flex flex-col items-center justify-center py-4">
+                                <label className="block text-sm text-slate-600 mb-2">Profile Picture</label>
+                                <img
+                                    src={provider?.profilePicture || 'default-profile-picture-url'}
+                                    alt="Student Profile"
+                                    className="w-24 h-24 rounded-full object-cover"
+                                />
+                            </div>
 
                             <div className="grid grid-cols-3 gap-8 my-4 p-4">
                                 <div className="">

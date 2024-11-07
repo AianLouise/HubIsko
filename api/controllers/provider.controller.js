@@ -6,12 +6,14 @@ import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator';
+import ActivityLog from '../models/activityLog.model.js'; // Adjust the import path as necessary
 
 export const test = (req, res) => {
   res.json({
     message: 'API is working!',
   });
 };
+
 
 export const signupAsProvider = async (req, res) => {
   // Validate request
@@ -72,7 +74,6 @@ export const signupAsProvider = async (req, res) => {
           authorizationLetter: documents.authorizationLetter,
           idProofContactPerson: documents.idProofContactPerson,
         },
-
       }
     });
 
@@ -127,6 +128,17 @@ export const signupAsProvider = async (req, res) => {
     });
 
     console.log('Verification email sent successfully to:', email);
+
+    // Create an activity log entry for signing up as a provider
+    const activityLog = new ActivityLog({
+      userId: savedUser._id,
+      action: 'SIGNUP_PROVIDER',
+      type: 'account',
+      details: `Scholarship provider account created for ${organizationName}`
+    });
+
+    await activityLog.save();
+    console.log('Activity log saved:', activityLog);
 
     // Respond with the new user's information (excluding sensitive information like the password)
     res.status(201).json({
@@ -242,8 +254,6 @@ export const getScholarshipProgramsByProvider = async (req, res) => {
     res.status(500).json({ message: 'Error retrieving scholarship applications', error: error.message });
   }
 };
-
-import ActivityLog from '../models/activityLog.model.js'; // Ensure the correct path
 
 export const updateUserInfo = async (req, res) => {
   try {

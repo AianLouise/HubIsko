@@ -114,7 +114,7 @@ const LogHistory = () => {
             </div>
 
             <div className="bg-white p-4 border shadow rounded-md">
-                <div className="overflow-auto" style={{ maxHeight: '400px' }}>
+                <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200 text-center">
                         <thead className="bg-gray-50">
                             <tr>

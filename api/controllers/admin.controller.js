@@ -26,11 +26,12 @@ export const getTotalUserAccounts = async (req, res) => {
 
 export const getTotalUnverifiedAccounts = async (req, res) => {
   try {
-    const totalUnverifiedAccounts = await User.countDocuments({ emailVerified: false });
+    const totalUnverifiedAccounts = await User.countDocuments({ status: 'Pending Verification' });
     res.json({
       totalUnverifiedAccounts,
     });
   } catch (error) {
+    console.error('Error retrieving total unverified user accounts:', error);
     res.status(500).json({
       message: 'Error retrieving total unverified user accounts',
       error: error.message,

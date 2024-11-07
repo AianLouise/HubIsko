@@ -246,7 +246,6 @@ export default function Accounts() {
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <span className="text-4xl font-bold text-left">{totalAccounts}</span>
-                                    <span className="text-slate-400 text-sm">+0 new accounts</span>
                                 </div>
                             </div>
 
@@ -257,7 +256,6 @@ export default function Accounts() {
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <span className="text-4xl font-bold text-left">{totalUnverifiedAccounts}</span>
-                                    <span className="text-slate-400 text-sm">+0 pending</span>
                                 </div>
                             </div>
 
@@ -268,18 +266,16 @@ export default function Accounts() {
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <span className="text-4xl font-bold text-left">{totalApplicants}</span>
-                                    <span className="text-slate-400 text-sm">+0 new students</span>
                                 </div>
                             </div>
 
                             <div className="flex flex-col gap-2 justify-center bg-white shadow border rounded-md p-4">
                                 <div className="flex items-center gap-2">
                                     <FaBuildingCircleCheck className="w-6 h-6 text-blue-600" />
-                                    <h2 className="text-md font-semibold text-slate-500">Scholarship Providers</h2>
+                                    <h2 className="text-md font-semibold text-slate-500">Total Scholarship Providers</h2>
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <span className="text-4xl font-bold text-left">{totalScholarshipProviders}</span>
-                                    <span className="text-slate-400 text-sm">+0 new providers</span>
                                 </div>
                             </div>
                         </div>

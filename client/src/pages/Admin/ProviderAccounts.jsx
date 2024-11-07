@@ -16,6 +16,20 @@ const statusColors = {
   'Pending Approval': 'bg-purple-500',
 };
 
+const getAccountLink = (account) => {
+  const buttonText = account.status === 'Pending Verification' ? 'Verify' : 'View Details';
+
+  if (account.role === 'applicant') {
+    const route = account.status === 'Pending Verification' ? `/student-applications/${account._id}` : `/student-details/${account._id}`;
+    return <Link to={route} className="bg-blue-600 hover:bg-blue-800 px-4 py-1 rounded-md text-white">{buttonText}</Link>;
+  } else if (account.role === 'scholarship_provider') {
+    const route = account.status === 'Pending Verification' ? `/scholarship-provider-applications/${account._id}` : `/provider-details/${account._id}`;
+    return <Link to={route} className="bg-blue-600 hover:bg-blue-800 px-4 py-1 rounded-md text-white">{buttonText}</Link>;
+  } else {
+    return null;
+  }
+};
+
 export default function ProviderAccounts() {
   useEffect(() => {
     document.title = "Scholarship Provider | HubIsko";
@@ -135,7 +149,7 @@ export default function ProviderAccounts() {
                 </div>
               </div>
 
-              <table className='w-full border-t text-center'>
+              <table className='w-full border-t text-center border-collapse'>
                 <thead>
                   <tr className='bg-slate-100'>
                     <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">#No</th>
@@ -155,7 +169,7 @@ export default function ProviderAccounts() {
                     </tr>
                   ) : (
                     currentProviders.map((provider, index) => (
-                      <tr key={provider._id} className="font-normal tracking-wide hover:bg-slate-200">
+                      <tr key={provider._id} className="font-normal tracking-wide hover:bg-slate-200 border-b">
                         <td className='py-2 px-4 border-b border-gray-200'>{(currentPage - 1) * itemsPerPage + index + 1}</td>
                         <td className='py-2 px-4 border-b border-gray-200 text-left'>
                           <div className="flex gap-2 items-center">
@@ -165,15 +179,15 @@ export default function ProviderAccounts() {
                         </td>
                         <td className='py-2 px-4 border-b border-gray-200'>{provider.email}</td>
                         <td className='py-2 px-4 border-b border-gray-200'>{provider.scholarshipProviderDetails.contactPersonName}</td>
-                        <td className='py-2 px-4 border-b border-gray-200 flex justify-center items-center'>
-                          <span className={`w-3 h-3 rounded-full ${statusColors[provider.status]} mr-2`}></span>
-                          {provider.status}
+                        <td className='py-2 px-4 border-b border-gray-200'>
+                          <div className="flex items-center justify-center">
+                            <span className={`w-3 h-3 rounded-full ${statusColors[provider.status]} mr-2`}></span>
+                            {provider.status}
+                          </div>
                         </td>
                         <td className='py-2 px-4 border-b border-gray-200'>
                           <div className="flex justify-center items-center gap-2">
-                            <Link to={`/provider-details/${provider._id}`} className=''>
-                              <MdPreview className='w-6 h-6 text-blue-600 hover:text-blue-800' />
-                            </Link>
+                            {getAccountLink(provider)}
                           </div>
                         </td>
                       </tr>

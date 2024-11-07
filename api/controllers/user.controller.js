@@ -3,6 +3,7 @@ import { errorHandler } from '../utils/error.js';
 import bcryptjs from 'bcryptjs';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
+import ActivityLog from '../models/activityLog.model.js'; // Adjust the import path as necessary
 
 export const test = (req, res) => {
   res.json({
@@ -195,6 +196,17 @@ export const CompleteProfile = async (req, res, next) => {
     if (!updatedUser) {
       return res.status(404).send({ message: "User not found." });
     }
+
+    // Create an activity log entry for completing the profile
+    const activityLog = new ActivityLog({
+      userId: req.user.id,
+      action: 'COMPLETE_PROFILE',
+      type: 'account',
+      details: `User ${req.user.id} completed their profile`
+    });
+
+    await activityLog.save();
+    console.log('Activity log saved:', activityLog);
 
     res.status(200).send(updatedUser);
   } catch (error) {
