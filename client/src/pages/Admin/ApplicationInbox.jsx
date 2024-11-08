@@ -79,9 +79,9 @@ export default function ApplicationInbox() {
       case 'SIGNUP_PROVIDER':
         return `New provider created an account and applied for verification: ${getUserDisplayName(log.userId)}`;
       case 'CREATE':
-        return `Student passed an application to be verified: ${getUserDisplayName(log.userId)}`;
+        return `Student created an account: ${getUserDisplayName(log.userId)}`;
       case 'COMPLETE_PROFILE':
-        return `Student completed their profile and sent an application to be verified: ${getUserDisplayName(log.userId)}`;
+        return `Student completed their profile and applied for verification: ${getUserDisplayName(log.userId)}`;
       default:
         return log.action;
     }
