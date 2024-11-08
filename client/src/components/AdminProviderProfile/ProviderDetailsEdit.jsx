@@ -29,7 +29,8 @@ export default function ProviderDetailsEdit() {
       registrationNumber: '',
       contactPersonName: '',
       contactPersonPosition: '',
-      contactPersonNumber: ''
+      contactPersonNumber: '',
+      website: ''
     },
   });
 
@@ -43,7 +44,8 @@ export default function ProviderDetailsEdit() {
       registrationNumber: '',
       contactPersonName: '',
       contactPersonPosition: '',
-      contactPersonNumber: ''
+      contactPersonNumber: '',
+      website: ''
     }
   });
 
@@ -67,9 +69,9 @@ export default function ProviderDetailsEdit() {
   const handleSaveChanges = async () => {
     // Validate form data
     const { scholarshipProviderDetails } = formData;
-    const { organizationName, organizationType, registrationNumber, contactPersonName, contactPersonPosition, contactPersonNumber } = scholarshipProviderDetails;
+    const { organizationName, organizationType, registrationNumber, contactPersonName, contactPersonPosition, contactPersonNumber, website } = scholarshipProviderDetails;
 
-    if (!organizationName || !organizationType || !registrationNumber || !contactPersonName || !contactPersonPosition || !contactPersonNumber) {
+    if (!organizationName || !organizationType || !registrationNumber || !contactPersonName || !contactPersonPosition || !contactPersonNumber || !website) {
       setNotification('Please fill in all required fields.');
       // Clear the notification after a few seconds
       setTimeout(() => {
@@ -117,7 +119,7 @@ export default function ProviderDetailsEdit() {
 
   return (
     <div className="bg-white p-8 rounded-md shadow-md w-full relative">
-      <div className="text-lg font-bold bg-slate-200 border-2 px-4 py-2 rounded-md">Provider Information</div>
+      <div className="text-lg font-bold bg-slate-200 border-2 px-4 py-2 rounded-md"> Organization Information</div>
 
       {notification && (
         <div className="fixed z-20 top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-md">
@@ -127,85 +129,166 @@ export default function ProviderDetailsEdit() {
 
       <form className='flex flex-col justify-between h-full'>
         <div className='gap-4 p-4'>
-          {/* All input fields */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {/* Provider Information */}
+          <div className="col-span-2 font-sans">
             <div className="mb-4">
-              <label className='block text-sm font-medium text-gray-700 mb-2'>Organization Name</label>
+              <label htmlFor="organizationName" className="block text-sm font-medium text-gray-700">
+                Organization Name <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 name="scholarshipProviderDetails.organizationName"
-                placeholder="Enter organization name"
+                id="organizationName"
                 value={formData.scholarshipProviderDetails.organizationName}
                 onChange={handleInputChange}
-                readOnly={!isEditing}
+                className="mt-1 p-2 w-full border rounded-md"
+                placeholder="Full name of the organization"
                 required
-                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                disabled={!isEditing}
               />
+              <div className="mt-1 text-xs text-gray-600">
+                {formData.scholarshipProviderDetails.organizationName.length}/{100} characters
+              </div>
+              {formData.scholarshipProviderDetails.organizationName.length === 100 && (
+                <div className="mt-1 text-xs text-red-600">
+                  You have reached the character limit.
+                </div>
+              )}
             </div>
 
             <div className="mb-4">
-              <label className='block text-sm font-medium text-gray-700 mb-2'>Organization Type</label>
-              <input
-                type="text"
+              <label htmlFor="organizationType" className="block text-sm font-medium text-gray-700 mb-2">
+                Organization Type <span className="text-red-500">*</span>
+              </label>
+              <select
                 name="scholarshipProviderDetails.organizationType"
-                placeholder="Enter organization type"
+                id="organizationType"
                 value={formData.scholarshipProviderDetails.organizationType}
                 onChange={handleInputChange}
-                readOnly={!isEditing}
-                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-              />
+                className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                required
+                disabled={!isEditing}
+              >
+                <option value="" disabled>Select organization type</option>
+                <option value="Government Agency">Government Agency (e.g., federal, state, local agencies)</option>
+                <option value="Private Corporation">Private Corporation (e.g., business, companies)</option>
+                <option value="Non-Governmental Organization">Non-Governmental Organization (e.g., charities, non-profit organization/foundations)</option>
+                <option value="Educational Foundation">Educational Foundation (e.g., schools, universities)</option>
+              </select>
+              <div className="mt-1 text-xs text-gray-600">
+                Please select the type of organization you are registering. This helps us categorize your organization correctly.
+              </div>
             </div>
 
             <div className="mb-4">
-              <label className='block text-sm font-medium text-gray-700 mb-2'>Registration Number</label>
+              <label htmlFor="registrationNumber" className="block text-sm font-medium text-gray-700">
+                Registration Number <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 name="scholarshipProviderDetails.registrationNumber"
-                placeholder="Enter registration number"
+                id="registrationNumber"
                 value={formData.scholarshipProviderDetails.registrationNumber}
                 onChange={handleInputChange}
-                readOnly={!isEditing}
-                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                className="mt-1 p-2 w-full border rounded-md"
+                placeholder="Enter your registration number"
+                required
+                disabled={!isEditing}
               />
+              <div className="mt-1 text-xs text-gray-600">
+                This is the official number assigned to your organization upon registration or incorporation.
+              </div>
             </div>
 
-            <div className="mb-4">
-              <label className='block text-sm font-medium text-gray-700 mb-2'>Contact Person Name</label>
+            <div className="mb-4 col-span-2">
+              <label htmlFor="website" className="block text-sm font-medium text-gray-700">
+                Website or Social Media Account <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
-                name="scholarshipProviderDetails.contactPersonName"
-                placeholder="Enter contact person name"
-                value={formData.scholarshipProviderDetails.contactPersonName}
+                name="scholarshipProviderDetails.website"
+                id="website"
+                value={formData.scholarshipProviderDetails.website}
                 onChange={handleInputChange}
-                readOnly={!isEditing}
-                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                className="mt-1 p-2 w-full border rounded-md"
+                placeholder="Official website URL or social media account of the organization"
+                required
+                disabled={!isEditing}
               />
+              <div className="mt-1 text-xs text-gray-600">
+                Please provide the official website URL or a social media account link (e.g., Facebook, Instagram) of your organization.
+              </div>
             </div>
+          </div>
 
-            <div className="mb-4">
-              <label className='block text-sm font-medium text-gray-700 mb-2'>Contact Person Position</label>
-              <input
-                type="text"
-                name="scholarshipProviderDetails.contactPersonPosition"
-                placeholder="Enter contact person position"
-                value={formData.scholarshipProviderDetails.contactPersonPosition}
-                onChange={handleInputChange}
-                readOnly={!isEditing}
-                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-              />
-            </div>
+          <hr className="col-span-2" />
 
-            <div className="mb-4">
-              <label className='block text-sm font-medium text-gray-700 mb-2'>Contact Person Number</label>
-              <input
-                type="text"
-                name="scholarshipProviderDetails.contactPersonNumber"
-                placeholder="Enter contact person number"
-                value={formData.scholarshipProviderDetails.contactPersonNumber}
-                onChange={handleInputChange}
-                readOnly={!isEditing}
-                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-              />
+          {/* Contact Person Details */}
+          <div className="col-span-2 font-sans">
+            <div className="text-lg font-bold bg-slate-200 border-2 px-4 py-2 rounded-md">Contact Person Details</div>
+            <div className="grid grid-cols-2 gap-4 p-4">
+              <div className="mb-4">
+                <label htmlFor="contactPersonName" className="block text-sm font-medium text-gray-700 mb-1">
+                  Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="scholarshipProviderDetails.contactPersonName"
+                  id="contactPersonName"
+                  value={formData.scholarshipProviderDetails.contactPersonName}
+                  onChange={handleInputChange}
+                  className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  placeholder="Enter the full name of the contact person"
+                  required
+                  disabled={!isEditing}
+                />
+                <div className="mt-1 text-xs text-gray-600">
+                  Please enter the full name of the contact person responsible for the registration.
+                </div>
+              </div>
+              <div className="mb-4">
+                <label htmlFor="contactPersonPosition" className="block text-sm font-medium text-gray-700 mb-1">
+                  Position <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="scholarshipProviderDetails.contactPersonPosition"
+                  id="contactPersonPosition"
+                  value={formData.scholarshipProviderDetails.contactPersonPosition}
+                  onChange={handleInputChange}
+                  className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  placeholder="Enter the job title or position"
+                  required
+                  disabled={!isEditing}
+                />
+                <div className="mt-1 text-xs text-gray-600">
+                  Please enter the job title or position of the contact person within the organization.
+                </div>
+              </div>
+              <div className="mb-4">
+                <label htmlFor="contactPersonNumber" className="block text-sm font-medium text-gray-700 mb-1">
+                  Contact Number <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="scholarshipProviderDetails.contactPersonNumber"
+                  id="contactPersonNumber"
+                  value={formData.scholarshipProviderDetails.contactPersonNumber}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (/^\d{0,11}$/.test(value)) {
+                      handleInputChange(e);
+                    }
+                  }}
+                  className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  placeholder="Enter the direct contact number"
+                  required
+                  disabled={!isEditing}
+                />
+                <div className="mt-1 text-xs text-gray-600">
+                  Please enter the direct contact number for the contact person. The number should be exactly 11 digits.
+                </div>
+              </div>
             </div>
           </div>
         </div>

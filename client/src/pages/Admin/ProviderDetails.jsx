@@ -63,10 +63,11 @@ export default function ProviderDetails() {
             </div>
           </div>
         </div>
+
         <div className='border-b mb-8'>
-          <div className={'flex items-center mx-auto px-24'}>
-            <div className='flex items-center gap-6 w-1/2'>
-              <div className='w-36 h-36 my-8 rounded-full overflow-hidden'>
+          <div className='flex items-center mx-auto px-24'>
+            <div className='flex items-center gap-6'>
+              <div className='w-44 h-44 my-8 rounded-full overflow-hidden'>
                 <img src={provider.profilePicture} alt="Profile" className='w-full h-full object-cover' />
               </div>
               <div className="flex flex-col gap-4">
@@ -79,7 +80,7 @@ export default function ProviderDetails() {
                     <BiCheck className="w-8 h-8 text-white" />
                   </div>
                 </div>
-                <p className='text-lg text-slate-500 font-medium'>Scholars: {provider.scholarsCount}</p>
+                {/* <p className='text-lg text-slate-500 font-medium'>Scholars: {provider.scholarsCount}</p> */}
               </div>
             </div>
           </div>
@@ -123,9 +124,9 @@ export default function ProviderDetails() {
             </>
           )}
 
-          {selectedTab === 'About' && (
+          {/* {selectedTab === 'About' && (
             <ProviderAbout provider={provider} />
-          )}
+          )} */}
 
           {selectedTab === 'Scholarships' && (
             <ProviderScholarships provider={provider} />

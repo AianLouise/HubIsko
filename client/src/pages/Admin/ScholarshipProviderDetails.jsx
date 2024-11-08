@@ -31,19 +31,19 @@ export default function ScholarshipsProviderDetails() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedImageUrl, setSelectedImageUrl] = useState('');
     const [selectedDocumentName, setSelectedDocumentName] = useState('');
-  
+
     const handleViewDocument = (url, name) => {
-      setSelectedImageUrl(url);
-      setSelectedDocumentName(name);
-      setIsModalOpen(true);
+        setSelectedImageUrl(url);
+        setSelectedDocumentName(name);
+        setIsModalOpen(true);
     };
-  
+
     const handleCloseModal = () => {
-      setIsModalOpen(false);
-      setSelectedImageUrl('');
-      setSelectedDocumentName('');
+        setIsModalOpen(false);
+        setSelectedImageUrl('');
+        setSelectedDocumentName('');
     };
-  
+
 
     const fetchProviderDetails = async () => {
         try {
@@ -62,7 +62,7 @@ export default function ScholarshipsProviderDetails() {
             setError(error.message);
             setLoading(false);
         }
-    };                           
+    };
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -72,7 +72,7 @@ export default function ScholarshipsProviderDetails() {
     const handleApprove = async (providerId) => {
         try {
             const userId = currentUser._id;
-    
+
             const response = await fetch(`/api/adminApp/scholarship-provider/approve/${providerId}`, {
                 method: 'PATCH',
                 headers: {
@@ -80,11 +80,11 @@ export default function ScholarshipsProviderDetails() {
                 },
                 body: JSON.stringify({ userId }),
             });
-    
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-    
+
             console.log(`Approved provider with id: ${providerId}`);
             setSuccessMessage('Application approved successfully!');
             setShowSnackbar(true);
@@ -95,10 +95,10 @@ export default function ScholarshipsProviderDetails() {
         }
     };
 
-        const handleReject = async (providerId) => {
+    const handleReject = async (providerId) => {
         try {
             const userId = currentUser._id;
-    
+
             const response = await fetch(`/api/adminApp/scholarship-provider/reject/${providerId}`, {
                 method: 'PATCH',
                 headers: {
@@ -106,11 +106,11 @@ export default function ScholarshipsProviderDetails() {
                 },
                 body: JSON.stringify({ rejectReason: rejectReason, userId })
             });
-    
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-    
+
             const data = await response.json();
             console.log('Decline reason updated:', data);
             setSuccessMessage('Application rejected successfully!');
@@ -326,82 +326,82 @@ export default function ScholarshipsProviderDetails() {
                         </div>
 
                         <div className="flex flex-col bg-white border p-4 py-6 rounded-md shadow">
-      <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Documents</div>
-      <div className="grid grid-cols-3 gap-8 my-4 py-4 px-8">
-        <div className="">
-          <label className="block text-sm text-slate-400">Registration Certificate</label>
-          {provider.scholarshipProviderDetails.documents.registrationCertificate ? (
-            <button
-              onClick={() => handleViewDocument(provider.scholarshipProviderDetails.documents.registrationCertificate, 'Registration Certificate')}
-              className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border w-full border-gray-300 rounded-md text-blue-600"
-            >
-              View Document
-            </button>
-          ) : (
-            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
-          )}
-        </div>
+                            <div className="text-lg font-bold bg-blue-500 text-white px-4 py-2 rounded-md">Documents</div>
+                            <div className="grid grid-cols-3 gap-8 my-4 py-4 px-8">
+                                <div className="">
+                                    <label className="block text-sm text-slate-400">Registration Certificate</label>
+                                    {provider.scholarshipProviderDetails.documents.registrationCertificate ? (
+                                        <button
+                                            onClick={() => handleViewDocument(provider.scholarshipProviderDetails.documents.registrationCertificate, 'Registration Certificate')}
+                                            className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border w-full border-gray-300 rounded-md text-blue-600"
+                                        >
+                                            View Document
+                                        </button>
+                                    ) : (
+                                        <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+                                    )}
+                                </div>
 
-        <div className="">
-          <label className="block text-sm text-slate-400">TIN</label>
-          {provider.scholarshipProviderDetails.documents.tin ? (
-            <button
-              onClick={() => handleViewDocument(provider.scholarshipProviderDetails.documents.tin, 'TIN')}
-              className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border w-full border-gray-300 rounded-md text-blue-600"
-            >
-              View Document
-            </button>
-          ) : (
-            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
-          )}
-        </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-400">TIN</label>
+                                    {provider.scholarshipProviderDetails.documents.tin ? (
+                                        <button
+                                            onClick={() => handleViewDocument(provider.scholarshipProviderDetails.documents.tin, 'TIN')}
+                                            className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border w-full border-gray-300 rounded-md text-blue-600"
+                                        >
+                                            View Document
+                                        </button>
+                                    ) : (
+                                        <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+                                    )}
+                                </div>
 
-        <div className="">
-          <label className="block text-sm text-slate-400">Proof of Address</label>
-          {provider.scholarshipProviderDetails.documents.proofOfAddress ? (
-            <button
-              onClick={() => handleViewDocument(provider.scholarshipProviderDetails.documents.proofOfAddress, 'Proof of Address')}
-              className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border w-full border-gray-300 rounded-md text-blue-600"
-            >
-              View Document
-            </button>
-          ) : (
-            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
-          )}
-        </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-400">Proof of Address</label>
+                                    {provider.scholarshipProviderDetails.documents.proofOfAddress ? (
+                                        <button
+                                            onClick={() => handleViewDocument(provider.scholarshipProviderDetails.documents.proofOfAddress, 'Proof of Address')}
+                                            className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border w-full border-gray-300 rounded-md text-blue-600"
+                                        >
+                                            View Document
+                                        </button>
+                                    ) : (
+                                        <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+                                    )}
+                                </div>
 
-        <div className="">
-          <label className="block text-sm text-slate-400">Authorization Letter</label>
-          {provider.scholarshipProviderDetails.documents.authorizationLetter ? (
-            <button
-              onClick={() => handleViewDocument(provider.scholarshipProviderDetails.documents.authorizationLetter, 'Authorization Letter')}
-              className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border w-full border-gray-300 rounded-md text-blue-600"
-            >
-              View Document
-            </button>
-          ) : (
-            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
-          )}
-        </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-400">Authorization Letter</label>
+                                    {provider.scholarshipProviderDetails.documents.authorizationLetter ? (
+                                        <button
+                                            onClick={() => handleViewDocument(provider.scholarshipProviderDetails.documents.authorizationLetter, 'Authorization Letter')}
+                                            className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border w-full border-gray-300 rounded-md text-blue-600"
+                                        >
+                                            View Document
+                                        </button>
+                                    ) : (
+                                        <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+                                    )}
+                                </div>
 
-        <div className="">
-          <label className="block text-sm text-slate-400">ID Proof of Contact Person</label>
-          {provider.scholarshipProviderDetails.documents.idProofContactPerson ? (
-            <button
-              onClick={() => handleViewDocument(provider.scholarshipProviderDetails.documents.idProofContactPerson, 'ID Proof of Contact Person')}
-              className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border w-full border-gray-300 rounded-md text-blue-600"
-            >
-              View Document
-            </button>
-          ) : (
-            <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
-          )}
-        </div>
-      </div>
-      <AdminImageModal isOpen={isModalOpen} onClose={handleCloseModal} imageUrl={selectedImageUrl} documentName={selectedDocumentName} />
-    </div>
+                                <div className="">
+                                    <label className="block text-sm text-slate-400">ID Proof of Contact Person</label>
+                                    {provider.scholarshipProviderDetails.documents.idProofContactPerson ? (
+                                        <button
+                                            onClick={() => handleViewDocument(provider.scholarshipProviderDetails.documents.idProofContactPerson, 'ID Proof of Contact Person')}
+                                            className="mt-1 block px-3 font-medium text-center bg-slate-100 hover:bg-slate-200 py-2 border w-full border-gray-300 rounded-md text-blue-600"
+                                        >
+                                            View Document
+                                        </button>
+                                    ) : (
+                                        <span className="mt-1 block px-3 py-2 border border-gray-300 rounded-md">Not Provided</span>
+                                    )}
+                                </div>
+                            </div>
+                            <AdminImageModal isOpen={isModalOpen} onClose={handleCloseModal} imageUrl={selectedImageUrl} documentName={selectedDocumentName} />
+                        </div>
 
-                    
+
                         <div className="flex justify-end gap-4 mt-6">
                             {provider.status === 'Pending Verification' && (
                                 <>

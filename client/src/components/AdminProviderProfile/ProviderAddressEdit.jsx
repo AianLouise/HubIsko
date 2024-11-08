@@ -109,6 +109,10 @@ export default function ProviderAddressEdit() {
 
     const handleCancel = () => {
         setFormData(provider.scholarshipProviderDetails); // Revert changes
+        setSelectedRegion(provider.scholarshipProviderDetails.region);
+        setSelectedProvince(provider.scholarshipProviderDetails.province);
+        setSelectedCity(provider.scholarshipProviderDetails.city);
+        setSelectedBarangay(provider.scholarshipProviderDetails.barangay);
         setIsEditing(false);
     };
 
@@ -125,6 +129,9 @@ export default function ProviderAddressEdit() {
     useEffect(() => {
         if (selectedRegion) {
             provinces(selectedRegion).then(setProvinceList);
+            setSelectedProvince(''); // Clear province
+            setSelectedCity(''); // Clear city
+            setSelectedBarangay(''); // Clear barangay
             setFormData(prevState => ({
                 ...prevState,
                 region: selectedRegion,
@@ -139,6 +146,8 @@ export default function ProviderAddressEdit() {
     useEffect(() => {
         if (selectedProvince) {
             cities(selectedProvince).then(setCityList);
+            setSelectedCity(''); // Clear city
+            setSelectedBarangay(''); // Clear barangay
             setFormData(prevState => ({
                 ...prevState,
                 province: selectedProvince,
@@ -152,6 +161,7 @@ export default function ProviderAddressEdit() {
     useEffect(() => {
         if (selectedCity) {
             barangays(selectedCity).then(setBarangayList);
+            setSelectedBarangay(''); // Clear barangay
             setFormData(prevState => ({
                 ...prevState,
                 city: selectedCity,
@@ -170,13 +180,29 @@ export default function ProviderAddressEdit() {
         }
     }, [selectedBarangay]);
 
+    // Load initial data from formData
+    useEffect(() => {
+        if (formData.region) {
+            setSelectedRegion(formData.region);
+        }
+        if (formData.province) {
+            setSelectedProvince(formData.province);
+        }
+        if (formData.city) {
+            setSelectedCity(formData.city);
+        }
+        if (formData.barangay) {
+            setSelectedBarangay(formData.barangay);
+        }
+    }, [formData]);
+
     if (!provider) {
         return <div>Loading...</div>;
     }
 
     return (
         <div className="bg-white p-8 rounded-md shadow-md w-full relative">
-            <div className="text-lg font-bold bg-slate-200 border-2 px-4 py-2 rounded-md">Address</div>
+
 
             {notification && (
                 <div className="fixed z-20 top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-md">
@@ -186,109 +212,136 @@ export default function ProviderAddressEdit() {
 
             <form className='flex flex-col justify-between h-full'>
                 <div className='gap-4 p-4'>
-                    <div className='grid grid-cols-2 gap-4 px-4 mt-4'>
-                        {/* Region Selector */}
-                        <div>
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>Region:</label>
-                            <select
-                                value={selectedRegion}
-                                onChange={(e) => {
-                                    setSelectedRegion(e.target.value);
-                                    setProvinceList([]); // Reset on region change
-                                    setCityList([]);
-                                    setBarangayList([]);
-                                }}
-                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                disabled={!isEditing}
-                            >
-                                <option value="">Select Region</option>
-                                {regionList.map((region) => (
-                                    <option key={region.region_code} value={region.region_code}>
-                                        {region.region_name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                    <div className="col-span-2 font-sans">
+                        <div className="text-lg font-bold bg-slate-200 border-2 px-4 py-2 rounded-md">Physical Address</div>
+                        <div className='grid lg:grid-cols-2 gap-4 mt-4 mx-2'>
+                            {/* Region Selector */}
+                            <div>
+                                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                                    Region <span className="text-red-500">*</span>
+                                </label>
+                                <select
+                                    value={selectedRegion}
+                                    onChange={(e) => {
+                                        setSelectedRegion(e.target.value);
+                                        setProvinceList([]); // Reset on region change
+                                        setCityList([]);
+                                        setBarangayList([]);
+                                    }}
+                                    className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                    required
+                                    disabled={!isEditing}
+                                >
+                                    <option value="" disabled>Select Region</option>
+                                    {regionList.map((region) => (
+                                        <option key={region.region_code} value={region.region_code}>
+                                            {region.region_name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div className="mt-1 text-xs text-gray-600">
+                                    Please select the region where your organization is located.
+                                </div>
+                            </div>
 
-                        {/* Province Selector */}
-                        <div>
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>Province:</label>
-                            <select
-                                value={selectedProvince}
-                                onChange={(e) => {
-                                    setSelectedProvince(e.target.value);
-                                    setCityList([]);
-                                    setBarangayList([]);
-                                }}
-                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                disabled={!isEditing}
-                            >
-                                <option value="">Select Province</option>
-                                {provinceList.map((province) => (
-                                    <option key={province.province_code} value={province.province_code}>
-                                        {province.province_name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                            {/* Province Selector */}
+                            <div>
+                                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                                    Province <span className="text-red-500">*</span>
+                                </label>
+                                <select
+                                    value={selectedProvince}
+                                    onChange={(e) => {
+                                        setSelectedProvince(e.target.value);
+                                        setCityList([]);
+                                        setBarangayList([]);
+                                    }}
+                                    className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                    required
+                                    disabled={!isEditing}
+                                >
+                                    <option value="" disabled>Select Province</option>
+                                    {provinceList.map((province) => (
+                                        <option key={province.province_code} value={province.province_code}>
+                                            {province.province_name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div className="mt-1 text-xs text-gray-600">
+                                    Please select the province where your organization is located.
+                                </div>
+                            </div>
 
-                        {/* City Selector */}
-                        <div>
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>City/Municipality:</label>
-                            <select
-                                value={selectedCity}
-                                onChange={(e) => {
-                                    setSelectedCity(e.target.value);
-                                    setBarangayList([]);
-                                }}
-                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                disabled={!isEditing}
-                            >
-                                <option value="">Select City</option>
-                                {cityList.map((city) => (
-                                    <option key={city.city_code} value={city.city_code}>
-                                        {city.city_name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                            {/* City Selector */}
+                            <div>
+                                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                                    City/Municipality <span className="text-red-500">*</span>
+                                </label>
+                                <select
+                                    value={selectedCity}
+                                    onChange={(e) => {
+                                        setSelectedCity(e.target.value);
+                                        setBarangayList([]);
+                                    }}
+                                    className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                    required
+                                    disabled={!isEditing}
+                                >
+                                    <option value="" disabled>Select City/Municipality</option>
+                                    {cityList.map((city) => (
+                                        <option key={city.city_code} value={city.city_code}>
+                                            {city.city_name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div className="mt-1 text-xs text-gray-600">
+                                    Please select the city or municipality where your organization is located.
+                                </div>
+                            </div>
 
-                        {/* Barangay Selector */}
-                        <div>
-                            <label className='block text-sm font-medium text-gray-700 mb-2'>Barangay:</label>
-                            <select
-                                value={selectedBarangay}
-                                onChange={(e) => setSelectedBarangay(e.target.value)}
-                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                disabled={!isEditing}
-                            >
-                                <option value="">Select Barangay</option>
-                                {barangayList.map((barangay) => (
-                                    <option key={barangay.brgy_code} value={barangay.brgy_code}>
-                                        {barangay.brgy_name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                            {/* Barangay Selector */}
+                            <div>
+                                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                                    Barangay <span className="text-red-500">*</span>
+                                </label>
+                                <select
+                                    value={selectedBarangay}
+                                    onChange={(e) => setSelectedBarangay(e.target.value)}
+                                    className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                    required
+                                    disabled={!isEditing}
+                                >
+                                    <option value="" disabled>Select Barangay</option>
+                                    {barangayList.map((barangay) => (
+                                        <option key={barangay.brgy_code} value={barangay.brgy_code}>
+                                            {barangay.brgy_name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div className="mt-1 text-xs text-gray-600">
+                                    Please select the barangay where your organization is located.
+                                </div>
+                            </div>
 
-                        {/* Address Details */}
-                        <div className='w-full flex flex-col lg:col-span-1 mb-4'>
-                            <label className='hidden lg:block text-sm font-medium text-gray-700 mb-2'>
-                                House No./Unit No./Bldg/Floor, Street, Subdivision
-                            </label>
-                            <label className='block lg:hidden text-sm font-medium text-gray-700 mb-2'>
-                                Full Address
-                            </label>
-                            <input
-                                type="text"
-                                name="addressDetails"
-                                value={formData.addressDetails || ''}
-                                onChange={handleChange}
-                                className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                                placeholder="Enter House No./Unit No./Bldg/Floor, Street, Subdivision"
-                                required
-                                disabled={!isEditing}
-                            />
+                            {/* Full Address */}
+                            <div className='w-full flex flex-col lg:col-span-2 mb-4'>
+                                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                                    House No./Unit No./Bldg/Floor, Street, Subdivision <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="addressDetails"
+                                    value={formData.addressDetails}
+                                    onChange={handleChange}
+                                    className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                                    placeholder="Enter House No./Unit No./Bldg/Floor, Street, Subdivision"
+                                    required
+                                    disabled={!isEditing}
+                                />
+                                <div className="mt-1 text-xs text-gray-600">
+                                    Please provide the full address including house number, unit number, building, floor, street, and subdivision.
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
