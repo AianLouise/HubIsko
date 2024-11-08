@@ -264,3 +264,4 @@ export const rejectScholarshipProvider = async (req, res) => {
     });
   }
 };
+

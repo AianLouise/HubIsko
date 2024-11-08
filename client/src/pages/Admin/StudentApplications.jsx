@@ -27,6 +27,10 @@ export default function StudentApplications() {
         document.title = "Student Applications | HubIsko";
     }, []);
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    });
+
     const [students, setStudents] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredStudents, setFilteredStudents] = useState([]);

@@ -150,8 +150,8 @@ export default function ScholarshipProviderApplications() {
                                 ) : (
                                     filteredProviders.map((provider) => (
                                         <tr key={provider._id} className="hover:bg-gray-100">
-                                            <td className="p-2">
-                                                <div className="flex gap-2 items-center justify-center">
+                                            <td className="p-2 text-left pl-10">
+                                                <div className="flex gap-2 items-center">
                                                     <img src={provider.profilePicture} alt="Profile" className="rounded-full h-6 w-6" />
                                                     {provider.scholarshipProviderDetails.organizationName}
                                                 </div>

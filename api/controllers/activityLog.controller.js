@@ -22,7 +22,7 @@ export const getActivityLogs = async (req, res) => {
         const logs = await ActivityLog.find()
             .populate({
                 path: 'userId',
-                select: 'username applicantDetails.firstName applicantDetails.lastName applicantDetails.middleName scholarshipProviderDetails.organizationName',
+                select: 'username profilePicture applicantDetails.firstName applicantDetails.lastName applicantDetails.middleName scholarshipProviderDetails.organizationName',
             });
         res.status(200).json(logs);
     } catch (error) {

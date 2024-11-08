@@ -415,7 +415,7 @@ export default function ForumPost() {
                                     </span>
                                 </div>
                             </div>
-                            {currentUser && currentUser._id === post.author._id && (
+                            {currentUser && (currentUser._id === post.author._id || currentUser.role === 'admin') && (
                                 <div className='relative' ref={dropdownRef}>
                                     <button onClick={toggleDropdown2} className='focus:outline-none'>
                                         <FaEllipsis className='text-gray-600 hover:text-gray-800' />

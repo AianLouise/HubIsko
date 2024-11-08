@@ -87,7 +87,7 @@ export const createScholarshipProgram = async (req, res) => {
     // Create an activity log entry for creating a scholarship program
     const activityLog = new ActivityLog({
       userId: providerId,
-      action: 'CREATE',
+      action: 'CREATE_SCHOLARSHIP',
       type: 'scholarship',
       details: `Scholarship program created: ${title}`
     });

@@ -3,11 +3,8 @@ import { Link } from "react-router-dom";
 import { BiFilter } from "react-icons/bi";
 import { PiArrowRightFill } from "react-icons/pi";
 import { GoDotFill } from "react-icons/go";
-import Layout from "../../components/Layout";
-import { BiRightArrowAlt } from "react-icons/bi";
 import { BsInboxFill } from "react-icons/bs";
-import { FaGraduationCap, FaUserGraduate } from "react-icons/fa6";
-import { FaUniversity } from "react-icons/fa";
+import { FaUserGraduate, FaUniversity } from "react-icons/fa";
 
 export default function ApplicationInbox() {
   useEffect(() => {
@@ -21,7 +18,6 @@ export default function ApplicationInbox() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-
         // Fetch total number of pending providers
         const pendingProvidersResponse = await fetch('/api/adminApp/search-pending-verification-providers');
         const pendingProvidersData = await pendingProvidersResponse.json();
@@ -40,6 +36,61 @@ export default function ApplicationInbox() {
 
     fetchData();
   }, []);
+
+  const [activityLogs, setActivityLogs] = useState([]);
+
+  useEffect(() => {
+    const fetchActivityLogs = async () => {
+      try {
+        const response = await fetch('/api/activity/activity-logs'); // Adjust the endpoint as necessary
+        const data = await response.json();
+        const filteredLogs = Array.isArray(data) ? data.filter(log =>
+          log.action === 'APPROVE_SCHOLARSHIP_PROVIDER' ||
+          log.action === 'APPROVE_STUDENT' ||
+          log.action === 'SIGNUP_PROVIDER' ||
+          log.action === 'CREATE'
+        ) : [];
+        setActivityLogs(filteredLogs); // Ensure data is an array
+      } catch (error) {
+        console.error('Error fetching activity logs:', error);
+      }
+    };
+
+    fetchActivityLogs();
+  }, []);
+
+  const getUserDisplayName = (user) => {
+    if (!user) return 'N/A';
+    if (user.applicantDetails?.firstName || user.applicantDetails?.lastName || user.applicantDetails?.middleName) {
+      const middleInitial = user.applicantDetails.middleName ? `${user.applicantDetails.middleName.charAt(0)}.` : '';
+      return `${user.applicantDetails.lastName || ''}, ${user.applicantDetails.firstName || ''} ${middleInitial}`.trim();
+    }
+    if (user.scholarshipProviderDetails?.organizationName) return user.scholarshipProviderDetails.organizationName;
+    return user.username || 'N/A';
+  };
+
+  const formatDetails = (log) => {
+    switch (log.action) {
+      case 'APPROVE_SCHOLARSHIP_PROVIDER':
+        return `Scholarship provider successfully verified by admin: ${getUserDisplayName(log.userId)}`;
+      case 'APPROVE_STUDENT':
+        return `Student successfully verified by admin: ${getUserDisplayName(log.userId)}`;
+      case 'SIGNUP_PROVIDER':
+        return `New provider created an account and applied for verification: ${getUserDisplayName(log.userId)}`;
+      case 'CREATE':
+        return `Student passed an application to be verified: ${getUserDisplayName(log.userId)}`;
+      default:
+        return log.action;
+    }
+  };
+
+  const isNewLog = (timestamp) => {
+    const logDate = new Date(timestamp);
+    const currentDate = new Date();
+    const timeDifference = currentDate - logDate;
+    const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
+    return timeDifference < oneDayInMilliseconds;
+  };
 
   if (loading) {
     return (
@@ -67,9 +118,11 @@ export default function ApplicationInbox() {
     );
   }
 
+  // Sort activity logs to show new notifications on top
+  const sortedActivityLogs = [...activityLogs].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
   return (
     <div className="flex flex-col min-h-screen font-medium text-slate-700">
-
       <main className="flex-grow bg-[#f8f8fb]">
         <div className="border-b mb-8">
           <div className="flex items-center mx-auto justify-between px-24">
@@ -112,18 +165,18 @@ export default function ApplicationInbox() {
           </div>
 
           {/* Activity Section */}
-          {/* <div className="flex flex-col mt-10 mb-10">
+          <div className="flex flex-col mt-10 mb-10">
             <span className="font-bold text-xl border-b w-full pb-2">
               Recent Activity
             </span>
             <div className="flex items-center justify-between mt-4">
-              <div className="flex gap-1">
+              {/* <div className="flex gap-1">
                 <span className="bg-blue-600 p-3 rounded-full w-4 h-4 text-white flex justify-center items-center">
-                  1
+                  {sortedActivityLogs.length}
                 </span>{" "}
                 unread notification
-              </div>
-              <div className="flex gap-4">
+              </div> */}
+              {/* <div className="flex gap-4">
                 <input
                   type="text"
                   placeholder="Search in the inbox..."
@@ -133,72 +186,36 @@ export default function ApplicationInbox() {
                   <BiFilter className="w-6 h-6" />
                   <span>Filter</span>
                 </button>
-              </div>
+              </div> */}
             </div>
             <div className="bg-white border rounded-md mt-4 divide-y">
-              <Link
-                to={"/scholarships-data-details"}
-                className="flex justify-between items-center p-4 hover:bg-slate-200 group transition ease-in-out"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="bg-blue-600 w-14 h-14 rounded-full"></div>
-                  <div className="gap-2 flex flex-col">
-                    <div className="flex gap-2">
-                      <span className="font-bold">DepEd</span>
-                      <span className="text-slate-500">
-                        Posted a new Scholarship Program
+              {sortedActivityLogs.map((log) => (
+                <div className="flex justify-between items-center p-4 hover:bg-slate-200 group transition ease-in-out">
+                  <div className="flex items-center gap-4">
+                    <img
+                      src={log.userId?.profilePicture}
+                      alt="Profile"
+                      className="bg-white w-14 h-14 rounded-full object-cover"
+                    />
+                    <div className="gap-2 flex flex-col">
+                      <span className="font-bold">{getUserDisplayName(log.userId)}</span>
+                      <span className="text-slate-500">{formatDetails(log)}</span>
+                      <span className="text-slate-500 text-sm flex items-center gap-2">
+                        {isNewLog(log.timestamp) && (
+                          <>
+                            <span className="text-blue-600"> New </span>{" "}
+                            <GoDotFill className="text-blue-600" />
+                          </>
+                        )}
+                        {new Date(log.timestamp).toLocaleTimeString()}
                       </span>
                     </div>
-                    <span className="text-slate-500 text-sm flex items-center gap-2">
-                      <span className="text-blue-600"> New </span>{" "}
-                      <GoDotFill className="text-blue-600" /> 2 hours ago
-                    </span>
                   </div>
                 </div>
-                <div className="group-hover:flex justify-end items-center gap-2 text-blue-600 hidden">
-                  <span className="text-xl">View</span>
-                  <PiArrowRightFill className="w-6 h-6" />
-                </div>
-              </Link>
-              <div className="flex justify-between items-center p-4 hover:bg-slate-200 group transition ease-in-out">
-                <div className="flex items-center gap-4">
-                  <div className="bg-blue-600 w-14 h-14 rounded-full"></div>
-                  <div className="gap-2 flex flex-col">
-                    <div className="flex gap-2">
-                      <span className="font-bold">John Doe</span>
-                      <span className="text-slate-500">
-                        Requested a Verification
-                      </span>
-                    </div>
-                    <span className="text-slate-500 text-sm">2 hours ago</span>
-                  </div>
-                </div>
-                <div className="group-hover:flex justify-end items-center gap-2 text-blue-600 hidden">
-                  <span className="text-xl">View</span>
-                  <PiArrowRightFill className="w-6 h-6" />
-                </div>
-              </div>
-              <div className="flex justify-between items-center p-4 hover:bg-slate-200 group transition ease-in-out">
-                <div className="flex items-center gap-4">
-                  <div className="bg-blue-600 w-14 h-14 rounded-full"></div>
-                  <div className="gap-2 flex flex-col">
-                    <div className="flex gap-2">
-                      <span className="font-bold">Jane Smith</span>
-                      <span className="text-slate-500">
-                        Sent a scholarship application to{" "}
-                        <span className="text-blue-600">DepEd</span>
-                      </span>
-                    </div>
-                    <span className="text-slate-500 text-sm">3 hours ago</span>
-                  </div>
-                </div>
-                <div className="group-hover:flex justify-end items-center gap-2 text-blue-600 hidden">
-                  <span className="text-xl">View</span>
-                  <PiArrowRightFill className="w-6 h-6" />
-                </div>
-              </div>
+              ))}
             </div>
-          </div> */}
+          </div>
+
         </div>
       </main>
     </div>

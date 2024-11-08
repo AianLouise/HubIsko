@@ -36,14 +36,6 @@ const AdminForumViews = ({ isGridView, currentPage, handlePageChange, paginatedD
                   <div key={item.id} className="bg-white shadow rounded-lg p-6 relative flex flex-col justify-between">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-xl font-semibold text-gray-800">{item.title}</h3>
-                      <div className='flex gap-2 items-center'>
-                        <button className="bg-blue-600 text-white rounded-lg flex items-center justify-center hover:bg-blue-900 p-2">
-                          <FaEdit className='w-5 h-5' />
-                        </button>
-                        <button className="bg-red-600 text-white rounded-lg flex items-center justify-center hover:bg-red-900 p-2">
-                          <FaTrashAlt className='w-5 h-5' />
-                        </button>
-                      </div>
                     </div>
                     <p className="text-gray-600 mb-4">{truncateText(item.content, 100)}</p>
                     <div className="text-gray-500 text-sm mb-4">
@@ -52,7 +44,7 @@ const AdminForumViews = ({ isGridView, currentPage, handlePageChange, paginatedD
                     <div className='flex justify-end'>
                       <button
                         className="bg-blue-600 hover:bg-blue-700 px-3 py-1 text-white rounded-md flex items-center justify-end"
-                        onClick={() => handleViewPost(item._id)} // Add onClick event handler
+                        onClick={() => handleViewPost(item._id)}
                       >
                         <FaEdit className="mr-1" /> View Post
                       </button>
@@ -95,32 +87,28 @@ const AdminForumViews = ({ isGridView, currentPage, handlePageChange, paginatedD
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {paginatedData.map((item) => (
+                    <tr key={item.id} className="hover:bg-gray-100">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.title}</td>
+                      <td className="px-6 py-4 whitespace-nowrap max-w-xs overflow-hidden text-ellipsis text-sm text-gray-500">
+                        {item.content}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {new Date(item.createdAt).toLocaleString()}
+                      </td>
+                      <td className="flex gap-2 items-center px-6 py-4 whitespace-nowrap">
+                        <button
+                          className="bg-blue-600 hover:bg-blue-700 px-3 py-1 text-white rounded-md flex items-center"
+                          onClick={() => handleViewPost(item._id)} // Add onClick event handler
+                        >
+                          <FaEdit className="mr-1" /> View Post
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
               </table>
-              <div className="flex-grow overflow-y-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {paginatedData.map((item) => (
-                      <tr key={item.id} className="hover:bg-gray-100">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.title}</td>
-                        <td className="px-6 py-4 whitespace-nowrap max-w-xs overflow-hidden text-ellipsis text-sm text-gray-500">
-                          {item.content}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {new Date(item.createdAt).toLocaleString()}
-                        </td>
-                        <td className="flex gap-2 items-center px-6 py-4 whitespace-nowrap">
-                          <button
-                            className="bg-blue-600 hover:bg-blue-700 px-3 py-1 text-white rounded-md flex items-center"
-                            onClick={() => handleViewPost(item._id)} // Add onClick event handler
-                          >
-                            <FaEdit className="mr-1" /> View Post
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
               <div className="flex justify-end gap-4 items-center py-4 px-8 bg-gray-50 border-t">
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
