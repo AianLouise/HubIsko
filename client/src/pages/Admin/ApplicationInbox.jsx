@@ -124,7 +124,7 @@ export default function ApplicationInbox() {
   return (
     <div className="flex flex-col min-h-screen font-medium text-slate-700">
       <main className="flex-grow bg-[#f8f8fb]">
-        <div className="border-b mb-8">
+        <div className="border-b mb-8 bg-white">
           <div className="flex items-center mx-auto justify-between px-24">
             <div className="flex flex-col gap-2 w-1/2">
               <h1 className="text-4xl font-bold text-gray-800">Application Inbox</h1>

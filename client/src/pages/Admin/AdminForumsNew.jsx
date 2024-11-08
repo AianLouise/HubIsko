@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { MdClearAll } from "react-icons/md";
+import { MdClearAll, MdForum } from "react-icons/md";
 import { PiStudentFill } from "react-icons/pi";
 import { FaBuilding, FaPlus, FaWrench } from "react-icons/fa6";
-import { FaList } from "react-icons/fa";
+import { FaHistory, FaList } from "react-icons/fa";
 import { BsFillGridFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import AllPosts from "../../components/AdminForums/Allposts";
@@ -95,8 +95,15 @@ export default function AdminForumsNew() {
   return (
     <div className="flex flex-col min-h-screen font-medium text-slate-700 bg-[#f8f8fb]">
       <main className="flex-grow pb-24">
+        <header className="bg-white shadow">
+          <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <h1 className="text-2xl font-bold text-gray-900 flex items-center">
+              <MdForum className="mr-4 text-blue-600" /> {/* Add the icon */}
+              Forums
+            </h1>
+          </div>
+        </header>
         <div className="max-w-8xl mx-auto px-24 gap-10 flex-col flex mt-8">
-          <h1 className="text-2xl font-bold text-slate-900 tracking-wide">Forums</h1>
 
           <div className="flex gap-10">
 
