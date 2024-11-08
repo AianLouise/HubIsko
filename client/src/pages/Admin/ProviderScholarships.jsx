@@ -138,7 +138,7 @@ export default function ProviderScholarships({ provider }) {
                   </div>
                 </div>
                 <Link
-                  to={`/scholarship-details/${scholarship._id}`}
+                  to={`/scholarship-program/${scholarship._id}`}
                   key={scholarship._id}
                   className='bg-blue-600 text-white p-2 flex justify-center items-center rounded-md my-4 text-sm lg:text-base font-medium hover:bg-blue-800 transition ease-in-out'
                 >

@@ -112,7 +112,7 @@ export default function StudentDetails() {
                     <BiCheck className="w-8 h-8 text-white" />
                   </div>
                 </div>
-                <p className='text-lg text-slate-500 font-medium'>Followers: N</p>
+                {/* <p className='text-lg text-slate-500 font-medium'>Followers: N</p> */}
               </div>
             </div>
           </div>
@@ -145,7 +145,7 @@ export default function StudentDetails() {
               className={`border text-center rounded-xl w-1/2 px-16 py-4 ${selectedTab === 'Posts' ? 'bg-white shadow-md' : 'bg-slate-200 hover:bg-slate-300'}`}
               onClick={() => handleTabClick('Posts')}
             >
-              Posts
+              Forum Posts
             </button>
           </div>
 

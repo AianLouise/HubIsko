@@ -72,7 +72,7 @@ export const getApplicantForumPosts = async (req, res) => {
                 return {
                     ...post._doc,
                     profilePicture: user.profilePicture,
-                    username: user.username,
+                    username: user.applicantDetails.firstName + ' ' + user.applicantDetails.lastName,
                 };
             })
         );

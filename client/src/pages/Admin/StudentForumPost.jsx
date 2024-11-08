@@ -44,7 +44,7 @@ const StudentForumPost = () => {
                 filteredPosts
                     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort posts by creation date in descending order
                     .map((post) => (
-                        <Link to={`/forums/post/${post._id}`} key={post._id}>
+                        <Link to={`/admin-forums/post/${post._id}`} key={post._id}>
                             <div
                                 className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow cursor-pointer hover:bg-slate-100 hover:-translate-y-1 transition ease-in-out'
                                 onClick={() => handlePostClick(post._id)}
@@ -105,10 +105,10 @@ const StudentForumPost = () => {
                                                 <span>{post.totalComments}</span>
                                             </div>
                                         </div>
-                                        <div className='flex flex-row gap-1 pr-2'>
+                                        {/* <div className='flex flex-row gap-1 pr-2'>
                                             <FaRegEye className='w-6 h-6 text-blue-600' />
                                             <span>{post.views}</span>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                             </div>

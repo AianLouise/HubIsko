@@ -42,6 +42,10 @@ const toSentenceCase = (str) => {
 const getAccountLink = (account) => {
     const buttonText = account.status === 'Pending Verification' ? 'Verify' : 'View Details';
 
+    if (account.status === 'Verify Account') {
+        return null; // Do not show any button if the status is "Verify Account"
+    }
+
     if (account.role === 'applicant') {
         const route = account.status === 'Pending Verification' ? `/student-applications/${account._id}` : `/student-details/${account._id}`;
         return <Link to={route} className="bg-blue-600 hover:bg-blue-800 px-4 py-1 rounded-md text-white">{buttonText}</Link>;
