@@ -12,6 +12,7 @@ import Modal from 'react-modal';
 import { FaInfoCircle, FaEdit, FaBullhorn, FaUsers, FaFileAlt, FaRedo } from 'react-icons/fa';
 import { FaPlay, FaCalendarPlus, FaPause, FaPlayCircle } from 'react-icons/fa';
 import { FaComments, FaPaperPlane } from 'react-icons/fa6';
+import { se } from 'date-fns/locale';
 
 export default function ViewScholarshipDetails() {
     useEffect(() => {
@@ -122,6 +123,7 @@ export default function ViewScholarshipDetails() {
     };
 
     const handlePublish = async () => {
+        setLoading(true);
         try {
             const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${id}/publish`, {
                 method: 'POST',
@@ -138,6 +140,8 @@ export default function ViewScholarshipDetails() {
         } catch (error) {
             console.error('Error publishing the program:', error);
             setError(error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -224,6 +228,7 @@ export default function ViewScholarshipDetails() {
     };
 
     const confirmPauseProgram = async () => {
+        setLoading(true);
         try {
             const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipProgram.id}/pause`, {
                 method: 'PUT',
@@ -239,10 +244,13 @@ export default function ViewScholarshipDetails() {
         } catch (error) {
             console.error('Error pausing the program:', error);
             setError(error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
     const confirmResumeProgram = async () => {
+        setLoading(true);
         try {
             const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipProgram.id}/resume`, {
                 method: 'PUT',
@@ -258,10 +266,13 @@ export default function ViewScholarshipDetails() {
         } catch (error) {
             console.error('Error resuming the program:', error);
             setError(error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
     const confirmExtendDeadline = async () => {
+        setLoading(true);
         try {
             const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipProgram.id}/extend-deadline`, {
                 method: 'PUT',
@@ -278,6 +289,8 @@ export default function ViewScholarshipDetails() {
         } catch (error) {
             console.error('Error extending the application deadline:', error);
             setError(error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -290,6 +303,7 @@ export default function ViewScholarshipDetails() {
     };
 
     const confirmOpenApplication = async () => {
+        setLoading(true);
         try {
             const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${scholarshipProgram.id}/republish`, {
                 method: 'PATCH',
@@ -311,6 +325,8 @@ export default function ViewScholarshipDetails() {
             setErrorMessage('Error republishing scholarship program');
             console.error('Error republishing scholarship program:', error);
             setIsConfirmModalOpen2(false);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -384,10 +400,11 @@ export default function ViewScholarshipDetails() {
                                             Cancel
                                         </button>
                                         <button
-                                            className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
+                                            className={`px-4 py-2 rounded-md text-white ${loading ? 'bg-yellow-400' : 'bg-yellow-500 hover:bg-yellow-600'}`}
                                             onClick={handlePublish}
+                                            disabled={loading}
                                         >
-                                            Confirm
+                                            {loading ? 'Publishing...' : 'Confirm'}
                                         </button>
                                     </div>
                                 </div>
@@ -489,15 +506,17 @@ export default function ViewScholarshipDetails() {
                                             Cancel
                                         </button>
                                         <button
-                                            className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600"
+                                            className={`px-4 py-2 rounded-md text-white ${loading ? 'bg-orange-400' : 'bg-orange-500 hover:bg-orange-600'}`}
                                             onClick={confirmPauseProgram}
+                                            disabled={loading}
                                         >
-                                            Confirm
+                                            {loading ? 'Pausing...' : 'Confirm'}
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         )}
+
                         {isResumeModalOpen && (
                             <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
                                 <div className="bg-white p-6 rounded-md shadow-md">
@@ -511,10 +530,11 @@ export default function ViewScholarshipDetails() {
                                             Cancel
                                         </button>
                                         <button
-                                            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+                                            className={`px-4 py-2 rounded-md text-white ${loading ? 'bg-green-400' : 'bg-green-500 hover:bg-green-600'}`}
                                             onClick={confirmResumeProgram}
+                                            disabled={loading}
                                         >
-                                            Confirm
+                                            {loading ? 'Resuming...' : 'Confirm'}
                                         </button>
                                     </div>
                                 </div>
@@ -546,10 +566,11 @@ export default function ViewScholarshipDetails() {
                                             Cancel
                                         </button>
                                         <button
-                                            className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600"
+                                            className={`px-4 py-2 rounded-md text-white ${loading ? 'bg-yellow-400' : 'bg-yellow-500 hover:bg-yellow-600'}`}
                                             onClick={confirmExtendDeadline}
+                                            disabled={loading}
                                         >
-                                            Confirm
+                                            {loading ? 'Extending...' : 'Confirm'}
                                         </button>
                                     </div>
                                 </div>
@@ -588,10 +609,11 @@ export default function ViewScholarshipDetails() {
                                         Cancel
                                     </button>
                                     <button
-                                        className="bg-teal-500 hover:bg-teal-600 text-white font-semibold px-4 py-2 rounded-md"
+                                        className={`px-4 py-2 rounded-md text-white ${loading ? 'bg-teal-400' : 'bg-teal-500 hover:bg-teal-600'}`}
                                         onClick={handleStartProgram}
+                                        disabled={loading}
                                     >
-                                        Confirm
+                                        {loading ? 'Starting...' : 'Confirm'}
                                     </button>
                                 </div>
                             </div>
@@ -626,10 +648,11 @@ export default function ViewScholarshipDetails() {
                                             Cancel
                                         </button>
                                         <button
-                                            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+                                            className={`px-4 py-2 rounded-md text-white ${loading ? 'bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700'}`}
                                             onClick={confirmOpenApplication}
+                                            disabled={loading}
                                         >
-                                            Confirm
+                                            {loading ? 'Republishing...' : 'Confirm'}
                                         </button>
                                     </div>
                                 </div>
