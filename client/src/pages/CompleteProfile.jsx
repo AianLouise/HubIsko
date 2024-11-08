@@ -708,6 +708,7 @@ export default function CompleteProfile() {
                   <option value="AB-">AB-</option>
                   <option value="O+">O+</option>
                   <option value="O-">O-</option>
+                  <option value="unknown">I don't know</option> {/* Added option for unknown blood type */}
                 </select>
               </div>
 
