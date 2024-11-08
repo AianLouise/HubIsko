@@ -219,7 +219,7 @@ const Step1 = ({ formData, setFormData }) => {
                         </div>
                     </div>
 
-                    <div className="mb-4">
+                                       <div className="mb-4">
                         <label htmlFor="registrationNumber" className="block text-sm font-medium text-gray-700">
                             Registration Number <span className="text-red-500">*</span>
                         </label>
@@ -230,7 +230,7 @@ const Step1 = ({ formData, setFormData }) => {
                             value={formData.registrationNumber}
                             onChange={handleChange}
                             className="mt-1 p-2 w-full border rounded-md"
-                            placeholder="SEC Reg. No.: CN199301543"
+                            placeholder="Enter your registration number"
                             required
                         />
                         <div className="mt-1 text-xs text-gray-600">
