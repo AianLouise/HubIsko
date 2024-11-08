@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { FaRegHeart, FaHeart, FaRegEye } from "react-icons/fa";
+import { FaRegHeart, FaHeart, FaRegEye, FaEllipsisV } from "react-icons/fa";
 import { BiCommentDots } from "react-icons/bi";
 import { IoMdAdd, IoMdArrowDropdown } from "react-icons/io";
 import Modal from 'react-modal';
@@ -12,7 +12,7 @@ import CommentForm from './CommentForm';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { AiFillFilePdf, AiFillFileWord } from 'react-icons/ai';
 import { MdForum, MdOutlineForum } from 'react-icons/md';
-import { FaComments } from 'react-icons/fa6';
+import { FaComments, FaEllipsis } from 'react-icons/fa6';
 
 Modal.setAppElement('#root');
 
@@ -281,6 +281,59 @@ export default function ForumPost() {
         }
     };
 
+    const [showDropdown2, setShowDropdown2] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const dropdownRef = useRef(null);
+
+    const toggleDropdown2 = () => {
+        setShowDropdown2(!showDropdown);
+    };
+
+    const handleDeleteClick = () => {
+        setShowModal(true);
+        setShowDropdown2(false);
+    };
+
+    const handleConfirmDelete = async () => {
+        try {
+            const response = await fetch(`/api/forums/post/${post._id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${currentUser.token}`, // Assuming you have a token in currentUser
+                },
+            });
+
+            if (response.ok) {
+                // onDelete(post._id); // Call the onDelete function to update the UI
+                navigate(-1); // Navigate back to the previous page
+            } else {
+                console.error('Failed to delete post');
+            }
+        } catch (error) {
+            console.error('Error deleting post:', error);
+        } finally {
+            setShowModal(false);
+        }
+    };
+
+    const handleCancelDelete = () => {
+        setShowModal(false);
+    };
+
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setShowDropdown2(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     if (!post) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -317,49 +370,92 @@ export default function ForumPost() {
                     </div>
 
                     <div className='border shadow p-4 rounded-md bg-white'>
-                        <div className='flex gap-4'>
-                            <Link
-                                to={
-                                    currentUser && currentUser._id === post.author._id
-                                        ? post.author.role === 'admin'
-                                            ? `/admin-profile/${post.author._id}`
-                                            : post.author.role === 'scholarship_provider'
-                                                ? `/provider-profile/${post.author._id}`
-                                                : post.author.role === 'applicant'
-                                                    ? `/profile`
-                                                    : `/profile/${post.author._id}`
-                                        : `/profile/${post.author._id}`
-                                }
-                            >
-                                <img
-                                    src={post.author.profilePicture}
-                                    alt={`${post.author.role === 'applicant'
-                                        ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}`
-                                        : post.author.role === 'admin'
-                                            ? `${post.author.username}`
-                                            : `${post.author.scholarshipProviderDetails.organizationName}`}'s profile`}
-                                    className='w-12 h-12 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
-                                />
-                            </Link>
-                            <div className='flex flex-col'>
-                                <span className='font-bold text-lg'>
-                                    {post.author.role === 'applicant'
-                                        ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}`
-                                        : post.author.role === 'admin'
-                                            ? `${post.author.username}`
-                                            : `${post.author.scholarshipProviderDetails.organizationName}`}
-                                </span>
-                                <span className='text-sm text-slate-500'>
-                                    {new Date(post.createdAt).toLocaleString('en-US', {
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric',
-                                        hour: 'numeric',
-                                        minute: 'numeric',
-                                        hour12: true,
-                                    })}
-                                </span>
+                        <div className='flex justify-between items-start'>
+                            <div className='flex gap-4'>
+                                <Link
+                                    to={
+                                        currentUser && currentUser._id === post.author._id
+                                            ? post.author.role === 'admin'
+                                                ? `/admin-profile/${post.author._id}`
+                                                : post.author.role === 'scholarship_provider'
+                                                    ? `/provider-profile/${post.author._id}`
+                                                    : post.author.role === 'applicant'
+                                                        ? `/profile`
+                                                        : `/profile/${post.author._id}`
+                                            : `/profile/${post.author._id}`
+                                    }
+                                >
+                                    <img
+                                        src={post.author.profilePicture}
+                                        alt={`${post.author.role === 'applicant'
+                                            ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}`
+                                            : post.author.role === 'admin'
+                                                ? `${post.author.username}`
+                                                : `${post.author.scholarshipProviderDetails.organizationName}`}'s profile`}
+                                        className='w-12 h-12 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
+                                    />
+                                </Link>
+                                <div className='flex flex-col'>
+                                    <span className='font-bold text-lg'>
+                                        {post.author.role === 'applicant'
+                                            ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}`
+                                            : post.author.role === 'admin'
+                                                ? `${post.author.username}`
+                                                : `${post.author.scholarshipProviderDetails.organizationName}`}
+                                    </span>
+                                    <span className='text-sm text-slate-500'>
+                                        {new Date(post.createdAt).toLocaleString('en-US', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                            hour: 'numeric',
+                                            minute: 'numeric',
+                                            hour12: true,
+                                        })}
+                                    </span>
+                                </div>
                             </div>
+                            {currentUser && currentUser._id === post.author._id && (
+                                <div className='relative' ref={dropdownRef}>
+                                    <button onClick={toggleDropdown2} className='focus:outline-none'>
+                                        <FaEllipsis className='text-gray-600 hover:text-gray-800' />
+                                    </button>
+                                    {showDropdown2 && (
+                                        <div className='absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-10'>
+                                            <button
+                                                onClick={handleDeleteClick}
+                                                className='block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100'
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {showModal && (
+                                <div className='fixed inset-0 flex items-center justify-center z-50'>
+                                    <div className='absolute inset-0 bg-black opacity-50'></div>
+                                    <div className='bg-white p-6 rounded-md shadow-lg z-10'>
+                                        <h2 className='text-lg font-semibold mb-4'>Confirm Delete</h2>
+                                        <p className='mb-4'>Are you sure you want to delete this post?</p>
+                                        <div className='flex justify-end gap-4'>
+                                            <button
+                                                onClick={handleCancelDelete}
+                                                className='px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400'
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                onClick={handleConfirmDelete}
+                                                className='px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700'
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                         <div className='mt-6 flex flex-col gap-2 pl-2 pb-4'>
                             <span className='text-left text-3xl font-bold'>{post.title}</span>

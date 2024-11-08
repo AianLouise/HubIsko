@@ -9,7 +9,8 @@ import {
   getCommentById, 
   deleteComment,
   addReplyToComment,
-  getUserById
+  getUserById,
+  deletePost
 } from '../controllers/forum.controller.js';
 import { verifyToken } from '../utils/verifyUser.js';
 
@@ -44,5 +45,8 @@ router.post('/comment/reply/:commentId', verifyToken, addReplyToComment);
 
 // Route to get a specific user by their ID
 router.get('/user/:id', getUserById);
+
+// Route to delete a specific post by its ID
+router.delete('/post/:postId', verifyToken, deletePost); // Add the deletePost route
 
 export default router;

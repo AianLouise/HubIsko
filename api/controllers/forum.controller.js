@@ -317,3 +317,39 @@ export const getUserById = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
+export const deletePost = async (req, res) => {
+  try {
+    const post = await ForumPost.findById(req.params.postId);
+    if (!post) {
+      return res.status(404).json({ msg: 'Post not found' });
+    }
+
+    // Ensure the user is the author of the post or an admin
+    if (post.author.toString() !== req.user.id && req.user.role !== 'admin') {
+      return res.status(401).json({ msg: 'User not authorized' });
+    }
+
+    // Remove all comments associated with the post
+    await Comment.deleteMany({ post: req.params.postId });
+
+    // Remove the post
+    await post.deleteOne();
+
+    // Create an activity log entry for deleting the post
+    const activityLog = new ActivityLog({
+      userId: req.user.id,
+      action: 'DELETE_POST',
+      type: 'forum',
+      details: `Post with title: ${post.title} was deleted`
+    });
+
+    await activityLog.save();
+    console.log('Activity log saved:', activityLog);
+
+    res.json({ msg: 'Post removed' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+};
