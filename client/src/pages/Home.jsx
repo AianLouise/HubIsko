@@ -95,11 +95,11 @@ export default function Home() {
       <main className="flex-grow bg-[#f8f8fb] no-scrollbar"> {/* Main content grows to fill available space */}
         <div className=''>
           <div className='text-center lg:px-56 py-20'>
-            <h1 className='text-4xl sm:px-none lg:text-8xl font-bold text-slate-800 lg:px-20'>
-              Explore Scholarships through <span className='text-blue-600'>technology.</span>
+            <h1 className='text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-slate-800 px-4 sm:px-8 md:px-12 lg:px-20'>
+              Explore <span className='text-blue-600'>Scholarships</span> Through <span className='text-blue-600'>Technology.</span>
             </h1>
-            <h4 className='pt-10  text-sm lg:text-2xl font-medium text-slate-700'>
-              A scholarship management system for your locale!
+            <h4 className='pt-10 text-sm lg:text-2xl font-medium text-slate-700'>
+              A Scholarship Management System for Your Locale!
             </h4>
             <div className='mt-8 flex gap-4 justify-center'>
 
@@ -313,7 +313,7 @@ export default function Home() {
 
                     {/* Text content */}
                     <div className='flex flex-col justify-center text-left w-[800px] px-10  lg:px-20 pt-16 pb-32 gap-3'>
-                      <FaTools className='w-16 h-16 text-blue-600 mb-4'/>
+                      <FaTools className='w-16 h-16 text-blue-600 mb-4' />
                       <div className='text-2xl lg:text-4xl font-bold'>
                         Scholar Tools
                       </div>

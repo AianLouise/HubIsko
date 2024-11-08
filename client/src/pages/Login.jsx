@@ -231,7 +231,7 @@ export default function SignIn() {
                 <p className="mb-6 text-center">Choose your registration type:</p>
                 <div className="flex flex-col gap-4">
                   <Link to="/register" className="bg-blue-500 text-white py-2 px-4 rounded text-center hover:bg-blue-600 transition duration-200">
-                    Register as Student
+                    Register as a Student
                   </Link>
 
                   <div className='w-full flex flex-col'>
@@ -240,9 +240,9 @@ export default function SignIn() {
                       className={`bg-blue-800 py-2 px-4 rounded text-center hover:bg-blue-900 transition duration-200 ${isMobile ? 'pointer-events-none opacity-50 bg-white text-blue-600 border-2 font-medium' : 'text-white '}`}
                       onClick={(e) => isMobile && e.preventDefault()}
                     >
-                      Register as Scholarship Provider
+                      Register as a Scholarship Provider
                     </Link>
-                    <span className='block lg:hidden mt-1 text-slate-400 text-xs text-center'>This function isn't available on Mobile</span>
+                    <span className='block lg:hidden mt-1 text-slate-400 text-xs text-center'>This function isn't available on mobile</span>
                   </div>
                 </div>
               </div>

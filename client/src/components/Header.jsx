@@ -327,13 +327,13 @@ export default function Header() {
                 {dropdownVisible && (
                   <ul className="absolute bg-white shadow-lg rounded-lg mt-2 w-64 left-1/2 transform -translate-x-1/2 border border-gray-200">
                     <Link to='/register'>
-                      <li className='p-2 px-4 hover:bg-gray-100 text-center cursor-pointer'>
-                        Register as Student
+                      <li className='p-2 px-4 bg-white hover:bg-blue-600 hover:text-white text-center cursor-pointer rounded-t-lg border-b border-blue-600'>
+                        Register as a Student
                       </li>
                     </Link>
                     <Link to='/apply-as-provider'>
-                      <li className='p-2 px-4 hover:bg-gray-100 text-center cursor-pointer'>
-                        Register as Scholarship Provider
+                      <li className='p-2 px-4 bg-white hover:bg-blue-600 hover:text-white text-center cursor-pointer rounded-b-lg'>
+                        Register as a Scholarship Provider
                       </li>
                     </Link>
                   </ul>

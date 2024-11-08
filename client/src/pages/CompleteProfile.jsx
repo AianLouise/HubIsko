@@ -970,7 +970,7 @@ export default function CompleteProfile() {
         {currentStep === 2 && (
           <div className="step-container">
             <div className="bg-blue-600 text-white p-4 rounded-t-lg">
-              <span className='text-lg font-bold'>Education Information</span>
+              <span className='text-lg font-bold'>Educational Information</span>
             </div>
 
             <div className='p-4 education-form'>
