@@ -48,7 +48,8 @@ export default function ApplicationInbox() {
           log.action === 'APPROVE_SCHOLARSHIP_PROVIDER' ||
           log.action === 'APPROVE_STUDENT' ||
           log.action === 'SIGNUP_PROVIDER' ||
-          log.action === 'CREATE'
+          log.action === 'CREATE' ||
+          log.action === 'COMPLETE_PROFILE'
         ) : [];
         setActivityLogs(filteredLogs); // Ensure data is an array
       } catch (error) {
@@ -72,13 +73,15 @@ export default function ApplicationInbox() {
   const formatDetails = (log) => {
     switch (log.action) {
       case 'APPROVE_SCHOLARSHIP_PROVIDER':
-        return `Scholarship provider successfully verified by admin: ${getUserDisplayName(log.userId)}`;
+        return `Scholarship provider successfully verified by ${getUserDisplayName(log.userId)}. Details: ${log.details}`;
       case 'APPROVE_STUDENT':
-        return `Student successfully verified by admin: ${getUserDisplayName(log.userId)}`;
+        return `Student successfully verified by ${getUserDisplayName(log.userId)}. Details: ${log.details}`;
       case 'SIGNUP_PROVIDER':
         return `New provider created an account and applied for verification: ${getUserDisplayName(log.userId)}`;
       case 'CREATE':
         return `Student passed an application to be verified: ${getUserDisplayName(log.userId)}`;
+      case 'COMPLETE_PROFILE':
+        return `Student completed their profile and sent an application to be verified: ${getUserDisplayName(log.userId)}`;
       default:
         return log.action;
     }
