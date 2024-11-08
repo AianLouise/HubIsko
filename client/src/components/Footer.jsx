@@ -17,10 +17,10 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Center Section: Links */}
+          {/* Center Section: Linksss */}
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-8 text-center lg:text-left mb-6 lg:mb-0">
             <a href="/privacy-policy" className="hover:text-blue-400">Privacy Policy</a>
-            <a href="/terms-of-use" className="hover:text-blue-400">Terms of Use</a>
+            <a href="/terms-of-use" className="hover:text-blue-400">Terms of Use</a> 
             <a href="/about" className="hover:text-blue-400">About Us</a>
           </div>
 
