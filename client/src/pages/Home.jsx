@@ -94,11 +94,11 @@ export default function Home() {
       <Header />
       <main className="flex-grow bg-[#f8f8fb] no-scrollbar"> {/* Main content grows to fill available space */}
         <div className=''>
-          <div className='text-center lg:px-56 py-20'>
-            <h1 className='text-4xl sm:px-none lg:text-8xl font-bold text-slate-800 lg:px-20'>
+          <div className='text-center py-32 lg:px-56 lg:py-44'>
+            <h1 className='text-4xl sm:px-none lg:text-8xl font-black text-slate-800 lg:px-20'>
               Explore Scholarships through <span className='text-blue-600'>technology.</span>
             </h1>
-            <h4 className='pt-10  text-sm lg:text-2xl font-medium text-slate-700'>
+            <h4 className='pt-12 text-sm lg:text-2xl font-medium text-slate-700'>
               A scholarship management system for your locale!
             </h4>
             <div className='mt-8 flex gap-4 justify-center'>
@@ -143,8 +143,8 @@ export default function Home() {
           </div>
         </div>
         <div className='px-4 max-w-6xl mx-auto'>
-          <div className='border shadow-2xl rounded-md mb-10 lg:mb-40 w-full max-w-6xl transition-all hover:-translate-y-2 bg-white'>
-            <h1 className='text-center lg:text-left bg-blue-600 p-4 text-white font-bold text-lg lg:text-2xl rounded-t-md'>
+          <div className='lg:block hidden border shadow-2xl rounded-md mb-10 lg:mb-40 w-full max-w-6xl transition-all hover:-translate-y-2 bg-white'>
+            {/* <h1 className='text-center lg:text-left bg-blue-600 p-4 text-white font-bold text-lg lg:text-2xl rounded-t-md'>
               Our Goal
             </h1>
             <p className='mb-4 text-slate-700 p-4 lg:px-8 font-medium text-sm lg:text-base'>
@@ -165,20 +165,20 @@ export default function Home() {
             <p className='text-slate-700 p-4 lg:px-8 font-medium text-sm lg:text-base'>
               Join HubIsko in achieving our mission to make education more accessible and to
               empower students and organizations with the tools they need to succeed.
-            </p>
+            </p> */}
           </div>
 
 
           <div className='text-slate-700 w-full mb-40 rounded-md p-4 '>
 
-            <div className='font-bold text-2xl lg:text-4xl w-full text-center mb-10'>Browse Our Features</div>
+            <div className='font-bold text-2xl lg:text-5xl w-full text-center mb-14'>Browse Our Features</div>
 
             <div className='m-2 flex flex-col justify-between gap-2 items-center text-center'>
-              <div className=' hidden lg:flex flex-row gap-3 font-semibold mb-6'>
-                <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 ${selectedTab === 'Explore Resources' ? 'bg-white shadow-md hover:bg-white' : ''}`} onClick={() => handleTabClick('Explore Resources')}>Scholarship Finder</button>
-                <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 ${selectedTab === 'Fast Processing' ? 'bg-white shadow-md hover:bg-white' : ''}`} onClick={() => handleTabClick('Fast Processing')} >Automated Processing</button>
-                <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 ${selectedTab === 'Organization Tools' ? 'bg-white shadow-md hover:bg-white' : ''}`} onClick={() => handleTabClick('Organization Tools')} >Scholar Dashboard</button>
-                <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 ${selectedTab === 'Enhanced Security' ? 'bg-white shadow-md hover:bg-white' : ''}`} onClick={() => handleTabClick('Enhanced Security')}>Forums</button>
+              <div className=' hidden lg:flex flex-row gap-3 mb-6'>
+                <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 transition-all ease-in-out ${selectedTab === 'Explore Resources' ? 'bg-white shadow-md hover:bg-white font-bold' : ''}`} onClick={() => handleTabClick('Explore Resources')}>Scholarship Finder</button>
+                <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 transition-all ease-in-out ${selectedTab === 'Fast Processing' ? 'bg-white shadow-md hover:bg-white font-bold' : ''}`} onClick={() => handleTabClick('Fast Processing')} >Automated Processing</button>
+                <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 transition-all ease-in-out ${selectedTab === 'Organization Tools' ? 'bg-white shadow-md hover:bg-white font-bold' : ''}`} onClick={() => handleTabClick('Organization Tools')} >Scholar Dashboard</button>
+                <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 transition-all ease-in-out ${selectedTab === 'Enhanced Security' ? 'bg-white shadow-md hover:bg-white font-bold' : ''}`} onClick={() => handleTabClick('Enhanced Security')}>Forums</button>
               </div>
 
               {selectedTab === 'Explore Resources' && (
@@ -547,7 +547,7 @@ export default function Home() {
                     <div className='pb-2 font-bold text-md lg:text-xl'>Ready to register as a student and be part of our community?</div>
                     <p className='text-sm lg:text-lg text-slate-500 font-medium'>Join us! It's completely free!</p>
                     <div className='flex flex-row justify-between items-center'>
-                      <Link to="/register" className="mt-4 bg-blue-600 text-white p-2 rounded-md lg:rounded-full font-medium px-3 lg:px-4 flex flex-row items-center gap-2 cursor-pointer">
+                      <Link to="/register" className="mt-4 bg-blue-600 text-white p-2 hover:bg-blue-800 transition ease-in-out rounded-md lg:rounded-full font-medium px-3 lg:px-4 flex flex-row items-center gap-2 cursor-pointer">
                         Register as Student <FaAngleRight />
                       </Link>
 
@@ -563,7 +563,7 @@ export default function Home() {
                     <div className='pb-2 font-bold text-md lg:text-xl'>Are you looking to provide scholarships to deserving students?</div>
                     <p className='text-sm lg:text-lg text-slate-500 font-medium'>We're looking to help you!</p>
                     <div className='flex flex-row justify-between items-center'>
-                      <Link to="/apply-as-provider" className="mt-4 bg-blue-600 text-white p-2 rounded-md lg:rounded-full font-medium px-3 lg:px-4 flex flex-row items-center gap-2 cursor-pointer">
+                      <Link to="/apply-as-provider" className="mt-4 bg-blue-600 hover:bg-blue-800 transition ease-in-out  text-white p-2 rounded-md lg:rounded-full font-medium px-3 lg:px-4 flex flex-row items-center gap-2 cursor-pointer">
                         Apply as a Provider <FaAngleRight />
                       </Link>
 
