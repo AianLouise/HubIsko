@@ -15,7 +15,7 @@ const activityLogSchema = new Schema({
   type: {
     type: String,
     required: true,
-    enum: ['account', 'scholarship'] // Added type field with choices
+    enum: ['account', 'scholarship', 'forum'] // Added type field with choices
   },
   timestamp: {
     type: Date,

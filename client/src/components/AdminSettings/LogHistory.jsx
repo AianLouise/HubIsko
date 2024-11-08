@@ -102,6 +102,12 @@ const LogHistory = () => {
                     >
                         Scholarships ({activityLogs.filter(log => log.type === 'scholarship').length})
                     </button>
+                    <button
+                        className={`px-4 py-2 rounded-md ${filter === 'forum' ? 'bg-blue-600 text-white' : 'bg-white border shadow'}`}
+                        onClick={() => setFilter('forum')}
+                    >
+                        Forums ({activityLogs.filter(log => log.type === 'forum').length})
+                    </button>
                 </div>
 
                 <input

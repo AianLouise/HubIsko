@@ -1,6 +1,7 @@
 import ForumPost from '../models/forumPost.model.js';
 import Comment from '../models/comment.model.js';
 import User from '../models/user.model.js';
+import ActivityLog from '../models/activityLog.model.js'; // Adjust the import path as necessary
 
 export const createPost = async (req, res) => {
   const { title, content, author, attachmentUrls } = req.body;
@@ -14,6 +15,18 @@ export const createPost = async (req, res) => {
     });
 
     const post = await newPost.save();
+
+    // Create an activity log entry for creating a post
+    const activityLog = new ActivityLog({
+      userId: author,
+      action: 'CREATE_POST',
+      type: 'forum',
+      details: `Post created with title: ${title}`
+    });
+
+    await activityLog.save();
+    console.log('Activity log saved:', activityLog);
+
     res.json(post);
   } catch (err) {
     console.error(err.message);
@@ -121,6 +134,18 @@ export const addComment = async (req, res) => {
     const comment = await newComment.save();
     post.comments.push(comment.id);
     await post.save();
+
+    // Create an activity log entry for adding a comment
+    const activityLog = new ActivityLog({
+      userId: req.user.id,
+      action: 'ADD_COMMENT',
+      type: 'forum',
+      details: `Comment added to post with title: ${post.title}`
+    });
+
+    await activityLog.save();
+    console.log('Activity log saved:', activityLog);
+
     res.json(comment);
   } catch (err) {
     console.error(err.message);
@@ -134,12 +159,29 @@ export const likePost = async (req, res) => {
     if (!post) {
       return res.status(404).json({ msg: 'Post not found' });
     }
+
+    let action;
     if (post.likes.includes(req.user.id)) {
       post.likes = post.likes.filter(like => like.toString() !== req.user.id);
+      action = 'UNLIKE_POST';
     } else {
       post.likes.push(req.user.id);
+      action = 'LIKE_POST';
     }
+
     await post.save();
+
+    // Create an activity log entry for liking or unliking a post
+    const activityLog = new ActivityLog({
+      userId: req.user.id,
+      action: action,
+      type: 'forum',
+      details: `${action === 'LIKE_POST' ? 'Liked' : 'Unliked'} post with title: ${post.title}`
+    });
+
+    await activityLog.save();
+    console.log('Activity log saved:', activityLog);
+
     res.json(post);
   } catch (err) {
     console.error(err.message);
@@ -153,20 +195,35 @@ export const likeComment = async (req, res) => {
     if (!comment) {
       return res.status(404).json({ msg: 'Comment not found' });
     }
+
+    let action;
     if (comment.likes.includes(req.user.id)) {
       comment.likes = comment.likes.filter(like => like.toString() !== req.user.id);
+      action = 'UNLIKE_COMMENT';
     } else {
       comment.likes.push(req.user.id);
+      action = 'LIKE_COMMENT';
     }
+
     await comment.save();
+
+    // Create an activity log entry for liking or unliking a comment
+    const activityLog = new ActivityLog({
+      userId: req.user.id,
+      action: action,
+      type: 'forum',
+      details: `${action === 'LIKE_COMMENT' ? 'Liked' : 'Unliked'} comment with content: ${comment.content}`
+    });
+
+    await activityLog.save();
+    console.log('Activity log saved:', activityLog);
+
     res.json(comment);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
   }
 };
-
-
 
 export const getCommentById = async (req, res) => {
   try {
