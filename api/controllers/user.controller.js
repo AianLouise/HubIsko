@@ -234,6 +234,17 @@ export const changePassword = async (req, res, next) => {
     user.password = await bcryptjs.hash(newPassword, salt);
     await user.save();
 
+    // Create an activity log entry for changing the password
+    const activityLog = new ActivityLog({
+      userId: id,
+      action: 'CHANGE_PASSWORD',
+      type: 'account',
+      details: `Password changed for user ${user.email}`
+    });
+
+    await activityLog.save();
+    console.log('Activity log saved:', activityLog);
+
     res.status(200).send('Password successfully changed');
   } catch (error) {
     next(errorHandler(500, 'Server error'));

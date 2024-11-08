@@ -3,6 +3,7 @@ import ScholarshipProgram from "../models/scholarshipProgram.model.js"; // Impor
 import ForumPost from "../models/forumPost.model.js"; // Import the ForumPost model
 import nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken';
+import ActivityLog from '../models/activityLog.model.js'; // Adjust the import path as necessary
 
 export const test = (req, res) => {
     res.json({
@@ -106,6 +107,17 @@ export const editUserInfo = async (req, res) => {
         // Save the updated user information
         await user.save();
 
+        // Create an activity log entry for editing user information
+        const activityLog = new ActivityLog({
+            userId: userId,
+            action: 'EDIT_USER_INFO',
+            type: 'account',
+            details: `User information updated for ${user.applicantDetails.firstName} ${user.applicantDetails.lastName}`
+        });
+
+        await activityLog.save();
+        console.log('Activity log saved:', activityLog);
+
         // Send the updated user information as a JSON response
         res.json({ message: 'User information updated successfully', user });
     } catch (error) {
@@ -132,10 +144,22 @@ export const editAddress = async (req, res) => {
         // Save the updated user information
         await user.save();
 
+        // Create an activity log entry for editing the address
+        const activityLog = new ActivityLog({
+            userId: userId,
+            action: 'EDIT_ADDRESS',
+            type: 'account',
+            details: `Address updated for ${user.applicantDetails.firstName} ${user.applicantDetails.lastName}`
+        });
+
+        await activityLog.save();
+        console.log('Activity log saved:', activityLog);
+
         // Send the updated user information as a response
         res.json({ message: 'Address updated successfully', user });
     } catch (error) {
         // Handle server errors
+        console.error('Error updating address:', error);
         res.status(500).json({ message: 'Server error', error });
     }
 };
@@ -159,10 +183,22 @@ export const editEducation = async (req, res) => {
         // Save the updated user information
         await user.save();
 
+        // Create an activity log entry for editing the education
+        const activityLog = new ActivityLog({
+            userId: userId,
+            action: 'EDIT_EDUCATION',
+            type: 'account',
+            details: `Education updated for ${user.applicantDetails.firstName} ${user.applicantDetails.lastName}`
+        });
+
+        await activityLog.save();
+        console.log('Activity log saved:', activityLog);
+
         // Send the updated user information as a response
         res.json({ message: 'Education updated successfully', user });
     } catch (error) {
         // Handle server errors
+        console.error('Error updating education:', error);
         res.status(500).json({ message: 'Server error', error });
     }
 };
@@ -247,8 +283,20 @@ export const verifyEmail = async (req, res) => {
         // Save the user document
         await user.save();
 
+        // Create an activity log entry for verifying the email
+        const activityLog = new ActivityLog({
+            userId: user._id,
+            action: 'VERIFY_EMAIL',
+            type: 'account',
+            details: `Email verified for ${user.email}`
+        });
+
+        await activityLog.save();
+        console.log('Activity log saved:', activityLog);
+
         res.json({ message: 'Email verified successfully' });
     } catch (error) {
+        console.error('Error verifying email:', error);
         res.status(500).json({ message: 'Server error', error });
     }
 };
@@ -276,6 +324,17 @@ export const updateProfile = async (req, res) => {
         if (!updatedUser) {
             return res.status(404).json({ message: 'User not found' });
         }
+
+        // Create an activity log entry for updating the profile picture
+        const activityLog = new ActivityLog({
+            userId: userId,
+            action: 'UPDATE_PROFILE_PICTURE',
+            type: 'account',
+            details: `Profile picture updated for ${updatedUser.applicantDetails.firstName} ${updatedUser.applicantDetails.lastName}`
+        });
+
+        await activityLog.save();
+        console.log('Activity log saved:', activityLog);
 
         // Respond with the updated user data
         res.status(200).json({
