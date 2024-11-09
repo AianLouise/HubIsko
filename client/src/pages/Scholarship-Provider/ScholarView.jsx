@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { BsArrowLeft } from 'react-icons/bs';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import ApplicationForm from '../ApplicationForm';
 import ProviderHeaderSidebar from '../../components/ProviderHeaderAndSidebar';
-import Modal from 'react-modal';
 import { FaArrowLeft, FaUser } from 'react-icons/fa6';
 
 export default function ScholarView() {
@@ -19,14 +17,8 @@ export default function ScholarView() {
 
     const { id } = useParams();
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState('scholars');
     const [scholar, setScholar] = useState(null);
     const [isValidated, setIsValidated] = useState(false);
-    const [isTerminateModalOpen, setIsTerminateModalOpen] = useState(false);
-
-    const handleTabChange = (tab) => {
-        setActiveTab(tab);
-    };
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -112,38 +104,17 @@ export default function ScholarView() {
                         </div>
                     </div>
 
-                    <div className="tabs flex justify-center border-b mb-6">
-                        {[
-                            { label: 'Scholar Details', value: 'scholars' },
-                        ].map((tab) => (
-                            <button
-                                key={tab.value}
-                                className={`tab px-4 py-2 mx-2 transition-colors duration-300 ${activeTab === tab.value
-                                    ? 'border-b-2 border-blue-600 text-blue-600'
-                                    : 'text-gray-600 hover:text-blue-600'
-                                    }`}
-                                onClick={() => handleTabChange(tab.value)}
-                            >
-                                {tab.label}
-                            </button>
-                        ))}
-                    </div>
-
-                    <div className='content'>
-                        {activeTab === 'scholars' && (
-                            <div className='flex flex-col gap-4'>
-                                <div className='flex justify-between items-center gap-4'>
-                                    <span className='text-2xl font-bold'>Scholar Details</span>
-                                    <div className="flex justify-end">
-                                        <button onClick={printScholarDetails} className="bg-blue-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-blue-800">
-                                            Print Scholar Details
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <ApplicationForm printScholarDetails={printScholarDetails} />
+                    <div className='flex flex-col gap-4'>
+                        <div className='flex justify-between items-center gap-4'>
+                            <span className='text-2xl font-bold'>Scholar Details</span>
+                            <div className="flex justify-end">
+                                <button onClick={printScholarDetails} className="bg-blue-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-blue-800">
+                                    Print Scholar Details
+                                </button>
                             </div>
-                        )}
+                        </div>
+
+                        <ApplicationForm printScholarDetails={printScholarDetails} />
                     </div>
                 </div>
             </main>

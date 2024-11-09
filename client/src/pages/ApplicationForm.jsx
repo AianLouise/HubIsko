@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 import { regions, provinces, cities, barangays } from 'select-philippines-address';
 import Modal from 'react-modal';
-import ImageModal from '../components/AdminImageModal';
 
 export default function ApplicationForm() {
     useTokenExpiry();
 
     const navigate = useNavigate();
     const { currentUser } = useSelector((state) => state.user);
-
-    const toggleModal = () => {
-        setShowModal(!showModal);
-    }
 
     const [application, setApplication] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -106,19 +101,6 @@ export default function ApplicationForm() {
         navigate(`/resubmit-application/${application._id}`); // Navigate to the resubmit application page
     };
 
-    const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
-    const [selectedDocument, setSelectedDocument] = useState({ name: '', url: '' });
-
-    const openDocumentModal = (name, url) => {
-        setSelectedDocument({ name, url });
-        setIsDocumentModalOpen(true);
-    };
-
-    const closeDocumentModal = () => {
-        setIsDocumentModalOpen(false);
-        setSelectedDocument({ name: '', url: '' });
-    };
-
     if (!application || !currentUser) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -132,9 +114,30 @@ export default function ApplicationForm() {
 
     return (
         <div>
-            <div className="border shadow rounded-md h-auto p-4 sm:p-10 bg-white">
+            <style>
+                {`
+                    @media print {
+                        body {
+                            font-size: 10px;
+                        }
+                        .text-md {
+                            font-size: 12px;
+                        }
+                        .text-lg {
+                            font-size: 14px;
+                        }
+                        .text-xl {
+                            font-size: 16px;
+                        }
+                        .text-2xl {
+                            font-size: 18px;
+                        }
+                    }
+                `}
+            </style>
+            <div className="border shadow rounded-md h-auto p-4 sm:p-10 bg-white text-sm">
                 <div className="flex justify-between items-center">
-                    <span className="text-2xl">Submitted details for: <span className='text-blue-600 font-bold'>{application.scholarshipProgram.title}</span></span>
+                    <span className="text-xl">Submitted details for: <span className='text-blue-600 font-bold'>{application.scholarshipProgram.title}</span></span>
                 </div>
                 <div id="scholar-details" className="mt-4">
                     {/* Application Status */}
@@ -176,12 +179,29 @@ export default function ApplicationForm() {
                     )}
 
                     <div className="mt-4 p-2 sm:p-4 py-6">
-                        <div>
-                            <p className="text-lg font-semibold">
-                                <strong>Name:</strong> {`${application.applicant.applicantDetails.lastName}, ${application.applicant.applicantDetails.firstName} ${application.applicant.applicantDetails.middleName}`}
-                            </p>
-                            <p><strong>Email:</strong> {application.applicant.email}</p>
-                            <p className="text-sm text-gray-600"><strong>Submitted Date:</strong> {new Date(application.createdAt).toLocaleDateString()}</p>
+                        <div className="flex items-center space-x-4">
+                            <img
+                                src={application.applicant.profilePicture}
+                                alt="Profile"
+                                className="w-16 h-16 rounded-full border border-gray-300"
+                            />
+                            <div>
+                                <p className="text-lg font-semibold">
+                                    <strong>Name:</strong> {`${application.applicant.applicantDetails.lastName}, ${application.applicant.applicantDetails.firstName} ${application.applicant.applicantDetails.middleName}`}
+                                </p>
+                                <p><strong>Email:</strong> {application.applicant.email}</p>
+                                <p className="text-sm text-gray-600">
+                                    <strong>Submitted Date:</strong> {new Date(application.createdAt).toLocaleDateString('en-US', {
+                                        weekday: 'long',
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        second: '2-digit'
+                                    })}
+                                </p>
+                            </div>
                         </div>
                     </div>
 
@@ -293,30 +313,22 @@ export default function ApplicationForm() {
                     )}
 
                     <div className="p-2 sm:p-4">
-                        <div className="my-2">
+                        <div className="my-2" style={{ pageBreakBefore: 'always' }}>
                             <h3 className="text-md text-blue-600 font-bold mb-2 border-b">Documents</h3>
                             <div className="px-2 sm:px-4 pt-2">
                                 {application.documents && Object.entries(application.documents).map(([key, value], index) => (
-                                    <div key={index} className="flex items-center mb-2">
-                                        <strong className="w-1/3 text-sm">{key.replace(/_/g, ' ')}:</strong>
-                                        <div className="w-2/3 flex justify-end items-center">
-                                            <button
-                                                onClick={() => openDocumentModal(key, value)}
-                                                className="ml-2 bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 text-xs"
-                                            >
-                                                View Document
-                                            </button>
-                                        </div>
+                                    <div key={index} className="mb-4" style={{ pageBreakAfter: 'always' }}>
+                                        <strong className="block text-sm mb-2">{key.replace(/_/g, ' ')}:</strong>
+                                        <img
+                                            src={value}
+                                            alt={key}
+                                            className="w-full border border-gray-300 rounded"
+                                            style={{ height: '500px', objectFit: 'contain' }}
+                                        />
                                     </div>
                                 ))}
                             </div>
                         </div>
-                        <ImageModal
-                            isOpen={isDocumentModalOpen}
-                            onClose={closeDocumentModal}
-                            imageUrl={selectedDocument.url}
-                            documentName={selectedDocument.name}
-                        />
                     </div>
 
                     {/* Modal for resubmission confirmation */}
@@ -339,7 +351,6 @@ export default function ApplicationForm() {
                         </div>
                     </Modal>
                 </div>
-
             </div>
         </div>
     )
