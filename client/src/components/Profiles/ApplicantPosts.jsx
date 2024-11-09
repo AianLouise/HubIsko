@@ -85,7 +85,7 @@ const ApplicantPosts = ({ userId }) => {
                     </div>
                   </div>
                   <span className='font-bold'>{post.title}</span>
-                  <span className='text-sm text-slate-600'>{post.content}</span>
+                  <span className='text-sm text-slate-600' style={{ whiteSpace: 'pre-wrap' }}>{post.content}</span>
                   <div className='border-t'>
                     <div className='flex flex-row justify-between mt-3 gap-2'>
                       <div className='flex flex-row gap-2'>

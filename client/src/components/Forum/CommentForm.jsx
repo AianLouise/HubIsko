@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { AiOutlinePaperClip, AiFillFilePdf, AiFillFileWord } from 'react-icons/ai';
 
 const CommentForm = ({
@@ -11,10 +11,22 @@ const CommentForm = ({
     handleRemoveFile,
     loading
 }) => {
+    const textareaRef = useRef(null);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await handleCommentSubmit(e);
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto'; // Reset the height
+            textareaRef.current.style.width = 'auto'; // Reset the width
+        }
+    };
+
     return (
-        <form onSubmit={handleCommentSubmit} className="bg-white p-8 rounded-md shadow mb-8 mx-auto">
+        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-md shadow mb-8 mx-auto">
             <textarea
-                className="w-full p-4 border rounded-md mb-4 focus:outline-blue-200 resize-none"
+                ref={textareaRef}
+                className="w-full p-4 border rounded-md mb-4 focus:outline-blue-200 resize-both"
                 placeholder="Write your reply..."
                 value={commentContent}
                 onChange={(e) => setCommentContent(e.target.value)}

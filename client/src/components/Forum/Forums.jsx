@@ -96,6 +96,13 @@ export default function Forums() {
         post.content.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    const truncateText = (text, maxLength) => {
+        if (text.length <= maxLength) {
+          return text;
+        }
+        return text.substring(0, maxLength) + '...';
+      };
+
     return (
         <div className='flex flex-col min-h-screen'>
             <main className='flex-grow bg-[#f8f8fb] no-scrollbar'>
@@ -308,7 +315,9 @@ export default function Forums() {
                                     </div>
                                 </div>
                                 <span className='font-bold'>{post.title}</span>
-                                <span className='text-sm text-slate-600'>{post.content}</span>
+                                <span className='text-sm text-slate-600' style={{ whiteSpace: 'pre-wrap' }}>
+                                    {truncateText(post.content, 500)} {/* Adjust the maxLength as needed */}
+                                </span>
                                 <div className='border-t'>
                                     <div className='flex flex-row justify-between mt-3 gap-2'>
                                         <div className='flex flex-row gap-2'>

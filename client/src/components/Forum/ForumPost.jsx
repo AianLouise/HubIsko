@@ -294,7 +294,7 @@ export default function ForumPost() {
         setShowDropdown2(false);
     };
 
-       const handleConfirmDelete = async () => {
+    const handleConfirmDelete = async () => {
         try {
             const response = await fetch(`/api/forums/post/${post._id}`, {
                 method: 'DELETE',
@@ -303,7 +303,7 @@ export default function ForumPost() {
                 },
                 body: JSON.stringify({ userId: currentUser._id }), // Include the current user's ID in the request body
             });
-    
+
             if (response.ok) {
                 // onDelete(post._id); // Call the onDelete function to update the UI
                 navigate(-1); // Navigate back to the previous page
@@ -374,15 +374,17 @@ export default function ForumPost() {
                             <div className='flex gap-4'>
                                 <Link
                                     to={
-                                        currentUser && currentUser._id === post.author._id
-                                            ? post.author.role === 'admin'
-                                                ? `/admin-profile/${post.author._id}`
-                                                : post.author.role === 'scholarship_provider'
-                                                    ? `/provider-profile/${post.author._id}`
-                                                    : post.author.role === 'applicant'
-                                                        ? `/profile`
-                                                        : `/profile/${post.author._id}`
-                                            : `/profile/${post.author._id}`
+                                        currentUser && currentUser.role === 'admin'
+                                            ? `/admin-profile/${post.author._id}`
+                                            : currentUser && currentUser._id === post.author._id
+                                                ? post.author.role === 'admin'
+                                                    ? `/admin-profile/${post.author._id}`
+                                                    : post.author.role === 'scholarship_provider'
+                                                        ? `/provider-profile/${post.author._id}`
+                                                        : post.author.role === 'applicant'
+                                                            ? `/profile`
+                                                            : `/profile/${post.author._id}`
+                                                : `/profile/${post.author._id}`
                                     }
                                 >
                                     <img
@@ -459,7 +461,7 @@ export default function ForumPost() {
                         </div>
                         <div className='mt-6 flex flex-col gap-2 pl-2 pb-4'>
                             <span className='text-left text-3xl font-bold'>{post.title}</span>
-                            <span className='text-sm font-normal'>{post.content}</span>
+                            <span className='text-sm font-normal' style={{ whiteSpace: 'pre-wrap' }}>{post.content}</span>
                         </div>
                         <div>
                             {/* Display attachment if it exists */}
@@ -471,7 +473,7 @@ export default function ForumPost() {
                                             .filter(att => att.fileType.startsWith('image/'))
                                             .slice(0, 3)
                                             .map((att, index) => (
-                                                <div key={index} className="w-full h-48 rounded-md shadow-sm overflow-hidden">
+                                                <div key={index} className={post.attachmentUrls.filter(att => att.fileType.startsWith('image/')).length === 1 ? 'w-full h-full rounded-md shadow-sm overflow-hidden' : 'w-full h-48 rounded-md shadow-sm overflow-hidden'}>
                                                     <img
                                                         src={att.url}
                                                         alt={`Attachment ${index + 1}`}

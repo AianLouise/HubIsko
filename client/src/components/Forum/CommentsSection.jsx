@@ -9,6 +9,7 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
 
+
 const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, repliesVisibility, activeReplyBox, replies, handleReplyChange, handleReplyComment }) => {
 
     const { currentUser } = useSelector((state) => state.user);
@@ -126,7 +127,7 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
                                 : comment.author.role === 'admin'
                                     ? comment.author.username
                                     : comment.author.scholarshipProviderDetails.organizationName}'s profile`}
-                            className='w-10 h-10 mt-2 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
+                            className='w-10 h-10 mt-5 rounded-full object-cover hover:border-blue-600 hover:border-2 cursor-pointer ease-in-out transition'
                         />
                     </Link>
                     {/* Comment container */}
@@ -134,19 +135,31 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
                         {/* Comment content */}
                         <div className='flex flex-col px-4 pt-4'>
                             <div className="flex justify-between items-center mb-2">
-                                <span className="text-lg font-semibold text-gray-700">
-                                    {comment.author.role === 'applicant'
-                                        ? `${comment.author.applicantDetails.firstName} ${comment.author.applicantDetails.lastName}`
-                                        : comment.author.role === 'admin'
-                                            ? `${comment.author.username}`
-                                            : `${comment.author.scholarshipProviderDetails.organizationName}`}
-                                </span>
+                                <div className="flex flex-col">
+                                    <span className="text-lg font-semibold text-gray-700">
+                                        {comment.author.role === 'applicant'
+                                            ? `${comment.author.applicantDetails.firstName} ${comment.author.applicantDetails.lastName}`
+                                            : comment.author.role === 'admin'
+                                                ? `${comment.author.username}`
+                                                : `${comment.author.scholarshipProviderDetails.organizationName}`}
+                                    </span>
+                                    <span className='text-sm text-slate-500'>
+                                        {new Date(comment.createdAt).toLocaleString('en-US', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                            hour: 'numeric',
+                                            minute: 'numeric',
+                                            hour12: true,
+                                        })}
+                                    </span>
+                                </div>
                                 <span className="text-xs text-gray-500">
                                     {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
                                 </span>
                             </div>
 
-                            <span className='p-4 text-sm border-b'>{comment.content}</span>
+                            <span className='p-4 text-sm border-b' style={{ whiteSpace: 'pre-wrap' }}>{comment.content}</span>
 
                             {/* Display attachment if it exists */}
                             {Array.isArray(comment.attachmentUrls) && comment.attachmentUrls.length > 0 && (
@@ -281,35 +294,45 @@ const CommentsSection = ({ post, toggleReplyBox, toggleRepliesVisibility, replie
                                                 : reply.author.role === 'admin'
                                                     ? `${reply.author.username}`
                                                     : `${reply.author.scholarshipProviderDetails.organizationName}`}'s profile`}
-                                            className="w-10 h-10 rounded-full object-cover"
+                                            className="w-10 h-10 mt-3 rounded-full object-cover border"
                                         />
                                         <div className="flex flex-col bg-white border border-gray-200 rounded-lg w-full shadow-sm p-4">
                                             <div className="flex justify-between items-center mb-2">
-                                                <span className="text-sm font-semibold text-gray-700">
-                                                    {reply.author.role === 'applicant'
-                                                        ? `${reply.author.applicantDetails.firstName} ${reply.author.applicantDetails.lastName}`
-                                                        : reply.author.role === 'admin'
-                                                            ? `${reply.author.username}`
-                                                            : `${reply.author.scholarshipProviderDetails.organizationName}`}
-                                                </span>
+                                                <div className="flex flex-col">
+                                                    <span className="text-sm font-semibold text-gray-700">
+                                                        {reply.author.role === 'applicant'
+                                                            ? `${reply.author.applicantDetails.firstName} ${reply.author.applicantDetails.lastName}`
+                                                            : reply.author.role === 'admin'
+                                                                ? `${reply.author.username}`
+                                                                : `${reply.author.scholarshipProviderDetails.organizationName}`}
+                                                    </span>
+                                                    <span className="text-xs text-gray-500">
+                                                        {new Date(reply.createdAt).toLocaleString('en-US', {
+                                                            year: 'numeric',
+                                                            month: 'long',
+                                                            day: 'numeric',
+                                                            hour: 'numeric',
+                                                            minute: 'numeric',
+                                                            hour12: true,
+                                                        })}
+                                                    </span>
+                                                </div>
                                                 <span className="text-xs text-gray-500">
                                                     {formatDistanceToNow(new Date(reply.createdAt), { addSuffix: true })}
                                                 </span>
                                             </div>
-                                            <p className="text-sm text-gray-800 mb-2">{reply.content}</p>
-                                            <div className="flex gap-4 mt-2">
-                                                {/* Like button and count */}
+                                            <p className="text-sm text-gray-800 mb-2" style={{ whiteSpace: 'pre-wrap' }}>{reply.content}</p>
+                                            {/* <div className="flex gap-4 mt-2">
                                                 <div className='flex flex-row gap-1 px-2'>
                                                     <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
                                                     <span>{reply.likes ? reply.likes.length : 0}</span>
                                                 </div>
-
-                                                {/* Reply button and count */}
+                            
                                                 <div className='flex flex-row gap-1' onClick={() => toggleReplyBox(reply._id)}>
                                                     <BiCommentDots className='w-6 h-6 text-blue-600' />
                                                     <span>{reply.replies ? reply.replies.length : 0}</span>
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 ))}
