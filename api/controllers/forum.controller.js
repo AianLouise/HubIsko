@@ -44,10 +44,10 @@ export const getPosts = async (req, res) => {
       authorName: post.author.role === 'applicant'
         ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.middleName ? post.author.applicantDetails.middleName.charAt(0) + '.' : ''} ${post.author.applicantDetails.lastName}`
         : post.author.role === 'admin'
-        ? `${post.author.username}`
-        : `${post.author.scholarshipProviderDetails.organizationName}`
+          ? `${post.author.username}`
+          : `${post.author.scholarshipProviderDetails.organizationName}`
     }));
-    
+
     res.json(modifiedPosts);
   } catch (err) {
     console.error(err.message);
@@ -109,8 +109,8 @@ export const getPostById = async (req, res) => {
       authorName: post.author.role === 'applicant'
         ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.middleName ? post.author.applicantDetails.middleName.charAt(0) + '.' : ''} ${post.author.applicantDetails.lastName}`
         : post.author.role === 'admin'
-        ? `${post.author.username}`
-        : `${post.author.scholarshipProviderDetails.organizationName}`
+          ? `${post.author.username}`
+          : `${post.author.scholarshipProviderDetails.organizationName}`
     });
   } catch (err) {
     console.error(err.message);
@@ -325,11 +325,6 @@ export const deletePost = async (req, res) => {
       return res.status(404).json({ msg: 'Post not found' });
     }
 
-    // Ensure the user is the author of the post or an admin
-    if (post.author.toString() !== req.user.id && req.user.role !== 'admin') {
-      return res.status(401).json({ msg: 'User not authorized' });
-    }
-
     // Remove all comments associated with the post
     await Comment.deleteMany({ post: req.params.postId });
 
@@ -338,7 +333,7 @@ export const deletePost = async (req, res) => {
 
     // Create an activity log entry for deleting the post
     const activityLog = new ActivityLog({
-      userId: req.user.id,
+      userId: req.body.userId, // Use the userId from the request body
       action: 'DELETE_POST',
       type: 'forum',
       details: `Post with title: ${post.title} was deleted`

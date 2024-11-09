@@ -294,16 +294,16 @@ export default function ForumPost() {
         setShowDropdown2(false);
     };
 
-    const handleConfirmDelete = async () => {
+       const handleConfirmDelete = async () => {
         try {
             const response = await fetch(`/api/forums/post/${post._id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${currentUser.token}`, // Assuming you have a token in currentUser
                 },
+                body: JSON.stringify({ userId: currentUser._id }), // Include the current user's ID in the request body
             });
-
+    
             if (response.ok) {
                 // onDelete(post._id); // Call the onDelete function to update the UI
                 navigate(-1); // Navigate back to the previous page

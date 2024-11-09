@@ -47,6 +47,6 @@ router.post('/comment/reply/:commentId', verifyToken, addReplyToComment);
 router.get('/user/:id', getUserById);
 
 // Route to delete a specific post by its ID
-router.delete('/post/:postId', verifyToken, deletePost); // Add the deletePost route
+router.delete('/post/:postId', deletePost); // Add the deletePost route
 
 export default router;
