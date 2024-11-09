@@ -841,14 +841,17 @@ export default function CompleteProfile() {
                   name="contactNumber"
                   value={formData.contactNumber}
                   onChange={handleChange}
+                  onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')}
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter contact number"
                   maxLength="11"
+                  inputMode="numeric"
                   pattern="09\d{9}"
                   title="Please enter a valid 11-digit phone number starting with 09"
                   required
                 />
               </div>
+
             </div>
 
             <div className='grid grid-cols-2 gap-4 px-4 mt-4'>
