@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import logo from '../assets/NewLogo.png'; // Adjust the path to your logo file
 
 export default function Footer() {
@@ -17,11 +18,11 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Center Section: Linksss */}
+          {/* Center Section: Links */}
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-8 text-center lg:text-left mb-6 lg:mb-0">
-            <a href="/privacy-policy" className="hover:text-blue-400">Privacy Policy</a>
-            <a href="/terms-of-use" className="hover:text-blue-400">Terms of Use</a> 
-            <a href="/about" className="hover:text-blue-400">About Us</a>
+            <Link to="/privacy-policy" className="hover:text-blue-400">Privacy Policy</Link>
+            <Link to="/terms-of-use" className="hover:text-blue-400">Terms of Use</Link>
+            <Link to="/about" className="hover:text-blue-400">About Us</Link>
           </div>
 
           {/* Right Section: Social Media */}

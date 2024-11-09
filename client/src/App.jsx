@@ -42,6 +42,8 @@ import AnnouncementDetails from "./components/ViewScholarshipDetails/Announcemen
 import AnnouncementView from "./pages/AnnouncementView";
 import AccountSettings from "./pages/AccountSettings";
 import ApplicantProfilePage from "./pages/ApplicantProfilePage";
+import PrivacyPolicy from "./pages/PrivacyPolicy2";
+import TermsOfUse from "./pages/TermsOfUse";
 
 // Admin Routes
 import AdminDashboard from "./pages/Admin/AdminDashboard";
@@ -147,6 +149,8 @@ export default function App() {
         <Route path="/scholar-view/:id" element={<ScholarView />} />
 
         <Route path="/about" element={<About />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-of-use" element={<TermsOfUse />} />
 
         {/* <Route path="/others-profile/:id" element={<OthersProfile />} /> */}
         {/* Admin Routes */}
