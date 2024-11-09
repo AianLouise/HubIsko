@@ -549,7 +549,7 @@ export default function EditScholarshipDetails() {
                             <label className="block text-gray-700">Contact Email</label>
                             <p className="text-sm text-gray-500 mb-2">Please enter a valid email address for contact purposes.</p>
                             <input
-                                type="email"
+                                type="text"
                                 name="contactEmail"
                                 value={formData.contactEmail || ''}
                                 onChange={handleChange}
