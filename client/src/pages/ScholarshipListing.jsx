@@ -147,116 +147,123 @@ export default function ScholarshipListing() {
       (selectedEducationLevel === '' || scholarship.educationLevel === selectedEducationLevel)
     );
 
-    const courses = [
-      "Open for All Courses",
-      "BS in Accounting",
-      "BS in Accounting Information Systems",
-      "BS in Aerospace Engineering",
-      "BS in Agricultural Engineering",
-      "BS in Agriculture",
-      "BS in Accounting Technology",
-      "BSBA in Financial Management",
-      "BS in Secondary Education major in Biology",
-      "BS in Secondary Education major in Chemistry",
-      "BS in Secondary Education major in General Sciences",
-      "BS in Secondary Education major in Physics",
-      "BS in Secondary Education major in Mathematics",
-      "BS in Secondary Education major in English",
-      "BS in Food Technology",
-      "BS in Internal Auditing",
-      "BA in Anthropology",
-      "BS in Applied Mathematics",
-      "BS in Architecture",
-      "BA in Art Studies",
-      "BS in Astronomy",
-      "BS in Biochemistry",
-      "BS in Biology",
-      "BS in Biomedical Engineering",
-      "BS in Business Administration",
-      "BS in Business Management",
-      "BS in Chemical Engineering",
-      "BS in Chemistry",
-      "BS in Civil Engineering",
-      "BA in Communication",
-      "BS in Computer Engineering",
-      "BS in Computer Science",
-      "BS in Criminology",
-      "BS in Dentistry",
-      "BA in Development Communication",
-      "BS in Digital Media Arts",
-      "BA in Economics",
-      "BS in Education",
-      "BS in Electrical Engineering",
-      "BS in Electronics Engineering",
-      "BS in Electronics and Communications Engineering",
-      "BS in Elementary Education",
-      "BS in Environmental Engineering",
-      "BS in Environmental Science",
-      "BS in Fashion Design",
-      "BS in Finance",
-      "BA in Fine Arts",
-      "BS in Food Science",
-      "BS in Forestry",
-      "BS in Forensic Science",
-      "BS in Geodetic Engineering",
-      "BA in Geography",
-      "BS in Geology",
-      "BS in Graphic Design",
-      "BS in Health Sciences",
-      "BA in History",
-      "BS in Hospitality Management",
-      "BS in Hotel and Restaurant Management",
-      "BS in Human Resource Development",
-      "BS in Industrial Design",
-      "BS in Industrial Engineering",
-      "BS in Information Systems",
-      "BS in Information Technology",
-      "BS in Interior Design",
-      "BA in International Relations",
-      "BA in Journalism",
-      "BS in Landscape Architecture",
-      "BA in Law",
-      "BA in Linguistics",
-      "BS in Management Accounting",
-      "BS in Marine Biology",
-      "BS in Marine Engineering",
-      "BS in Marine Transportation",
-      "BS in Marketing",
-      "BS in Materials Science",
-      "BS in Mathematics",
-      "BS in Mechanical Engineering",
-      "BA in Media Studies",
-      "BS in Medical Laboratory Science",
-      "BS in Medicine",
-      "BS in Metallurgical Engineering",
-      "BS in Microbiology",
-      "BS in Midwifery",
-      "BS in Mining Engineering",
-      "BS in Molecular Biology",
-      "BS in Multimedia Arts",
-      "BS in Music",
-      "BS in Nanotechnology",
-      "BS in Nursing",
-      "BS in Nutrition",
-      "BS in Occupational Therapy",
-      "BS in Oceanography",
-      "BS in Pharmacy",
-      "BS in Physical Therapy",
-      "BS in Physics",
-      "BS in Political Science",
-      "BS in Psychology",
-      "BS in Public Health",
-      "BS in Radiologic Technology",
-      "BS in Real Estate Management",
-      "BA in Religious Studies",
-      "BA in Social Work",
-      "BS in Sociology",
-      "BS in Software Engineering",
-      "BS in Statistics",
-      "BS in Tourism Management",
-      "BS in Veterinary Medicine",
-      "BS in Zoology"
-    ];
+  const courses = [
+    "Open for All Courses",
+    "BS in Accounting",
+    "BS in Accounting Information Systems",
+    "BS in Aerospace Engineering",
+    "BS in Agricultural Engineering",
+    "BS in Agriculture",
+    "BS in Accounting Technology",
+    "BSBA in Financial Management",
+    "BS in Secondary Education major in Biology",
+    "BS in Secondary Education major in Chemistry",
+    "BS in Secondary Education major in General Sciences",
+    "BS in Secondary Education major in Physics",
+    "BS in Secondary Education major in Mathematics",
+    "BS in Secondary Education major in English",
+    "BS in Food Technology",
+    "BS in Internal Auditing",
+    "BA in Anthropology",
+    "BS in Applied Mathematics",
+    "BS in Architecture",
+    "BA in Art Studies",
+    "BS in Astronomy",
+    "BS in Biochemistry",
+    "BS in Biology",
+    "BS in Biomedical Engineering",
+    "BS in Business Administration",
+    "BS in Business Management",
+    "BS in Chemical Engineering",
+    "BS in Chemistry",
+    "BS in Civil Engineering",
+    "BA in Communication",
+    "BS in Computer Engineering",
+    "BS in Computer Science",
+    "BS in Criminology",
+    "BS in Dentistry",
+    "BA in Development Communication",
+    "BS in Digital Media Arts",
+    "BA in Economics",
+    "BS in Education",
+    "BS in Electrical Engineering",
+    "BS in Electronics Engineering",
+    "BS in Electronics and Communications Engineering",
+    "BS in Elementary Education",
+    "BS in Environmental Engineering",
+    "BS in Environmental Science",
+    "BS in Fashion Design",
+    "BS in Finance",
+    "BA in Fine Arts",
+    "BS in Food Science",
+    "BS in Forestry",
+    "BS in Forensic Science",
+    "BS in Geodetic Engineering",
+    "BA in Geography",
+    "BS in Geology",
+    "BS in Graphic Design",
+    "BS in Health Sciences",
+    "BA in History",
+    "BS in Hospitality Management",
+    "BS in Hotel and Restaurant Management",
+    "BS in Human Resource Development",
+    "BS in Industrial Design",
+    "BS in Industrial Engineering",
+    "BS in Information Systems",
+    "BS in Information Technology",
+    "BS in Interior Design",
+    "BA in International Relations",
+    "BA in Journalism",
+    "BS in Landscape Architecture",
+    "BA in Law",
+    "BA in Linguistics",
+    "BS in Management Accounting",
+    "BS in Marine Biology",
+    "BS in Marine Engineering",
+    "BS in Marine Transportation",
+    "BS in Marketing",
+    "BS in Materials Science",
+    "BS in Mathematics",
+    "BS in Mechanical Engineering",
+    "BA in Media Studies",
+    "BS in Medical Laboratory Science",
+    "BS in Medicine",
+    "BS in Metallurgical Engineering",
+    "BS in Microbiology",
+    "BS in Midwifery",
+    "BS in Mining Engineering",
+    "BS in Molecular Biology",
+    "BS in Multimedia Arts",
+    "BS in Music",
+    "BS in Nanotechnology",
+    "BS in Nursing",
+    "BS in Nutrition",
+    "BS in Occupational Therapy",
+    "BS in Oceanography",
+    "BS in Pharmacy",
+    "BS in Physical Therapy",
+    "BS in Physics",
+    "BS in Political Science",
+    "BS in Psychology",
+    "BS in Public Health",
+    "BS in Radiologic Technology",
+    "BS in Real Estate Management",
+    "BA in Religious Studies",
+    "BA in Social Work",
+    "BS in Sociology",
+    "BS in Software Engineering",
+    "BS in Statistics",
+    "BS in Tourism Management",
+    "BS in Veterinary Medicine",
+    "BS in Zoology"
+  ];
+
+  const [showAll, setShowAll] = useState(false);
+
+  // Handle "Show All" button click
+  const handleShowAll = () => {
+    setShowAll(true);
+  };
 
   if (loading) {
     return (
@@ -292,23 +299,21 @@ export default function ScholarshipListing() {
           </div>
         </div>
 
-        <div className='flex flex-col gap-4 justify-center items-left px-10 lg:mx-auto lg:max-w-6xl lg:px-24 lg:my-8'>
+        <div className='flex flex-col gap-4 justify-center items-center px-4 lg:mx-auto lg:max-w-6xl lg:px-24 lg:my-8'>
           <div className='flex gap-2 items-center justify-between'>
             <span className='text-xl font-bold text-slate-600'>Organizations</span>
           </div>
+
           <div className='flex items-center justify-center p-4'>
-            {!isLargeScreen && (
-              <button
-                onClick={handlePreviousPage}
-                className='absolute left-8 bg-blue-600 text-white p-2 rounded-full z-10'
-                disabled={currentPage === 0}
-              >
-                <MdOutlineKeyboardArrowRight className='transform rotate-180' />
-              </button>
-            )}
-            <div className={`flex space-x-6 ${isLargeScreen ? 'overflow-x-hidden' : 'overflow-x-auto'} overflow-y-hidden lg:h-32 w-full mx-4`}>
-              {(isLargeScreen ? allProviders : paginatedProviders).map((provider) => (
-                <Link to={`/profile/${provider._id}`} key={provider._id} className='flex flex-col items-center group flex-shrink-0 relative'>
+            <div
+              className={`flex flex-wrap justify-center gap-6 ${isLargeScreen ? 'overflow-hidden' : 'overflow-x-auto'} mx-4`}
+            >
+              {allProviders.map((provider) => (
+                <Link
+                  to={`/profile/${provider._id}`}
+                  key={provider._id}
+                  className='flex flex-col items-center group flex-shrink-0 relative'
+                >
                   <button className='flex flex-col items-center group space-y-2 relative ml-4 lg:ml-0'>
                     <div className='w-12 h-12 lg:w-20 lg:h-20 rounded-full overflow-hidden group-hover:bg-blue-800'>
                       <img
@@ -332,15 +337,6 @@ export default function ScholarshipListing() {
                 </Link>
               ))}
             </div>
-            {!isLargeScreen && (
-              <button
-                onClick={handleNextPage}
-                className='absolute right-8 bg-blue-600 text-white p-2 rounded-full z-10'
-                disabled={(currentPage + 1) * itemsPerPage >= providers.length}
-              >
-                <MdOutlineKeyboardArrowRight />
-              </button>
-            )}
           </div>
         </div>
 

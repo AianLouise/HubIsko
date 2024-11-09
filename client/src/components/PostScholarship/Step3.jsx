@@ -141,6 +141,9 @@ const Step3 = ({ formData, setFormData }) => {
 
     const isOpenForAllCourses = formData.fieldOfStudy.includes('Open for All Courses');
 
+    const isEmailLong = formData.contactEmail.length > 30;
+    const isPhoneLong = formData.contactPhone.length > 20;
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -254,7 +257,7 @@ const Step3 = ({ formData, setFormData }) => {
                             </div>
                             {errorMessage2 && <p className="text-red-500 text-center">{errorMessage2}</p>}
                         </div>
-                        
+
                         <div>
                             {formData.description && (
                                 <div className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
@@ -323,39 +326,64 @@ const Step3 = ({ formData, setFormData }) => {
                             </div>
 
                             {/* Contact Section */}
-                            <div className='flex gap-6 justify-center mb-8'>
-                                <button type='button' className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'>
+                            <div className={`flex flex-col ${isEmailLong || isPhoneLong ? 'space-y-6' : 'lg:flex-row lg:space-x-6'} justify-center items-center mb-8 px-2`}>
+                                <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
                                     <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
                                         <FaEnvelope className='text-white' />
                                     </div>
-                                    <div className='flex flex-col justify-center'>
+                                    <div className='flex flex-col justify-center flex-grow'>
                                         <span className='text-slate-600 text-left'>Email Us!</span>
-                                        <span className=''>{formData.contactEmail}</span>
+                                        <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{formData.contactEmail}</span>
                                     </div>
                                 </button>
 
-                                <button type='button' className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'>
-                                    <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
-                                        <FaPhone className='text-white' />
-                                    </div>
-                                    <div className='flex flex-col justify-center'>
-                                        <span className='text-slate-600 text-left'>Call us!</span>
-                                        <span className=''>{formData.contactPhone}</span>
-                                    </div>
-                                </button>
+                                {!isEmailLong && (
+                                    <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
+                                        <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
+                                            <FaPhone className='text-white' />
+                                        </div>
+                                        <div className='flex flex-col justify-center flex-grow'>
+                                            <span className='text-slate-600 text-left'>Call us!</span>
+                                            <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{formData.contactPhone}</span>
+                                        </div>
+                                    </button>
+                                )}
 
-                                <button
-                                    type="button"
-                                    className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'
-                                >
-                                    <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
-                                        <FaUser className='text-white' />
-                                    </div>
-                                    <div className='flex flex-col justify-center text-left'>
-                                        <span className='text-slate-600'>Visit our profile!</span>
-                                        <span className=''>{currentUser ? currentUser.scholarshipProviderDetails.organizationName : 'Scholarship Provider'}</span>
-                                    </div>
-                                </button>
+                                {!isEmailLong && !isPhoneLong && (
+                                    <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
+                                        <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
+                                            <FaUser className='text-white' />
+                                        </div>
+                                        <div className='flex flex-col justify-center text-left flex-grow'>
+                                            <span className='text-slate-600'>Visit our profile!</span>
+                                            <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{formData.organizationName}</span>
+                                        </div>
+                                    </button>
+                                )}
+
+                                {isEmailLong && (
+                                    <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
+                                        <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
+                                            <FaPhone className='text-white' />
+                                        </div>
+                                        <div className='flex flex-col justify-center flex-grow'>
+                                            <span className='text-slate-600 text-left'>Call us!</span>
+                                            <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{formData.contactPhone}</span>
+                                        </div>
+                                    </button>
+                                )}
+
+                                {(isEmailLong || isPhoneLong) && (
+                                    <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
+                                        <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
+                                            <FaUser className='text-white' />
+                                        </div>
+                                        <div className='flex flex-col justify-center text-left flex-grow'>
+                                            <span className='text-slate-600'>Visit our profile!</span>
+                                            <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{formData.organizationName}</span>
+                                        </div>
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>

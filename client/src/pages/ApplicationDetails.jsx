@@ -249,6 +249,9 @@ export default function Forums() {
 
     const isOpenForAllCourses = scholarship.fieldOfStudy.includes('Open for All Courses');
 
+    const isEmailLong = scholarship.contactEmail.length > 30;
+    const isPhoneLong = scholarship.contactPhone.length > 20;
+
     return (
         <div className='min-h-screen flex flex-col'>
             <Header />
@@ -367,36 +370,64 @@ export default function Forums() {
                             </div>
 
                             {/* Contact Section */}
-                            <div className='grid grid-rows-1 lg:flex gap-6 justify-center mb-8'>
-                                <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'>
+                            <div className={`flex flex-col ${isEmailLong || isPhoneLong ? 'space-y-6' : 'lg:flex-row lg:space-x-6'} justify-center items-center mb-8 px-2`}>
+                                <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
                                     <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
                                         <FaEnvelope className='text-white' />
                                     </div>
-                                    <div className='flex flex-col justify-center'>
+                                    <div className='flex flex-col justify-center flex-grow'>
                                         <span className='text-slate-600 text-left'>Email Us!</span>
-                                        <span className=''>{scholarship.contactEmail}</span>
+                                        <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{scholarship.contactEmail}</span>
                                     </div>
                                 </button>
 
-                                <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'>
-                                    <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
-                                        <FaPhone className='text-white' />
-                                    </div>
-                                    <div className='flex flex-col justify-center'>
-                                        <span className='text-slate-600 text-left'>Call us!</span>
-                                        <span className=''>{scholarship.contactPhone}</span>
-                                    </div>
-                                </button>
+                                {!isEmailLong && (
+                                    <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
+                                        <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
+                                            <FaPhone className='text-white' />
+                                        </div>
+                                        <div className='flex flex-col justify-center flex-grow'>
+                                            <span className='text-slate-600 text-left'>Call us!</span>
+                                            <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{scholarship.contactPhone}</span>
+                                        </div>
+                                    </button>
+                                )}
 
-                                <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out'>
-                                    <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
-                                        <FaUser className='text-white' />
-                                    </div>
-                                    <Link to={`/profile/${scholarship.providerId}`} className='flex flex-col justify-center text-left'>
-                                        <span className='text-slate-600'>Visit our profile!</span>
-                                        <span className=''>{scholarship.organizationName}</span>
-                                    </Link>
-                                </button>
+                                {!isEmailLong && !isPhoneLong && (
+                                    <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
+                                        <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
+                                            <FaUser className='text-white' />
+                                        </div>
+                                        <Link to={`/profile/${scholarship.providerId}`} className='flex flex-col justify-center text-left flex-grow'>
+                                            <span className='text-slate-600'>Visit our profile!</span>
+                                            <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{scholarship.organizationName}</span>
+                                        </Link>
+                                    </button>
+                                )}
+
+                                {isEmailLong && (
+                                    <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
+                                        <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
+                                            <FaPhone className='text-white' />
+                                        </div>
+                                        <div className='flex flex-col justify-center flex-grow'>
+                                            <span className='text-slate-600 text-left'>Call us!</span>
+                                            <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{scholarship.contactPhone}</span>
+                                        </div>
+                                    </button>
+                                )}
+
+                                {(isEmailLong || isPhoneLong) && (
+                                    <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
+                                        <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
+                                            <FaUser className='text-white' />
+                                        </div>
+                                        <Link to={`/profile/${scholarship.providerId}`} className='flex flex-col justify-center text-left flex-grow'>
+                                            <span className='text-slate-600'>Visit our profile!</span>
+                                            <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{scholarship.organizationName}</span>
+                                        </Link>
+                                    </button>
+                                )}
                             </div>
                         </div>
 
