@@ -64,12 +64,21 @@ export default function CompleteProfile() {
     certificateOfRegistrationFile: '',
   });
 
+  useEffect(() => {
+    if (currentUser && currentUser.profilePicture) {
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        profilePicture: currentUser.profilePicture
+      }));
+    }
+  }, [currentUser]);
+
   const handleNext = () => {
     console.log('Current civilStatus:', formData.civilStatus);
 
     const stepRequiredFields = {
       1: [
-        'profilePicture', 'firstName', 'lastName', 'birthdate', 'gender',
+        'firstName', 'lastName', 'birthdate', 'gender',
         'bloodType', 'civilStatus', ...(formData.civilStatus === 'Married' ?
           ['maidenName', 'spouseName', 'spouseOccupation'] : []),
         'religion', 'height', 'weight', 'birthplace', 'contactNumber',
@@ -87,7 +96,7 @@ export default function CompleteProfile() {
     };
 
     const fieldDisplayNames = {
-      profilePicture: 'Profile Picture', firstName: 'First Name', lastName: 'Last Name',
+      firstName: 'First Name', lastName: 'Last Name',
       birthdate: 'Birthdate', gender: 'Gender', bloodType: 'Blood Type',
       civilStatus: 'Civil Status', religion: 'Religion', height: 'Height', weight: 'Weight',
       birthplace: 'Birthplace', contactNumber: 'Contact Number', addressDetails: 'Address Details',
@@ -123,10 +132,7 @@ export default function CompleteProfile() {
       setCurrentStep((prevStep) => prevStep + 1);
     } else {
       let message = '';
-      if (missingFields.includes('profilePicture')) {
-        message = 'The Profile Picture is missing. Please upload it before proceeding to the next step.';
-        document.getElementById('profilePictureInput').focus();
-      } else if (missingFields.length > 0) {
+      if (missingFields.length > 0) {
         const topMostMissingField = missingFields[0];
         const topMostMissingFieldName = fieldDisplayNames[topMostMissingField];
         message = `The following required field is missing: ${topMostMissingFieldName}. Please complete it before proceeding to the next step.`;
@@ -186,7 +192,6 @@ export default function CompleteProfile() {
 
     // List of required fields
     const requiredFields = [
-      'profilePicture',
       'firstName',
       'lastName',
       'birthdate',
@@ -221,7 +226,6 @@ export default function CompleteProfile() {
 
     // Mapping of field keys to display names
     const fieldDisplayNames = {
-      profilePicture: 'Profile Picture',
       firstName: 'First Name',
       lastName: 'Last Name',
       birthdate: 'Birthdate',
@@ -293,10 +297,12 @@ export default function CompleteProfile() {
 
     try {
       // Upload profile picture if it exists
-      if (formData.profilePicture) {
+      if (formData.profilePicture && formData.profilePicture instanceof Blob) {
         const storageRef = ref(storage, `profilePictures/${formData.profilePicture.name}`);
         await uploadBytes(storageRef, formData.profilePicture);
         profilePictureUrl = await getDownloadURL(storageRef);
+      } else {
+        profilePictureUrl = formData.profilePicture; // Use existing URL if it's not a Blob
       }
 
       // Upload student ID file if it exists
@@ -712,7 +718,7 @@ export default function CompleteProfile() {
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4'>
               <div className='col-span-1 md:col-span-2 lg:col-span-4 text-center mt-2'>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>
-                  Profile Picture <span className='text-red-500'>*</span>
+                  Profile Picture <span className='text-gray-500'>(optional)</span>
                 </label>
                 <span className='text-xs text-gray-500 mb-2 block'>Upload a square image for best results.</span>
                 <div className='flex justify-center'>
@@ -726,16 +732,15 @@ export default function CompleteProfile() {
                         handleFileChange(e);
                         e.target.setCustomValidity('');
                       }}
-                      onInvalid={(e) => e.target.setCustomValidity('Please upload a profile picture.')}
+                      onInvalid={(e) => e.target.setCustomValidity('')}
                       className='absolute inset-0 w-full h-full opacity-0 cursor-pointer'
-                      required
                     />
                     <div className='w-24 h-24 rounded-full border border-gray-300 flex items-center justify-center overflow-hidden'>
                       <img
                         src={
                           formData.profilePicture instanceof Blob
                             ? URL.createObjectURL(formData.profilePicture)
-                            : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToiRnzzyrDtkmRzlAvPPbh77E-Mvsk3brlxQ&s'
+                            : formData.profilePicture || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToiRnzzyrDtkmRzlAvPPbh77E-Mvsk3brlxQ&s'
                         }
                         alt="Profile"
                         className="w-full h-full object-cover"
@@ -1454,97 +1459,115 @@ export default function CompleteProfile() {
               </div>
               <p className="text-sm text-gray-600 mb-4">Please review the information below carefully before submitting.</p>
               <div className="space-y-4">
-                <div className="border-t border-gray-200 pt-4">
-                  <h3 className="text-xl font-semibold text-white mb-4 border-b-2 border-gray-300 pb-2 bg-blue-600 p-2 rounded-md">Basic Information</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
-                      <p className="text-sm text-gray-600">
-                        <span className="font-semibold">First Name:</span> {formData.firstName}
-                      </p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
-                      <p className="text-sm text-gray-600">
-                        <span className="font-semibold">Middle Name:</span> {formData.middleName}
-                      </p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
-                      <p className="text-sm text-gray-600">
-                        <span className="font-semibold">Last Name:</span> {formData.lastName}
-                      </p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
-                      <p className="text-sm text-gray-600">
-                        <span className="font-semibold">Name Extension:</span> {formData.nameExtension || 'N/A'}
-                      </p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
-                      <p className="text-sm text-gray-600">
-                        <span className="font-semibold">Birthdate:</span> {formData.birthdate}
-                      </p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
-                      <p className="text-sm text-gray-600">
-                        <span className="font-semibold">Gender:</span> {formData.gender}
-                      </p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
-                      <p className="text-sm text-gray-600">
-                        <span className="font-semibold">Blood Type:</span> {formData.bloodType}
-                      </p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
-                      <p className="text-sm text-gray-600">
-                        <span className="font-semibold">Civil Status:</span> {formData.civilStatus}
-                      </p>
-                    </div>
-                    {formData.civilStatus === 'Married' && (
-                      <>
-                        <div className="bg-gray-50 p-4 rounded-md shadow-sm">
-                          <p className="text-sm text-gray-600">
-                            <span className="font-semibold">Maiden Name:</span> {formData.maidenName || 'N/A'}
-                          </p>
+                <div className="space-y-4">
+                  <div className="border-t border-gray-200 pt-4">
+                    <h3 className="text-xl font-semibold text-white mb-4 border-b-2 border-gray-300 pb-2 bg-blue-600 p-2 rounded-md">Basic Information</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="bg-gray-50 p-4 rounded-md shadow-sm sm:col-span-2 flex flex-col items-center">
+                        <p className="text-sm text-gray-600 mb-2">
+                          <span className="font-semibold">Profile Picture:</span>
+                        </p>
+                        <div className="w-24 h-24 rounded-full border border-gray-300 flex items-center justify-center overflow-hidden">
+                          <img
+                            src={
+                              formData.profilePicture instanceof Blob
+                                ? URL.createObjectURL(formData.profilePicture)
+                                : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToiRnzzyrDtkmRzlAvPPbh77E-Mvsk3brlxQ&s'
+                            }
+                            alt="Profile"
+                            className="w-full h-full object-cover"
+                          />
                         </div>
-                        <div className="bg-gray-50 p-4 rounded-md shadow-sm">
-                          <p className="text-sm text-gray-600">
-                            <span className="font-semibold">Name of Spouse:</span> {formData.spouseName || 'N/A'}
-                          </p>
-                        </div>
-                        <div className="bg-gray-50 p-4 rounded-md shadow-sm">
-                          <p className="text-sm text-gray-600">
-                            <span className="font-semibold">Occupation of Spouse:</span> {formData.spouseOccupation || 'N/A'}
-                          </p>
-                        </div>
-                      </>
-                    )}
-                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
-                      <p className="text-sm text-gray-600">
-                        <span className="font-semibold">Religion:</span> {formData.religion}
-                      </p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
-                      <p className="text-sm text-gray-600">
-                        <span className="font-semibold">Height:</span> {formData.height} cm
-                      </p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
-                      <p className="text-sm text-gray-600">
-                        <span className="font-semibold">Weight:</span> {formData.weight} kg
-                      </p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
-                      <p className="text-sm text-gray-600">
-                        <span className="font-semibold">Birthplace:</span> {formData.birthplace}
-                      </p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
-                      <p className="text-sm text-gray-600">
-                        <span className="font-semibold">Contact Number:</span> {formData.contactNumber}
-                      </p>
-                    </div>
-                    <div className="bg-gray-50 p-4 rounded-md shadow-sm sm:col-span-2">
-                      <p className="text-sm text-gray-600">
-                        <span className="font-semibold">Address:</span> {`${formData.addressDetails}, ${formData.barangayName}, ${formData.cityName}, ${formData.provinceName}, ${formData.regionName}`}
-                      </p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                        <p className="text-sm text-gray-600">
+                          <span className="font-semibold">First Name:</span> {formData.firstName}
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                        <p className="text-sm text-gray-600">
+                          <span className="font-semibold">Middle Name:</span> {formData.middleName}
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                        <p className="text-sm text-gray-600">
+                          <span className="font-semibold">Last Name:</span> {formData.lastName}
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                        <p className="text-sm text-gray-600">
+                          <span className="font-semibold">Name Extension:</span> {formData.nameExtension || 'N/A'}
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                        <p className="text-sm text-gray-600">
+                          <span className="font-semibold">Birthdate:</span> {formData.birthdate}
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                        <p className="text-sm text-gray-600">
+                          <span className="font-semibold">Gender:</span> {formData.gender}
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                        <p className="text-sm text-gray-600">
+                          <span className="font-semibold">Blood Type:</span> {formData.bloodType}
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                        <p className="text-sm text-gray-600">
+                          <span className="font-semibold">Civil Status:</span> {formData.civilStatus}
+                        </p>
+                      </div>
+                      {formData.civilStatus === 'Married' && (
+                        <>
+                          <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                            <p className="text-sm text-gray-600">
+                              <span className="font-semibold">Maiden Name:</span> {formData.maidenName || 'N/A'}
+                            </p>
+                          </div>
+                          <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                            <p className="text-sm text-gray-600">
+                              <span className="font-semibold">Name of Spouse:</span> {formData.spouseName || 'N/A'}
+                            </p>
+                          </div>
+                          <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                            <p className="text-sm text-gray-600">
+                              <span className="font-semibold">Occupation of Spouse:</span> {formData.spouseOccupation || 'N/A'}
+                            </p>
+                          </div>
+                        </>
+                      )}
+                      <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                        <p className="text-sm text-gray-600">
+                          <span className="font-semibold">Religion:</span> {formData.religion}
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                        <p className="text-sm text-gray-600">
+                          <span className="font-semibold">Height:</span> {formData.height} cm
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                        <p className="text-sm text-gray-600">
+                          <span className="font-semibold">Weight:</span> {formData.weight} kg
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                        <p className="text-sm text-gray-600">
+                          <span className="font-semibold">Birthplace:</span> {formData.birthplace}
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                        <p className="text-sm text-gray-600">
+                          <span className="font-semibold">Contact Number:</span> {formData.contactNumber}
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-md shadow-sm sm:col-span-2">
+                        <p className="text-sm text-gray-600">
+                          <span className="font-semibold">Address:</span> {`${formData.addressDetails}, ${formData.barangayName}, ${formData.cityName}, ${formData.provinceName}, ${formData.regionName}`}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>

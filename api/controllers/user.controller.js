@@ -143,13 +143,15 @@ export const getUserDetails = async (req, res, next) => {
 
 export const CompleteProfile = async (req, res, next) => {
   try {
+    const profilePictureUrl = req.body.profilePicture || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToiRnzzyrDtkmRzlAvPPbh77E-Mvsk3brlxQ&s';
+
     const updatedUser = await User.findByIdAndUpdate(
       req.user.id,
       {
         $set: {
           "status": 'Pending Verification',
           "applicantDetails.profileComplete": 'true',
-          "profilePicture": req.body.profilePicture,
+          "profilePicture": profilePictureUrl,
           "applicantDetails.firstName": req.body.firstName,
           "applicantDetails.middleName": req.body.middleName,
           "applicantDetails.lastName": req.body.lastName,
@@ -187,7 +189,7 @@ export const CompleteProfile = async (req, res, next) => {
           "applicantDetails.education.college.course": req.body.education.college.course,
           "applicantDetails.education.college.yearGraduated": req.body.education.college.yearGraduated,
           "applicantDetails.studentIdFile": req.body.studentIdFile,
-          "applicantDetails.certificateOfRegistrationFile": req.body.certificateOfRegistrationFile 
+          "applicantDetails.certificateOfRegistrationFile": req.body.certificateOfRegistrationFile
         }
       },
       { new: true } // Return the modified document rather than the original.
