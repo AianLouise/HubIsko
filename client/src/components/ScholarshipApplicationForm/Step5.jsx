@@ -16,9 +16,30 @@ const Step5 = ({ formData, setFormData, errors, scholarship, requiredDocuments }
     return file.size / (1024 * 1024) <= maxSizeInMB;
   };
 
+  const validateFileType = (file) => {
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    return allowedTypes.includes(file.type);
+  };
+
   const handleFileChange = (e, docName) => {
     const file = e.target.files[0];
-    if (file && validateFileSize(file)) {
+    if (file) {
+      if (!validateFileType(file)) {
+        setFileErrors(prevState => ({
+          ...prevState,
+          [docName]: 'Only image files (jpeg, jpg, png) are allowed'
+        }));
+        return;
+      }
+
+      if (!validateFileSize(file)) {
+        setFileErrors(prevState => ({
+          ...prevState,
+          [docName]: 'File size should be 5 MB or less'
+        }));
+        return;
+      }
+
       setFormData(prevState => {
         const updatedFormData = {
           ...prevState,
@@ -37,11 +58,6 @@ const Step5 = ({ formData, setFormData, errors, scholarship, requiredDocuments }
       setFileErrors(prevState => ({
         ...prevState,
         [docName]: null
-      }));
-    } else {
-      setFileErrors(prevState => ({
-        ...prevState,
-        [docName]: 'File size should be 5 MB or less'
       }));
     }
   };
@@ -88,7 +104,7 @@ const Step5 = ({ formData, setFormData, errors, scholarship, requiredDocuments }
                   <div className='flex items-center'>
                     <input
                       type="file"
-                      accept=".jpeg,.jpg,.png,.pdf"
+                      accept=".jpeg,.jpg,.png"
                       className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                       onChange={(e) => handleFileChange(e, doc.name)}
                     />
