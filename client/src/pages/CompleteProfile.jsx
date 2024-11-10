@@ -123,7 +123,10 @@ export default function CompleteProfile() {
       setCurrentStep((prevStep) => prevStep + 1);
     } else {
       let message = '';
-      if (missingFields.length > 0) {
+      if (missingFields.includes('profilePicture')) {
+        message = 'The Profile Picture is missing. Please upload it before proceeding to the next step.';
+        document.getElementById('profilePictureInput').focus();
+      } else if (missingFields.length > 0) {
         const topMostMissingField = missingFields[0];
         const topMostMissingFieldName = fieldDisplayNames[topMostMissingField];
         message = `The following required field is missing: ${topMostMissingFieldName}. Please complete it before proceeding to the next step.`;
@@ -556,7 +559,7 @@ export default function CompleteProfile() {
   const maxDate = new Date(Datetoday.setFullYear(Datetoday.getFullYear() - 15)).toISOString().split('T')[0];
 
   const courses = [
-   "BA in Anthropology",
+    "BA in Anthropology",
     "BA in Art Studies",
     "BA in Communication",
     "BA in Development Communication",
@@ -679,6 +682,13 @@ export default function CompleteProfile() {
     "BS in Zoology"
   ];
 
+  const handleKeyPress = (event) => {
+    const charCode = event.charCode;
+    if ((charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122)) {
+      event.preventDefault();
+    }
+  };
+
   return (
     <div className=' min-h-screen flex flex-col items-center'>
       {notification.show && (
@@ -701,15 +711,24 @@ export default function CompleteProfile() {
 
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4'>
               <div className='col-span-1 md:col-span-2 lg:col-span-4 text-center mt-2'>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Profile Picture</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                  Profile Picture <span className='text-red-500'>*</span>
+                </label>
+                <span className='text-xs text-gray-500 mb-2 block'>Upload a square image for best results.</span>
                 <div className='flex justify-center'>
                   <div className='relative'>
                     <input
                       type="file"
+                      id="profilePictureInput"
                       name="profilePicture"
                       accept="image/*"
-                      onChange={handleFileChange}
+                      onChange={(e) => {
+                        handleFileChange(e);
+                        e.target.setCustomValidity('');
+                      }}
+                      onInvalid={(e) => e.target.setCustomValidity('Please upload a profile picture.')}
                       className='absolute inset-0 w-full h-full opacity-0 cursor-pointer'
+                      required
                     />
                     <div className='w-24 h-24 rounded-full border border-gray-300 flex items-center justify-center overflow-hidden'>
                       <img
@@ -727,12 +746,15 @@ export default function CompleteProfile() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                  First Name <span className='text-red-500'>*</span>
+                </label>
                 <input
                   type="text"
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
+                  onKeyPress={handleKeyPress}
                   placeholder="Enter your first name"
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   required
@@ -740,12 +762,15 @@ export default function CompleteProfile() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                  Last Name <span className='text-red-500'>*</span>
+                </label>
                 <input
                   type="text"
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
+                  onKeyPress={handleKeyPress}
                   placeholder="Enter your last name"
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   required
@@ -753,12 +778,15 @@ export default function CompleteProfile() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                  Middle Name <span className='text-red-500'>*</span>
+                </label>
                 <input
                   type="text"
                   name="middleName"
                   value={formData.middleName}
                   onChange={handleChange}
+                  onKeyPress={handleKeyPress}
                   placeholder="Enter your middle name"
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   required
@@ -786,7 +814,7 @@ export default function CompleteProfile() {
 
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4 mt-4'>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate <span className='text-red-500'>*</span></label>
                 <input
                   type="date"
                   name="birthdate"
@@ -799,7 +827,7 @@ export default function CompleteProfile() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Gender</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Gender <span className='text-red-500'>*</span></label>
                 <select
                   name="gender"
                   value={formData.gender}
@@ -815,7 +843,7 @@ export default function CompleteProfile() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Blood Type</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Blood Type <span className='text-red-500'>*</span></label>
                 <select
                   name="bloodType"
                   value={formData.bloodType}
@@ -837,7 +865,7 @@ export default function CompleteProfile() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Civil Status</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Civil Status <span className='text-red-500'>*</span></label>
                 <select
                   name="civilStatus"
                   value={formData.civilStatus}
@@ -856,7 +884,7 @@ export default function CompleteProfile() {
               {!isSingleWidowedOrDivorced && (
                 <>
                   <div>
-                    <label className='block text-sm font-medium text-gray-700 mb-2'>Maiden Name</label>
+                    <label className='block text-sm font-medium text-gray-700 mb-2'>Maiden Name <span className='text-red-500'>*</span></label>
                     <input
                       type="text"
                       name="maidenName"
@@ -870,7 +898,7 @@ export default function CompleteProfile() {
                   </div>
 
                   <div>
-                    <label className='block text-sm font-medium text-gray-700 mb-2'>Name of Spouse</label>
+                    <label className='block text-sm font-medium text-gray-700 mb-2'>Name of Spouse <span className='text-red-500'>*</span></label>
                     <input
                       type="text"
                       name="spouseName"
@@ -884,7 +912,7 @@ export default function CompleteProfile() {
                   </div>
 
                   <div>
-                    <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation of Spouse</label>
+                    <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation of Spouse <span className='text-red-500'>*</span></label>
                     <input
                       type="text"
                       name="spouseOccupation"
@@ -900,7 +928,7 @@ export default function CompleteProfile() {
               )}
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Religion</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Religion <span className='text-red-500'>*</span></label>
                 <select
                   name="religion"
                   value={formData.religion}
@@ -918,7 +946,7 @@ export default function CompleteProfile() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Height</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Height <span className='text-red-500'>*</span></label>
                 <input
                   type="number"
                   name="height"
@@ -932,7 +960,7 @@ export default function CompleteProfile() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Weight</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Weight <span className='text-red-500'>*</span></label>
                 <input
                   type="number"
                   name="weight"
@@ -946,7 +974,7 @@ export default function CompleteProfile() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Birthplace</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Birthplace <span className='text-red-500'>*</span></label>
                 <input
                   type="text"
                   name="birthplace"
@@ -959,7 +987,7 @@ export default function CompleteProfile() {
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Contact Number</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Contact Number <span className='text-red-500'>*</span></label>
                 <input
                   type="text"
                   name="contactNumber"
@@ -981,7 +1009,7 @@ export default function CompleteProfile() {
             <div className='grid grid-cols-2 gap-4 px-4 mt-4'>
               {/* Region Selector */}
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Region:</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Region <span className='text-red-500'>*</span></label>
                 <select
                   value={selectedRegion}
                   onChange={(e) => {
@@ -1004,7 +1032,7 @@ export default function CompleteProfile() {
 
               {/* Province Selector */}
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Province:</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Province <span className='text-red-500'>*</span></label>
                 <select
                   value={selectedProvince}
                   onChange={(e) => {
@@ -1026,7 +1054,7 @@ export default function CompleteProfile() {
 
               {/* City Selector */}
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>City/Municipality:</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>City/Municipality <span className='text-red-500'>*</span></label>
                 <select
                   value={selectedCity}
                   onChange={(e) => {
@@ -1047,7 +1075,7 @@ export default function CompleteProfile() {
 
               {/* Barangay Selector */}
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Barangay:</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Barangay <span className='text-red-500'>*</span></label>
                 <select
                   value={selectedBarangay}
                   onChange={(e) => setSelectedBarangay(e.target.value)}
@@ -1066,7 +1094,7 @@ export default function CompleteProfile() {
               {/* Address Details */}
               <div className='w-full flex flex-col lg:col-span-1 mb-4'>
                 <label className='hidden lg:block text-sm font-medium text-gray-700 mb-2'>
-                  House No./Unit No./Bldg/Floor, Street, Subdivision
+                  House No./Unit No./Bldg/Floor, Street, Subdivision <span className='text-red-500'>*</span>
                 </label>
                 <label className='block lg:hidden text-sm font-medium text-gray-700 mb-2'>
                   Full Address
@@ -1105,7 +1133,9 @@ export default function CompleteProfile() {
               <span className='text-lg font-bold block'>Elementary</span>
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-2'>School</label>
+                  <label className='block text-sm font-medium text-gray-700 mb-2'>
+                    School <span className='text-red-500'>*</span>
+                  </label>
                   <input
                     type="text"
                     name="school"
@@ -1117,7 +1147,9 @@ export default function CompleteProfile() {
                   />
                 </div>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-2'>Award</label>
+                  <label className='block text-sm font-medium text-gray-700 mb-2'>
+                    Award <span className='text-red-500'>*</span> <span className='text-xs text-gray-500'>(Type N/A if not applicable)</span>
+                  </label>
                   <input
                     type="text"
                     name="award"
@@ -1129,7 +1161,9 @@ export default function CompleteProfile() {
                   />
                 </div>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated</label>
+                  <label className='block text-sm font-medium text-gray-700 mb-2'>
+                    Year Graduated <span className='text-red-500'>*</span>
+                  </label>
                   <select
                     name="yearGraduated"
                     value={formData.education.elementary.yearGraduated}
@@ -1149,7 +1183,9 @@ export default function CompleteProfile() {
               <span className='text-lg font-bold mt-8 block'>Junior High School</span>
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-2'>School</label>
+                  <label className='block text-sm font-medium text-gray-700 mb-2'>
+                    School <span className='text-red-500'>*</span>
+                  </label>
                   <input
                     type="text"
                     name="school"
@@ -1161,7 +1197,9 @@ export default function CompleteProfile() {
                   />
                 </div>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-2'>Award</label>
+                  <label className='block text-sm font-medium text-gray-700 mb-2'>
+                    Award <span className='text-red-500'>*</span> <span className='text-xs text-gray-500'>(Type N/A if not applicable)</span>
+                  </label>
                   <input
                     type="text"
                     name="award"
@@ -1173,7 +1211,9 @@ export default function CompleteProfile() {
                   />
                 </div>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated</label>
+                  <label className='block text-sm font-medium text-gray-700 mb-2'>
+                    Year Graduated <span className='text-red-500'>*</span>
+                  </label>
                   <select
                     name="yearGraduated"
                     value={formData.education.juniorHighSchool.yearGraduated}
@@ -1193,7 +1233,9 @@ export default function CompleteProfile() {
               <span className='text-lg font-bold mt-8 block'>Senior High School</span>
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-2'>School</label>
+                  <label className='block text-sm font-medium text-gray-700 mb-2'>
+                    School <span className='text-red-500'>*</span>
+                  </label>
                   <input
                     type="text"
                     name="school"
@@ -1205,7 +1247,9 @@ export default function CompleteProfile() {
                   />
                 </div>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-2'>Award</label>
+                  <label className='block text-sm font-medium text-gray-700 mb-2'>
+                    Award <span className='text-red-500'>*</span> <span className='text-xs text-gray-500'>(Type N/A if not applicable)</span>
+                  </label>
                   <input
                     type="text"
                     name="award"
@@ -1217,7 +1261,9 @@ export default function CompleteProfile() {
                   />
                 </div>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated</label>
+                  <label className='block text-sm font-medium text-gray-700 mb-2'>
+                    Year Graduated <span className='text-red-500'>*</span>
+                  </label>
                   <select
                     name="yearGraduated"
                     value={formData.education.seniorHighSchool.yearGraduated}
@@ -1237,7 +1283,9 @@ export default function CompleteProfile() {
               <span className='text-lg font-bold mt-8 block'>College</span>
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-2'>College</label>
+                  <label className='block text-sm font-medium text-gray-700 mb-2'>
+                    College <span className='text-red-500'>*</span>
+                  </label>
                   <input
                     type="text"
                     name="school"
@@ -1249,7 +1297,9 @@ export default function CompleteProfile() {
                   />
                 </div>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-2'>College Course</label>
+                  <label className='block text-sm font-medium text-gray-700 mb-2'>
+                    College Course <span className='text-red-500'>*</span>
+                  </label>
                   <select
                     name="course"
                     value={formData.education.college.course}
@@ -1337,10 +1387,10 @@ export default function CompleteProfile() {
 
             <div className="p-4 flex flex-col items-center">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Upload Certificate of Registration (COR) Image
+                Upload School Certificate of Registration (COR) Image
               </label>
               <p className="text-gray-500 text-sm mb-4 text-center">
-                Please upload a clear image of your Certificate of Registration. Accepted formats are JPG, PNG, and GIF.
+                Please upload a clear image of your School Certificate of Registration. Accepted formats are JPG, PNG, and GIF.
               </p>
               <div className="mt-1 flex flex-col items-center">
                 <label className="relative bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50" title="Click to choose a file">
@@ -1388,7 +1438,7 @@ export default function CompleteProfile() {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 h-screen">
+        <div className="fixed inset-0 z-50 flex items-center justify-center h-screen bg-gray-500 bg-opacity-50">
           <div className="relative w-full max-w-5xl">
             <div className="bg-white rounded-lg shadow-lg p-6 max-h-screen overflow-y-auto">
               <div className="flex justify-between items-center mb-4">
@@ -1402,103 +1452,183 @@ export default function CompleteProfile() {
                   </svg>
                 </button>
               </div>
+              <p className="text-sm text-gray-600 mb-4">Please review the information below carefully before submitting.</p>
               <div className="space-y-4">
                 <div className="border-t border-gray-200 pt-4">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">Basic Information</h3>
+                  <h3 className="text-xl font-semibold text-white mb-4 border-b-2 border-gray-300 pb-2 bg-blue-600 p-2 rounded-md">Basic Information</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">First Name:</span> {formData.firstName}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Middle Name:</span> {formData.middleName}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Last Name:</span> {formData.lastName}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Birthdate:</span> {formData.birthdate}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Gender:</span> {formData.gender}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Blood Type:</span> {formData.bloodType}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Civil Status:</span> {formData.civilStatus}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Maiden Name:</span> {formData.maidenName || 'N/A'}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Name of Spouse:</span> {formData.spouseName || 'N/A'}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Occupation of Spouse:</span> {formData.spouseOccupation || 'N/A'}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Religion:</span> {formData.religion}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Height:</span> {formData.height} cm
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Weight:</span> {formData.weight} kg
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Birthplace:</span> {formData.birthplace}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Contact Number:</span> {formData.contactNumber}
-                    </p>
-                    <p className="text-sm text-gray-600 sm:col-span-2">
-                      <span className="font-semibold">Address:</span> {`${formData.addressDetails}, ${formData.barangayName}, ${formData.cityName}, ${formData.provinceName}, ${formData.regionName}`}
-                    </p>
-                  </div>
-                </div>
-                <div className="border-t border-gray-200 pt-4">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">Education Information</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Elementary School:</span> {formData.education.elementary.school}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Elementary Award:</span> {formData.education.elementary.award}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Elementary Year Graduated:</span> {formData.education.elementary.yearGraduated}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Junior High School:</span> {formData.education.juniorHighSchool.school}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Junior High Award:</span> {formData.education.juniorHighSchool.award}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Junior High Year Graduated:</span> {formData.education.juniorHighSchool.yearGraduated}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Senior High School:</span> {formData.education.seniorHighSchool.school}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Senior High Award:</span> {formData.education.seniorHighSchool.award}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">Senior High Year Graduated:</span> {formData.education.seniorHighSchool.yearGraduated}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">College School:</span> {formData.education.college.school}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold">College Course:</span> {formData.education.college.course}
-                    </p>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">First Name:</span> {formData.firstName}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Middle Name:</span> {formData.middleName}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Last Name:</span> {formData.lastName}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Name Extension:</span> {formData.nameExtension || 'N/A'}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Birthdate:</span> {formData.birthdate}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Gender:</span> {formData.gender}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Blood Type:</span> {formData.bloodType}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Civil Status:</span> {formData.civilStatus}
+                      </p>
+                    </div>
+                    {formData.civilStatus === 'Married' && (
+                      <>
+                        <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                          <p className="text-sm text-gray-600">
+                            <span className="font-semibold">Maiden Name:</span> {formData.maidenName || 'N/A'}
+                          </p>
+                        </div>
+                        <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                          <p className="text-sm text-gray-600">
+                            <span className="font-semibold">Name of Spouse:</span> {formData.spouseName || 'N/A'}
+                          </p>
+                        </div>
+                        <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                          <p className="text-sm text-gray-600">
+                            <span className="font-semibold">Occupation of Spouse:</span> {formData.spouseOccupation || 'N/A'}
+                          </p>
+                        </div>
+                      </>
+                    )}
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Religion:</span> {formData.religion}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Height:</span> {formData.height} cm
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Weight:</span> {formData.weight} kg
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Birthplace:</span> {formData.birthplace}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Contact Number:</span> {formData.contactNumber}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm sm:col-span-2">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Address:</span> {`${formData.addressDetails}, ${formData.barangayName}, ${formData.cityName}, ${formData.provinceName}, ${formData.regionName}`}
+                      </p>
+                    </div>
                   </div>
                 </div>
 
                 <div className="border-t border-gray-200 pt-4">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Student ID</h3>
+                  <h3 className="text-xl font-semibold text-white mb-4 border-b-2 border-gray-300 pb-2 bg-blue-600 p-2 rounded-md">Education Information</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="col-span-3">
+                      <h4 className="text-lg font-semibold text-gray-800">Elementary</h4>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">School:</span> {formData.education.elementary.school}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Award:</span> {formData.education.elementary.award}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Year Graduated:</span> {formData.education.elementary.yearGraduated}
+                      </p>
+                    </div>
+
+                    <div className="col-span-3">
+                      <h4 className="text-lg font-semibold text-gray-800">Junior High School</h4>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">School:</span> {formData.education.juniorHighSchool.school}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Award:</span> {formData.education.juniorHighSchool.award}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Year Graduated:</span> {formData.education.juniorHighSchool.yearGraduated}
+                      </p>
+                    </div>
+
+                    <div className="col-span-3">
+                      <h4 className="text-lg font-semibold text-gray-800">Senior High School</h4>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">School:</span> {formData.education.seniorHighSchool.school}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Award:</span> {formData.education.seniorHighSchool.award}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Year Graduated:</span> {formData.education.seniorHighSchool.yearGraduated}
+                      </p>
+                    </div>
+
+                    <div className="col-span-3">
+                      <h4 className="text-lg font-semibold text-gray-800">College</h4>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">School:</span> {formData.education.college.school}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-600">
+                        <span className="font-semibold">Course:</span> {formData.education.college.course}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border-t border-gray-200 pt-4">
+                  <h3 className="text-xl font-semibold text-white mb-4 border-b-2 border-gray-300 pb-2 bg-blue-600 p-2 rounded-md">Student ID</h3>
                   <div className="flex flex-col items-center gap-2">
-                    <p className="text-xs text-gray-600">
+                    <p className="text-sm text-gray-600">
                       <span className="font-semibold">Student ID File:</span> {formData.studentIdFile ? formData.studentIdFile.name : 'N/A'}
                     </p>
                     {formData.studentIdFile && (
@@ -1514,9 +1644,9 @@ export default function CompleteProfile() {
                 </div>
 
                 <div className="border-t border-gray-200 pt-4">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Certificate of Registration (COR)</h3>
+                  <h3 className="text-xl font-semibold text-white mb-4 border-b-2 border-gray-300 pb-2 bg-blue-600 p-2 rounded-md">Certificate of Registration (COR)</h3>
                   <div className="flex flex-col items-center gap-2">
-                    <p className="text-xs text-gray-600">
+                    <p className="text-sm text-gray-600">
                       <span className="font-semibold">COR File:</span> {formData.certificateOfRegistrationFile ? formData.certificateOfRegistrationFile.name : 'N/A'}
                     </p>
                     {formData.certificateOfRegistrationFile && (
@@ -1530,9 +1660,10 @@ export default function CompleteProfile() {
                     )}
                   </div>
                 </div>
+
                 {/* Image Modal */}
                 {showImageModal && (
-                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50 p-4">
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
                     <div className="relative bg-white rounded-lg shadow-lg p-4 max-w-md max-h-md overflow-auto">
                       <button
                         onClick={() => setShowImageModal(false)}
