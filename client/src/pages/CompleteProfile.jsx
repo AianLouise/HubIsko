@@ -934,20 +934,15 @@ export default function CompleteProfile() {
 
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>Religion <span className='text-red-500'>*</span></label>
-                <select
+                <input
+                  type="text"
                   name="religion"
                   value={formData.religion}
                   onChange={handleChange}
+                  placeholder="Enter your religion"
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   required
-                >
-                  <option value="">Select Religion</option>
-                  <option value="Roman Catholic">Roman Catholic</option>
-                  <option value="Iglesia ni Cristo">Iglesia ni Cristo</option>
-                  <option value="Islam">Islam</option>
-                  <option value="Born Again Christian">Born Again Christian</option>
-                  <option value="Others">Others</option>
-                </select>
+                />
               </div>
 
               <div>

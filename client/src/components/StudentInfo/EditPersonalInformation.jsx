@@ -371,21 +371,18 @@ export default function EditPersonalInformation() {
                         <option value="unknown">I don't know</option> {/* Added option for unknown blood type */}
                     </select>
                 </div>
+
                 <div className="flex flex-col gap-2">
                     <label className="block text-sm font-medium text-gray-700">Religion</label>
-                    <select
+                    <input
+                        type="text"
                         name="religion"
                         className={inputClasses}
                         value={formData.applicantDetails.religion}
                         onChange={handleChange}
+                        placeholder="Enter your religion"
                         disabled={!isEditing}
-                    >
-                        <option value="Roman Catholic">Roman Catholic</option>
-                        <option value="Iglesia ni Cristo">Iglesia ni Cristo</option>
-                        <option value="Islam">Islam</option>
-                        <option value="Born Again Christian">Born Again Christian</option>
-                        <option value="Others">Others</option>
-                    </select>
+                    />
                 </div>
 
                 {/* Third Row: Civil Status, Maiden Name, Spouse Name, Spouse Occupation */}
