@@ -40,7 +40,9 @@ const ScholarshipProviderScholarships = ({ userId }) => {
   const filteredScholarships = scholarships
     .filter(scholarship =>
       scholarship.status === 'Published' &&
-      scholarship.title.toLowerCase().includes(searchQuery.toLowerCase())
+      (scholarship.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        scholarship.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        scholarship.organizationName.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
   return (
@@ -48,7 +50,7 @@ const ScholarshipProviderScholarships = ({ userId }) => {
       <div className='mb-4'>
         <input
           type="text"
-          placeholder='Search scholarship'
+          placeholder='Search Scholarship Program'
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className='border border-gray-300 p-2 px-4 lg:px-6 lg:text-base lg:font-sm w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition ease-in-out duration-150'
@@ -82,7 +84,7 @@ const ScholarshipProviderScholarships = ({ userId }) => {
                 </div>
                 <div className='flex flex-col ml-6 flex-grow'>
                   <div className='flex justify-between items-center'>
-                    <h2 className='lg:text-lg font-semibold'>{truncateText(scholarship.title, 12)}</h2>
+                    <h2 className='lg:text-lg font-semibold'>{truncateText(scholarship.title, 25)}</h2>
                     <span className='font-medium bg-blue-600 text-white px-2 py-1 rounded-full'>{scholarship.approvedScholars.length}/{scholarship.numberOfScholarships}</span>
                   </div>
                   <p className='text-sm lg:text-base lg:text-gray-500'>{truncateText(scholarship.organizationName, 50)}</p>

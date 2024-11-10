@@ -237,6 +237,7 @@ export default function EditScholarshipWebView() {
     const isEmailLong = formData.contactEmail.length > 30;
     const isPhoneLong = formData.contactPhone.length > 20;
 
+
     return (
         <div>
             <main className='flex-grow bg-[#f8f8fb] font-medium'>
@@ -294,13 +295,13 @@ export default function EditScholarshipWebView() {
                                 <span className='text-xl font-bold text-gray-600 pr-4'>
                                     {programDetails ? programDetails.organizationName : 'Scholarship Provider'}
                                 </span>
-                                <span className='text-xl font-medium text-gray-400 pl-4'>{new Date().toLocaleDateString('en-US')}</span>
+                                <span className='text-xl font-medium text-gray-400 pl-4'>{formatDate(new Date())}</span>
                             </div>
                             <h1 className='text-4xl font-bold text-gray-800'>{formData.title}</h1>
 
-                            <div className='flex text-blue-600 font-bold'>
-                                <div className='flex flex-row gap-2 px-2 text-xl'>
-                                    <FaHandHolding className='' />
+                            <div className='flex text-blue-600 font-bold items-center justify-center lg:justify-start'>
+                                <div className='flex items-center gap-2 px-10 py-2 lg:py-0 lg:px-2 text-xl bg-slate-200 rounded-md lg:bg-[#f8f8fb]'>
+                                    <FaHandHolding className='w-6 h-6 flex-shrink-0' style={{ marginTop: '-10px' }} />
                                     {formData.amount}
                                 </div>
                             </div>
@@ -308,13 +309,13 @@ export default function EditScholarshipWebView() {
                     </div>
 
                     <div className='flex flex-col items-center mx-auto max-w-6xl gap-8 lg:px-24 p-4'>
-                        <div className='flex flex-col gap-2 bg-white shadow-md rounded-md p-6 px-10 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                        <div className='flex flex-col gap-2 bg-white shadow-md rounded-md p-6 px-10 hover:bg-gray-200 hover:shadow-lg transition duration-300 items-center'>
                             <div className='flex items-center gap-4'>
                                 <FaBook className='text-blue-500 w-6 h-6' />
                                 <p className='text-base font-semibold'>Field of Study</p>
                             </div>
                             {formData.fieldOfStudy && (
-                                <ul className='grid grid-cols-1 md:grid-cols-2 list-disc list-inside gap-2 mx-auto'>
+                                <ul className='grid grid-cols-1 md:grid-cols-2 list-disc list-inside gap-2'>
                                     {formData.fieldOfStudy.map((course, index) => (
                                         <li key={index} className='text-base'>{course}</li>
                                     ))}
@@ -335,13 +336,13 @@ export default function EditScholarshipWebView() {
 
                     <div className='max-w-6xl px-24 mx-auto mb-20 mt-3'>
                         <div className='flex gap-2'>
-                            <span className='flex gap-1 bg-white border px-4 py-2 rounded-md shadow'>
+                            <span className='flex gap-1 bg-white border px-4 py-2 rounded-md shadow items-center'>
                                 <MdOutlineRefresh className='w-6 h-6 text-blue-600' />
-                                Last update: {new Date().toLocaleDateString('en-US')}
+                                Last update: {formatDate(new Date())}
                             </span>
                             <span className='flex gap-2 bg-white border px-4 py-2 rounded-md shadow items-center'>
-                                <FaRegCalendarXmark className='text-red-500' />
-                                Deadline:  {formatDate(formData.applicationDeadline)}
+                                <FaRegCalendarXmark className='text-red-500 w-6 h-6' />
+                                Deadline: {formatDate(formData.applicationDeadline)}
                             </span>
                         </div>
 

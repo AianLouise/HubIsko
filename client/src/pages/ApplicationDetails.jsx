@@ -273,13 +273,13 @@ export default function Forums() {
                             <div className='flex flex-row divide-x-2 divide-blue-200 mb-2'>
                                 <span className='text-lg lg:text-xl font-bold text-gray-600 pr-4'>{scholarship.organizationName}</span>
                                 {/* need date posted */}
-                                <span className='text-lg lg:text-xl font-medium text-gray-400 pl-4'>{new Date(scholarship.applicationStartDate).toLocaleDateString()}</span>
+                                <span className='text-lg lg:text-xl font-medium text-gray-400 pl-4'>{formatDate(scholarship.applicationStartDate)}</span>
                             </div>
                             <h1 className='text-4xl hidden lg:block font-bold text-gray-800'>{scholarship.title}</h1>
 
                             <div className='flex text-blue-600 font-bold items-center justify-center lg:justify-start'>
-                                <div className='flex flex-row gap-2 px-10 py-2 lg:py-0 lg:px-2 text-xl bg-slate-200 rounded-md lg:bg-[#f8f8fb]'>
-                                    <FaHandHolding className='w-6 h-6 flex-shrink-0' />
+                                <div className='flex items-center gap-2 px-10 py-2 lg:py-0 lg:px-2 text-xl bg-slate-200 rounded-md lg:bg-[#f8f8fb]'>
+                                    <FaHandHolding className='w-6 h-6 flex-shrink-0' style={{ marginTop: '-10px' }} />
                                     {scholarship.amount}
                                 </div>
                             </div>
@@ -287,13 +287,15 @@ export default function Forums() {
                     </div>
 
                     <div className='flex flex-col items-center mx-auto max-w-6xl gap-8 lg:px-24 p-4'>
-                        <div className='flex flex-col gap-2 bg-white shadow-md rounded-md p-6 px-10 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                        <div className='flex flex-col gap-2 bg-white shadow-md rounded-md p-6 px-10 hover:bg-gray-200 hover:shadow-lg transition duration-300 items-center'>
                             <div className='flex items-center gap-4'>
                                 <FaBook className='text-blue-500 w-6 h-6' />
                                 <p className='text-base font-semibold'>Field of Study</p>
                             </div>
-                            {scholarship.fieldOfStudy && (
-                                <ul className='grid grid-cols-1 md:grid-cols-2 list-disc list-inside gap-2 mx-auto'>
+                            {scholarship.fieldOfStudy && scholarship.fieldOfStudy.includes("Open for All Courses") ? (
+                                <p className='text-base text-center'>Open for All Courses</p>
+                            ) : (
+                                <ul className='grid grid-cols-1 md:grid-cols-2 list-disc list-inside gap-2'>
                                     {scholarship.fieldOfStudy.map((course, index) => (
                                         <li key={index} className='text-base'>{course}</li>
                                     ))}
@@ -315,12 +317,12 @@ export default function Forums() {
                     <div className='max-w-6xl lg:px-24 p-4 mx-auto mb-20'>
                         <div className='flex flex-col md:flex-row justify-between gap-2'>
                             <div className='flex flex-col md:flex-row gap-2 lg:items-center'>
-                                <span className='flex gap-1 bg-white border px-4 py-2 rounded-md shadow'>
+                                <span className='flex gap-1 bg-white border px-4 py-2 rounded-md shadow items-center'>
                                     <MdOutlineRefresh className='w-6 h-6 text-blue-600' />
-                                    Last update: {new Date(scholarship.dateUpdated).toLocaleDateString()}
+                                    Last update: {formatDate(scholarship.dateUpdated)}
                                 </span>
                                 <span className='flex gap-2 bg-white border px-4 py-2 rounded-md shadow items-center'>
-                                    <FaRegCalendarXmark className='text-red-500' />
+                                    <FaRegCalendarXmark className='w-6 h-6 text-red-500' />
                                     Deadline: {formatDate(scholarship.applicationDeadline)}
                                 </span>
                             </div>
@@ -371,18 +373,18 @@ export default function Forums() {
 
                             {/* Contact Section */}
                             <div className={`flex flex-col ${isEmailLong || isPhoneLong ? 'space-y-6' : 'lg:flex-row lg:space-x-6'} justify-center items-center mb-8 px-2`}>
-                                <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
+                                <div className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
                                     <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
                                         <FaEnvelope className='text-white' />
                                     </div>
                                     <div className='flex flex-col justify-center flex-grow'>
-                                        <span className='text-slate-600 text-left'>Email Us!</span>
+                                        <span className='text-slate-600 text-left'>Email us!</span>
                                         <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{scholarship.contactEmail}</span>
                                     </div>
-                                </button>
+                                </div>
 
                                 {!isEmailLong && (
-                                    <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
+                                    <div className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
                                         <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
                                             <FaPhone className='text-white' />
                                         </div>
@@ -390,7 +392,7 @@ export default function Forums() {
                                             <span className='text-slate-600 text-left'>Call us!</span>
                                             <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{scholarship.contactPhone}</span>
                                         </div>
-                                    </button>
+                                    </div>
                                 )}
 
                                 {!isEmailLong && !isPhoneLong && (
@@ -406,7 +408,7 @@ export default function Forums() {
                                 )}
 
                                 {isEmailLong && (
-                                    <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
+                                    <div className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
                                         <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
                                             <FaPhone className='text-white' />
                                         </div>
@@ -414,11 +416,11 @@ export default function Forums() {
                                             <span className='text-slate-600 text-left'>Call us!</span>
                                             <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{scholarship.contactPhone}</span>
                                         </div>
-                                    </button>
+                                    </div>
                                 )}
 
                                 {(isEmailLong || isPhoneLong) && (
-                                    <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
+                                    <div className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
                                         <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
                                             <FaUser className='text-white' />
                                         </div>
@@ -426,7 +428,7 @@ export default function Forums() {
                                             <span className='text-slate-600'>Visit our profile!</span>
                                             <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{scholarship.organizationName}</span>
                                         </Link>
-                                    </button>
+                                    </div>
                                 )}
                             </div>
                         </div>

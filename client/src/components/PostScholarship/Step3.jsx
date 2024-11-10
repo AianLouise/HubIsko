@@ -144,6 +144,11 @@ const Step3 = ({ formData, setFormData }) => {
     const isEmailLong = formData.contactEmail.length > 30;
     const isPhoneLong = formData.contactPhone.length > 20;
 
+    const formatDate = (dateString) => {
+        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString('en-US', options);
+    };
+
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -186,7 +191,7 @@ const Step3 = ({ formData, setFormData }) => {
                                 <span className='text-xl font-bold text-gray-600 pr-4'>
                                     {currentUser ? currentUser.scholarshipProviderDetails.organizationName : 'Scholarship Provider'}
                                 </span>
-                                <span className='text-xl font-medium text-gray-400 pl-4'>{new Date().toLocaleDateString('en-US')}</span>
+                                <span className='text-xl font-medium text-gray-400 pl-4'>{formatDate(new Date())}</span>
                             </div>
                             <h1 className='text-4xl font-bold text-gray-800'>{formData.title}</h1>
 
@@ -200,7 +205,7 @@ const Step3 = ({ formData, setFormData }) => {
                     </div>
 
                     <div className='flex flex-col items-center mx-auto max-w-6xl gap-8 lg:px-24 p-4'>
-                        <div className='flex flex-col gap-2 bg-white shadow-md rounded-md p-6 px-10 hover:bg-gray-200 hover:shadow-lg transition duration-300'>
+                        <div className='flex flex-col gap-2 bg-white shadow-md rounded-md p-6 px-10 hover:bg-gray-200 hover:shadow-lg transition duration-300 items-center'>
                             <div className='flex items-center gap-4'>
                                 <FaBook className='text-blue-500 w-6 h-6' />
                                 <p className='text-base font-semibold'>Field of Study</p>
@@ -227,13 +232,13 @@ const Step3 = ({ formData, setFormData }) => {
 
                     <div className='max-w-6xl px-24 mx-auto mb-20 mt-3'>
                         <div className='flex gap-2'>
-                            <span className='flex gap-1 bg-white border px-4 py-2 rounded-md shadow'>
+                            <span className='flex gap-1 bg-white border px-4 py-2 rounded-md shadow items-center'>
                                 <MdOutlineRefresh className='w-6 h-6 text-blue-600' />
-                                Last update: {new Date().toLocaleDateString('en-US')}
+                                Last update: {formatDate(new Date())}
                             </span>
                             <span className='flex gap-2 bg-white border px-4 py-2 rounded-md shadow items-center'>
-                                <FaRegCalendarXmark className='text-red-500' />
-                                Deadline:  No deadline set
+                                <FaRegCalendarXmark className='text-red-500 w-6 h-6' />
+                                Deadline: No deadline set
                             </span>
                         </div>
 
@@ -327,7 +332,7 @@ const Step3 = ({ formData, setFormData }) => {
 
                             {/* Contact Section */}
                             <div className={`flex flex-col ${isEmailLong || isPhoneLong ? 'space-y-6' : 'lg:flex-row lg:space-x-6'} justify-center items-center mb-8 px-2`}>
-                                <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
+                                <div className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
                                     <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
                                         <FaEnvelope className='text-white' />
                                     </div>
@@ -335,10 +340,10 @@ const Step3 = ({ formData, setFormData }) => {
                                         <span className='text-slate-600 text-left'>Email Us!</span>
                                         <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{formData.contactEmail}</span>
                                     </div>
-                                </button>
+                                </div>
 
                                 {!isEmailLong && (
-                                    <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
+                                    <div className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
                                         <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
                                             <FaPhone className='text-white' />
                                         </div>
@@ -346,11 +351,11 @@ const Step3 = ({ formData, setFormData }) => {
                                             <span className='text-slate-600 text-left'>Call us!</span>
                                             <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{formData.contactPhone}</span>
                                         </div>
-                                    </button>
+                                    </div>
                                 )}
 
                                 {!isEmailLong && !isPhoneLong && (
-                                    <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
+                                    <div className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
                                         <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
                                             <FaUser className='text-white' />
                                         </div>
@@ -358,11 +363,11 @@ const Step3 = ({ formData, setFormData }) => {
                                             <span className='text-slate-600'>Visit our profile!</span>
                                             <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{formData.organizationName}</span>
                                         </div>
-                                    </button>
+                                    </div>
                                 )}
 
                                 {isEmailLong && (
-                                    <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
+                                    <div className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
                                         <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
                                             <FaPhone className='text-white' />
                                         </div>
@@ -370,7 +375,7 @@ const Step3 = ({ formData, setFormData }) => {
                                             <span className='text-slate-600 text-left'>Call us!</span>
                                             <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{formData.contactPhone}</span>
                                         </div>
-                                    </button>
+                                    </div>
                                 )}
 
                                 {(isEmailLong || isPhoneLong) && (
