@@ -141,15 +141,18 @@ export default function ScholarshipListing() {
   const filteredScholarships = scholarships
     .filter(scholarship =>
       scholarship.status === 'Published' &&
-      scholarship.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (selectedCourse === '' || scholarship.fieldOfStudy.includes(selectedCourse)) &&
-      (selectedLocation === '' || scholarship.location === selectedLocation) &&
+      (scholarship.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        scholarship.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        scholarship.organizationName.toLowerCase().includes(searchQuery.toLowerCase())) &&
+      (selectedCourse === '' || scholarship.fieldOfStudy.includes(selectedCourse) || scholarship.fieldOfStudy.includes('Open for All Courses')) &&
+      (selectedLocation === '' || scholarship.location === selectedLocation || scholarship.location.includes('Open for Any Location')) &&
       (selectedEducationLevel === '' || scholarship.educationLevel === selectedEducationLevel)
-    );
+    )
+    .sort((a, b) => new Date(a.applicationDeadline) - new Date(b.applicationDeadline)); // Sort by application deadline date
 
   const courses = [
     "Open for All Courses",
-        "BA in Anthropology",
+    "BA in Anthropology",
     "BA in Art Studies",
     "BA in Communication",
     "BA in Development Communication",
@@ -314,54 +317,61 @@ export default function ScholarshipListing() {
         </div>
 
         <div className='flex flex-col gap-4 justify-center items-center px-4 lg:mx-auto lg:max-w-6xl lg:px-24 lg:my-8'>
-          <div className='flex gap-2 items-center justify-between'>
+          <div className='flex flex-col gap-2 items-center justify-between'>
             <span className='text-xl font-bold text-slate-600'>Organizations</span>
+            <p className='text-sm text-gray-500'>Showing all available organizations</p>
           </div>
 
           <div className='flex items-center justify-center p-4'>
             <div
               className={`flex flex-wrap justify-center gap-6 ${isLargeScreen ? 'overflow-hidden' : 'overflow-x-auto'} mx-4`}
             >
-              {allProviders.map((provider) => (
-                <Link
-                  to={`/profile/${provider._id}`}
-                  key={provider._id}
-                  className='flex flex-col items-center group flex-shrink-0 relative'
-                >
-                  <button className='flex flex-col items-center group space-y-2 relative ml-4 lg:ml-0'>
-                    <div className='w-12 h-12 lg:w-20 lg:h-20 rounded-full overflow-hidden group-hover:bg-blue-800'>
-                      <img
-                        src={provider.profilePicture}
-                        alt={`${provider.scholarshipProviderDetails.organizationName}'s profile`}
-                        className='w-full h-full object-cover'
-                      />
+              {allProviders
+                .sort((a, b) => a.scholarshipProviderDetails.organizationName.localeCompare(b.scholarshipProviderDetails.organizationName))
+                .map((provider) => (
+                  <Link
+                    to={`/profile/${provider._id}`}
+                    key={provider._id}
+                    className='flex flex-col items-center group flex-shrink-0 relative'
+                  >
+                    <button className='flex flex-col items-center group space-y-2 relative ml-4 lg:ml-0'>
+                      <div className='w-12 h-12 lg:w-20 lg:h-20 rounded-full overflow-hidden group-hover:bg-blue-800'>
+                        <img
+                          src={provider.profilePicture}
+                          alt={`${provider.scholarshipProviderDetails.organizationName}'s profile`}
+                          className='w-full h-full object-cover'
+                        />
+                      </div>
+                      <span
+                        className='font-medium max-w-[100px] text-sm lg:text-ellipsis overflow-hidden whitespace-nowrap group-hover:tooltip'
+                        title={provider.scholarshipProviderDetails.organizationName}
+                      >
+                        {provider.scholarshipProviderDetails.organizationName.length > 15
+                          ? `${provider.scholarshipProviderDetails.organizationName.slice(0, 12)}...`
+                          : provider.scholarshipProviderDetails.organizationName}
+                      </span>
+                    </button>
+                    <div className='absolute mt-14 p-2 z-20 bg-white border-2 border-blue-500 shadow-lg text-center text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden sm:block'>
+                      {provider.scholarshipProviderDetails.organizationName}
                     </div>
-                    <span
-                      className='font-medium max-w-[100px] text-sm lg:text-ellipsis overflow-hidden whitespace-nowrap group-hover:tooltip'
-                      title={provider.scholarshipProviderDetails.organizationName}
-                    >
-                      {provider.scholarshipProviderDetails.organizationName.length > 15
-                        ? `${provider.scholarshipProviderDetails.organizationName.slice(0, 12)}...`
-                        : provider.scholarshipProviderDetails.organizationName}
-                    </span>
-                  </button>
-                  <div className='absolute mt-14 p-2 z-20 bg-white border-2 border-blue-500 shadow-lg text-center text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none hidden sm:block'>
-                    {provider.scholarshipProviderDetails.organizationName}
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ))}
             </div>
           </div>
         </div>
 
-        <div className='flex flex-col mx-auto max-w-6xl justify-center items-center px-10 lg:px-24'>
-          <div className='flex flex-col w-full gap-4'>
+        <div className='flex flex-col mx-auto max-w-6xl justify-center items-center px-10'>
+          <div className='flex flex-col gap-2 items-center justify-between'>
+            <span className='text-xl font-bold text-slate-600'>Scholarship Programs</span>
+            <p className='text-sm text-gray-500'>Showing all available scholarship programs</p>
+          </div>
+          <div className='flex flex-col gap-4 p-4'>
             <div className='flex flex-col lg:flex-row items-center justify-between gap-4'>
               <div className='relative w-full lg:w-auto'>
                 <FaSearch className='absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500' />
                 <input
                   type="text"
-                  placeholder='Search scholarship'
+                  placeholder='Search Scholarship Program'
                   value={searchQuery}
                   onChange={handleSearchChange}
                   className='border border-gray-300 p-2 px-4 pl-12 lg:px-9 lg:text-base lg:font-sm w-full lg:w-[500px] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition ease-in-out duration-150'
@@ -442,7 +452,7 @@ export default function ScholarshipListing() {
                     </div>
                     <div className='flex flex-col ml-6 flex-grow'>
                       <div className='flex justify-between items-center'>
-                        <h2 className='lg:text-lg font-semibold'>{truncateText(scholarship.title, 12)}</h2>
+                        <h2 className='lg:text-lg font-semibold'>{truncateText(scholarship.title, 25)}</h2>
                         <span className='font-medium bg-blue-600 text-white px-2 py-1 rounded-full'>{scholarship.approvedScholars}/{scholarship.numberOfScholarships}</span>
                       </div>
                       <p className='text-sm lg:text-base lg:text-gray-500'>{truncateText(scholarship.organizationName, 50)}</p>
@@ -454,24 +464,13 @@ export default function ScholarshipListing() {
                       <div className='-translate-y-4'>
                         <div className='flex text-blue-600 text-left justify-center font-bold'>
                           <div className='flex flex-row bg-white gap-2 px-2 items-center'>
-                            <FaHandHolding className='text-xl flex-shrink-0' />
-                            {truncateText(scholarship.amount, 50)}
+                            <FaHandHolding className='text-xl flex-shrink-0' style={{ marginTop: '-10px' }} />
+                            <span className='flex items-center'>{truncateText(scholarship.amount, 50)}</span>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div className='flex flex-col gap-4'>
-                      {/* Slots Info */}
-                      {/* <div className='flex lg:flex-row lg:gap-4'>
-                        <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
-                          <div className='flex lg:gap-0 gap-2'>
-                            <FaInfoCircle className='text-2xl text-blue-600 w-4 lg:w-10' />
-                            <p className='font-medium'>Slots:  </p>
-                          </div>
-                          <p className='text-sm lg:hidden'>{scholarship.slots}</p>
-                        </div>
-                        <p className='w-full text-sm hidden lg:block'>{scholarship.slots}</p>
-                      </div> */}
                       <div className='flex lg:flex-row lg:gap-4'>
                         <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
                           <div className='flex lg:gap-0 gap-2'>
