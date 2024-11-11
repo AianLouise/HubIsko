@@ -87,17 +87,20 @@ const Step5 = ({ formData, setFormData, errors, scholarship, requiredDocuments }
           </div>
 
           <div className='p-4'>
-            <p className='text-base font-medium text-gray-800 mb-2 whitespace-pre-wrap'>{scholarship.documentGuidelines}</p>
-            <p className='text-sm text-gray-700 mb-4'>
-              Please upload the following documents:
-            </p>
+            <h2 className='text-lg font-semibold text-gray-800 mb-2'>Please upload the following documents:</h2>
             <ul className='list-disc list-inside mt-2 text-sm text-gray-700 space-y-1'>
               {requiredDocuments.map(doc => (
                 <li key={doc.name} className='pl-2'>{doc.name}</li>
               ))}
             </ul>
 
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
+            <div className='mt-4'>
+              <h2 className='text-lg font-semibold text-gray-800 mb-2'>Document Upload Guidelines</h2>
+              <p className='text-base font-medium text-gray-800 mb-2 whitespace-pre-wrap'>{scholarship.documentGuidelines}</p>
+            </div>
+
+            <h2 className='text-lg font-semibold text-gray-800 mt-6 mb-4'>Document Uploads</h2>
+            <div className='grid grid-cols-1 gap-4 mt-4'>
               {requiredDocuments.map(doc => (
                 <div key={doc.name} className='mb-4'>
                   <label className='block text-sm font-medium text-gray-700 mb-2'>{doc.name} <span className='text-red-500'>*</span></label>
