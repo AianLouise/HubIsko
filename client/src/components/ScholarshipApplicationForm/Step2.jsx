@@ -116,30 +116,49 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   name="firstName"
                   value={formData.father.firstName}
                   onChange={(e) => handleChange(e, 'father')}
+                  onKeyPress={(e) => {
+                    if (!/[a-zA-Z]/.test(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
                   required
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter first name"
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name <span className='text-red-500'>*</span></label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                  Last Name <span className='text-red-500'>*</span>
+                </label>
                 <input
                   type="text"
                   name="lastName"
                   value={formData.father.lastName}
                   onChange={(e) => handleChange(e, 'father')}
+                  onKeyPress={(e) => {
+                    if (!/[a-zA-Z]/.test(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
                   required
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter last name"
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name <span className='text-red-500'>*</span></label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                  Middle Name <span className='text-red-500'>*</span>
+                </label>
                 <input
                   type="text"
                   name="middleName"
                   value={formData.father.middleName}
                   onChange={(e) => handleChange(e, 'father')}
+                  onKeyPress={(e) => {
+                    if (!/[a-zA-Z]/.test(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
                   required
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter middle name"
@@ -198,20 +217,19 @@ const Step2 = ({ formData, setFormData, errors }) => {
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No. <span className='text-red-500'>*</span></label>
                 <input
-                  type="number"
+                  type="tel"
                   name="contactNo"
+                  id='contactNumber'
                   value={formData.father.contactNo}
                   onChange={(e) => handleChange(e, 'father')}
-                  onInput={(e) => {
-                    if (e.target.value.length > 11) {
-                      e.target.value = e.target.value.slice(0, 11);
-                    }
-                  }}
-                  required
+                  onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')}
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter contact number"
                   maxLength="11"
-                  title="Please enter a valid 11-digit phone number"
+                  inputMode="numeric"
+                  pattern="09\d{9}"
+                  title="Please enter a valid 11-digit phone number starting with 09"
+                  required
                 />
               </div>
             </div>
@@ -225,6 +243,11 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   name="firstName"
                   value={formData.mother.firstName}
                   onChange={(e) => handleChange(e, 'mother')}
+                  onKeyPress={(e) => {
+                    if (!/[a-zA-Z]/.test(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
                   required
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter first name"
@@ -237,6 +260,11 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   name="lastName"
                   value={formData.mother.lastName}
                   onChange={(e) => handleChange(e, 'mother')}
+                  onKeyPress={(e) => {
+                    if (!/[a-zA-Z]/.test(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
                   required
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter last name"
@@ -249,6 +277,11 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   name="middleName"
                   value={formData.mother.middleName}
                   onChange={(e) => handleChange(e, 'mother')}
+                  onKeyPress={(e) => {
+                    if (!/[a-zA-Z]/.test(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
                   required
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter middle name"
@@ -307,19 +340,21 @@ const Step2 = ({ formData, setFormData, errors }) => {
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No. <span className='text-red-500'>*</span></label>
                 <input
-                  type="number"
+                  type="tel"
                   name="contactNo"
+                  id='contactNumber'
                   value={formData.mother.contactNo}
-                  onChange={(e) => handleChange(e, 'mother')}
-                  onInput={(e) => {
-                    if (e.target.value.length > 11) {
-                      e.target.value = e.target.value.slice(0, 11);
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[^0-9]/g, '');
+                    if (value.length <= 11) {
+                      handleChange({ target: { name: 'contactNo', value } }, 'mother');
                     }
                   }}
                   required
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter contact number"
                   maxLength="11"
+                  inputMode="numeric"
                   title="Please enter a valid 11-digit phone number"
                 />
               </div>
@@ -343,6 +378,11 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   name="firstName"
                   value={formData.guardian.firstName}
                   onChange={(e) => handleChange(e, 'guardian')}
+                  onKeyPress={(e) => {
+                    if (!/[a-zA-Z]/.test(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter first name"
                 />
@@ -354,6 +394,11 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   name="lastName"
                   value={formData.guardian.lastName}
                   onChange={(e) => handleChange(e, 'guardian')}
+                  onKeyPress={(e) => {
+                    if (!/[a-zA-Z]/.test(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter last name"
                 />
@@ -365,6 +410,11 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   name="middleName"
                   value={formData.guardian.middleName}
                   onChange={(e) => handleChange(e, 'guardian')}
+                  onKeyPress={(e) => {
+                    if (!/[a-zA-Z]/.test(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter middle name"
                 />
@@ -421,9 +471,18 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   type="tel"
                   name="contactNo"
                   value={formData.guardian.contactNo}
-                  onChange={(e) => handleChange(e, 'guardian')}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[^0-9]/g, '');
+                    if (value.length <= 11) {
+                      handleChange({ target: { name: 'contactNo', value } }, 'guardian');
+                    }
+                  }}
+                  required
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
                   placeholder="Enter contact number"
+                  maxLength="11"
+                  inputMode="numeric"
+                  title="Please enter a valid 11-digit phone number"
                 />
               </div>
             </div>

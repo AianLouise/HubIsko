@@ -312,9 +312,9 @@ const ScholarshipApplicationForm = () => {
                         errors.guardianYearlyIncome = 'Guardian\'s yearly income is required';
                     }
                     if (!formData.guardian.contactNo || formData.guardian.contactNo.trim() === '') {
-                        errors.guardianContactNo = 'Guardian\'s contact number is required';
-                    } else if (!/^\d+$/.test(formData.guardian.contactNo)) {
-                        errors.guardianContactNo = 'Guardian\'s contact number is invalid';
+                        errors.guardianContactNo = "Guardian's contact number is required";
+                    } else if (!/^09\d{9}$/.test(formData.guardian.contactNo)) {
+                        errors.guardianContactNo = "Guardian's contact number is invalid. It should be an 11-digit number starting with 09";
                     }
                 } else if (hasParentInput) {
                     // Validate father details
@@ -339,9 +339,9 @@ const ScholarshipApplicationForm = () => {
                         errors.fatherYearlyIncome = 'Father\'s yearly income is required';
                     }
                     if (!formData.father.contactNo || formData.father.contactNo.trim() === '') {
-                        errors.fatherContactNo = 'Father\'s contact number is required';
-                    } else if (!/^\d+$/.test(formData.father.contactNo)) {
-                        errors.fatherContactNo = 'Father\'s contact number is invalid';
+                        errors.fatherContactNo = "Father's contact number is required";
+                    } else if (!/^09\d{9}$/.test(formData.father.contactNo)) {
+                        errors.fatherContactNo = "Father's contact number is invalid. It should be an 11-digit number starting with 09";
                     }
 
                     // Validate mother details
@@ -366,9 +366,9 @@ const ScholarshipApplicationForm = () => {
                         errors.motherYearlyIncome = 'Mother\'s yearly income is required';
                     }
                     if (!formData.mother.contactNo || formData.mother.contactNo.trim() === '') {
-                        errors.motherContactNo = 'Mother\'s contact number is required';
-                    } else if (!/^\d+$/.test(formData.mother.contactNo)) {
-                        errors.motherContactNo = 'Mother\'s contact number is invalid';
+                        errors.motherContactNo = "Mother's contact number is required";
+                    } else if (!/^09\d{9}$/.test(formData.mother.contactNo)) {
+                        errors.motherContactNo = "Mother's contact number is invalid. It should be an 11-digit number starting with 09";
                     }
                 } else {
                     errors.general = 'Please provide details for either parents or a guardian';
