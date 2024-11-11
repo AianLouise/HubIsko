@@ -197,7 +197,7 @@ export default function Header() {
                   <Link to='/about'>
                     <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/about' ? 'bg-blue-600' : 'bg-slate-500'}`}>
 
-                      <IoInformationCircle className='w-5 h-5' />About
+                      <IoInformationCircle className='w-5 h-5' />About Us
                     </li></Link>
 
                   <button onClick={handleSignOut} className="border-2 text-slate-700 px-4 p-2 text-left rounded-md flex items-center gap-2">
@@ -307,7 +307,7 @@ export default function Header() {
                 <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20 font-medium text-center">
                   {/* Dropdown items here */}
                   <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Manage Account</Link>
-                  <Link to='/about' className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>About</Link>
+                  <Link to='/about' className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>About Us</Link>
                   <button onClick={handleSignOut} className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-red-600 hover:text-white">Sign out</button>
                 </div>
               )}

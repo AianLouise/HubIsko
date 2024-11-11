@@ -10,7 +10,7 @@ import { FaTools } from "react-icons/fa";
 import { MdForum } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa";
 import { FaHandshake } from "react-icons/fa";
-import { FaCheck } from "react-icons/fa6";
+import { FaCheck, FaRocket } from "react-icons/fa6";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { VscTriangleRight } from "react-icons/vsc";
 import { useState } from 'react';
@@ -174,11 +174,31 @@ export default function Home() {
             <div className='font-bold text-2xl lg:text-4xl w-full text-center mb-10'>Browse Our Features</div>
 
             <div className='m-2 flex flex-col justify-between gap-2 items-center text-center'>
-              <div className=' hidden lg:flex flex-row gap-3 font-semibold mb-6'>
-                <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 ${selectedTab === 'Explore Resources' ? 'bg-white shadow-md hover:bg-white' : ''}`} onClick={() => handleTabClick('Explore Resources')}>Scholarship Finder</button>
-                <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 ${selectedTab === 'Fast Processing' ? 'bg-white shadow-md hover:bg-white' : ''}`} onClick={() => handleTabClick('Fast Processing')} >Automated Processing</button>
-                <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 ${selectedTab === 'Organization Tools' ? 'bg-white shadow-md hover:bg-white' : ''}`} onClick={() => handleTabClick('Organization Tools')} >Scholar Dashboard</button>
-                <button className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 ${selectedTab === 'Enhanced Security' ? 'bg-white shadow-md hover:bg-white' : ''}`} onClick={() => handleTabClick('Enhanced Security')}>Forums</button>
+              <div className='hidden lg:flex flex-row gap-3 font-semibold mb-6'>
+                <button
+                  className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 w-64 ${selectedTab === 'Explore Resources' ? 'bg-white shadow-md hover:bg-white' : ''}`}
+                  onClick={() => handleTabClick('Explore Resources')}
+                >
+                  Scholarship Finder
+                </button>
+                <button
+                  className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 w-64 ${selectedTab === 'Fast Processing' ? 'bg-white shadow-md hover:bg-white' : ''}`}
+                  onClick={() => handleTabClick('Fast Processing')}
+                >
+                  Instant Notifications
+                </button>
+                <button
+                  className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 w-64 ${selectedTab === 'Organization Tools' ? 'bg-white shadow-md hover:bg-white' : ''}`}
+                  onClick={() => handleTabClick('Organization Tools')}
+                >
+                  Scholar Tools
+                </button>
+                <button
+                  className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 w-64 ${selectedTab === 'Enhanced Security' ? 'bg-white shadow-md hover:bg-white' : ''}`}
+                  onClick={() => handleTabClick('Enhanced Security')}
+                >
+                  Enhanced Security and Forums
+                </button>
               </div>
 
               {selectedTab === 'Explore Resources' && (
@@ -252,27 +272,25 @@ export default function Home() {
                     </button>
                   </div>
 
-                  {/* Content for 'Fast Processing' tab */}
+                  {/* Content for 'New Feature' tab */}
                   <div className='rounded-xl w-full h-[500px] lg:h-[600px] shadow-md flex flex-row'>
 
                     {/* Text content */}
                     <div className='flex flex-col justify-center text-left w-[800px] px-10 lg:px-20 pt-16 pb-32 gap-3'>
-                      <FaFastForward className='w-8 h-8 lg:w-16 lg:h-16 text-blue-600 my-4' />
+                      <FaRocket className='w-8 h-8 lg:w-16 lg:h-16 text-blue-600 my-4' />
                       <div className='text-2xl lg:text-4xl font-bold'>
-                        Automated Processing
+                        Instant Notifications
                       </div>
                       <div className='text-sm lg:text-lg font-medium text-slate-500'>
-                        Apply and Go!
+                        Stay Updated Instantly!
                       </div>
                       <span>
-                        With our fast and automated application processing,
-                        you no longer need to wait weeks for updates.
-                        Our system ensures that applications are handled in real-time,
-                        keeping you informed every step of the way.
+                        With our new instant notifications feature, you will never miss an important update.
+                        Get real-time alerts on your applications, deadlines, and more.
                       </span>
                       <span>
                         Whether you're applying for multiple scholarships or managing applications,
-                        enjoy a streamlined process that saves time and ensures quick responses.
+                        enjoy a streamlined process that keeps you informed every step of the way.
                       </span>
 
                       {/* Learn more link */}
@@ -286,7 +304,7 @@ export default function Home() {
 
                     {/* Image content */}
                     <div className='hidden lg:flex justify-center items-center w-1/2'>
-                      <img src={HomeProcess} alt="Home Process" className='w-[300px] h-auto hover:-translate-y-2 transition ease-in-out' />
+                      <img src={HomeProcess} alt="New Feature" className='w-[300px] h-auto hover:-translate-y-2 transition ease-in-out' />
                     </div>
                   </div>
                 </div>

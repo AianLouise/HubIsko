@@ -10,7 +10,7 @@ import { FaTools } from "react-icons/fa";
 import { MdForum } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa";
 import { FaHandshake } from "react-icons/fa";
-import { FaCheck } from "react-icons/fa6";
+import { FaBell, FaCheck, FaClock, FaRocket } from "react-icons/fa6";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { VscTriangleRight } from "react-icons/vsc";
 import { useState } from 'react';
@@ -134,34 +134,40 @@ export default function AboutUs() {
               </div>
             </div>
 
-            <div className='flex flex-col gap-10  items-center'>
+            <div className='flex flex-col gap-10 items-center'>
               {/* Text content */}
-              <div className='border flex flex-col justify-center text-left  p-10 rounded-md lg:px-20 gap-3'>
+              <div className='border flex flex-col justify-center text-left p-10 rounded-md lg:px-20 gap-3'>
                 <div className='flex flex-col gap-3'>
-                  <FaFastForward className='w-8 h-8 lg:w-16 lg:h-16 text-blue-600 my-4' />
+                  <FaRocket className='w-8 h-8 lg:w-16 lg:h-16 text-blue-600 my-4' />
                   <div className='text-2xl lg:text-4xl font-bold'>
-                    Automated Processing
+                    Instant Notifications
                   </div>
                   <div className='text-sm lg:text-lg font-medium text-slate-500'>
-                    Apply and Go!
+                    Stay Updated Instantly!
                   </div>
                   <span>
-                    With our fast and automated application processing,
-                    you no longer need to wait weeks for updates.
-                    Our system ensures that applications are handled in real-time,
-                    keeping you informed every step of the way.
+                    With our new instant notifications feature, you will never miss an important update.
+                    Get real-time alerts on your applications, deadlines, and more.
                   </span>
                   <span>
                     Whether you're applying for multiple scholarships or managing applications,
-                    enjoy a streamlined process that saves time and ensures quick responses.
+                    enjoy a streamlined process that keeps you informed every step of the way.
                   </span>
                 </div>
                 <div className='flex flex-col'>
                   <span className='border-b my-2 font-medium'>Features:</span>
                   <div className='flex gap-2'>
                     <div className='flex px-6 py-2 border shadow rounded-md gap-2 items-center'>
-                      <PiSteps className='w-4 h-4 text-blue-600' />
-                      <span className='text-sm'>HubIsko application processing</span>
+                      <FaBell className='w-4 h-4 text-blue-600' />
+                      <span className='text-sm'>Real-time application updates</span>
+                    </div>
+                    <div className='flex px-6 py-2 border shadow rounded-md gap-2 items-center'>
+                      <FaClock className='w-4 h-4 text-blue-600' />
+                      <span className='text-sm'>Instant deadline reminders</span>
+                    </div>
+                    <div className='flex px-6 py-2 border shadow rounded-md gap-2 items-center'>
+                      <FaRocket className='w-4 h-4 text-blue-600' />
+                      <span className='text-sm'>Quick response times</span>
                     </div>
                   </div>
                 </div>
