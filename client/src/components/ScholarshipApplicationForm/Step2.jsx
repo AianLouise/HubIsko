@@ -108,7 +108,9 @@ const Step2 = ({ formData, setFormData, errors }) => {
             <span className='text-lg font-bold'>Father's Information</span>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                  First Name <span className='text-red-500'>*</span>
+                </label>
                 <input
                   type="text"
                   name="firstName"
@@ -120,7 +122,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name <span className='text-red-500'>*</span></label>
                 <input
                   type="text"
                   name="lastName"
@@ -132,7 +134,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name <span className='text-red-500'>*</span></label>
                 <input
                   type="text"
                   name="middleName"
@@ -147,7 +149,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
 
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4'>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate <span className='text-red-500'>*</span></label>
                 <input
                   type="date"
                   name="birthdate"
@@ -160,7 +162,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation <span className='text-red-500'>*</span></label>
                 <input
                   type="text"
                   name="occupation"
@@ -172,7 +174,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Yearly Income</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Yearly Income <span className='text-red-500'>*</span></label>
                 <select
                   name="yearlyIncome"
                   value={formData.father.yearlyIncome}
@@ -194,7 +196,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                 </select>
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No.</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No. <span className='text-red-500'>*</span></label>
                 <input
                   type="number"
                   name="contactNo"
@@ -217,7 +219,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
             <span className='text-lg font-bold mt-8 block'>Mother's Information</span>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>First Name <span className='text-red-500'>*</span></label>
                 <input
                   type="text"
                   name="firstName"
@@ -229,7 +231,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name <span className='text-red-500'>*</span></label>
                 <input
                   type="text"
                   name="lastName"
@@ -241,7 +243,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name <span className='text-red-500'>*</span></label>
                 <input
                   type="text"
                   name="middleName"
@@ -256,7 +258,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
 
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4'>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate <span className='text-red-500'>*</span></label>
                 <input
                   type="date"
                   name="birthdate"
@@ -269,7 +271,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation <span className='text-red-500'>*</span></label>
                 <input
                   type="text"
                   name="occupation"
@@ -281,7 +283,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Yearly Income</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Yearly Income <span className='text-red-500'>*</span></label>
                 <select
                   name="yearlyIncome"
                   value={formData.mother.yearlyIncome}
@@ -303,7 +305,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                 </select>
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No.</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No. <span className='text-red-500'>*</span></label>
                 <input
                   type="number"
                   name="contactNo"
@@ -335,7 +337,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
             <span className='text-lg font-bold mt-8 block'>Guardian's Information</span>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>First Name</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>First Name <span className='text-red-500'>*</span></label>
                 <input
                   type="text"
                   name="firstName"
@@ -346,7 +348,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Last Name <span className='text-red-500'>*</span></label>
                 <input
                   type="text"
                   name="lastName"
@@ -357,7 +359,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Middle Name <span className='text-red-500'>*</span></label>
                 <input
                   type="text"
                   name="middleName"
@@ -370,7 +372,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
             </div>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4'>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate <span className='text-red-500'>*</span></label>
                 <input
                   type="date"
                   name="birthdate"
@@ -382,7 +384,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Occupation <span className='text-red-500'>*</span></label>
                 <input
                   type="text"
                   name="occupation"
@@ -393,7 +395,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                 />
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Yearly Income</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Yearly Income <span className='text-red-500'>*</span></label>
                 <select
                   name="yearlyIncome"
                   value={formData.guardian.yearlyIncome}
@@ -414,7 +416,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                 </select>
               </div>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No.</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Contact No. <span className='text-red-500'>*</span></label>
                 <input
                   type="tel"
                   name="contactNo"
