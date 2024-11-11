@@ -64,6 +64,75 @@ export default function CompleteProfile() {
     certificateOfRegistrationFile: '',
   });
 
+  // Load form data from localStorage when the component mounts
+  useEffect(() => {
+    const savedFormData = localStorage.getItem('completeProfileFormData');
+    if (savedFormData) {
+      setFormData(JSON.parse(savedFormData));
+    }
+  }, []);
+
+  // Save form data to localStorage whenever it changes
+  useEffect(() => {
+    const { studentIdFile, certificateOfRegistrationFile, ...restFormData } = formData;
+    localStorage.setItem('completeProfileFormData', JSON.stringify(restFormData));
+  }, [formData]);
+
+  // Clear form data from localStorage when navigating away from the page
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem('completeProfileFormData');
+      setFormData({
+        profilePicture: '',
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        nameExtension: '',
+        birthdate: '',
+        gender: '',
+        bloodType: '',
+        civilStatus: '',
+        maidenName: '',
+        spouseName: '',
+        spouseOccupation: '',
+        religion: '',
+        height: '',
+        weight: '',
+        birthplace: '',
+        contactNumber: '',
+        addressDetails: '',
+        region: '',
+        province: '',
+        city: '',
+        barangay: '',
+        education: {
+          elementary: {
+            school: '',
+            award: '',
+            yearGraduated: '',
+          },
+          juniorHighSchool: {
+            school: '',
+            award: '',
+            yearGraduated: '',
+          },
+          seniorHighSchool: {
+            school: '',
+            award: '',
+            yearGraduated: '',
+          },
+          college: {
+            school: '',
+            course: '',
+            yearGraduated: ''
+          }
+        },
+        studentIdFile: '',
+        certificateOfRegistrationFile: '',
+      });
+    };
+  }, []);
+
   useEffect(() => {
     if (currentUser && currentUser.profilePicture) {
       setFormData(prevFormData => ({
