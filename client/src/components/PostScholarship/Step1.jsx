@@ -57,7 +57,7 @@ const Step1 = ({ formData, setFormData }) => {
                         <input
                             type="text"
                             name="title"
-                            value={title}
+                            value={formData.title}
                             onChange={handleChange}
                             placeholder="Enter the title of the scholarship"
                             className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"

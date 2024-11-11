@@ -44,6 +44,65 @@ const PostScholarship = () => {
         bannerImage: '',
         // providerRequirements: ''
     });
+
+    // Load form data from localStorage when the component mounts
+    useEffect(() => {
+        const savedFormData = localStorage.getItem('postScholarshipFormData');
+        if (savedFormData) {
+            const parsedFormData = JSON.parse(savedFormData);
+            setFormData({
+                ...parsedFormData,
+                scholarshipImage: '',
+                bannerImage: '',
+            });
+        }
+    }, []);
+
+    // Save form data to localStorage whenever it changes
+    useEffect(() => {
+        const { scholarshipImage, bannerImage, ...restFormData } = formData;
+        localStorage.setItem('postScholarshipFormData', JSON.stringify(restFormData));
+    }, [formData]);
+
+    // Clear form data from localStorage when navigating away from the page
+    useEffect(() => {
+        return () => {
+            localStorage.removeItem('postScholarshipFormData');
+            setFormData({
+                title: '',
+                description: '',
+                educationLevel: '',
+                location: '',
+                fieldOfStudy: [],
+                numberOfScholarships: '',
+                amount: '',
+                applicationStartDate: '',
+                applicationDeadline: '',
+                minGPA: '',
+                duration: '',
+                nationality: '',
+                otherEligibility: '',
+                startDate: '',
+                endDate: '',
+                selectionProcess: '',
+                selectionCriteria: '',
+                renewalPolicy: '',
+                renewalDuration: '',
+                disbursementSchedule: '',
+                disbursementMethod: '',
+                bankName: '',
+                contactEmail: '',
+                contactPhone: '',
+                providerId: currentUser ? currentUser._id : '',
+                organizationName: currentUser ? currentUser.scholarshipProviderDetails.organizationName : '',
+                faqTitle: 'For more details',
+                faqDescription: 'For more details, visit our website or contact us directly.',
+                scholarshipImage: '',
+                bannerImage: '',
+            });
+        };
+    }, [currentUser]);
+
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [currentPage, setCurrentPage] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
