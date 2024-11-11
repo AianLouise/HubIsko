@@ -216,6 +216,7 @@ export default function EditPersonalInformation() {
 
     const handleCancel = () => {
         setFormData(originalFormData);
+        setErrors({}); // Clear the errors
         toggleEdit();
     };
 
@@ -262,7 +263,7 @@ export default function EditPersonalInformation() {
             <div className="grid lg:grid-cols-4 gap-4 pt-2 lg:px-12 p-4 lg:py-8">
                 {/* First Row: First Name, Last Name, Middle Name, Name Extension */}
                 <div className="flex flex-col gap-2">
-                    <label className="block text-sm font-medium text-gray-700">First Name</label>
+                    <label className="block text-sm font-medium text-gray-700">First Name <span className="text-red-500">*</span></label>
                     <input
                         type="text"
                         name="firstName"
@@ -275,7 +276,7 @@ export default function EditPersonalInformation() {
                     {errors.firstName && <span className="text-red-500 text-sm">{errors.firstName}</span>}
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label className="block text-sm font-medium text-gray-700">Last Name</label>
+                    <label className="block text-sm font-medium text-gray-700">Last Name <span className="text-red-500">*</span></label>
                     <input
                         type="text"
                         name="lastName"
@@ -288,7 +289,7 @@ export default function EditPersonalInformation() {
                     {errors.lastName && <span className="text-red-500 text-sm">{errors.lastName}</span>}
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label className="block text-sm font-medium text-gray-700">Middle Name</label>
+                    <label className="block text-sm font-medium text-gray-700">Middle Name <span className="text-red-500">*</span></label>
                     <input
                         type="text"
                         name="middleName"
@@ -319,7 +320,7 @@ export default function EditPersonalInformation() {
 
                 {/* Second Row: Birthdate, Gender, Blood Type, Religion */}
                 <div className="flex flex-col gap-2">
-                    <label className="block text-sm font-medium text-gray-700">Birthdate</label>
+                    <label className="block text-sm font-medium text-gray-700">Birthdate <span className="text-red-500">*</span></label>
                     <input
                         type="date"
                         name="birthdate"
@@ -334,7 +335,7 @@ export default function EditPersonalInformation() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                    <label className="block text-sm font-medium text-gray-700">Gender</label>
+                    <label className="block text-sm font-medium text-gray-700">Gender <span className="text-red-500">*</span></label>
                     <select
                         name="gender"
                         className={inputClasses}
@@ -351,7 +352,7 @@ export default function EditPersonalInformation() {
                     {errors.gender && <span className="text-red-500 text-sm">{errors.gender}</span>}
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label className="block text-sm font-medium text-gray-700">Blood Type</label>
+                    <label className="block text-sm font-medium text-gray-700">Blood Type <span className="text-red-500">*</span></label>
                     <select
                         name="bloodType"
                         className={inputClasses}
@@ -373,7 +374,7 @@ export default function EditPersonalInformation() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                    <label className="block text-sm font-medium text-gray-700">Religion</label>
+                    <label className="block text-sm font-medium text-gray-700">Religion <span className="text-red-500">*</span></label>
                     <input
                         type="text"
                         name="religion"
@@ -387,7 +388,7 @@ export default function EditPersonalInformation() {
 
                 {/* Third Row: Civil Status, Maiden Name, Spouse Name, Spouse Occupation */}
                 <div className="flex flex-col gap-2">
-                    <label className="block text-sm font-medium text-gray-700">Civil Status</label>
+                    <label className="block text-sm font-medium text-gray-700">Civil Status <span className="text-red-500">*</span></label>
                     <select
                         name="civilStatus"
                         className={inputClasses}
@@ -407,7 +408,7 @@ export default function EditPersonalInformation() {
                 {formData.applicantDetails.civilStatus === 'Married' && (
                     <>
                         <div className="flex flex-col gap-2">
-                            <label className="block text-sm font-medium text-gray-700">Maiden Name</label>
+                            <label className="block text-sm font-medium text-gray-700">Maiden Name <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
                                 name="maidenName"
@@ -420,7 +421,7 @@ export default function EditPersonalInformation() {
                             {errors.maidenName && <span className="text-red-500 text-sm">{errors.maidenName}</span>}
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="block text-sm font-medium text-gray-700">Spouse Name</label>
+                            <label className="block text-sm font-medium text-gray-700">Spouse Name <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
                                 name="spouseName"
@@ -433,7 +434,7 @@ export default function EditPersonalInformation() {
                             {errors.spouseName && <span className="text-red-500 text-sm">{errors.spouseName}</span>}
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="block text-sm font-medium text-gray-700">Spouse Occupation</label>
+                            <label className="block text-sm font-medium text-gray-700">Spouse Occupation <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
                                 name="spouseOccupation"
@@ -450,7 +451,7 @@ export default function EditPersonalInformation() {
 
                 {/* Fourth Row: Height, Weight, Birthplace, Contact Number */}
                 <div className="flex flex-col gap-2">
-                    <label className="block text-sm font-medium text-gray-700">Height (cm)</label>
+                    <label className="block text-sm font-medium text-gray-700">Height (cm) <span className="text-red-500">*</span></label>
                     <input
                         type="number"
                         name="height"
@@ -463,7 +464,7 @@ export default function EditPersonalInformation() {
                     {errors.height && <span className="text-red-500 text-sm">{errors.height}</span>}
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label className="block text-sm font-medium text-gray-700">Weight (kg)</label>
+                    <label className="block text-sm font-medium text-gray-700">Weight (kg) <span className="text-red-500">*</span></label>
                     <input
                         type="number"
                         name="weight"
@@ -476,7 +477,7 @@ export default function EditPersonalInformation() {
                     {errors.weight && <span className="text-red-500 text-sm">{errors.weight}</span>}
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label className="block text-sm font-medium text-gray-700">Birthplace</label>
+                    <label className="block text-sm font-medium text-gray-700">Birthplace <span className="text-red-500">*</span></label>
                     <input
                         type="text"
                         name="birthplace"
@@ -489,7 +490,7 @@ export default function EditPersonalInformation() {
                     {errors.birthplace && <span className="text-red-500 text-sm">{errors.birthplace}</span>}
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label className="block text-sm font-medium text-gray-700">Contact Number</label>
+                    <label className="block text-sm font-medium text-gray-700">Contact Number <span className="text-red-500">*</span></label>
                     <input
                         type="text"
                         name="contactNumber"

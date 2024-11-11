@@ -106,6 +106,7 @@ const EducationInformation = () => {
 
     const handleCancel = () => {
         setFormData(originalFormData);
+        setErrors({}); // Clear the errors
         setIsEditing(false);
     };
 
@@ -186,127 +187,127 @@ const EducationInformation = () => {
     };
 
     const courses = [
-     "BA in Anthropology",
-    "BA in Art Studies",
-    "BA in Communication",
-    "BA in Development Communication",
-    "BA in Economics",
-    "BA in Fine Arts",
-    "BA in Geography",
-    "BA in History",
-    "BA in International Relations",
-    "BA in Journalism",
-    "BA in Law",
-    "BA in Linguistics",
-    "BA in Media Studies",
-    "BA in Religious Studies",
-    "BA in Social Work",
-    "BS in Accounting",
-    "BS in Accounting Information Systems",
-    "BS in Accounting Technology",
-    "BS in Aerospace Engineering",
-    "BS in Agribusiness Management",
-    "BS in Agricultural Engineering",
-    "BS in Agriculture",
-    "BS in Animal Science",
-    "BS in Applied Mathematics",
-    "BS in Applied Physics",
-    "BS in Architecture",
-    "BS in Astronomy",
-    "BS in Biochemistry",
-    "BS in Biology",
-    "BS in Biomedical Engineering",
-    "BS in Biosystems Engineering",
-    "BS in Business Administration",
-    "BS in Business Administration major in Financial Management",
-    "BS in Business Analytics",
-    "BS in Business Management",
-    "BS in Chemical Engineering",
-    "BS in Chemistry",
-    "BS in Civil Engineering",
-    "BS in Communication",
-    "BS in Computer Engineering",
-    "BS in Computer Science",
-    "BS in Criminology",
-    "BS in Cyber Security",
-    "BS in Data Analytics",
-    "BS in Data Science",
-    "BS in Dentistry",
-    "BS in Digital Media Arts",
-    "BS in Education",
-    "BS in Electrical Engineering",
-    "BS in Elementary Education",
-    "BS in Electronics and Communications Engineering",
-    "BS in Electronics Engineering",
-    "BS in Environmental Engineering",
-    "BS in Environmental Science",
-    "BS in Fashion Design",
-    "BS in Finance",
-    "BS in Food Science",
-    "BS in Food Technology",
-    "BS in Forensic Science",
-    "BS in Forestry",
-    "BS in Geodetic Engineering",
-    "BS in Geology",
-    "BS in Graphic Design",
-    "BS in Health Sciences",
-    "BS in Horticulture",
-    "BS in Hospitality Management",
-    "BS in Hotel and Restaurant Management",
-    "BS in Human Resource Development",
-    "BS in Industrial Design",
-    "BS in Industrial Engineering",
-    "BS in Information Systems",
-    "BS in Information Technology",
-    "BS in Internal Auditing",
-    "BS in Landscape Architecture",
-    "BS in Library and Information Science",
-    "BS in Management Accounting",
-    "BS in Marine Biology",
-    "BS in Marine Engineering",
-    "BS in Marine Transportation",
-    "BS in Marketing",
-    "BS in Materials Science",
-    "BS in Mathematics",
-    "BS in Mechanical Engineering",
-    "BS in Medical Laboratory Science",
-    "BS in Medical Technology",
-    "BS in Medicine",
-    "BS in Metallurgical Engineering",
-    "BS in Microbiology",
-    "BS in Midwifery",
-    "BS in Mining Engineering",
-    "BS in Molecular Biology",
-    "BS in Multimedia Arts",
-    "BS in Music",
-    "BS in Nanotechnology",
-    "BS in Nursing",
-    "BS in Nutrition",
-    "BS in Occupational Therapy",
-    "BS in Oceanography",
-    "BS in Pharmacy",
-    "BS in Physical Therapy",
-    "BS in Physics",
-    "BS in Political Science",
-    "BS in Psychology",
-    "BS in Public Health",
-    "BS in Radiologic Technology",
-    "BS in Real Estate Management",
-    "BS in Renewable/Sustainable Energy Engineering",
-    "BS in Robotics Engineering",
-    "BS in Secondary Education major in Biology",
-    "BS in Secondary Education major in Chemistry",
-    "BS in Secondary Education major in English",
-    "BS in Secondary Education major in General Sciences",
-    "BS in Secondary Education major in Mathematics",
-    "BS in Secondary Education major in Physics",
-    "BS in Social Work",
-    "BS in Sociology",
-    "BS in Software Engineering",
-    "BS in Statistics",
-    "BS in Tourism Management",
-    "BS in Veterinary Medicine",
-    "BS in Zoology"
+        "BA in Anthropology",
+        "BA in Art Studies",
+        "BA in Communication",
+        "BA in Development Communication",
+        "BA in Economics",
+        "BA in Fine Arts",
+        "BA in Geography",
+        "BA in History",
+        "BA in International Relations",
+        "BA in Journalism",
+        "BA in Law",
+        "BA in Linguistics",
+        "BA in Media Studies",
+        "BA in Religious Studies",
+        "BA in Social Work",
+        "BS in Accounting",
+        "BS in Accounting Information Systems",
+        "BS in Accounting Technology",
+        "BS in Aerospace Engineering",
+        "BS in Agribusiness Management",
+        "BS in Agricultural Engineering",
+        "BS in Agriculture",
+        "BS in Animal Science",
+        "BS in Applied Mathematics",
+        "BS in Applied Physics",
+        "BS in Architecture",
+        "BS in Astronomy",
+        "BS in Biochemistry",
+        "BS in Biology",
+        "BS in Biomedical Engineering",
+        "BS in Biosystems Engineering",
+        "BS in Business Administration",
+        "BS in Business Administration major in Financial Management",
+        "BS in Business Analytics",
+        "BS in Business Management",
+        "BS in Chemical Engineering",
+        "BS in Chemistry",
+        "BS in Civil Engineering",
+        "BS in Communication",
+        "BS in Computer Engineering",
+        "BS in Computer Science",
+        "BS in Criminology",
+        "BS in Cyber Security",
+        "BS in Data Analytics",
+        "BS in Data Science",
+        "BS in Dentistry",
+        "BS in Digital Media Arts",
+        "BS in Education",
+        "BS in Electrical Engineering",
+        "BS in Elementary Education",
+        "BS in Electronics and Communications Engineering",
+        "BS in Electronics Engineering",
+        "BS in Environmental Engineering",
+        "BS in Environmental Science",
+        "BS in Fashion Design",
+        "BS in Finance",
+        "BS in Food Science",
+        "BS in Food Technology",
+        "BS in Forensic Science",
+        "BS in Forestry",
+        "BS in Geodetic Engineering",
+        "BS in Geology",
+        "BS in Graphic Design",
+        "BS in Health Sciences",
+        "BS in Horticulture",
+        "BS in Hospitality Management",
+        "BS in Hotel and Restaurant Management",
+        "BS in Human Resource Development",
+        "BS in Industrial Design",
+        "BS in Industrial Engineering",
+        "BS in Information Systems",
+        "BS in Information Technology",
+        "BS in Internal Auditing",
+        "BS in Landscape Architecture",
+        "BS in Library and Information Science",
+        "BS in Management Accounting",
+        "BS in Marine Biology",
+        "BS in Marine Engineering",
+        "BS in Marine Transportation",
+        "BS in Marketing",
+        "BS in Materials Science",
+        "BS in Mathematics",
+        "BS in Mechanical Engineering",
+        "BS in Medical Laboratory Science",
+        "BS in Medical Technology",
+        "BS in Medicine",
+        "BS in Metallurgical Engineering",
+        "BS in Microbiology",
+        "BS in Midwifery",
+        "BS in Mining Engineering",
+        "BS in Molecular Biology",
+        "BS in Multimedia Arts",
+        "BS in Music",
+        "BS in Nanotechnology",
+        "BS in Nursing",
+        "BS in Nutrition",
+        "BS in Occupational Therapy",
+        "BS in Oceanography",
+        "BS in Pharmacy",
+        "BS in Physical Therapy",
+        "BS in Physics",
+        "BS in Political Science",
+        "BS in Psychology",
+        "BS in Public Health",
+        "BS in Radiologic Technology",
+        "BS in Real Estate Management",
+        "BS in Renewable/Sustainable Energy Engineering",
+        "BS in Robotics Engineering",
+        "BS in Secondary Education major in Biology",
+        "BS in Secondary Education major in Chemistry",
+        "BS in Secondary Education major in English",
+        "BS in Secondary Education major in General Sciences",
+        "BS in Secondary Education major in Mathematics",
+        "BS in Secondary Education major in Physics",
+        "BS in Social Work",
+        "BS in Sociology",
+        "BS in Software Engineering",
+        "BS in Statistics",
+        "BS in Tourism Management",
+        "BS in Veterinary Medicine",
+        "BS in Zoology"
     ];
 
     const inputBaseClasses = "block w-full p-2 rounded-lg border transition duration-200";
@@ -345,7 +346,7 @@ const EducationInformation = () => {
                 <span className='text-lg font-bold block'>Elementary</span>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                     <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>School</label>
+                        <label className='block text-sm font-medium text-gray-700 mb-2'>School <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             name="school"
@@ -359,7 +360,9 @@ const EducationInformation = () => {
                         {errors.elementarySchool && <p className="text-red-500 text-sm">{errors.elementarySchool}</p>}
                     </div>
                     <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>Award</label>
+                        <label className='block text-sm font-medium text-gray-700 mb-2'>
+                            Award <span className='text-red-500'>*</span> <span className='text-gray-500'>(Type N/A if not applicable)</span>
+                        </label>
                         <input
                             type="text"
                             name="award"
@@ -372,7 +375,7 @@ const EducationInformation = () => {
                         {errors.elementaryAward && <p className="text-red-500 text-sm">{errors.elementaryAward}</p>}
                     </div>
                     <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated</label>
+                        <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated <span className="text-red-500">*</span></label>
                         <select
                             name="yearGraduated"
                             value={formData.education?.elementary?.yearGraduated || ''}
@@ -394,7 +397,7 @@ const EducationInformation = () => {
                 <span className='text-lg font-bold mt-8 block'>Junior High School</span>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                     <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>School</label>
+                        <label className='block text-sm font-medium text-gray-700 mb-2'>School <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             name="school"
@@ -408,7 +411,7 @@ const EducationInformation = () => {
                         {errors.juniorHighSchoolSchool && <p className="text-red-500 text-sm">{errors.juniorHighSchoolSchool}</p>}
                     </div>
                     <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>Award</label>
+                        <label className='block text-sm font-medium text-gray-700 mb-2'>Award <span className='text-red-500'>*</span> <span className='text-gray-500'>(Type N/A if not applicable)</span></label>
                         <input
                             type="text"
                             name="award"
@@ -421,7 +424,7 @@ const EducationInformation = () => {
                         {errors.juniorHighSchoolAward && <p className="text-red-500 text-sm">{errors.juniorHighSchoolAward}</p>}
                     </div>
                     <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated</label>
+                        <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated <span className="text-red-500">*</span></label>
                         <select
                             name="yearGraduated"
                             value={formData.education?.juniorHighSchool?.yearGraduated || ''}
@@ -443,7 +446,7 @@ const EducationInformation = () => {
                 <span className='text-lg font-bold mt-8 block'>Senior High School</span>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                     <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>School</label>
+                        <label className='block text-sm font-medium text-gray-700 mb-2'>School <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             name="school"
@@ -457,7 +460,7 @@ const EducationInformation = () => {
                         {errors.seniorHighSchoolSchool && <p className="text-red-500 text-sm">{errors.seniorHighSchoolSchool}</p>}
                     </div>
                     <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>Award</label>
+                        <label className='block text-sm font-medium text-gray-700 mb-2'>Award <span className='text-red-500'>*</span> <span className='text-gray-500'>(Type N/A if not applicable)</span></label>
                         <input
                             type="text"
                             name="award"
@@ -470,7 +473,7 @@ const EducationInformation = () => {
                         {errors.seniorHighSchoolAward && <p className="text-red-500 text-sm">{errors.seniorHighSchoolAward}</p>}
                     </div>
                     <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated</label>
+                        <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated <span className="text-red-500">*</span></label>
                         <select
                             name="yearGraduated"
                             value={formData.education?.seniorHighSchool?.yearGraduated || ''}
@@ -492,7 +495,7 @@ const EducationInformation = () => {
                 <span className='text-lg font-bold mt-8 block'>College</span>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                     <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>College</label>
+                        <label className='block text-sm font-medium text-gray-700 mb-2'>College <span className="text-red-500">*</span></label>
                         <input
                             type="text"
                             name="school"
@@ -506,7 +509,7 @@ const EducationInformation = () => {
                         {errors.collegeSchool && <p className="text-red-500 text-sm">{errors.collegeSchool}</p>}
                     </div>
                     <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>College Course</label>
+                        <label className='block text-sm font-medium text-gray-700 mb-2'>College Course <span className="text-red-500">*</span></label>
                         <select
                             name="course"
                             value={formData.education?.college?.course || ''}

@@ -112,6 +112,7 @@ const AddressInformation = () => {
 
     const handleCancel = () => {
         setFormData(originalFormData);
+        setErrors({}); // Clear the errors
         setIsEditing(false);
     };
 
@@ -238,7 +239,7 @@ const AddressInformation = () => {
             <div className="flex flex-col px-4 lg:px-12 py-8 font-normal gap-4">
                 {/* Region Selector */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Region:</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Region <span className="text-red-500">*</span></label>
                     <select
                         value={selectedRegion}
                         onChange={(e) => {
@@ -265,7 +266,7 @@ const AddressInformation = () => {
 
                 {/* Province Selector */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Province:</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Province <span className="text-red-500">*</span></label>
                     <select
                         value={selectedProvince}
                         onChange={(e) => {
@@ -290,7 +291,7 @@ const AddressInformation = () => {
 
                 {/* City Selector */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">City/Municipality:</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">City/Municipality <span className="text-red-500">*</span></label>
                     <select
                         value={selectedCity}
                         onChange={(e) => {
@@ -313,7 +314,7 @@ const AddressInformation = () => {
 
                 {/* Barangay Selector */}
                 <div>
-                    <label className='block text-sm font-medium text-gray-700 mb-2'>Barangay:</label>
+                    <label className='block text-sm font-medium text-gray-700 mb-2'>Barangay <span className="text-red-500">*</span></label>
                     <select
                         value={selectedBarangay}
                         onChange={(e) => setSelectedBarangay(e.target.value)}
@@ -332,7 +333,7 @@ const AddressInformation = () => {
 
                 {/* Address Details */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Detailed Address:</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Detailed Address <span className="text-red-500">*</span></label>
                     <textarea
                         name="addressDetails"
                         value={formData.applicantDetails.address.addressDetails}
