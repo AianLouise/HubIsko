@@ -282,6 +282,12 @@ export default function ScholarshipListing() {
     setShowAll(true);
   };
 
+  useEffect(() => {
+    if (allProviders.length > 0) {
+      setLoading(false);
+    }
+  }, [allProviders]);
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
