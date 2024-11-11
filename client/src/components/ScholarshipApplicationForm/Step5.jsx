@@ -100,7 +100,7 @@ const Step5 = ({ formData, setFormData, errors, scholarship, requiredDocuments }
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
               {requiredDocuments.map(doc => (
                 <div key={doc.name} className='mb-4'>
-                  <label className='block text-sm font-medium text-gray-700 mb-2'>{doc.name}</label>
+                  <label className='block text-sm font-medium text-gray-700 mb-2'>{doc.name} <span className='text-red-500'>*</span></label>
                   <div className='flex items-center'>
                     <input
                       type="file"

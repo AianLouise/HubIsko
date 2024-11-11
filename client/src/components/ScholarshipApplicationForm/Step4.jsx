@@ -121,7 +121,7 @@ const Step4 = ({ formData, setFormData, errors, visibleRelativeIndex, setVisible
                 }`}
             >
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Name</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Name <span className='text-red-500'>*</span></label>
                 <input
                   type="text"
                   name="name"
@@ -133,7 +133,7 @@ const Step4 = ({ formData, setFormData, errors, visibleRelativeIndex, setVisible
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate <span className='text-red-500'>*</span></label>
                 <input
                   type="date"
                   name="birthdate"
@@ -145,7 +145,7 @@ const Step4 = ({ formData, setFormData, errors, visibleRelativeIndex, setVisible
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Relationship</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Relationship <span className='text-red-500'>*</span></label>
                 <select
                   name="relationship"
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
@@ -255,7 +255,7 @@ const Step4 = ({ formData, setFormData, errors, visibleRelativeIndex, setVisible
           {formData.skillsAndQualifications.map((skill, index) => (
             <div key={index} className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mb-4 ${index > visibleSkillIndex ? 'hidden' : ''}`}>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Skill</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Skill <span className='text-red-500'>*</span></label>
                 <input
                   type="text"
                   name="skills"
@@ -267,7 +267,7 @@ const Step4 = ({ formData, setFormData, errors, visibleRelativeIndex, setVisible
               </div>
 
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Qualification</label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>Qualification <span className='text-red-500'>*</span></label>
                 <input
                   type="text"
                   name="qualifications"
