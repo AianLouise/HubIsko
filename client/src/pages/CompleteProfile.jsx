@@ -762,7 +762,8 @@ export default function CompleteProfile() {
     if (
       (charCode < 65 || charCode > 90) && // Not uppercase letters
       (charCode < 97 || charCode > 122) && // Not lowercase letters
-      charCode !== 32 // Not space
+      charCode !== 32 && // Not space
+      charCode !== 45 // Not dash
     ) {
       event.preventDefault();
     }
