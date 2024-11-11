@@ -660,21 +660,21 @@ export default function ScholarshipProgramDetails() {
                     {/* Tabs for different sections */}
                     <div className="tabs flex justify-center border-b mb-6">
                         {[
-                            { label: 'Program Details', value: 'details' },
-                            { label: 'Edit Program', value: 'edit' },
-                            // { label: 'Post Announcement', value: 'announcement' },
-                            // { label: 'Validation', value: 'validation' },
-                            { label: 'View Scholars', value: 'scholars' },
-                            { label: 'Scholar Applications', value: 'applications' },
+                            { label: 'Program Details', value: 'details', icon: <FaInfoCircle className="mr-2" /> },
+                            { label: 'Edit Program', value: 'edit', icon: <FaEdit className="mr-2" /> },
+                            // { label: 'Post Announcement', value: 'announcement', icon: <FaBullhorn className="mr-2" /> },
+                            { label: 'View Scholars', value: 'scholars', icon: <FaUsers className="mr-2" /> },
+                            { label: 'Scholar Applications', value: 'applications', icon: <FaFileAlt className="mr-2" /> },
                         ].map((tab) => (
                             <button
                                 key={tab.value}
-                                className={`tab px-4 py-2 mx-2 transition-colors duration-300 ${activeTab === tab.value
+                                className={`tab flex items-center px-4 py-2 mx-2 transition-colors duration-300 ${activeTab === tab.value
                                     ? 'border-b-2 border-blue-600 text-blue-600'
-                                    : 'text-gray-600 hover:text-blue-600'
+                                    : 'text-gray-500 hover:text-blue-600'
                                     }`}
                                 onClick={() => handleTabChange(tab.value)}
                             >
+                                {tab.icon}
                                 {tab.label}
                             </button>
                         ))}
