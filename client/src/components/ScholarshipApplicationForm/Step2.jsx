@@ -117,7 +117,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   value={formData.father.firstName}
                   onChange={(e) => handleChange(e, 'father')}
                   onKeyPress={(e) => {
-                    if (!/[a-zA-Z]/.test(e.key)) {
+                    if (!/[a-zA-Z ]/.test(e.key)) {
                       e.preventDefault();
                     }
                   }}
@@ -136,7 +136,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   value={formData.father.lastName}
                   onChange={(e) => handleChange(e, 'father')}
                   onKeyPress={(e) => {
-                    if (!/[a-zA-Z]/.test(e.key)) {
+                    if (!/[a-zA-Z ]/.test(e.key)) {
                       e.preventDefault();
                     }
                   }}
@@ -155,7 +155,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   value={formData.father.middleName}
                   onChange={(e) => handleChange(e, 'father')}
                   onKeyPress={(e) => {
-                    if (!/[a-zA-Z]/.test(e.key)) {
+                    if (!/[a-zA-Z ]/.test(e.key)) {
                       e.preventDefault();
                     }
                   }}
@@ -244,7 +244,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   value={formData.mother.firstName}
                   onChange={(e) => handleChange(e, 'mother')}
                   onKeyPress={(e) => {
-                    if (!/[a-zA-Z]/.test(e.key)) {
+                    if (!/[a-zA-Z ]/.test(e.key)) {
                       e.preventDefault();
                     }
                   }}
@@ -261,7 +261,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   value={formData.mother.lastName}
                   onChange={(e) => handleChange(e, 'mother')}
                   onKeyPress={(e) => {
-                    if (!/[a-zA-Z]/.test(e.key)) {
+                    if (!/[a-zA-Z ]/.test(e.key)) {
                       e.preventDefault();
                     }
                   }}
@@ -278,7 +278,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   value={formData.mother.middleName}
                   onChange={(e) => handleChange(e, 'mother')}
                   onKeyPress={(e) => {
-                    if (!/[a-zA-Z]/.test(e.key)) {
+                    if (!/[a-zA-Z ]/.test(e.key)) {
                       e.preventDefault();
                     }
                   }}
@@ -375,7 +375,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   value={formData.guardian.firstName}
                   onChange={(e) => handleChange(e, 'guardian')}
                   onKeyPress={(e) => {
-                    if (!/[a-zA-Z]/.test(e.key)) {
+                    if (!/[a-zA-Z ]/.test(e.key)) {
                       e.preventDefault();
                     }
                   }}
@@ -391,7 +391,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   value={formData.guardian.lastName}
                   onChange={(e) => handleChange(e, 'guardian')}
                   onKeyPress={(e) => {
-                    if (!/[a-zA-Z]/.test(e.key)) {
+                    if (!/[a-zA-Z ]/.test(e.key)) {
                       e.preventDefault();
                     }
                   }}
@@ -407,7 +407,7 @@ const Step2 = ({ formData, setFormData, errors }) => {
                   value={formData.guardian.middleName}
                   onChange={(e) => handleChange(e, 'guardian')}
                   onKeyPress={(e) => {
-                    if (!/[a-zA-Z]/.test(e.key)) {
+                    if (!/[a-zA-Z ]/.test(e.key)) {
                       e.preventDefault();
                     }
                   }}

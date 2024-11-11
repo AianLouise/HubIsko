@@ -759,7 +759,11 @@ export default function CompleteProfile() {
 
   const handleKeyPress = (event) => {
     const charCode = event.charCode;
-    if ((charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122)) {
+    if (
+      (charCode < 65 || charCode > 90) && // Not uppercase letters
+      (charCode < 97 || charCode > 122) && // Not lowercase letters
+      charCode !== 32 // Not space
+    ) {
       event.preventDefault();
     }
   };
