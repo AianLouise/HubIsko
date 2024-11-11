@@ -464,18 +464,18 @@ export default function ScholarshipListing() {
                       <p className='text-sm lg:text-base lg:text-gray-500'>{truncateText(scholarship.organizationName, 50)}</p>
                     </div>
                   </div>
-                  <div className='p-4 flex flex-col gap-2'>
-                    <div className='mt-4'>
-                      <div className='border-b-2'></div>
-                      <div className='-translate-y-4'>
-                        <div className='flex text-blue-600 text-left justify-center font-bold'>
-                          <div className='flex flex-row bg-white gap-2 px-2 items-center'>
-                            <FaHandHolding className='text-xl flex-shrink-0' style={{ marginTop: '-10px' }} />
-                            <span className='flex items-center'>{truncateText(scholarship.amount, 50)}</span>
-                          </div>
+                  <div className='mt-4'>
+                    <div className='border-b-2'></div>
+                    <div className='-translate-y-4'>
+                      <div className='flex text-blue-600 text-left justify-center font-bold'>
+                        <div className='flex flex-row bg-white gap-2 px-2 items-center'>
+                          <FaHandHolding className='text-xl flex-shrink-0' style={{ marginTop: '-10px' }} />
+                          <span className='flex items-center'>{truncateText(scholarship.amount, 50)}</span>
                         </div>
                       </div>
                     </div>
+                  </div>
+                  <div className='p-4 flex flex-col gap-2'>
                     <div className='flex flex-col gap-4'>
                       <div className='flex lg:flex-row lg:gap-4'>
                         <div className='flex flex-col lg:flex-row gap-2 w-full lg:gap-0 lg:w-40'>
