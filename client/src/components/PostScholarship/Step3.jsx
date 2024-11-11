@@ -242,7 +242,7 @@ const Step3 = ({ formData, setFormData }) => {
                             </span>
                         </div>
 
-                        <div className='flex flex-col mt-8 border-b-2'>
+                        <div className='flex flex-col mt-8 border-b-2 items-center'>
                             <span className='text-sm bg-blue-600 text-white px-6 rounded-md py-2 w-[300px] text-center'>Click to Upload an Image</span>
                             <div className='flex justify-center items-center w-full h-52 rounded-md my-4 shadow border relative overflow-hidden'>
                                 <img

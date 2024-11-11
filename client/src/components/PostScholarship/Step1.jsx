@@ -52,7 +52,7 @@ const Step1 = ({ formData, setFormData }) => {
                 <h2 className="text-2xl font-bold mb-4 border-b-2 pb-4">Scholarship Details</h2>
                 <div className='flex flex-col gap-4 px-4 space-y-1 mt-4'>
                     <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Title of Scholarship</label>
+                        <label className="block text-gray-700 font-semibold mb-2">Title of Scholarship <span className="text-red-500">*</span></label>
                         <p className="text-sm text-gray-500 mb-2">Please provide the official title of the scholarship program.</p>
                         <input
                             type="text"
@@ -68,7 +68,7 @@ const Step1 = ({ formData, setFormData }) => {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Scholarship Description</label>
+                        <label className="block text-gray-700 font-semibold mb-2">Scholarship Description <span className="text-red-500">*</span></label>
                         <p className="text-sm text-gray-500 mb-2">Please provide a detailed description of the scholarship program.</p>
                         <textarea
                             name="description"
@@ -81,7 +81,7 @@ const Step1 = ({ formData, setFormData }) => {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Number of Scholarships Available</label>
+                        <label className="block text-gray-700 font-semibold mb-2">Number of Scholarships Available <span className="text-red-500">*</span></label>
                         <p className="text-sm text-gray-500 mb-2">Please enter the total number of scholarship slots available.</p>
                         <input
                             type="number"
@@ -96,7 +96,7 @@ const Step1 = ({ formData, setFormData }) => {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Scholarship Amount</label>
+                        <label className="block text-gray-700 font-semibold mb-2">Scholarship Amount <span className="text-red-500">*</span></label>
                         <p className="text-sm text-gray-500 mb-2">Please enter the scholarship amount in PHP. Example: Up to PHP 10,000.</p>
                         <input
                             type="text"
@@ -116,7 +116,7 @@ const Step1 = ({ formData, setFormData }) => {
                 <h2 className="text-2xl font-bold mb-4 border-b-2 pb-4"> Eligibility Criteria</h2>
                 <div className='flex flex-col gap-4 px-4 space-y-1 mt-4'>
                     <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Education Level</label>
+                        <label className="block text-gray-700 font-semibold mb-2">Education Level <span className="text-red-500">*</span></label>
                         <p className="text-sm text-gray-500 mb-2">Please select the appropriate education level for the scholarship program.</p>
                         <select
                             name="educationLevel"
@@ -132,7 +132,7 @@ const Step1 = ({ formData, setFormData }) => {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Location</label>
+                        <label className="block text-gray-700 font-semibold mb-2">Location <span className="text-red-500">*</span></label>
                         <p className="text-sm text-gray-500 mb-2">Select the location you want to provide.</p>
                         <select
                             name="location"
@@ -153,7 +153,7 @@ const Step1 = ({ formData, setFormData }) => {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Field of Study</label>
+                        <label className="block text-gray-700 font-semibold mb-2">Field of Study <span className="text-red-500">*</span></label>
                         <p className="text-sm text-gray-500 mb-2">Please select the field of study relevant to the scholarship program.</p>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                             {[
@@ -305,7 +305,7 @@ const Step1 = ({ formData, setFormData }) => {
                 <h2 className="text-2xl font-bold mb-4 border-b-2 pb-4">Scholarship Duration</h2>
                 <div className='flex flex-col gap-4 px-4 space-y-1 mt-4'>
                     <div>
-                        <label className="block text-gray-700">Duration</label>
+                        <label className="block text-gray-700">Duration <span className="text-red-500">*</span></label>
                         <p className="text-sm text-gray-500 mb-2">Please select the duration for the scholarship.</p>
                         <select
                             name="duration"
@@ -443,7 +443,7 @@ const Step1 = ({ formData, setFormData }) => {
                 <div className='flex flex-col gap-4 px-4 space-y-1 mt-4'>
 
                     <div>
-                        <label className="block text-gray-700">Contact Email</label>
+                        <label className="block text-gray-700">Contact Email <span className="text-red-500">*</span></label>
                         <p className="text-sm text-gray-500 mb-2">Please enter a valid email address for contact purposes.</p>
                         <input
                             type="email"
@@ -456,7 +456,7 @@ const Step1 = ({ formData, setFormData }) => {
                     </div>
 
                     <div>
-                        <label className="block text-gray-700">Contact Phone Number</label>
+                        <label className="block text-gray-700">Contact Phone Number <span className="text-red-500">*</span></label>
                         <p className="text-sm text-gray-500 mb-2">Please enter a valid phone number for contact purposes.</p>
                         <input
                             type="tel"

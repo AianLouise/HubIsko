@@ -73,7 +73,7 @@ const Step5 = ({ formData, setFormData }) => {
                     required
                 />
                 <label htmlFor="agree" className="text-gray-700 text-sm">
-                    I have read and agree to the data privacy policy.
+                    I have read and agree to the data privacy policy. <span className="text-red-500">*</span>
                 </label>
             </div>
         </div>

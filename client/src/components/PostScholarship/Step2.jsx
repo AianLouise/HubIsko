@@ -71,7 +71,7 @@ const Step2 = ({ formData, setFormData }) => {
         <div className="flex flex-col gap-8">
             <div className="bg-white p-8 rounded-md shadow border flex flex-col gap-4">
                 <div className='flex justify-between items-center'>
-                    <h2 className="text-2xl font-bold text-gray-800">Required Documents</h2>
+                    <h2 className="text-2xl font-bold text-gray-800">Required Documents <span className="text-red-500">*</span></h2>
                     {/* {errors && <p className="bg-red-600 text-white font-medium py-2 px-4 rounded-md mt-2">At least one document must be selected.</p>} */}
                 </div>
 
@@ -123,7 +123,7 @@ const Step2 = ({ formData, setFormData }) => {
             </div>
 
             <div className="bg-white p-8 rounded-md shadow border flex flex-col gap-4">
-                <h2 className="text-xl font-bold text-gray-800">Document Instructions</h2>
+                <h2 className="text-xl font-bold text-gray-800">Document Instructions <span className="text-red-500">*</span></h2>
                 <p className="text-sm text-gray-500 mb-2">Please provide any additional instructions or guidelines for document submission.</p>
                 <textarea
                     id="documentGuidelines"
