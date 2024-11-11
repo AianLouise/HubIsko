@@ -359,17 +359,13 @@ const Step2 = ({ formData, setFormData, errors }) => {
                 />
               </div>
             </div>
-
-
           </div>
         )}
-
-
 
         {selectedTab === 'Guardians' && (
           <div className='p-4'>
 
-            <span className='text-lg font-bold mt-8 block'>Guardian's Information</span>
+            <span className='text-lg font-bold block'>Guardian's Information</span>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4'>
               <div>
                 <label className='block text-sm font-medium text-gray-700 mb-2'>First Name <span className='text-red-500'>*</span></label>

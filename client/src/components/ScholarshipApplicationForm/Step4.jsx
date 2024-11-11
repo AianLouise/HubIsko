@@ -60,7 +60,7 @@ const Step4 = ({ formData, setFormData, errors, visibleRelativeIndex, setVisible
       // Add a new work experience object if the current number of work experiences is less than 2
       setFormData({
         ...formData,
-        workExperience: [...formData.workExperience, { companyName: '', dateStarted: '', position: '', monthlySalary: '', appointmentStatus: '' }],
+        workExperience: [...formData.workExperience, { companyName: '', dateStarted: '', position: '', monthlySalary: '', statusOfAppointment: '' }],
       });
       setVisibleWorkExperienceIndex(visibleWorkExperienceIndex + 1);
       setWorkExperienceErrorMessage(''); // Clear any previous error message
@@ -230,7 +230,7 @@ const Step4 = ({ formData, setFormData, errors, visibleRelativeIndex, setVisible
                 <select
                   name="statusOfAppointment"
                   className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
-                  value={workExperience.appointmentStatus}
+                  value={workExperience.statusOfAppointment}
                   onChange={(event) => handleWorkChange(index, event, 'workExperience')}
                 >
                   <option value="">Select appointment status</option>

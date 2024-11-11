@@ -129,6 +129,123 @@ const ScholarshipApplicationForm = () => {
         applicant: currentUser._id,
     });
 
+    // Load form data from localStorage when the component mounts
+    useEffect(() => {
+        const savedFormData = localStorage.getItem('scholarshipApplicationFormData');
+        if (savedFormData) {
+            const parsedFormData = JSON.parse(savedFormData);
+            setFormData({
+                ...parsedFormData,
+                documents: [], // Clear the documents field
+            });
+        }
+    }, []);
+
+    // Save form data to localStorage whenever it changes
+    useEffect(() => {
+        const { documents, ...restFormData } = formData;
+        localStorage.setItem('scholarshipApplicationFormData', JSON.stringify(restFormData));
+    }, [formData]);
+
+    // Clear form data from localStorage when navigating away from the page
+    useEffect(() => {
+        return () => {
+            localStorage.removeItem('scholarshipApplicationFormData');
+            setFormData({
+                firstName: userDetails?.firstName || '',
+                lastName: '',
+                middleName: '',
+                nameExtension: '',
+                birthdate: '',
+                gender: '',
+                bloodType: '',
+                civilStatus: '',
+                maidenName: '',
+                spouseName: '',
+                spouseOccupation: '',
+                religion: '',
+                height: '',
+                weight: '',
+                birthplace: '',
+                email: '',
+                contactNumber: '',
+                addressDetails: '',
+                region: '',
+                province: '',
+                city: '',
+                barangay: '',
+                father: {
+                    firstName: '',
+                    lastName: '',
+                    middleName: '',
+                    birthdate: '',
+                    occupation: '',
+                    yearlyIncome: '',
+                    contactNo: ''
+                },
+                mother: {
+                    firstName: '',
+                    lastName: '',
+                    middleName: '',
+                    birthdate: '',
+                    occupation: '',
+                    yearlyIncome: '',
+                    contactNo: ''
+                },
+                guardian: {
+                    firstName: '',
+                    lastName: '',
+                    middleName: '',
+                    birthdate: '',
+                    occupation: '',
+                    yearlyIncome: '',
+                    contactNo: ''
+                },
+                education: {
+                    elementary: {
+                        school: '',
+                        award: '',
+                        yearGraduated: '',
+                    },
+                    juniorHighSchool: {
+                        school: '',
+                        award: '',
+                        yearGraduated: '',
+                    },
+                    seniorHighSchool: {
+                        school: '',
+                        award: '',
+                        yearGraduated: '',
+                    },
+                    college: {
+                        school: '',
+                        course: '',
+                        yearGraduated: ''
+                    }
+                },
+                relatives: Array(6).fill({
+                    name: '',
+                    birthdate: '',
+                    relationship: ''
+                }),
+                workExperience: Array(2).fill({
+                    companyName: '',
+                    position: '',
+                    startDate: '',
+                    monthlySalary: '',
+                    statusOfAppointment: ''
+                }),
+                skillsAndQualifications: Array(6).fill({
+                    skills: '',
+                    qualifications: ''
+                }),
+                documents: {},
+                scholarshipProgram: '',
+                applicant: currentUser._id,
+            });
+        };
+    }, []);
+
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
