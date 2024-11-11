@@ -94,7 +94,7 @@ export default function ChangeEmail() {
             <h1 className='font-bold text-xl mb-8'>Change Email</h1>
             <form className='flex flex-col gap-8' onSubmit={handleSubmit}>
                 <div className='flex flex-col gap-1'>
-                    <span className='font-medium text-slate-500'>Current Email</span>
+                    <span className='font-medium text-slate-500'>Current Email <span className="text-red-500">*</span></span>
                     <input
                         type='email'
                         id='currentEmail'
@@ -108,7 +108,7 @@ export default function ChangeEmail() {
                     />
                 </div>
                 <div className='flex flex-col gap-1'>
-                    <span className='font-medium text-slate-500'>New Email</span>
+                    <span className='font-medium text-slate-500'>New Email <span className="text-red-500">*</span></span>
                     <input
                         type='email'
                         id='newEmail'
@@ -121,7 +121,7 @@ export default function ChangeEmail() {
                     />
                 </div>
                 <div className='flex flex-col gap-1'>
-                    <span className='font-medium text-slate-500'>Confirm New Email</span>
+                    <span className='font-medium text-slate-500'>Confirm New Email <span className="text-red-500">*</span></span>
                     <input
                         type='email'
                         id='confirmNewEmail'

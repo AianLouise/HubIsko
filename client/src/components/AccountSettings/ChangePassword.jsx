@@ -135,7 +135,7 @@ export default function ChangePassword() {
             <h1 className='font-bold text-xl mb-8'>Change Password</h1>
             <form className='flex flex-col gap-8' onSubmit={handleSubmit}>
                 <div className='flex flex-col gap-1'>
-                    <span className='font-medium text-slate-500'>Current Password</span>
+                    <span className='font-medium text-slate-500'>Current Password <span className="text-red-500">*</span></span>
                     <input
                         type={showPasswords ? 'text' : 'password'}
                         id='currentPassword'
@@ -148,7 +148,7 @@ export default function ChangePassword() {
                     />
                 </div>
                 <div className='flex flex-col gap-1'>
-                    <span className='font-medium text-slate-500'>New Password</span>
+                    <span className='font-medium text-slate-500'>New Password <span className="text-red-500">*</span></span>
                     <input
                         type={showPasswords ? 'text' : 'password'}
                         id='newPassword'
@@ -167,7 +167,7 @@ export default function ChangePassword() {
                     </div>
                 </div>
                 <div className='flex flex-col gap-1'>
-                    <span className='font-medium text-slate-500'>Confirm New Password</span>
+                    <span className='font-medium text-slate-500'>Confirm New Password <span className="text-red-500">*</span></span>
                     <input
                         type={showPasswords ? 'text' : 'password'}
                         id='confirmNewPassword'

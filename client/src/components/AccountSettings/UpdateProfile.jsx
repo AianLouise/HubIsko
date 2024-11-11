@@ -133,7 +133,7 @@ const UpdateProfile = () => {
             <h1 className='font-bold text-xl mb-8'>Update Profile</h1>
             <form className='flex flex-col gap-8' onSubmit={handleSubmit}>
                 <div className='flex flex-col items-center'>
-                    <span className='font-medium text-slate-500 mb-2'>Profile Picture</span>
+                    <span className='font-medium text-slate-500 mb-2'>Profile Picture <span className="text-red-500">*</span></span>
                     <div
                         className='relative cursor-pointer mb-2'
                         onClick={handleFileInputClick}
