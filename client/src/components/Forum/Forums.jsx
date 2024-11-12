@@ -98,10 +98,10 @@ export default function Forums() {
 
     const truncateText = (text, maxLength) => {
         if (text.length <= maxLength) {
-          return text;
+            return text;
         }
         return text.substring(0, maxLength) + '...';
-      };
+    };
 
     return (
         <div className='flex flex-col min-h-screen'>

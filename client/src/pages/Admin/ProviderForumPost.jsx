@@ -28,8 +28,22 @@ const ProviderForumPost = () => {
     // Handle post click if needed
   };
 
+  const truncateText = (text, maxLength) => {
+    if (text.length <= maxLength) {
+      return text;
+    }
+    return text.substring(0, maxLength) + '...';
+  };
+
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+        </svg>
+      </div>
+    );
   }
 
   const filteredPosts = Array.isArray(posts) ? posts : []; // Ensure filteredPosts is always an array
@@ -37,14 +51,14 @@ const ProviderForumPost = () => {
   return (
     <div className='grid grid-cols-1 sm:grid-rows-1 gap-8 pb-12'>
       {filteredPosts.length === 0 ? (
-        <div className='flex flex-col items-center justify-center gap-4 h-20'>
+        <div className='flex flex-col items-center justify-center gap-4 h-96'>
           <p>No posts available.</p>
         </div>
       ) : (
         filteredPosts
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort posts by creation date in descending order
           .map((post) => (
-            <Link to={`/forums/post/${post._id}`} key={post._id}>
+            <Link to={`/admin-forums/post/${post._id}`} key={post._id}>
               <div
                 className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow cursor-pointer hover:bg-slate-100 hover:-translate-y-1 transition ease-in-out'
                 onClick={() => handlePostClick(post._id)}
@@ -70,7 +84,7 @@ const ProviderForumPost = () => {
                   </div>
                 </div>
                 <span className='font-bold'>{post.title}</span>
-                <span className='text-sm text-slate-600'>{post.content}</span>
+                {truncateText(post.content, 500)} {/* Adjust the maxLength as needed */}
 
                 {/* Attachments Section */}
                 {post.attachments && post.attachments.length > 0 && (
@@ -104,10 +118,6 @@ const ProviderForumPost = () => {
                         <BiCommentDots className='w-6 h-6 text-blue-600' />
                         <span>{post.totalComments}</span>
                       </div>
-                    </div>
-                    <div className='flex flex-row gap-1 pr-2'>
-                      <FaRegEye className='w-6 h-6 text-blue-600' />
-                      <span>{post.views}</span>
                     </div>
                   </div>
                 </div>

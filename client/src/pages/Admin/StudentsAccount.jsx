@@ -50,7 +50,21 @@ export default function Students() {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      setApplicants(data.applicants);
+      const applicantsArray = data.applicants;
+
+      // Load all profile pictures before setting applicants
+      await Promise.all(
+        applicantsArray.map(applicant => {
+          return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = applicant.profilePicture;
+            img.onload = resolve;
+            img.onerror = reject;
+          });
+        })
+      );
+
+      setApplicants(applicantsArray);
     } catch (error) {
       console.error('Error fetching all applicants:', error);
     } finally {
@@ -63,7 +77,7 @@ export default function Students() {
   }, []);
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('All');
+  const [selectedFilter, setSelectedFilter] = useState('A - Z');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -71,8 +85,8 @@ export default function Students() {
     setSearchQuery(e.target.value);
   };
 
-  const toggleFilter = () => {
-    setSelectedFilter(prevFilter => (prevFilter === 'Recent' ? 'Oldest' : 'Recent'));
+  const handleFilterChange = (e) => {
+    setSelectedFilter(e.target.value);
   };
 
   const filteredApplicants = applicants.filter(applicant => {
@@ -85,7 +99,11 @@ export default function Students() {
 
     return matchesSearchQuery;
   }).sort((a, b) => {
-    if (selectedFilter === 'Recent') {
+    if (selectedFilter === 'A - Z') {
+      return a.applicantDetails.lastName.localeCompare(b.applicantDetails.lastName);
+    } else if (selectedFilter === 'Z - A') {
+      return b.applicantDetails.lastName.localeCompare(a.applicantDetails.lastName);
+    } else if (selectedFilter === 'Recent') {
       return new Date(b.createdAt) - new Date(a.createdAt);
     } else if (selectedFilter === 'Oldest') {
       return new Date(a.createdAt) - new Date(b.createdAt);
@@ -148,16 +166,22 @@ export default function Students() {
                     value={searchQuery}
                     onChange={handleSearchChange}
                   />
-                  <button onClick={toggleFilter} className='bg-blue-600 px-4 py-2 rounded-md flex gap-2 text-white'>
-                    <BiFilter className='w-6 h-6' />
-                    <span>{selectedFilter === 'Recent' ? 'Recent' : 'Oldest'}</span>
-                  </button>
+                  <select
+                    value={selectedFilter}
+                    onChange={handleFilterChange}
+                    className='border-gray-300 rounded-md p-2 border pr-8 bg-blue-600 text-white'
+                  >
+                    <option value="A - Z">A - Z</option>
+                    <option value="Z - A">Z - A</option>
+                    <option value="Recent">Recent</option>
+                    <option value="Oldest">Oldest</option>
+                  </select>
                 </div>
               </div>
               <table className='w-full border-t text-center'>
                 <thead>
                   <tr className='bg-slate-100'>
-                    <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">#No</th>
+                    <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">No.</th>
                     <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Name</th>
                     <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Email</th>
                     <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Date Applied</th>
@@ -179,7 +203,7 @@ export default function Students() {
                         <td className='py-2 px-4 border-gray-200'>
                           <div className="flex gap-2 items-center">
                             <img src={applicant.profilePicture} alt="Profile" className="rounded-full h-6 w-6 object-cover" />
-                            {`${applicant.applicantDetails.firstName} ${applicant.applicantDetails.middleName} ${applicant.applicantDetails.lastName}`}
+                            {`${applicant.applicantDetails.lastName}, ${applicant.applicantDetails.firstName} ${applicant.applicantDetails.middleName.charAt(0)}.`}
                           </div>
                         </td>
                         <td className='py-2 px-4 border-gray-200'>{applicant.email}</td>
@@ -223,40 +247,6 @@ export default function Students() {
                 </div>
               </div>
             </div>
-
-            {/* <div className="divide-y bg-white shadow border rounded-md flex flex-col w-1/4">
-              <div className="flex items-center gap-2 p-4">
-                <div className="bg-blue-600 w-16 h-16 rounded-full"></div>
-                <div className="flex flex-col gap-1">
-                  <span className="text-lg font-bold text-slate-800">John Doe</span>
-                  <span className="text-sm font-normal text-slate-600">University of Mang Tomas</span>
-                </div>
-              </div>
-
-              <ul className="p-4 divide-y font-normal text-slate-600">
-                {[
-                  { label: 'Email:', value: 'sample@sample.com' },
-                  { label: 'Contact No:', value: '09123456789' },
-                  { label: 'Region:', value: 'Mang Tomas' },
-                  { label: 'Birthday:', value: 'August 13, 2024' },
-                ].map((item, index) => (
-                  <li
-                    key={index}
-                    className={`flex items-center justify-between py-2 px-2 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50'
-                      }`}
-                  >
-                    {item.label}
-                    <span className="pr-2">{item.value}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="flex justify-end p-4">
-                <button className="flex px-3 py-1 bg-blue-600 text-white rounded-md">
-                  See full Details
-                </button>
-              </div>
-            </div> */}
           </div>
         </div>
       </main>

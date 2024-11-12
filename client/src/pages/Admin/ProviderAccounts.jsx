@@ -30,6 +30,13 @@ const getAccountLink = (account) => {
   }
 };
 
+const truncateText = (text, maxLength) => {
+  if (text.length <= maxLength) {
+    return text;
+  }
+  return text.substring(0, maxLength) + '...';
+};
+
 export default function ProviderAccounts() {
   useEffect(() => {
     document.title = "Scholarship Provider | HubIsko";
@@ -38,7 +45,7 @@ export default function ProviderAccounts() {
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('All');
+  const [selectedFilter, setSelectedFilter] = useState('A - Z');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -50,7 +57,21 @@ export default function ProviderAccounts() {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        setProviders(data.providers);
+        const providersArray = data.providers;
+
+        // Load all profile pictures before setting providers
+        await Promise.all(
+          providersArray.map(provider => {
+            return new Promise((resolve, reject) => {
+              const img = new Image();
+              img.src = provider.profilePicture;
+              img.onload = resolve;
+              img.onerror = reject;
+            });
+          })
+        );
+
+        setProviders(providersArray);
       } catch (error) {
         console.error('Error fetching all providers:', error);
       } finally {
@@ -65,8 +86,8 @@ export default function ProviderAccounts() {
     setSearchQuery(e.target.value);
   };
 
-  const toggleFilter = () => {
-    setSelectedFilter(prevFilter => (prevFilter === 'Recent' ? 'Oldest' : 'Recent'));
+  const handleFilterChange = (e) => {
+    setSelectedFilter(e.target.value);
   };
 
   const filteredProviders = providers.filter(provider => {
@@ -79,7 +100,11 @@ export default function ProviderAccounts() {
 
     return matchesSearchQuery;
   }).sort((a, b) => {
-    if (selectedFilter === 'Recent') {
+    if (selectedFilter === 'A - Z') {
+      return a.scholarshipProviderDetails.organizationName.localeCompare(b.scholarshipProviderDetails.organizationName);
+    } else if (selectedFilter === 'Z - A') {
+      return b.scholarshipProviderDetails.organizationName.localeCompare(a.scholarshipProviderDetails.organizationName);
+    } else if (selectedFilter === 'Recent') {
       return new Date(b.createdAt) - new Date(a.createdAt);
     } else if (selectedFilter === 'Oldest') {
       return new Date(a.createdAt) - new Date(b.createdAt);
@@ -123,16 +148,11 @@ export default function ProviderAccounts() {
         <div className='max-w-8xl mx-auto px-24 gap-4 flex-col flex mt-12 pb-10'>
           <div className="flex items-center justify-between border-b pb-2">
             <h1 className='text-2xl font-bold text-slate-600'>Providers' Info</h1>
-            {/* <h1 className='text-xl text-slate-600'>Recently Added</h1> */}
           </div>
 
           <div className='flex gap-4'>
             <div className='overflow-x-auto rounded-md bg-white shadow border w-full'>
               <div className='flex justify-between items-center gap-4 p-4 py-0 rounded-md'>
-                {/* <button className="flex gap-2 items-center bg-blue-600 rounded-md px-6 py-2 shadow text-white font-medium">
-                  <IoAddCircleOutline className='w-6 h-6' />
-                  Add Provider
-                </button> */}
                 <div></div>
                 <div className="flex items-center gap-4 p-4">
                   <input
@@ -142,17 +162,23 @@ export default function ProviderAccounts() {
                     value={searchQuery}
                     onChange={handleSearchChange}
                   />
-                  <button onClick={toggleFilter} className='bg-blue-600 px-4 py-2 rounded-md flex gap-2 text-white'>
-                    <BiFilter className='w-6 h-6' />
-                    <span>{selectedFilter === 'Recent' ? 'Recent' : 'Oldest'}</span>
-                  </button>
+                  <select
+                    value={selectedFilter}
+                    onChange={handleFilterChange}
+                    className='border-gray-300 rounded-md p-2 border pr-8 bg-blue-600 text-white'
+                  >
+                    <option value="A - Z">A - Z</option>
+                    <option value="Z - A">Z - A</option>
+                    <option value="Recent">Recent</option>
+                    <option value="Oldest">Oldest</option>
+                  </select>
                 </div>
               </div>
 
               <table className='w-full border-t text-center border-collapse'>
                 <thead>
                   <tr className='bg-slate-100'>
-                    <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">#No</th>
+                    <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">No.</th>
                     <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Organization</th>
                     <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Email</th>
                     <th className="py-3 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200">Contact Person</th>
@@ -174,7 +200,9 @@ export default function ProviderAccounts() {
                         <td className='py-2 px-4 border-b border-gray-200 text-left'>
                           <div className="flex gap-2 items-center">
                             <img src={provider.profilePicture} alt="Profile" className="rounded-full h-6 w-6 object-cover" />
-                            {provider.scholarshipProviderDetails.organizationName}
+                            <span className="truncate max-w-xs" title={provider.scholarshipProviderDetails.organizationName}>
+                              {truncateText(provider.scholarshipProviderDetails.organizationName, 20)}
+                            </span>
                           </div>
                         </td>
                         <td className='py-2 px-4 border-b border-gray-200'>{provider.email}</td>
@@ -220,47 +248,6 @@ export default function ProviderAccounts() {
                 </div>
               </div>
             </div>
-
-            {/* <div className="divide-y bg-white shadow border rounded-md flex flex-col w-1/3">
-              <div className="flex items-center gap-2 p-4">
-                <div className="bg-blue-600 w-16 h-16 rounded-full"></div>
-                <div className="flex flex-col gap-1">
-                  <span className="text-lg font-bold text-slate-800">Provider</span>
-                  <span className="text-sm font-normal text-slate-600">Place or Region</span>
-                </div>
-              </div>
-
-              <div>
-                <div className="p-4">
-                  <h1 className="mb-2">About the provider</h1>
-                  <span className="font-normal text-base">
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Totam aperiam explicabo atque quidem minima officiis, in magnam ea eos quaerat ipsam voluptatibus praesentium, excepturi quos? Eveniet, veritatis quos. Beatae, voluptates.
-                  </span>
-                </div>
-                <ul className="p-4 divide-y font-normal text-slate-600">
-                  {[
-                    { label: 'Email:', value: 'sample@sample.com' },
-                    { label: 'Contact Person:', value: 'Person Sample' },
-                    { label: 'Region:', value: 'Mang Tomas' },
-                    { label: 'Birthday:', value: 'August 13, 2024' },
-                  ].map((item, index) => (
-                    <li
-                      key={index}
-                      className={`flex items-center justify-between py-2 px-2 ${index % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}
-                    >
-                      {item.label}
-                      <span className="pr-2">{item.value}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="flex justify-end p-4">
-                <button className="flex px-3 py-1 bg-blue-600 text-white rounded-md">
-                  See full Details
-                </button>
-              </div>
-            </div> */}
           </div>
         </div>
       </main>
