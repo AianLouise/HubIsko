@@ -12,8 +12,6 @@ export default function ScholarshipPrograms() {
     }, []);
 
     const [totalScholarships, setTotalScholarships] = useState(0);
-    const [pendingPrograms, setPendingPrograms] = useState(0);
-    const [approvedPrograms, setApprovedPrograms] = useState(0);
     const [loading, setLoading] = useState(true);
     const [scholarshipPrograms, setScholarshipPrograms] = useState([]);
     const [filter, setFilter] = useState('All');
@@ -26,16 +24,6 @@ export default function ScholarshipPrograms() {
                 const scholarshipsResponse = await fetch('/api/admin/total-scholarships');
                 const scholarshipsData = await scholarshipsResponse.json();
                 setTotalScholarships(scholarshipsData.totalScholarships);
-
-                // Fetch total number of pending programs
-                const pendingProgramsResponse = await fetch('/api/admin/search-pending-approval-programs');
-                const pendingProgramsData = await pendingProgramsResponse.json();
-                setPendingPrograms(pendingProgramsData.length);
-
-                // Fetch total number of approved programs
-                const approvedProgramsResponse = await fetch('/api/admin/total-approved-programs');
-                const approvedProgramsData = await approvedProgramsResponse.json();
-                setApprovedPrograms(approvedProgramsData.totalApprovedPrograms);
 
                 // Fetch scholarship programs
                 const scholarshipProgramsResponse = await fetch('/api/admin/scholarship-programs');
@@ -115,7 +103,7 @@ export default function ScholarshipPrograms() {
                                     <MdOutlinePendingActions className='text-2xl text-teal-600' />
                                 </div>
                             </div>
-                            <span className='text-4xl font-bold tracking-wide'>{pendingPrograms}</span>
+                            <span className='text-4xl font-bold tracking-wide'>{scholarshipPrograms.filter(program => program.status === 'Ongoing').length}</span>
                         </div>
 
                         <div className='flex flex-col gap-3 bg-white border shadow p-8 py-6 rounded-md'>
@@ -125,7 +113,7 @@ export default function ScholarshipPrograms() {
                                     <MdOutlinePlayLesson className='text-2xl text-indigo-600' />
                                 </div>
                             </div>
-                            <span className='text-4xl font-bold tracking-wide'>{approvedPrograms}</span>
+                            <span className='text-4xl font-bold tracking-wide'>{scholarshipPrograms.filter(program => program.status === 'Published').length}</span>
                         </div>
 
                         <div className='flex flex-col gap-3 bg-white border shadow p-8 py-6 rounded-md'>
@@ -140,122 +128,124 @@ export default function ScholarshipPrograms() {
                     </div>
                 </div>
 
-                <div className='max-w-8xl mx-auto px-24 mt-4 flex-col flex'>
-                    <div className="flex justify-between p-6 border-b items-center gap-2 bg-white shadow rounded-md mb-4">
-                        <div className='flex gap-2 font-medium text-sm'>
-                            <button
-                                className={`group border shadow rounded-md hover:bg-slate-200 hover:text-blue-900 px-4 py-2 ${filter === 'All' ? 'bg-blue-500 text-white' : ''}`}
-                                onClick={() => setFilter('All')}
-                            >
-                                All <span className={`text-blue-600 ${filter === 'All' ? 'text-white' : ''} group-hover:text-blue-600`}>({scholarshipPrograms.length})</span>
-                            </button>
+                <div className="h-screen">
+                    <div className='max-w-8xl mx-auto px-24 mt-4 flex-col flex'>
+                        <div className="flex justify-between p-6 border-b items-center gap-2 bg-white shadow rounded-md mb-4">
+                            <div className='flex gap-2 font-medium text-sm'>
+                                <button
+                                    className={`group border shadow rounded-md hover:bg-slate-200 hover:text-blue-900 px-4 py-2 ${filter === 'All' ? 'bg-blue-500 text-white' : ''}`}
+                                    onClick={() => setFilter('All')}
+                                >
+                                    All <span className={`text-blue-600 ${filter === 'All' ? 'text-white' : ''} group-hover:text-blue-600`}>({scholarshipPrograms.length})</span>
+                                </button>
 
-                            <button
-                                className={`group border shadow rounded-md hover:bg-slate-200 hover:text-teal-900 px-4 py-2 ${filter === 'Ongoing' ? 'bg-teal-500 text-white' : ''}`}
-                                onClick={() => setFilter('Ongoing')}
-                            >
-                                Ongoing <span className={`text-teal-600 ${filter === 'Ongoing' ? 'text-white' : ''} group-hover:text-teal-600`}> ({scholarshipPrograms.filter(program => program.status === 'Ongoing').length})</span>
-                            </button>
+                                <button
+                                    className={`group border shadow rounded-md hover:bg-slate-200 hover:text-yellow-900 px-4 py-2 ${filter === 'Awaiting Publication' ? 'bg-yellow-500 text-white' : ''}`}
+                                    onClick={() => setFilter('Awaiting Publication')}
+                                >
+                                    Awaiting Publication <span className={`${filter === 'Awaiting Publication' ? 'text-white' : 'text-yellow-600'} group-hover:text-yellow-600`}>({scholarshipPrograms.filter(program => program.status === 'Awaiting Publication').length})</span>
+                                </button>
 
-                            <button
-                                className={`group border shadow rounded-md hover:bg-slate-200 hover:text-indigo-900 px-4 py-2 ${filter === 'Published' ? 'bg-indigo-500 text-white' : ''}`}
-                                onClick={() => setFilter('Published')}
-                            >
-                                Published <span className={`text-indigo-600 ${filter === 'Published' ? 'text-white' : ''} group-hover:text-indigo-600`}> ({scholarshipPrograms.filter(program => program.status === 'Published').length})</span>
-                            </button>
+                                <button
+                                    className={`group border shadow rounded-md hover:bg-slate-200 hover:text-indigo-900 px-4 py-2 ${filter === 'Published' ? 'bg-indigo-500 text-white' : ''}`}
+                                    onClick={() => setFilter('Published')}
+                                >
+                                    Published <span className={`text-indigo-600 ${filter === 'Published' ? 'text-white' : ''} group-hover:text-indigo-600`}> ({scholarshipPrograms.filter(program => program.status === 'Published').length})</span>
+                                </button>
 
-                            <button
-                                className={`group border shadow rounded-md hover:bg-slate-200 hover:text-yellow-900 px-4 py-2 ${filter === 'Awaiting Publication' ? 'bg-yellow-500 text-white' : ''}`}
-                                onClick={() => setFilter('Awaiting Publication')}
-                            >
-                                Awaiting Publication <span className={`${filter === 'Awaiting Publication' ? 'text-white' : 'text-yellow-600'} group-hover:text-yellow-600`}>({scholarshipPrograms.filter(program => program.status === 'Awaiting Publication').length})</span>
-                            </button>
+                                <button
+                                    className={`group border shadow rounded-md hover:bg-slate-200 hover:text-teal-900 px-4 py-2 ${filter === 'Ongoing' ? 'bg-teal-500 text-white' : ''}`}
+                                    onClick={() => setFilter('Ongoing')}
+                                >
+                                    Ongoing <span className={`text-teal-600 ${filter === 'Ongoing' ? 'text-white' : ''} group-hover:text-teal-600`}> ({scholarshipPrograms.filter(program => program.status === 'Ongoing').length})</span>
+                                </button>
 
-                            <button
-                                className={`group border shadow rounded-md hover:bg-slate-200 hover:text-green-900 px-4 py-2 ${filter === 'Completed' ? 'bg-green-500 text-white' : ''}`}
-                                onClick={() => setFilter('Completed')}
-                            >
-                                Completed <span className={`text-green-600 ${filter === 'Completed' ? 'text-white' : ''} group-hover:text-green-600`}>({scholarshipPrograms.filter(program => program.status === 'Completed').length})</span>
-                            </button>
+                                <button
+                                    className={`group border shadow rounded-md hover:bg-slate-200 hover:text-green-900 px-4 py-2 ${filter === 'Completed' ? 'bg-green-500 text-white' : ''}`}
+                                    onClick={() => setFilter('Completed')}
+                                >
+                                    Completed <span className={`text-green-600 ${filter === 'Completed' ? 'text-white' : ''} group-hover:text-green-600`}>({scholarshipPrograms.filter(program => program.status === 'Completed').length})</span>
+                                </button>
+                            </div>
+
+                            <input
+                                type="text"
+                                placeholder='Search Scholarship Program'
+                                className='p-2 border rounded-md w-1/3'
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
                         </div>
 
-                        <input
-                            type="text"
-                            placeholder='Search Scholarship Program'
-                            className='p-2 border rounded-md w-1/3'
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                    </div>
-
-                    <div className="overflow-x-auto border shadow rounded-md bg-white w-full mb-10">
-                        <div className="">
-                            {filteredPrograms.length === 0 ? (
-                                <div className="flex justify-center items-center h-full py-4">
-                                    <p className="text-gray-600 font-medium">No scholarships available for the selected filter.</p>
-                                </div>
-                            ) : (
-                                <table className="divide-y w-full divide-gray-200">
-                                    <thead className="bg-slate-50 text-slate-700 border-b font-bold sticky top-0">
-                                        <tr>
-                                            <th scope="col" className="px-3 py-3 text-left text-xs uppercase tracking-wider">
-                                                Title
-                                            </th>
-                                            <th scope="col" className="px-3 py-3 text-center text-xs uppercase tracking-wider">
-                                                Organization Name
-                                            </th>
-                                            <th scope="col" className="px-3 py-3 text-center text-xs uppercase tracking-wider">
-                                                Status
-                                            </th>
-                                            <th scope="col" className="px-3 py-3 text-center text-xs uppercase tracking-wider">
-                                                Slots
-                                            </th>
-                                            <th scope="col" className="px-3 py-3 text-center text-xs uppercase tracking-wider sticky right-0 bg-slate-50">
-                                                Actions
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="bg-white divide-y divide-gray-200">
-                                        {filteredPrograms.map((scholarship) => (
-                                            <tr key={scholarship._id}>
-                                                <td className="px-6 flex gap-4 items-center py-4 whitespace-nowrap">
-                                                    <div
-                                                        className='w-16 h-16 rounded-md'
-                                                        style={{
-                                                            backgroundImage: `url(${scholarship.bannerImage})`,
-                                                            backgroundSize: 'cover',
-                                                            backgroundPosition: 'center'
-                                                        }}
-                                                    ></div>
-                                                    <h1 className='text-base font-medium text-gray-800 break-words'>{truncate(scholarship.title, 30)}</h1>
-                                                </td>
-                                                <td className="px-6 py-4 text-center whitespace-nowrap">
-                                                    <span className='text-base font-medium text-gray-800'>{truncate(scholarship.organizationName, 30)}</span>
-                                                </td>
-                                                <td className="px-6 py-4 text-center whitespace-nowrap">
-                                                    <span className={`text-base font-medium 
+                        <div className="overflow-x-auto border shadow rounded-md bg-white w-full mb-10">
+                            <div className="">
+                                {filteredPrograms.length === 0 ? (
+                                    <div className="flex justify-center items-center h-full py-4">
+                                        <p className="text-gray-600 font-medium">No scholarships available for the selected filter.</p>
+                                    </div>
+                                ) : (
+                                    <table className="divide-y w-full divide-gray-200">
+                                        <thead className="bg-slate-50 text-slate-700 border-b font-bold sticky top-0">
+                                            <tr>
+                                                <th scope="col" className="px-3 py-3 text-left text-xs uppercase tracking-wider">
+                                                    Title
+                                                </th>
+                                                <th scope="col" className="px-3 py-3 text-center text-xs uppercase tracking-wider">
+                                                    Organization Name
+                                                </th>
+                                                <th scope="col" className="px-3 py-3 text-center text-xs uppercase tracking-wider">
+                                                    Status
+                                                </th>
+                                                <th scope="col" className="px-3 py-3 text-center text-xs uppercase tracking-wider">
+                                                    Slots
+                                                </th>
+                                                <th scope="col" className="px-3 py-3 text-center text-xs uppercase tracking-wider sticky right-0 bg-slate-50">
+                                                    Actions
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="bg-white divide-y divide-gray-200">
+                                            {filteredPrograms.map((scholarship) => (
+                                                <tr key={scholarship._id}>
+                                                    <td className="px-6 flex gap-4 items-center py-4 whitespace-nowrap">
+                                                        <div
+                                                            className='w-16 h-16 rounded-md'
+                                                            style={{
+                                                                backgroundImage: `url(${scholarship.bannerImage})`,
+                                                                backgroundSize: 'cover',
+                                                                backgroundPosition: 'center'
+                                                            }}
+                                                        ></div>
+                                                        <h1 className='text-base font-medium text-gray-800 break-words'>{truncate(scholarship.title, 30)}</h1>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-center whitespace-nowrap">
+                                                        <span className='text-base font-medium text-gray-800'>{truncate(scholarship.organizationName, 30)}</span>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-center whitespace-nowrap">
+                                                        <span className={`text-base font-medium 
                                                                                     ${scholarship.status === 'Published' ? 'bg-indigo-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
                                                                                     ${scholarship.status === 'Ongoing' ? 'bg-teal-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
                                                                                     ${scholarship.status === 'Archived' ? 'bg-gray-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
                                                                                     ${scholarship.status === 'Cancelled' ? 'bg-orange-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
                                                                                     ${scholarship.status === 'Completed' ? 'bg-green-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
                                                                                     ${scholarship.status === 'Awaiting Publication' ? 'bg-yellow-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''}`}>
-                                                        {scholarship.status}
-                                                    </span>
-                                                </td>
-                                                <td className="px-6 py-4 text-center whitespace-nowrap">
-                                                    <span className='text-slate-600'>{scholarship.approvedScholars.length}/{scholarship.numberOfScholarships}</span>
-                                                </td>
-                                                <td className="px-6 py-4 text-center whitespace-nowrap sticky right-0 bg-white">
-                                                    <Link to={`/scholarship-program/${scholarship._id}`} className="bg-blue-600 text-white px-4 ml-2 py-1 rounded-md hover:bg-blue-800 whitespace-nowrap">
-                                                        View Details
-                                                    </Link>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            )}
+                                                            {scholarship.status}
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-center whitespace-nowrap">
+                                                        <span className='text-slate-600'>{scholarship.approvedScholars.length}/{scholarship.numberOfScholarships}</span>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-center whitespace-nowrap sticky right-0 bg-white">
+                                                        <Link to={`/scholarship-program/${scholarship._id}`} className="bg-blue-600 text-white px-4 ml-2 py-1 rounded-md hover:bg-blue-800 whitespace-nowrap">
+                                                            View Details
+                                                        </Link>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

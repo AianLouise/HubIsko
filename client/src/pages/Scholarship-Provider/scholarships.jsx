@@ -223,10 +223,10 @@ export default function Scholarships() {
                   </button>
 
                   <button
-                    className={`group border shadow rounded-md hover:bg-slate-200 hover:text-teal-900 px-4 py-2 ${filter === 'Ongoing' ? 'bg-teal-500 text-white' : ''}`}
-                    onClick={() => handleFilterChange('Ongoing')}
+                    className={`group border shadow rounded-md hover:bg-slate-200 hover:text-yellow-900 px-4 py-2 ${filter === 'Awaiting Publication' ? 'bg-yellow-500 text-white' : ''}`}
+                    onClick={() => handleFilterChange('Awaiting Publication')}
                   >
-                    Ongoing <span className={`text-teal-600 ${filter === 'Ongoing' ? 'text-white' : ''} group-hover:text-teal-600`}>({scholarships.filter(scholarship => scholarship.status === 'Ongoing').length})</span>
+                    Awaiting Publication <span className={`text-yellow-600 ${filter === 'Awaiting Publication' ? 'text-white' : ''} group-hover:text-yellow-600`}>({scholarships.filter(scholarship => scholarship.status === 'Awaiting Publication').length})</span>
                   </button>
 
                   <button
@@ -237,10 +237,10 @@ export default function Scholarships() {
                   </button>
 
                   <button
-                    className={`group border shadow rounded-md hover:bg-slate-200 hover:text-yellow-900 px-4 py-2 ${filter === 'Awaiting Publication' ? 'bg-yellow-500 text-white' : ''}`}
-                    onClick={() => handleFilterChange('Awaiting Publication')}
+                    className={`group border shadow rounded-md hover:bg-slate-200 hover:text-teal-900 px-4 py-2 ${filter === 'Ongoing' ? 'bg-teal-500 text-white' : ''}`}
+                    onClick={() => handleFilterChange('Ongoing')}
                   >
-                    Awaiting Publication <span className={`text-yellow-600 ${filter === 'Awaiting Publication' ? 'text-white' : ''} group-hover:text-yellow-600`}>({scholarships.filter(scholarship => scholarship.status === 'Awaiting Publication').length})</span>
+                    Ongoing <span className={`text-teal-600 ${filter === 'Ongoing' ? 'text-white' : ''} group-hover:text-teal-600`}>({scholarships.filter(scholarship => scholarship.status === 'Ongoing').length})</span>
                   </button>
 
                   <button

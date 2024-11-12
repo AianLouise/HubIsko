@@ -1,5 +1,5 @@
 import express from "express";
-import { countApprovedScholars, createAccount, getAllApplicants, getAllProviders, getAllScholarshipPrograms, getAllUsers, getApplicantById, getPendingScholarshipPrograms, getPendingScholarshipProviders, getScholarshipProgramDetailsById, getScholarshipProviderById, getTotalApplicants, getTotalApprovedPrograms, getTotalScholarshipProviders, getTotalScholarships, getTotalUnverifiedAccounts, getTotalUserAccounts, getUserForumPosts, getUserScholarshipPrograms, rejectScholarshipProgram, searchPendingApprovalPrograms, test, updateProviderDetails, updateStudentDetails, verifyScholarshipProgram, verifyScholarshipProviderStatus } from '../controllers/admin.controller.js';
+import { countApprovedScholars, createAccount, getAllApplicants, getAllProviders, getAllScholarshipPrograms, getAllUsers, getApplicantById, getPendingScholarshipPrograms, getPendingScholarshipProviders, getScholarshipProgramDetailsById, getScholarshipProviderById, getTotalApplicants, getTotalScholarshipProviders, getTotalScholarships, getTotalUnverifiedAccounts, getTotalUserAccounts, getUserForumPosts, getUserScholarshipPrograms, rejectScholarshipProgram, test, updateProviderDetails, updateStudentDetails, verifyScholarshipProgram, verifyScholarshipProviderStatus } from '../controllers/admin.controller.js';
 
 const router = express.Router();
 
@@ -19,7 +19,6 @@ router.get('/scholarship-provider/:id', getScholarshipProviderById);
 
 router.put('/verify-scholarship-provider-status/:id', verifyScholarshipProviderStatus);
 
-router.get('/search-pending-approval-programs', searchPendingApprovalPrograms);
 router.get('/count-approved-scholars', countApprovedScholars);
 router.get('/all-users', getAllUsers);
 
@@ -32,7 +31,6 @@ router.patch('/provider/:id', updateProviderDetails);
 router.get('/scholarship-programs', getAllScholarshipPrograms);
 router.get('/user/:userId/scholarship-programs', getUserScholarshipPrograms);
 router.get('/user/:userId/forum-posts', getUserForumPosts);
-router.get('/total-approved-programs', getTotalApprovedPrograms);
 
 // New route for creating an account
 router.post('/register', createAccount);

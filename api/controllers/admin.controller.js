@@ -244,21 +244,6 @@ export const searchPendingVerificationProviders = async (req, res) => {
   }
 };
 
-export const searchPendingApprovalPrograms = async (req, res) => {
-  try {
-    const pendingPrograms = await ScholarshipProgram.find({
-      status: 'Pending Approval',
-    });
-
-    res.status(200).json(pendingPrograms);
-  } catch (error) {
-    res.status(500).json({
-      message: 'Error searching for pending approval scholarship programs',
-      error: error.message,
-    });
-  }
-};
-
 export const countApprovedScholars = async (req, res) => {
   try {
     const approvedScholarsCount = await ScholarshipProgram.aggregate([
@@ -489,19 +474,6 @@ export const getUserForumPosts = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error fetching user forum posts',
-      error: error.message,
-    });
-  }
-};
-
-export const getTotalApprovedPrograms = async (req, res) => {
-  try {
-    const approvedProgramsCount = await ScholarshipProgram.countDocuments({ status: 'Approved' });
-    res.status(200).json({ totalApprovedPrograms: approvedProgramsCount });
-  } catch (error) {
-    console.error('Error fetching total approved programs:', error.message);
-    res.status(500).json({
-      message: 'Error fetching total approved programs',
       error: error.message,
     });
   }
