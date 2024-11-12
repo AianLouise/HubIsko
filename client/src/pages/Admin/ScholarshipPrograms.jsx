@@ -51,15 +51,22 @@ export default function ScholarshipPrograms() {
         fetchData();
     }, []);
 
-    const filteredPrograms = scholarshipPrograms.filter(program => {
-        if (filter !== 'All' && program.status !== filter) {
-            return false;
-        }
-        if (searchQuery && !program.title.toLowerCase().includes(searchQuery.toLowerCase())) {
-            return false;
-        }
-        return true;
-    });
+    const filteredPrograms = scholarshipPrograms
+        .filter(program => {
+            if (filter !== 'All' && program.status !== filter) {
+                return false;
+            }
+            if (searchQuery && !program.title.toLowerCase().includes(searchQuery.toLowerCase()) && !program.organizationName.toLowerCase().includes(searchQuery.toLowerCase())) {
+                return false;
+            }
+            return true;
+        })
+        .sort((a, b) => a.title.localeCompare(b.title));
+
+    const truncate = (text, maxLength) => {
+        if (text.length <= maxLength) return text;
+        return text.substring(0, maxLength) + '...';
+    };
 
     if (loading) {
         return (
@@ -174,8 +181,8 @@ export default function ScholarshipPrograms() {
 
                         <input
                             type="text"
-                            placeholder='Search Scholarships'
-                            className='p-2 border rounded-md'
+                            placeholder='Search Scholarship Program'
+                            className='p-2 border rounded-md w-1/3'
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -191,16 +198,19 @@ export default function ScholarshipPrograms() {
                                 <table className="divide-y w-full divide-gray-200">
                                     <thead className="bg-slate-50 text-slate-700 border-b font-bold sticky top-0">
                                         <tr>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs uppercase tracking-wider">
+                                            <th scope="col" className="px-3 py-3 text-left text-xs uppercase tracking-wider">
                                                 Title
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs uppercase tracking-wider">
+                                            <th scope="col" className="px-3 py-3 text-center text-xs uppercase tracking-wider">
+                                                Organization Name
+                                            </th>
+                                            <th scope="col" className="px-3 py-3 text-center text-xs uppercase tracking-wider">
                                                 Status
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs uppercase tracking-wider">
+                                            <th scope="col" className="px-3 py-3 text-center text-xs uppercase tracking-wider">
                                                 Slots
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs uppercase tracking-wider">
+                                            <th scope="col" className="px-3 py-3 text-center text-xs uppercase tracking-wider sticky right-0 bg-slate-50">
                                                 Actions
                                             </th>
                                         </tr>
@@ -217,29 +227,27 @@ export default function ScholarshipPrograms() {
                                                             backgroundPosition: 'center'
                                                         }}
                                                     ></div>
-
-                                                    <h1 className='text-base font-medium text-gray-800 break-words'>{scholarship.title}</h1>
+                                                    <h1 className='text-base font-medium text-gray-800 break-words'>{truncate(scholarship.title, 30)}</h1>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                <td className="px-6 py-4 text-center whitespace-nowrap">
+                                                    <span className='text-base font-medium text-gray-800'>{truncate(scholarship.organizationName, 30)}</span>
+                                                </td>
+                                                <td className="px-6 py-4 text-center whitespace-nowrap">
                                                     <span className={`text-base font-medium 
-                                                              ${scholarship.status === 'Published' ? 'bg-indigo-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                                              ${scholarship.status === 'Ongoing' ? 'bg-teal-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                                              ${scholarship.status === 'Archived' ? 'bg-gray-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                                              ${scholarship.status === 'Cancelled' ? 'bg-orange-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                                              ${scholarship.status === 'Completed' ? 'bg-green-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                                              ${scholarship.status === 'Awaiting Publication' ? 'bg-yellow-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''}`}>
+                                                                                    ${scholarship.status === 'Published' ? 'bg-indigo-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                                                                    ${scholarship.status === 'Ongoing' ? 'bg-teal-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                                                                    ${scholarship.status === 'Archived' ? 'bg-gray-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                                                                    ${scholarship.status === 'Cancelled' ? 'bg-orange-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                                                                    ${scholarship.status === 'Completed' ? 'bg-green-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
+                                                                                    ${scholarship.status === 'Awaiting Publication' ? 'bg-yellow-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''}`}>
                                                         {scholarship.status}
                                                     </span>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                <td className="px-6 py-4 text-center whitespace-nowrap">
                                                     <span className='text-slate-600'>{scholarship.approvedScholars.length}/{scholarship.numberOfScholarships}</span>
                                                 </td>
-
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <Link
-                                                        to={`/scholarship-program/${scholarship._id}`}
-                                                        className="bg-blue-600 text-white px-4 ml-2 py-1 rounded-md hover:bg-blue-800 whitespace-nowrap"
-                                                    >
+                                                <td className="px-6 py-4 text-center whitespace-nowrap sticky right-0 bg-white">
+                                                    <Link to={`/scholarship-program/${scholarship._id}`} className="bg-blue-600 text-white px-4 ml-2 py-1 rounded-md hover:bg-blue-800 whitespace-nowrap">
                                                         View Details
                                                     </Link>
                                                 </td>

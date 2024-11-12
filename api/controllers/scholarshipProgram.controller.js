@@ -156,6 +156,7 @@ export const getScholarshipProgramsByProviderId = async (req, res) => {
       providerRequirements: program.providerRequirements,
       status: program.status,
       approvedScholars: program.approvedScholars.length,
+      dateCreated: program.dateCreated,
     }));
 
     res.status(200).json(formattedPrograms);
