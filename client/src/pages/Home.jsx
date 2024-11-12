@@ -147,7 +147,7 @@ export default function Home() {
             <h1 className='text-center lg:text-left bg-blue-600 p-4 text-white font-bold text-lg lg:text-2xl rounded-t-md'>
               Our Goal
             </h1>
-            <p className='mb-4 text-slate-700 p-4 lg:px-8 font-medium text-sm lg:text-base'>
+            <p className='mb-1 text-slate-700 p-2 lg:px-8 font-medium text-sm lg:text-base text-justify'>
               HubIsko is a comprehensive scholarship management system designed to streamline
               the process of finding, applying for, and managing scholarships. Whether you're
               a student seeking financial assistance or an organization looking to provide
@@ -155,14 +155,14 @@ export default function Home() {
               We aim to connect students with the resources they need to achieve their
               educational goals while helping organizations manage their scholarship programs efficiently.
             </p>
-            <p className='mb-4 text-slate-700 p-4 lg:px-8 font-medium text-sm lg:text-base'>
+            <p className='mb-1 text-slate-700 p-2 lg:px-8 font-medium text-sm lg:text-base text-justify'>
               With HubIsko's user-friendly interface, you can easily search for scholarships
               that match your academic interests and eligibility. Our system also allows
               scholarship providers to track applications, review submissions, and communicate
               with applicants seamlessly. We are committed to making the scholarship process
               more accessible, transparent, and effective for everyone involved.
             </p>
-            <p className='text-slate-700 p-4 lg:px-8 font-medium text-sm lg:text-base'>
+            <p className='text-slate-700 p-2 lg:px-8 font-medium text-sm lg:text-base text-justify'>
               Join HubIsko in achieving our mission to make education more accessible and to
               empower students and organizations with the tools they need to succeed.
             </p>
