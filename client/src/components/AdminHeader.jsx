@@ -230,6 +230,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                             || location.pathname.startsWith('/provider-accounts')
                                             || location.pathname.startsWith('/verification-details')
                                             || location.pathname.startsWith('/student-details')
+                                            || location.pathname.startsWith('/student-applications')
                                             || location.pathname.startsWith('/provider-details')
                                             || location.pathname.startsWith('/scholarship-provider')
                                             ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>

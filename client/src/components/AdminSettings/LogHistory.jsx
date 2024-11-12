@@ -6,6 +6,7 @@ const LogHistory = () => {
     const [filter, setFilter] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+    const [sortOption, setSortOption] = useState('latest');
     const logsPerPage = 10;
 
     useEffect(() => {
@@ -45,8 +46,14 @@ const LogHistory = () => {
             );
         }
 
+        if (sortOption === 'latest') {
+            logs = logs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        } else if (sortOption === 'oldest') {
+            logs = logs.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+        }
+
         setFilteredLogs(logs);
-    }, [filter, searchQuery, activityLogs]);
+    }, [filter, searchQuery, activityLogs, sortOption]);
 
     useEffect(() => {
         setCurrentPage(1);
@@ -110,13 +117,23 @@ const LogHistory = () => {
                     </button>
                 </div>
 
-                <input
-                    placeholder="Search"
-                    type="text"
-                    className="border-2 rounded-md bg-slate-100 p-2 w-[300px] text-slate-700"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
+                <div className="flex gap-4 items-center">
+                    <input
+                        placeholder="Search"
+                        type="text"
+                        className="border-2 rounded-md bg-white p-2 w-[300px] text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    <select
+                        value={sortOption}
+                        onChange={(e) => setSortOption(e.target.value)}
+                        className="border-2 rounded-md bg-white p-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                    >
+                        <option value="latest">Latest</option>
+                        <option value="oldest">Oldest</option>
+                    </select>
+                </div>
             </div>
 
             <div className="bg-white p-4 border shadow rounded-md">
@@ -161,7 +178,7 @@ const LogHistory = () => {
                                             <div className="text-sm text-gray-900">{log.type}</div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-sm text-gray-500">{new Date(log.timestamp).toLocaleDateString()}</div>
+                                            <div className="text-sm text-gray-500">{new Date(log.timestamp).toLocaleString()}</div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="text-sm text-gray-900">{log.details}</div>

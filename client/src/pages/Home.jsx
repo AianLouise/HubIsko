@@ -430,7 +430,7 @@ export default function Home() {
             </div>
 
             {/* Abundant Opportunities */}
-            <div className='flex flex-row gap-8 text-center items-center justify-center text-md font-semibold'>
+            <div className='flex flex-row gap-8 text-center items-center justify-center text-md font-medium'>
               <div className='bg-white flex flex-row items-center justify-between w-full border rounded-md shadow-md hover:-translate-y-2 transition-all p-8 lg:p-10'>
 
                 {/* Icon */}
@@ -443,11 +443,11 @@ export default function Home() {
                   <div className='text-blue-600 text-md font-semibold'>
                     ABUNDANT OPPORTUNITIES
                   </div>
-                  <span className='hidden lg:block font-bold text-4xl'>
+                  <span className='hidden lg:block font-bold text-3xl'>
                     Maximize your scholarship opportunities with minimal effort
                   </span>
 
-                  <div className='hidden lg:flex flex-col text-lg text-slate-600 gap-1'>
+                  <div className='hidden lg:flex flex-col text-base text-slate-600 gap-1'>
                     <span>1. Access a wide variety of scholarships tailored to your field of study.</span>
                     <span>2. Use advanced filters to easily find and apply for scholarships that match your qualifications.</span>
                     <span>3. Enjoy a seamless application process with automated document submissions.</span>
@@ -457,7 +457,7 @@ export default function Home() {
             </div>
 
             {/* User-Friendly Automation */}
-            <div className='flex flex-row gap-8 text-center items-center justify-between lg:justify-center text-md font-semibold'>
+            <div className='flex flex-row gap-8 text-center items-center justify-between lg:justify-center text-md font-medium'>
               <div className='flex flex-row items-center justify-between w-full rounded-md hover:-translate-y-2 transition-all p-10 lg:p-10'>
 
                 {/* Text */}
@@ -469,7 +469,7 @@ export default function Home() {
                     Stay organized with dashboard overviews and timely alerts
                   </span>
 
-                  <div className='hidden lg:flex flex-col text-lg text-slate-600 gap-1'>
+                  <div className='hidden lg:flex flex-col text-base text-slate-600 gap-1'>
                     <span>1. Track your scholarship application status with real-time updates.</span>
                     <span>2. Get timely alerts for upcoming deadlines and new opportunities.</span>
                     <span>3. Manage all your applications and documents in one organized dashboard.</span>
@@ -485,7 +485,7 @@ export default function Home() {
             </div>
 
             {/* Responsive System and Users */}
-            <div className='flex flex-row gap-8 text-center items-center justify-center text-md font-semibold'>
+            <div className='flex flex-row gap-8 text-center items-center justify-center text-md font-medium'>
               <div className='bg-white flex flex-row items-center justify-between w-full border rounded-md shadow-md hover:-translate-y-2 transition-all p-10 lg:p-10'>
 
                 {/* Image */}
@@ -502,7 +502,7 @@ export default function Home() {
                     Access a wide network of scholarship providers and applicants
                   </span>
 
-                  <div className='hidden lg:flex flex-col text-lg text-slate-600 gap-1'>
+                  <div className='hidden lg:flex flex-col text-base text-slate-600 gap-1'>
                     <span>1. Easily connect with providers and other applicants across various fields of study.</span>
                     <span>2. Join a supportive community where you can collaborate and seek advice.</span>
                     <span>3. Explore a platform built for efficient communication and quick response times.</span>
@@ -511,7 +511,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className='flex flex-row gap-8 text-center items-center justify-between lg:justify-center text-md font-semibold'>
+            <div className='flex flex-row gap-8 text-center items-center justify-between lg:justify-center text-md font-medium'>
               <div className='flex flex-row items-center justify-between w-full rounded-md hover:-translate-y-2 transition-all p-10 lg:p-10'>
 
                 <div className='w-1/2 text-left flex flex-col gap-8'>
@@ -526,7 +526,7 @@ export default function Home() {
                   </span>
 
                   {/* Process Description */}
-                  <div className='hidden lg:flex flex-col text-lg text-slate-600 gap-1'>
+                  <div className='hidden lg:flex flex-col text-base text-slate-600 gap-1'>
                     <span className=''>1. Sign up with your account details or register as a new user.</span>
                     <span className=''>2. Fill in the scholarship application form with your credentials and required documents.</span>
                     <span className=''>3. Review your application and submit it for approval.</span>
@@ -534,7 +534,7 @@ export default function Home() {
                   </div>
 
                   {/* Additional Details (Optional) */}
-                  <div className='hidden lg:flex flex-col text-md text-slate-500 gap-2 mt-4'>
+                  <div className='hidden lg:flex flex-col text-base text-slate-500 gap-2 mt-4'>
                     <span className='font-semibold'>Tips for a successful application:</span>
                     <ul className='list-disc ml-4'>
                       <li>Ensure all your documents are up to date and clear.</li>
