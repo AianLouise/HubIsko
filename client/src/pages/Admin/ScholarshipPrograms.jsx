@@ -137,45 +137,38 @@ export default function ScholarshipPrograms() {
                     <div className="flex justify-between p-6 border-b items-center gap-2 bg-white shadow rounded-md mb-4">
                         <div className='flex gap-2 font-medium text-sm'>
                             <button
-                                className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'All' ? 'bg-slate-200' : ''}`}
+                                className={`group border shadow rounded-md hover:bg-slate-200 hover:text-blue-900 px-4 py-2 ${filter === 'All' ? 'bg-blue-500 text-white' : ''}`}
                                 onClick={() => setFilter('All')}
                             >
-                                All <span className={`${filter === 'All' ? 'text-blue-600' : 'text-blue-600'}`}>({scholarshipPrograms.length})</span>
+                                All <span className={`text-blue-600 ${filter === 'All' ? 'text-white' : ''} group-hover:text-blue-600`}>({scholarshipPrograms.length})</span>
                             </button>
 
                             <button
-                                className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Ongoing' ? 'bg-teal-500 text-white' : ''}`}
+                                className={`group border shadow rounded-md hover:bg-slate-200 hover:text-teal-900 px-4 py-2 ${filter === 'Ongoing' ? 'bg-teal-500 text-white' : ''}`}
                                 onClick={() => setFilter('Ongoing')}
                             >
-                                Ongoing <span className={`${filter === 'Ongoing' ? 'text-white' : 'text-teal-600'}`}>({scholarshipPrograms.filter(program => program.status === 'Ongoing').length})</span>
+                                Ongoing <span className={`text-teal-600 ${filter === 'Ongoing' ? 'text-white' : ''} group-hover:text-teal-600`}> ({scholarshipPrograms.filter(program => program.status === 'Ongoing').length})</span>
                             </button>
 
                             <button
-                                className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Published' ? 'bg-indigo-500 text-white' : ''}`}
+                                className={`group border shadow rounded-md hover:bg-slate-200 hover:text-indigo-900 px-4 py-2 ${filter === 'Published' ? 'bg-indigo-500 text-white' : ''}`}
                                 onClick={() => setFilter('Published')}
                             >
-                                Published <span className={`${filter === 'Published' ? 'text-white' : 'text-indigo-600'}`}>({scholarshipPrograms.filter(program => program.status === 'Published').length})</span>
+                                Published <span className={`text-indigo-600 ${filter === 'Published' ? 'text-white' : ''} group-hover:text-indigo-600`}> ({scholarshipPrograms.filter(program => program.status === 'Published').length})</span>
                             </button>
 
                             <button
-                                className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Awaiting Publication' ? 'bg-yellow-500 text-white' : ''}`}
+                                className={`group border shadow rounded-md hover:bg-slate-200 hover:text-yellow-900 px-4 py-2 ${filter === 'Awaiting Publication' ? 'bg-yellow-500 text-white' : ''}`}
                                 onClick={() => setFilter('Awaiting Publication')}
                             >
-                                Awaiting Publication <span className={`${filter === 'Awaiting Publication' ? 'text-white' : 'text-yellow-600'}`}>({scholarshipPrograms.filter(program => program.status === 'Awaiting Publication').length})</span>
+                                Awaiting Publication <span className={`${filter === 'Awaiting Publication' ? 'text-white' : 'text-yellow-600'} group-hover:text-yellow-600`}>({scholarshipPrograms.filter(program => program.status === 'Awaiting Publication').length})</span>
                             </button>
 
                             <button
-                                className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Completed' ? 'bg-green-500 text-white' : ''}`}
+                                className={`group border shadow rounded-md hover:bg-slate-200 hover:text-green-900 px-4 py-2 ${filter === 'Completed' ? 'bg-green-500 text-white' : ''}`}
                                 onClick={() => setFilter('Completed')}
                             >
-                                Completed <span className={`${filter === 'Completed' ? 'text-white' : 'text-green-600'}`}>({scholarshipPrograms.filter(program => program.status === 'Completed').length})</span>
-                            </button>
-
-                            <button
-                                className={`border shadow rounded-md hover:bg-slate-200 px-4 py-2 ${filter === 'Rejected' ? 'bg-red-500 text-white' : ''}`}
-                                onClick={() => setFilter('Rejected')}
-                            >
-                                Rejected <span className={`${filter === 'Rejected' ? 'text-white' : 'text-red-600'}`}>({scholarshipPrograms.filter(program => program.status === 'Rejected').length})</span>
+                                Completed <span className={`text-green-600 ${filter === 'Completed' ? 'text-white' : ''} group-hover:text-green-600`}>({scholarshipPrograms.filter(program => program.status === 'Completed').length})</span>
                             </button>
                         </div>
 
@@ -231,7 +224,6 @@ export default function ScholarshipPrograms() {
                                                     <span className={`text-base font-medium 
                                                               ${scholarship.status === 'Published' ? 'bg-indigo-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
                                                               ${scholarship.status === 'Ongoing' ? 'bg-teal-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
-                                                              ${scholarship.status === 'Rejected' ? 'bg-red-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
                                                               ${scholarship.status === 'Archived' ? 'bg-gray-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
                                                               ${scholarship.status === 'Cancelled' ? 'bg-orange-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
                                                               ${scholarship.status === 'Completed' ? 'bg-green-500 text-white font-semibold text-sm px-4 py-2 rounded-md' : ''} 
