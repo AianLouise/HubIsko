@@ -8,7 +8,6 @@ import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 import { useSelector } from 'react-redux';
 import { FaBook } from 'react-icons/fa6';
 
-
 export default function ScholarshipListing() {
   useTokenExpiry();
 
@@ -37,8 +36,6 @@ export default function ScholarshipListing() {
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 2;
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1024);
 
   useEffect(() => {
@@ -49,21 +46,6 @@ export default function ScholarshipListing() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  const handleNextPage = () => {
-    if ((currentPage + 1) * itemsPerPage < filteredProviders.length) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePreviousPage = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const filteredProviders = providers.filter((provider) => provider.status === 'Verified');
-  const paginatedProviders = filteredProviders.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
 
   const allProviders = providers.filter((provider) => provider.status === 'Verified');
 
@@ -271,13 +253,6 @@ export default function ScholarshipListing() {
     "BS in Veterinary Medicine",
     "BS in Zoology"
   ];
-
-  const [showAll, setShowAll] = useState(false);
-
-  // Handle "Show All" button click
-  const handleShowAll = () => {
-    setShowAll(true);
-  };
 
   useEffect(() => {
     if (allProviders.length > 0) {
