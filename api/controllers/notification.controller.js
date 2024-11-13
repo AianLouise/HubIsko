@@ -84,3 +84,21 @@ export const getNotificationById = async (req, res) => {
         res.status(500).json({ message: 'Error fetching notification' });
     }
 };
+
+export const markAsRead = async (req, res) => {
+    const { id } = req.params; // Get the ID from the URL parameters
+
+    try {
+        const notification = await Notification.findById(id);
+        if (!notification) {
+            return res.status(404).json({ message: 'Notification not found' });
+        }
+
+        notification.read = true;
+        await notification.save();
+
+        res.status(200).json({ message: 'Notification marked as read', notification });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to mark notification as read', error });
+    }
+};

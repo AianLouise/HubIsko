@@ -18,16 +18,21 @@ import NewLogo from '../assets/NewLogo.png';
 
 export default function Header() {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
   const { currentUser } = useSelector(state => state.user);
 
   const [showDropdown, setShowDropdown] = useState(false);
   const showDropdownRef = useRef(null);
-
   const [showNotification, setShowNotification] = useState(false);
   const notificationRef = useRef(null);
-
-
+  const [unreadCount, setUnreadCount] = useState(0);
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('all');
+  const [displayedNotifications, setDisplayedNotifications] = useState(10);
+
   const ShowModal = () => setShowModal(!showModal);
 
   const handleClickOutside = (event) => {
@@ -46,24 +51,46 @@ export default function Header() {
     };
   }, []);
 
-
   const toggleDropdown = () => setShowDropdown(!showDropdown);
   const toggleNotification = () => setShowNotification(!showNotification);
   const toggleSidebar = () => setSidebarVisible(!sidebarVisible);
-  const [showModal, setShowModal] = useState(false);
 
   const handleSeeAllNotifications = () => {
     navigate('/notifications');
   };
 
-  const handleNotificationClick = (notificationId) => {
-    navigate(`/notifications/${notificationId}`);
+  const handleNotificationClick = async (notificationId) => {
+    try {
+      // Send a request to the server to mark the notification as read
+      const response = await fetch(`/api/notification/mark-as-read/${notificationId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to mark notification as read');
+      }
+
+      // Update the local state to reflect the change
+      setNotifications((prevNotifications) =>
+        prevNotifications.map((notification) =>
+          notification._id === notificationId ? { ...notification, read: true } : notification
+        )
+      );
+
+      // Update the unread count
+      setUnreadCount((prevCount) => prevCount - 1);
+
+      // Navigate to the notification details page
+      navigate(`/notifications/${notificationId}`);
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
   };
 
-
-  const location = useLocation();
   const isNotificationsPage = location.pathname === '/notifications';
-  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     const userId = currentUser ? currentUser._id : null;
@@ -98,7 +125,6 @@ export default function Header() {
   const userId = currentUser ? currentUser._id : null;
 
   useEffect(() => {
-    // Fetch notifications when the component mounts
     const fetchNotifications = async () => {
       if (!userId) {
         console.warn('User is not logged in. Skipping fetch notifications.');
@@ -106,14 +132,20 @@ export default function Header() {
       }
 
       try {
+        setLoading(true);
         const response = await fetch(`/api/notification/notifications/${userId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch notifications');
         }
         const data = await response.json();
         setNotifications(data);
+
+        const unread = data.filter(notification => !notification.read).length;
+        setUnreadCount(unread);
       } catch (error) {
         console.error('Error fetching notifications:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -126,6 +158,27 @@ export default function Header() {
     }
     return message;
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (notificationRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = notificationRef.current;
+        if (scrollTop + clientHeight >= scrollHeight) {
+          handleSeeAllNotifications();
+        }
+      }
+    };
+
+    if (notificationRef.current) {
+      notificationRef.current.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (notificationRef.current) {
+        notificationRef.current.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [notificationRef]);
 
   return (
     <div className='border-b bg-[#f8f8fb] shadow-sm'>
@@ -230,57 +283,149 @@ export default function Header() {
 
         {/* Desktop Navigation */}
         <ul className='lg:flex hidden gap-6 font-bold text-slate-600'>
-          <Link to='/'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>Home</li></Link>
+          <Link to='/'>
+            <li className={`p-2 ${location.pathname === '/' ? 'text-blue-600 border-b-2 border-blue-600' : 'hover:text-blue-600 hover:border-b-2'} hover:-translate-y-0.5 transition-all ease-in-out`}>
+              Home
+            </li>
+          </Link>
 
           {currentUser && currentUser.role === 'applicant' && (
-            <Link to='/scholar-dashboard'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>Scholar Dashboard</li></Link>
+            <Link to='/scholar-dashboard'>
+              <li className={`p-2 ${location.pathname === '/scholar-dashboard' ? 'text-blue-600 border-b-2 border-blue-600' : 'hover:text-blue-600 hover:border-b-2'} hover:-translate-y-0.5 transition-all ease-in-out`}>
+                Scholar Dashboard
+              </li>
+            </Link>
           )}
 
-          <Link to='/scholarship-listing'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>Scholarship Listing</li></Link>
-          <Link to='/forums'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>Forums</li></Link>
+          <Link to='/scholarship-listing'>
+            <li className={`p-2 ${location.pathname === '/scholarship-listing' ? 'text-blue-600 border-b-2 border-blue-600' : 'hover:text-blue-600 hover:border-b-2'} hover:-translate-y-0.5 transition-all ease-in-out`}>
+              Scholarship Listing
+            </li>
+          </Link>
+          <Link to='/forums'>
+            <li className={`p-2 ${location.pathname === '/forums' ? 'text-blue-600 border-b-2 border-blue-600' : 'hover:text-blue-600 hover:border-b-2'} hover:-translate-y-0.5 transition-all ease-in-out`}>
+              Forums
+            </li>
+          </Link>
 
+          {/* Notification */}
           {currentUser && currentUser.role === 'applicant' && (
             <div className='font-semibold'>
-              <button onClick={toggleNotification} className="relative w-full border rounded-full p-3 hover:bg-slate-200 focus:bg-blue-600 group">
-                <IoIosNotifications className="w-4 h-4 text-blue-600 group-focus:text-white scale-150" />
+              <button
+                onClick={toggleNotification}
+                className={`relative p-3 ${showNotification ? 'bg-blue-600 text-white rounded-full' : 'hover:bg-slate-200 hover:rounded-full focus:bg-blue-600 group'}`}
+              >
+                <IoIosNotifications className={`w-5 h-5 ${showNotification ? 'text-white' : 'text-blue-600 group-focus:text-white'} scale-125`} />
+                {unreadCount > 0 && (
+                  <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                    {unreadCount}
+                  </span>
+                )}
                 {showNotification && (
                   <div ref={notificationRef} className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 border bg-white text-gray-800 shadow-lg rounded-md p-4 w-96 z-50">
                     <div className="flex flex-col justify-start">
-                      <span className="text-2xl text-left border-b py-2 w-full">Notification Inbox</span>
+                      <span className="text-xl text-left border-b py-2 w-full">Notification Inbox</span>
+                      <div className="flex flex-row justify-start mt-4 gap-2">
+                        <button
+                          className={`px-4 py-2 rounded-md ${filter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setFilter('all');
+                          }}
+                        >
+                          All
+                        </button>
+                        <button
+                          className={`px-4 py-2 rounded-md ${filter === 'unread' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setFilter('unread');
+                          }}
+                        >
+                          Unread
+                        </button>
+                      </div>
                       <div className="flex flex-col items-start p-2 mt-4">
-                        <span>New Notifications</span>
-                        <div className="flex flex-col gap-2 mt-2 max-h-64 overflow-y-auto">
-                          {notifications.length > 0 ? (
-                            notifications.map((notification) => (
-                              <div
-                                key={notification._id}
-                                className="flex flex-row hover:bg-slate-200 rounded-md p-2 text-sm w-full gap-4 cursor-pointer"
-                                onClick={() => handleNotificationClick(notification._id)}
-                              >
-                                <img
-                                  src={notification.senderId?.profilePicture || 'default-avatar.png'}
-                                  alt="Sender's Avatar"
-                                  className="w-12 h-12 rounded-full object-cover"
-                                />
-                                <div className="flex flex-col text-left">
-                                  {notification.senderId?.role === 'scholarship_provider' && (
-                                    <span className="font-bold">{notification.senderId.scholarshipProviderDetails?.organizationName || 'Unknown Organization'}</span>
-                                  )}
-                                  {notification.senderId?.role === 'admin' && (
-                                    <span className="font-bold">{notification.senderId.username || 'Unknown User'}</span>
-                                  )}
-                                  <span className="text-sm font-normal">{truncateMessage(notification.message, 50)}
-                                    <span className='text-blue-600 font-semibold'>  See More</span>
-                                  </span>
-                                </div>
-                              </div>
-                            ))
+                        <div className="flex flex-col gap-2 mt-2">
+                          {loading ? (
+                            <div className="flex justify-center items-center h-32">
+                              <svg className="animate-spin h-8 w-8 text-blue-600" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                              </svg>
+                            </div>
                           ) : (
-                            <div>No new notifications</div>
+                            <>
+                              {filter === 'all' && notifications.length > 0 ? (
+                                <>
+                                  {notifications.slice(0, displayedNotifications).map((notification) => (
+                                    <div
+                                      key={notification._id}
+                                      className="flex flex-row items-center hover:bg-slate-200 rounded-md p-2 text-sm w-full gap-4 cursor-pointer border-b border-gray-200"
+                                      onClick={() => handleNotificationClick(notification._id)}
+                                    >
+                                      <img
+                                        src={notification.senderId?.profilePicture || 'default-avatar.png'}
+                                        alt="Sender's Avatar"
+                                        className="w-12 h-12 rounded-full object-cover"
+                                      />
+                                      <div className="flex flex-col text-left">
+                                        {notification.senderId?.role === 'scholarship_provider' && (
+                                          <span className="font-bold">{notification.senderId.scholarshipProviderDetails?.organizationName || 'Unknown Organization'}</span>
+                                        )}
+                                        {notification.senderId?.role === 'admin' && (
+                                          <span className="font-bold">{notification.senderId.username || 'Unknown User'}</span>
+                                        )}
+                                        <span className="text-sm font-normal">{truncateMessage(notification.message, 50)}
+                                          <span className='text-blue-600 font-semibold'>  See More</span>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </>
+                              ) : filter === 'unread' && notifications.filter(notification => !notification.read).length > 0 ? (
+                                <>
+                                  {notifications.filter(notification => !notification.read).slice(0, displayedNotifications).map((notification) => (
+                                    <div
+                                      key={notification._id}
+                                      className="flex flex-row items-center hover:bg-slate-200 rounded-md p-2 text-sm w-full gap-4 cursor-pointer border-b border-gray-200"
+                                      onClick={() => handleNotificationClick(notification._id)}
+                                    >
+                                      <img
+                                        src={notification.senderId?.profilePicture || 'default-avatar.png'}
+                                        alt="Sender's Avatar"
+                                        className="w-12 h-12 rounded-full object-cover"
+                                      />
+                                      <div className="flex flex-col text-left">
+                                        {notification.senderId?.role === 'scholarship_provider' && (
+                                          <span className="font-bold">{notification.senderId.scholarshipProviderDetails?.organizationName || 'Unknown Organization'}</span>
+                                        )}
+                                        {notification.senderId?.role === 'admin' && (
+                                          <span className="font-bold">{notification.senderId.username || 'Unknown User'}</span>
+                                        )}
+                                        <span className="text-sm font-normal">{truncateMessage(notification.message, 50)}
+                                          <span className='text-blue-600 font-semibold'>  See More</span>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </>
+                              ) : (
+                                <div className="text-center text-gray-500">No new notifications</div>
+                              )}
+                            </>
                           )}
                         </div>
                       </div>
-                      <button onClick={handleSeeAllNotifications} className="bg-blue-600 text-white rounded-md p-2 mt-4 font-medium hover:bg-blue-800 transition ease-in-out">See All Notifications</button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSeeAllNotifications();
+                        }}
+                        className="bg-blue-600 text-white rounded-md p-2 mt-4 font-medium hover:bg-blue-800 transition ease-in-out"
+                      >
+                        See All Notifications
+                      </button>
                     </div>
                   </div>
                 )}

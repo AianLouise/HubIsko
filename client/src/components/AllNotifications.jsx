@@ -7,6 +7,7 @@ const NotificationsPage = () => {
   const navigate = useNavigate();
 
   const [notifications, setNotifications] = useState([]);
+  const [filter, setFilter] = useState('all');
 
   const userId = currentUser ? currentUser._id : null;
 
@@ -33,19 +34,61 @@ const NotificationsPage = () => {
     fetchNotifications();
   }, [userId]);
 
-  const handleNotificationClick = (notificationId) => {
-    navigate(`/notifications/${notificationId}`);
+  const handleNotificationClick = async (notificationId) => {
+    try {
+      // Send a request to the server to mark the notification as read
+      const response = await fetch(`/api/notification/mark-as-read/${notificationId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to mark notification as read');
+      }
+
+      // Update the local state to reflect the change
+      setNotifications((prevNotifications) =>
+        prevNotifications.map((notification) =>
+          notification._id === notificationId ? { ...notification, read: true } : notification
+        )
+      );
+
+      // Navigate to the notification details page
+      navigate(`/notifications/${notificationId}`);
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
   };
+
+  const filteredNotifications = filter === 'all'
+    ? notifications
+    : notifications.filter(notification => !notification.read);
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md space-y-6 mt-10 mb-10">
-      <h2 className="text-xl font-bold mb-4 text-blue-600">All Notifications</h2>
+      <h2 className="text-2xl font-bold mb-6 text-blue-600">Notifications</h2>
+      <div className="flex justify-start gap-4 mb-4">
+        <button
+          className={`px-4 py-2 rounded-md ${filter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+          onClick={() => setFilter('all')}
+        >
+          All
+        </button>
+        <button
+          className={`px-4 py-2 rounded-md ${filter === 'unread' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+          onClick={() => setFilter('unread')}
+        >
+          Unread
+        </button>
+      </div>
       <div className="flex flex-col gap-6">
-        {notifications.length > 0 ? (
-          notifications.map((notification) => (
+        {filteredNotifications.length > 0 ? (
+          filteredNotifications.map((notification) => (
             <div
               key={notification._id}
-              className="flex flex-row items-center text-sm w-full gap-4 border-b pb-4 pt-4 px-4 cursor-pointer hover:bg-gray-100"
+              className="flex flex-row items-center text-sm w-full gap-4 border-b pb-4 pt-4 px-4 cursor-pointer hover:bg-gray-100 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg relative"
               onClick={() => handleNotificationClick(notification._id)}
             >
               <img
@@ -54,10 +97,13 @@ const NotificationsPage = () => {
                 className="w-12 h-12 rounded-full object-cover border-2 border-blue-600"
               />
               <div className="flex flex-col text-left">
-                <span className="text-xl font-bold">{notification.senderName}</span>
-                <span className="text-sm">{notification.message}</span>
-                <span className="text-xs text-gray-500">{new Date(notification.createdAt).toLocaleString()}</span>
+                <span className="text-lg font-bold text-gray-800">{notification.senderName}</span>
+                <span className="text-sm text-gray-600">{notification.message}</span>
+                <span className="text-xs text-gray-400">{new Date(notification.createdAt).toLocaleString()}</span>
               </div>
+              {!notification.read && (
+                <span className="absolute right-4 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-blue-600 rounded-full"></span>
+              )}
             </div>
           ))
         ) : (

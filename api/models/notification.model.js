@@ -10,6 +10,7 @@ const notificationSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
     recipientName: { type: String }, // Name of the recipient
     senderName: { type: String }, // Name of the sender
+    read: { type: Boolean, default: false } // Indicates if the notification has been read
 });
 
 export default mongoose.model('Notification', notificationSchema);
