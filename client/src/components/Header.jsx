@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { signOut } from '../redux/user/userSlice';
 import { IoIosNotifications } from "react-icons/io";
-import { IoChatbubblesSharp, IoSadOutline, IoMenu } from "react-icons/io5";
+import { IoMenu } from "react-icons/io5";
 import { IoClose } from "react-icons/io5";
 import { BsThreeDots } from "react-icons/bs";
 import { GoHomeFill } from 'react-icons/go';
@@ -149,6 +149,7 @@ export default function Header() {
           </button>
         </div>
 
+        {/* Mobile Sidebar */}
         <div className={`fixed shadow-lg inset-0 z-50 flex justify-end transition-transform transform ${sidebarVisible ? 'translate-x-0' : 'translate-x-full'}`}>
           <div className="bg-white shadow-lg border w-64 p-4 h-full">
 
@@ -186,7 +187,6 @@ export default function Header() {
                 </li></Link>
 
               {currentUser ? (
-
                 <ul className='flex flex-col gap-4 text-white font-medium'>
                   <Link to="/profile"
                     className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/profile' ? 'bg-blue-600' : 'bg-slate-500'}`}>
@@ -204,7 +204,6 @@ export default function Header() {
 
                     <FaDoorOpen className='w-5 h-5' />Sign Out</button>
                 </ul>
-
               ) : (
                 <>
                   <Link to='/login'><li className='border p-2 px-4 text-slate-700 rounded-md hover:bg-slate-200'>Login</li></Link>
@@ -225,14 +224,11 @@ export default function Header() {
                   </div>
                 </>
               )}
-
             </ul>
-
-
           </div>
         </div>
 
-
+        {/* Desktop Navigation */}
         <ul className='lg:flex hidden gap-6 font-bold text-slate-600'>
           <Link to='/'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>Home</li></Link>
 
@@ -242,14 +238,6 @@ export default function Header() {
 
           <Link to='/scholarship-listing'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>Scholarship Listing</li></Link>
           <Link to='/forums'><li className='p-2 hover:text-blue-600 hover:border-b-2 hover:-translate-y-0.5 transition-all ease-in-out'>Forums</li></Link>
-
-          {/* {currentUser && currentUser.role === 'applicant' && (
-            <button className='border rounded-full p-3 hover:bg-slate-200'>
-              <IoChatbubblesSharp className='w-4 h-4 text-blue-600' />
-            </button>
-
-
-          )} */}
 
           {currentUser && currentUser.role === 'applicant' && (
             <div className='font-semibold'>
@@ -312,7 +300,6 @@ export default function Header() {
                 </div>
               )}
             </div>
-
           ) : (
             <>
               <Link to='/login'>
@@ -343,9 +330,6 @@ export default function Header() {
           )}
         </ul>
       </div>
-
-
-
 
       {/* NOTIFICATION MODAL */}
       {showModal && (
