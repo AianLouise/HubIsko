@@ -32,10 +32,12 @@ export default function SignIn() {
       } else if (currentUser.role === 'applicant') {
         if (!currentUser.emailVerified) {
           navigate('/verify-your-email', { state: { email: currentUser.email } });
+        } else if (currentUser.applicantDetails.status === 'Verified') {
+          navigate('/scholar-dashboard');
         } else if (!currentUser.applicantDetails.profileComplete) {
           navigate('/CoRH', { state: { userId: currentUser._id } });
         } else {
-          navigate('/');
+          navigate('/scholar-dashboard');
         }
       } else {
         navigate('/');
@@ -110,10 +112,12 @@ export default function SignIn() {
       } else if (data.role === 'applicant') {
         if (!data.emailVerified) {
           navigate('/verify-your-email', { state: { email: formData.email } });
+        } else if (data.applicantDetails.status === 'Verified') {
+          navigate('/scholar-dashboard');
         } else if (!data.applicantDetails.profileComplete) {
           navigate('/CoRH', { state: { userId: data._id } });
         } else {
-          navigate('/');
+          navigate('/scholar-dashboard');
         }
       } else {
         navigate('/');
