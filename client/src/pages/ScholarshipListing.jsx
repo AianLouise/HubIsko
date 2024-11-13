@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { FaSearch, FaRedo, FaHandHolding, FaGraduationCap, FaInfoCircle, FaMapMarkerAlt } from "react-icons/fa";
+import { FaSearch, FaHandHolding, FaGraduationCap, FaInfoCircle, FaMapMarkerAlt } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
-import { BiFilter } from 'react-icons/bi';
 import ListingIcon from '../assets/ListingIconwTexture.png'
 import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 import { useSelector } from 'react-redux';
 import { FaBook } from 'react-icons/fa6';
-import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 
 
 export default function ScholarshipListing() {

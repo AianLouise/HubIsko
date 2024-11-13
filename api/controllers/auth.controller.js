@@ -361,7 +361,7 @@ export const resendVerificationEmail = async (req, res, next) => {
           pass: process.env.EMAIL_PASSWORD,
         },
       });
-      
+
       // Use the environment variable for the base URL
       const baseUrl = process.env.BASE_URL || 'http://localhost:5173';
       const verificationUrl = `${baseUrl}/verify-email?token=${emailVerificationToken}`;

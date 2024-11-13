@@ -194,9 +194,9 @@ export default function Forums() {
         fetchScholarship();
         if (!isLoggedIn) {
             setNotification('You must be logged in to apply for scholarships.');
-        } else if (currentUser?.status === 'Pending Verification') {
+        } else if (userDetails?.status === 'Pending Verification') {
             setNotification('Your account is currently under verification. You cannot apply for scholarships until your account is fully verified.');
-        } else if (currentUser?.status === 'Verify Account') {
+        } else if (userDetails?.status === 'Verify Account') {
             setNotification('You need to verify your account before applying for scholarships. Please visit the verification page.');
         } else if (scholarship?.numberOfScholarships == scholarship?.approvedScholars) {
             setNotification('Applications are closed as the slots are full. Please check back later.');
