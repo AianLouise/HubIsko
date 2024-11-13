@@ -142,7 +142,6 @@ export default function ScholarshipListing() {
     .filter(scholarship =>
       scholarship.status === 'Published' &&
       (scholarship.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        scholarship.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         scholarship.organizationName.toLowerCase().includes(searchQuery.toLowerCase())) &&
       (selectedCourse === '' || scholarship.fieldOfStudy.includes(selectedCourse) || scholarship.fieldOfStudy.includes('Open for All Courses')) &&
       (selectedLocation === '' || scholarship.location === selectedLocation || scholarship.location.includes('Open for Any Location')) &&

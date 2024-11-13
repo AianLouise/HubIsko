@@ -91,10 +91,20 @@ export default function Forums() {
         }
     };
 
-    const filteredPosts = recentPosts.filter(post =>
-        post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        post.content.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredPosts = recentPosts
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .filter(post => {
+            const searchQueryLower = searchQuery.toLowerCase();
+            const authorName = post.author.role === 'applicant'
+                ? `${post.author.applicantDetails.firstName} ${post.author.applicantDetails.lastName}`.toLowerCase()
+                : post.author.role === 'admin'
+                    ? `${post.author.username}`.toLowerCase()
+                    : `${post.author.scholarshipProviderDetails.organizationName}`.toLowerCase();
+
+            return post.title.toLowerCase().includes(searchQueryLower) ||
+                post.content.toLowerCase().includes(searchQueryLower) ||
+                authorName.includes(searchQueryLower);
+        });
 
     const truncateText = (text, maxLength) => {
         if (text.length <= maxLength) {
@@ -190,92 +200,7 @@ export default function Forums() {
                 </div>
 
                 {/* Forum Posts */}
-                <div className='max-w-6xl lg:px-24 px-2 mx-auto mt-10 lg:mt-20'>
-
-                    {/* <div className='flex gap-2 items-center pb-2 font-bold text-lg border-b mb-8'>
-                            <FaStar className='text-blue-600' />
-                            Featured Posts
-                        </div>
-
-                        <div className='grid lg:grid-cols-2 gap-2'>
-
-                            <div className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow'>
-                            <div className='flex flex-row gap-4 mb-2'>
-                                <div className='bg-blue-600 rounded-full w-12 h-12 text-white flex items-center justify-center'>
-                                <FaWrench className='w-6 h-6' />
-                                </div>
-                                <div className='flex flex-col'>
-                                <span className='font-medium'>Admin</span>
-                                <span className='text-sm text-slate-500'>July 10, 2024</span>
-                                </div>
-                            </div>
-
-                            <span className='font-bold'>Frequently Asked Questions (FAQs)</span>
-                            <span className='text-sm'>This Post contains Questions and Answers regarding forums and scholarship listing.</span>
-                            <div className='border-t mt-2'>
-                                <div className='flex flex-row justify-between mt-3 gap-2'>
-
-
-                                <div className='flex flex-row gap-2'>
-                                    <div className='flex flex-row gap-1 px-2'>
-                                    <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
-                                    <span>123</span>
-                                    </div>
-
-                                    <div className='flex flex-row gap-1'>
-                                    <BiCommentDots className='w-6 h-6 text-blue-600' />
-                                    <span>10</span>
-                                    </div>
-                                </div>
-
-                                <div className='flex flex-row gap-1 pr-2'>
-                                    <FaRegEye className='w-6 h-6 text-blue-600' />
-                                    <span>1.2k</span>
-                                </div>
-
-                                </div>
-                            </div>
-                            </div>
-
-
-                            <div className='flex flex-col gap-2 px-8 py-6 border rounded-md bg-white shadow'>
-                            <div className='flex flex-row gap-4 mb-2'>
-                                <div className='bg-blue-600 rounded-full w-12 h-12 text-white flex items-center justify-center'>
-                                <FaWrench className='w-6 h-6' />
-                                </div>
-                                <div className='flex flex-col'>
-                                <span className='font-medium'>Admin</span>
-                                <span className='text-sm text-slate-500'>July 10, 2024</span>
-                                </div>
-                            </div>
-
-                            <span className='font-bold'>System Announcements</span>
-                            <span className='text-sm'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Lorem ipsum dolor sit.</span>
-                            <div className='border-t mt-2'>
-                                <div className='flex flex-row justify-between mt-3 gap-2'>
-
-
-                                <div className='flex flex-row gap-2'>
-                                    <div className='flex flex-row gap-1 px-2'>
-                                    <FaRegHeart className='w-6 h-6 font-bold text-blue-600' />
-                                    <span>123</span>
-                                    </div>
-
-                                    <div className='flex flex-row gap-1'>
-                                    <BiCommentDots className='w-6 h-6 text-blue-600' />
-                                    <span>10</span>
-                                    </div>
-                                </div>
-
-                                <div className='flex flex-row gap-1 pr-2'>
-                                    <FaRegEye className='w-6 h-6 text-blue-600' />
-                                    <span>1.2k</span>
-                                </div>
-                                </div>
-                            </div>
-                            </div>
-                        </div> */}
-
+                <div className='max-w-6xl lg:px-24 px-2 mx-auto mt-10 lg:mt-10'>
                     <div className='flex gap-2 items-center border-b my-4 py-2'>
                         <FaNewspaper className='w-6 h-6 text-blue-600' />
                         <span className='font-bold text-lg'>Recent posts</span>
