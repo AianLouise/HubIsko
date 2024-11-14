@@ -59,7 +59,7 @@ export const getNotifications = async (req, res) => {
         // and populate the senderId field with the sender's profile picture and organization name
         const notifications = await Notification.find({ recipientId })
             .sort({ createdAt: -1 })
-            .populate('senderId', 'profilePicture scholarshipProviderDetails.organizationName role username');  // Populating the senderId with profilePicture, organizationName, and username
+            .populate('senderId', 'role username profilePicture applicantDetails.firstName applicantDetails.lastName scholarshipProviderDetails.organizationName');  // Populating the senderId with profilePicture, organizationName, and username
 
         res.status(200).json(notifications);
     } catch (error) {

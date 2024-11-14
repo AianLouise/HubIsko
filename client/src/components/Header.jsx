@@ -313,7 +313,7 @@ export default function Header() {
             <div className='font-semibold'>
               <button
                 onClick={toggleNotification}
-                className={`relative p-3 ${showNotification ? 'bg-blue-600 text-white rounded-full' : 'hover:bg-slate-200 hover:rounded-full focus:bg-blue-600 group'}`}
+                className={`relative p-3 ${showNotification ? 'bg-blue-600 text-white rounded-full' : 'hover:bg-slate-200 hover:rounded-full focus:bg-blue-600 group focus:rounded-full'}`}
               >
                 <IoIosNotifications className={`w-5 h-5 ${showNotification ? 'text-white' : 'text-blue-600 group-focus:text-white'} scale-125`} />
                 {unreadCount > 0 && (
@@ -325,7 +325,7 @@ export default function Header() {
                   <div ref={notificationRef} className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 border bg-white text-gray-800 shadow-lg rounded-md p-4 w-96 z-50">
                     <div className="flex flex-col justify-start">
                       <span className="text-xl text-left border-b py-2 w-full">Notification Inbox</span>
-                      <div className="flex flex-row justify-start mt-4 gap-2">
+                      <div className="flex flex-row justify-start mt-4 gap-2 font-medium">
                         <button
                           className={`px-4 py-2 rounded-md ${filter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
                           onClick={(e) => {
@@ -376,6 +376,9 @@ export default function Header() {
                                         {notification.senderId?.role === 'admin' && (
                                           <span className="font-bold">{notification.senderId.username || 'Unknown User'}</span>
                                         )}
+                                        {notification.senderId?.role === 'applicant' && (
+                                          <span className="font-bold">{`${notification.senderId.applicantDetails?.firstName || 'Unknown'} ${notification.senderId.applicantDetails?.lastName || 'Applicant'}`}</span>
+                                        )}
                                         <span className="text-sm font-normal">{truncateMessage(notification.message, 50)}
                                           <span className='text-blue-600 font-semibold'>  See More</span>
                                         </span>
@@ -402,6 +405,9 @@ export default function Header() {
                                         )}
                                         {notification.senderId?.role === 'admin' && (
                                           <span className="font-bold">{notification.senderId.username || 'Unknown User'}</span>
+                                        )}
+                                        {notification.senderId?.role === 'applicant' && (
+                                          <span className="font-bold">{`${notification.senderId.applicantDetails?.firstName || 'Unknown'} ${notification.senderId.applicantDetails?.lastName || 'Applicant'}`}</span>
                                         )}
                                         <span className="text-sm font-normal">{truncateMessage(notification.message, 50)}
                                           <span className='text-blue-600 font-semibold'>  See More</span>

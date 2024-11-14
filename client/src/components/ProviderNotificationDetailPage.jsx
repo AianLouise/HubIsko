@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ProviderHeaderSidebar from '../components/ProviderHeaderAndSidebar';
 import { useSelector } from 'react-redux';
+import { format } from 'date-fns';
 
 const ProviderNotificationDetailPage = () => {
     const { currentUser } = useSelector((state) => state.user);
@@ -48,7 +49,7 @@ const ProviderNotificationDetailPage = () => {
                         />
                         <div className="flex flex-col">
                             <span className="text-xl font-bold">{notification.senderName}</span>
-                            <span className="text-sm text-gray-500">{new Date(notification.createdAt).toLocaleString()}</span>
+                            <span className="text-sm text-gray-500">{format(new Date(notification.createdAt), 'PPpp')}</span>
                         </div>
                     </div>
                     <div className="mt-4 p-4 bg-gray-100 rounded-lg">

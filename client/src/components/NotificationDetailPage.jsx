@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { format } from 'date-fns';
 
 const NotificationDetailPage = () => {
   const { notificationId } = useParams();
@@ -50,7 +51,7 @@ const NotificationDetailPage = () => {
                 ? `${notification.senderId.applicantDetails.firstName} ${notification.senderId.applicantDetails.middleName ? notification.senderId.applicantDetails.middleName.charAt(0) + '.' : ''} ${notification.senderId.applicantDetails.lastName}`
                 : notification.senderId.scholarshipProviderDetails.organizationName}
           </span>
-          <span className="text-sm text-gray-500">{new Date(notification.createdAt).toLocaleString()}</span>
+          <span className="text-sm text-gray-500">{format(new Date(notification.createdAt), 'PPpp')}</span>
         </div>
       </div>
       <div className="mt-4 p-4 bg-gray-100 rounded-lg">

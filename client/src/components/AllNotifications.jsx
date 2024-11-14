@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
 
 const NotificationsPage = () => {
   const { currentUser } = useSelector(state => state.user);
@@ -99,7 +100,7 @@ const NotificationsPage = () => {
               <div className="flex flex-col text-left">
                 <span className="text-lg font-bold text-gray-800">{notification.senderName}</span>
                 <span className="text-sm text-gray-600">{notification.message}</span>
-                <span className="text-xs text-gray-400">{new Date(notification.createdAt).toLocaleString()}</span>
+                <span className="text-xs text-gray-400">{format(new Date(notification.createdAt), 'PPpp')}</span>
               </div>
               {!notification.read && (
                 <span className="absolute right-4 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-blue-600 rounded-full"></span>
