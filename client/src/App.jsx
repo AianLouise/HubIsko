@@ -74,6 +74,7 @@ import Layout from "./components/Layout";
 import StudentApplicationDetails from "./pages/Admin/StudentApplicationDetails";
 import AddAccount from "./pages/Admin/AddAccount";
 import AdminProfilePage from "./pages/Admin/AdminProfilePage";
+import AdminReports from "./pages/Admin/AdminReports";
 
 // Scholarship Provider Routes
 import ProviderDashboard from "./pages/Scholarship-Provider/ProviderDashboard";
@@ -193,6 +194,7 @@ export default function App() {
             <Route path="add-account" element={<AddAccount />} />
 
             <Route path="log-history" element={<AdminLogHistory />} />
+            <Route path="admin-reports" element={<AdminReports />} />
           </Route>
         </Route>
 
