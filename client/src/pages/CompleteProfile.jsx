@@ -142,12 +142,12 @@ export default function CompleteProfile() {
     }
   }, [currentUser]);
 
-  const handleNext = () => {
-    console.log('Current civilStatus:', formData.civilStatus);
+  const [errorFields, setErrorFields] = useState([]);
 
+  const handleNext = () => {
     const stepRequiredFields = {
       1: [
-        'firstName', 'lastName', 'birthdate', 'gender',
+        'firstName', 'lastName', 'middleName', 'birthdate', 'gender',
         'bloodType', 'civilStatus', ...(formData.civilStatus === 'Married' ?
           ['maidenName', 'spouseName', 'spouseOccupation'] : []),
         'religion', 'height', 'weight', 'birthplace', 'contactNumber',
@@ -165,7 +165,7 @@ export default function CompleteProfile() {
     };
 
     const fieldDisplayNames = {
-      firstName: 'First Name', lastName: 'Last Name',
+      firstName: 'First Name', lastName: 'Last Name', middleName: 'Middle Name',
       birthdate: 'Birthdate', gender: 'Gender', bloodType: 'Blood Type',
       civilStatus: 'Civil Status', religion: 'Religion', height: 'Height', weight: 'Weight',
       birthplace: 'Birthplace', contactNumber: 'Contact Number', addressDetails: 'Address Details',
@@ -199,12 +199,14 @@ export default function CompleteProfile() {
 
     if (missingFields.length === 0 && isBirthdateValid && isContactNumberValid) {
       setCurrentStep((prevStep) => prevStep + 1);
+      setErrorFields([]); // Clear error fields
     } else {
       let message = '';
       if (missingFields.length > 0) {
         const topMostMissingField = missingFields[0];
         const topMostMissingFieldName = fieldDisplayNames[topMostMissingField];
         message = `The following required field is missing: ${topMostMissingFieldName}. Please complete it before proceeding to the next step.`;
+        setErrorFields([topMostMissingField]); // Set only the top-most missing field
       } else if (!isBirthdateValid) {
         message = 'The birthdate entered is invalid. Please enter a valid birthdate before proceeding to the next step.';
       } else if (!isContactNumberValid) {
@@ -263,6 +265,7 @@ export default function CompleteProfile() {
     const requiredFields = [
       'firstName',
       'lastName',
+      'middleName',
       'birthdate',
       'gender',
       'bloodType',
@@ -297,6 +300,7 @@ export default function CompleteProfile() {
     const fieldDisplayNames = {
       firstName: 'First Name',
       lastName: 'Last Name',
+      middleName: 'Middle Name',
       birthdate: 'Birthdate',
       gender: 'Gender',
       bloodType: 'Blood Type',
@@ -835,7 +839,7 @@ export default function CompleteProfile() {
                   onChange={handleChange}
                   onKeyPress={handleKeyPress}
                   placeholder="Enter your first name"
-                  className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('firstName') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                   required
                 />
               </div>
@@ -851,7 +855,7 @@ export default function CompleteProfile() {
                   onChange={handleChange}
                   onKeyPress={handleKeyPress}
                   placeholder="Enter your last name"
-                  className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('lastName') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                   required
                 />
               </div>
@@ -867,7 +871,7 @@ export default function CompleteProfile() {
                   onChange={handleChange}
                   onKeyPress={handleKeyPress}
                   placeholder="Enter your middle name"
-                  className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('middleName') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                   required
                 />
               </div>
@@ -893,13 +897,15 @@ export default function CompleteProfile() {
 
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4 mt-4'>
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>Birthdate <span className='text-red-500'>*</span></label>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>
+                  Birthdate <span className='text-red-500'>*</span>
+                </label>
                 <input
                   type="date"
                   name="birthdate"
                   value={formData.birthdate}
                   onChange={handleChange}
-                  className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('birthdate') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                   required
                   max={maxDate} // Set the max attribute to the calculated date
                 />
@@ -911,7 +917,7 @@ export default function CompleteProfile() {
                   name="gender"
                   value={formData.gender}
                   onChange={handleChange}
-                  className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('gender') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                   required
                 >
                   <option value="">Select Gender</option>
@@ -927,7 +933,7 @@ export default function CompleteProfile() {
                   name="bloodType"
                   value={formData.bloodType}
                   onChange={handleChange}
-                  className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('bloodType') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                   required
                 >
                   <option value="">Select Blood Type</option>
@@ -949,7 +955,7 @@ export default function CompleteProfile() {
                   name="civilStatus"
                   value={formData.civilStatus}
                   onChange={handleChange}
-                  className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('civilStatus') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                   required
                 >
                   <option value="">Select Civil Status</option>
@@ -960,7 +966,7 @@ export default function CompleteProfile() {
                 </select>
               </div>
 
-              {!isSingleWidowedOrDivorced && (
+              {formData.civilStatus === 'Married' && (
                 <>
                   <div>
                     <label className='block text-sm font-medium text-gray-700 mb-2'>Maiden Name <span className='text-red-500'>*</span></label>
@@ -970,9 +976,8 @@ export default function CompleteProfile() {
                       value={formData.maidenName}
                       onChange={handleChange}
                       placeholder="Enter maiden name"
-                      disabled={isSingleWidowedOrDivorced}
                       required
-                      className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
+                      className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('maidenName') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                     />
                   </div>
 
@@ -984,9 +989,8 @@ export default function CompleteProfile() {
                       value={formData.spouseName}
                       onChange={handleChange}
                       placeholder="Enter name of spouse"
-                      disabled={isSingleWidowedOrDivorced}
                       required
-                      className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
+                      className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('spouseName') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                     />
                   </div>
 
@@ -998,9 +1002,8 @@ export default function CompleteProfile() {
                       value={formData.spouseOccupation}
                       onChange={handleChange}
                       placeholder="Enter occupation of spouse"
-                      disabled={isSingleWidowedOrDivorced}
                       required
-                      className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full ${isSingleWidowedOrDivorced ? 'text-gray-400' : ''}`}
+                      className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('spouseOccupation') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                     />
                   </div>
                 </>
@@ -1014,7 +1017,7 @@ export default function CompleteProfile() {
                   value={formData.religion}
                   onChange={handleChange}
                   placeholder="Enter your religion"
-                  className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('religion') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                   required
                 />
               </div>
@@ -1026,7 +1029,7 @@ export default function CompleteProfile() {
                   name="height"
                   value={formData.height}
                   onChange={handleChange}
-                  className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('height') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                   placeholder="Enter height in cm"
                   required
                   min="0" // Set the min attribute to 0
@@ -1040,7 +1043,7 @@ export default function CompleteProfile() {
                   name="weight"
                   value={formData.weight}
                   onChange={handleChange}
-                  className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('weight') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                   placeholder="Enter weight in kg"
                   required
                   min="0" // Set the min attribute to 0
@@ -1054,7 +1057,7 @@ export default function CompleteProfile() {
                   name="birthplace"
                   value={formData.birthplace}
                   onChange={handleChange}
-                  className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('birthplace') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                   placeholder="Enter birthplace"
                   required
                 />
@@ -1068,7 +1071,7 @@ export default function CompleteProfile() {
                   value={formData.contactNumber}
                   onChange={handleChange}
                   onInput={(e) => e.target.value = e.target.value.replace(/[^0-9]/g, '')}
-                  className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('contactNumber') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                   placeholder="Enter contact number"
                   maxLength="11"
                   inputMode="numeric"
@@ -1077,7 +1080,6 @@ export default function CompleteProfile() {
                   required
                 />
               </div>
-
             </div>
 
             <div className='grid grid-cols-2 gap-4 px-4 mt-4'>
@@ -1092,7 +1094,7 @@ export default function CompleteProfile() {
                     setCityList([]);
                     setBarangayList([]);
                   }}
-                  className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('region') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                   required
                 >
                   <option value="">Select Region</option>
@@ -1114,7 +1116,7 @@ export default function CompleteProfile() {
                     setCityList([]);
                     setBarangayList([]);
                   }}
-                  className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('province') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                   required
                 >
                   <option value="">Select Province</option>
@@ -1135,7 +1137,7 @@ export default function CompleteProfile() {
                     setSelectedCity(e.target.value);
                     setBarangayList([]);
                   }}
-                  className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('city') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                   required
                 >
                   <option value="">Select City</option>
@@ -1153,7 +1155,7 @@ export default function CompleteProfile() {
                 <select
                   value={selectedBarangay}
                   onChange={(e) => setSelectedBarangay(e.target.value)}
-                  className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('barangay') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                   required
                 >
                   <option value="">Select Barangay</option>
@@ -1178,7 +1180,7 @@ export default function CompleteProfile() {
                   name="addressDetails"
                   value={formData.addressDetails}
                   onChange={handleChange}
-                  className='standard-input border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 w-full'
+                  className={`standard-input border border-gray-300 rounded-md p-2 focus:outline-none w-full ${errorFields.includes('addressDetails') ? 'focus:ring-2 focus:ring-red-600' : 'focus:ring-2 focus:ring-blue-600'}`}
                   placeholder="Enter House No./Unit No./Bldg/Floor, Street, Subdivision"
                   required
                 />
