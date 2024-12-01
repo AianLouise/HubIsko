@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaFileAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from "react-redux";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import logo from '../../assets/NewLogo.png';
-import { FaUser, FaCheckCircle, FaClock, FaCheck, FaUserGraduate, FaUserTie, FaUserShield } from 'react-icons/fa';
 
 export default function AdminSettings() {
     const { currentUser } = useSelector((state) => state.user);
@@ -12,16 +11,22 @@ export default function AdminSettings() {
 
     const [selectedTab, setSelectedTab] = useState('Update Information');
     const [startDate, setStartDate] = useState('');
+    const [startDate2, setStartDate2] = useState('');
     const [endDate, setEndDate] = useState('');
+    const [endDate2, setEndDate2] = useState('');
     const [role, setRole] = useState('');
     const [program, setProgram] = useState('');
     const [status, setStatus] = useState('');
+    const [provider, setProvider] = useState('');
+    const [providers, setProviders] = useState([]);
     const [accountReportGenerated, setAccountReportGenerated] = useState(false);
     const [programReportGenerated, setProgramReportGenerated] = useState(false);
     const [accountLoading, setAccountLoading] = useState(false);
     const [programLoading, setProgramLoading] = useState(false);
     const [accountReportData, setAccountReportData] = useState(null);
+    const [programReportData, setProgramReportData] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
+    const [errorMessage2, setErrorMessage2] = useState('');
 
     const handleTabClick = (tab) => setSelectedTab(tab);
 
@@ -46,17 +51,59 @@ export default function AdminSettings() {
         }
     };
 
+    useEffect(() => {
+        // Fetch the list of verified scholarship providers
+        const fetchProviders = async () => {
+            try {
+                const response = await fetch('/api/admin/verified-scholarship-providers');
+                const data = await response.json();
+                setProviders(data);
+            } catch (error) {
+                console.error('Error fetching providers:', error);
+            }
+        };
+
+        fetchProviders();
+    }, []);
+
+    const fetchProgramReportData = async () => {
+        try {
+            const response = await fetch('/api/admin/program-report', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    startDate: startDate2,
+                    endDate: endDate2,
+                    provider,
+                    status,
+                }),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching program report data:', error);
+            return null;
+        }
+    };
+
     const handleGenerateAccountReport = async () => {
         if ((startDate && !endDate) || (!startDate && endDate)) {
             setErrorMessage('Please provide both start date and end date.');
             return;
         }
-    
+
         if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
             setErrorMessage('End date cannot be earlier than start date.');
             return;
         }
-    
+
         setErrorMessage('');
         setAccountLoading(true);
         const data = await fetchAccountReportData();
@@ -67,13 +114,33 @@ export default function AdminSettings() {
         setAccountLoading(false);
     };
 
-    const handleGenerateProgramReport = () => {
+    const handleGenerateProgramReport = async () => {
+        // Validate that both startDate2 and endDate2 are provided together
+        if ((startDate2 && !endDate2) || (!startDate2 && endDate2)) {
+            setErrorMessage2('Please provide both start date and end date.');
+            return;
+        }
+    
+        // Validate that endDate2 is not earlier than startDate2
+        if (startDate2 && endDate2 && new Date(endDate2) < new Date(startDate2)) {
+            setErrorMessage2('End date cannot be earlier than start date.');
+            return;
+        }
+    
+        // Clear any previous error messages
+        setErrorMessage2('');
         setProgramLoading(true);
-        // Logic to generate the program report based on the conditions
-        setTimeout(() => {
+    
+        // Fetch the program report data
+        const data = await fetchProgramReportData();
+        if (data) {
+            setProgramReportData(data);
             setProgramReportGenerated(true);
-            setProgramLoading(false);
-        }, 2000); // Simulate a delay for generating the report
+        } else {
+            setErrorMessage2('Failed to generate the report. Please try again.');
+        }
+    
+        setProgramLoading(false);
     };
 
     const generateAccountPDF = async () => {
@@ -215,12 +282,20 @@ export default function AdminSettings() {
         const logoBase64 = await loadImageToBase64(logo); // Convert logo to base64
 
         // Define the variables for the overview section
-        const totalPrograms = accountReportData ? accountReportData.length : 0;
-        const totalActivePrograms = accountReportData ? accountReportData.filter(program => program.status === 'active').length : 0;
-        const totalInactivePrograms = accountReportData ? accountReportData.filter(program => program.status === 'inactive').length : 0;
+        const totalPrograms = programReportData ? programReportData.length : 0;
+        const totalPendingApproval = programReportData ? programReportData.filter(program => program.status === 'Pending Approval').length : 0;
+        const totalApproved = programReportData ? programReportData.filter(program => program.status === 'Approved').length : 0;
+        const totalPublished = programReportData ? programReportData.filter(program => program.status === 'Published').length : 0;
+        const totalOngoing = programReportData ? programReportData.filter(program => program.status === 'Ongoing').length : 0;
+        const totalRejected = programReportData ? programReportData.filter(program => program.status === 'Rejected').length : 0;
+        const totalArchived = programReportData ? programReportData.filter(program => program.status === 'Archived').length : 0;
+        const totalCancelled = programReportData ? programReportData.filter(program => program.status === 'Cancelled').length : 0;
+        const totalCompleted = programReportData ? programReportData.filter(program => program.status === 'Completed').length : 0;
+        const totalAwaitingPublication = programReportData ? programReportData.filter(program => program.status === 'Awaiting Publication').length : 0;
+        const totalPaused = programReportData ? programReportData.filter(program => program.status === 'Paused').length : 0;
 
         // Log the report data to the console
-        console.log("Program Report Data:", accountReportData);
+        console.log("Program Report Data:", programReportData);
 
         // Add logo and header
         const pageWidth = pdf.internal.pageSize.getWidth();
@@ -246,10 +321,17 @@ export default function AdminSettings() {
         pdf.text("Overview:", 25.4, 70); // 1 inch margin
         pdf.setFont("helvetica", "normal");
         pdf.setFontSize(10); // Reduced font size for overview details
-        pdf.text(`Total Programs: ${totalPrograms}`, 25.4, 80); // 1 inch margin
-        pdf.text(`Total Active Programs: ${totalActivePrograms}`, 25.4, 90); // 1 inch margin
-        pdf.text(`Total Inactive Programs: ${totalInactivePrograms}`, 25.4, 100); // 1 inch margin
-        pdf.text(`Status: Verify Account, Pending Verification, Verified`, 25.4, 110); // 1 inch margin
+        pdf.text(`Total Programs: ${totalPrograms}`, 25.4, 80);
+        pdf.text(`Pending Approval: ${totalPendingApproval}`, 25.4, 90);
+        pdf.text(`Approved: ${totalApproved}`, 25.4, 100);
+        pdf.text(`Published: ${totalPublished}`, 25.4, 110);
+        pdf.text(`Ongoing: ${totalOngoing}`, 25.4, 120);
+        pdf.text(`Rejected: ${totalRejected}`, 25.4, 130);
+        pdf.text(`Archived: ${totalArchived}`, 25.4, 140);
+        pdf.text(`Cancelled: ${totalCancelled}`, 25.4, 150);
+        pdf.text(`Completed: ${totalCompleted}`, 25.4, 160);
+        pdf.text(`Awaiting Publication: ${totalAwaitingPublication}`, 25.4, 170);
+        pdf.text(`Paused: ${totalPaused}`, 25.4, 180);
 
         // Add a new page for the program report data
         pdf.addPage();
@@ -261,7 +343,7 @@ export default function AdminSettings() {
         pdf.setFontSize(12); // Increased font size for report data
 
         let y = 35.4; // 1 inch margin + 10mm
-        accountReportData.forEach((item, index) => {
+        programReportData.forEach((item, index) => {
             if (y > 270) { // Check if we need to add a new page (297mm - 1 inch margin)
                 pdf.addPage();
                 y = 25.4; // Reset y coordinate for new page with 1 inch margin
@@ -380,7 +462,7 @@ export default function AdminSettings() {
                                 <h2 className="text-xl font-bold mb-4">Accounts Report</h2>
                                 <p className="text-gray-600">Generate a detailed report of all account informations.</p>
 
-                                                               <div className="mt-4">
+                                <div className="mt-4">
                                     <label className="block text-gray-700">Start Date</label>
                                     <input
                                         type="date"
@@ -390,7 +472,7 @@ export default function AdminSettings() {
                                         max={new Date().toISOString().split("T")[0]} // Set max attribute to today's date
                                     />
                                 </div>
-                                
+
                                 <div className="mt-4">
                                     <label className="block text-gray-700">End Date</label>
                                     <input
@@ -447,17 +529,41 @@ export default function AdminSettings() {
                                 <p className="text-gray-600">Generate a detailed report of all scholarship programs and their statuses.</p>
 
                                 <div className="mt-4">
-                                    <label className="block text-gray-700">Program</label>
+                                    <label className="block text-gray-700">Start Date</label>
+                                    <input
+                                        type="date"
+                                        className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        value={startDate2}
+                                        onChange={(e) => setStartDate2(e.target.value)}
+                                        max={new Date().toISOString().split("T")[0]} // Set max attribute to today's date
+                                    />
+                                </div>
+
+                                <div className="mt-4">
+                                    <label className="block text-gray-700">End Date</label>
+                                    <input
+                                        type="date"
+                                        className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        value={endDate2}
+                                        onChange={(e) => setEndDate2(e.target.value)}
+                                        min={startDate2} // Set min attribute to start date
+                                        max={new Date().toISOString().split("T")[0]} // Set max attribute to today's date
+                                    />
+                                </div>
+
+                                <div className="mt-4">
+                                    <label className="block text-gray-700">Provider</label>
                                     <select
                                         className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                        value={program}
-                                        onChange={(e) => setProgram(e.target.value)}
+                                        value={provider}
+                                        onChange={(e) => setProvider(e.target.value)}
                                     >
-                                        <option value="">All Programs</option>
-                                        <option value="program1">Program 1</option>
-                                        <option value="program2">Program 2</option>
-                                        <option value="program3">Program 3</option>
-                                        {/* Add more options as needed */}
+                                        <option value="">All Providers</option>
+                                        {providers.map((provider) => (
+                                            <option key={provider._id} value={provider.scholarshipProviderDetails.organizationName}>
+                                                {provider.scholarshipProviderDetails.organizationName}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
 
@@ -469,12 +575,24 @@ export default function AdminSettings() {
                                         onChange={(e) => setStatus(e.target.value)}
                                     >
                                         <option value="">All Statuses</option>
-                                        <option value="active">Active</option>
-                                        <option value="inactive">Inactive</option>
-                                        <option value="completed">Completed</option>
-                                        {/* Add more options as needed */}
+                                        <option value="Pending Approval">Pending Approval</option>
+                                        <option value="Approved">Approved</option>
+                                        <option value="Published">Published</option>
+                                        <option value="Ongoing">Ongoing</option>
+                                        <option value="Rejected">Rejected</option>
+                                        <option value="Archived">Archived</option>
+                                        <option value="Cancelled">Cancelled</option>
+                                        <option value="Completed">Completed</option>
+                                        <option value="Awaiting Publication">Awaiting Publication</option>
+                                        <option value="Paused">Paused</option>
                                     </select>
                                 </div>
+
+                                {errorMessage2 && (
+                                    <div className="mt-4 text-red-600">
+                                        {errorMessage2}
+                                    </div>
+                                )}
 
                                 <div className="flex mt-4">
                                     <button

@@ -552,3 +552,63 @@ export const getAccountReport = async (req, res) => {
     });
   }
 };
+
+export const getProgramReport = async (req, res) => {
+  try {
+    const { startDate, endDate, provider, status } = req.body;
+
+    // Build the query object
+    let query = {};
+
+    if (startDate) {
+      query.dateCreated = { $gte: new Date(startDate) };
+    }
+
+    if (endDate) {
+      query.dateCreated = query.dateCreated || {};
+      query.dateCreated.$lte = new Date(endDate);
+    }
+
+    if (provider) {
+      query.organizationName = provider;
+    }
+
+    if (status) {
+      query.status = status;
+    }
+
+    // Fetch filtered data from the ScholarshipProgram collection
+    const scholarshipProgramData = await ScholarshipProgram.find(query).exec();
+
+    // Return the fetched data
+    res.status(200).json(scholarshipProgramData);
+  } catch (error) {
+    console.error('Error fetching scholarship program data:', error.message);
+    res.status(500).json({
+      message: 'Error fetching scholarship program data',
+      error: error.message,
+    });
+  }
+};
+
+export const getVerifiedScholarshipProviders = async (req, res) => {
+  try {
+    // Build the query to find verified scholarship providers
+    const query = {
+      role: 'scholarship_provider',
+      status: 'Verified'
+    };
+
+    // Fetch the data from the database, selecting only _id and organizationName
+    const verifiedProviders = await User.find(query).select('_id scholarshipProviderDetails.organizationName').exec();
+
+    // Return the fetched data
+    res.status(200).json(verifiedProviders);
+  } catch (error) {
+    console.error('Error fetching verified scholarship providers:', error.message);
+    res.status(500).json({
+      message: 'Error fetching verified scholarship providers',
+      error: error.message,
+    });
+  }
+};

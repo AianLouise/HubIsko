@@ -1,5 +1,5 @@
 import express from "express";
-import { countApprovedScholars, createAccount, getAccountReport, getAllApplicants, getAllProviders, getAllScholarshipPrograms, getAllUsers, getApplicantById, getPendingScholarshipPrograms, getPendingScholarshipProviders, getScholarshipProgramDetailsById, getScholarshipProviderById, getTotalApplicants, getTotalScholarshipProviders, getTotalScholarships, getTotalUnverifiedAccounts, getTotalUserAccounts, getUserForumPosts, getUserScholarshipPrograms, rejectScholarshipProgram, test, updateProviderDetails, updateStudentDetails, verifyScholarshipProgram, verifyScholarshipProviderStatus } from '../controllers/admin.controller.js';
+import { countApprovedScholars, createAccount, getAccountReport, getAllApplicants, getAllProviders, getAllScholarshipPrograms, getAllUsers, getApplicantById, getPendingScholarshipPrograms, getPendingScholarshipProviders, getProgramReport, getScholarshipProgramDetailsById, getScholarshipProviderById, getTotalApplicants, getTotalScholarshipProviders, getTotalScholarships, getTotalUnverifiedAccounts, getTotalUserAccounts, getUserForumPosts, getUserScholarshipPrograms, getVerifiedScholarshipProviders, rejectScholarshipProgram, test, updateProviderDetails, updateStudentDetails, verifyScholarshipProgram, verifyScholarshipProviderStatus } from '../controllers/admin.controller.js';
 
 const router = express.Router();
 
@@ -36,5 +36,10 @@ router.get('/user/:userId/forum-posts', getUserForumPosts);
 router.post('/register', createAccount);
 
 router.post('/account-report', getAccountReport);
+router.post('/program-report', getProgramReport);
+
+// Add the new route for fetching verified scholarship providers
+router.get('/verified-scholarship-providers', getVerifiedScholarshipProviders);
+
 
 export default router;
