@@ -1,5 +1,5 @@
 import express from "express";
-import { countApprovedScholars, createAccount, getAllApplicants, getAllProviders, getAllScholarshipPrograms, getAllUsers, getApplicantById, getPendingScholarshipPrograms, getPendingScholarshipProviders, getScholarshipProgramDetailsById, getScholarshipProviderById, getTotalApplicants, getTotalScholarshipProviders, getTotalScholarships, getTotalUnverifiedAccounts, getTotalUserAccounts, getUserForumPosts, getUserScholarshipPrograms, rejectScholarshipProgram, test, updateProviderDetails, updateStudentDetails, verifyScholarshipProgram, verifyScholarshipProviderStatus } from '../controllers/admin.controller.js';
+import { countApprovedScholars, createAccount, getAccountReport, getAllApplicants, getAllProviders, getAllScholarshipPrograms, getAllUsers, getApplicantById, getPendingScholarshipPrograms, getPendingScholarshipProviders, getScholarshipProgramDetailsById, getScholarshipProviderById, getTotalApplicants, getTotalScholarshipProviders, getTotalScholarships, getTotalUnverifiedAccounts, getTotalUserAccounts, getUserForumPosts, getUserScholarshipPrograms, rejectScholarshipProgram, test, updateProviderDetails, updateStudentDetails, verifyScholarshipProgram, verifyScholarshipProviderStatus } from '../controllers/admin.controller.js';
 
 const router = express.Router();
 
@@ -34,5 +34,7 @@ router.get('/user/:userId/forum-posts', getUserForumPosts);
 
 // New route for creating an account
 router.post('/register', createAccount);
+
+router.post('/account-report', getAccountReport);
 
 export default router;

@@ -520,3 +520,35 @@ export const createAccount = async (req, res) => {
     });
   }
 };
+
+// Controller to fetch account report data
+export const getAccountReport = async (req, res) => {
+  const { startDate, endDate, role } = req.body;
+
+  try {
+    // Build the query based on the provided filters
+    const query = {};
+    if (startDate) {
+      query.createdAt = { $gte: new Date(startDate) };
+    }
+    if (endDate) {
+      query.createdAt = query.createdAt || {};
+      query.createdAt.$lte = new Date(endDate);
+    }
+    if (role) {
+      query.role = role;
+    }
+
+    // Fetch the data from the database
+    const accountReportData = await User.find(query).exec();
+
+    // Return the fetched data
+    res.status(200).json(accountReportData);
+  } catch (error) {
+    console.error('Error fetching account report data:', error.message);
+    res.status(500).json({
+      message: 'Error fetching account report data',
+      error: error.message,
+    });
+  }
+};
