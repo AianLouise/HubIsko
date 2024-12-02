@@ -13,6 +13,6 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    exclude: ['react-icons', 'problematic-dependency', 'react-csv', 'jspdf', 'jspdf-autotable' ] // Add the problematic dependency here
+    exclude: ['react-icons', 'problematic-dependency'] // Add the problematic dependency here
   }
 });
