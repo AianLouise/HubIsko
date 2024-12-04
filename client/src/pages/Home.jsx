@@ -24,6 +24,7 @@ import HomeNotification from '../assets/HomeNotification.png';
 import HomeTeam from '../assets/HomeTeam.png';
 import HomeNetwork from '../assets/HomeNetwork.png';
 import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
+import LandingImage from '../assets/Landing.svg';
 
 
 export default function Home() {
@@ -94,7 +95,7 @@ export default function Home() {
       <Header />
       <main className="flex-grow bg-[#f8f8fb] no-scrollbar"> {/* Main content grows to fill available space */}
         <div className=''>
-          <div className='text-center lg:px-56 py-20'>
+          <div className='text-center lg:px-56 pt-32'>
             <h1 className='text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-slate-800 px-4 sm:px-8 md:px-12 lg:px-20'>
               Explore <span className='text-blue-600'>Scholarships</span> Through <span className='text-blue-600'>Technology.</span>
             </h1>
@@ -143,31 +144,13 @@ export default function Home() {
           </div>
         </div>
         <div className='px-4 max-w-6xl mx-auto'>
-          <div className='border shadow-2xl rounded-md mb-10 lg:mb-40 w-full max-w-6xl transition-all hover:-translate-y-2 bg-white'>
-            <h1 className='text-center lg:text-left bg-blue-600 p-4 text-white font-bold text-lg lg:text-2xl rounded-t-md'>
-              Our Goal
-            </h1>
-            <p className='mb-1 text-slate-700 p-2 lg:px-8 font-medium text-sm lg:text-base text-justify'>
-              HubIsko is a comprehensive scholarship management system designed to streamline
-              the process of finding, applying for, and managing scholarships. Whether you're
-              a student seeking financial assistance or an organization looking to provide
-              scholarships, HubIsko offers a suite of tools to simplify your journey.
-              We aim to connect students with the resources they need to achieve their
-              educational goals while helping organizations manage their scholarship programs efficiently.
-            </p>
-            <p className='mb-1 text-slate-700 p-2 lg:px-8 font-medium text-sm lg:text-base text-justify'>
-              With HubIsko's user-friendly interface, you can easily search for scholarships
-              that match your academic interests and eligibility. Our system also allows
-              scholarship providers to track applications, review submissions, and communicate
-              with applicants seamlessly. We are committed to making the scholarship process
-              more accessible, transparent, and effective for everyone involved.
-            </p>
-            <p className='text-slate-700 p-2 lg:px-8 font-medium text-sm lg:text-base text-justify'>
-              Join HubIsko in achieving our mission to make education more accessible and to
-              empower students and organizations with the tools they need to succeed.
-            </p>
-          </div>
 
+          {/* Landing Image */}
+          <div className='overflow-hidden -translate-y-32 flex flex-col lg:flex-row items-center justify-center'>
+            <img src={LandingImage} alt="Landing Image" className='w-full h-auto' />
+            <div className='flex flex-col lg:w-1/2 gap-4'>
+            </div>
+          </div>
 
           <div className='text-slate-700 w-full mb-40 rounded-md p-4 '>
 

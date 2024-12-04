@@ -5,7 +5,13 @@ import { BiPhone } from "react-icons/bi";
 
 export default function MassReportLayout() {
   return (
-    <div className="flex flex-col container justify-between mx-auto bg-white border my-10" style={{ width: '11in', height: '17in' }}>
+    <div className="flex flex-col justify-center mt-10">
+    <div className="flex mx-auto container my-2" style={{ width: '11in'}}>
+    <button className="bg-blue-600 hover:bg-blue-800 px-8 py-2 rounded-md text-white">
+      Print PDF
+    </button>
+    </div>
+    <div className="flex flex-col container justify-between mx-auto bg-white border" style={{ width: '11in', height: '17in' }}>
     <div>
      <div className="flex items-center border-b p-4 my-2 justify-between">
         <div>
@@ -106,6 +112,11 @@ export default function MassReportLayout() {
             </div>
         </div>
     </div>
- 
+    <div className="flex justify-end mx-auto container my-2" style={{ width: '11in'}}>
+    <button className="bg-blue-600 hover:bg-blue-800 px-8 py-2 rounded-md text-white">
+      Print PDF
+    </button>
+    </div>
+    </div>
   );
 }
