@@ -80,11 +80,11 @@ export default function AdminSettings() {
                     status,
                 }),
             });
-    
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-    
+
             const data = await response.json();
             return data;
         } catch (error) {
@@ -120,17 +120,17 @@ export default function AdminSettings() {
             setErrorMessage2('Please provide both start date and end date.');
             return;
         }
-    
+
         // Validate that endDate2 is not earlier than startDate2
         if (startDate2 && endDate2 && new Date(endDate2) < new Date(startDate2)) {
             setErrorMessage2('End date cannot be earlier than start date.');
             return;
         }
-    
+
         // Clear any previous error messages
         setErrorMessage2('');
         setProgramLoading(true);
-    
+
         // Fetch the program report data
         const data = await fetchProgramReportData();
         if (data) {
@@ -139,7 +139,7 @@ export default function AdminSettings() {
         } else {
             setErrorMessage2('Failed to generate the report. Please try again.');
         }
-    
+
         setProgramLoading(false);
     };
 
@@ -159,22 +159,50 @@ export default function AdminSettings() {
         // Log the report data to the console
         console.log("Account Report Data:", accountReportData);
 
-        // Add logo and header
+        // Add header section with a thinner border and reduced gaps
         const pageWidth = pdf.internal.pageSize.getWidth();
-        const logoWidth = 10;
+        const margin = 10;
+        const headerHeight = 35; // Adjusted height for compact spacing
+
+        // Add a smaller border with thickness 0.2
+        pdf.setLineWidth(0.2);
+        pdf.rect(margin, margin, pageWidth - 2 * margin, headerHeight); // Border for header section
+
+        // Calculate the vertical middle of the header section
+        const headerMiddleY = margin + headerHeight / 2;
+
+        // Calculate the center of the page for horizontal alignment
+        const centerX = pageWidth / 2;
+
+        // Add a smaller logo above the "HubIsko Account Report" text
+        const logoWidth = 10; // Smaller logo size
         const logoHeight = 10;
+        const logoX = centerX - logoWidth / 2; // Center the logo horizontally
+        const logoY = margin + 5; // Slightly below the top margin
+        pdf.addImage(logoBase64, 'PNG', logoX, logoY, logoWidth, logoHeight); // Add the logo
+
+        // Add "HubIsko Account Report" text centered horizontally below the logo
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(12); // Smaller font for title
         const title = "HubIsko Account Report";
         const titleWidth = pdf.getTextWidth(title);
-        const totalWidth = logoWidth + titleWidth + 5; // 5 is the space between logo and title
-        const startX = (pageWidth - totalWidth) / 2;
+        pdf.text(title, centerX - titleWidth / 2, logoY + logoHeight + 4); // Reduced gap below the logo
 
-        pdf.addImage(logoBase64, 'PNG', startX, 10, logoWidth, logoHeight); // Add logo with size 10x10
-        pdf.setFontSize(16); // Slightly larger font size for title
-        pdf.text(title, startX + logoWidth + 5, 18); // Position title next to the logo
-        pdf.setFontSize(12); // Reduced font size for description and other text
-        pdf.text("This report contains detailed information about account informations.", 25.4, 30); // 1 inch margin
-        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-        pdf.text(`Generated on: ${new Date().toLocaleString('en-US', options)}`, 25.4, 40); // 1 inch margin
+        // Add the description text below the title, centered horizontally
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(10); // Smaller font for description
+        const description = "This report contains detailed information about account informations.";
+        const descriptionWidth = pdf.getTextWidth(description);
+        pdf.text(description, centerX - descriptionWidth / 2, logoY + logoHeight + 10); // Reduced gap below the title
+
+        // Add the generated date directly below the description, with no extra space
+        const generatedDate = `Generated on:${new Date().toLocaleString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
+        })}`;
+        const dateWidth = pdf.getTextWidth(generatedDate);
+        pdf.text(generatedDate, centerX - dateWidth / 2, logoY + logoHeight + 14); // Directly aligned below the description
+
+
         if (startDate) {
             pdf.text(`Start Date: ${startDate}`, 25.4, 50); // 1 inch margin
         }
@@ -186,19 +214,49 @@ export default function AdminSettings() {
             pdf.text(`Role: ${role}`, 25.4, 70); // 1 inch margin
         }
 
-        // Add overview section
+        // Add overview section as a table
+        const tableStartX = 25.4; // 1 inch margin
+        const tableStartY = 80;
+        const rowHeight = 10;
+        const colWidth = 60;
+
+        // Set font for table header
         pdf.setFontSize(12); // Slightly larger font size for overview header
         pdf.setFont("helvetica", "bold");
-        pdf.text("Overview:", 25.4, 80); // 1 inch margin
+        pdf.text("Overview:", tableStartX, tableStartY);
+
+        // Add some space after the "Overview:" text
+        const tableContentStartY = tableStartY + rowHeight;
+
+        // Set font for table content
         pdf.setFont("helvetica", "normal");
         pdf.setFontSize(12); // Reduced font size for overview details
-        pdf.text(`Total Users: ${totalUsers}`, 25.4, 90); // 1 inch margin
-        pdf.text(`Verify Account: ${verifyAccountCount}`, 25.4, 100); // 1 inch margin
-        pdf.text(`Pending Verification: ${pendingVerificationCount}`, 25.4, 110); // 1 inch margin
-        pdf.text(`Verified: ${verifiedCount}`, 25.4, 120); // 1 inch margin
-        pdf.text(`Total Applicants: ${totalApplicants}`, 25.4, 130); // 1 inch margin
-        pdf.text(`Total Scholarship Providers: ${totalScholarshipProviders}`, 25.4, 140); // 1 inch margin
-        pdf.text(`Total Admins: ${totalAdmins}`, 25.4, 150); // 1 inch margin
+
+        // Define table data
+        const tableData = [
+            { label: "Total Users", value: totalUsers },
+            { label: "Verify Account", value: verifyAccountCount },
+            { label: "Pending Verification", value: pendingVerificationCount },
+            { label: "Verified", value: verifiedCount },
+            { label: "Total Applicants", value: totalApplicants },
+            { label: "Total Scholarship Providers", value: totalScholarshipProviders },
+            { label: "Total Admins", value: totalAdmins }
+        ];
+
+        // Draw table rows with borders and center the values
+        tableData.forEach((row, index) => {
+            const y = tableContentStartY + (index + 1) * rowHeight;
+            pdf.text(row.label, tableStartX + 2, y - 2); // Adjust text position
+
+            // Center the value text
+            const valueTextWidth = pdf.getTextWidth(row.value.toString());
+            const valueTextX = tableStartX + colWidth + (colWidth - valueTextWidth) / 2;
+            pdf.text(row.value.toString(), valueTextX, y - 2); // Adjust text position
+
+            // Draw border for each row
+            pdf.rect(tableStartX, y - rowHeight, colWidth, rowHeight); // Border for label column
+            pdf.rect(tableStartX + colWidth, y - rowHeight, colWidth, rowHeight); // Border for value column
+        });
 
         // Add a new page for the account report data
         pdf.addPage();
@@ -207,7 +265,7 @@ export default function AdminSettings() {
         pdf.setFontSize(12); // Slightly larger font size for section header
         pdf.text("Account Report Data:", 25.4, 25.4); // 1 inch margin
         pdf.setFont("helvetica", "normal");
-        pdf.setFontSize(12); // Increased font size for report data
+        pdf.setFontSize(10); // Increased font size for report data
 
         let y = 35.4; // 1 inch margin + 10mm
 
@@ -238,11 +296,13 @@ export default function AdminSettings() {
         };
 
         accountReportData.forEach((item, index) => {
-            if (y > 270) { // Check if we need to add a new page (297mm - 1 inch margin)
+            if (index > 0) {
                 pdf.addPage();
                 y = 25.4; // Reset y coordinate for new page with 1 inch margin
             }
+            pdf.setFont("helvetica", "bold");
             pdf.text(`Record ${index + 1}:`, 25.4, y); // 1 inch margin
+            pdf.setFont("helvetica", "normal"); // Reset font to normal for subsequent text
             y += 10;
             addDetails(item, 0, true); // Skip nested objects
 
@@ -253,6 +313,13 @@ export default function AdminSettings() {
                 pdf.setFont("helvetica", "normal");
                 y += 10;
                 addDetails(item.adminDetails, 2);
+            } else {
+                pdf.setFont("helvetica", "bold");
+                pdf.text("Admin Details:", 25.4, y);
+                pdf.setFont("helvetica", "normal");
+                y += 10;
+                pdf.text("No admin details available.", 25.4, y);
+                y += 10;
             }
 
             if (item.applicantDetails) {
@@ -261,6 +328,13 @@ export default function AdminSettings() {
                 pdf.setFont("helvetica", "normal");
                 y += 10;
                 addDetails(item.applicantDetails, 2);
+            } else {
+                pdf.setFont("helvetica", "bold");
+                pdf.text("Applicant Details:", 25.4, y);
+                pdf.setFont("helvetica", "normal");
+                y += 10;
+                pdf.text("No applicant details available.", 25.4, y);
+                y += 10;
             }
 
             if (item.scholarshipProviderDetails) {
@@ -269,6 +343,13 @@ export default function AdminSettings() {
                 pdf.setFont("helvetica", "normal");
                 y += 10;
                 addDetails(item.scholarshipProviderDetails, 2);
+            } else {
+                pdf.setFont("helvetica", "bold");
+                pdf.text("Scholarship Provider Details:", 25.4, y);
+                pdf.setFont("helvetica", "normal");
+                y += 10;
+                pdf.text("No scholarship provider details available.", 25.4, y);
+                y += 10;
             }
 
             y += 10; // Add extra space between records
@@ -297,41 +378,91 @@ export default function AdminSettings() {
         // Log the report data to the console
         console.log("Program Report Data:", programReportData);
 
-        // Add logo and header
+        // Add header section with a thinner border and reduced gaps
         const pageWidth = pdf.internal.pageSize.getWidth();
-        const logoWidth = 10;
+        const margin = 10;
+        const headerHeight = 35; // Adjusted height for compact spacing
+
+        // Add a smaller border with thickness 0.2
+        pdf.setLineWidth(0.2);
+        pdf.rect(margin, margin, pageWidth - 2 * margin, headerHeight); // Border for header section
+
+        // Calculate the vertical middle of the header section
+        const headerMiddleY = margin + headerHeight / 2;
+
+        // Calculate the center of the page for horizontal alignment
+        const centerX = pageWidth / 2;
+
+        // Add a smaller logo above the "HubIsko Program Report" text
+        const logoWidth = 10; // Smaller logo size
         const logoHeight = 10;
+        const logoX = centerX - logoWidth / 2; // Center the logo horizontally
+        const logoY = margin + 5; // Slightly below the top margin
+        pdf.addImage(logoBase64, 'PNG', logoX, logoY, logoWidth, logoHeight); // Add the logo
+
+        // Add "HubIsko Program Report" text centered horizontally below the logo
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(12); // Smaller font for title
         const title = "HubIsko Program Report";
         const titleWidth = pdf.getTextWidth(title);
-        const totalWidth = logoWidth + titleWidth + 5; // 5 is the space between logo and title
-        const startX = (pageWidth - totalWidth) / 2;
+        pdf.text(title, centerX - titleWidth / 2, logoY + logoHeight + 4); // Reduced gap below the logo
 
-        pdf.addImage(logoBase64, 'PNG', startX, 10, logoWidth, logoHeight); // Add logo with size 10x10
-        pdf.setFontSize(16); // Slightly larger font size for title
-        pdf.text(title, startX + logoWidth + 5, 18); // Position title next to the logo
-        pdf.setFontSize(10); // Reduced font size for description and other text
-        pdf.text("This report contains detailed information about program activities and statuses.", 25.4, 30); // 1 inch margin
-        pdf.text(`Generated on: ${new Date().toLocaleDateString()}`, 25.4, 40); // 1 inch margin
-        pdf.text(`Program: ${program}`, 25.4, 50); // 1 inch margin
-        pdf.text(`Status: ${status}`, 25.4, 60); // 1 inch margin
+        // Add the description text below the title, centered horizontally
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(10); // Smaller font for description
+        const description = "This report contains detailed information about program activities and statuses.";
+        const descriptionWidth = pdf.getTextWidth(description);
+        pdf.text(description, centerX - descriptionWidth / 2, logoY + logoHeight + 10); // Reduced gap below the title
 
-        // Add overview section
+        // Add the generated date directly below the description, with no extra space
+        const generatedDate = `Generated on:${new Date().toLocaleString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
+        })}`;
+        const dateWidth = pdf.getTextWidth(generatedDate);
+        pdf.text(generatedDate, centerX - dateWidth / 2, logoY + logoHeight + 14); // Directly aligned below the description
+
+        // Add overview section as a table
+        const tableStartX = 25.4; // 1 inch margin
+        const tableStartY = 80;
+        const rowHeight = 10;
+        const colWidth = 60;
+
+        // Set font for table header
         pdf.setFontSize(12); // Slightly larger font size for overview header
         pdf.setFont("helvetica", "bold");
-        pdf.text("Overview:", 25.4, 70); // 1 inch margin
+        pdf.text("Overview:", tableStartX, 70); // 1 inch margin
+
+        // Add some space after the "Overview:" text
+        const tableContentStartY = tableStartY;
+
+        // Set font for table content
         pdf.setFont("helvetica", "normal");
         pdf.setFontSize(10); // Reduced font size for overview details
-        pdf.text(`Total Programs: ${totalPrograms}`, 25.4, 80);
-        pdf.text(`Pending Approval: ${totalPendingApproval}`, 25.4, 90);
-        pdf.text(`Approved: ${totalApproved}`, 25.4, 100);
-        pdf.text(`Published: ${totalPublished}`, 25.4, 110);
-        pdf.text(`Ongoing: ${totalOngoing}`, 25.4, 120);
-        pdf.text(`Rejected: ${totalRejected}`, 25.4, 130);
-        pdf.text(`Archived: ${totalArchived}`, 25.4, 140);
-        pdf.text(`Cancelled: ${totalCancelled}`, 25.4, 150);
-        pdf.text(`Completed: ${totalCompleted}`, 25.4, 160);
-        pdf.text(`Awaiting Publication: ${totalAwaitingPublication}`, 25.4, 170);
-        pdf.text(`Paused: ${totalPaused}`, 25.4, 180);
+
+        // Define table data
+        const tableData = [
+            { label: "Total Programs", value: totalPrograms },
+            { label: "Awaiting Publication", value: totalAwaitingPublication },
+            { label: "Published", value: totalPublished },
+            { label: "Ongoing", value: totalOngoing },
+            { label: "Paused", value: totalPaused },
+            { label: "Completed", value: totalCompleted },
+        ];
+
+        // Draw table rows with borders and center the values
+        tableData.forEach((row, index) => {
+            const y = tableContentStartY + (index + 1) * rowHeight;
+            pdf.text(row.label, tableStartX + 2, y - 2); // Adjust text position
+
+            // Center the value text
+            const valueTextWidth = pdf.getTextWidth(row.value.toString());
+            const valueTextX = tableStartX + colWidth + (colWidth - valueTextWidth) / 2;
+            pdf.text(row.value.toString(), valueTextX, y - 2); // Adjust text position
+
+            // Draw border for each row
+            pdf.rect(tableStartX, y - rowHeight, colWidth, rowHeight); // Border for label column
+            pdf.rect(tableStartX + colWidth, y - rowHeight, colWidth, rowHeight); // Border for value column
+        });
 
         // Add a new page for the program report data
         pdf.addPage();
@@ -340,15 +471,17 @@ export default function AdminSettings() {
         pdf.setFontSize(12); // Slightly larger font size for section header
         pdf.text("Program Report Data:", 25.4, 25.4); // 1 inch margin
         pdf.setFont("helvetica", "normal");
-        pdf.setFontSize(12); // Increased font size for report data
+        pdf.setFontSize(10); // Increased font size for report data
 
         let y = 35.4; // 1 inch margin + 10mm
         programReportData.forEach((item, index) => {
-            if (y > 270) { // Check if we need to add a new page (297mm - 1 inch margin)
+            if (index > 0) {
                 pdf.addPage();
                 y = 25.4; // Reset y coordinate for new page with 1 inch margin
             }
+            pdf.setFont("helvetica", "bold");
             pdf.text(`Record ${index + 1}:`, 25.4, y); // 1 inch margin
+            pdf.setFont("helvetica", "normal"); // Reset font to normal for subsequent text
             y += 10;
             Object.keys(item).forEach(key => {
                 const text = `${key}: ${item[key]}`;
@@ -420,8 +553,6 @@ export default function AdminSettings() {
                     });
                 });
             }
-
-            y += 10; // Add extra space between records
         });
 
         pdf.save("program_report.pdf");
