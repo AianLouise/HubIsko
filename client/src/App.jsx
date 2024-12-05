@@ -157,7 +157,7 @@ export default function App() {
 
 
         {/* Test */}
-        <Route path="/mass-report" element={<MassReportLayout />} />
+        <Route path="/mass-report/:scholarshipId" element={<MassReportLayout />} />
         
 
         {/* <Route path="/others-profile/:id" element={<OthersProfile />} /> */}

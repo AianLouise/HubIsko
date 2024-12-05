@@ -727,6 +727,7 @@ export default function ViewScholarshipDetails() {
                                 approvedScholars={scholars.length}
                                 numberOfScholarships={numberOfScholarships}
                                 numberOfScholarshipsSlotFilled={numberOfScholarshipsSlotFilled}
+                                scholarshipProgram={scholarshipProgram}
                             />
                         )}
 

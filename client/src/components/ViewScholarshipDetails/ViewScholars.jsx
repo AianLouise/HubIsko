@@ -5,14 +5,18 @@ import { Link } from 'react-router-dom';
 import { BiFilter } from 'react-icons/bi';
 import { CSVLink } from 'react-csv';
 import { regions, provinces, cities, barangays } from 'select-philippines-address';
-import MassReportLayout from  '../MassReportLayout';
+import MassReportLayout from '../MassReportLayout';
 
-export default function ViewScholars({ scholars, numberOfScholarships, numberOfScholarshipsSlotFilled, approvedScholars }) {
+export default function ViewScholars({ scholars, numberOfScholarships, numberOfScholarshipsSlotFilled, approvedScholars, scholarshipProgram }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [sortOrder, setSortOrder] = useState('A-Z');
     const [csvData, setCsvData] = useState([]);
     const [isGenerating, setIsGenerating] = useState(false);
     const [addressNames, setAddressNames] = useState({});
+
+    console.log(scholarshipProgram.id);
+
+    const scholarshipId = scholarshipProgram.id;
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
@@ -202,43 +206,44 @@ export default function ViewScholars({ scholars, numberOfScholarships, numberOfS
                         className="border p-2 rounded-md w-full lg:w-1/2"
                     />
                     <div className='flex gap-2'>
-                    <button
-                className='flex gap-2 bg-white hover:bg-slate-200 px-6 py-2 border shadow rounded-md'
-                onClick={toggleSortOrder}
-            >
-                <BiFilter className='w-6 h-6 text-blue-600' />
-                <span>{sortOrder === 'A-Z' ? 'Sort Z-A' : 'Sort A-Z'}</span>
-            </button>
-            <button
-                className='flex gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 border shadow rounded-md'
-                onClick={generateCsvReport}
-                disabled={isGenerating}
-            >
-                {isGenerating ? (
-                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                    </svg>
-                ) : (
-                    <span>Generate CSV Report</span>
-                )}
-            </button>
+                        <button
+                            className='flex gap-2 bg-white hover:bg-slate-200 px-6 py-2 border shadow rounded-md'
+                            onClick={toggleSortOrder}
+                        >
+                            <BiFilter className='w-6 h-6 text-blue-600' />
+                            <span>{sortOrder === 'A-Z' ? 'Sort Z-A' : 'Sort A-Z'}</span>
+                        </button>
+                        <button
+                            className='flex gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 border shadow rounded-md'
+                            onClick={generateCsvReport}
+                            disabled={isGenerating}
+                        >
+                            {isGenerating ? (
+                                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                                </svg>
+                            ) : (
+                                <span>Generate CSV Report</span>
+                            )}
+                        </button>
 
-            <button className='flex gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 border shadow rounded-md'>
-             <Link to={'/mass-report'}>
-             Print PDF
-             </Link>
-            </button>
-            {!isGenerating && csvData.length > 0 && (
-                <CSVLink
-                    data={csvData}
-                    filename={"scholar-report.csv"}
-                    className="flex gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2 border shadow rounded-md"
-                >
-                    <span>Download CSV</span>
-                </CSVLink>
-                
-            )}
+                        <Link to={`/mass-report/${scholarshipId}`}>
+                            <button className='flex gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 border shadow rounded-md'>
+                                Print PDF
+                            </button>
+                        </Link>
+
+                        {!isGenerating && csvData.length > 0 && (
+                            <CSVLink
+                                data={csvData}
+                                filename={"scholar-report.csv"}
+                                className="flex gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2 border shadow rounded-md"
+                            >
+                                <span>Download CSV</span>
+                            </CSVLink>
+
+                        )}
                     </div>
                 </div>
 
