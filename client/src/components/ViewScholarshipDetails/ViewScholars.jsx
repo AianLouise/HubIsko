@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { BiFilter } from 'react-icons/bi';
 import { CSVLink } from 'react-csv';
 import { regions, provinces, cities, barangays } from 'select-philippines-address';
+import MassReportLayout from  '../MassReportLayout';
 
 export default function ViewScholars({ scholars, numberOfScholarships, numberOfScholarshipsSlotFilled, approvedScholars }) {
     const [searchQuery, setSearchQuery] = useState('');
@@ -222,6 +223,12 @@ export default function ViewScholars({ scholars, numberOfScholarships, numberOfS
                     <span>Generate CSV Report</span>
                 )}
             </button>
+
+            <button className='flex gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 border shadow rounded-md'>
+             <Link to={'/mass-report'}>
+             Print PDF
+             </Link>
+            </button>
             {!isGenerating && csvData.length > 0 && (
                 <CSVLink
                     data={csvData}
@@ -230,6 +237,7 @@ export default function ViewScholars({ scholars, numberOfScholarships, numberOfS
                 >
                     <span>Download CSV</span>
                 </CSVLink>
+                
             )}
                     </div>
                 </div>

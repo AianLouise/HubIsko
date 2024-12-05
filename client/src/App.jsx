@@ -100,6 +100,8 @@ import ScholarshipProviderProfilePage from "./pages/Scholarship-Provider/Scholar
 import AdminLogHistory from "./pages/Admin/AdminLogHistory";
 import ScholarshipAnnouncements from "./pages/Admin/ScholarshipAnnouncements";
 
+import MassReportLayout from "./components/MassReportLayout";
+
 
 // import RegisterAsProvider from "./pages/RegisterAsProvider";
 // import OthersProfile from "./pages/Dump/OthersProfile";
@@ -152,6 +154,11 @@ export default function App() {
         <Route path="/about" element={<About />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-use" element={<TermsOfUse />} />
+
+
+        {/* Test */}
+        <Route path="/mass-report" element={<MassReportLayout />} />
+        
 
         {/* <Route path="/others-profile/:id" element={<OthersProfile />} /> */}
         {/* Admin Routes */}

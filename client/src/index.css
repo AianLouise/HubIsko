@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 /* ModalStyles.css */
-.no-scroll {
+/* .no-scroll {
     overflow: hidden;
-}
+} */
 
 .fade-out {
     animation: fadeOut 3s forwards;
@@ -18,6 +18,10 @@
     100% {
       opacity: 0;
     }
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
   }
 
   /* Add this to your CSS file */
