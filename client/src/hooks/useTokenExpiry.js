@@ -18,13 +18,13 @@ const useTokenExpiry = () => {
       console.log('User ID is not available');
       return;
     }
-
     try {
       await fetch(`${apiUrl}/api/auth/signout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // Include cookies in cross-origin requests
         body: JSON.stringify({ userId }),
       });
       dispatch(signOut());

@@ -28,7 +28,38 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+// CORS configuration to handle credentials
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    // Define allowed origins
+    const allowedOrigins = [
+      'http://localhost:5173', // Vite dev server
+      'http://localhost:3000', // Local backend
+      'http://localhost:4173', // Vite preview
+      'https://hub-isko.vercel.app', // Production frontend
+      'https://hubisko.vercel.app', // Alternative production URL
+    ];
+
+    // Add any additional origins from environment variable
+    if (process.env.FRONTEND_URL) {
+      allowedOrigins.push(process.env.FRONTEND_URL);
+    }
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-access-token'],
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -50,7 +81,7 @@ const connectToDatabase = async () => {
     };
 
     const connection = await mongoose.connect(process.env.MONGODB_URI, options);
-    
+
     // Wait for the connection to be ready
     await new Promise((resolve, reject) => {
       if (mongoose.connection.readyState === 1) {
@@ -60,10 +91,10 @@ const connectToDatabase = async () => {
         mongoose.connection.once('error', reject);
       }
     });
-    
+
     isConnected = true;
     console.log('Connected to MongoDB');
-    
+
     // Create default admin account after connection is fully established
     await User.createDefaultAdmin();
   } catch (err) {
@@ -110,8 +141,8 @@ app.use('/api/providerAccount', ProviderAccountRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.status(200).json({ 
-    status: 'OK', 
+  res.status(200).json({
+    status: 'OK',
     message: 'API is healthy',
     timestamp: new Date().toISOString()
   });
@@ -120,16 +151,16 @@ app.get('/api/health', (req, res) => {
 // Serve static files (only in development)
 if (process.env.NODE_ENV !== 'production') {
   app.use(express.static(path.join(__dirname, 'client', 'dist')));
-  
+
   // Catch-all route to serve index.html (only in development)
   app.get('*', (req, res) => {
-      res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
   });
 } else {
   // In production, handle non-API routes
   app.get('/', (req, res) => {
-    res.json({ 
-      message: 'HubIsko API is running!', 
+    res.json({
+      message: 'HubIsko API is running!',
       version: '1.0.0',
       endpoints: [
         '/api/auth',
@@ -148,13 +179,13 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    const statusCode = err.statusCode || 500;
-    const message = err.message || 'Internal Server Error';
-    res.status(statusCode).json({
-        success: false,
-        message,
-        statusCode,
-    });
+  const statusCode = err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
+  res.status(statusCode).json({
+    success: false,
+    message,
+    statusCode,
+  });
 });
 
 const PORT = process.env.PORT || 3000;

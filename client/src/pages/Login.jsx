@@ -68,7 +68,7 @@ export default function SignIn() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-    const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       dispatch(signInStart());
@@ -78,7 +78,7 @@ export default function SignIn() {
         controller.abort();
         setShowSlowConnectionNotification(true);
         setTimeout(() => setShowSlowConnectionNotification(false), 5000); // Hide after 5 seconds
-      }, 10000); // 10 seconds timeout
+      }, 10000); // 10 seconds timeout      
 
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
       const res = await fetch(`${apiUrl}/api/auth/signin`, {
@@ -86,6 +86,7 @@ export default function SignIn() {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // Include cookies in cross-origin requests
         body: JSON.stringify(formData),
         signal: controller.signal,
       });

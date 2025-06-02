@@ -249,7 +249,9 @@ const ScholarshipApplicationForm = () => {
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
-                const response = await fetch(`/api/auth/user/${userId}`);
+                const response = await fetch(`/api/auth/user/${userId}`, {
+                    credentials: 'include', // Include cookies in cross-origin requests
+                });
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
