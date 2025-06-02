@@ -67,13 +67,43 @@ app.use('/api/adminForums', AdminForums);
 app.use('/api/adminProfile', AdminProfile);
 app.use('/api/providerAccount', ProviderAccountRoutes);
 
-// Serve static files
-app.use(express.static(path.join(__dirname, 'client', 'dist')));
-
-// Catch-all route to serve index.html
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'OK', 
+    message: 'API is healthy',
+    timestamp: new Date().toISOString()
+  });
 });
+
+// Serve static files (only in development)
+if (process.env.NODE_ENV !== 'production') {
+  app.use(express.static(path.join(__dirname, 'client', 'dist')));
+  
+  // Catch-all route to serve index.html (only in development)
+  app.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+  });
+} else {
+  // In production, handle non-API routes
+  app.get('/', (req, res) => {
+    res.json({ 
+      message: 'HubIsko API is running!', 
+      version: '1.0.0',
+      endpoints: [
+        '/api/auth',
+        '/api/user',
+        '/api/provider',
+        '/api/forums',
+        '/api/scholarshipProgram',
+        '/api/scholarshipApplication',
+        '/api/admin',
+        '/api/profile',
+        '/api/notification'
+      ]
+    });
+  });
+}
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -88,6 +118,12 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
+// Only start the server in development mode
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-});
+  });
+}
+
+// Export the app for Vercel
+export default app;
