@@ -1,0 +1,23 @@
+{
+  "name": "hubisko2",
+  "version": "1.0.0",
+  "description": "HubIsko2 - Scholarship Management Platform",
+  "type": "module",
+  "scripts": {
+    "install-all": "npm install --prefix api && npm install --prefix client",
+    "dev": "concurrently \"npm run dev --prefix api\" \"npm run dev --prefix client\"",
+    "build": "cd client && npm install && npm run build",
+    "start": "cd api && npm install && npm start",
+    "api:dev": "npm run dev --prefix api",
+    "api:start": "npm start --prefix api",
+    "client:dev": "npm run dev --prefix client",
+    "client:build": "npm run build --prefix client",
+    "client:preview": "npm run preview --prefix client"
+  },
+  "keywords": ["scholarship", "management", "platform"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
