@@ -77,37 +77,39 @@ export default function ScholarshipListing() {
   };
 
   useEffect(() => {
-    const fetchScholarships = async () => {
-      try {
-        const response = await fetch('/api/scholarshipProgram/scholarshipPrograms');
-        const data = await response.json();
-        setScholarships(data);
-      } catch (error) {
-        console.error('Error fetching scholarships:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchScholarships();
-  }, []);
-
-  useEffect(() => {
-    const fetchProviders = async () => {
-      try {
-        const response = await fetch('/api/scholarshipProgram/getScholarshipProvider');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+      const fetchScholarships = async () => {
+        try {
+          const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+          const response = await fetch(`${apiUrl}/api/scholarshipProgram/scholarshipPrograms`);
+          const data = await response.json();
+          setScholarships(data);
+        } catch (error) {
+          console.error('Error fetching scholarships:', error);
+        } finally {
+          setLoading(false);
         }
-        const data = await response.json();
-        setProviders(data);
-      } catch (error) {
-        console.error('Error fetching scholarship providers:', error.message);
-      }
-    };
-
-    fetchProviders();
-  }, []);
+      };
+  
+      fetchScholarships();
+    }, []);
+  
+    useEffect(() => {
+      const fetchProviders = async () => {
+        try {
+          const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+          const response = await fetch(`${apiUrl}/api/scholarshipProgram/getScholarshipProvider`);
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          setProviders(data);
+        } catch (error) {
+          console.error('Error fetching scholarship providers:', error.message);
+        }
+      };
+  
+      fetchProviders();
+    }, []);
 
   function truncateText(text, maxLength) {
     if (typeof text !== 'string') {
