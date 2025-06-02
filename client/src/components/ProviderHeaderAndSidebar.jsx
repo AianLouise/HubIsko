@@ -77,7 +77,9 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
 
     const handleSettingsClick = () => {
         navigate('/provider-settings');
-    };    const handleSignOut = async () => {
+    };    
+    
+    const handleSignOut = async () => {
         const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
         const userId = currentUser ? currentUser._id : null;
         if (!userId) {
@@ -106,7 +108,9 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
 
         const capitalizeWords = (str) => {
             return str.replace(/-/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
-        };        useEffect(() => {
+        };        
+        
+        useEffect(() => {
             const fetchTitles = async () => {
                 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
                 const newTitles = {};
@@ -153,7 +157,9 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
 
     const handleSeeAllNotifications = () => {
         navigate('/provider-notification');
-    };    const handleNotificationClick = async (notificationId) => {
+    };    
+    
+    const handleNotificationClick = async (notificationId) => {
         const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
         try {
             const response = await fetch(`${apiUrl}/api/notification/mark-as-read/${notificationId}`, {
@@ -179,7 +185,9 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
         } catch (error) {
             console.error('Error marking notification as read:', error);
         }
-    };    useEffect(() => {
+    };    
+    
+    useEffect(() => {
         const fetchNotifications = async () => {
             const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
             if (!userId) {

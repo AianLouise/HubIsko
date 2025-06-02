@@ -138,17 +138,24 @@ export const google = async (req, res, next) => {
         details: 'User logged in using Google.'
       });
 
-      await activityLog.save();
+      await activityLog.save();      // Cookie options for production
+      const cookieOptions = {
+        httpOnly: true,
+        expires: expiryDate,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      };
+
+      const tokenExpiryCookieOptions = {
+        httpOnly: false,
+        expires: expiryDate,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      };
 
       return res
-        .cookie('access_token', token, {
-          httpOnly: true,
-          expires: expiryDate,
-        })
-        .cookie('tokenExpiry', expiryDate.toISOString(), {
-          httpOnly: false,
-          expires: expiryDate,
-        })
+        .cookie('access_token', token, cookieOptions)
+        .cookie('tokenExpiry', expiryDate.toISOString(), tokenExpiryCookieOptions)
         .status(200)
         .json({ ...rest, tokenExpiry: expiryDate });
     } else {
@@ -219,21 +226,29 @@ export const google = async (req, res, next) => {
         details: 'User signed up using Google.'
       });
 
-      await activityLog.save();
-
-      // Generate a token and send the response
+      await activityLog.save();      // Generate a token and send the response
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '5h' });
       const { password, ...rest } = newUser.toObject();
       const expiryDate = new Date(Date.now() + 5 * 60 * 60 * 1000); // 5 hours
+      
+      // Cookie options for production
+      const cookieOptions = {
+        httpOnly: true,
+        expires: expiryDate,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      };
+
+      const tokenExpiryCookieOptions = {
+        httpOnly: false,
+        expires: expiryDate,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      };
+
       res
-        .cookie('access_token', token, {
-          httpOnly: true,
-          expires: expiryDate,
-        })
-        .cookie('tokenExpiry', expiryDate.toISOString(), {
-          httpOnly: false,
-          expires: expiryDate,
-        })
+        .cookie('access_token', token, cookieOptions)
+        .cookie('tokenExpiry', expiryDate.toISOString(), tokenExpiryCookieOptions)
         .status(201)
         .json({ ...rest, tokenExpiry: expiryDate });
     }
@@ -262,11 +277,24 @@ export const signin = async (req, res, next) => {
       details: 'User signed in.'
     });
 
-    await activityLog.save();
+    await activityLog.save();    // Cookie options for production
+    const cookieOptions = {
+      httpOnly: true,
+      expires: expiryDate,
+      secure: process.env.NODE_ENV === 'production', // Only secure in production (HTTPS)
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Allow cross-site cookies in production
+    };
+
+    const tokenExpiryCookieOptions = {
+      httpOnly: false,
+      expires: expiryDate,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    };
 
     res
-      .cookie('access_token', token, { httpOnly: true, expires: expiryDate })
-      .cookie('tokenExpiry', expiryDate.toISOString(), { httpOnly: false, expires: expiryDate }) // Set expiryDate as a separate cookie
+      .cookie('access_token', token, cookieOptions)
+      .cookie('tokenExpiry', expiryDate.toISOString(), tokenExpiryCookieOptions)
       .status(200)
       .json({ ...rest, tokenExpiry: expiryDate });
   } catch (error) {
