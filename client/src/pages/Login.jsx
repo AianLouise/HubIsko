@@ -86,7 +86,6 @@ export default function SignIn() {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include', // Include cookies in cross-origin requests
         body: JSON.stringify(formData),
         signal: controller.signal,
       });

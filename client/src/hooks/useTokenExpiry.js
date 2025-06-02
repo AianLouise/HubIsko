@@ -24,7 +24,6 @@ const useTokenExpiry = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include', // Include cookies in cross-origin requests
         body: JSON.stringify({ userId }),
       });
       dispatch(signOut());
@@ -37,13 +36,12 @@ const useTokenExpiry = () => {
     const tokenExpiry = getCookie('tokenExpiry');
     console.log('Token Expiry Date:', tokenExpiry);
 
-    const checkTokenExpiry = () => {
-      if (!tokenExpiry) {
-        handleSignOut();
-        clearInterval(intervalId); // Clear the interval after sign-out
-        return;
-      }
+    if (!tokenExpiry) {
+      // Don't auto sign out if tokenExpiry is missing
+      return;
+    }
 
+    const checkTokenExpiry = () => {
       const expiryDate = new Date(tokenExpiry);
       if (expiryDate <= new Date()) {
         handleSignOut();

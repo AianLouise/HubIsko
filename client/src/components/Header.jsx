@@ -103,7 +103,6 @@ export default function Header() {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include', // Include cookies in cross-origin requests
         body: JSON.stringify({ userId }),
       });
       dispatch(signOut());
@@ -112,8 +111,6 @@ export default function Header() {
       console.log(error);
     }
   };
-
-
 
   const [dropdownVisible, setDropdownVisible] = useState(false);
 

@@ -20,7 +20,6 @@ export default function OAuth() {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include', // Include cookies in cross-origin requests
         body: JSON.stringify({
           name: result.user.displayName,
           email: result.user.email,
