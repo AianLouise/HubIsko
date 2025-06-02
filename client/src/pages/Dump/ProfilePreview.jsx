@@ -18,35 +18,32 @@ export default function ProfilePreview() {
   const [posts, setPosts] = useState([]);
   const [username, setUsername] = useState('');
   const [profilePicture, setProfilePicture] = useState('');
-
   useEffect(() => {
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    
     // Function to fetch user information
     const fetchUser = async () => {
       try {
-        const response = await fetch(`/api/profile/user/${id}`);
+        const response = await fetch(`${apiUrl}/api/profile/user/${id}`);
         const data = await response.json();
         setUser(data);
       } catch (error) {
         console.error('Error fetching user:', error);
       }
-    };
-
-    // Function to fetch scholarship programs
+    };    // Function to fetch scholarship programs
     const fetchScholarships = async () => {
       try {
-        const response = await fetch(`/api/profile/${id}/scholarship-programs`);
+        const response = await fetch(`${apiUrl}/api/profile/${id}/scholarship-programs`);
         const data = await response.json();
         setScholarships(Array.isArray(data) ? data : []); // Ensure data is an array
       } catch (error) {
         console.error('Error fetching scholarships:', error);
         setScholarships([]); // Set to empty array on error
       }
-    };
-
-    // Function to fetch forum posts by user ID
+    };    // Function to fetch forum posts by user ID
     const fetchPosts = async () => {
       try {
-        const response = await fetch(`/api/profile/forum-posts/${id}`);
+        const response = await fetch(`${apiUrl}/api/profile/forum-posts/${id}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
