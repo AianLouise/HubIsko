@@ -20,19 +20,19 @@ export default function Footer() {
               Your dedicated platform for discovering and managing scholarship opportunities through innovative technology.
             </p>
             <div className="flex space-x-2 mt-1">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" 
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
                 className="bg-white text-blue-600 p-1.5 rounded-full hover:bg-blue-100 transition duration-300">
                 <FaFacebookF className="text-xs" />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" 
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
                 className="bg-white text-blue-600 p-1.5 rounded-full hover:bg-blue-100 transition duration-300">
                 <FaTwitter className="text-xs" />
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" 
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
                 className="bg-white text-blue-600 p-1.5 rounded-full hover:bg-blue-100 transition duration-300">
                 <FaLinkedinIn className="text-xs" />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" 
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
                 className="bg-white text-blue-600 p-1.5 rounded-full hover:bg-blue-100 transition duration-300">
                 <FaInstagram className="text-xs" />
               </a>
@@ -106,14 +106,12 @@ export default function Footer() {
               <li className="flex items-start">
                 <FaMapMarkerAlt className="text-blue-200 mt-1 mr-2 flex-shrink-0 text-xs" />
                 <span className="text-xs sm:text-sm text-blue-100">123 Scholarship Ave, Education District, Philippines</span>
-              </li>
-              <li className="flex items-center">
+              </li>              <li className="flex items-center">
                 <MdPhone className="text-blue-200 mr-2 flex-shrink-0 text-xs" />
-                <a href="tel:+639123456789" className="text-xs sm:text-sm text-blue-100 hover:text-white transition duration-300">+63 912 345 6789</a>
-              </li>
-              <li className="flex items-center">
+                <a href="tel:+6302812334567" className="text-xs sm:text-sm text-blue-100 hover:text-white transition duration-300">+63 (02) 8123-4567</a>
+              </li><li className="flex items-center">
                 <FaEnvelope className="text-blue-200 mr-2 flex-shrink-0 text-xs" />
-                <a href="mailto:info@hubisko.edu.ph" className="text-xs sm:text-sm text-blue-100 hover:text-white transition duration-300">info@hubisko.edu.ph</a>
+                <a href="mailto:connectwithhubisko@gmail.com" className="text-xs sm:text-sm text-blue-100 hover:text-white transition duration-300">connectwithhubisko@gmail.com</a>
               </li>
             </ul>
           </div>

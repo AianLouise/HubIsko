@@ -182,9 +182,11 @@ export default function Header() {
 
   return (<div className='border-b bg-white shadow-sm sticky top-0 z-40'>
     <div className='flex justify-between items-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3'>
-      <Link to='/' className='flex items-center space-x-2'>
-        <img src={NewLogo} alt='HubIsko Logo' className='w-10 h-auto' />
-        <h1 className='font-bold text-2xl text-gray-800 hover:text-blue-600'>HubIsko</h1>
+      <Link to='/'>
+        <div className="flex items-center space-x-2">
+          <img src={NewLogo} alt='HubIsko Logo' className='w-8 h-8 object-contain' />
+          <h2 className="text-xl font-bold text-gray-800">HubIsko</h2>
+        </div>
       </Link>
 
       {/* Mobile Nav Controls */}

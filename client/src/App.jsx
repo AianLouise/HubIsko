@@ -44,6 +44,8 @@ import AccountSettings from "./pages/AccountSettings";
 import ApplicantProfilePage from "./pages/ApplicantProfilePage";
 import PrivacyPolicy from "./pages/PrivacyPolicy2";
 import TermsOfUse from "./pages/TermsOfUse";
+import FAQ from "./pages/FAQ";
+import ContactUs from "./pages/ContactUs";
 
 // Admin Routes
 import AdminDashboard from "./pages/Admin/AdminDashboard";
@@ -147,11 +149,10 @@ export default function App() {
         <Route path="/admin-profile/:id" element={<AdminProfilePage />} />
 
         <Route path="/view-scholarships/:id/edit-program-details" element={<EditScholarshipDetails />} />
-        <Route path="/view-scholarships/:id/scholarship-web-view" element={<EditScholarshipWebView />} />
-
-        <Route path="/scholar-view/:id" element={<ScholarView />} />
-
+        <Route path="/view-scholarships/:id/scholarship-web-view" element={<EditScholarshipWebView />} />        <Route path="/scholar-view/:id" element={<ScholarView />} />        
         <Route path="/about" element={<About />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/contact" element={<ContactUs />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-use" element={<TermsOfUse />} />
 
