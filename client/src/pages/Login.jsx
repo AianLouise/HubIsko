@@ -68,7 +68,7 @@ export default function SignIn() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       dispatch(signInStart());
@@ -80,7 +80,8 @@ export default function SignIn() {
         setTimeout(() => setShowSlowConnectionNotification(false), 5000); // Hide after 5 seconds
       }, 10000); // 10 seconds timeout
 
-      const res = await fetch('/api/auth/signin', {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const res = await fetch(`${apiUrl}/api/auth/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
