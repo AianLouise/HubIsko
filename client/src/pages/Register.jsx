@@ -7,6 +7,8 @@ import NewLogo from '../assets/NewLogo.png';
 import SmallLogo from '../assets/NewLogoClean.png';
 import { useSelector } from 'react-redux';
 
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 const PasswordRequirements = ({ requirements }) => {
   return (
     <ul className="list-none p-0">
@@ -150,11 +152,10 @@ export default function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
-    setLoading(true);
+    if (!validateForm()) return;    setLoading(true);
     setErrors({});
     try {
-      const res = await fetch('/api/auth/signup', {
+      const res = await fetch(`${apiUrl}/api/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
