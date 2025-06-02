@@ -29,8 +29,7 @@ dotenv.config();
 const app = express();
 
 // CORS configuration to handle credentials
-const corsOptions = {
-  origin: function (origin, callback) {
+const corsOptions = {  origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
 
@@ -41,25 +40,45 @@ const corsOptions = {
       'http://localhost:4173', // Vite preview
       'https://hub-isko.vercel.app', // Production frontend
       'https://hubisko.vercel.app', // Alternative production URL
+      'https://hubisko-api.vercel.app', // API domain
     ];
 
     // Add any additional origins from environment variable
     if (process.env.FRONTEND_URL) {
       allowedOrigins.push(process.env.FRONTEND_URL);
-    }
-
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    }    if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
+      console.log('Origin not allowed by CORS:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-access-token'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: [
+    'Content-Type', 
+    'Authorization', 
+    'x-access-token', 
+    'X-Requested-With',
+    'Accept',
+    'Origin'
+  ],
+  exposedHeaders: ['set-cookie'],
+  preflightContinue: false,
+  optionsSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
+
+// Handle preflight requests explicitly
+app.options('*', cors(corsOptions));
+
+// Debug middleware to log requests
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path} - Origin: ${req.headers.origin}`);
+  next();
+});
+
 app.use(express.json());
 app.use(cookieParser());
 
