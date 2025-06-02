@@ -5,6 +5,8 @@ import { formatDistanceToNow } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 const ScholarshipAnnouncements = () => {
     const navigate = useNavigate();
     const currentUser = useSelector((state) => state.user.currentUser);
@@ -13,12 +15,10 @@ const ScholarshipAnnouncements = () => {
     const [scholarshipData, setScholarshipData] = useState([]);
     const [carouselIndex, setCarouselIndex] = useState(0);
     const [announcementSortOrder, setAnnouncementSortOrder] = useState('recent');
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
+    const [loading, setLoading] = useState(true);    useEffect(() => {
         const fetchAnnouncements = async () => {
             try {
-                const response = await fetch('/api/announcement/student-scholarship-program', {
+                const response = await fetch(`${apiUrl}/api/announcement/student-scholarship-program`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

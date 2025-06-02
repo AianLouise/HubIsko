@@ -10,6 +10,8 @@ import ApplicationForm from './ApplicationForm';
 import { formatDistanceToNow } from 'date-fns';
 import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
 
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function ScholarshipDashboardDetails() {
     useTokenExpiry();
 
@@ -37,13 +39,11 @@ export default function ScholarshipDashboardDetails() {
                 }
             }
         }
-    }, [currentUser, navigate]);
-
-    // Fetch application details
+    }, [currentUser, navigate]);    // Fetch application details
     useEffect(() => {
         const fetchApplicationDetails = async () => {
             try {
-                const response = await fetch(`/api/scholarshipApplication/get-applications-details/${applicationId}`);
+                const response = await fetch(`${apiUrl}/api/scholarshipApplication/get-applications-details/${applicationId}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -58,10 +58,10 @@ export default function ScholarshipDashboardDetails() {
     }, [applicationId]);
 
     // Fetch announcements
-    useEffect(() => {
+    useEffect(() => {        
         const fetchAnnouncements = async () => {
             try {
-                const response = await fetch('/api/announcement/student-scholarship-program', {
+                const response = await fetch(`${apiUrl}/api/announcement/student-scholarship-program`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
