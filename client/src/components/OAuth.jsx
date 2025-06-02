@@ -8,13 +8,14 @@ import { FaGoogle } from "react-icons/fa";
 export default function OAuth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
   const handleGoogleClick = async () => {
     try {
       const provider = new GoogleAuthProvider();
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
-      const res = await fetch('/api/auth/google', {
+      const res = await fetch(`${apiUrl}/api/auth/google`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
