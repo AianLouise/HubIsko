@@ -11,6 +11,7 @@ import ScholarshipAnnouncements from '../components/ScholarDashboard/Scholarship
 export default function ScholarDashboard() {
   useTokenExpiry();
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
   useEffect(() => {
     document.title = "Scholar Dashboard | HubIsko";
@@ -38,11 +39,10 @@ export default function ScholarDashboard() {
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const response = await fetch(`/api/profile/user/${currentUser._id}`, {
+        const response = await fetch(`${apiUrl}/api/profile/user/${currentUser._id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
@@ -58,12 +58,11 @@ export default function ScholarDashboard() {
       fetchUserDetails();
     }
   }, [currentUser]);
-
   useEffect(() => {
     const fetchApplications = async () => {
       try {
         const userId = currentUser._id; // Assuming currentUser contains the user object with an id
-        const response = await fetch(`/api/scholarshipApplication/get-applications/${userId}`, {
+        const response = await fetch(`${apiUrl}/api/scholarshipApplication/get-applications/${userId}`, {
           headers: {
             'Content-Type': 'application/json'
           }
