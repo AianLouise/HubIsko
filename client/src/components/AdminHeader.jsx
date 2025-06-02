@@ -82,9 +82,8 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
     }, []);
 
     const dispatch = useDispatch();
-    const currentUser = useSelector((state) => state.user.currentUser);
-
-    const handleSignOut = async () => {
+    const currentUser = useSelector((state) => state.user.currentUser);    const handleSignOut = async () => {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
         const userId = currentUser ? currentUser._id : null;
         if (!userId) {
             console.log('User ID is not available');
@@ -92,7 +91,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
         }
 
         try {
-            await fetch('/api/auth/signout', {
+            await fetch(`${apiUrl}/api/auth/signout`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -108,12 +107,11 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
 
     const [pendingVerificationCount, setPendingVerificationCount] = useState(0);
     const [pendingApprovalCount, setPendingApprovalCount] = useState(0);
-    const [totalPendingCount, setTotalPendingCount] = useState(0);
-
-    useEffect(() => {
+    const [totalPendingCount, setTotalPendingCount] = useState(0);    useEffect(() => {
         const fetchPendingCounts = async () => {
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
             try {
-                const response = await fetch('/api/adminApp/users/pending-verification');
+                const response = await fetch(`${apiUrl}/api/adminApp/users/pending-verification`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }

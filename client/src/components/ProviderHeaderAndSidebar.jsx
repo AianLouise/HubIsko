@@ -77,9 +77,8 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
 
     const handleSettingsClick = () => {
         navigate('/provider-settings');
-    };
-
-    const handleSignOut = async () => {
+    };    const handleSignOut = async () => {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
         const userId = currentUser ? currentUser._id : null;
         if (!userId) {
             console.log('User ID is not available');
@@ -87,7 +86,7 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
         }
 
         try {
-            await fetch('/api/auth/signout', {
+            await fetch(`${apiUrl}/api/auth/signout`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -107,17 +106,16 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
 
         const capitalizeWords = (str) => {
             return str.replace(/-/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
-        };
-
-        useEffect(() => {
+        };        useEffect(() => {
             const fetchTitles = async () => {
+                const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
                 const newTitles = {};
                 for (const value of pathnames) {
                     if (value === 'view-scholarships') {
                         const id = pathnames[pathnames.indexOf(value) + 1];
                         if (id) {
                             try {
-                                const response = await fetch(`/api/provider/scholarshipProgramTitle/${id.trim()}`);
+                                const response = await fetch(`${apiUrl}/api/provider/scholarshipProgramTitle/${id.trim()}`);
                                 if (!response.ok) {
                                     throw new Error('Network response was not ok');
                                 }
@@ -155,11 +153,10 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
 
     const handleSeeAllNotifications = () => {
         navigate('/provider-notification');
-    };
-
-    const handleNotificationClick = async (notificationId) => {
+    };    const handleNotificationClick = async (notificationId) => {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
         try {
-            const response = await fetch(`/api/notification/mark-as-read/${notificationId}`, {
+            const response = await fetch(`${apiUrl}/api/notification/mark-as-read/${notificationId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -182,10 +179,9 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
         } catch (error) {
             console.error('Error marking notification as read:', error);
         }
-    };
-
-    useEffect(() => {
+    };    useEffect(() => {
         const fetchNotifications = async () => {
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
             if (!userId) {
                 console.warn('User is not logged in. Skipping fetch notifications.');
                 return;
@@ -193,7 +189,7 @@ export default function ProviderHeaderSidebar({ sidebarOpen, toggleSidebar }) {
 
             try {
                 setLoading(true);
-                const response = await fetch(`/api/notification/notifications/${userId}`);
+                const response = await fetch(`${apiUrl}/api/notification/notifications/${userId}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch notifications');
                 }

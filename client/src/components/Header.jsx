@@ -58,11 +58,11 @@ export default function Header() {
   const handleSeeAllNotifications = () => {
     navigate('/notifications');
   };
-
   const handleNotificationClick = async (notificationId) => {
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
     try {
       // Send a request to the server to mark the notification as read
-      const response = await fetch(`/api/notification/mark-as-read/${notificationId}`, {
+      const response = await fetch(`${apiUrl}/api/notification/mark-as-read/${notificationId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -91,8 +91,8 @@ export default function Header() {
   };
 
   const isNotificationsPage = location.pathname === '/notifications';
-
   const handleSignOut = async () => {
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
     const userId = currentUser ? currentUser._id : null;
     if (!userId) {
       console.log('User ID is not available');
@@ -100,7 +100,7 @@ export default function Header() {
     }
 
     try {
-      await fetch('/api/auth/signout', {
+      await fetch(`${apiUrl}/api/auth/signout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -123,9 +123,9 @@ export default function Header() {
   const [notifications, setNotifications] = useState([]);
 
   const userId = currentUser ? currentUser._id : null;
-
   useEffect(() => {
     const fetchNotifications = async () => {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
       if (!userId) {
         console.warn('User is not logged in. Skipping fetch notifications.');
         return;
@@ -133,7 +133,7 @@ export default function Header() {
 
       try {
         setLoading(true);
-        const response = await fetch(`/api/notification/notifications/${userId}`);
+        const response = await fetch(`${apiUrl}/api/notification/notifications/${userId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch notifications');
         }

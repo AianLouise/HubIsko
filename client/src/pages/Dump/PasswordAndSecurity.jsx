@@ -75,12 +75,12 @@ export default function PasswordAndSecurity() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+      const res = await fetch(`${apiUrl}/api/user/update/${currentUser._id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,11 +98,11 @@ export default function PasswordAndSecurity() {
       dispatch(updateUserFail(error));
     }
   };
-
   const handleDeleteAccount = async () => {
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
     try {
       dispatch(deleteUserStart());
-      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+      const res = await fetch(`${apiUrl}/api/user/delete/${currentUser._id}`, {
         method: 'DELETE',
       });
       const data = await res.json();
@@ -116,10 +116,10 @@ export default function PasswordAndSecurity() {
       dispatch(deleteUserFail(error));
     }
   };
-
   const handleSignOut = async () => {
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
     try {
-      await fetch('/api/auth/signout');
+      await fetch(`${apiUrl}/api/auth/signout`);
       dispatch(signOut());
     } catch (error) {
       console.log(error);
