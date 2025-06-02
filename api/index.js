@@ -43,19 +43,28 @@ const connectToDatabase = async () => {
   try {
     const options = {
       bufferCommands: false,
-      bufferMaxEntries: 0,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+      // Remove deprecated options
       serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
       socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
       maxPoolSize: 10, // Maintain up to 10 socket connections
     };
 
-    await mongoose.connect(process.env.MONGODB_URI, options);
+    const connection = await mongoose.connect(process.env.MONGODB_URI, options);
+    
+    // Wait for the connection to be ready
+    await new Promise((resolve, reject) => {
+      if (mongoose.connection.readyState === 1) {
+        resolve();
+      } else {
+        mongoose.connection.once('connected', resolve);
+        mongoose.connection.once('error', reject);
+      }
+    });
+    
     isConnected = true;
     console.log('Connected to MongoDB');
     
-    // Create default admin account if it doesn't exist
+    // Create default admin account after connection is fully established
     await User.createDefaultAdmin();
   } catch (err) {
     console.error('Failed to connect to MongoDB', err);

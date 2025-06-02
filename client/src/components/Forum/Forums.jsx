@@ -40,7 +40,8 @@ export default function Forums() {
     const fetchRecentPosts = async () => {
         setLoading(true);
         try {
-            const response = await fetch('/api/forums/posts');
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const response = await fetch(`${apiUrl}/api/forums/posts`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
