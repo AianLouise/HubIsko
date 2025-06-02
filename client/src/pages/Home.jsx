@@ -5,13 +5,11 @@ import { FaAngleRight } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FaSearch } from "react-icons/fa";
-import { FaFastForward } from "react-icons/fa";
 import { FaTools } from "react-icons/fa";
 import { MdForum } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa";
 import { FaHandshake } from "react-icons/fa";
 import { FaCheck, FaRocket } from "react-icons/fa6";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { VscTriangleRight } from "react-icons/vsc";
 import { useState } from 'react';
 import { FaBuildingCircleArrowRight } from "react-icons/fa6";
@@ -23,7 +21,7 @@ import HomeForums from '../assets/HomeForums.png';
 import HomeNotification from '../assets/HomeNotification.png';
 import HomeTeam from '../assets/HomeTeam.png';
 import HomeNetwork from '../assets/HomeNetwork.png';
-import useTokenExpiry from '../hooks/useTokenExpiry'; // Adjust the import path
+import useTokenExpiry from '../hooks/useTokenExpiry';
 import LandingImage from '../assets/Landing.svg';
 
 
@@ -80,496 +78,484 @@ export default function Home() {
     }
   }, [userDetails, navigate]);
 
-  const [selectedTab, setSelectedTab] = useState('Explore Resources');
+  const [selectedTab, setSelectedTab] = useState('Scholarship Search');
 
   const handleTabClick = (tab) => {
     setSelectedTab(tab);
     setButtonText(tab);
   };
 
-  const [buttonText, setButtonText] = useState('Explore Resources');
-
+  const [buttonText, setButtonText] = useState('Scholarship Search');
 
   return (
-    <div className="flex flex-col min-h-screen"> {/* Flex container */}
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-grow bg-[#f8f8fb] no-scrollbar"> {/* Main content grows to fill available space */}
-        <div className=''>
-          <div className='text-center lg:px-56 pt-32'>
-            <h1 className='text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-slate-800 px-4 sm:px-8 md:px-12 lg:px-20'>
+      <main className="flex-grow bg-[#f8f8fb] no-scrollbar overflow-x-hidden">
+        {/* Hero Section */}
+        <div className="h-screen">
+          <div className='text-center md:max-w-4xl lg:max-w-5xl mx-auto'>
+            {/* Landing Image */}
+            <div className='flex justify-center items-center mb-0'>
+              <img src={LandingImage} alt="Landing Image" className='w-full max-w-3xl h-auto' />
+            </div>
+
+            <h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-slate-800 mt-[-5rem] mb-2'>
               Explore <span className='text-blue-600'>Scholarships</span> Through <span className='text-blue-600'>Technology.</span>
             </h1>
-            <h4 className='pt-10 text-sm lg:text-2xl font-medium text-slate-700'>
+
+            <h4 className='text-sm md:text-base lg:text-xl font-medium text-slate-700 py-7'>
               A Scholarship Management System for Your Locale!
             </h4>
-            <div className='mt-8 flex gap-4 justify-center'>
 
-
-
+            {/* CTA Buttons */}
+            <div className='flex flex-col sm:flex-row gap-4 justify-center items-center'>
               {!currentUser ? (
-                // For Unregistered Users
-                <div className="flex items-center space-x-4">
-                  <Link to="/register">
-                    <button className='border bg-blue-600 text-white p-4 text-md font-semibold rounded-full hover:bg-blue-700 transition-colors'>
+                <>
+                  <Link to="/register" className="w-full sm:w-auto">
+                    <button className='w-full sm:w-auto border bg-blue-600 text-white py-3 px-6 text-md font-semibold rounded-full hover:bg-blue-700 transition-colors'>
                       Sign Up for Free
                     </button>
                   </Link>
 
-
-                  <Link to="/forums">
-                    <button className='group flex items-center border p-4 text-md font-semibold rounded-full hover:bg-slate-200 transition-all ease-in-out bg-white'>
+                  <Link to="/forums" className="w-full sm:w-auto">
+                    <button className='w-full sm:w-auto group flex items-center justify-center border py-3 px-6 text-md font-semibold rounded-full hover:bg-slate-200 transition-all ease-in-out bg-white'>
                       Visit our Forums <FaAngleRight className='group-hover:translate-x-2 group-hover:bg-blue-600 text-xl ml-2 bg-slate-400 text-white rounded-full transition ease-in-out' />
                     </button>
                   </Link>
-
-                </div>
+                </>
               ) : (
-                // For Registered Users
-                <div className="flex items-center space-x-4">
-                  <Link to="/scholarship-listing">
-                    <button className='border bg-blue-600 text-white p-4 text-md font-semibold rounded-full hover:bg-blue-700 transition-colors'>
+                <>
+                  <Link to="/scholarship-listing" className="w-full sm:w-auto">
+                    <button className='w-full sm:w-auto border bg-blue-600 text-white py-3 px-6 text-md font-semibold rounded-full hover:bg-blue-700 transition-colors'>
                       View Scholarships
                     </button>
                   </Link>
 
-                  <Link to="/forums">
-                    <button className='group flex items-center border p-4 text-md font-semibold rounded-full hover:bg-slate-200 transition-all ease-in-out bg-white'>
+                  <Link to="/forums" className="w-full sm:w-auto">
+                    <button className='w-full sm:w-auto group flex items-center justify-center border py-3 px-6 text-md font-semibold rounded-full hover:bg-slate-200 transition-all ease-in-out bg-white'>
                       Visit our Forums <FaAngleRight className='group-hover:translate-x-2 group-hover:bg-blue-600 text-xl ml-2 bg-slate-400 text-white rounded-full transition ease-in-out' />
                     </button>
                   </Link>
-                </div>
+                </>
               )}
-
             </div>
           </div>
         </div>
-        <div className='px-4 max-w-6xl mx-auto'>
 
-          {/* Landing Image */}
-          <div className='overflow-hidden -translate-y-32 flex flex-col lg:flex-row items-center justify-center'>
-            <img src={LandingImage} alt="Landing Image" className='w-full h-auto' />
-            <div className='flex flex-col lg:w-1/2 gap-4'>
-            </div>
-          </div>
+        <div className='px-4 sm:px-6 md:px-8 max-w-6xl mx-auto'>
+          {/* Features Section */}
+          <div className='text-slate-700 w-full mb-20 md:mb-32 rounded-md p-4'>
+            <h2 className='font-bold text-2xl md:text-3xl lg:text-4xl w-full text-center mb-10'>Browse Our Features</h2>
 
-          <div className='text-slate-700 w-full mb-40 rounded-md p-4 '>
-
-            <div className='font-bold text-2xl lg:text-4xl w-full text-center mb-10'>Browse Our Features</div>
-
-            <div className='m-2 flex flex-col justify-between gap-2 items-center text-center'>
-              <div className='hidden lg:flex flex-row gap-3 font-semibold mb-6'>
+            <div className='flex flex-col justify-between gap-6 items-center text-center'>
+              {/* Desktop Tabs */}
+              <div className='hidden md:grid grid-cols-2 lg:grid-cols-4 gap-3 font-semibold mb-6 w-full'>
                 <button
-                  className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 w-64 ${selectedTab === 'Explore Resources' ? 'bg-white shadow-md hover:bg-white' : ''}`}
-                  onClick={() => handleTabClick('Explore Resources')}
+                  className={`border text-center rounded-xl py-3 px-4 bg-slate-200 hover:bg-slate-300 ${selectedTab === 'Scholarship Search' ? 'bg-white shadow-md hover:bg-white' : ''}`}
+                  onClick={() => handleTabClick('Scholarship Search')}
                 >
-                  Scholarship Finder
+                  Scholarship Search
                 </button>
                 <button
-                  className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 w-64 ${selectedTab === 'Fast Processing' ? 'bg-white shadow-md hover:bg-white' : ''}`}
-                  onClick={() => handleTabClick('Fast Processing')}
+                  className={`border text-center rounded-xl py-3 px-4 bg-slate-200 hover:bg-slate-300 ${selectedTab === 'Application Tracking' ? 'bg-white shadow-md hover:bg-white' : ''}`}
+                  onClick={() => handleTabClick('Application Tracking')}
                 >
-                  Instant Notifications
+                  Application Tracking
                 </button>
                 <button
-                  className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 w-64 ${selectedTab === 'Organization Tools' ? 'bg-white shadow-md hover:bg-white' : ''}`}
-                  onClick={() => handleTabClick('Organization Tools')}
+                  className={`border text-center rounded-xl py-3 px-4 bg-slate-200 hover:bg-slate-300 ${selectedTab === 'Management Tools' ? 'bg-white shadow-md hover:bg-white' : ''}`}
+                  onClick={() => handleTabClick('Management Tools')}
                 >
-                  Scholar Tools
+                  Management Tools
                 </button>
                 <button
-                  className={`border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 w-64 ${selectedTab === 'Enhanced Security' ? 'bg-white shadow-md hover:bg-white' : ''}`}
-                  onClick={() => handleTabClick('Enhanced Security')}
+                  className={`border text-center rounded-xl py-3 px-4 bg-slate-200 hover:bg-slate-300 ${selectedTab === 'Community & Support' ? 'bg-white shadow-md hover:bg-white' : ''}`}
+                  onClick={() => handleTabClick('Community & Support')}
                 >
-                  Enhanced Security and Forums
+                  Community & Support
                 </button>
               </div>
 
-              {selectedTab === 'Explore Resources' && (
-                <div className='w-full lg:border rounded-md'>
-                  {/* Mobile navigation buttons */}
-                  <div className='flex w-full lg:hidden flex-row gap-3 font-semibold mb-6 items-center'>
-                    <button onClick={() => handleTabClick('Enhanced Security')}>
-                      <VscTriangleRight className='w-10 h-10 text-blue-600 rotate-180' />
-                    </button>
-                    <div className='border text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>
-                      <span>{buttonText}</span>
-                    </div>
-                    <button onClick={() => handleTabClick('Fast Processing')}>
-                      <VscTriangleRight className='w-10 h-10 text-blue-600' />
-                    </button>
+              {/* Feature Content */}
+              <div className='w-full border rounded-md shadow-md'>
+                {/* Mobile Tab Navigation */}
+                <div className='flex md:hidden justify-between items-center p-4 bg-white border-b'>
+                  <button onClick={() => {
+                    const tabs = ['Explore Resources', 'Application Tracking', 'Management Tools', 'Community & Support'];
+                    const currentIndex = tabs.indexOf(selectedTab);
+                    const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+                    handleTabClick(tabs[prevIndex]);
+                  }} className="flex-none">
+                    <VscTriangleRight className='w-8 h-8 text-blue-600 rotate-180' />
+                  </button>
+
+                  <div className='flex-1 text-center px-2 font-semibold truncate'>
+                    {buttonText}
                   </div>
 
-                  {/* Content for 'Explore Resources' tab */}
-                  <div className='rounded-xl w-full h-[500px] lg:h-[600px] shadow-md flex flex-row'>
+                  <button onClick={() => {
+                    const tabs = ['Scholarship Search', 'Application Tracking', 'Management Tools', 'Community & Support'];
+                    const currentIndex = tabs.indexOf(selectedTab);
+                    const nextIndex = (currentIndex + 1) % tabs.length;
+                    handleTabClick(tabs[nextIndex]);
+                  }} className="flex-none">
+                    <VscTriangleRight className='w-8 h-8 text-blue-600' />
+                  </button>
+                </div>
 
-                    {/* Text content */}
-                    <div className='flex flex-col justify-center text-left w-[800px] px-10 lg:px-20 pt-16 pb-32 gap-3'>
-                      <FaSearch className='w-8 h-8 lg:w-16 lg:h-16 text-blue-600 my-4' />
+                {/* Feature Content Area */}
+                {selectedTab === 'Scholarship Search' && (
+                  <div className='w-full p-6 md:p-8'>
+                    <div className='flex flex-col md:flex-row items-center md:items-start gap-8'>
+                      {/* Text content */}
+                      <div className='flex flex-col text-left md:w-1/2 gap-4'>
+                        <div className='flex items-center gap-3'>
+                          <FaSearch className='w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-blue-600' />
+                          <h3 className='text-xl md:text-2xl lg:text-3xl font-bold'>
+                            Find Scholarships
+                          </h3>
+                        </div>
 
-                      <div className='text-2xl lg:text-4xl font-bold'>
-                        Find Scholarships!
-                      </div>
-                      <div className='text-sm lg:text-lg font-medium text-slate-500'>
-                        Reliable materials for your learning journey!
-                      </div>
-                      <span>
-                        Discover a variety of scholarships that suit your academic goals.
-                        Whether you're looking for undergraduate programs or postgraduate opportunities,
-                        explore resources designed to help you secure financial aid with ease.
-                      </span>
-                      <span>
-                        Get access to a well-curated list of scholarships from top institutions,
-                        and use our powerful search tools to filter results that fit your needs.
-                      </span>
+                        {/* Mobile Image */}
+                        <div className='flex md:hidden justify-center items-center w-full my-3'>
+                          <img src={HomeFinder} alt="Scholarship Search" className='w-[150px] h-auto hover:-translate-y-2 transition ease-in-out' />
+                        </div>
 
-                      {/* Learn more link */}
-                      <div className='flex flex-row'>
-                        <Link to="/about" className='flex flex-row items-center gap-2 text-blue-600 text-xl font-medium pt-4 hover:text-slate-700 group'>
-                          <h2>Learn More</h2>
-                          <FaArrowRight className='text-lg mt-1 font-normal group-hover:text-slate-700 group-hover:translate-x-2 transition ease-in-out' />
+                        <p className='text-sm md:text-base font-medium text-slate-500'>
+                          Discover opportunities that match your profile
+                        </p>
+                        <p className='text-sm md:text-base'>
+                          Our advanced search system helps you find scholarships that match your academic qualifications,
+                          field of study, and personal background. Filter by location, amount, deadline, and more.
+                        </p>
+                        <p className='text-sm md:text-base'>
+                          Save time with personalized recommendations based on your profile and preferences,
+                          ensuring you never miss opportunities that are the perfect fit for you.
+                        </p>
+
+                        {/* Learn more link */}
+                        <Link to="/about" className='flex items-center gap-2 text-blue-600 font-medium pt-2 hover:text-slate-700 group'>
+                          <span>Learn More</span>
+                          <FaArrowRight className='group-hover:translate-x-2 transition ease-in-out' />
                         </Link>
                       </div>
-                    </div>
 
-                    {/* Image content */}
-                    <div className='hidden lg:flex justify-center items-center w-1/2'>
-                      <img src={HomeFinder} alt="Home Finder" className='w-[350px] h-auto hover:-translate-y-2 transition ease-in-out' />
+                      {/* Desktop Image content */}
+                      <div className='hidden md:flex justify-center items-center md:w-1/2 self-center'>
+                        <img src={HomeFinder} alt="Scholarship Search" className='w-full max-w-[200px] h-auto hover:-translate-y-2 transition ease-in-out' />
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
 
+                {selectedTab === 'Application Tracking' && (
+                  <div className='w-full p-6 md:p-8'>
+                    <div className='flex flex-col md:flex-row items-center md:items-start gap-8'>
+                      {/* Text content */}
+                      <div className='flex flex-col text-left md:w-1/2 gap-4'>
+                        <div className='flex items-center gap-3'>
+                          <FaRocket className='w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-blue-600' />
+                          <h3 className='text-xl md:text-2xl lg:text-3xl font-bold'>
+                            Track Applications
+                          </h3>
+                        </div>
 
-              {selectedTab === 'Fast Processing' && (
-                <div className='w-full lg:border rounded-md'>
-                  {/* Mobile navigation buttons */}
-                  <div className='flex lg:hidden flex-row gap-3 font-semibold mb-6 items-center'>
-                    <button onClick={() => handleTabClick('Explore Resources')}>
-                      <VscTriangleRight className='w-10 h-10 text-blue-600 rotate-180' />
-                    </button>
-                    <button className='border w-[208px] text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>
-                      {buttonText}
-                    </button>
-                    <button onClick={() => handleTabClick('Organization Tools')}>
-                      <VscTriangleRight className='w-10 h-10 text-blue-600' />
-                    </button>
-                  </div>
+                        {/* Mobile Image */}
+                        <div className='flex md:hidden justify-center items-center w-full my-3'>
+                          <img src={HomeProcess} alt="Application Tracking" className='w-[150px] h-auto hover:-translate-y-2 transition ease-in-out' />
+                        </div>
 
-                  {/* Content for 'New Feature' tab */}
-                  <div className='rounded-xl w-full h-[500px] lg:h-[600px] shadow-md flex flex-row'>
+                        <p className='text-sm md:text-base font-medium text-slate-500'>
+                          Monitor your applications in real-time
+                        </p>
+                        <p className='text-sm md:text-base'>
+                          Keep track of all your scholarship applications in one place. Our tracking system shows you exactly where each application
+                          stands – from submission to final decision.
+                        </p>
+                        <p className='text-sm md:text-base'>
+                          Receive timely notifications about application status changes, upcoming deadlines, and required actions,
+                          giving you complete control over your scholarship journey.
+                        </p>
 
-                    {/* Text content */}
-                    <div className='flex flex-col justify-center text-left w-[800px] px-10 lg:px-20 pt-16 pb-32 gap-3'>
-                      <FaRocket className='w-8 h-8 lg:w-16 lg:h-16 text-blue-600 my-4' />
-                      <div className='text-2xl lg:text-4xl font-bold'>
-                        Instant Notifications
-                      </div>
-                      <div className='text-sm lg:text-lg font-medium text-slate-500'>
-                        Stay Updated Instantly!
-                      </div>
-                      <span>
-                        With our new instant notifications feature, you will never miss an important update.
-                        Get real-time alerts on your applications, deadlines, and more.
-                      </span>
-                      <span>
-                        Whether you're applying for multiple scholarships or managing applications,
-                        enjoy a streamlined process that keeps you informed every step of the way.
-                      </span>
-
-                      {/* Learn more link */}
-                      <div className='flex flex-row'>
-                        <Link to="/about" className='flex flex-row items-center gap-2 text-blue-600 text-xl font-medium pt-4 hover:text-slate-700 group'>
-                          <h2>Learn More</h2>
-                          <FaArrowRight className='text-lg mt-1 font-normal group-hover:text-slate-700 group-hover:translate-x-2 transition ease-in-out' />
+                        {/* Learn more link */}
+                        <Link to="/about" className='flex items-center gap-2 text-blue-600 font-medium pt-2 hover:text-slate-700 group'>
+                          <span>Learn More</span>
+                          <FaArrowRight className='group-hover:translate-x-2 transition ease-in-out' />
                         </Link>
                       </div>
-                    </div>
 
-                    {/* Image content */}
-                    <div className='hidden lg:flex justify-center items-center w-1/2'>
-                      <img src={HomeProcess} alt="New Feature" className='w-[300px] h-auto hover:-translate-y-2 transition ease-in-out' />
+                      {/* Desktop Image content */}
+                      <div className='hidden md:flex justify-center items-center md:w-1/2 self-center'>
+                        <img src={HomeProcess} alt="Application Tracking" className='w-full max-w-[200px] h-auto hover:-translate-y-2 transition ease-in-out' />
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
 
+                {selectedTab === 'Management Tools' && (
+                  <div className='w-full p-6 md:p-8'>
+                    <div className='flex flex-col md:flex-row items-center md:items-start gap-8'>
+                      {/* Text content */}
+                      <div className='flex flex-col text-left md:w-1/2 gap-4'>
+                        <div className='flex items-center gap-3'>
+                          <FaTools className='w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10 text-blue-600' />
+                          <h3 className='text-xl md:text-2xl lg:text-3xl font-bold'>
+                            Document Management
+                          </h3>
+                        </div>
 
-              {selectedTab === 'Organization Tools' && (
-                <div className='w-full lg:border rounded-md'>
-                  {/* Mobile navigation buttons */}
-                  <div className='flex lg:hidden flex-row gap-3 font-semibold mb-6 items-center'>
-                    <button onClick={() => handleTabClick('Fast Processing')}>
-                      <VscTriangleRight className='w-10 h-10 text-blue-600 rotate-180' />
-                    </button>
-                    <button className='border w-[208px] text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>
-                      {buttonText}
-                    </button>
-                    <button onClick={() => handleTabClick('Enhanced Security')}>
-                      <VscTriangleRight className='w-10 h-10 text-blue-600' />
-                    </button>
-                  </div>
+                        {/* Mobile Image */}
+                        <div className='flex md:hidden justify-center items-center w-full my-3'>
+                          <img src={HomeTools} alt="Document Management" className='w-[150px] h-auto hover:-translate-y-2 transition ease-in-out' />
+                        </div>
 
-                  {/* Content for 'Organization Tools' tab */}
-                  <div className='rounded-xl w-full h-[500px] lg:h-[600px] lg:mt-0 mt-10 shadow-md flex flex-row'>
+                        <p className='text-sm md:text-base font-medium text-slate-500'>
+                          Keep all your documents organized in one place
+                        </p>
+                        <p className='text-sm md:text-base'>
+                          Store, manage, and reuse your important documents securely in our digital repository.
+                          Transcripts, recommendation letters, essays, and more – all available at your fingertips
+                          whenever you need them for applications.
+                        </p>
+                        <p className='text-sm md:text-base'>
+                          Our smart system reminds you when documents need updating and helps you prepare exactly
+                          what each scholarship requires, saving you time and reducing application stress.
+                        </p>
 
-                    {/* Text content */}
-                    <div className='flex flex-col justify-center text-left w-[800px] px-10  lg:px-20 pt-16 pb-32 gap-3'>
-                      <FaTools className='w-16 h-16 text-blue-600 mb-4' />
-                      <div className='text-2xl lg:text-4xl font-bold'>
-                        Scholar Tools
-                      </div>
-                      <div className='text-sm lg:text-lg font-medium text-slate-500'>
-                        Organize, Track, and Manage with Ease!
-                      </div>
-                      <span>
-                        Our platform provides a comprehensive dashboard for scholars to keep
-                        track of applications, deadlines, and required documents,
-                        all in one place. Never miss an opportunity with our built-in reminders and real-time updates.
-                      </span>
-                      <span>
-                        Whether you're juggling multiple scholarships or just need a simple way to stay organized,
-                        our Scholar Tools are designed to streamline the entire process.
-                      </span>
-
-                      {/* Learn more link */}
-                      <div className='flex flex-row'>
-                        <Link to="/about" className='flex flex-row items-center gap-2 text-blue-600 text-xl font-medium hover:text-slate-700 group'>
-                          <h2>Learn More</h2>
-                          <FaArrowRight className='text-lg mt-1 font-normal group-hover:text-slate-700 group-hover:translate-x-2 transition ease-in-out' />
+                        {/* Learn more link */}
+                        <Link to="/about" className='flex items-center gap-2 text-blue-600 font-medium pt-2 hover:text-slate-700 group'>
+                          <span>Learn More</span>
+                          <FaArrowRight className='group-hover:translate-x-2 transition ease-in-out' />
                         </Link>
                       </div>
-                    </div>
 
-                    {/* Image content */}
-                    <div className='hidden lg:flex justify-center items-center w-1/2'>
-                      <img src={HomeTools} alt="Home Tools" className='w-[300px] h-auto hover:-translate-y-2 transition ease-in-out' />
+                      {/* Desktop Image content */}
+                      <div className='hidden md:flex justify-center items-center md:w-1/2 self-center'>
+                        <img src={HomeTools} alt="Document Management" className='w-full max-w-[200px] h-auto hover:-translate-y-2 transition ease-in-out' />
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
 
+                {selectedTab === 'Community & Support' && (
+                  <div className='w-full p-6 md:p-8'>
+                    <div className='flex flex-col md:flex-row items-center md:items-start gap-8'>
+                      {/* Text content */}
+                      <div className='flex flex-col text-left md:w-1/2 gap-4'>
+                        <div className='flex items-center gap-3'>
+                          <MdForum className='w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 text-blue-600' />
+                          <h3 className='text-xl md:text-2xl lg:text-3xl font-bold'>
+                            Community Forums
+                          </h3>
+                        </div>
 
-              {selectedTab === 'Enhanced Security' && (
-                <div className='w-full lg:border rounded-md'>
-                  {/* Mobile navigation buttons */}
-                  <div className='flex lg:hidden flex-row gap-3 font-semibold mb-6 items-center'>
-                    <button onClick={() => handleTabClick('Organization Tools')}>
-                      <VscTriangleRight className='w-10 h-10 text-blue-600 rotate-180' />
-                    </button>
-                    <button className='border w-[208px] text-center rounded-xl px-16 py-4 bg-slate-200 hover:bg-slate-300 focus:bg-white focus:shadow-md'>
-                      {buttonText}
-                    </button>
-                    <button onClick={() => handleTabClick('Explore Resources')}>
-                      <VscTriangleRight className='w-10 h-10 text-blue-600' />
-                    </button>
-                  </div>
+                        {/* Mobile Image */}
+                        <div className='flex md:hidden justify-center items-center w-full my-3'>
+                          <img src={HomeForums} alt="Community Forums" className='w-[150px] h-auto hover:-translate-y-2 transition ease-in-out' />
+                        </div>
 
-                  {/* Content for 'Enhanced Security' tab */}
-                  <div className='rounded-xl w-full h-[500px] lg:h-[600px] shadow-md flex flex-row'>
+                        <p className='text-sm md:text-base font-medium text-slate-500'>
+                          Connect with peers and get expert advice
+                        </p>
+                        <p className='text-sm md:text-base'>
+                          Join our active community forums where you can connect with fellow applicants,
+                          current scholars, and scholarship providers. Share experiences, ask questions,
+                          and get advice on application strategies.
+                        </p>
+                        <p className='text-sm md:text-base'>
+                          Participate in discussions about scholarship opportunities, application tips,
+                          and student life. Our moderated forums ensure a supportive, respectful environment
+                          for meaningful conversations.
+                        </p>
 
-                    {/* Text content */}
-                    <div className='flex flex-col justify-center text-left w-[800px] px-10 lg:px-20 pt-16 pb-32 gap-3'>
-                      <MdForum className='w-8 h-8 lg:w-16 lg:h-16 text-blue-600' />
-                      <div className='text-2xl lg:text-4xl font-bold'>
-                        Enhanced Security and Forums
-                      </div>
-                      <div className='text-sm lg:text-lg font-medium text-slate-500'>
-                        Safe and secure discussions with our community.
-                      </div>
-                      <span>
-                        At HubIsko, we prioritize your safety. Engage with peers in secure forums, share experiences, and gain insights while ensuring your privacy. We implement advanced security measures to protect your data.
-                      </span>
-                      <span>
-                        Join discussions, ask questions, and get advice from fellow scholars—all within a safe environment built for collaboration and learning.
-                      </span>
-
-                      {/* Learn more link */}
-                      <div className='flex flex-row'>
-                        <Link to="/about" className='flex flex-row items-center gap-2 text-blue-600 text-xl font-medium pt-4 hover:text-slate-700 group'>
-                          <h2>Learn More</h2>
-                          <FaArrowRight className='text-lg mt-1 font-normal group-hover:text-slate-700 group-hover:translate-x-2 transition ease-in-out' />
+                        {/* Learn more link */}
+                        <Link to="/about" className='flex items-center gap-2 text-blue-600 font-medium pt-2 hover:text-slate-700 group'>
+                          <span>Learn More</span>
+                          <FaArrowRight className='group-hover:translate-x-2 transition ease-in-out' />
                         </Link>
                       </div>
-                    </div>
 
-                    {/* Image content */}
-                    <div className='hidden lg:flex justify-center items-center w-1/2'>
-                      <img src={HomeForums} alt="Home Forums" className='w-[350px] h-auto hover:-translate-y-2 transition ease-in-out' />
+                      {/* Desktop Image content */}
+                      <div className='hidden md:flex justify-center items-center md:w-1/2 self-center'>
+                        <img src={HomeForums} alt="Community Forums" className='w-full max-w-[200px] h-auto hover:-translate-y-2 transition ease-in-out' />
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-
+                )}
+              </div>
             </div>
           </div>
 
-
-          {/* BENEFITS */}
-          <div className='mb-36 border-b text-slate-700 flex flex-col gap-8 text-center'>
-
+          {/* What we'll provide? */}
+          <div className='mb-16 md:mb-24 text-slate-700'>
             {/* Heading */}
-            <div className='pb-2 font-bold text-2xl lg:text-4xl w-full text-center mb-8'>
+            <h2 className='font-bold text-2xl md:text-3xl lg:text-4xl text-center mb-10'>
               What we'll provide?
-            </div>
+            </h2>
 
-            {/* Abundant Opportunities */}
-            <div className='flex flex-row gap-8 text-center items-center justify-center text-md font-medium'>
-              <div className='bg-white flex flex-row items-center justify-between w-full border rounded-md shadow-md hover:-translate-y-2 transition-all p-8 lg:p-10'>
-
-                {/* Icon */}
-                <div className='flex w-1/2 items-center justify-center rounded-md mr-8'>
-                  <FaHandshake className='w-[300px] h-auto object-cover text-blue-600' />
-                </div>
-
-                {/* Text */}
-                <div className='w-1/2 text-left flex flex-col gap-8'>
-                  <div className='text-blue-600 text-md font-semibold'>
-                    ABUNDANT OPPORTUNITIES
+            {/* Benefits Cards */}
+            <div className='space-y-8'>
+              {/* Abundant Opportunities */}
+              <div className='bg-white border rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300'>
+                <div className='flex flex-col md:flex-row p-6 md:p-8 gap-6 items-center'>
+                  {/* Icon */}
+                  <div className='flex justify-center items-center md:w-1/3'>
+                    <FaHandshake className='w-20 h-20 md:w-32 md:h-32 text-blue-600' />
                   </div>
-                  <span className='hidden lg:block font-bold text-3xl'>
-                    Maximize your scholarship opportunities with minimal effort
-                  </span>
 
-                  <div className='hidden lg:flex flex-col text-base text-slate-600 gap-1'>
-                    <span>1. Access a wide variety of scholarships tailored to your field of study.</span>
-                    <span>2. Use advanced filters to easily find and apply for scholarships that match your qualifications.</span>
-                    <span>3. Enjoy a seamless application process with automated document submissions.</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+                  {/* Text */}
+                  <div className='md:w-2/3 text-left flex flex-col gap-4'>
+                    <div className='text-blue-600 text-sm md:text-base font-semibold'>
+                      ABUNDANT OPPORTUNITIES
+                    </div>
+                    <h3 className='font-bold text-xl md:text-2xl lg:text-3xl'>
+                      Maximize your scholarship opportunities with minimal effort
+                    </h3>
 
-            {/* User-Friendly Automation */}
-            <div className='flex flex-row gap-8 text-center items-center justify-between lg:justify-center text-md font-medium'>
-              <div className='flex flex-row items-center justify-between w-full rounded-md hover:-translate-y-2 transition-all p-10 lg:p-10'>
-
-                {/* Text */}
-                <div className='w-1/2 text-left flex flex-col gap-8'>
-                  <div className='text-blue-600 text-md font-semibold'>
-                    USER-FRIENDLY AUTOMATION
-                  </div>
-                  <span className='hidden lg:block font-bold text-4xl'>
-                    Stay organized with dashboard overviews and timely alerts
-                  </span>
-
-                  <div className='hidden lg:flex flex-col text-base text-slate-600 gap-1'>
-                    <span>1. Track your scholarship application status with real-time updates.</span>
-                    <span>2. Get timely alerts for upcoming deadlines and new opportunities.</span>
-                    <span>3. Manage all your applications and documents in one organized dashboard.</span>
-                  </div>
-                </div>
-
-                {/* Image */}
-                <div className='flex w-1/2 items-center justify-center rounded-md ml-8'>
-                  <img src={HomeNotification} alt="Home Notification" className='w-[400px] h-auto object-cover' />
-                </div>
-
-              </div>
-            </div>
-
-            {/* Responsive System and Users */}
-            <div className='flex flex-row gap-8 text-center items-center justify-center text-md font-medium'>
-              <div className='bg-white flex flex-row items-center justify-between w-full border rounded-md shadow-md hover:-translate-y-2 transition-all p-10 lg:p-10'>
-
-                {/* Image */}
-                <div className='flex w-1/2 items-center justify-center rounded-md mr-8'>
-                  <img src={HomeNetwork} alt="Home Network" className='w-[400px] h-auto object-cover mr-8' />
-                </div>
-
-                {/* Text */}
-                <div className='w-1/2 text-left flex flex-col gap-8'>
-                  <div className='text-blue-600 text-md font-semibold'>
-                    RESPONSIVE SYSTEM AND USERS
-                  </div>
-                  <span className='hidden lg:block font-bold text-4xl'>
-                    Access a wide network of scholarship providers and applicants
-                  </span>
-
-                  <div className='hidden lg:flex flex-col text-base text-slate-600 gap-1'>
-                    <span>1. Easily connect with providers and other applicants across various fields of study.</span>
-                    <span>2. Join a supportive community where you can collaborate and seek advice.</span>
-                    <span>3. Explore a platform built for efficient communication and quick response times.</span>
+                    <div className='text-sm md:text-base text-slate-600 space-y-2'>
+                      <p>1. Access a wide variety of scholarships tailored to your field of study.</p>
+                      <p>2. Use advanced filters to easily find and apply for scholarships that match your qualifications.</p>
+                      <p>3. Enjoy a seamless application process with automated document submissions.</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div className='flex flex-row gap-8 text-center items-center justify-between lg:justify-center text-md font-medium'>
-              <div className='flex flex-row items-center justify-between w-full rounded-md hover:-translate-y-2 transition-all p-10 lg:p-10'>
+              {/* User-Friendly Automation */}
+              <div className='bg-white border rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300'>
+                <div className='flex flex-col-reverse md:flex-row p-6 md:p-8 gap-6 items-center'>
+                  {/* Text */}
+                  <div className='md:w-2/3 text-left flex flex-col gap-4'>
+                    <div className='text-blue-600 text-sm md:text-base font-semibold'>
+                      USER-FRIENDLY AUTOMATION
+                    </div>
+                    <h3 className='font-bold text-xl md:text-2xl lg:text-3xl'>
+                      Stay organized with dashboard overviews and timely alerts
+                    </h3>
 
-                <div className='w-1/2 text-left flex flex-col gap-8'>
-                  {/* Title */}
-                  <div className='text-blue-600 text-md font-semibold'>
-                    STEP BY STEP PROCESS
+                    <div className='text-sm md:text-base text-slate-600 space-y-2'>
+                      <p>1. Track your scholarship application status with real-time updates.</p>
+                      <p>2. Get timely alerts for upcoming deadlines and new opportunities.</p>
+                      <p>3. Manage all your applications and documents in one organized dashboard.</p>
+                    </div>
                   </div>
 
-                  {/* Main Heading */}
-                  <span className='hidden lg:block font-bold text-4xl'>
-                    The system will present you step-by-step stages when applying.
-                  </span>
-
-                  {/* Process Description */}
-                  <div className='hidden lg:flex flex-col text-base text-slate-600 gap-1'>
-                    <span className=''>1. Sign up with your account details or register as a new user.</span>
-                    <span className=''>2. Fill in the scholarship application form with your credentials and required documents.</span>
-                    <span className=''>3. Review your application and submit it for approval.</span>
-                    <span className=''>4. Track the progress of your application through notifications and updates.</span>
-                  </div>
-
-                  {/* Additional Details (Optional) */}
-                  <div className='hidden lg:flex flex-col text-base text-slate-500 gap-2 mt-4'>
-                    <span className='font-semibold'>Tips for a successful application:</span>
-                    <ul className='list-disc ml-4'>
-                      <li>Ensure all your documents are up to date and clear.</li>
-                      <li>Double-check your eligibility for the scholarship before applying.</li>
-                      <li>Keep an eye on your email for important updates and communications.</li>
-                    </ul>
+                  {/* Image */}
+                  <div className='flex justify-center items-center mb-4 md:mb-0 md:w-1/3'>
+                    <img src={HomeNotification} alt="Home Notification" className='w-20 h-20 md:w-auto md:max-h-48 object-contain' />
                   </div>
                 </div>
+              </div>
 
-                {/* Image Section */}
-                <div className='flex w-1/2 items-center justify-center rounded-md ml-8'>
-                  <img src={HomeTeam} alt="Home Team" className='w-[350px] h-auto object-cover' />
+              {/* Responsive System and Users */}
+              <div className='bg-white border rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300'>
+                <div className='flex flex-col md:flex-row p-6 md:p-8 gap-6 items-center'>
+                  {/* Image */}
+                  <div className='flex justify-center items-center md:w-1/3'>
+                    <img src={HomeNetwork} alt="Home Network" className='w-20 h-20 md:w-auto md:max-h-48 object-contain' />
+                  </div>
+
+                  {/* Text */}
+                  <div className='md:w-2/3 text-left flex flex-col gap-4'>
+                    <div className='text-blue-600 text-sm md:text-base font-semibold'>
+                      RESPONSIVE SYSTEM AND USERS
+                    </div>
+                    <h3 className='font-bold text-xl md:text-2xl lg:text-3xl'>
+                      Access a wide network of scholarship providers and applicants
+                    </h3>
+
+                    <div className='text-sm md:text-base text-slate-600 space-y-2'>
+                      <p>1. Easily connect with providers and other applicants across various fields of study.</p>
+                      <p>2. Join a supportive community where you can collaborate and seek advice.</p>
+                      <p>3. Explore a platform built for efficient communication and quick response times.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Step by Step Process */}
+              <div className='bg-white border rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300'>
+                <div className='flex flex-col-reverse md:flex-row p-6 md:p-8 gap-6 items-center'>
+                  {/* Text */}
+                  <div className='md:w-2/3 text-left flex flex-col gap-4'>
+                    <div className='text-blue-600 text-sm md:text-base font-semibold'>
+                      STEP BY STEP PROCESS
+                    </div>
+                    <h3 className='font-bold text-xl md:text-2xl lg:text-3xl'>
+                      The system will present you step-by-step stages when applying
+                    </h3>
+
+                    <div className='text-sm md:text-base text-slate-600 space-y-2'>
+                      <p>1. Sign up with your account details or register as a new user.</p>
+                      <p>2. Fill in the scholarship application form with your credentials and required documents.</p>
+                      <p>3. Review your application and submit it for approval.</p>
+                      <p>4. Track the progress of your application through notifications and updates.</p>
+                    </div>
+
+                    <div className='text-sm md:text-base text-slate-500 mt-2'>
+                      <p className='font-semibold'>Tips for a successful application:</p>
+                      <ul className='list-disc ml-5 mt-2 space-y-1'>
+                        <li>Ensure all your documents are up to date and clear.</li>
+                        <li>Double-check your eligibility for the scholarship before applying.</li>
+                        <li>Keep an eye on your email for important updates and communications.</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Image */}
+                  <div className='flex justify-center items-center mb-4 md:mb-0 md:w-1/3'>
+                    <img src={HomeTeam} alt="Home Team" className='w-20 h-20 md:w-auto md:max-h-48 object-contain' />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-
-
 
           {/* APPLY FOR ROLE */}
           {!currentUser && (
-            <div>
-              <div className='flex justify-center text-2xl lg:text-4xl font-bold text-slate-700 pb-10'>Apply now!</div>
-              <div className='flex flex-col lg:flex-row gap-10 border text-center p-10 rounded-md shadow-inner mb-10'>
+            <div className="mb-16">
+              <h2 className='text-2xl md:text-3xl lg:text-4xl font-bold text-slate-700 text-center mb-8'>Apply now!</h2>
 
-                <div className='mb-4 text-slate-700 flex flex-col text-center justify-center border border-b lg:w-1/2 bg-white p-10'>
-                  <div className='text-left'>
-                    <div className='pb-2 font-bold text-md lg:text-xl'>Ready to register as a student and be part of our community?</div>
-                    <p className='text-sm lg:text-lg text-slate-500 font-medium'>Join us! It's completely free!</p>
-                    <div className='flex flex-row justify-between items-center'>
-                      <Link to="/register" className="mt-4 bg-blue-600 text-white p-2 rounded-md lg:rounded-full font-medium px-3 lg:px-4 flex flex-row items-center gap-2 cursor-pointer">
-                        Register as Student <FaAngleRight />
+              <div className='grid md:grid-cols-2 gap-6 rounded-lg overflow-hidden'>
+                {/* Student Registration Card */}
+                <div className='bg-white border rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-6'>
+                  <div className='flex flex-col h-full'>
+                    <div className='mb-auto text-center md:text-left'>
+                      <h3 className='text-xl font-bold text-slate-800 mb-2'>Ready to register as a student?</h3>
+                      <p className='text-slate-500 mb-6'>Join us! It's completely free!</p>
+                    </div>
+
+                    <div className='flex flex-col md:flex-row items-center md:justify-between gap-4'>
+                      <Link to="/register" className="w-full md:w-auto">
+                        <button className='w-full md:w-auto bg-blue-600 text-white py-2 px-4 rounded-lg md:rounded-full font-medium flex items-center justify-center md:justify-start gap-2 hover:bg-blue-700 transition-colors'>
+                          Register as Student <FaAngleRight />
+                        </button>
                       </Link>
 
-                      <div className='lg:block hidden rounded-md'>
-                        <MdEmail className='w-24 h-auto text-blue-600' />
+                      <div className='hidden md:block'>
+                        <MdEmail className='w-16 h-16 text-blue-600' />
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className='mb-4 text-slate-700 flex flex-col text-center justify-center border border-b lg:w-1/2 bg-white p-10'>
-                  <div className='text-left'>
-                    <div className='pb-2 font-bold text-md lg:text-xl'>Are you looking to provide scholarships to deserving students?</div>
-                    <p className='text-sm lg:text-lg text-slate-500 font-medium'>We're looking to help you!</p>
-                    <div className='flex flex-row justify-between items-center'>
-                      <Link to="/apply-as-provider" className="mt-4 bg-blue-600 text-white p-2 rounded-md lg:rounded-full font-medium px-3 lg:px-4 flex flex-row items-center gap-2 cursor-pointer">
-                        Apply as a Provider <FaAngleRight />
+                {/* Provider Application Card */}
+                <div className='bg-white border rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-6'>
+                  <div className='flex flex-col h-full'>
+                    <div className='mb-auto text-center md:text-left'>
+                      <h3 className='text-xl font-bold text-slate-800 mb-2'>Looking to provide scholarships?</h3>
+                      <p className='text-slate-500 mb-6'>We're looking to help you!</p>
+                    </div>
+
+                    <div className='flex flex-col md:flex-row items-center md:justify-between gap-4'>
+                      <Link to="/apply-as-provider" className="w-full md:w-auto">
+                        <button className='w-full md:w-auto bg-blue-600 text-white py-2 px-4 rounded-lg md:rounded-full font-medium flex items-center justify-center md:justify-start gap-2 hover:bg-blue-700 transition-colors'>
+                          Apply as a Provider <FaAngleRight />
+                        </button>
                       </Link>
 
-                      <div className='lg:block hidden rounded-md'>
-                        <FaBuildingCircleArrowRight className='w-24 h-20 text-blue-600' />
+                      <div className='hidden md:block'>
+                        <FaBuildingCircleArrowRight className='w-16 h-16 text-blue-600' />
                       </div>
                     </div>
                   </div>
@@ -577,6 +563,7 @@ export default function Home() {
               </div>
             </div>
           )}
+
         </div>
       </main>
       <Footer />
