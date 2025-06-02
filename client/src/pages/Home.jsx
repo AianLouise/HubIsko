@@ -92,48 +92,46 @@ export default function Home() {
       <Header />
       <main className="flex-grow bg-[#f8f8fb] no-scrollbar overflow-x-hidden">
         {/* Hero Section */}
-        <div className="h-screen">
-          <div className='text-center md:max-w-4xl lg:max-w-5xl mx-auto'>
+        <div className="flex items-center justify-center px-5 sm:px-8">
+          <div className='text-center w-full lg:h-screen py-10'>
             {/* Landing Image */}
             <div className='flex justify-center items-center mb-0'>
-              <img src={LandingImage} alt="Landing Image" className='w-full max-w-3xl h-auto' />
+              <img src={LandingImage} alt="Landing Image" className='w-full max-w-xl sm:max-w-2xl md:max-w-3xl h-auto' />
             </div>
 
-            <h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-slate-800 mt-[-5rem] mb-2'>
-              Explore <span className='text-blue-600'>Scholarships</span> Through <span className='text-blue-600'>Technology.</span>
+            <h1 className='text-3xl lg:text-7xl font-bold text-slate-800 mt-[-2rem] sm:mt-[-6rem] mb-2 sm:mb-3 px-4'>
+              Explore <span className='text-blue-600'>Scholarships</span> <br /> Through <span className='text-blue-600'>Technology.</span>
             </h1>
-
-            <h4 className='text-sm md:text-base lg:text-xl font-medium text-slate-700 py-7'>
+            <h4 className='text-sm sm:text-base font-medium text-slate-700 mb-4 sm:mb-5 px-4'>
               A Scholarship Management System for Your Locale!
             </h4>
-
             {/* CTA Buttons */}
-            <div className='flex flex-col sm:flex-row gap-4 justify-center items-center'>
+            <div className='flex flex-col sm:flex-row gap-3 justify-center items-center px-4 sm:px-0'>
               {!currentUser ? (
                 <>
                   <Link to="/register" className="w-full sm:w-auto">
-                    <button className='w-full sm:w-auto border bg-blue-600 text-white py-3 px-6 text-md font-semibold rounded-full hover:bg-blue-700 transition-colors'>
+                    <button className='w-full sm:w-auto border bg-blue-600 text-white py-2 px-4 sm:px-5 text-sm font-semibold rounded-full hover:bg-blue-700 transition-colors'>
                       Sign Up for Free
                     </button>
                   </Link>
 
                   <Link to="/forums" className="w-full sm:w-auto">
-                    <button className='w-full sm:w-auto group flex items-center justify-center border py-3 px-6 text-md font-semibold rounded-full hover:bg-slate-200 transition-all ease-in-out bg-white'>
-                      Visit our Forums <FaAngleRight className='group-hover:translate-x-2 group-hover:bg-blue-600 text-xl ml-2 bg-slate-400 text-white rounded-full transition ease-in-out' />
+                    <button className='w-full sm:w-auto group flex items-center justify-center border py-2.5 px-4 sm:px-6 text-sm font-semibold rounded-full hover:bg-slate-200 transition-all ease-in-out bg-white'>
+                      Visit our Forums <FaAngleRight className='group-hover:translate-x-2 group-hover:bg-blue-600 text-lg ml-2 bg-slate-400 text-white rounded-full transition ease-in-out' />
                     </button>
                   </Link>
                 </>
               ) : (
                 <>
                   <Link to="/scholarship-listing" className="w-full sm:w-auto">
-                    <button className='w-full sm:w-auto border bg-blue-600 text-white py-3 px-6 text-md font-semibold rounded-full hover:bg-blue-700 transition-colors'>
+                    <button className='w-full sm:w-auto border bg-blue-600 text-white py-2 px-4 sm:px-5 text-sm font-semibold rounded-full hover:bg-blue-700 transition-colors'>
                       View Scholarships
                     </button>
                   </Link>
 
                   <Link to="/forums" className="w-full sm:w-auto">
-                    <button className='w-full sm:w-auto group flex items-center justify-center border py-3 px-6 text-md font-semibold rounded-full hover:bg-slate-200 transition-all ease-in-out bg-white'>
-                      Visit our Forums <FaAngleRight className='group-hover:translate-x-2 group-hover:bg-blue-600 text-xl ml-2 bg-slate-400 text-white rounded-full transition ease-in-out' />
+                    <button className='w-full sm:w-auto group flex items-center justify-center border py-2.5 px-4 sm:px-6 text-sm font-semibold rounded-full hover:bg-slate-200 transition-all ease-in-out bg-white'>
+                      Visit our Forums <FaAngleRight className='group-hover:translate-x-2 group-hover:bg-blue-600 text-lg ml-2 bg-slate-400 text-white rounded-full transition ease-in-out' />
                     </button>
                   </Link>
                 </>
@@ -390,7 +388,7 @@ export default function Home() {
           <div className='mb-16 md:mb-24 text-slate-700'>
             {/* Heading */}
             <h2 className='font-bold text-2xl md:text-3xl lg:text-4xl text-center mb-10'>
-              What we'll provide?
+              What HubIsko Provides
             </h2>
 
             {/* Benefits Cards */}
@@ -406,16 +404,16 @@ export default function Home() {
                   {/* Text */}
                   <div className='md:w-2/3 text-left flex flex-col gap-4'>
                     <div className='text-blue-600 text-sm md:text-base font-semibold'>
-                      ABUNDANT OPPORTUNITIES
+                      COMPREHENSIVE SCHOLARSHIP DATABASE
                     </div>
                     <h3 className='font-bold text-xl md:text-2xl lg:text-3xl'>
-                      Maximize your scholarship opportunities with minimal effort
+                      Discover and access relevant scholarship opportunities
                     </h3>
 
                     <div className='text-sm md:text-base text-slate-600 space-y-2'>
-                      <p>1. Access a wide variety of scholarships tailored to your field of study.</p>
-                      <p>2. Use advanced filters to easily find and apply for scholarships that match your qualifications.</p>
-                      <p>3. Enjoy a seamless application process with automated document submissions.</p>
+                      <p>1. Browse our curated database of local scholarships from verified providers.</p>
+                      <p>2. Filter scholarships by field of study, eligibility criteria, and application deadlines.</p>
+                      <p>3. Save time with a centralized platform that eliminates the need to search multiple websites.</p>
                     </div>
                   </div>
                 </div>
@@ -427,22 +425,22 @@ export default function Home() {
                   {/* Text */}
                   <div className='md:w-2/3 text-left flex flex-col gap-4'>
                     <div className='text-blue-600 text-sm md:text-base font-semibold'>
-                      USER-FRIENDLY AUTOMATION
+                      APPLICATION MANAGEMENT
                     </div>
                     <h3 className='font-bold text-xl md:text-2xl lg:text-3xl'>
-                      Stay organized with dashboard overviews and timely alerts
+                      Track your applications with our user-friendly dashboard
                     </h3>
 
                     <div className='text-sm md:text-base text-slate-600 space-y-2'>
-                      <p>1. Track your scholarship application status with real-time updates.</p>
-                      <p>2. Get timely alerts for upcoming deadlines and new opportunities.</p>
-                      <p>3. Manage all your applications and documents in one organized dashboard.</p>
+                      <p>1. Monitor the status of all your scholarship applications in real-time.</p>
+                      <p>2. Receive notifications about application updates, deadlines, and requirements.</p>
+                      <p>3. Access a personalized dashboard that organizes your applications by status and priority.</p>
                     </div>
                   </div>
 
                   {/* Image */}
                   <div className='flex justify-center items-center mb-4 md:mb-0 md:w-1/3'>
-                    <img src={HomeNotification} alt="Home Notification" className='w-20 h-20 md:w-auto md:max-h-48 object-contain' />
+                    <img src={HomeNotification} alt="Application Management" className='w-20 h-20 md:w-auto md:max-h-48 object-contain' />
                   </div>
                 </div>
               </div>
@@ -452,22 +450,22 @@ export default function Home() {
                 <div className='flex flex-col md:flex-row p-6 md:p-8 gap-6 items-center'>
                   {/* Image */}
                   <div className='flex justify-center items-center md:w-1/3'>
-                    <img src={HomeNetwork} alt="Home Network" className='w-20 h-20 md:w-auto md:max-h-48 object-contain' />
+                    <img src={HomeNetwork} alt="Community Network" className='w-20 h-20 md:w-auto md:max-h-48 object-contain' />
                   </div>
 
                   {/* Text */}
                   <div className='md:w-2/3 text-left flex flex-col gap-4'>
                     <div className='text-blue-600 text-sm md:text-base font-semibold'>
-                      RESPONSIVE SYSTEM AND USERS
+                      COMMUNITY ENGAGEMENT
                     </div>
                     <h3 className='font-bold text-xl md:text-2xl lg:text-3xl'>
-                      Access a wide network of scholarship providers and applicants
+                      Connect with scholarship providers and fellow applicants
                     </h3>
 
                     <div className='text-sm md:text-base text-slate-600 space-y-2'>
-                      <p>1. Easily connect with providers and other applicants across various fields of study.</p>
-                      <p>2. Join a supportive community where you can collaborate and seek advice.</p>
-                      <p>3. Explore a platform built for efficient communication and quick response times.</p>
+                      <p>1. Engage directly with scholarship providers through our platform.</p>
+                      <p>2. Participate in community forums to share experiences and get advice.</p>
+                      <p>3. Build relationships with mentors and peers in your academic field.</p>
                     </div>
                   </div>
                 </div>
@@ -479,32 +477,32 @@ export default function Home() {
                   {/* Text */}
                   <div className='md:w-2/3 text-left flex flex-col gap-4'>
                     <div className='text-blue-600 text-sm md:text-base font-semibold'>
-                      STEP BY STEP PROCESS
+                      STREAMLINED APPLICATION PROCESS
                     </div>
                     <h3 className='font-bold text-xl md:text-2xl lg:text-3xl'>
-                      The system will present you step-by-step stages when applying
+                      Apply for scholarships through our guided step-by-step system
                     </h3>
 
                     <div className='text-sm md:text-base text-slate-600 space-y-2'>
-                      <p>1. Sign up with your account details or register as a new user.</p>
-                      <p>2. Fill in the scholarship application form with your credentials and required documents.</p>
-                      <p>3. Review your application and submit it for approval.</p>
-                      <p>4. Track the progress of your application through notifications and updates.</p>
+                      <p>1. Create your account and complete your applicant profile with your qualifications.</p>
+                      <p>2. Upload required documents once and reuse them across multiple applications.</p>
+                      <p>3. Submit applications directly through our platform with automated verification.</p>
+                      <p>4. Receive real-time updates on your application status and next steps.</p>
                     </div>
 
                     <div className='text-sm md:text-base text-slate-500 mt-2'>
-                      <p className='font-semibold'>Tips for a successful application:</p>
+                      <p className='font-semibold'>For a successful application:</p>
                       <ul className='list-disc ml-5 mt-2 space-y-1'>
-                        <li>Ensure all your documents are up to date and clear.</li>
-                        <li>Double-check your eligibility for the scholarship before applying.</li>
-                        <li>Keep an eye on your email for important updates and communications.</li>
+                        <li>Keep your profile information up-to-date and accurate.</li>
+                        <li>Upload clear, high-quality documents in the requested format.</li>
+                        <li>Submit applications well before deadlines to avoid technical issues.</li>
                       </ul>
                     </div>
                   </div>
 
                   {/* Image */}
                   <div className='flex justify-center items-center mb-4 md:mb-0 md:w-1/3'>
-                    <img src={HomeTeam} alt="Home Team" className='w-20 h-20 md:w-auto md:max-h-48 object-contain' />
+                    <img src={HomeTeam} alt="Application Process" className='w-20 h-20 md:w-auto md:max-h-48 object-contain' />
                   </div>
                 </div>
               </div>

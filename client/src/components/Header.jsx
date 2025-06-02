@@ -180,344 +180,478 @@ export default function Header() {
     };
   }, [notificationRef]);
 
-  return (
-    <div className='border-b bg-[#f8f8fb] shadow-sm'>
-      <div className='flex justify-between text-md max-w-6xl mx-auto p-6 lg:px-20'>
-        <Link to='/' className='flex items-center'>
-          <img src={NewLogo} alt='HubIsko Logo' className='w-10 h-auto mx-2' />
-          <h1 className='font-bold text-2xl hover:text-slate-600 ease-in-out transition-colors'>HubIsko</h1>
+  return (<div className='border-b bg-white shadow-sm sticky top-0 z-40'>
+    <div className='flex justify-between items-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3'>
+      <Link to='/' className='flex items-center space-x-2'>
+        <img src={NewLogo} alt='HubIsko Logo' className='w-10 h-auto' />
+        <h1 className='font-bold text-2xl text-gray-800 hover:text-blue-600'>HubIsko</h1>
+      </Link>
+
+      {/* Mobile Nav Controls */}
+      <div className='flex items-center gap-3 md:hidden'>
+        {currentUser && (
+          <Link
+            to={'/notifications'}
+            className={`flex items-center justify-center p-1.5 rounded-full relative ${isNotificationsPage ? 'bg-blue-50 text-blue-600 border border-blue-200' : 'bg-white text-blue-600 border border-gray-200 hover:bg-blue-50'}`}
+          >
+            <IoIosNotifications className="w-5 h-5" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
+                {unreadCount}
+              </span>
+            )}
+          </Link>
+        )}
+        <button className="text-gray-600 hover:text-blue-600 rounded-md p-1.5 hover:bg-blue-50 border border-gray-200" onClick={toggleSidebar}>
+          <IoMenu className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* Desktop Navigation */}
+      <ul className='md:flex hidden items-center gap-5 text-gray-600'>
+        <Link to='/'>
+          <li className={`p-2 font-medium ${location.pathname === '/' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 border-b-2 border-transparent hover:text-blue-600 hover:border-blue-600'}`}>
+            Home
+          </li>
         </Link>
 
-        <div className='flex items-center gap-4 md:hidden'>
-          {currentUser && (
-            <Link
-              to={'/notifications'}
-              className={`flex items-center p-1.5 rounded-full ${isNotificationsPage ? 'bg-white text-blue-600 border' : 'bg-blue-600 text-white'}`}
-            >
-              <IoIosNotifications className="w-6 h-6" />
-            </Link>
-          )}
-          <button className="bg-blue-600 text-white rounded-md p-2" onClick={toggleSidebar}>
-            <IoMenu className="w-6 h-6" />
+        {currentUser && currentUser.role === 'applicant' && (
+          <Link to='/scholar-dashboard'>
+            <li className={`p-2 font-medium ${location.pathname === '/scholar-dashboard' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 border-b-2 border-transparent hover:text-blue-600 hover:border-blue-600'}`}>
+              Scholar Dashboard
+            </li>
+          </Link>
+        )}
+
+        <Link to='/scholarship-listing'>
+          <li className={`p-2 font-medium ${location.pathname === '/scholarship-listing' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 border-b-2 border-transparent hover:text-blue-600 hover:border-blue-600'}`}>
+            Scholarship Listing
+          </li>
+        </Link>
+
+        <Link to='/forums'>
+          <li className={`p-2 font-medium ${location.pathname === '/forums' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 border-b-2 border-transparent hover:text-blue-600 hover:border-blue-600'}`}>
+            Forums
+          </li>
+        </Link>
+
+        {/* Notification */}
+        {currentUser && currentUser.role === 'applicant' && (
+          <div className='relative'>              <button
+            onClick={toggleNotification}
+            className={`relative p-2 rounded-full ${showNotification ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100 text-gray-600 hover:text-blue-600'}`}
+          >
+            <IoIosNotifications className="w-5 h-5" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
+                {unreadCount}
+              </span>
+            )}
           </button>
-        </div>
 
-        {/* Mobile Sidebar */}
-        <div className={`fixed shadow-lg inset-0 z-50 flex justify-end transition-transform transform ${sidebarVisible ? 'translate-x-0' : 'translate-x-full'}`}>
-          <div className="bg-white shadow-lg border w-64 p-4 h-full">
-
-            <div className='mb-4 pb-4 border-b flex justify-between items-center'>
-              <span className='font-bold text-slate-700 text-lg'>Sidebar</span>
-              <button className="bg-blue-600 text-white p-1.5 rounded-full" onClick={toggleSidebar}><IoClose className="w-5 h-5" /></button>
-            </div>
-
-            <ul className='flex flex-col gap-4 p-2 text-white font-medium'>
-
-              <Link to='/'>
-                <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/' ? 'bg-blue-600' : 'bg-slate-500'}`}>
-                  <GoHomeFill className='w-5 h-5' />Home
-                </li>
-              </Link>
-
-              {currentUser && currentUser.role === 'applicant' && (
-                <Link to='/scholar-dashboard'>
-                  <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/scholar-dashboard' ? 'bg-blue-600' : 'bg-slate-500'}`}>
-
-                    <MdDashboard className='w-5 h-5' />Scholar Dashboard
-                  </li></Link>
-              )}
-
-              <Link to='/scholarship-listing'>
-                <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/scholarship-listing' ? 'bg-blue-600' : 'bg-slate-500'}`}>
-
-                  <FaGoogleScholar className='w-5 h-5' />Scholarship Listing
-                </li></Link>
-
-              <Link to='/forums'>
-                <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/forums' ? 'bg-blue-600' : 'bg-slate-500'}`}>
-
-                  <BsChatLeftTextFill className='w-5 h-5' />Forums
-                </li></Link>
-
-              {currentUser ? (
-                <ul className='flex flex-col gap-4 text-white font-medium'>
-                  <Link to="/profile"
-                    className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/profile' ? 'bg-blue-600' : 'bg-slate-500'}`}>
-
-                    <IoPersonCircleSharp className='w-5 h-5' />Manage Account
-                  </Link>
-
-                  <Link to='/about'>
-                    <li className={`px-4 p-2 rounded-md flex items-center gap-2 ${location.pathname === '/about' ? 'bg-blue-600' : 'bg-slate-500'}`}>
-
-                      <IoInformationCircle className='w-5 h-5' />About Us
-                    </li></Link>
-
-                  <button onClick={handleSignOut} className="border-2 text-slate-700 px-4 p-2 text-left rounded-md flex items-center gap-2">
-
-                    <FaDoorOpen className='w-5 h-5' />Sign Out</button>
-                </ul>
-              ) : (
-                <>
-                  <Link to='/login'><li className='border p-2 px-4 text-slate-700 rounded-md hover:bg-slate-200'>Login</li></Link>
-                  <div className="relative">
-                    <li className='bg-blue-600 text-white p-2 px-4 rounded-md hover:bg-blue-800 cursor-pointer' onClick={toggleDropdown2}>
-                      Register
-                    </li>
-                    {dropdownVisible && (
-                      <ul className="text-left absolute bg-white shadow-lg rounded-lg mt-2 w-56 left-1/2 transform -translate-x-1/2 border border-gray-200">
-                        <Link to='/register'>
-                          <li className='p-2 px-4 hover:bg-blue-400 text-slate-700 cursor-pointer'>Register as Student</li>
-                        </Link>
-                        <Link to='/apply-as-provider'>
-                          <li className='p-2 px-4 hover:bg-blue-400 text-slate-700 cursor-pointer'>Register as Scholarship Provider</li>
-                        </Link>
-                      </ul>
-                    )}
-                  </div>
-                </>
-              )}
-            </ul>
-          </div>
-        </div>
-
-        {/* Desktop Navigation */}
-        <ul className='lg:flex hidden gap-6 font-bold text-slate-600'>
-          <Link to='/'>
-            <li className={`p-2 ${location.pathname === '/' ? 'text-blue-600 border-b-2 border-blue-600' : 'hover:text-blue-600 hover:border-b-2'} hover:-translate-y-0.5 transition-all ease-in-out`}>
-              Home
-            </li>
-          </Link>
-
-          {currentUser && currentUser.role === 'applicant' && (
-            <Link to='/scholar-dashboard'>
-              <li className={`p-2 ${location.pathname === '/scholar-dashboard' ? 'text-blue-600 border-b-2 border-blue-600' : 'hover:text-blue-600 hover:border-b-2'} hover:-translate-y-0.5 transition-all ease-in-out`}>
-                Scholar Dashboard
-              </li>
-            </Link>
-          )}
-
-          <Link to='/scholarship-listing'>
-            <li className={`p-2 ${location.pathname === '/scholarship-listing' ? 'text-blue-600 border-b-2 border-blue-600' : 'hover:text-blue-600 hover:border-b-2'} hover:-translate-y-0.5 transition-all ease-in-out`}>
-              Scholarship Listing
-            </li>
-          </Link>
-          <Link to='/forums'>
-            <li className={`p-2 ${location.pathname === '/forums' ? 'text-blue-600 border-b-2 border-blue-600' : 'hover:text-blue-600 hover:border-b-2'} hover:-translate-y-0.5 transition-all ease-in-out`}>
-              Forums
-            </li>
-          </Link>
-
-          {/* Notification */}
-          {currentUser && currentUser.role === 'applicant' && (
-            <div className='font-semibold'>
-              <button
-                onClick={toggleNotification}
-                className={`relative p-3 ${showNotification ? 'bg-blue-600 text-white rounded-full' : 'hover:bg-slate-200 hover:rounded-full focus:bg-blue-600 group focus:rounded-full'}`}
-              >
-                <IoIosNotifications className={`w-5 h-5 ${showNotification ? 'text-white' : 'text-blue-600 group-focus:text-white'} scale-125`} />
-                {unreadCount > 0 && (
-                  <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
-                    {unreadCount}
-                  </span>
-                )}
-                {showNotification && (
-                  <div ref={notificationRef} className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 border bg-white text-gray-800 shadow-lg rounded-md p-4 w-96 z-50">
-                    <div className="flex flex-col justify-start">
-                      <span className="text-xl text-left border-b py-2 w-full">Notification Inbox</span>
-                      <div className="flex flex-row justify-start mt-4 gap-2 font-medium">
-                        <button
-                          className={`px-4 py-2 rounded-md ${filter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setFilter('all');
-                          }}
-                        >
-                          All
-                        </button>
-                        <button
-                          className={`px-4 py-2 rounded-md ${filter === 'unread' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setFilter('unread');
-                          }}
-                        >
-                          Unread
-                        </button>
-                      </div>
-                      <div className="flex flex-col items-start p-2 mt-4">
-                        <div className="flex flex-col gap-2 mt-2">
-                          {loading ? (
-                            <div className="flex justify-center items-center h-32">
-                              <svg className="animate-spin h-8 w-8 text-blue-600" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                              </svg>
-                            </div>
-                          ) : (
-                            <>
-                              {filter === 'all' && notifications.length > 0 ? (
-                                <>
-                                  {notifications.slice(0, displayedNotifications).map((notification) => (
-                                    <div
-                                      key={notification._id}
-                                      className="flex flex-row items-center hover:bg-slate-200 rounded-md p-2 text-sm w-full gap-4 cursor-pointer border-b border-gray-200"
-                                      onClick={() => handleNotificationClick(notification._id)}
-                                    >
-                                      <img
-                                        src={notification.senderId?.profilePicture || 'default-avatar.png'}
-                                        alt="Sender's Avatar"
-                                        className="w-12 h-12 rounded-full object-cover"
-                                      />
-                                      <div className="flex flex-col text-left">
-                                        {notification.senderId?.role === 'scholarship_provider' && (
-                                          <span className="font-bold">{notification.senderId.scholarshipProviderDetails?.organizationName || 'Unknown Organization'}</span>
-                                        )}
-                                        {notification.senderId?.role === 'admin' && (
-                                          <span className="font-bold">{notification.senderId.username || 'Unknown User'}</span>
-                                        )}
-                                        {notification.senderId?.role === 'applicant' && (
-                                          <span className="font-bold">{`${notification.senderId.applicantDetails?.firstName || 'Unknown'} ${notification.senderId.applicantDetails?.lastName || 'Applicant'}`}</span>
-                                        )}
-                                        <span className="text-sm font-normal">{truncateMessage(notification.message, 50)}
-                                          <span className='text-blue-600 font-semibold'>  See More</span>
-                                        </span>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </>
-                              ) : filter === 'unread' && notifications.filter(notification => !notification.read).length > 0 ? (
-                                <>
-                                  {notifications.filter(notification => !notification.read).slice(0, displayedNotifications).map((notification) => (
-                                    <div
-                                      key={notification._id}
-                                      className="flex flex-row items-center hover:bg-slate-200 rounded-md p-2 text-sm w-full gap-4 cursor-pointer border-b border-gray-200"
-                                      onClick={() => handleNotificationClick(notification._id)}
-                                    >
-                                      <img
-                                        src={notification.senderId?.profilePicture || 'default-avatar.png'}
-                                        alt="Sender's Avatar"
-                                        className="w-12 h-12 rounded-full object-cover"
-                                      />
-                                      <div className="flex flex-col text-left">
-                                        {notification.senderId?.role === 'scholarship_provider' && (
-                                          <span className="font-bold">{notification.senderId.scholarshipProviderDetails?.organizationName || 'Unknown Organization'}</span>
-                                        )}
-                                        {notification.senderId?.role === 'admin' && (
-                                          <span className="font-bold">{notification.senderId.username || 'Unknown User'}</span>
-                                        )}
-                                        {notification.senderId?.role === 'applicant' && (
-                                          <span className="font-bold">{`${notification.senderId.applicantDetails?.firstName || 'Unknown'} ${notification.senderId.applicantDetails?.lastName || 'Applicant'}`}</span>
-                                        )}
-                                        <span className="text-sm font-normal">{truncateMessage(notification.message, 50)}
-                                          <span className='text-blue-600 font-semibold'>  See More</span>
-                                        </span>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </>
-                              ) : (
-                                <div className="text-center text-gray-500">No new notifications</div>
-                              )}
-                            </>
-                          )}
-                        </div>
-                      </div>
+            {showNotification && (
+              <div ref={notificationRef} className="absolute top-full right-0 mt-2 border bg-white text-gray-800 shadow-lg rounded-lg p-3 w-96 z-50">
+                <div className="flex flex-col">
+                  <div className="flex items-center justify-between pb-2 border-b">
+                    <span className="text-lg font-semibold text-gray-800">Notifications</span>
+                    <div className="flex gap-2">
                       <button
+                        className={`px-3 py-1 rounded-md text-sm ${filter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleSeeAllNotifications();
+                          setFilter('all');
                         }}
-                        className="bg-blue-600 text-white rounded-md p-2 mt-4 font-medium hover:bg-blue-800 transition ease-in-out"
                       >
-                        See All Notifications
+                        All
+                      </button>
+                      <button
+                        className={`px-3 py-1 rounded-md text-sm ${filter === 'unread' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setFilter('unread');
+                        }}
+                      >
+                        Unread
                       </button>
                     </div>
                   </div>
-                )}
-              </button>
-            </div>
-          )}
 
-          {currentUser ? (
-            <div ref={showDropdownRef} className="relative"> {/* This div wraps both the image and the dropdown */}
-              <img src={currentUser.profilePicture} alt='profile' className='h-10 w-10 rounded-full object-cover cursor-pointer' onClick={toggleDropdown} />
-              {showDropdown && (
-                <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20 font-medium text-center">
-                  {/* Dropdown items here */}
-                  <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Manage Account</Link>
-                  <Link to='/about' className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>About Us</Link>
-                  <button onClick={handleSignOut} className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-red-600 hover:text-white">Sign out</button>
+                  <div className="max-h-[320px] overflow-y-auto py-2 mt-2">
+                    {loading ? (
+                      <div className="flex justify-center items-center h-32">
+                        <svg className="animate-spin h-6 w-6 text-blue-600" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                        </svg>
+                      </div>
+                    ) : (
+                      <>
+                        {filter === 'all' && notifications.length > 0 ? (
+                          <>
+                            {notifications.slice(0, displayedNotifications).map((notification) => (
+                              <div
+                                key={notification._id}
+                                className={`flex items-center p-2 text-sm gap-3 cursor-pointer border-b border-gray-100 hover:bg-blue-50 rounded-md ${!notification.read ? 'bg-blue-50' : ''}`}
+                                onClick={() => handleNotificationClick(notification._id)}
+                              >
+                                <img
+                                  src={notification.senderId?.profilePicture || 'default-avatar.png'}
+                                  alt="Sender's Avatar"
+                                  className="w-10 h-10 rounded-full object-cover border border-gray-200"
+                                />
+                                <div className="flex-1 min-w-0">
+                                  {notification.senderId?.role === 'scholarship_provider' && (
+                                    <span className="font-semibold text-gray-800">{notification.senderId.scholarshipProviderDetails?.organizationName || 'Unknown Organization'}</span>
+                                  )}
+                                  {notification.senderId?.role === 'admin' && (
+                                    <span className="font-semibold text-gray-800">{notification.senderId.username || 'Unknown User'}</span>
+                                  )}
+                                  {notification.senderId?.role === 'applicant' && (
+                                    <span className="font-semibold text-gray-800">{`${notification.senderId.applicantDetails?.firstName || 'Unknown'} ${notification.senderId.applicantDetails?.lastName || 'Applicant'}`}</span>
+                                  )}
+                                  <p className="text-gray-600 text-sm truncate">{truncateMessage(notification.message, 50)}</p>
+                                </div>
+                                {!notification.read && (
+                                  <div className="w-2 h-2 bg-blue-600 rounded-full flex-shrink-0"></div>
+                                )}
+                              </div>
+                            ))}
+                          </>
+                        ) : filter === 'unread' && notifications.filter(notification => !notification.read).length > 0 ? (
+                          <>
+                            {notifications.filter(notification => !notification.read).slice(0, displayedNotifications).map((notification) => (
+                              <div
+                                key={notification._id}
+                                className="flex items-center p-2 text-sm gap-3 cursor-pointer border-b border-gray-100 hover:bg-blue-50 rounded-md bg-blue-50"
+                                onClick={() => handleNotificationClick(notification._id)}
+                              >
+                                <img
+                                  src={notification.senderId?.profilePicture || 'default-avatar.png'}
+                                  alt="Sender's Avatar"
+                                  className="w-10 h-10 rounded-full object-cover border border-gray-200"
+                                />
+                                <div className="flex-1 min-w-0">
+                                  {notification.senderId?.role === 'scholarship_provider' && (
+                                    <span className="font-semibold text-gray-800">{notification.senderId.scholarshipProviderDetails?.organizationName || 'Unknown Organization'}</span>
+                                  )}
+                                  {notification.senderId?.role === 'admin' && (
+                                    <span className="font-semibold text-gray-800">{notification.senderId.username || 'Unknown User'}</span>
+                                  )}
+                                  {notification.senderId?.role === 'applicant' && (
+                                    <span className="font-semibold text-gray-800">{`${notification.senderId.applicantDetails?.firstName || 'Unknown'} ${notification.senderId.applicantDetails?.lastName || 'Applicant'}`}</span>
+                                  )}
+                                  <p className="text-gray-600 text-sm truncate">{truncateMessage(notification.message, 50)}</p>
+                                </div>
+                                <div className="w-2 h-2 bg-blue-600 rounded-full flex-shrink-0"></div>
+                              </div>
+                            ))}
+                          </>
+                        ) : (
+                          <div className="text-center py-6 text-gray-500">No notifications to display</div>
+                        )}
+                      </>
+                    )}
+                  </div>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSeeAllNotifications();
+                    }}
+                    className="mt-2 bg-blue-600 text-white rounded-md p-2 text-sm font-medium hover:bg-blue-700 w-full"
+                  >
+                    See All Notifications
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {currentUser ? (
+          <div ref={showDropdownRef} className="relative ml-2">
+            <div className="flex items-center cursor-pointer" onClick={toggleDropdown}>
+              <img
+                src={currentUser.profilePicture}
+                alt='profile'
+                className='h-9 w-9 rounded-full object-cover border-2 border-gray-200'
+              />
+              <span className="ml-2 text-sm font-medium text-gray-700 hidden lg:block">
+                {currentUser.username}
+              </span>
+            </div>
+
+            {showDropdown && (
+              <div className="absolute right-0 mt-2 py-2 w-56 bg-white rounded-lg shadow-xl z-20 border border-gray-100">
+                <div className="px-4 py-2 border-b border-gray-100">
+                  <p className="text-sm font-medium text-gray-900">{currentUser.username}</p>
+                  <p className="text-xs text-gray-500 truncate">{currentUser.email}</p>
+                </div>
+                <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">
+                  <div className="flex items-center">
+                    <IoPersonCircleSharp className="mr-2 h-4 w-4" />
+                    Manage Account
+                  </div>
+                </Link>
+                <Link to='/about' className='block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600'>
+                  <div className="flex items-center">
+                    <IoInformationCircle className="mr-2 h-4 w-4" />
+                    About Us
+                  </div>
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 border-t border-gray-100 mt-1"
+                >
+                  <div className="flex items-center">
+                    <FaDoorOpen className="mr-2 h-4 w-4" />
+                    Sign out
+                  </div>
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="flex items-center gap-3 ml-2">
+            <Link to='/login'>
+              <button className='px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50'>
+                Login
+              </button>
+            </Link>
+            <div className="relative">
+              <button
+                className='px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 hover-bg-transition'
+                onClick={toggleDropdown2}
+              >
+                Register
+              </button>
+              {dropdownVisible && (
+                <div className="absolute right-0 mt-2 w-60 bg-white rounded-lg shadow-lg border border-gray-100 z-20 overflow-hidden">
+                  <Link to='/register'>
+                    <div className='p-3 hover:bg-blue-50 text-gray-700 cursor-pointer border-b border-gray-100'>
+                      <div className="font-medium">Register as a Student</div>
+                      <p className="text-xs text-gray-500">Create a student account for scholarship applications</p>
+                    </div>
+                  </Link>
+                  <Link to='/apply-as-provider'>
+                    <div className='p-3 hover:bg-blue-50 text-gray-700 cursor-pointer'>
+                      <div className="font-medium">Register as a Scholarship Provider</div>
+                      <p className="text-xs text-gray-500">Create an account to offer scholarships</p>
+                    </div>
+                  </Link>
                 </div>
               )}
             </div>
-          ) : (
-            <>
-              <Link to='/login'>
-                <li className='border p-2 px-4 rounded-full hover:bg-slate-200'>
-                  Login
-                </li>
-              </Link>
-              <div className="relative">
-                <li className='bg-blue-600 text-white p-2 px-4 rounded-full hover:bg-blue-800 cursor-pointer' onClick={toggleDropdown2}>
-                  Register
-                </li>
-                {dropdownVisible && (
-                  <ul className="absolute bg-white shadow-lg rounded-lg mt-2 w-64 left-1/2 transform -translate-x-1/2 border border-gray-200">
-                    <Link to='/register'>
-                      <li className='p-2 px-4 bg-white hover:bg-blue-600 hover:text-white text-center cursor-pointer rounded-t-lg border-b border-blue-600'>
-                        Register as a Student
-                      </li>
-                    </Link>
-                    <Link to='/apply-as-provider'>
-                      <li className='p-2 px-4 bg-white hover:bg-blue-600 hover:text-white text-center cursor-pointer rounded-b-lg'>
-                        Register as a Scholarship Provider
-                      </li>
-                    </Link>
-                  </ul>
-                )}
-              </div>
-            </>
-          )}
-        </ul>
-      </div>
+          </div>
+        )}
+      </ul>
+    </div>
 
-      {/* NOTIFICATION MODAL */}
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto bg-gray-900 bg-opacity-50">
-          <div className='bg-white rounded-md shadow w-1/2 h-[800px]'>
-            <div className='flex items-center justify-between'>
-              <h1 className='text-2xl p-4 font-bold'>Notifications</h1>
-              <button className='p-2 mx-4 border rounded-full hover:bg-slate-200'>
-                <IoClose onClick={ShowModal} className='w-6 h-6 text-blue-600' />
-              </button>
+    {/* Mobile Sidebar */}
+    <div className={`fixed inset-0 bg-gray-600 bg-opacity-50 z-50 ${sidebarVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={toggleSidebar}>
+      <div className={`fixed inset-y-0 right-0 max-w-xs w-full bg-white shadow-xl transform ${sidebarVisible ? 'translate-x-0' : 'translate-x-full'} slide-transition gpu-accelerated`} onClick={e => e.stopPropagation()}>
+        <div className="h-full flex flex-col">
+          <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <img src={NewLogo} alt='HubIsko Logo' className='w-8 h-auto' />
+              <h2 className="text-xl font-bold text-gray-800">HubIsko</h2>
             </div>
-            <div className='flex gap-2 px-4'>
-              <button className='border rounded-md p-2 px-4 hover:bg-slate-200 focus:bg-blue-600 focus:text-white'>All</button>
-              <button className='border rounded-md p-2 px-4 hover:bg-slate-200 focus:bg-blue-600 focus:text-white'>Unread</button>
+            <button
+              className="p-1.5 rounded-full text-gray-500 hover:bg-gray-100"
+              onClick={toggleSidebar}
+            >
+              <IoClose className="w-5 h-5" />
+            </button>
+          </div>
 
-            </div>
-            <div className='flex flex-col p-2 px-4 mt-4 w-full'>
-              <span className='font-medium'>New Notifications</span>
-              <div className='flex flex-col gap-2 mt-2 hover:bg-slate-200 w-full p-2 rounded-md group'>
-                <div className='flex flex-row justify-between items-center text-sm w-full gap-8'>
-                  <div className='bg-blue-600 w-16 h-16 rounded-full mr-4'></div>
-                  <div className='flex flex-col text-left'>
-                    <div className='flex gap-2 items-center font-bold text-lg '>
-                      <div className='bg-blue-600 w-2 h-2 rounded-full'></div>
-                      HubIsko
-                    </div>
-                    <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cupiditate voluptatum repellat dolore officia voluptatem non debitis! Ullam nobis vel temporibus?</span>
-
-                  </div>
-                  <BsThreeDots className='w-10 h-10' />
+          {currentUser && (
+            <div className="p-4 border-b border-gray-200">
+              <div className="flex items-center space-x-3">
+                <img
+                  src={currentUser.profilePicture}
+                  alt="Profile"
+                  className="h-12 w-12 rounded-full object-cover border border-gray-200"
+                />
+                <div>
+                  <h3 className="text-sm font-medium text-gray-900">{currentUser.username}</h3>
+                  <p className="text-xs text-gray-500">{currentUser.email}</p>
                 </div>
               </div>
             </div>
+          )}
+
+          <div className="flex-1 overflow-y-auto py-2 px-3">
+            <div className="space-y-1">
+              <Link to='/' onClick={toggleSidebar}>
+                <div className={`flex items-center space-x-3 px-3 py-2.5 rounded-md ${location.pathname === '/' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-100'}`}>
+                  <GoHomeFill className='w-5 h-5' />
+                  <span className="text-sm font-medium">Home</span>
+                </div>
+              </Link>
+
+              {currentUser && currentUser.role === 'applicant' && (
+                <Link to='/scholar-dashboard' onClick={toggleSidebar}>
+                  <div className={`flex items-center space-x-3 px-3 py-2.5 rounded-md ${location.pathname === '/scholar-dashboard' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-100'}`}>
+                    <MdDashboard className='w-5 h-5' />
+                    <span className="text-sm font-medium">Scholar Dashboard</span>
+                  </div>
+                </Link>
+              )}
+
+              <Link to='/scholarship-listing' onClick={toggleSidebar}>
+                <div className={`flex items-center space-x-3 px-3 py-2.5 rounded-md ${location.pathname === '/scholarship-listing' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-100'}`}>
+                  <FaGoogleScholar className='w-5 h-5' />
+                  <span className="text-sm font-medium">Scholarship Listing</span>
+                </div>
+              </Link>
+
+              <Link to='/forums' onClick={toggleSidebar}>
+                <div className={`flex items-center space-x-3 px-3 py-2.5 rounded-md ${location.pathname === '/forums' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-100'}`}>
+                  <BsChatLeftTextFill className='w-5 h-5' />
+                  <span className="text-sm font-medium">Forums</span>
+                </div>
+              </Link>
+            </div>
+
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              {currentUser ? (
+                <div className="space-y-1">
+                  <Link to="/profile" onClick={toggleSidebar}>
+                    <div className={`flex items-center space-x-3 px-3 py-2.5 rounded-md ${location.pathname === '/profile' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-100'}`}>
+                      <IoPersonCircleSharp className='w-5 h-5' />
+                      <span className="text-sm font-medium">Manage Account</span>
+                    </div>
+                  </Link>
+
+                  <Link to='/about' onClick={toggleSidebar}>
+                    <div className={`flex items-center space-x-3 px-3 py-2.5 rounded-md ${location.pathname === '/about' ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-100'}`}>
+                      <IoInformationCircle className='w-5 h-5' />
+                      <span className="text-sm font-medium">About Us</span>
+                    </div>
+                  </Link>
+
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full flex items-center space-x-3 px-3 py-2.5 rounded-md text-red-600 hover:bg-red-50 mt-2"
+                  >
+                    <FaDoorOpen className='w-5 h-5' />
+                    <span className="text-sm font-medium">Sign Out</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-3 px-3 pt-2">
+                  <Link to='/login' onClick={toggleSidebar}>
+                    <button className="w-full py-2 text-center text-sm font-medium text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50">
+                      Login
+                    </button>
+                  </Link>
+
+                  <div className="relative">
+                    <button
+                      className="w-full py-2 text-center text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                      onClick={toggleDropdown2}
+                    >
+                      Register
+                    </button>
+                    {dropdownVisible && (
+                      <div className="mt-2 w-full bg-white rounded-md shadow border border-gray-200 overflow-hidden">
+                        <Link to='/register' onClick={toggleSidebar}>
+                          <div className='p-3 hover:bg-blue-50 text-gray-700 border-b border-gray-100'>
+                            <div className="text-sm font-medium">Register as Student</div>
+                          </div>
+                        </Link>
+                        <Link to='/apply-as-provider' onClick={toggleSidebar}>
+                          <div className='p-3 hover:bg-blue-50 text-gray-700'>
+                            <div className="text-sm font-medium">Register as Provider</div>
+                          </div>
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-
-      )}
+      </div>
     </div>
+
+    {/* NOTIFICATION MODAL */}
+    {showModal && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto bg-gray-600 bg-opacity-50">
+        <div className='bg-white rounded-lg shadow-xl w-full max-w-xl max-h-[80vh] flex flex-col'>
+          <div className='flex items-center justify-between p-4 border-b border-gray-200'>
+            <h1 className='text-xl font-bold text-gray-800'>Notifications</h1>
+            <button className='p-1.5 rounded-full text-gray-500 hover:bg-gray-100' onClick={ShowModal}>
+              <IoClose className='w-5 h-5' />
+            </button>
+          </div>
+
+          <div className='flex gap-2 p-4 border-b border-gray-200'>
+            <button className={`px-4 py-1.5 rounded-md text-sm font-medium ${filter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`} onClick={() => setFilter('all')}>
+              All
+            </button>
+            <button className={`px-4 py-1.5 rounded-md text-sm font-medium ${filter === 'unread' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`} onClick={() => setFilter('unread')}>
+              Unread
+            </button>
+          </div>
+
+          <div className='flex-1 overflow-y-auto p-4'>
+            <h2 className='font-medium text-gray-700 mb-3'>Recent Notifications</h2>
+
+            {loading ? (
+              <div className="flex justify-center items-center h-32">
+                <svg className="animate-spin h-8 w-8 text-blue-600" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+              </div>
+            ) : notifications.length > 0 ? (
+              <div className='space-y-2'>
+                {notifications.slice(0, displayedNotifications).map((notification) => (
+                  <div
+                    key={notification._id}
+                    className={`flex items-center p-3 rounded-lg cursor-pointer ${!notification.read ? 'bg-blue-50' : 'hover:bg-gray-50'}`}
+                    onClick={() => handleNotificationClick(notification._id)}
+                  >
+                    <img
+                      src={notification.senderId?.profilePicture || 'default-avatar.png'}
+                      alt="Sender's Avatar"
+                      className="w-12 h-12 rounded-full object-cover border border-gray-200 mr-3"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-gray-800">
+                          {notification.senderId?.role === 'scholarship_provider' && notification.senderId.scholarshipProviderDetails?.organizationName}
+                          {notification.senderId?.role === 'admin' && notification.senderId.username}
+                          {notification.senderId?.role === 'applicant' &&
+                            `${notification.senderId.applicantDetails?.firstName || ''} ${notification.senderId.applicantDetails?.lastName || ''}`}
+                        </span>
+                        {!notification.read && (
+                          <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                        )}
+                      </div>
+                      <p className="text-gray-600">{truncateMessage(notification.message, 80)}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 text-gray-500">No notifications to display</div>
+            )}
+          </div>
+
+          <div className="p-4 border-t border-gray-200">
+            <button
+              onClick={handleSeeAllNotifications}
+              className="w-full bg-blue-600 text-white rounded-md py-2 font-medium hover:bg-blue-700"
+            >
+              See All Notifications
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
   );
 }

@@ -20,6 +20,28 @@
     }
   }
 
+/* Performance optimizations for smoother animations */
+@layer utilities {
+  .gpu-accelerated {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .hover-bg-transition {
+    transition: background-color 0.1s ease;
+  }
+
+  .hover-color-transition {
+    transition: color 0.1s ease;
+  }
+
+  .slide-transition {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
   ::-webkit-scrollbar {
     display: none;
   }
@@ -43,4 +65,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Add GPU acceleration to elements where needed */
+.sidebar-container {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Add smooth transition only for background color changes */
+.bg-transition {
+  transition: background-color 0.15s ease;
+}
+
+/* Add smooth transition for opacity changes */
+.opacity-transition {
+  transition: opacity 0.2s ease;
+}
+
+/* Add smooth transition for transform changes */
+.transform-transition {
+  transition: transform 0.2s ease;
 }
