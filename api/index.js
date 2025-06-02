@@ -32,18 +32,50 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI)
-  .then(async () => {
-    console.log('Connected to MongoDB');
+// Improved MongoDB connection for serverless
+let isConnected = false;
 
+const connectToDatabase = async () => {
+  if (isConnected) {
+    return;
+  }
+
+  try {
+    const options = {
+      bufferCommands: false,
+      bufferMaxEntries: 0,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+      socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+      maxPoolSize: 10, // Maintain up to 10 socket connections
+    };
+
+    await mongoose.connect(process.env.MONGODB_URI, options);
+    isConnected = true;
+    console.log('Connected to MongoDB');
+    
     // Create default admin account if it doesn't exist
     await User.createDefaultAdmin();
-  })
-  .catch(err => {
+  } catch (err) {
     console.error('Failed to connect to MongoDB', err);
-  });
+    throw err;
+  }
+};
 
+// Middleware to ensure database connection
+app.use(async (req, res, next) => {
+  try {
+    await connectToDatabase();
+    next();
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Database connection failed',
+      statusCode: 500,
+    });
+  }
+});
 
 const __dirname = path.resolve();
 
