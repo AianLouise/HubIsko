@@ -24,9 +24,10 @@ import HomeNetwork from '../assets/HomeNetwork.png';
 import useTokenExpiry from '../hooks/useTokenExpiry';
 import LandingImage from '../assets/Landing.svg';
 
-
 export default function Home() {
   useTokenExpiry();
+
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -90,14 +91,33 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen">
+      {!imageLoaded && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-80">
+          <svg className="animate-spin h-12 w-12 text-blue-600" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+          </svg>
+        </div>
+      )}
       <Header />
       <main className="flex-grow bg-[#f8f8fb] no-scrollbar overflow-x-hidden mt-[-20px]">
         {/* Hero Section */}
-        <div className="flex items-center justify-center px-5 sm:px-8 mb-20">
+        <div className="flex items-center justify-center px-5 sm:px-8 mb-20" style={{ visibility: imageLoaded ? 'visible' : 'hidden' }}>
           <div className='text-center w-full lg:h-auto py-4 md:py-6 flex flex-col items-center justify-center'>
             {/* Landing Image */}
             <div className='flex justify-center items-center mb-0 w-full'>
-              <img src={LandingImage} alt="Landing Image" className='w-full max-w-xl sm:max-w-2xl md:max-w-3xl h-auto mx-auto' />
+              <img
+                src={LandingImage}
+                alt="Landing Image"
+                className='w-full max-w-xl sm:max-w-2xl md:max-w-3xl h-auto mx-auto'
+                onLoad={() => setImageLoaded(true)}
+                style={{ display: imageLoaded ? 'block' : 'none' }}
+              />
+              {!imageLoaded && (
+                <div className="w-full max-w-xl sm:max-w-2xl md:max-w-3xl h-64 flex items-center justify-center bg-gray-100 animate-pulse rounded-lg mx-auto">
+                  <span className="text-gray-400 text-lg">Loading image...</span>
+                </div>
+              )}
             </div>
 
             <h1 className='text-3xl lg:text-7xl font-bold text-slate-800 mt-[-2rem] sm:mt-[-6rem] mb-2 sm:mb-3 px-4 mx-auto'>
