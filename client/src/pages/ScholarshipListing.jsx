@@ -77,39 +77,39 @@ export default function ScholarshipListing() {
   };
 
   useEffect(() => {
-      const fetchScholarships = async () => {
-        try {
-          const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-          const response = await fetch(`${apiUrl}/api/scholarshipProgram/scholarshipPrograms`);
-          const data = await response.json();
-          setScholarships(data);
-        } catch (error) {
-          console.error('Error fetching scholarships:', error);
-        } finally {
-          setLoading(false);
+    const fetchScholarships = async () => {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+        const response = await fetch(`${apiUrl}/api/scholarshipProgram/scholarshipPrograms`);
+        const data = await response.json();
+        setScholarships(data);
+      } catch (error) {
+        console.error('Error fetching scholarships:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchScholarships();
+  }, []);
+
+  useEffect(() => {
+    const fetchProviders = async () => {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+        const response = await fetch(`${apiUrl}/api/scholarshipProgram/getScholarshipProvider`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
         }
-      };
-  
-      fetchScholarships();
-    }, []);
-  
-    useEffect(() => {
-      const fetchProviders = async () => {
-        try {
-          const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-          const response = await fetch(`${apiUrl}/api/scholarshipProgram/getScholarshipProvider`);
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          const data = await response.json();
-          setProviders(data);
-        } catch (error) {
-          console.error('Error fetching scholarship providers:', error.message);
-        }
-      };
-  
-      fetchProviders();
-    }, []);
+        const data = await response.json();
+        setProviders(data);
+      } catch (error) {
+        console.error('Error fetching scholarship providers:', error.message);
+      }
+    };
+
+    fetchProviders();
+  }, []);
 
   function truncateText(text, maxLength) {
     if (typeof text !== 'string') {
@@ -353,7 +353,8 @@ export default function ScholarshipListing() {
     <div className="flex flex-col min-h-screen">
       <Header />
       <main className="flex-grow bg-gray-50">
-        {/* Hero Section */}        <div className="bg-gradient-to-r from-blue-700 to-blue-500 py-12 mb-8">
+        {/* Hero Section */}
+        <div className="bg-gradient-to-r from-blue-700 to-blue-500 py-12 mb-8">
           <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
               <div className="text-white lg:w-1/2 text-center lg:text-left">
@@ -433,16 +434,17 @@ export default function ScholarshipListing() {
 
           {/* Filters Section */}
           <section className="mb-8">
-            <div className="bg-white rounded-xl shadow-md p-6">              <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-800">Find Scholarships</h2>
-              <button
-                onClick={toggleFilters}
-                className="flex items-center gap-2 text-blue-600 hover:text-blue-800 md:hidden transition"
-              >
-                <FaFilter />
-                <span>{showFilters ? 'Hide Filters' : 'Show Filters'}</span>
-              </button>
-            </div>
+            <div className="bg-white rounded-xl shadow-md p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-800">Find Scholarships</h2>
+                <button
+                  onClick={toggleFilters}
+                  className="flex items-center gap-2 text-blue-600 hover:text-blue-800 md:hidden transition"
+                >
+                  <FaFilter />
+                  <span>{showFilters ? 'Hide Filters' : 'Show Filters'}</span>
+                </button>
+              </div>
 
               <div className="mb-6">
                 <label htmlFor="search-filter" className="block text-sm font-medium text-gray-700 mb-1">Search Scholarships</label>

@@ -43,7 +43,8 @@ export default function Forums() {
 
     const fetchUserDetails = async () => {
         try {
-            const response = await fetch(`/api/auth/user/${currentUser._id}`);
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const response = await fetch(`${apiUrl}/api/auth/user/${currentUser._id}`);
             const data = await response.json();
             setUserDetails(data);
         } catch (error) {
@@ -53,7 +54,8 @@ export default function Forums() {
 
     const fetchScholarship = async () => {
         try {
-            const response = await fetch(`/api/scholarshipProgram/scholarship-programs/${id}`);
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const response = await fetch(`${apiUrl}/api/scholarshipProgram/scholarship-programs/${id}`);
             const data = await response.json();
             setScholarship(data);
         } catch (error) {
@@ -214,7 +216,8 @@ export default function Forums() {
             setNotification('The deadline for this scholarship has passed.');
         } else {
             try {
-                const response = await fetch(`/api/scholarshipProgram/${scholarship.id}/has-applied/${currentUser._id}`);
+                const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                const response = await fetch(`${apiUrl}/api/scholarshipProgram/${scholarship.id}/has-applied/${currentUser._id}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
