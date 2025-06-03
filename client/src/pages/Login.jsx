@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signInStart, signInSuccess, signInFail } from '../redux/user/userSlice';
 import OAuth from '../components/OAuth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faEnvelope, faLock, faCircleExclamation, faXmark } from '@fortawesome/free-solid-svg-icons';
 import NewLogo from '../assets/NewLogo.png';
 import SmallLogo from '../assets/NewLogoClean.png';
+import { motion } from 'framer-motion';
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -139,133 +140,267 @@ export default function SignIn() {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
   return (
-    <div className='bg-[#f8f8fb] flex flex-col md:flex-row items-center text-left gap-10 min-h-screen'>
+    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-blue-50 to-white">
+      {/* Left Side - Illustration & Branding */}
+      <motion.div
+        initial={{ opacity: 0, x: -50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6 }}
+        className="md:w-1/2 flex flex-col items-center justify-center p-8 md:p-16 relative overflow-hidden"
+      >
+        <div className="absolute top-0 left-0 w-full h-full">
+          <div className="absolute top-[30%] left-[-50%] w-[800px] h-[800px] bg-blue-600 rounded-full opacity-10"></div>
+          <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-blue-400 rounded-full opacity-10"></div>
+        </div>
 
-      {/* Left Column for Logo or Image */}
-      <div className='w-1/2 hidden lg:flex justify-center items-center z-10 mx-auto'>
-        <Link to="/">
-          <img src={NewLogo} alt='HubIsko Logo' className='w-80 h-auto bg-white p-4 rounded-full transition-transform duration-300 ease-in-out transform hover:scale-110' />
-        </Link>
-      </div>
+        <div className="relative z-10 flex flex-col items-center">
+          <Link to="/" className="mb-8">
+            <img
+              src={NewLogo}
+              alt="HubIsko Logo"
+              className="w-64 h-auto filter drop-shadow-lg transition-transform duration-300 hover:scale-105"
+            />
+          </Link>
 
-      <div className='absolute w-full h-full'>
-        <div className='bg-blue-600 rounded-full w-full h-full -translate-x-[1100px]'></div>
-      </div>
+          <h1 className="text-3xl md:text-4xl font-bold text-blue-800 mb-4 text-center">Welcome to HubIsko</h1>
+          <p className="text-lg text-gray-600 mb-6 text-center max-w-md">
+            Your gateway to scholarship opportunities and academic success
+          </p>
 
-      {/* <img src='../assets/logo.png' alt='HubIsko Logo' className='w-56 h-56' /> */}
-
-
-      {/* Right Column for Sign In Form */}
-      <div className='lg:w-1/2 w-full flex items-center justify-center'>
-        <div className='flex flex-col items-start justify-center bg-white border rounded-md w-[600px] shadow-md px-10 lg:px-24 py-16 relative'>
-          <div className='flex flex-col justify-center text-left gap-4 mb-8'>
-            <div className='flex flex-row gap-2 items-center mb-4'>
-              <img src={SmallLogo} alt='HubIsko Logo' className='w-12 h-auto' />
-              <span className='font-bold text-lg'>HubIsko</span>
-            </div>
-            <h1 className='text-2xl lg:text-4xl font-bold'>Log in to your Account</h1>
-            <span className='text-sm lg:text-medium text-slate-500'>Welcome back! Please choose the login method:</span>
+          <div className="hidden md:block mt-6 p-6 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg max-w-md">
+            <h3 className="text-xl font-bold text-gray-800 mb-3">Why Choose HubIsko?</h3>
+            <ul className="space-y-2">
+              <li className="flex items-start">
+                <div className="mr-2 mt-0.5 text-blue-600">•</div>
+                <span className="text-gray-700">Access to thousands of scholarship opportunities</span>
+              </li>
+              <li className="flex items-start">
+                <div className="mr-2 mt-0.5 text-blue-600">•</div>
+                <span className="text-gray-700">Streamlined application process</span>
+              </li>
+              <li className="flex items-start">
+                <div className="mr-2 mt-0.5 text-blue-600">•</div>
+                <span className="text-gray-700">Connect with scholarship providers directly</span>
+              </li>
+              <li className="flex items-start">
+                <div className="mr-2 mt-0.5 text-blue-600">•</div>
+                <span className="text-gray-700">Track all your applications in one place</span>
+              </li>
+            </ul>
           </div>
-          <form onSubmit={handleSubmit} className='w-full max-w-md flex flex-col gap-4'>
-            <OAuth />
+        </div>
+      </motion.div>
+
+      {/* Right Side - Login Form */}
+      <motion.div
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="md:w-1/2 flex items-center justify-center p-4 md:p-16"
+      >
+        <div className="w-full max-w-md bg-white p-8 md:p-10 rounded-2xl shadow-xl">
+          <div className="flex items-center mb-6">
+            <img src={SmallLogo} alt="HubIsko" className="w-10 h-10 mr-3" />
+            <h2 className="text-2xl font-bold text-gray-800">Log in to your account</h2>
+          </div>
+
+          <OAuth />
+
+          <div className="flex items-center my-6">
+            <div className="flex-1 h-px bg-gray-300"></div>
+            <div className="px-4 text-sm text-gray-500">or continue with email</div>
+            <div className="flex-1 h-px bg-gray-300"></div>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <div className='border-b-2 mt-6'></div>
-              <div className='text-center -translate-y-4'>
-                <span className='bg-white p-1 px-4 text-slate-500 font-medium'>or continue with email </span>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                Email Address
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FontAwesomeIcon icon={faEnvelope} className="text-gray-400" />
+                </div>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="your@email.com"
+                  required
+                  className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  onChange={handleChange}
+                />
               </div>
             </div>
-            <input
-              type='email'
-              placeholder='Email'
-              id='email'
-              aria-label='Email'
-              required
-              className='border bg-white p-3 rounded-lg focus:outline-blue-600'
-              onChange={handleChange}
-            />
-            <div className="relative">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                placeholder='Password'
-                id='password'
-                aria-label='Password'
-                required
-                className='border bg-white p-3 rounded-lg w-full focus:outline-blue-600'
-                onChange={handleChange}
-              />
-              <button
-                type="button"
-                onClick={togglePasswordVisibility}
-                className='absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-blue-500 hover:underline'
-              >
-                {showPassword ? <FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}
-              </button>
+
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  Password
+                </label>
+                <Link to="/forgot-password" className="text-xs text-blue-600 hover:text-blue-800 transition">
+                  Forgot password?
+                </Link>
+              </div>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FontAwesomeIcon icon={faLock} className="text-gray-400" />
+                </div>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  placeholder="••••••••"
+                  required
+                  className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  onChange={handleChange}
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700"
+                >
+                  <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                </button>
+              </div>
             </div>
-            {/* Forgot Password Link */}
-            <div className="text-right w-full mb-2">
-              <Link to='/forgot-password' className='text-sm text-blue-500 hover:underline'>
-                Forgot Password?
-              </Link>
-            </div>
+
             <button
-              type='submit'
+              type="submit"
               disabled={loading}
-              className='bg-blue-600 text-white p-3 rounded-lg hover:opacity-95 disabled:opacity-50'
+              className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Loading...' : 'Login'}
+              {loading ? (
+                <span className="flex items-center justify-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Logging in...
+                </span>
+              ) : "Sign in"}
             </button>
           </form>
-          <div className='flex w-full p-2 justify-center gap-2 mt-5'>
-            <p>Don't Have an account?</p>
-            <button onClick={openModal} className='text-blue-500 hover:underline'>
-              Register
-            </button>
+
+          <div className="text-center pt-4">
+            <p className="text-sm text-gray-600">
+              Don't have an account?{" "}
+              <button onClick={openModal} className="font-medium text-blue-600 hover:text-blue-800 transition">
+                Register now
+              </button>
+            </p>
           </div>
+        </div>
+      </motion.div>
 
-          {isModalOpen && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-              <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative">
-                <button onClick={closeModal} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-                <h2 className="text-2xl font-bold mb-4 text-center">Register</h2>
-                <p className="mb-6 text-center">Choose your registration type:</p>
-                <div className="flex flex-col gap-4">
-                  <Link to="/register" className="bg-blue-500 text-white py-2 px-4 rounded text-center hover:bg-blue-600 transition duration-200">
-                    Register as a Student
+      {/* Modal for Registration Options */}
+      {isModalOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+        >
+          <motion.div
+            initial={{ scale: 0.9, y: 20 }}
+            animate={{ scale: 1, y: 0 }}
+            exit={{ scale: 0.9, y: 20 }}
+            className="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden"
+          >
+            <div className="relative p-6 md:p-8">
+              <button
+                onClick={closeModal}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <FontAwesomeIcon icon={faXmark} className="h-5 w-5" />
+              </button>
+
+              <div className="text-center mb-6">
+                <img src={SmallLogo} alt="HubIsko Logo" className="w-12 h-12 mx-auto mb-4" />
+                <h3 className="text-2xl font-bold text-gray-800">Join HubIsko</h3>
+                <p className="text-gray-600 mt-2">Choose how you want to register</p>
+              </div>
+
+              <div className="space-y-4">
+                <Link
+                  to="/register"
+                  className="flex items-center justify-center w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow transition-all"
+                >
+                  Register as a Student
+                </Link>
+
+                <div className="relative">
+                  <Link
+                    to="/apply-as-provider"
+                    className={`flex items-center justify-center w-full py-3 px-4 bg-blue-800 hover:bg-blue-900 text-white font-medium rounded-lg shadow transition-all ${isMobile ? "opacity-50 pointer-events-none" : ""
+                      }`}
+                    onClick={(e) => isMobile && e.preventDefault()}
+                  >
+                    Register as a Scholarship Provider
                   </Link>
-
-                  <div className='w-full flex flex-col'>
-                    <Link
-                      to="/apply-as-provider"
-                      className={`bg-blue-800 py-2 px-4 rounded text-center hover:bg-blue-900 transition duration-200 ${isMobile ? 'pointer-events-none opacity-50 bg-white text-blue-600 border-2 font-medium' : 'text-white '}`}
-                      onClick={(e) => isMobile && e.preventDefault()}
-                    >
-                      Register as a Scholarship Provider
-                    </Link>
-                    <span className='block lg:hidden mt-1 text-slate-400 text-xs text-center'>This function isn't available on mobile</span>
-                  </div>
+                  {isMobile && (
+                    <div className="mt-1 text-center text-sm text-red-500">
+                      <FontAwesomeIcon icon={faCircleExclamation} className="mr-1" />
+                      Not available on mobile devices
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          )}
 
-          {showErrorNotification && (
-            <div className="fixed top-5 right-5 bg-red-500 text-white px-4 py-2 rounded-md shadow-md opacity-95">
-              {error.message || 'Something went wrong!'}
+              <div className="mt-6 pt-6 border-t border-gray-200 text-center text-sm text-gray-600">
+                Already have an account?{" "}
+                <button onClick={closeModal} className="font-medium text-blue-600 hover:text-blue-800 transition">
+                  Sign in instead
+                </button>
+              </div>
             </div>
-          )}
-          {showSlowConnectionNotification && (
-            <div className="fixed top-5 right-5 bg-yellow-500 text-white px-4 py-2 rounded-md shadow-md opacity-95">
-              Slow internet connection. Please try again later.
-            </div>
-          )}
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Notifications */}
+      {showErrorNotification && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          className="fixed top-5 right-5 z-50 flex items-center p-4 bg-red-50 border-l-4 border-red-500 rounded-md shadow-lg"
+        >
+          <div className="flex-shrink-0 mr-3">
+            <FontAwesomeIcon icon={faCircleExclamation} className="h-5 w-5 text-red-500" />
+          </div>
+          <div className="flex-1 text-sm text-red-700">
+            {error.message || 'Something went wrong!'}
+          </div>
+          <button
+            className="ml-3 text-red-400 hover:text-red-600"
+            onClick={() => setShowErrorNotification(false)}
+          >
+            <FontAwesomeIcon icon={faXmark} className="h-4 w-4" />
+          </button>
+        </motion.div>
+      )}
+
+      {showSlowConnectionNotification && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          className="fixed top-5 right-5 z-50 flex items-center p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-md shadow-lg"
+        >
+          <div className="flex-shrink-0 mr-3">
+            <FontAwesomeIcon icon={faCircleExclamation} className="h-5 w-5 text-yellow-500" />
+          </div>
+          <div className="flex-1 text-sm text-yellow-700">
+            Slow internet connection. Please try again later.
+          </div>
+          <button
+            className="ml-3 text-yellow-400 hover:text-yellow-600"
+            onClick={() => setShowSlowConnectionNotification(false)}
+          >
+            <FontAwesomeIcon icon={faXmark} className="h-4 w-4" />
+          </button>
+        </motion.div>
+      )}
     </div>
   );
 }
