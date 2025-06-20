@@ -3,8 +3,9 @@ import { useSelector } from 'react-redux';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaAngleRight } from "react-icons/fa";
+import { FaAngleRight, FaSearch, FaUser, FaGraduationCap, FaCalendarAlt, FaChartLine } from "react-icons/fa";
 import { BiFilter } from 'react-icons/bi';
+import { HiOutlineDocumentText, HiOutlineCheckCircle, HiOutlineClock, HiOutlineXCircle } from 'react-icons/hi';
 import useTokenExpiry from '../hooks/useTokenExpiry';
 import ScholarshipAnnouncements from '../components/ScholarDashboard/ScholarshipAnnouncements';
 
@@ -172,252 +173,312 @@ export default function ScholarDashboard() {
       </div>
     );
   }
-
   return (
-    <div className="flex flex-col min-h-screen"> {/* Flex container */}
+    <div className="flex flex-col min-h-screen bg-gray-50">
       <Header />
-      <main className="flex-grow bg-[#f8f8fb] pb-24"> {/* Main content grows to fill available space */}
-        <div className='flex flex-col gap-4 py-2 max-w-6xl mx-auto justify-between p-4 lg:px-24'>
+      <main className="flex-grow">
+        
+        {/* Hero Section */}
+        <div className="bg-gradient-to-r from-blue-700 to-blue-500 py-8 sm:py-12 mb-8">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8">
+              {/* Text Content */}
+              <div className="text-white w-full lg:w-2/3 text-center lg:text-left">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 leading-tight">
+                  Welcome Back, {userDetails?.applicantDetails?.firstName}!
+                </h1>
+                <p className="text-blue-100 text-base sm:text-lg mb-4 sm:mb-6 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                  Track your scholarship applications, discover new opportunities, and manage your academic journey all in one place.
+                </p>
+                
+                {/* Quick Actions */}
+                <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+                  <Link to="/scholarship-listing">
+                    <button className="bg-white text-blue-700 font-semibold py-3 px-6 rounded-lg hover:bg-blue-50 transition-all duration-300 shadow-lg transform hover:scale-105 inline-flex items-center">
+                      <FaSearch className="mr-2" />
+                      Browse Scholarships
+                    </button>
+                  </Link>
+                  <Link to="/forums">
+                    <button className="bg-blue-600 border-2 border-white text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-800 transition-all duration-300 inline-flex items-center">
+                      <HiOutlineDocumentText className="mr-2" />
+                      Join Forums
+                    </button>
+                  </Link>
+                </div>
+              </div>
 
-          {userDetails.status === 'Pending Verification' && (
-            <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 m-6 rounded-md" role="alert">
-              <p className="font-bold">Account Under Verification</p>
-              <p>Your account is currently under verification. Some features may be restricted until your account is fully verified.</p>
-            </div>
-          )}
-
-          {userDetails.status === 'Rejected' && (
-            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 m-6 rounded-md" role="alert">
-              <p className="font-bold">Account Rejected</p>
-              <p>Your account has been rejected. Reason: {userDetails.rejectReason}</p>
-            </div>
-          )}
-
-          {userDetails.status === 'Verified' && (
-            <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 my-8 rounded-md" role="alert">
-              <p className="font-bold">Welcome Back!</p>
-              <p>Your account is fully verified. Enjoy all the features available to you.</p>
-            </div>
-          )}
-
-          {userDetails.status === 'Verify Account' && (
-            <div className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 m-6 rounded-md" role="alert">
-              <p className="font-bold">Verify Your Account</p>
-              <p>Please verify your account to access all features. You can do this by visiting the verification page.</p>
-              <button
-                onClick={handleVerifyClick}
-                className={`mt-4 py-2 px-4 rounded bg-blue-500 text-white font-semibold hover:bg-blue-700 transition duration-200 focus:outline-none ${isLoading ? 'cursor-not-allowed' : ''}`}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <svg className="animate-spin h-5 w-5 text-white mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                  </svg>
-                ) : (
-                  'Verify Profile'
-                )}
-              </button>
-            </div>
-          )}
-
-          <ScholarshipAnnouncements />
-
-          <span className='font-bold text-xl lg:text-2xl'>Scholarship Applications</span>
-
-          {/* <div className='mb-2'>
-            <span className='font-medium text-slate-500 lg:text-base text-sm'>Recent Scholarship Activities</span>
-
-            <div className='flex lg:grid lg:grid-rows-1 lg:grid-cols-3 gap-2 text-sm mt-4 lg:mt-2'>
-
-              <button onClick={handlePrev} className='lg:hidden rounded-md'>
-                <IoMdArrowDropleftCircle className='w-10 h-10 text-blue-600' />
-              </button>
-
-
-
-              {activities.map((activity, index) => (
-                <div
-                  key={index}
-                  className={`border ${activity.borderColor} shadow rounded-md w-full lg:p-2 py-4 flex items-center justify-center lg:flex-col gap-2 font-medium ${index === currentIndex ? 'block' : 'hidden'} lg:block`}
-                >
-                  <div className='items-center flex justify-center'>
-                    <span className='py-2'>{activity.title}</span>
-                    <span className={`${activity.textColor} lg:px-2 py-2 rounded-md`}>{activity.scholarshipTitle}</span>
+              {/* Stats Cards */}
+              <div className="w-full lg:w-1/3">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-4 text-center text-white">
+                    <HiOutlineDocumentText className="w-8 h-8 mx-auto mb-2 text-yellow-300" />
+                    <div className="font-bold text-2xl">{allApplications.length}</div>
+                    <div className="text-blue-100 text-sm">Total Applications</div>
+                  </div>
+                  <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-4 text-center text-white">
+                    <HiOutlineCheckCircle className="w-8 h-8 mx-auto mb-2 text-green-300" />
+                    <div className="font-bold text-2xl">{approvedApplications.length}</div>
+                    <div className="text-blue-100 text-sm">Approved</div>
+                  </div>
+                  <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-4 text-center text-white">
+                    <HiOutlineClock className="w-8 h-8 mx-auto mb-2 text-orange-300" />
+                    <div className="font-bold text-2xl">{pendingApplications.length}</div>
+                    <div className="text-blue-100 text-sm">Pending</div>
+                  </div>
+                  <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-4 text-center text-white">
+                    <FaChartLine className="w-8 h-8 mx-auto mb-2 text-blue-300" />
+                    <div className="font-bold text-2xl">
+                      {allApplications.length > 0 ? Math.round((approvedApplications.length / allApplications.length) * 100) : 0}%
+                    </div>
+                    <div className="text-blue-100 text-sm">Success Rate</div>
                   </div>
                 </div>
-              ))}
-
-              <button onClick={handleNext} className='lg:hidden rounded-md'>
-                <IoMdArrowDropleftCircle className='w-10 h-10 rotate-180  text-blue-600' />
-              </button>
-            </div>
-          </div> */}
-
-          <div className="flex flex-col lg:flex-row justify-between items-center mt-4 font-medium px-4">
-            <div className='flex flex-wrap gap-2 lg:gap-4'>
-              <button
-                className={`flex gap-2 items-center ${filter === 'all' ? 'bg-blue-600 text-white' : 'bg-white hover:bg-slate-200'} shadow lg:px-6 lg:py-2 px-4 py-2 rounded-md text-sm lg:text-md`}
-                onClick={() => setFilter('all')}
-              >
-                <h2 className="hidden lg:block rounded-t-lg text-center">All Applications</h2>
-                <h2 className="lg:hidden block rounded-t-lg text-center">All</h2>
-                <div className='font-bold '>({allApplications.length})</div>
-              </button>
-
-              <button
-                className={`flex gap-2 items-center ${filter === 'approved' ? 'bg-green-600 text-white border-green-600' : 'bg-white hover:bg-slate-200'} shadow lg:px-6 lg:py-2 px-4 py-2 rounded-md text-sm lg:text-md`}
-                onClick={() => setFilter('approved')}
-              >
-                <h2 className="rounded-t-lg text-center">Approved</h2>
-                <div className={`font-bold ${filter === 'approved' ? 'text-white' : 'text-green-600'}`}>({approvedApplications.length})</div>
-              </button>
-
-              <button
-                className={`flex gap-2 items-center ${filter === 'pending' ? 'bg-yellow-500 text-white border-yellow-500' : 'bg-white hover:bg-slate-200'} shadow lg:px-6 lg:py-2 px-4 py-2 rounded-md text-sm lg:text-md`}
-                onClick={() => setFilter('pending')}
-              >
-                <h2 className="rounded-t-lg text-center">Pending</h2>
-                <div className={`font-bold ${filter === 'pending' ? 'text-white' : 'text-yellow-500'}`}>({pendingApplications.length})</div>
-              </button>
-
-              <button
-                className={`flex gap-2 items-center ${filter === 'rejected' ? 'bg-red-600 text-white border-red-600' : 'bg-white hover:bg-slate-200'} shadow lg:px-6 lg:py-2 px-4 py-2 rounded-md text-sm lg:text-md`}
-                onClick={() => setFilter('rejected')}
-              >
-                <h2 className="rounded-t-lg text-center">Rejected</h2>
-                <div className={`font-bold ${filter === 'rejected' ? 'text-white' : 'text-red-600'}`}>({rejectedApplications.length})</div>
-              </button>
-            </div>
-
-            <div className="flex w-full lg:w-auto mt-4 lg:mt-0 gap-2 items-center bg-white shadow px-4 lg:px-6 py-2 rounded-md border text-sm lg:text-md">
-              <input
-                type="text"
-                placeholder="Search Applications"
-                className="w-full bg-transparent outline-none"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+              </div>
             </div>
           </div>
+        </div>
 
-          <div className="lg:grid gap-4">
-            <div className="bg-white shadow rounded-lg col-span-1 md:col-span-2">
-              <div className='flex items-center justify-between font-semibold text-xl w-full p-4 rounded-t-lg border-b'>
-                <h2 className='font-bold text-xl'>Inbox</h2>
-                <button
-                  className='flex items-center gap-2 bg-blue-600 text-sm lg:text-base text-white shadow rounded-md lg:px-6 px-3 py-2'
-                  onClick={() => setSortOrder(sortOrder === 'recent' ? 'oldest' : 'recent')}
-                >
-                  <BiFilter className='w-6 h-6' />
-                  {sortOrder === 'recent' ? 'Recent' : 'Oldest'}
-                </button>
-              </div>
-
-              <div className="space-y-4 p-4 text-slate-800">
-                {filteredApplications.length === 0 ? (
-                  <div className='h-full flex flex-col gap-2 justify-center items-center'>
-                    <span className='text-xl font-medium text-slate-500'>You have no applications yet.</span>
-                    <Link to={'/scholarship-listing'}>
-                      <button className='flex gap-2 items-center text-base lg:text-lg bg-blue-600 rounded-md px-4 py-2 text-white fond-medium hover:bg-blue-800 group transition ease-in-out'>
-                        Go to Scholarship List
-                        <FaAngleRight className='w-5 h-5 group-hover:translate-x-2 transition ease-in-out' />
-                      </button>
-                    </Link>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pb-12">
+          
+          {/* Status Alerts */}
+          <div className="mb-8">
+            {userDetails.status === 'Pending Verification' && (
+              <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-500 text-yellow-800 p-6 rounded-lg shadow-md">
+                <div className="flex items-center">
+                  <HiOutlineClock className="w-6 h-6 mr-3 text-yellow-600" />
+                  <div>
+                    <p className="font-bold text-lg">Account Under Verification</p>
+                    <p className="mt-1">Your account is currently under verification. Some features may be restricted until your account is fully verified.</p>
                   </div>
-                ) : (
-                  <div className="overflow-y-auto max-h-[800px]">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead>
-                        <tr>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Title
-                          </th>
-                          <th scope="col" className="lg:table-cell hidden px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Organization
-                          </th>
-                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Status
-                          </th>
-                          <th scope="col" className="lg:table-cell hidden px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Action
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
-                        {filteredApplications.map(application => (
-                          <tr key={application._id} className="hover:bg-slate-200">
-                            {isMobile ? (
-                              <Link to={`/scholarship-dashboard-details/${application._id}`} className="contents">
-                                <td className="px-6 py-4 whitespace-nowrap flex gap-2 items-center">
-                                  <div className='lg:table-cell hidden bg-white w-12 h-12 rounded-md'>
-                                    {application.scholarshipProgram && application.scholarshipProgram.scholarshipImage ? (
-                                      <img src={application.scholarshipProgram.scholarshipImage} alt="Scholarship" className='w-full h-full object-cover rounded-md' />
-                                    ) : (
-                                      <div className='w-full h-full flex items-center justify-center text-white'>N/A</div>
-                                    )}
-                                  </div>
-                                  <span className='text-sm lg:text-base lg:font-bold'>{application.scholarshipProgram?.title}</span>
-                                </td>
-
-                                <td className="lg:table-cell hidden px-6 py-4 whitespace-nowrap">
-                                  <span>{application.scholarshipProgram?.organizationName}</span>
-                                </td>
-
-                                <td className="px-6 py-4 whitespace-nowrap ">
-                                  <div className='flex flex-row items-center gap-2'>
-                                    <div className={`rounded-full w-2 h-2 ${getStatusColor(application.applicationStatus)}`}></div>
-                                    <span className='lg:text-base text-sm'>{toSentenceCase(application.applicationStatus)}</span>
-                                  </div>
-                                </td>
-
-                                <td className="lg:table-cell hidden px-6 py-4 whitespace-nowrap">
-                                  <Link to={`/scholarship-dashboard-details/${application._id}`}>
-                                    <button className='flex gap-2 items-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition ease-in-out'>
-                                      View
-                                      <FaAngleRight className='w-5 h-5' />
-                                    </button>
-                                  </Link>
-                                </td>
-                              </Link>
-                            ) : (
-                              <>
-                                <td className="lg:px-6 py-4 whitespace-nowrap flex gap-2 items-center">
-                                  <div className='bg-whit w-12 h-12 rounded-md'>
-                                    {application.scholarshipProgram && application.scholarshipProgram.scholarshipImage ? (
-                                      <img src={application.scholarshipProgram.scholarshipImage} alt="Scholarship" className='w-full h-full object-cover rounded-md' />
-                                    ) : (
-                                      <div className='w-full h-full flex items-center justify-center text-white'>N/A</div>
-                                    )}
-                                  </div>
-                                  <span className='text-sm lg:text-base lg:font-bold'>{application.scholarshipProgram?.title}</span>
-                                </td>
-                                <td className="lg:table-cell hidden px-6 py-4 whitespace-nowrap">
-                                  <span>{application.scholarshipProgram?.organizationName}</span>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className='flex items-center gap-2'>
-                                    <div className={`rounded-full w-2 h-2 ${getStatusColor(application.applicationStatus)}`}></div>
-                                    <span className='lg:text-base text-sm'>{toSentenceCase(application.applicationStatus)}</span>
-                                  </div>
-                                </td>
-                                <td className="lg:table-cell hidden px-6 py-4 whitespace-nowrap">
-                                  <Link to={`/scholarship-dashboard-details/${application._id}`}>
-                                    <button className='flex gap-2 items-center bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition ease-in-out'>
-                                      View
-                                      <FaAngleRight className='w-5 h-5' />
-                                    </button>
-                                  </Link>
-                                </td>
-                              </>
-                            )}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
+                </div>
               </div>
+            )}
+
+            {userDetails.status === 'Rejected' && (
+              <div className="bg-gradient-to-r from-red-50 to-pink-50 border-l-4 border-red-500 text-red-800 p-6 rounded-lg shadow-md">
+                <div className="flex items-center">
+                  <HiOutlineXCircle className="w-6 h-6 mr-3 text-red-600" />
+                  <div>
+                    <p className="font-bold text-lg">Account Rejected</p>
+                    <p className="mt-1">Your account has been rejected. Reason: {userDetails.rejectReason}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {userDetails.status === 'Verified' && (
+              <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 text-green-800 p-6 rounded-lg shadow-md">
+                <div className="flex items-center">
+                  <HiOutlineCheckCircle className="w-6 h-6 mr-3 text-green-600" />
+                  <div>
+                    <p className="font-bold text-lg">Welcome Back!</p>
+                    <p className="mt-1">Your account is fully verified. Enjoy all the features available to you.</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {userDetails.status === 'Verify Account' && (
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 text-blue-800 p-6 rounded-lg shadow-md">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <FaUser className="w-6 h-6 mr-3 text-blue-600" />
+                    <div>
+                      <p className="font-bold text-lg">Verify Your Account</p>
+                      <p className="mt-1">Please verify your account to access all features. You can do this by visiting the verification page.</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleVerifyClick}
+                    className={`bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg transform hover:scale-105 ${isLoading ? 'cursor-not-allowed opacity-75' : ''}`}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <svg className="animate-spin h-5 w-5 text-white mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                      </svg>
+                    ) : (
+                      'Verify Profile'
+                    )}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Announcements */}
+          <div className="mb-8">
+            <ScholarshipAnnouncements />
+          </div>
+
+          {/* Applications Section */}
+          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
+              <h2 className="text-2xl font-bold text-white">Scholarship Applications</h2>
+              <p className="text-blue-100 mt-1">Manage and track your scholarship applications</p>
+            </div>
+
+            {/* Filters and Search */}
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                {/* Filter Buttons */}
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    className={`inline-flex items-center px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                      filter === 'all' 
+                        ? 'bg-blue-600 text-white shadow-lg' 
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                    onClick={() => setFilter('all')}
+                  >
+                    <HiOutlineDocumentText className="w-4 h-4 mr-2" />
+                    All ({allApplications.length})
+                  </button>
+                  
+                  <button
+                    className={`inline-flex items-center px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                      filter === 'approved' 
+                        ? 'bg-green-600 text-white shadow-lg' 
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                    onClick={() => setFilter('approved')}
+                  >
+                    <HiOutlineCheckCircle className="w-4 h-4 mr-2" />
+                    Approved ({approvedApplications.length})
+                  </button>
+                  
+                  <button
+                    className={`inline-flex items-center px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                      filter === 'pending' 
+                        ? 'bg-yellow-500 text-white shadow-lg' 
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                    onClick={() => setFilter('pending')}
+                  >
+                    <HiOutlineClock className="w-4 h-4 mr-2" />
+                    Pending ({pendingApplications.length})
+                  </button>
+                  
+                  <button
+                    className={`inline-flex items-center px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                      filter === 'rejected' 
+                        ? 'bg-red-600 text-white shadow-lg' 
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                    onClick={() => setFilter('rejected')}
+                  >
+                    <HiOutlineXCircle className="w-4 h-4 mr-2" />
+                    Rejected ({rejectedApplications.length})
+                  </button>
+                </div>
+
+                {/* Search and Sort */}
+                <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+                  <div className="relative">
+                    <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <input
+                      type="text"
+                      placeholder="Search applications..."
+                      className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full sm:w-64"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                  </div>
+                  
+                  <button
+                    className="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-all duration-300"
+                    onClick={() => setSortOrder(sortOrder === 'recent' ? 'oldest' : 'recent')}
+                  >
+                    <BiFilter className="w-4 h-4 mr-2" />
+                    {sortOrder === 'recent' ? 'Recent First' : 'Oldest First'}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Applications List */}
+            <div className="p-6">
+              {filteredApplications.length === 0 ? (
+                <div className="text-center py-12">
+                  <HiOutlineDocumentText className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-600 mb-2">No applications found</h3>
+                  <p className="text-gray-500 mb-6">
+                    {searchQuery ? 'No applications match your search criteria.' : 'You haven\'t applied to any scholarships yet.'}
+                  </p>
+                  <Link to="/scholarship-listing">
+                    <button className="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg transform hover:scale-105">
+                      <FaGraduationCap className="mr-2" />
+                      Browse Scholarships
+                    </button>
+                  </Link>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {filteredApplications.map(application => (
+                    <div key={application._id} className="border border-gray-200 rounded-lg hover:shadow-md transition-all duration-300">
+                      <div className="p-4 sm:p-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                          <div className="flex items-start gap-4">
+                            <div className="flex-shrink-0">
+                              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden bg-gray-100">
+                                {application.scholarshipProgram?.scholarshipImage ? (
+                                  <img 
+                                    src={application.scholarshipProgram.scholarshipImage} 
+                                    alt="Scholarship" 
+                                    className="w-full h-full object-cover"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center">
+                                    <FaGraduationCap className="w-6 h-6 text-gray-400" />
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                                {application.scholarshipProgram?.title || 'Scholarship Title'}
+                              </h3>
+                              <p className="text-sm text-gray-600 mb-2">
+                                {application.scholarshipProgram?.organizationName}
+                              </p>
+                              
+                              <div className="flex items-center gap-4 text-sm text-gray-500">
+                                <div className="flex items-center">
+                                  <FaCalendarAlt className="w-4 h-4 mr-1" />
+                                  Applied: {new Date(application.createdAt).toLocaleDateString()}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                            <div className="flex items-center">
+                              <div className={`w-3 h-3 rounded-full mr-2 ${getStatusColor(application.applicationStatus)}`}></div>
+                              <span className={`font-medium text-sm px-3 py-1 rounded-full ${
+                                application.applicationStatus === 'Approved' ? 'bg-green-100 text-green-800' :
+                                application.applicationStatus === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                                'bg-red-100 text-red-800'
+                              }`}>
+                                {toSentenceCase(application.applicationStatus)}
+                              </span>
+                            </div>
+                            
+                            <Link to={`/scholarship-dashboard-details/${application._id}`}>
+                              <button className="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 shadow hover:shadow-md">
+                                View Details
+                                <FaAngleRight className="w-4 h-4 ml-2" />
+                              </button>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>

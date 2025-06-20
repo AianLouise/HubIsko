@@ -37,8 +37,7 @@ export default {
       '2xl': '1536px',
       // => @media (min-width: 1536px) { ... }
     }
-  },
-  plugins: [
+  },  plugins: [
     function ({ addUtilities }) {
       const newUtilities = {
         ".no-scrollbar::-webkit-scrollbar": {
@@ -47,6 +46,24 @@ export default {
         ".no-scrollbar": {
           "-ms-overflow-style": "none",
           "scrollbar-width": "none",
+        },
+        ".line-clamp-1": {
+          overflow: "hidden",
+          display: "-webkit-box",
+          "-webkit-box-orient": "vertical",
+          "-webkit-line-clamp": "1",
+        },
+        ".line-clamp-2": {
+          overflow: "hidden",
+          display: "-webkit-box",
+          "-webkit-box-orient": "vertical",
+          "-webkit-line-clamp": "2",
+        },
+        ".line-clamp-3": {
+          overflow: "hidden",
+          display: "-webkit-box",
+          "-webkit-box-orient": "vertical",
+          "-webkit-line-clamp": "3",
         },
       };
 

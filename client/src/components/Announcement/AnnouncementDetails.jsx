@@ -1,20 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { FaRegHeart, FaHeart, FaRegEye, FaBullhorn } from 'react-icons/fa';
+import { FaRegHeart, FaHeart, FaRegEye, FaBullhorn, FaCalendarAlt, FaUser, FaBuilding } from 'react-icons/fa';
 import { BiCommentDots } from 'react-icons/bi';
+import { HiOutlineDotsVertical, HiOutlineReply, HiOutlineTrash, HiOutlineArrowLeft } from 'react-icons/hi';
+import { IoMdArrowDropdown } from 'react-icons/io';
 import AddCommentForm from '../ViewScholarshipDetails/AddCommentForm';
 import { useSelector } from 'react-redux';
-import { FaEllipsisH } from 'react-icons/fa';
-import { IoMdArrowDropdown } from 'react-icons/io';
 import { formatDistanceToNow } from 'date-fns';
-import { BsArrowLeft } from 'react-icons/bs';
 import ProviderHeaderSidebar from '../ProviderHeaderAndSidebar';
 
 const AnnouncementDetails = () => {
     const { announcementId } = useParams();
-    const navigate = useNavigate();
-
-    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const navigate = useNavigate();    const [sidebarOpen, setSidebarOpen] = useState(true);
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
     const [announcement, setAnnouncement] = useState(null);
@@ -24,9 +21,24 @@ const AnnouncementDetails = () => {
     const [likesCount, setLikesCount] = useState(0);
     const [replyContent, setReplyContent] = useState('');
     const [replyingTo, setReplyingTo] = useState(null);
+    const [dropdownVisible, setDropdownVisible] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
 
     const { currentUser } = useSelector((state) => state.user);
     const currentUserId = currentUser ? currentUser._id : null;
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 1024);
+        };
+        
+        window.addEventListener('resize', handleResize);
+        handleResize();
+        
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const fetchAnnouncement = async () => {
         try {
@@ -165,18 +177,12 @@ const AnnouncementDetails = () => {
         } catch (error) {
             console.error(error);
         }
-    };
-
-    const handleCommentAdded = (newComment) => {
+    };    const handleCommentAdded = (newComment) => {
         setAnnouncement((prev) => ({
             ...prev,
             comments: [...prev.comments, newComment]
         }));
     };
-
-    const [dropdownVisible, setDropdownVisible] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
-    const dropdownRef = useRef(null);
 
     const handleDelete = () => {
         setModalVisible(true);
@@ -220,244 +226,371 @@ const AnnouncementDetails = () => {
 
     const handleBackClick = () => {
         navigate(-1);
-    };
-
-    if (loading) {
+    };    if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen">
-                <svg className="animate-spin h-10 w-10 text-blue-600" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                </svg>
+            <div className="flex justify-center items-center min-h-screen bg-gray-50">
+                <div className="flex flex-col items-center">
+                    <svg className="animate-spin h-12 w-12 text-blue-600 mb-4" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                    </svg>
+                    <p className="text-gray-600 font-medium">Loading announcement...</p>
+                </div>
             </div>
         );
     }
 
     if (error) {
-        return <p>{error}</p>;
+        return (
+            <div className="flex justify-center items-center min-h-screen bg-gray-50">
+                <div className="text-center">
+                    <div className="text-red-500 text-6xl mb-4">⚠️</div>
+                    <h2 className="text-2xl font-bold text-gray-800 mb-2">Error Loading Announcement</h2>
+                    <p className="text-gray-600 mb-4">{error}</p>
+                    <button 
+                        onClick={() => window.location.reload()}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors"
+                    >
+                        Try Again
+                    </button>
+                </div>
+            </div>
+        );
     }
 
+    const getRoleIcon = (role) => {
+        switch (role) {
+            case 'applicant':
+                return <FaUser className="w-4 h-4 text-blue-600" />;
+            case 'scholarship_provider':
+                return <FaBuilding className="w-4 h-4 text-green-600" />;
+            case 'admin':
+                return <FaBullhorn className="w-4 h-4 text-red-600" />;
+            default:
+                return <FaUser className="w-4 h-4 text-gray-600" />;
+        }
+    };
+
+    const getUserDisplayName = (user) => {
+        if (user.role === 'admin') return user.username;
+        if (user.role === 'applicant') return `${user.applicantDetails.firstName} ${user.applicantDetails.lastName}`;
+        if (user.role === 'scholarship_provider') return user.scholarshipProviderDetails.organizationName;
+        return 'Unknown User';
+    };
+
     return (
-        <div className='flex flex-col'>
-            <main className='flex-grow transition-all duration-200 ease-in-out'>
-                <div className="flex flex-col items-center pt-7 pb-7">
-                    <div className="relative w-full max-w-4xl">
-                        <div className="flex justify-start items-center w-full">
-                            <div className='flex gap-1 items-center font-medium'>
-                                <div className='flex gap-2'>
-                                    <button
-                                        onClick={handleBackClick}
-                                        className='text-blue-600 flex gap-2 items-center hover:bg-slate-200 bg-white shadow rounded-md border px-6 py-2'
-                                    >
-                                        <BsArrowLeft className='w-6 h-6' /> Back to Scholarship
-                                    </button>
+        <div className="min-h-screen bg-gray-50">
+            <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 max-w-4xl">
+                {/* Breadcrumb Navigation */}
+                <div className="mb-6">
+                    <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
+                        <button
+                            onClick={handleBackClick}
+                            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                        >
+                            <HiOutlineArrowLeft className="w-4 h-4" />
+                            Back to Scholarship
+                        </button>
+                        <IoMdArrowDropdown className="-rotate-90 text-gray-400" />
+                        <span className="text-gray-800 font-medium">Announcement Details</span>
+                    </div>
+                </div>
+
+                {/* Main Announcement Card */}
+                <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                    {/* Header */}
+                    <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-xl overflow-hidden bg-white p-1">
+                                    <img 
+                                        src={announcement.scholarshipProgram.scholarshipImage} 
+                                        alt="Scholarship" 
+                                        className="w-full h-full object-cover rounded-lg"
+                                        onError={(e) => {
+                                            e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMCAyOEMyNC40MTgzIDI4IDI4IDI0LjQxODMgMjggMjBDMjggMTUuNTgxNyAyNC40MTgzIDEyIDIwIDEyQzE1LjU4MTcgMTIgMTIgMTUuNTgxNyAxMiAyMEMxMiAyNC40MTgzIDE1LjU4MTcgMjggMjAgMjhaIiBmaWxsPSIjOTlBM0FFIi8+Cjwvc3ZnPgo=';
+                                        }}
+                                    />
                                 </div>
-                                <IoMdArrowDropdown className='-rotate-90 text-2xl text-blue-600' />
-                                <div className='flex gap-1 items-center'>
-                                    <button className='text-blue-600 flex gap-2 items-center hover:bg-slate-200 bg-white shadow rounded-md border px-6 py-2'>
-                                        <FaBullhorn className='w-4 h-4' /> {/* Add the announcement icon */}
-                                        {announcement.title}
-                                    </button>
+                                <div>
+                                    <h2 className="text-white font-bold text-lg">
+                                        {announcement.scholarshipProgram.organizationName}
+                                    </h2>
+                                    <p className="text-blue-100 text-sm">
+                                        {announcement.scholarshipProgram.title}
+                                    </p>
                                 </div>
                             </div>
-                        </div>
-                        <div className="bg-white border p-4 rounded-md flex flex-col gap-4 transition ease-in-out mt-5">
-                            <div className="flex justify-between items-center">
-                                {announcement.status === 'Deleted' ? (
-                                    <div className="flex flex-col gap-2 items-center">
-                                        <span className="font-bold text-red-600 self-start">This announcement has been deleted.</span>
-                                        <div className="flex gap-2 items-center">
-                                            <div className="w-12 h-12 rounded-md overflow-hidden">
-                                                <img src={announcement.scholarshipProgram.scholarshipImage} alt="Scholarship" className="w-full h-full object-cover" />
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <span className="font-bold">{announcement.scholarshipProgram.organizationName}</span>
-                                                <span className="text-blue-600">{announcement.scholarshipProgram.title}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="flex gap-2 items-center">
-                                        <div className="w-12 h-12 rounded-md overflow-hidden">
-                                            <img src={announcement.scholarshipProgram.scholarshipImage} alt="Scholarship" className="w-full h-full object-cover" />
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <span className="font-bold">{announcement.scholarshipProgram.organizationName}</span>
-                                            <span className="text-blue-600">{announcement.scholarshipProgram.title}</span>
-                                        </div>
-                                    </div>
-                                )}
+                            
+                            {/* Action Menu */}
+                            {currentUser.role === 'scholarship_provider' && (
                                 <div className="relative" ref={dropdownRef}>
-                                    {currentUser.role === 'scholarship_provider' && (
-                                        <>
-                                            <FaEllipsisH
-                                                className="text-gray-600 cursor-pointer mr-3"
-                                                onClick={() => setDropdownVisible(!dropdownVisible)}
-                                            />
-                                            {dropdownVisible && (
-                                                <div className="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-10">
-                                                    <button
-                                                        className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                                                        onClick={handleDelete}
-                                                    >
-                                                        Delete
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </>
+                                    <button
+                                        onClick={() => setDropdownVisible(!dropdownVisible)}
+                                        className="text-white hover:bg-white hover:bg-opacity-20 p-2 rounded-lg transition-colors"
+                                    >
+                                        <HiOutlineDotsVertical className="w-5 h-5" />
+                                    </button>
+                                    
+                                    {dropdownVisible && (
+                                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border z-10">
+                                            <button
+                                                className="flex items-center gap-2 w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 transition-colors"
+                                                onClick={handleDelete}
+                                            >
+                                                <HiOutlineTrash className="w-4 h-4" />
+                                                Delete Announcement
+                                            </button>
+                                        </div>
                                     )}
                                 </div>
+                            )}
+                        </div>
+                    </div>
 
-                                {modalVisible && (
-                                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
-                                        <div className="bg-white p-6 rounded-md shadow-lg">
-                                            <h2 className="text-lg font-bold mb-4">Confirm Delete</h2>
-                                            <p className="mb-4">Are you sure you want to delete this announcement?</p>
-                                            <div className="flex justify-end gap-2">
-                                                <button
-                                                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md"
-                                                    onClick={cancelDelete}
-                                                >
-                                                    Cancel
-                                                </button>
-                                                <button
-                                                    className="px-4 py-2 bg-red-600 text-white rounded-md"
-                                                    onClick={confirmDelete}
-                                                >
-                                                    Delete
-                                                </button>
-                                            </div>
+                    {/* Announcement Content */}
+                    <div className="p-6">
+                        {announcement.status === 'Deleted' ? (
+                            <div className="text-center py-8">
+                                <div className="text-red-500 text-4xl mb-4">🗑️</div>
+                                <h3 className="text-xl font-bold text-red-600 mb-2">Announcement Deleted</h3>
+                                <p className="text-gray-600">This announcement has been removed by the organization.</p>
+                            </div>
+                        ) : (
+                            <>
+                                {/* Title and Content */}
+                                <div className="mb-6">
+                                    <div className="flex items-start gap-3 mb-4">
+                                        <FaBullhorn className="w-6 h-6 text-blue-600 mt-1 flex-shrink-0" />
+                                        <h1 className="text-2xl font-bold text-gray-900 leading-tight">
+                                            {announcement.title}
+                                        </h1>
+                                    </div>
+                                    
+                                    <div className="bg-gray-50 rounded-lg p-4">
+                                        <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                                            {announcement.content}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Engagement Stats */}
+                                <div className="flex items-center justify-between py-4 border-t border-gray-200">
+                                    <div className="flex items-center gap-6">
+                                        <button
+                                            onClick={liked ? handleUnlike : handleLike}
+                                            className="flex items-center gap-2 text-gray-600 hover:text-red-500 transition-colors"
+                                        >
+                                            {liked ? (
+                                                <FaHeart className="w-5 h-5 text-red-500" />
+                                            ) : (
+                                                <FaRegHeart className="w-5 h-5" />
+                                            )}
+                                            <span className="font-medium">{likesCount}</span>
+                                        </button>
+                                        
+                                        <div className="flex items-center gap-2 text-gray-600">
+                                            <BiCommentDots className="w-5 h-5" />
+                                            <span className="font-medium">{announcement.comments.length}</span>
                                         </div>
                                     </div>
-                                )}
-                            </div>
-                            <div className="bg-slate-200 p-4 rounded-md">
-                                <div className="flex justify-between items-center">
-                                    <h1 className="text-2xl font-bold text-blue-600">{announcement.title}</h1>
-                                </div>
-                                <p className="text-gray-700 whitespace-pre-line mt-4">
-                                    <span className="text-blue-600 font-bold"></span> {announcement.content}
-                                </p>
-                            </div>
-                            <div className="border-t mt-2">
-                                <div className="flex flex-row justify-between mt-2 gap-2">
-                                    <div className="flex flex-row gap-2">
-                                        <div className="flex flex-row gap-1 px-2" onClick={liked ? handleUnlike : handleLike}>
-                                            {liked ? <FaHeart className="w-6 h-6 font-bold text-blue-600" /> : <FaRegHeart className="w-6 h-6 font-bold text-blue-600" />}
-                                            <span>{likesCount}</span>
-                                        </div>
-                                        <div className="flex flex-row gap-1">
-                                            <BiCommentDots className="w-6 h-6 text-blue-600" />
-                                            <span>{announcement.comments.length}</span>
-                                        </div>
+                                    
+                                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                                        <FaCalendarAlt className="w-4 h-4" />
+                                        <span>{formatDistanceToNow(new Date(announcement.date), { addSuffix: true })}</span>
                                     </div>
-                                    {/* <div className="flex flex-row gap-1 pr-2">
-                                <FaRegEye className="w-6 h-6 text-blue-600" />
-                                <span>1.2k</span>
-                            </div> */}
-                                    <span className="text-sm text-slate-600">
-                                        Announced: {formatDistanceToNow(new Date(announcement.date), { addSuffix: true })}
-                                    </span>
                                 </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+
+                {/* Comments Section */}
+                {announcement.status !== 'Deleted' && (
+                    <div className="mt-8 bg-white rounded-xl shadow-lg overflow-hidden">
+                        <div className="px-6 py-4 border-b border-gray-200">
+                            <h2 className="text-xl font-bold text-gray-900">
+                                Comments ({announcement.comments.length})
+                            </h2>
+                        </div>
+                        
+                        <div className="p-6">
+                            {/* Add Comment Form */}
+                            <div className="mb-8">
+                                <AddCommentForm 
+                                    announcementId={announcementId} 
+                                    onCommentAdded={handleCommentAdded} 
+                                />
                             </div>
 
-                            <div className="mt-4">
-                                <h2 className="text-xl font-bold">Comments</h2>
+                            {/* Comments List */}
+                            <div className="space-y-6">
                                 {announcement.comments.map((comment, index) => (
-                                    <div key={index} className="bg-white p-4 rounded-md mt-4 shadow-md border border-gray-200">
-                                        <div className="flex gap-4">
-                                            <div className="w-12 h-12 rounded-full overflow-hidden">
-                                                <img src={comment.author.profilePicture} alt={comment.author.username} className="w-full h-full object-cover" />
+                                    <div key={index} className="border border-gray-200 rounded-lg p-4">
+                                        {/* Comment Header */}
+                                        <div className="flex items-start gap-3 mb-3">
+                                            <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
+                                                <img 
+                                                    src={comment.author.profilePicture} 
+                                                    alt={getUserDisplayName(comment.author)}
+                                                    className="w-full h-full object-cover"
+                                                    onError={(e) => {
+                                                        e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMCAyOEMyNC40MTgzIDI4IDI4IDI0LjQxODMgMjggMjBDMjggMTUuNTgxNyAyNC40MTgzIDEyIDIwIDEyQzE1LjU4MTcgMTIgMTIgMTUuNTgxNyAxMiAyMEMxMiAyNC40MTgzIDE1LjU4MTcgMjggMjAgMjhaIiBmaWxsPSIjOTlBM0FFIi8+Cjwvc3ZnPgo=';
+                                                    }}
+                                                />
                                             </div>
-                                            <div className="flex flex-col w-full">
-                                                <div className="flex justify-between items-center">
-                                                    <p className="font-bold">
-                                                        {comment.author.role === 'admin' && comment.author.username}
-                                                        {comment.author.role === 'applicant' && `${comment.author.applicantDetails.firstName} ${comment.author.applicantDetails.lastName}`}
-                                                        {comment.author.role === 'scholarship_provider' && comment.author.scholarshipProviderDetails.organizationName}
-                                                    </p>
-                                                    <p className="text-sm text-gray-500">
+                                            
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <h4 className="font-semibold text-gray-900">
+                                                        {getUserDisplayName(comment.author)}
+                                                    </h4>
+                                                    {getRoleIcon(comment.author.role)}
+                                                    <span className="text-sm text-gray-500">
                                                         {formatDistanceToNow(new Date(comment.date), { addSuffix: true })}
-                                                    </p>
+                                                    </span>
                                                 </div>
-                                                <p className="mt-2">{comment.content}</p>
+                                                <p className="text-gray-700 leading-relaxed">{comment.content}</p>
                                             </div>
                                         </div>
-                                        <div className="border-t mt-4 pt-2">
-                                            <div className="flex flex-row justify-between gap-4">
-                                                <div className="flex flex-row gap-2">
-                                                    <div className="flex flex-row gap-1 px-2" onClick={() => comment.likedBy && comment.likedBy.includes(currentUserId) ? handleCommentUnlike(comment._id) : handleCommentLike(comment._id)}>
-                                                        {comment.likedBy && comment.likedBy.includes(currentUserId) ? <FaHeart className="w-6 h-6 font-bold text-blue-600" /> : <FaRegHeart className="w-6 h-6 font-bold text-blue-600" />}
-                                                        <span>{comment.likesCount}</span>
-                                                    </div>
-                                                    <div className="flex flex-row gap-1">
-                                                        <BiCommentDots className="w-6 h-6 text-blue-600" />
-                                                        <span>{comment.replies ? comment.replies.length : 0}</span>
-                                                    </div>
-                                                </div>
+
+                                        {/* Comment Actions */}
+                                        <div className="flex items-center justify-between pl-13">
+                                            <div className="flex items-center gap-4">
+                                                <button
+                                                    onClick={() => comment.likedBy && comment.likedBy.includes(currentUserId) ? handleCommentUnlike(comment._id) : handleCommentLike(comment._id)}
+                                                    className="flex items-center gap-1 text-gray-600 hover:text-red-500 transition-colors"
+                                                >
+                                                    {comment.likedBy && comment.likedBy.includes(currentUserId) ? (
+                                                        <FaHeart className="w-4 h-4 text-red-500" />
+                                                    ) : (
+                                                        <FaRegHeart className="w-4 h-4" />
+                                                    )}
+                                                    <span className="text-sm">{comment.likesCount || 0}</span>
+                                                </button>
+                                                
+                                                <button
+                                                    onClick={() => setReplyingTo(replyingTo === comment._id ? null : comment._id)}
+                                                    className="flex items-center gap-1 text-gray-600 hover:text-blue-500 transition-colors"
+                                                >
+                                                    <HiOutlineReply className="w-4 h-4" />
+                                                    <span className="text-sm">Reply</span>
+                                                </button>
                                             </div>
-                                            <div className="mt-2">
-                                                {comment.replies && comment.replies.map((reply, replyIndex) => (
-                                                    <div key={replyIndex} className="bg-gray-100 p-2 rounded-md mt-2">
-                                                        <div className="flex gap-4">
-                                                            <div className="w-8 h-8 rounded-full overflow-hidden">
-                                                                <img src={reply.author.profilePicture} alt={reply.author.username} className="w-full h-full object-cover" />
+                                            
+                                            {comment.replies && comment.replies.length > 0 && (
+                                                <span className="text-sm text-gray-500">
+                                                    {comment.replies.length} {comment.replies.length === 1 ? 'reply' : 'replies'}
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        {/* Replies */}
+                                        {comment.replies && comment.replies.length > 0 && (
+                                            <div className="mt-4 ml-13 space-y-3">
+                                                {comment.replies.map((reply, replyIndex) => (
+                                                    <div key={replyIndex} className="bg-gray-50 rounded-lg p-3">
+                                                        <div className="flex items-start gap-2">
+                                                            <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
+                                                                <img 
+                                                                    src={reply.author.profilePicture} 
+                                                                    alt={getUserDisplayName(reply.author)}
+                                                                    className="w-full h-full object-cover"
+                                                                    onError={(e) => {
+                                                                        e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMCAyOEMyNC40MTgzIDI4IDI4IDI0LjQxODMgMjggMjBDMjggMTUuNTgxNyAyNC40MTgzIDEyIDIwIDEyQzE1LjU4MTcgMTIgMTIgMTUuNTgxNyAxMiAyMEMxMiAyNC40MTgzIDE1LjU4MTcgMjggMjAgMjhaIiBmaWxsPSIjOTlBM0FFIi8+Cjwvc3ZnPgo=';
+                                                                    }}
+                                                                />
                                                             </div>
-                                                            <div className="flex flex-col w-full">
-                                                                <div className="flex justify-between items-center">
-                                                                    <p className="font-bold">
-                                                                        {reply.author.role === 'admin' && reply.author.username}
-                                                                        {reply.author.role === 'applicant' && `${reply.author.applicantDetails.firstName} ${reply.author.applicantDetails.lastName}`}
-                                                                        {reply.author.role === 'scholarship_provider' && reply.author.scholarshipProviderDetails.organizationName}
-                                                                    </p>
-                                                                    <p className="text-sm text-gray-500">{formatDistanceToNow(new Date(reply.date), { addSuffix: true })}</p>
+                                                            <div className="flex-1 min-w-0">
+                                                                <div className="flex items-center gap-2 mb-1">
+                                                                    <h5 className="font-medium text-gray-900 text-sm">
+                                                                        {getUserDisplayName(reply.author)}
+                                                                    </h5>
+                                                                    {getRoleIcon(reply.author.role)}
+                                                                    <span className="text-xs text-gray-500">
+                                                                        {formatDistanceToNow(new Date(reply.date), { addSuffix: true })}
+                                                                    </span>
                                                                 </div>
-                                                                <p className="mt-1">{reply.content}</p>
+                                                                <p className="text-gray-700 text-sm">{reply.content}</p>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 ))}
                                             </div>
-                                            {replyingTo === comment._id ? (
-                                                <div className="mt-2">
+                                        )}
+
+                                        {/* Reply Form */}
+                                        {replyingTo === comment._id && (
+                                            <div className="mt-4 ml-13">
+                                                <div className="bg-gray-50 rounded-lg p-3">
                                                     <textarea
-                                                        className="w-full p-2 border rounded-md"
+                                                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                                                        rows="3"
                                                         value={replyContent}
                                                         onChange={(e) => setReplyContent(e.target.value)}
                                                         placeholder="Write a reply..."
                                                     />
-                                                    <div className="flex justify-end gap-2 mt-2">
+                                                    <div className="flex justify-end gap-2 mt-3">
                                                         <button
-                                                            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md"
                                                             onClick={() => setReplyingTo(null)}
+                                                            className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
                                                         >
                                                             Cancel
                                                         </button>
                                                         <button
-                                                            className="px-4 py-2 bg-blue-600 text-white rounded-md"
                                                             onClick={() => handleReplySubmit(comment._id)}
+                                                            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                                                            disabled={!replyContent.trim()}
                                                         >
                                                             Reply
                                                         </button>
                                                     </div>
                                                 </div>
-                                            ) : (
-                                                <button
-                                                    className="mt-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-md"
-                                                    onClick={() => setReplyingTo(comment._id)}
-                                                >
-                                                    Reply
-                                                </button>
-                                            )}
-                                        </div>
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>
 
-                            <AddCommentForm announcementId={announcementId} onCommentAdded={handleCommentAdded} />
+                            {announcement.comments.length === 0 && (
+                                <div className="text-center py-8">
+                                    <BiCommentDots className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                                    <h3 className="text-lg font-medium text-gray-600 mb-2">No comments yet</h3>
+                                    <p className="text-gray-500">Be the first to share your thoughts!</p>
+                                </div>
+                            )}
                         </div>
                     </div>
-                </div>
+                )}
+
+                {/* Delete Confirmation Modal */}
+                {modalVisible && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                        <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+                            <div className="text-center">
+                                <div className="text-red-500 text-4xl mb-4">⚠️</div>
+                                <h3 className="text-xl font-bold text-gray-900 mb-2">Delete Announcement</h3>
+                                <p className="text-gray-600 mb-6">
+                                    Are you sure you want to delete this announcement? This action cannot be undone.
+                                </p>
+                                <div className="flex gap-3 justify-center">
+                                    <button
+                                        onClick={cancelDelete}
+                                        className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition-colors"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={confirmDelete}
+                                        className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </main>
         </div>
     );
