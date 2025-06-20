@@ -52,7 +52,6 @@ export default function ScholarshipListing() {
   const [providerPage, setProviderPage] = useState(0);
   const [showFilters, setShowFilters] = useState(false);
   const [sortOption, setSortOption] = useState('deadline-asc'); // Default sort by deadline ascending
-
   // Constants for provider carousel
   const providersPerPage = isLargeScreen ? 6 : 3;
 
@@ -352,23 +351,120 @@ export default function ScholarshipListing() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-grow bg-gray-50">
-        {/* Hero Section */}
-        <div className="bg-gradient-to-r from-blue-700 to-blue-500 py-12 mb-8">
-          <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
-              <div className="text-white lg:w-1/2 text-center lg:text-left">
-                <h1 className="text-3xl lg:text-4xl font-bold mb-4">Find Your Perfect Scholarship</h1>
-                <p className="text-blue-100 text-lg mb-6 max-w-xl">
+      <main className="flex-grow bg-gray-50">        {/* Hero Section */}
+        <div className="bg-gradient-to-r from-blue-700 to-blue-500 py-8 sm:py-12 mb-8">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8">
+              {/* Text Content */}
+              <div className="text-white w-full lg:w-1/2 text-center lg:text-left order-2 lg:order-1">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold mb-3 sm:mb-4 leading-tight">
+                  Find Your Perfect Scholarship
+                </h1>
+                <p className="text-blue-100 text-base sm:text-lg lg:text-xl mb-4 sm:mb-6 max-w-xl mx-auto lg:mx-0 leading-relaxed">
                   Discover various scholarship options to support your educational journey. Browse through our curated list of opportunities to find the best fit for your academic goals and financial needs.
                 </p>
+                
+                {/* Mobile CTA Button */}
+                <button
+                  onClick={() => document.getElementById('search-filter')?.focus()}
+                  className="bg-white text-blue-700 font-semibold py-3 px-6 rounded-lg hover:bg-blue-50 transition-all duration-300 shadow-lg transform hover:scale-105 inline-flex items-center mx-auto lg:mx-0"
+                >
+                  <FaSearch className="mr-2" />
+                  Start Searching
+                </button>
+
+                {/* Mobile Quick Stats */}
+                <div className="block lg:hidden mt-6">
+                  <div className="grid grid-cols-2 gap-4 text-center text-white max-w-xs mx-auto">
+                    <div>
+                      <div className="font-bold text-lg">{filteredScholarships.length}</div>
+                      <div className="text-blue-100 text-sm">Available</div>
+                    </div>
+                    <div>
+                      <div className="font-bold text-lg">{allProviders.length}</div>
+                      <div className="text-blue-100 text-sm">Providers</div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="lg:w-1/2 flex justify-center">
-                <img
-                  src={ListingIcon}
-                  alt="Scholarship Listing"
-                  className="w-64 h-64 lg:w-96 lg:h-auto object-cover transform hover:scale-105 transition-transform duration-300"
-                />
+
+              {/* Image Content */}
+              <div className="w-full lg:w-1/2 flex justify-center order-1 lg:order-2">
+                <div className="relative">
+                  <img
+                    src={ListingIcon}
+                    alt="Scholarship Listing"
+                    className="w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 xl:w-96 xl:h-auto object-contain transform hover:scale-105 transition-transform duration-300 drop-shadow-2xl"
+                  />
+                  {/* Mobile decorative elements */}
+                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full animate-pulse lg:hidden"></div>
+                  <div className="absolute -bottom-2 -left-2 w-4 h-4 bg-white rounded-full opacity-80 lg:hidden"></div>
+                  <div className="absolute top-1/2 -left-4 w-3 h-3 bg-blue-300 rounded-full opacity-60 lg:hidden"></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop Statistics Bar */}
+            <div className="hidden lg:block mt-12 pt-8 border-t border-blue-400 border-opacity-30">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
+                <div className="group hover:transform hover:scale-105 transition-all duration-300">
+                  <div className="font-bold text-3xl xl:text-4xl mb-2 group-hover:text-yellow-300 transition-colors">
+                    {filteredScholarships.length}
+                  </div>
+                  <div className="text-blue-100 text-sm uppercase tracking-wide">Available Scholarships</div>
+                </div>
+                <div className="group hover:transform hover:scale-105 transition-all duration-300">
+                  <div className="font-bold text-3xl xl:text-4xl mb-2 group-hover:text-yellow-300 transition-colors">
+                    {allProviders.length}
+                  </div>
+                  <div className="text-blue-100 text-sm uppercase tracking-wide">Trusted Providers</div>
+                </div>
+                <div className="group hover:transform hover:scale-105 transition-all duration-300">
+                  <div className="font-bold text-3xl xl:text-4xl mb-2 group-hover:text-yellow-300 transition-colors">
+                    {filteredScholarships.reduce((total, scholarship) => total + scholarship.numberOfScholarships, 0)}
+                  </div>
+                  <div className="text-blue-100 text-sm uppercase tracking-wide">Total Slots Available</div>
+                </div>
+                <div className="group hover:transform hover:scale-105 transition-all duration-300">
+                  <div className="font-bold text-3xl xl:text-4xl mb-2 group-hover:text-yellow-300 transition-colors">
+                    {filteredScholarships.filter(s => {
+                      const deadline = new Date(s.applicationDeadline);
+                      const today = new Date();
+                      const diffTime = deadline - today;
+                      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                      return diffDays >= 0 && diffDays <= 30;
+                    }).length}
+                  </div>
+                  <div className="text-blue-100 text-sm uppercase tracking-wide">Closing This Month</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile Extended Statistics */}
+            <div className="block lg:hidden mt-8 pt-6 border-t border-blue-400 border-opacity-30">
+              <div className="grid grid-cols-3 gap-4 text-center text-white">
+                <div>
+                  <div className="font-bold text-xl">{filteredScholarships.length}</div>
+                  <div className="text-blue-100 text-xs">Scholarships</div>
+                </div>
+                <div>
+                  <div className="font-bold text-xl">
+                    {filteredScholarships.reduce((total, scholarship) => total + scholarship.numberOfScholarships, 0)}
+                  </div>
+                  <div className="text-blue-100 text-xs">Total Slots</div>
+                </div>
+                <div>
+                  <div className="font-bold text-xl">
+                    {filteredScholarships.filter(s => {
+                      const deadline = new Date(s.applicationDeadline);
+                      const today = new Date();
+                      const diffTime = deadline - today;
+                      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                      return diffDays >= 0 && diffDays <= 30;
+                    }).length}
+                  </div>
+                  <div className="text-blue-100 text-xs">Urgent</div>
+                </div>
               </div>
             </div>
           </div>
@@ -402,8 +498,7 @@ export default function ScholarshipListing() {
                 </button>
               </div>
             </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {allProviders
                 .sort((a, b) => a.scholarshipProviderDetails.organizationName.localeCompare(b.scholarshipProviderDetails.organizationName))
                 .slice(providerPage * providersPerPage, (providerPage * providersPerPage) + providersPerPage)
