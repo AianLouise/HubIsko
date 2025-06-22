@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { signOut } from '../redux/user/userSlice';
-import { IoIosNotifications } from "react-icons/io";
+import { IoNotifications } from "react-icons/io5";
 import { IoMenu } from "react-icons/io5";
 import { IoClose } from "react-icons/io5";
 import { BsThreeDots } from "react-icons/bs";
@@ -194,7 +194,7 @@ export default function Header() {
             to={'/notifications'}
             className={`flex items-center justify-center p-1.5 rounded-full relative ${isNotificationsPage ? 'bg-blue-50 text-blue-600 border border-blue-200' : 'bg-white text-blue-600 border border-gray-200 hover:bg-blue-50'}`}
           >
-            <IoIosNotifications className="w-5 h-5" />
+            <IoNotifications className="w-5 h-5" />
             {unreadCount > 0 && (
               <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
                 {unreadCount}
@@ -237,26 +237,25 @@ export default function Header() {
 
         {/* Notification */}
         {currentUser && currentUser.role === 'applicant' && (
-          <div className='relative'>              <button
-            onClick={toggleNotification}
-            className={`relative p-2 rounded-full ${showNotification ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100 text-gray-600 hover:text-blue-600'}`}
-          >
-            <IoIosNotifications className="w-5 h-5" />
-            {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
-                {unreadCount}
-              </span>
-            )}
-          </button>
-
-            {showNotification && (
-              <div ref={notificationRef} className="absolute top-full right-0 mt-2 border bg-white text-gray-800 shadow-lg rounded-lg p-3 w-96 z-50">
+          <div className='relative'>
+            <button
+              onClick={toggleNotification}
+              className={`relative p-2 rounded-full ${showNotification ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100 text-gray-600 hover:text-blue-600'}`}
+            >
+              <IoNotifications className="w-5 h-5" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
+                  {unreadCount}
+                </span>
+              )}
+            </button>            {showNotification && (
+              <div ref={notificationRef} className="absolute top-full right-0 mt-2 bg-white border border-gray-200 shadow-xl rounded-xl p-0 w-96 z-50 overflow-hidden">
                 <div className="flex flex-col">
-                  <div className="flex items-center justify-between pb-2 border-b">
-                    <span className="text-lg font-semibold text-gray-800">Notifications</span>
-                    <div className="flex gap-2">
+                  <div className="flex items-center justify-between p-4 bg-gray-50 border-b border-gray-200">
+                    <span className="text-lg font-semibold text-gray-900">Notifications</span>
+                    <div className="flex gap-1 bg-white border border-gray-200 rounded-lg p-1">
                       <button
-                        className={`px-3 py-1 rounded-md text-sm ${filter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                        className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${filter === 'all' ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'}`}
                         onClick={(e) => {
                           e.stopPropagation();
                           setFilter('all');
@@ -265,7 +264,7 @@ export default function Header() {
                         All
                       </button>
                       <button
-                        className={`px-3 py-1 rounded-md text-sm ${filter === 'unread' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                        className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${filter === 'unread' ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'}`}
                         onClick={(e) => {
                           e.stopPropagation();
                           setFilter('unread');
@@ -275,14 +274,16 @@ export default function Header() {
                       </button>
                     </div>
                   </div>
-
-                  <div className="max-h-[320px] overflow-y-auto py-2 mt-2">
+                  <div className="max-h-80 overflow-y-auto">
                     {loading ? (
-                      <div className="flex justify-center items-center h-32">
-                        <svg className="animate-spin h-6 w-6 text-blue-600" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                        </svg>
+                      <div className="flex justify-center items-center h-32 bg-white">
+                        <div className="flex flex-col items-center">
+                          <svg className="animate-spin h-6 w-6 text-blue-600 mb-2" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                          </svg>
+                          <span className="text-sm text-gray-500">Loading...</span>
+                        </div>
                       </div>
                     ) : (
                       <>
@@ -291,29 +292,36 @@ export default function Header() {
                             {notifications.slice(0, displayedNotifications).map((notification) => (
                               <div
                                 key={notification._id}
-                                className={`flex items-center p-2 text-sm gap-3 cursor-pointer border-b border-gray-100 hover:bg-blue-50 rounded-md ${!notification.read ? 'bg-blue-50' : ''}`}
+                                className={`flex items-start p-4 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors duration-200 hover:bg-blue-50 ${!notification.read ? 'bg-blue-50/50' : 'bg-white'}`}
                                 onClick={() => handleNotificationClick(notification._id)}
                               >
-                                <img
-                                  src={notification.senderId?.profilePicture || 'default-avatar.png'}
-                                  alt="Sender's Avatar"
-                                  className="w-10 h-10 rounded-full object-cover border border-gray-200"
-                                />
-                                <div className="flex-1 min-w-0">
-                                  {notification.senderId?.role === 'scholarship_provider' && (
-                                    <span className="font-semibold text-gray-800">{notification.senderId.scholarshipProviderDetails?.organizationName || 'Unknown Organization'}</span>
+                                <div className="relative">
+                                  <img
+                                    src={notification.senderId?.profilePicture || 'default-avatar.png'}
+                                    alt="Sender's Avatar"
+                                    className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm"
+                                  />
+                                  {!notification.read && (
+                                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-600 rounded-full border-2 border-white"></div>
                                   )}
-                                  {notification.senderId?.role === 'admin' && (
-                                    <span className="font-semibold text-gray-800">{notification.senderId.username || 'Unknown User'}</span>
-                                  )}
-                                  {notification.senderId?.role === 'applicant' && (
-                                    <span className="font-semibold text-gray-800">{`${notification.senderId.applicantDetails?.firstName || 'Unknown'} ${notification.senderId.applicantDetails?.lastName || 'Applicant'}`}</span>
-                                  )}
-                                  <p className="text-gray-600 text-sm truncate">{truncateMessage(notification.message, 50)}</p>
                                 </div>
-                                {!notification.read && (
-                                  <div className="w-2 h-2 bg-blue-600 rounded-full flex-shrink-0"></div>
-                                )}
+                                <div className="flex-1 min-w-0 ml-3">
+                                  <div className="flex items-center justify-between mb-1">
+                                    {notification.senderId?.role === 'scholarship_provider' && (
+                                      <span className="font-semibold text-gray-900 text-sm">{notification.senderId.scholarshipProviderDetails?.organizationName || 'Unknown Organization'}</span>
+                                    )}
+                                    {notification.senderId?.role === 'admin' && (
+                                      <span className="font-semibold text-gray-900 text-sm">{notification.senderId.username || 'Unknown User'}</span>
+                                    )}
+                                    {notification.senderId?.role === 'applicant' && (
+                                      <span className="font-semibold text-gray-900 text-sm">{`${notification.senderId.applicantDetails?.firstName || 'Unknown'} ${notification.senderId.applicantDetails?.lastName || 'Applicant'}`}</span>
+                                    )}
+                                    <span className="text-xs text-gray-400 ml-2 flex-shrink-0">
+                                      {new Date(notification.createdAt).toLocaleDateString()}
+                                    </span>
+                                  </div>
+                                  <p className="text-gray-600 text-sm leading-relaxed">{truncateMessage(notification.message, 60)}</p>
+                                </div>
                               </div>
                             ))}
                           </>
@@ -322,46 +330,60 @@ export default function Header() {
                             {notifications.filter(notification => !notification.read).slice(0, displayedNotifications).map((notification) => (
                               <div
                                 key={notification._id}
-                                className="flex items-center p-2 text-sm gap-3 cursor-pointer border-b border-gray-100 hover:bg-blue-50 rounded-md bg-blue-50"
+                                className="flex items-start p-4 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors duration-200 hover:bg-blue-50 bg-blue-50/50"
                                 onClick={() => handleNotificationClick(notification._id)}
                               >
-                                <img
-                                  src={notification.senderId?.profilePicture || 'default-avatar.png'}
-                                  alt="Sender's Avatar"
-                                  className="w-10 h-10 rounded-full object-cover border border-gray-200"
-                                />
-                                <div className="flex-1 min-w-0">
-                                  {notification.senderId?.role === 'scholarship_provider' && (
-                                    <span className="font-semibold text-gray-800">{notification.senderId.scholarshipProviderDetails?.organizationName || 'Unknown Organization'}</span>
-                                  )}
-                                  {notification.senderId?.role === 'admin' && (
-                                    <span className="font-semibold text-gray-800">{notification.senderId.username || 'Unknown User'}</span>
-                                  )}
-                                  {notification.senderId?.role === 'applicant' && (
-                                    <span className="font-semibold text-gray-800">{`${notification.senderId.applicantDetails?.firstName || 'Unknown'} ${notification.senderId.applicantDetails?.lastName || 'Applicant'}`}</span>
-                                  )}
-                                  <p className="text-gray-600 text-sm truncate">{truncateMessage(notification.message, 50)}</p>
+                                <div className="relative">
+                                  <img
+                                    src={notification.senderId?.profilePicture || 'default-avatar.png'}
+                                    alt="Sender's Avatar"
+                                    className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm"
+                                  />
+                                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-600 rounded-full border-2 border-white"></div>
                                 </div>
-                                <div className="w-2 h-2 bg-blue-600 rounded-full flex-shrink-0"></div>
+                                <div className="flex-1 min-w-0 ml-3">
+                                  <div className="flex items-center justify-between mb-1">
+                                    {notification.senderId?.role === 'scholarship_provider' && (
+                                      <span className="font-semibold text-gray-900 text-sm">{notification.senderId.scholarshipProviderDetails?.organizationName || 'Unknown Organization'}</span>
+                                    )}
+                                    {notification.senderId?.role === 'admin' && (
+                                      <span className="font-semibold text-gray-900 text-sm">{notification.senderId.username || 'Unknown User'}</span>
+                                    )}
+                                    {notification.senderId?.role === 'applicant' && (
+                                      <span className="font-semibold text-gray-900 text-sm">{`${notification.senderId.applicantDetails?.firstName || 'Unknown'} ${notification.senderId.applicantDetails?.lastName || 'Applicant'}`}</span>
+                                    )}
+                                    <span className="text-xs text-gray-400 ml-2 flex-shrink-0">
+                                      {new Date(notification.createdAt).toLocaleDateString()}
+                                    </span>
+                                  </div>
+                                  <p className="text-gray-600 text-sm leading-relaxed">{truncateMessage(notification.message, 60)}</p>
+                                </div>
                               </div>
                             ))}
                           </>
                         ) : (
-                          <div className="text-center py-6 text-gray-500">No notifications to display</div>
+                          <div className="flex flex-col items-center justify-center py-8 px-4 bg-white">
+                            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-3">
+                              <IoNotifications className="w-8 h-8 text-gray-400" />
+                            </div>
+                            <p className="text-gray-500 text-sm text-center">No notifications to display</p>
+                            <p className="text-gray-400 text-xs text-center mt-1">You're all caught up!</p>
+                          </div>
                         )}
                       </>
                     )}
                   </div>
-
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleSeeAllNotifications();
-                    }}
-                    className="mt-2 bg-blue-600 text-white rounded-md p-2 text-sm font-medium hover:bg-blue-700 w-full"
-                  >
-                    See All Notifications
-                  </button>
+                  <div className="p-4 bg-gray-50 border-t border-gray-200">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSeeAllNotifications();
+                      }}
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-2.5 text-sm font-medium transition-colors duration-200 shadow-sm"
+                    >
+                      View All Notifications
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
