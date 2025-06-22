@@ -6,6 +6,8 @@ import { storage } from '../../firebase'; // Adjust the import path as needed
 import CustomNotification from '../CustomNotification';
 import { updateUserSuccess } from '../../redux/user/userSlice'; // Adjust the import path as needed
 
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 const UpdateProfile = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -22,10 +24,9 @@ const UpdateProfile = () => {
     // Refs for file inputs
     const profilePictureInputRef = useRef(null);
 
-    useEffect(() => {
-        const fetchUserDetails = async () => {
+    useEffect(() => {        const fetchUserDetails = async () => {
             try {
-                const response = await fetch(`/api/auth/user/${userId}`);
+                const response = await fetch(`${apiUrl}/api/auth/user/${userId}`);
                 if (!response.ok) {
                     throw new Error('Error fetching user details');
                 }
@@ -89,10 +90,9 @@ const UpdateProfile = () => {
 
             const updatedFormData = {
                 profilePicture: profilePictureUrl,
-            };
-            console.log('Updated form data:', updatedFormData);
+            };            console.log('Updated form data:', updatedFormData);
 
-            const response = await fetch(`/api/profile/update-profile/${userId}`, {
+            const response = await fetch(`${apiUrl}/api/profile/update-profile/${userId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

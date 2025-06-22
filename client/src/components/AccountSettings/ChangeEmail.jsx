@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import CustomNotification from '../CustomNotification';
 
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function ChangeEmail() {
     const navigate = useNavigate();
     const currentUser = useSelector((state) => state.user.currentUser);
@@ -19,7 +21,7 @@ export default function ChangeEmail() {
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
-                const response = await fetch(`/api/auth/user/${userId}`);
+                const response = await fetch(`${apiUrl}/api/auth/user/${userId}`);
                 if (!response.ok) {
                     throw new Error('Error fetching user details');
                 }
@@ -66,7 +68,7 @@ export default function ChangeEmail() {
                 newEmail: formData.newEmail
             };
 
-            const response = await fetch(`/api/profile/change-email/${userId}`, { // Update the path to match your endpoint
+            const response = await fetch(`${apiUrl}/api/profile/change-email/${userId}`, { // Update the path to match your endpoint
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

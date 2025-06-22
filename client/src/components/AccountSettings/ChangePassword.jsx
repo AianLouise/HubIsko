@@ -5,6 +5,8 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import CustomNotification from '../CustomNotification';
 import { useNavigate } from 'react-router-dom';
 
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function ChangePassword() {
     const currentUser = useSelector((state) => state.user.currentUser);
     const dispatch = useDispatch();
@@ -95,7 +97,7 @@ export default function ChangePassword() {
 
             console.log('Request Payload:', payload); // Debugging log
 
-            const response = await fetch(`/api/user/change-password/${currentUser._id}`, {
+            const response = await fetch(`${apiUrl}/api/user/change-password/${currentUser._id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -293,7 +295,7 @@ export default function ChangePassword() {
                 <div className="flex items-start space-x-2">
                     <div className="flex-shrink-0">
                         <svg className="w-4 h-4 text-amber-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m-1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
                     <div className="flex-1">
