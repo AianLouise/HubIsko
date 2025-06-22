@@ -308,225 +308,339 @@ const EducationInformation = () => {
         "BS in Tourism Management",
         "BS in Veterinary Medicine",
         "BS in Zoology"
-    ];
-
-    const inputBaseClasses = "block w-full p-2 rounded-lg border transition duration-200";
+    ];    const inputBaseClasses = "block w-full px-3 py-2.5 rounded-md border transition-all duration-200 text-sm";
     const getInputClasses = (isEditing) => {
         return isEditing
-            ? `${inputBaseClasses} border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 shadow-sm`
-            : `${inputBaseClasses} bg-gray-100 border-gray-200 cursor-not-allowed`;
+            ? `${inputBaseClasses} border-gray-300 bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none shadow-sm hover:border-gray-400`
+            : `${inputBaseClasses} bg-gray-50 border-gray-200 cursor-not-allowed text-gray-700`;
     };
 
     return (
-        <div className="bg-white lg:gap-8 w-full border shadow rounded-md">
-            <div className="flex justify-between items-center p-4 lg:px-12 lg:py-4 rounded-t-md border-b">
-                <span className="text-base lg:text-xl font-bold">Your Education Background</span>
-                <div className="flex gap-2">
-                    <button
-                        onClick={isEditing ? handleSave : toggleEdit}
-                        className="flex gap-2 items-center bg-blue-600 text-white lg:px-6 px-4 py-2 rounded-md font-bold hover:bg-blue-800"
-                    >
-                        {isEditing ? <RiSaveFill /> : <RiEditFill />}
-                        {isEditing ? 'Save' : 'Edit'}
-                    </button>
-                    {isEditing && (
+        <div className="bg-white w-full rounded-lg shadow-md border border-gray-100 overflow-hidden">
+            {/* Header Section */}
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 sm:px-6 py-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-bold text-white">Educational Background</h3>
+                            <p className="text-blue-100 text-sm">Manage your academic history and achievements</p>
+                        </div>
+                    </div>
+                    <div className="flex gap-2">
                         <button
-                            onClick={handleCancel}
-                            className="flex gap-2 items-center bg-red-600 text-white lg:px-6 px-4 py-2 rounded-md font-bold hover:bg-red-800"
+                            onClick={isEditing ? handleSave : toggleEdit}
+                            className="inline-flex items-center space-x-2 bg-white text-blue-600 font-medium px-4 py-2 rounded-md transition-all duration-200 hover:bg-blue-50 shadow-sm text-sm"
                         >
-                            <RiCloseFill />
-                            Cancel
+                            {isEditing ? <RiSaveFill className="w-4 h-4" /> : <RiEditFill className="w-4 h-4" />}
+                            <span>{isEditing ? 'Save Changes' : 'Edit Information'}</span>
                         </button>
-                    )}
-                </div>
-            </div>
-
-            <div className="flex flex-col px-4 lg:px-12 py-8 font-normal gap-4">
-                {/* Elementary */}
-                <span className='text-lg font-bold block'>Elementary</span>
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-                    <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>School <span className="text-red-500">*</span></label>
-                        <input
-                            type="text"
-                            name="school"
-                            value={formData.education?.elementary?.school || ''}
-                            onChange={(e) => handleChange(e, 'elementary')}
-                            required
-                            placeholder="Enter elementary school name"
-                            className={getInputClasses(isEditing)}
-                            disabled={!isEditing}
-                        />
-                        {errors.elementarySchool && <p className="text-red-500 text-sm">{errors.elementarySchool}</p>}
-                    </div>
-                    <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>
-                            Award <span className='text-red-500'>*</span> <span className='text-gray-500'>(Type N/A if not applicable)</span>
-                        </label>
-                        <input
-                            type="text"
-                            name="award"
-                            value={formData.education?.elementary?.award || ''}
-                            onChange={(e) => handleChange(e, 'elementary')}
-                            placeholder="Enter elementary award"
-                            className={getInputClasses(isEditing)}
-                            disabled={!isEditing}
-                        />
-                        {errors.elementaryAward && <p className="text-red-500 text-sm">{errors.elementaryAward}</p>}
-                    </div>
-                    <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated <span className="text-red-500">*</span></label>
-                        <select
-                            name="yearGraduated"
-                            value={formData.education?.elementary?.yearGraduated || ''}
-                            onChange={(e) => handleChange(e, 'elementary')}
-                            required
-                            className={getInputClasses(isEditing)}
-                            disabled={!isEditing}
-                        >
-                            <option value="">Select year</option>
-                            {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
-                                <option key={year} value={year}>{year}</option>
-                            ))}
-                        </select>
-                        {errors.elementaryYearGraduated && <p className="text-red-500 text-sm">{errors.elementaryYearGraduated}</p>}
-                    </div>
-                </div>
-
-                {/* Junior High School */}
-                <span className='text-lg font-bold mt-8 block'>Junior High School</span>
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-                    <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>School <span className="text-red-500">*</span></label>
-                        <input
-                            type="text"
-                            name="school"
-                            value={formData.education?.juniorHighSchool?.school || ''}
-                            onChange={(e) => handleChange(e, 'juniorHighSchool')}
-                            required
-                            placeholder="Enter junior high school name"
-                            className={getInputClasses(isEditing)}
-                            disabled={!isEditing}
-                        />
-                        {errors.juniorHighSchoolSchool && <p className="text-red-500 text-sm">{errors.juniorHighSchoolSchool}</p>}
-                    </div>
-                    <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>Award <span className='text-red-500'>*</span> <span className='text-gray-500'>(Type N/A if not applicable)</span></label>
-                        <input
-                            type="text"
-                            name="award"
-                            value={formData.education?.juniorHighSchool?.award || ''}
-                            onChange={(e) => handleChange(e, 'juniorHighSchool')}
-                            placeholder="Enter junior high school award"
-                            className={getInputClasses(isEditing)}
-                            disabled={!isEditing}
-                        />
-                        {errors.juniorHighSchoolAward && <p className="text-red-500 text-sm">{errors.juniorHighSchoolAward}</p>}
-                    </div>
-                    <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated <span className="text-red-500">*</span></label>
-                        <select
-                            name="yearGraduated"
-                            value={formData.education?.juniorHighSchool?.yearGraduated || ''}
-                            onChange={(e) => handleChange(e, 'juniorHighSchool')}
-                            required
-                            className={getInputClasses(isEditing)}
-                            disabled={!isEditing}
-                        >
-                            <option value="">Select year</option>
-                            {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
-                                <option key={year} value={year}>{year}</option>
-                            ))}
-                        </select>
-                        {errors.juniorHighSchoolYearGraduated && <p className="text-red-500 text-sm">{errors.juniorHighSchoolYearGraduated}</p>}
-                    </div>
-                </div>
-
-                {/* Senior High School */}
-                <span className='text-lg font-bold mt-8 block'>Senior High School</span>
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-                    <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>School <span className="text-red-500">*</span></label>
-                        <input
-                            type="text"
-                            name="school"
-                            value={formData.education?.seniorHighSchool?.school || ''}
-                            onChange={(e) => handleChange(e, 'seniorHighSchool')}
-                            required
-                            placeholder="Enter senior high school name"
-                            className={getInputClasses(isEditing)}
-                            disabled={!isEditing}
-                        />
-                        {errors.seniorHighSchoolSchool && <p className="text-red-500 text-sm">{errors.seniorHighSchoolSchool}</p>}
-                    </div>
-                    <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>Award <span className='text-red-500'>*</span> <span className='text-gray-500'>(Type N/A if not applicable)</span></label>
-                        <input
-                            type="text"
-                            name="award"
-                            value={formData.education?.seniorHighSchool?.award || ''}
-                            onChange={(e) => handleChange(e, 'seniorHighSchool')}
-                            placeholder="Enter senior high school award"
-                            className={getInputClasses(isEditing)}
-                            disabled={!isEditing}
-                        />
-                        {errors.seniorHighSchoolAward && <p className="text-red-500 text-sm">{errors.seniorHighSchoolAward}</p>}
-                    </div>
-                    <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>Year Graduated <span className="text-red-500">*</span></label>
-                        <select
-                            name="yearGraduated"
-                            value={formData.education?.seniorHighSchool?.yearGraduated || ''}
-                            onChange={(e) => handleChange(e, 'seniorHighSchool')}
-                            required
-                            className={getInputClasses(isEditing)}
-                            disabled={!isEditing}
-                        >
-                            <option value="">Select year</option>
-                            {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
-                                <option key={year} value={year}>{year}</option>
-                            ))}
-                        </select>
-                        {errors.seniorHighSchoolYearGraduated && <p className="text-red-500 text-sm">{errors.seniorHighSchoolYearGraduated}</p>}
-                    </div>
-                </div>
-
-                {/* College */}
-                <span className='text-lg font-bold mt-8 block'>College</span>
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-                    <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>College <span className="text-red-500">*</span></label>
-                        <input
-                            type="text"
-                            name="school"
-                            value={formData.education?.college?.school || ''}
-                            onChange={(e) => handleChange(e, 'college')}
-                            required
-                            placeholder="Enter college name"
-                            className={getInputClasses(isEditing)}
-                            disabled={!isEditing}
-                        />
-                        {errors.collegeSchool && <p className="text-red-500 text-sm">{errors.collegeSchool}</p>}
-                    </div>
-                    <div>
-                        <label className='block text-sm font-medium text-gray-700 mb-2'>College Course <span className="text-red-500">*</span></label>
-                        <select
-                            name="course"
-                            value={formData.education?.college?.course || ''}
-                            onChange={(e) => handleChange(e, 'college')}
-                            required
-                            className={getInputClasses(isEditing)}
-                            disabled={!isEditing}
-                        >
-                            <option value="" disabled>Select your course</option>
-                            {courses.map((course) => (
-                                <option key={course} value={course}>{course}</option>
-                            ))}
-                        </select>
-                        {errors.collegeCourse && <p className="text-red-500 text-sm">{errors.collegeCourse}</p>}
+                        {isEditing && (
+                            <button
+                                onClick={handleCancel}
+                                className="inline-flex items-center space-x-2 bg-red-500 hover:bg-red-600 text-white font-medium px-4 py-2 rounded-md transition-all duration-200 shadow-sm text-sm"
+                            >
+                                <RiCloseFill className="w-4 h-4" />
+                                <span>Cancel</span>
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
+
+            {/* Form Content */}
+            <div className="p-4 sm:p-6">                {/* Form Description */}
+                <div className="mb-6 p-3 bg-blue-50 rounded-md border border-blue-200">
+                    <div className="flex items-start space-x-3">
+                        <div className="w-4 h-4 text-blue-600 mt-0.5">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 className="text-sm font-semibold text-blue-800 mb-1">Educational Background Form</h4>
+                            <p className="text-xs text-blue-700">Please provide accurate information about your educational journey. Fields marked with <span className="text-red-500">*</span> are required.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="space-y-6">                    {/* Elementary */}
+                    <div className="space-y-4">
+                        <div className="flex items-center space-x-3">
+                            <div className="w-7 h-7 bg-green-100 rounded-full flex items-center justify-center">
+                                <span className="text-green-600 font-bold text-xs">1</span>
+                            </div>
+                            <h4 className="text-base font-bold text-gray-900">Elementary Education</h4>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pl-10">
+                            <div className="space-y-2">
+                                <label className="block text-sm font-semibold text-gray-700">School Name <span className="text-red-500">*</span></label>
+                                <input
+                                    type="text"
+                                    name="school"
+                                    value={formData.education?.elementary?.school || ''}
+                                    onChange={(e) => handleChange(e, 'elementary')}
+                                    required
+                                    placeholder="Enter elementary school name"
+                                    className={getInputClasses(isEditing)}
+                                    disabled={!isEditing}
+                                />
+                                {errors.elementarySchool && <p className="text-red-500 text-xs mt-1 flex items-center space-x-1">
+                                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path>
+                                    </svg>
+                                    <span>{errors.elementarySchool}</span>
+                                </p>}
+                            </div>
+                            <div className="space-y-2">
+                                <label className="block text-sm font-semibold text-gray-700">
+                                    Award <span className="text-red-500">*</span> 
+                                    <span className="text-gray-500 font-normal"> (Type N/A if not applicable)</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="award"
+                                    value={formData.education?.elementary?.award || ''}
+                                    onChange={(e) => handleChange(e, 'elementary')}
+                                    placeholder="Enter award or N/A"
+                                    className={getInputClasses(isEditing)}
+                                    disabled={!isEditing}
+                                />
+                                {errors.elementaryAward && <p className="text-red-500 text-xs mt-1 flex items-center space-x-1">
+                                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path>
+                                    </svg>
+                                    <span>{errors.elementaryAward}</span>
+                                </p>}
+                            </div>
+                            <div className="space-y-2">
+                                <label className="block text-sm font-semibold text-gray-700">Year Graduated <span className="text-red-500">*</span></label>
+                                <select
+                                    name="yearGraduated"
+                                    value={formData.education?.elementary?.yearGraduated || ''}
+                                    onChange={(e) => handleChange(e, 'elementary')}
+                                    required
+                                    className={getInputClasses(isEditing)}
+                                    disabled={!isEditing}
+                                >
+                                    <option value="">Select graduation year</option>
+                                    {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                                        <option key={year} value={year}>{year}</option>
+                                    ))}
+                                </select>
+                                {errors.elementaryYearGraduated && <p className="text-red-500 text-xs mt-1 flex items-center space-x-1">
+                                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path>
+                                    </svg>
+                                    <span>{errors.elementaryYearGraduated}</span>
+                                </p>}
+                            </div>
+                        </div>
+                    </div>                    {/* Junior High School */}
+                    <div className="space-y-4">
+                        <div className="flex items-center space-x-3">
+                            <div className="w-7 h-7 bg-blue-100 rounded-full flex items-center justify-center">
+                                <span className="text-blue-600 font-bold text-xs">2</span>
+                            </div>
+                            <h4 className="text-base font-bold text-gray-900">Junior High School</h4>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pl-10">
+                            <div className="space-y-2">
+                                <label className="block text-sm font-semibold text-gray-700">School Name <span className="text-red-500">*</span></label>
+                                <input
+                                    type="text"
+                                    name="school"
+                                    value={formData.education?.juniorHighSchool?.school || ''}
+                                    onChange={(e) => handleChange(e, 'juniorHighSchool')}
+                                    required
+                                    placeholder="Enter junior high school name"
+                                    className={getInputClasses(isEditing)}
+                                    disabled={!isEditing}
+                                />
+                                {errors.juniorHighSchoolSchool && <p className="text-red-500 text-xs mt-1 flex items-center space-x-1">
+                                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path>
+                                    </svg>
+                                    <span>{errors.juniorHighSchoolSchool}</span>
+                                </p>}
+                            </div>
+                            <div className="space-y-2">
+                                <label className="block text-sm font-semibold text-gray-700">
+                                    Award <span className="text-red-500">*</span> 
+                                    <span className="text-gray-500 font-normal"> (Type N/A if not applicable)</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="award"
+                                    value={formData.education?.juniorHighSchool?.award || ''}
+                                    onChange={(e) => handleChange(e, 'juniorHighSchool')}
+                                    placeholder="Enter award or N/A"
+                                    className={getInputClasses(isEditing)}
+                                    disabled={!isEditing}
+                                />
+                                {errors.juniorHighSchoolAward && <p className="text-red-500 text-xs mt-1 flex items-center space-x-1">
+                                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path>
+                                    </svg>
+                                    <span>{errors.juniorHighSchoolAward}</span>
+                                </p>}
+                            </div>
+                            <div className="space-y-2">
+                                <label className="block text-sm font-semibold text-gray-700">Year Graduated <span className="text-red-500">*</span></label>
+                                <select
+                                    name="yearGraduated"
+                                    value={formData.education?.juniorHighSchool?.yearGraduated || ''}
+                                    onChange={(e) => handleChange(e, 'juniorHighSchool')}
+                                    required
+                                    className={getInputClasses(isEditing)}
+                                    disabled={!isEditing}
+                                >
+                                    <option value="">Select graduation year</option>
+                                    {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                                        <option key={year} value={year}>{year}</option>
+                                    ))}
+                                </select>
+                                {errors.juniorHighSchoolYearGraduated && <p className="text-red-500 text-xs mt-1 flex items-center space-x-1">
+                                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path>
+                                    </svg>
+                                    <span>{errors.juniorHighSchoolYearGraduated}</span>
+                                </p>}
+                            </div>
+                        </div>
+                    </div>                    {/* Senior High School */}
+                    <div className="space-y-4">
+                        <div className="flex items-center space-x-3">
+                            <div className="w-7 h-7 bg-purple-100 rounded-full flex items-center justify-center">
+                                <span className="text-purple-600 font-bold text-xs">3</span>
+                            </div>
+                            <h4 className="text-base font-bold text-gray-900">Senior High School</h4>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pl-10">
+                            <div className="space-y-2">
+                                <label className="block text-sm font-semibold text-gray-700">School Name <span className="text-red-500">*</span></label>
+                                <input
+                                    type="text"
+                                    name="school"
+                                    value={formData.education?.seniorHighSchool?.school || ''}
+                                    onChange={(e) => handleChange(e, 'seniorHighSchool')}
+                                    required
+                                    placeholder="Enter senior high school name"
+                                    className={getInputClasses(isEditing)}
+                                    disabled={!isEditing}
+                                />
+                                {errors.seniorHighSchoolSchool && <p className="text-red-500 text-xs mt-1 flex items-center space-x-1">
+                                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path>
+                                    </svg>
+                                    <span>{errors.seniorHighSchoolSchool}</span>
+                                </p>}
+                            </div>
+                            <div className="space-y-2">
+                                <label className="block text-sm font-semibold text-gray-700">
+                                    Award <span className="text-red-500">*</span> 
+                                    <span className="text-gray-500 font-normal"> (Type N/A if not applicable)</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    name="award"
+                                    value={formData.education?.seniorHighSchool?.award || ''}
+                                    onChange={(e) => handleChange(e, 'seniorHighSchool')}
+                                    placeholder="Enter award or N/A"
+                                    className={getInputClasses(isEditing)}
+                                    disabled={!isEditing}
+                                />
+                                {errors.seniorHighSchoolAward && <p className="text-red-500 text-xs mt-1 flex items-center space-x-1">
+                                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path>
+                                    </svg>
+                                    <span>{errors.seniorHighSchoolAward}</span>
+                                </p>}
+                            </div>
+                            <div className="space-y-2">
+                                <label className="block text-sm font-semibold text-gray-700">Year Graduated <span className="text-red-500">*</span></label>
+                                <select
+                                    name="yearGraduated"
+                                    value={formData.education?.seniorHighSchool?.yearGraduated || ''}
+                                    onChange={(e) => handleChange(e, 'seniorHighSchool')}
+                                    required
+                                    className={getInputClasses(isEditing)}
+                                    disabled={!isEditing}
+                                >
+                                    <option value="">Select graduation year</option>
+                                    {Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                                        <option key={year} value={year}>{year}</option>
+                                    ))}
+                                </select>
+                                {errors.seniorHighSchoolYearGraduated && <p className="text-red-500 text-xs mt-1 flex items-center space-x-1">
+                                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path>
+                                    </svg>
+                                    <span>{errors.seniorHighSchoolYearGraduated}</span>
+                                </p>}
+                            </div>
+                        </div>
+                    </div>                    {/* College */}
+                    <div className="space-y-4">
+                        <div className="flex items-center space-x-3">
+                            <div className="w-7 h-7 bg-orange-100 rounded-full flex items-center justify-center">
+                                <span className="text-orange-600 font-bold text-xs">4</span>
+                            </div>
+                            <h4 className="text-base font-bold text-gray-900">College Education</h4>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pl-10">
+                            <div className="space-y-2">
+                                <label className="block text-sm font-semibold text-gray-700">College Name <span className="text-red-500">*</span></label>
+                                <input
+                                    type="text"
+                                    name="school"
+                                    value={formData.education?.college?.school || ''}
+                                    onChange={(e) => handleChange(e, 'college')}
+                                    required
+                                    placeholder="Enter college/university name"
+                                    className={getInputClasses(isEditing)}
+                                    disabled={!isEditing}
+                                />
+                                {errors.collegeSchool && <p className="text-red-500 text-xs mt-1 flex items-center space-x-1">
+                                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path>
+                                    </svg>
+                                    <span>{errors.collegeSchool}</span>
+                                </p>}
+                            </div>
+                            <div className="space-y-2">
+                                <label className="block text-sm font-semibold text-gray-700">Course <span className="text-red-500">*</span></label>
+                                <select
+                                    name="course"
+                                    value={formData.education?.college?.course || ''}
+                                    onChange={(e) => handleChange(e, 'college')}
+                                    required
+                                    className={getInputClasses(isEditing)}
+                                    disabled={!isEditing}
+                                >
+                                    <option value="" disabled>Select your course</option>
+                                    {courses.map((course) => (
+                                        <option key={course} value={course}>{course}</option>
+                                    ))}
+                                </select>
+                                {errors.collegeCourse && <p className="text-red-500 text-xs mt-1 flex items-center space-x-1">
+                                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path>
+                                    </svg>
+                                    <span>{errors.collegeCourse}</span>
+                                </p>}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Notification */}
             {notification && (
                 <CustomNotification
                     type={notification.type}

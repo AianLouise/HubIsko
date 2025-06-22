@@ -34,6 +34,5 @@ export default function AccountManagement() {
         </div>
       </div>
     </div>
-
   );
 }
