@@ -87,48 +87,49 @@ export default function ChangeEmail() {
         } catch (error) {
             setNotification({ message: `Failed to request email update: ${error.message}`, type: 'error' });
         }
-    };    return (
-        <div className='bg-white shadow w-full border flex flex-col p-6 h-auto rounded-md text-slate-700'>
-            <h1 className='font-bold text-xl mb-6'>Change Email</h1>
-            <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
-                <div className='flex flex-col gap-1'>
-                    <span className='font-medium text-slate-500'>Current Email <span className="text-red-500">*</span></span>                    <input
+    }; return (
+        <div className='bg-white shadow w-full border flex flex-col p-3 h-auto rounded-md text-slate-700'>
+            <form className='flex flex-col gap-2' onSubmit={handleSubmit}>
+                <div className='flex flex-col gap-0.5'>
+                    <span className='font-medium text-xs text-slate-600'>Current Email <span className="text-red-500">*</span></span>
+                    <input
                         type='email'
                         id='currentEmail'
                         name='currentEmail'
                         placeholder='Current Email'
                         value={formData.currentEmail}
                         onChange={handleChange}
-                        className='bg-slate-100 rounded-lg p-2.5'
+                        className='bg-slate-100 rounded-md p-2 text-sm'
                         required
                         disabled // Disable the input as it's being shown for reference
                     />
-                </div>
-                <div className='flex flex-col gap-1'>
-                    <span className='font-medium text-slate-500'>New Email <span className="text-red-500">*</span></span>                    <input
+                </div>                <div className='flex flex-col gap-0.5'>
+                    <span className='font-medium text-xs text-slate-600'>New Email <span className="text-red-500">*</span></span>
+                    <input
                         type='email'
                         id='newEmail'
                         name='newEmail'
                         placeholder='New Email'
                         value={formData.newEmail}
                         onChange={handleChange}
-                        className='bg-slate-100 rounded-lg p-2.5'
+                        className='bg-slate-100 rounded-md p-2 text-sm'
                         required
                     />
-                </div>
-                <div className='flex flex-col gap-1'>
-                    <span className='font-medium text-slate-500'>Confirm New Email <span className="text-red-500">*</span></span>                    <input
+                </div>                <div className='flex flex-col gap-0.5'>
+                    <span className='font-medium text-xs text-slate-600'>Confirm New Email <span className="text-red-500">*</span></span>
+                    <input
                         type='email'
                         id='confirmNewEmail'
                         name='confirmNewEmail'
                         placeholder='Confirm New Email'
                         value={formData.confirmNewEmail}
                         onChange={handleChange}
-                        className='bg-slate-100 rounded-lg p-2.5'
+                        className='bg-slate-100 rounded-md p-2 text-sm'
                         required
                     />
-                </div>                <div className='w-full flex flex-row justify-end my-3 mt-6'>
-                    <button type='submit' className='bg-blue-600 px-6 font-medium text-white p-2.5 rounded-lg hover:bg-blue-800 transition ease-in-out'>
+                </div>
+                <div className='w-full flex flex-row justify-end my-2 mt-3'>
+                    <button type='submit' className='bg-blue-600 px-4 font-medium text-white p-2 text-sm rounded-md hover:bg-blue-800 transition ease-in-out'>
                         Change Email
                     </button>
                 </div>
