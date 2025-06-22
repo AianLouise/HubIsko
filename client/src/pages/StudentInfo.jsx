@@ -20,7 +20,9 @@ export default function StudentInfo() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       <Header />
-      <AccountManagement />      {/* Main Content Container */}
+      <AccountManagement />
+
+      {/* Main Content Container */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Header Section */}
         <div className="bg-white rounded-lg shadow-md border border-gray-100 mb-6 overflow-hidden">
@@ -37,7 +39,9 @@ export default function StudentInfo() {
               </div>
             </div>
           </div>
-        </div>        {currentUser.applicantDetails.profileComplete ? (
+        </div>
+
+        {currentUser.applicantDetails.profileComplete ? (
           <div className="space-y-6">
             {/* Welcome Message */}
             <div className="bg-white rounded-lg shadow-md border border-gray-100 p-4 sm:p-5">
@@ -69,9 +73,9 @@ export default function StudentInfo() {
               </div>
 
               {/* Address Information */}
-                <div className="p-0">
-                  <AddressInformation />
-                </div>
+              <div className="p-0">
+                <AddressInformation />
+              </div>
 
               {/* Education Information */}
               <div className="p-0">
@@ -83,17 +87,17 @@ export default function StudentInfo() {
             <div className="bg-white rounded-lg shadow-md border border-gray-100 p-4">
               <h3 className="text-base font-semibold text-gray-900 mb-3">Quick Actions</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">                <Link to="/account-settings" className="flex items-center space-x-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors duration-200 group">
-                  <div className="w-8 h-8 bg-blue-100 group-hover:bg-blue-200 rounded-full flex items-center justify-center">
-                    <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 text-sm">Account Settings</h4>
-                    <p className="text-xs text-gray-500">Manage security & preferences</p>
-                  </div>
-                </Link>
+                <div className="w-8 h-8 bg-blue-100 group-hover:bg-blue-200 rounded-full flex items-center justify-center">
+                  <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900 text-sm">Account Settings</h4>
+                  <p className="text-xs text-gray-500">Manage security & preferences</p>
+                </div>
+              </Link>
 
                 <Link to="/applications" className="flex items-center space-x-3 p-3 bg-green-50 hover:bg-green-100 rounded-lg transition-colors duration-200 group">
                   <div className="w-8 h-8 bg-green-100 group-hover:bg-green-200 rounded-full flex items-center justify-center">
@@ -120,7 +124,8 @@ export default function StudentInfo() {
                 </Link>
               </div>
             </div>
-          </div>        ) : (
+          </div>
+        ) : (
           <div className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden">
             <div className="px-4 sm:px-6 py-8 text-center">
               <div className="max-w-md mx-auto">

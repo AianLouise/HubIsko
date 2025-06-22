@@ -4,6 +4,8 @@ import { RiEditFill, RiSaveFill, RiCloseFill } from "react-icons/ri";
 import { regions, provinces, cities, barangays } from 'select-philippines-address';
 import CustomNotification from "../CustomNotification";
 
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 const AddressInformation = () => {
     const { currentUser } = useSelector((state) => state.user);
     const userId = currentUser._id;
@@ -35,10 +37,9 @@ const AddressInformation = () => {
     const [errors, setErrors] = useState({});
     const [notification, setNotification] = useState(null);
 
-    useEffect(() => {
-        const fetchUserDetails = async () => {
+    useEffect(() => {        const fetchUserDetails = async () => {
             try {
-                const response = await fetch(`/api/auth/user/${userId}`);
+                const response = await fetch(`${apiUrl}/api/auth/user/${userId}`);
                 if (!response.ok) {
                     throw new Error('Error fetching user details');
                 }
@@ -147,9 +148,8 @@ const AddressInformation = () => {
             return;
         }
 
-        console.log('Saving address:', formData.applicantDetails.address);
-        try {
-            const response = await fetch(`/api/profile/user/${userId}/address`, {
+        console.log('Saving address:', formData.applicantDetails.address);        try {
+            const response = await fetch(`${apiUrl}/api/profile/user/${userId}/address`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -210,7 +210,8 @@ const AddressInformation = () => {
             : `${inputBaseClasses} bg-gray-100 border-gray-200 cursor-not-allowed`;
     };    return (
         <div className="bg-white w-full border border-gray-200 shadow-md rounded-lg overflow-hidden">
-            {/* Professional Header */}            <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-5">
+            {/* Professional Header */}        
+                <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-5">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">

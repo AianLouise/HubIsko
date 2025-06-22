@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import { RiEditFill, RiSaveFill, RiCloseFill } from "react-icons/ri";
 import CustomNotification from '../CustomNotification';
 
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 const EducationInformation = () => {
     const { currentUser } = useSelector((state) => state.user);
     const userId = currentUser._id;
@@ -36,10 +38,9 @@ const EducationInformation = () => {
     const [errors, setErrors] = useState({});
     const [notification, setNotification] = useState(null);
 
-    useEffect(() => {
-        const fetchUserDetails = async () => {
+    useEffect(() => {        const fetchUserDetails = async () => {
             try {
-                const response = await fetch(`/api/auth/user/${userId}`);
+                const response = await fetch(`${apiUrl}/api/auth/user/${userId}`);
                 if (!response.ok) {
                     throw new Error('Error fetching user details');
                 }
@@ -140,11 +141,9 @@ const EducationInformation = () => {
             setErrors(newErrors);
             setNotification({ type: 'error', message: 'Please fill out all required fields' });
             return;
-        }
-
-        console.log('Saving education details:', formData.education); // Log education details to be saved
+        }        console.log('Saving education details:', formData.education); // Log education details to be saved
         try {
-            const response = await fetch(`/api/profile/user/${userId}/education`, {
+            const response = await fetch(`${apiUrl}/api/profile/user/${userId}/education`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',

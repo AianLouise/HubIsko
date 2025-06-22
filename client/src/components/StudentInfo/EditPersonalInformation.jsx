@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import { RiEditFill, RiSaveFill, RiCloseFill } from "react-icons/ri";
 import CustomNotification from '../CustomNotification';
 
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function EditPersonalInformation() {
     const { currentUser } = useSelector((state) => state.user);
     const userId = currentUser._id;
@@ -40,10 +42,9 @@ export default function EditPersonalInformation() {
     });
     const [errors, setErrors] = useState({}); // Initialize errors state
 
-    useEffect(() => {
-        const fetchUserDetails = async () => {
+    useEffect(() => {        const fetchUserDetails = async () => {
             try {
-                const response = await fetch(`/api/auth/user/${userId}`);
+                const response = await fetch(`${apiUrl}/api/auth/user/${userId}`);
                 if (!response.ok) {
                     throw new Error('Error fetching user details');
                 }
@@ -186,10 +187,8 @@ export default function EditPersonalInformation() {
             birthdate: formatDate(formData.birthdate)
         };
 
-        console.log('Saving data:', formattedData);
-
-        try {
-            const response = await fetch(`/api/profile/user/${currentUser._id}`, {
+        console.log('Saving data:', formattedData);        try {
+            const response = await fetch(`${apiUrl}/api/profile/user/${currentUser._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -225,7 +224,8 @@ export default function EditPersonalInformation() {
     };
 
     const today = new Date();
-    const maxDate = new Date(today.setFullYear(today.getFullYear() - 15)).toISOString().split('T')[0];    const inputBaseClasses = "block w-full px-3 py-2.5 rounded-md border transition-all duration-200 text-sm";
+    const maxDate = new Date(today.setFullYear(today.getFullYear() - 15)).toISOString().split('T')[0];   
+     const inputBaseClasses = "block w-full px-3 py-2.5 rounded-md border transition-all duration-200 text-sm";
 
     const inputClasses = isEditing
         ? `${inputBaseClasses} border-gray-300 bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none shadow-sm hover:border-gray-400`
@@ -273,7 +273,8 @@ export default function EditPersonalInformation() {
             </div>
 
             {/* Form Content */}
-            <div className="p-4 sm:p-6">                {/* Form Description */}
+            <div className="p-4 sm:p-6">            
+                    {/* Form Description */}
                 <div className="mb-6 p-3 bg-blue-50 rounded-md border border-blue-200">
                     <div className="flex items-start space-x-3">
                         <div className="w-4 h-4 text-blue-600 mt-0.5">
