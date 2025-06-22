@@ -9,7 +9,7 @@ export default function ChangePassword() {
     const currentUser = useSelector((state) => state.user.currentUser);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    
+
     const [showPasswords, setShowPasswords] = useState(false);
     const [passwordStrength, setPasswordStrength] = useState('');
     const [formData, setFormData] = useState({
@@ -128,79 +128,202 @@ export default function ChangePassword() {
             dispatch(changePasswordFail(error.message));
             setNotification({ message: 'Failed to change password', type: 'error' });
         }
-    };
+    }; return (
+        <div className='space-y-6'>
+            {/* Password Form Section */}
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4">
+                    {/* Current Password */}
+                    <div className='space-y-2'>
+                        <label className='flex items-center text-sm font-semibold text-gray-700'>
+                            <svg className="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                            Current Password
+                            <span className="text-red-500 ml-1">*</span>
+                        </label>
+                        <div className="relative">
+                            <input
+                                type={showPasswords ? 'text' : 'password'}
+                                id='currentPassword'
+                                name='currentPassword'
+                                placeholder='Enter your current password'
+                                value={formData.currentPassword}
+                                onChange={handleChange}
+                                className='w-full bg-gray-50 border border-gray-300 rounded-lg p-3 pr-10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200'
+                                required
+                            />
+                            <button
+                                type="button"
+                                onClick={toggleShowPasswords}
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                            >
+                                {showPasswords ? <FaEyeSlash className="w-5 h-5" /> : <FaEye className="w-5 h-5" />}
+                            </button>
+                        </div>
+                    </div>
 
-    return (
-        <div className='bg-white shadow w-full border flex flex-col p-10 h-auto rounded-md text-slate-700'>
-            <h1 className='font-bold text-xl mb-8'>Change Password</h1>
-            <form className='flex flex-col gap-8' onSubmit={handleSubmit}>
-                <div className='flex flex-col gap-1'>
-                    <span className='font-medium text-slate-500'>Current Password <span className="text-red-500">*</span></span>
-                    <input
-                        type={showPasswords ? 'text' : 'password'}
-                        id='currentPassword'
-                        name='currentPassword'
-                        placeholder='Current Password'
-                        value={formData.currentPassword}
-                        onChange={handleChange}
-                        className='bg-slate-100 rounded-lg p-3'
-                        required
-                    />
-                </div>
-                <div className='flex flex-col gap-1'>
-                    <span className='font-medium text-slate-500'>New Password <span className="text-red-500">*</span></span>
-                    <input
-                        type={showPasswords ? 'text' : 'password'}
-                        id='newPassword'
-                        name='newPassword'
-                        placeholder='New Password'
-                        value={formData.newPassword}
-                        onChange={handleChange}
-                        className='bg-slate-100 rounded-lg p-3'
-                        required
-                    />
-                    {newPasswordError && (
-                        <div className='text-red-500 text-sm mt-1'>{newPasswordError}</div>
-                    )}
-                    <div className='text-sm text-slate-500 mt-1'>
-                        Password Strength: <span className={`font-bold ${passwordStrength === 'Strong' ? 'text-green-500' : passwordStrength === 'Medium' ? 'text-yellow-500' : 'text-red-500'}`}>{passwordStrength}</span>
+                    {/* New Password */}
+                    <div className='space-y-2'>
+                        <label className='flex items-center text-sm font-semibold text-gray-700'>
+                            <svg className="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            New Password
+                            <span className="text-red-500 ml-1">*</span>
+                        </label>
+                        <div className="relative">
+                            <input
+                                type={showPasswords ? 'text' : 'password'}
+                                id='newPassword'
+                                name='newPassword'
+                                placeholder='Enter your new password'
+                                value={formData.newPassword}
+                                onChange={handleChange}
+                                className='w-full bg-gray-50 border border-gray-300 rounded-lg p-3 pr-10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200'
+                                required
+                            />
+                            <button
+                                type="button"
+                                onClick={toggleShowPasswords}
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                            >
+                                {showPasswords ? <FaEyeSlash className="w-5 h-5" /> : <FaEye className="w-5 h-5" />}
+                            </button>
+                        </div>
+
+                        {/* Password Strength Indicator */}
+                        {formData.newPassword && (
+                            <div className="flex items-center space-x-2 mt-2">
+                                <div className="flex space-x-1 flex-1">
+                                    <div className={`h-2 rounded-full flex-1 ${passwordStrength === 'Weak' ? 'bg-red-300' : passwordStrength === 'Medium' ? 'bg-yellow-300' : 'bg-green-300'}`}></div>
+                                    <div className={`h-2 rounded-full flex-1 ${passwordStrength === 'Medium' || passwordStrength === 'Strong' ? passwordStrength === 'Medium' ? 'bg-yellow-300' : 'bg-green-300' : 'bg-gray-200'}`}></div>
+                                    <div className={`h-2 rounded-full flex-1 ${passwordStrength === 'Strong' ? 'bg-green-300' : 'bg-gray-200'}`}></div>
+                                </div>
+                                <span className={`text-xs font-medium ${passwordStrength === 'Strong' ? 'text-green-600' : passwordStrength === 'Medium' ? 'text-yellow-600' : 'text-red-600'}`}>
+                                    {passwordStrength}
+                                </span>
+                            </div>
+                        )}
+
+                        {newPasswordError && (
+                            <div className='flex items-center text-red-600 text-sm mt-2'>
+                                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                </svg>
+                                {newPasswordError}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Confirm New Password */}
+                    <div className='space-y-2'>
+                        <label className='flex items-center text-sm font-semibold text-gray-700'>
+                            <svg className="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Confirm New Password
+                            <span className="text-red-500 ml-1">*</span>
+                        </label>
+                        <div className="relative">
+                            <input
+                                type={showPasswords ? 'text' : 'password'}
+                                id='confirmNewPassword'
+                                name='confirmNewPassword'
+                                placeholder='Confirm your new password'
+                                value={formData.confirmNewPassword}
+                                onChange={handleChange}
+                                className='w-full bg-gray-50 border border-gray-300 rounded-lg p-3 pr-10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200'
+                                required
+                            />
+                            <button
+                                type="button"
+                                onClick={toggleShowPasswords}
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                            >
+                                {showPasswords ? <FaEyeSlash className="w-5 h-5" /> : <FaEye className="w-5 h-5" />}
+                            </button>
+                        </div>
+
+                        {/* Password Match Indicator */}
+                        {formData.confirmNewPassword && (
+                            <div className={`flex items-center text-sm mt-2 ${formData.newPassword === formData.confirmNewPassword ? 'text-green-600' : 'text-red-600'}`}>
+                                {formData.newPassword === formData.confirmNewPassword ? (
+                                    <>
+                                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Passwords match
+                                    </>
+                                ) : (
+                                    <>
+                                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                        Passwords do not match
+                                    </>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                    {/* Action Buttons */}
+                    <div className="pt-4 border-t border-gray-200">
+                        <div className="flex justify-end items-center">
+                            <button
+                                type="submit"
+                                className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center space-x-2"
+                            >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                                    ></path>
+                                </svg>
+                                <span>Change Password</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            {/* Password Requirements Section */}
+            <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl border border-amber-200 p-4">
+                <div className="flex items-start space-x-3">
+                    <div className="flex-shrink-0">
+                        <svg className="w-6 h-6 text-amber-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-amber-800 mb-2">Password Requirements</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div className="flex items-center space-x-2">
+                                <div className={`w-2 h-2 rounded-full ${formData.newPassword.length >= 6 ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+                                <span className={`text-sm ${formData.newPassword.length >= 6 ? 'text-green-700' : 'text-gray-600'}`}>
+                                    Minimum 6 characters
+                                </span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <div className={`w-2 h-2 rounded-full ${/[A-Z]/.test(formData.newPassword) ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+                                <span className={`text-sm ${/[A-Z]/.test(formData.newPassword) ? 'text-green-700' : 'text-gray-600'}`}>
+                                    At least one uppercase letter
+                                </span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <div className={`w-2 h-2 rounded-full ${/[!@#$%^&*]/.test(formData.newPassword) ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+                                <span className={`text-sm ${/[!@#$%^&*]/.test(formData.newPassword) ? 'text-green-700' : 'text-gray-600'}`}>
+                                    At least one special character (!@#$%^&*)
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className='flex flex-col gap-1'>
-                    <span className='font-medium text-slate-500'>Confirm New Password <span className="text-red-500">*</span></span>
-                    <input
-                        type={showPasswords ? 'text' : 'password'}
-                        id='confirmNewPassword'
-                        name='confirmNewPassword'
-                        placeholder='Confirm New Password'
-                        value={formData.confirmNewPassword}
-                        onChange={handleChange}
-                        className='bg-slate-100 rounded-lg p-3'
-                        required
-                    />
-                </div>
-                <div className='text-sm text-slate-500 mt-1'>
-                    Password Requirements:
-                    <ul className='list-disc list-inside'>
-                        <li>Minimum 6 characters</li>
-                        <li>At least one uppercase letter</li>
-                        <li>At least one special character (!@#$%^&*)</li>
-                    </ul>
-                </div>
-                <div className='w-full flex flex-col lg:flex-row gap-4 justify-end my-4 mt-8'>
-                    <button
-                        type='button'
-                        className='flex flex-row items-center gap-2 border px-6 rounded-md p-3 font-medium hover:text-white hover:bg-blue-600 transition ease-in-out'
-                        onClick={toggleShowPasswords}
-                    >
-                        {showPasswords ? <FaEyeSlash /> : <FaEye />}
-                        {showPasswords ? 'Hide Passwords' : 'Show Passwords'}
-                    </button>
-                    <button type='submit' className='bg-blue-600 px-10 font-medium text-white p-3 rounded-lg hover:bg-blue-800 transition ease-in-out'>
-                        Change Password
-                    </button>
-                </div>
-            </form>
+            </div>
+
+            {/* Notification */}
             {notification.message && (
                 <CustomNotification
                     message={notification.message}
