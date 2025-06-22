@@ -105,7 +105,8 @@ export default function ChangeEmail() {
                         required
                         disabled // Disable the input as it's being shown for reference
                     />
-                </div>                <div className='flex flex-col gap-0.5'>
+                </div>           
+                     <div className='flex flex-col gap-0.5'>
                     <span className='font-medium text-xs text-slate-600'>New Email <span className="text-red-500">*</span></span>
                     <input
                         type='email'
@@ -117,7 +118,8 @@ export default function ChangeEmail() {
                         className='bg-slate-100 rounded-md p-2 text-sm'
                         required
                     />
-                </div>                <div className='flex flex-col gap-0.5'>
+                </div>          
+                      <div className='flex flex-col gap-0.5'>
                     <span className='font-medium text-xs text-slate-600'>Confirm New Email <span className="text-red-500">*</span></span>
                     <input
                         type='email'
