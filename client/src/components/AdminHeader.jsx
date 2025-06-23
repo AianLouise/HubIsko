@@ -82,7 +82,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
     }, []);
 
     const dispatch = useDispatch();
-    const currentUser = useSelector((state) => state.user.currentUser); 
+    const currentUser = useSelector((state) => state.user.currentUser);
     const handleSignOut = async () => {
         const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
         const userId = currentUser ? currentUser._id : null;
@@ -108,7 +108,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
 
     const [pendingVerificationCount, setPendingVerificationCount] = useState(0);
     const [pendingApprovalCount, setPendingApprovalCount] = useState(0);
-    const [totalPendingCount, setTotalPendingCount] = useState(0); 
+    const [totalPendingCount, setTotalPendingCount] = useState(0);
     useEffect(() => {
         const fetchPendingCounts = async () => {
             const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -127,9 +127,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
         };
 
         fetchPendingCounts();
-    }, []);
-
-    // Breadcrumbs based on current location
+    }, []);    // Breadcrumbs based on current location
     const generateBreadcrumb = () => {
         const pathnames = location.pathname.split('/').filter(x => x);
 
@@ -138,283 +136,387 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
         };
 
         return (
-            <>
-                <h1 className="text-lg font-bold pl-4 text-blue-500">Admin</h1>
+            <nav className="flex items-center space-x-2 text-sm">
+                <Link to="/admin-dashboard" className="flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold transition-colors duration-200">
+                    <GoHomeFill className="w-4 h-4" />
+                    <span>Admin</span>
+                </Link>
                 {pathnames.map((value, index) => {
                     const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
+                    const isLast = index === pathnames.length - 1;
+
                     return (
-                        <span key={index} className="text-lg font-bold text-blue-500">
-                            /&nbsp;<Link to={routeTo}>{capitalizeWords(value)}</Link>
-                        </span>
+                        <div key={index} className="flex items-center space-x-2">
+                            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                            {isLast ? (
+                                <span className="text-gray-900 font-medium">{capitalizeWords(value)}</span>
+                            ) : (
+                                <Link
+                                    to={routeTo}
+                                    className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
+                                >
+                                    {capitalizeWords(value)}
+                                </Link>
+                            )}
+                        </div>
                     );
                 })}
-            </>
+            </nav>
         );
-    };
-
-    return (
-        <header className="bg-white text-gray-800 p-4 flex justify-between items-center shadow border-b w-full">
-            <div className="max-w-8xl w-full mx-auto px-20 flex justify-between items-center">
-                <div className='flex items-center gap-2'>
-                    <button className="text-blue-600" onClick={toggleSidebar}>
-                        <FontAwesomeIcon icon={faBars} className='w-4 h-4' />
-                    </button>
-                    {generateBreadcrumb()}
-                </div>
-                <div className="flex gap-2 items-center">
-                    <span className="text-base">{currentUser.adminDetails.firstName}</span>
-                    <div className="relative" ref={dropdownRef}>
-                        <img
-                            src={currentUser.profilePicture || 'https://via.placeholder.com/40'}
-                            alt="Profile"
-                            className="h-8 w-8 rounded-full"
-                            onClick={toggleDropdown}
-                        />
-                        {dropdownOpen && (
-                            <div className="absolute mt-2 right-0 bg-white text-gray-800 shadow-lg rounded-md p-2 w-52 z-50 font-medium">
-                                <ul>
-                                    {/* <Link to={'#'}>
-                                        <li className="p-2 hover:bg-gray-100 cursor-pointer">
-                                            Profile
-                                        </li>
-                                    </Link> */}
-                                    <Link to={'/admin-settings'}>
-                                        <li className="p-2 hover:bg-gray-100 cursor-pointer">
-                                            Settings
-                                        </li>
-                                    </Link>
-                                    <li className="p-2 hover:bg-gray-100 cursor-pointer" onClick={handleSignOut}>
-                                        Sign out
-                                    </li>
-                                </ul>
-                            </div>
-                        )}
+    }; return (
+        <header className="bg-white shadow-md border-b border-gray-200 sticky top-0 z-40">
+            <div className="max-w-full w-full mx-auto px-6 lg:px-8 py-4">
+                <div className="flex justify-between items-center">
+                    {/* Left Section - Menu Button and Breadcrumbs */}
+                    <div className="flex items-center gap-4">
+                        <button
+                            className="p-2 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            onClick={toggleSidebar}
+                        >
+                            <FontAwesomeIcon icon={faBars} className="w-5 h-5" />
+                        </button>
+                        <div className="flex items-center gap-1">
+                            {generateBreadcrumb()}
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            {sidebarOpen && (
-                <aside className="fixed font-medium inset-y-0 left-0 transform translate-x-0 w-64 transition-transform duration-200 ease-in-out bg-white shadow-lg p-4 z-50">
-
-
-                    <div className="flex justify-between items-center pb-2 mb-4 border-b">
-
-                        <div className='flex items-center gap-2'>
-                            <img src={Logo} alt='Logo' className='w-6 h-6 rounded-md' />
-                            <span className='font-bold text-blue-600 text-2xl'>HubIsko</span>
+                    {/* Right Section - Admin Profile */}
+                    <div className="flex items-center gap-4">
+                        <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-blue-50 rounded-lg border border-blue-100">
+                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <span className="text-sm font-medium text-blue-800">System Online</span>
                         </div>
 
-                        <button onClick={toggleSidebar} className="text-blue-600 border p-2 rounded-full hover:bg-slate-200">
-                            <CgClose className="w-4 h-4" />
-                        </button>
+                        <div className="flex items-center gap-3">
+                            <div className="text-right hidden sm:block">
+                                <p className="text-sm font-semibold text-gray-900">{currentUser?.adminDetails?.firstName || 'Admin'}</p>
+                                <p className="text-xs text-gray-500">Administrator</p>
+                            </div>
 
-                    </div>
-
-                    <nav>
-                        <ul className="space-y-2">
-                            <li>
-                                <Link to={'/admin-dashboard'}
-                                    className={`flex gap-2 items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/admin-dashboard') ? 'bg-blue-600 text-white' : ''}`} >
-                                    <GoHomeFill className={`w-5 h-5 text-blue-600 ${location.pathname.startsWith('/admin-dashboard') ? 'text-white' : ''}`} />
-                                    Dashboard
-                                </Link>
-                            </li>
-
-                            <li>
-                                <div className="">
-                                    <Link to={'/accounts'}
-                                        onClick={toggleAccountsDropdown}
-
-                                        className={`flex gap-2 items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/accounts')
-                                            || location.pathname.startsWith('/students')
-                                            || location.pathname.startsWith('/provider-accounts')
-                                            || location.pathname.startsWith('/verification-details')
-                                            || location.pathname.startsWith('/student-details')
-                                            || location.pathname.startsWith('/student-applications')
-                                            || location.pathname.startsWith('/provider-details')
-                                            || location.pathname.startsWith('/scholarship-provider')
-                                            ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                        <BsFillPersonFill className={`w-5 h-5 text-blue-600 
-                                 ${location.pathname.startsWith('/accounts')
-                                                || location.pathname.startsWith('/students')
-                                                || location.pathname.startsWith('/provider-accounts')
-                                                || location.pathname.startsWith('/verification-details')
-                                                || location.pathname.startsWith('/student-details')
-                                                || location.pathname.startsWith('/provider-details')
-                                                || location.pathname.startsWith('/scholarship-provider')
-                                                ? 'text-white' : ''} `} />
-                                        Accounts
-                                    </Link>
-
-
-                                    {isAccountsDropdownOpen && (
-                                        <ul className="ml-4 my-2 space-y-2">
-                                            <li>
-                                                <Link to={'/accounts'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/accounts' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                                    <BsFillPersonFill className={`w-5 h-5 text-blue-600 ${location.pathname === '/accounts' ? ' text-white' : ''}`} />
-                                                    Users
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                <Link to={'/students'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/students' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                                    <PiStudentFill className={`w-5 h-5 text-blue-600 ${location.pathname === '/students' ? ' text-white' : ''}`} />
-                                                    Students
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                <Link to={'/student-applications'} className={`flex text-sm ml-3 gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/student-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                                    <FaFileAlt className={`w-5 h-5 text-blue-600 ${location.pathname === '/student-applications' ? ' text-white' : ''}`} />
-                                                    Students Application
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                <Link to={'/scholarship-provider'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-provider' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                                    <BsBuildingFill className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-provider' ? ' text-white' : ''}`} />
-                                                    Scholarship Providers
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                <Link to={'/scholarship-provider-applications'} className={`flex text-sm ml-3 gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-provider-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                                    <FaFileAlt className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-provider-applications' ? ' text-white' : ''}`} />
-                                                    Scholarship Provider Application
-                                                </Link>
-                                            </li>
-                                        </ul>
-
-                                    )}
-
-
-                                </div>
-                            </li>
-
-                            <li>
-                                <Link to={'/scholarship-programs'}
-                                    onClick={toggleInboxDropdown}
-                                    className={`flex gap-2 items-center text-gray-800 py-2 px-4 rounded-md 
-                                    ${location.pathname.startsWith('/scholarship-programs')
-                                            || location.pathname.startsWith('/scholarship-program-applications')
-                                            || location.pathname.startsWith('/scholarship-applications')
-
-                                            ? 'bg-blue-600 text-white' : ''}`} >
-                                    <FaGraduationCap className={`w-5 h-5 text-blue-600 
-                                        ${location.pathname.startsWith('/scholarship-programs')
-                                            || location.pathname.startsWith('/scholarship-program-applications')
-                                            || location.pathname.startsWith('/scholarship-applications')
-
-                                            ? 'text-white' : ''}`} />
-                                    Scholarship Programs
-                                </Link>
-
-
-
-                                {isInboxDropdownOpen && (
-                                    <ul className="ml-4 my-2 space-y-2">
-
-                                        <li>
-                                            <Link to={'/scholarship-programs'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-programs' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                                <FaGraduationCap className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-programs' ? ' text-white' : ''}`} />
-                                                Scholarship Dashboard
-                                            </Link>
-                                        </li>
-
-                                        {/* <li>
-                                            <Link
-                                                to={'/scholarship-announcements'}
-                                                className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-announcements' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}
-                                            >
-                                                <FaBullhorn className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-announcements' ? ' text-white' : ''}`} />
-                                                Scholarship Announcements
-                                            </Link>
-                                        </li> */}
-
-                                        {/* <li className="ml-4">
-                                            <Link to={'/scholarship-program-applications'}
-                                                className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md 
-                                                ${location.pathname === '/scholarship-program-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                                <FaFileAlt className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-program-applications' ? ' text-white' : ''}`} />
-                                                Scholarship Program Applications
-                                            </Link>
-                                        </li> */}
-
-                                        {/* <li>
-                                        <Link to={'/scholarship-applications'} className={`flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/scholarship-applications' ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                            <HiDocument className={`w-5 h-5 text-blue-600 ${location.pathname === '/scholarship-applications' ? ' text-white' : ''}`} />
-                                            Scholarship Provider Applications
-                                        </Link>
-                                    </li> */}
-                                        {/* <li>
-                                            <a href="#" className="flex text-sm gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
-                                                <FaFileCircleQuestion className="w-5 h-5 text-blue-600" />
-                                                Requests
-                                            </a>
-                                        </li> */}
-                                    </ul>
-
-                                )}
-                            </li>
-
-                            <li>
-                                <div>
-                                    <Link to={'/application-inbox'}
-
-                                        className={`flex gap-2 justify-between items-center text-gray-800 py-2 px-4 rounded-md ${location.pathname.startsWith('/application-inbox')
-
-                                            ? 'bg-blue-600 text-white' : 'hover:bg-blue-200'}`}>
-                                        <div className="flex items-center gap-2">
-                                            <BsInboxFill className={`w-5 h-5 text-blue-600 
-                                            ${location.pathname.startsWith('/application-inbox')
-
-                                                    ? 'text-white' : ''} `} />
-                                            Application Inbox
+                            <div className="relative" ref={dropdownRef}>
+                                <button
+                                    onClick={toggleDropdown}
+                                    className="flex items-center gap-2 p-1 rounded-lg hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                >
+                                    <div className="relative">
+                                        <img
+                                            src={currentUser?.profilePicture || 'https://via.placeholder.com/40'}
+                                            alt="Admin Profile"
+                                            className="w-10 h-10 rounded-lg object-cover border-2 border-blue-200"
+                                            onError={(e) => {
+                                                e.target.style.display = 'none';
+                                                e.target.nextSibling.style.display = 'flex';
+                                            }}
+                                        />
+                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold border-2 border-blue-200" style={{ display: 'none' }}>
+                                            {currentUser?.adminDetails?.firstName?.charAt(0) || 'A'}
                                         </div>
-                                        <div className={`bg-blue-600 rounded-full text-center flex items-center justify-center p-3 w-4 h-4 text-sm 
-                                            ${location.pathname.startsWith('/application-inbox')
-                                                || location.pathname.startsWith('/scholarship-program-applications')
-                                                || location.pathname.startsWith('/scholarship-applications')
+                                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+                                    </div>
+                                </button>
 
-                                                ? 'text-blue-600 bg-white' : 'text-white'} `}>{totalPendingCount}</div>
-                                    </Link>
+                                {dropdownOpen && (
+                                    <div className="absolute right-0 mt-3 w-56 bg-white border border-gray-200 rounded-xl shadow-lg z-50 py-2">
+                                        <div className="px-4 py-3 border-b border-gray-100">
+                                            <p className="text-sm font-semibold text-gray-900">{currentUser?.adminDetails?.firstName || 'Admin'}</p>
+                                            <p className="text-xs text-gray-500">{currentUser?.email}</p>
+                                        </div>
+                                        <div className="py-2">
+                                            <Link to="/admin-settings" className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors duration-200">
+                                                <FaCog className="w-4 h-4 text-blue-600" />
+                                                Settings
+                                            </Link>
+                                            <button
+                                                onClick={handleSignOut}
+                                                className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200 w-full text-left"
+                                            >
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                                </svg>
+                                                Sign Out
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            {sidebarOpen && (
+                <div className="fixed inset-0 z-50">
+                    <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={toggleSidebar}></div>
+                    <aside className="fixed inset-y-0 left-0 flex flex-col w-72 bg-white shadow-2xl border-r border-gray-200">
+                        {/* Sidebar Header */}
+                        <div className="flex items-center justify-between p-6 bg-gradient-to-r from-blue-600 to-blue-700">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-md">
+                                    <img src={Logo} alt="HubIsko Logo" className="w-6 h-6" />
                                 </div>
-                            </li>
+                                <div>
+                                    <h1 className="text-xl font-bold text-white">HubIsko</h1>
+                                    <p className="text-blue-100 text-xs">Admin Portal</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={toggleSidebar}
+                                className="p-2 rounded-lg text-white hover:bg-white/20 transition-colors duration-200"
+                            >
+                                <CgClose className="w-5 h-5" />
+                            </button>
+                        </div>
 
-                            {/* <li>
-                                <a href="#" className="flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md">
-                                    <BsFlagFill className="w-5 h-5 text-blue-600" />
-                                    Events
-                                </a>
-                            </li> */}
+                        {/* Sidebar Navigation */}
+                        <nav className="flex-1 px-4 py-6 overflow-y-auto">
+                            <ul className="space-y-2">
+                                {/* Dashboard */}
+                                <li>
+                                    <Link
+                                        to="/admin-dashboard"
+                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname.startsWith('/admin-dashboard')
+                                                ? 'bg-blue-600 text-white shadow-md'
+                                                : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                                            }`}
+                                    >
+                                        <GoHomeFill className={`w-5 h-5 ${location.pathname.startsWith('/admin-dashboard') ? 'text-white' : 'text-blue-600'
+                                            }`} />
+                                        <span className="font-medium">Dashboard</span>
+                                    </Link>
+                                </li>
 
-                            <li>
-                                <Link to={"/admin-forums"} className={`flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/admin-forums' ? 'bg-blue-600 text-white' : ''}`}>
-                                    <MdForum className={`w-5 h-5 text-blue-600 ${location.pathname == '/admin-forums' ? 'text-white' : ''}`} /> {/* Updated icon */}
-                                    Forums
-                                </Link>
-                            </li>
+                                {/* Accounts Section */}
+                                <li>
+                                    <div className="space-y-1">
+                                        <Link
+                                            to="/accounts"
+                                            onClick={toggleAccountsDropdown}
+                                            className={`flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname.startsWith('/accounts') ||
+                                                    location.pathname.startsWith('/students') ||
+                                                    location.pathname.startsWith('/provider-accounts') ||
+                                                    location.pathname.startsWith('/verification-details') ||
+                                                    location.pathname.startsWith('/student-details') ||
+                                                    location.pathname.startsWith('/student-applications') ||
+                                                    location.pathname.startsWith('/provider-details') ||
+                                                    location.pathname.startsWith('/scholarship-provider')
+                                                    ? 'bg-blue-600 text-white shadow-md'
+                                                    : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                                                }`}
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <BsFillPersonFill className={`w-5 h-5 ${location.pathname.startsWith('/accounts') ||
+                                                        location.pathname.startsWith('/students') ||
+                                                        location.pathname.startsWith('/provider-accounts') ||
+                                                        location.pathname.startsWith('/verification-details') ||
+                                                        location.pathname.startsWith('/student-details') ||
+                                                        location.pathname.startsWith('/provider-details') ||
+                                                        location.pathname.startsWith('/scholarship-provider')
+                                                        ? 'text-white' : 'text-blue-600'
+                                                    }`} />
+                                                <span className="font-medium">Accounts</span>
+                                            </div>
+                                            <svg
+                                                className={`w-4 h-4 transition-transform duration-200 ${isAccountsDropdownOpen ? 'rotate-180' : ''
+                                                    }`}
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </Link>
 
-                            <li>
-                                <Link to={"/log-history"} className={`flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/log-history' ? 'bg-blue-600 text-white' : ''}`}>
-                                    <FaHistory className={`w-5 h-5 text-blue-600 ${location.pathname === '/log-history' ? 'text-white' : ''}`} /> {/* Updated icon */}
-                                    Log History
-                                </Link>
-                            </li>
+                                        {isAccountsDropdownOpen && (
+                                            <ul className="ml-6 space-y-1 border-l-2 border-blue-100 pl-4">
+                                                <li>
+                                                    <Link
+                                                        to="/accounts"
+                                                        className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all duration-200 ${location.pathname === '/accounts'
+                                                                ? 'bg-blue-100 text-blue-700 font-medium'
+                                                                : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600'
+                                                            }`}
+                                                    >
+                                                        <BsFillPersonFill className="w-4 h-4 text-blue-600" />
+                                                        Users
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link
+                                                        to="/students"
+                                                        className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all duration-200 ${location.pathname === '/students'
+                                                                ? 'bg-blue-100 text-blue-700 font-medium'
+                                                                : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600'
+                                                            }`}
+                                                    >
+                                                        <PiStudentFill className="w-4 h-4 text-blue-600" />
+                                                        Students
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link
+                                                        to="/student-applications"
+                                                        className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all duration-200 ${location.pathname === '/student-applications'
+                                                                ? 'bg-blue-100 text-blue-700 font-medium'
+                                                                : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600'
+                                                            }`}
+                                                    >
+                                                        <FaFileAlt className="w-4 h-4 text-blue-600" />
+                                                        Student Applications
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link
+                                                        to="/scholarship-provider"
+                                                        className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all duration-200 ${location.pathname === '/scholarship-provider'
+                                                                ? 'bg-blue-100 text-blue-700 font-medium'
+                                                                : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600'
+                                                            }`}
+                                                    >
+                                                        <BsBuildingFill className="w-4 h-4 text-blue-600" />
+                                                        Scholarship Providers
+                                                    </Link>
+                                                </li>
+                                                <li>
+                                                    <Link
+                                                        to="/scholarship-provider-applications"
+                                                        className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all duration-200 ${location.pathname === '/scholarship-provider-applications'
+                                                                ? 'bg-blue-100 text-blue-700 font-medium'
+                                                                : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600'
+                                                            }`}
+                                                    >
+                                                        <FaFileAlt className="w-4 h-4 text-blue-600" />
+                                                        Provider Applications
+                                                    </Link>
+                                                </li>
+                                            </ul>
+                                        )}
+                                    </div>
+                                </li>
 
-                            <li>
-                                <Link to={"/admin-reports"} className={`flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/admin-reports' ? 'bg-blue-600 text-white' : ''}`}>
-                                    <FaFileAlt className={`w-5 h-5 text-blue-600 ${location.pathname === '/admin-reports' ? 'text-white' : ''}`} /> {/* Updated icon */}
-                                    Generate Reports
-                                </Link>
-                            </li>
+                                {/* Scholarship Programs Section */}                                <li>
+                                    <Link
+                                        to="/scholarship-programs"
+                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname.startsWith('/scholarship-programs') ||
+                                            location.pathname.startsWith('/scholarship-program-applications') ||
+                                            location.pathname.startsWith('/scholarship-applications')
+                                            ? 'bg-blue-600 text-white shadow-md'
+                                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                                            }`}
+                                    >
+                                        <FaGraduationCap className={`w-5 h-5 ${location.pathname.startsWith('/scholarship-programs') ||
+                                            location.pathname.startsWith('/scholarship-program-applications') ||
+                                            location.pathname.startsWith('/scholarship-applications')
+                                            ? 'text-white' : 'text-blue-600'
+                                            }`} />
+                                        <span className="font-medium">Scholarship Programs</span>
+                                    </Link>
+                                </li>
 
-                            <li>
-                                <Link to={"/admin-settings"} className={`flex gap-2 items-center text-gray-800 hover:bg-blue-200 py-2 px-4 rounded-md ${location.pathname === '/admin-settings' ? 'bg-blue-600 text-white' : ''}`}>
-                                    <FaCog className={`w-5 h-5 text-blue-600 ${location.pathname == '/admin-settings' ? 'text-white' : ''}`} /> {/* Updated icon */}
-                                    Settings
-                                </Link>
-                            </li>
+                                {/* Application Inbox */}
+                                <li>
+                                    <Link
+                                        to="/application-inbox"
+                                        className={`flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname.startsWith('/application-inbox')
+                                                ? 'bg-blue-600 text-white shadow-md'
+                                                : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                                            }`}
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <BsInboxFill className={`w-5 h-5 ${location.pathname.startsWith('/application-inbox') ? 'text-white' : 'text-blue-600'
+                                                }`} />
+                                            <span className="font-medium">Application Inbox</span>
+                                        </div>
+                                        {totalPendingCount > 0 && (
+                                            <span className={`px-2 py-1 text-xs font-bold rounded-full ${location.pathname.startsWith('/application-inbox')
+                                                    ? 'bg-white text-blue-600'
+                                                    : 'bg-blue-600 text-white'
+                                                }`}>
+                                                {totalPendingCount}
+                                            </span>
+                                        )}
+                                    </Link>
+                                </li>
 
-                        </ul>
-                    </nav>
-                </aside>
+                                {/* Forums */}
+                                <li>
+                                    <Link
+                                        to="/admin-forums"
+                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname === '/admin-forums'
+                                                ? 'bg-blue-600 text-white shadow-md'
+                                                : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                                            }`}
+                                    >
+                                        <MdForum className={`w-5 h-5 ${location.pathname === '/admin-forums' ? 'text-white' : 'text-blue-600'
+                                            }`} />
+                                        <span className="font-medium">Forums</span>
+                                    </Link>
+                                </li>
+
+                                {/* Log History */}
+                                <li>
+                                    <Link
+                                        to="/log-history"
+                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname === '/log-history'
+                                                ? 'bg-blue-600 text-white shadow-md'
+                                                : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                                            }`}
+                                    >
+                                        <FaHistory className={`w-5 h-5 ${location.pathname === '/log-history' ? 'text-white' : 'text-blue-600'
+                                            }`} />
+                                        <span className="font-medium">Log History</span>
+                                    </Link>
+                                </li>
+
+                                {/* Generate Reports */}
+                                <li>
+                                    <Link
+                                        to="/admin-reports"
+                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname === '/admin-reports'
+                                                ? 'bg-blue-600 text-white shadow-md'
+                                                : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                                            }`}
+                                    >
+                                        <FaFileAlt className={`w-5 h-5 ${location.pathname === '/admin-reports' ? 'text-white' : 'text-blue-600'
+                                            }`} />
+                                        <span className="font-medium">Generate Reports</span>
+                                    </Link>
+                                </li>
+
+                                {/* Settings */}
+                                <li>
+                                    <Link
+                                        to="/admin-settings"
+                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname === '/admin-settings'
+                                                ? 'bg-blue-600 text-white shadow-md'
+                                                : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                                            }`}
+                                    >
+                                        <FaCog className={`w-5 h-5 ${location.pathname === '/admin-settings' ? 'text-white' : 'text-blue-600'
+                                            }`} />
+                                        <span className="font-medium">Settings</span>
+                                    </Link>
+                                </li>
+                            </ul>
+                        </nav>
+
+                        {/* Sidebar Footer */}
+                        <div className="p-4 border-t border-gray-200 bg-gray-50">
+                            <div className="flex items-center gap-3 px-3 py-2">
+                                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                                    <span className="text-white text-sm font-bold">
+                                        {currentUser?.adminDetails?.firstName?.charAt(0) || 'A'}
+                                    </span>
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-sm font-medium text-gray-900 truncate">
+                                        {currentUser?.adminDetails?.firstName || 'Admin'}
+                                    </p>
+                                    <p className="text-xs text-gray-500">Administrator</p>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
             )}
         </header>
     );
