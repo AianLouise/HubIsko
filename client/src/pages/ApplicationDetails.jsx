@@ -256,212 +256,288 @@ export default function Forums() {
     const isPhoneLong = scholarship.contactPhone.length > 20;
 
     return (
-        <div className='min-h-screen flex flex-col'>
+        <div className='min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-blue-50'>
             <Header />
-            <main className='flex-grow bg-[#f8f8fb] font-medium'>
-                <div key={scholarship._id} className='border-b mb-8 py-8'>
-                    <div className='flex flex-col lg:flex-row items-center mx-auto max-w-6xl gap-2 lg:gap-10 lg:px-24 p-4'>
-                        <div className='bg-white w-36 h-36 my-8 rounded-md'>
-                            {scholarship.scholarshipImage && (
-                                <img
-                                    src={scholarship.scholarshipImage}
-                                    alt={scholarship.title}
-                                    className='w-full h-full object-cover rounded-md'
-                                />
-                            )}
-
-                        </div>
-                        <h1 className='text-4xl block lg:hidden font-bold text-gray-800 mb-8'>{scholarship.title}</h1>
-                        <div className='flex flex-col lg:gap-2 lg:w-2/3 xl:w-3/4'>
-                            <div className='flex flex-row divide-x-2 divide-blue-200 mb-2'>
-                                <span className='text-lg lg:text-xl font-bold text-gray-600 pr-4'>{scholarship.organizationName}</span>
-                                {/* need date posted */}
-                                <span className='text-lg lg:text-xl font-medium text-gray-400 pl-4'>{formatDate(scholarship.applicationStartDate)}</span>
+            <main className='flex-grow'>
+                {/* Hero Section */}
+                <div className='bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white py-8'>
+                    <div className='max-w-6xl mx-auto px-4 lg:px-6'>
+                        <div className='flex flex-col lg:flex-row items-center gap-6'>
+                            <div className='relative group'>
+                                <div className='bg-white/10 backdrop-blur-sm w-28 h-28 lg:w-32 lg:h-32 rounded-xl p-2 shadow-xl border border-white/20'>
+                                    {scholarship.scholarshipImage ? (
+                                        <img
+                                            src={scholarship.scholarshipImage}
+                                            alt={scholarship.title}
+                                            className='w-full h-full object-cover rounded-lg'
+                                        />
+                                    ) : (
+                                        <div className='w-full h-full bg-white/20 rounded-lg flex items-center justify-center'>
+                                            <FaGraduationCap className='w-10 h-10 text-white/60' />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                            <h1 className='text-4xl hidden lg:block font-bold text-gray-800'>{scholarship.title}</h1>
 
-                            <div className='flex text-blue-600 font-bold items-center justify-center lg:justify-start'>
-                                <div className='flex items-center gap-2 px-10 py-2 lg:py-0 lg:px-2 text-xl bg-slate-200 rounded-md lg:bg-[#f8f8fb]'>
-                                    <FaHandHolding className='w-6 h-6 flex-shrink-0' style={{ marginTop: '-10px' }} />
-                                    {scholarship.amount}
+                            <div className='flex-1 text-center lg:text-left'>
+                                <div className='flex flex-col lg:flex-row items-center lg:items-start gap-2 mb-3'>
+                                    <span className='bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full text-blue-100 font-medium text-sm border border-white/30'>
+                                        {scholarship.organizationName}
+                                    </span>
+                                    <span className='text-blue-200 font-medium text-sm'>
+                                        {formatDate(scholarship.applicationStartDate)}
+                                    </span>
+                                </div>
+
+                                <h1 className='text-2xl lg:text-3xl font-bold mb-4 leading-tight'>
+                                    {scholarship.title}
+                                </h1>
+
+                                <div className='inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30'>
+                                    <span className='text-base font-bold text-white'>{scholarship.amount}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div className='flex flex-col items-center mx-auto max-w-6xl gap-8 lg:px-24 p-4'>
-                        <div className='flex flex-col gap-2 bg-white shadow-md rounded-md p-6 px-10 hover:bg-gray-200 hover:shadow-lg transition duration-300 items-center'>
-                            <div className='flex items-center gap-4'>
-                                <FaBook className='text-blue-500 w-6 h-6' />
-                                <p className='text-base font-semibold'>Field of Study</p>
+                {/* Key Information Cards */}
+                <div className='max-w-6xl mx-auto px-4 lg:px-6 mt-6 relative z-10'>
+                    <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6'>
+                        {/* Field of Study Card */}
+                        <div className='lg:col-span-2 bg-white rounded-xl shadow-lg border border-blue-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1'>
+                            <div className='bg-gradient-to-r from-blue-600 to-blue-700 p-3'>
+                                <div className='flex items-center gap-2 text-white'>
+                                    <div className='bg-white/20 p-1.5 rounded-lg'>
+                                        <FaBook className='w-4 h-4' />
+                                    </div>
+                                    <span className='font-semibold'>Field of Study</span>
+                                </div>
                             </div>
-                            {scholarship.fieldOfStudy && scholarship.fieldOfStudy.includes("Open for All Courses") ? (
-                                <p className='text-base text-center'>Open for All Courses</p>
-                            ) : (
-                                <ul className='grid grid-cols-1 md:grid-cols-2 list-disc list-inside gap-2'>
-                                    {scholarship.fieldOfStudy.map((course, index) => (
-                                        <li key={index} className='text-base'>{course}</li>
-                                    ))}
-                                </ul>
-                            )}
+                            <div className='p-4'>
+                                {scholarship.fieldOfStudy && scholarship.fieldOfStudy.includes("Open for All Courses") ? (
+                                    <div className='flex justify-center items-center py-9'>
+                                        <span className='bg-blue-100 text-blue-800 px-3 py-1.5 rounded-full font-medium text-sm'>
+                                            Open for All Courses
+                                        </span>
+                                    </div>
+                                ) : (
+                                    <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
+                                        {scholarship.fieldOfStudy.map((course, index) => (
+                                            <div key={index} className='flex items-center gap-2 bg-blue-50 p-2 rounded-lg'>
+                                                <div className='w-1.5 h-1.5 bg-blue-500 rounded-full'></div>
+                                                <span className='text-gray-700 text-sm font-medium'>{course}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                        <div className='flex flex-col lg:flex-row items-center justify-center w-full gap-4'>
-                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300 w-full lg:w-auto'>
-                                <FaMapMarkerAlt className='text-blue-500 w-6 h-6' />
-                                <p className='text-base'>{scholarship.location}</p>
+
+                        {/* Quick Info Cards */}
+                        <div className='space-y-3'>
+                            <div className='bg-white rounded-xl shadow-lg border border-blue-100 p-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1'>
+                                <div className='flex items-center gap-2 mb-2'>
+                                    <div className='bg-blue-100 p-1.5 rounded-lg'>
+                                        <FaMapMarkerAlt className='text-blue-600 w-4 h-4' />
+                                    </div>
+                                    <span className='font-semibold text-gray-700 text-sm'>Location</span>
+                                </div>
+                                <p className='text-gray-600 font-medium text-sm'>{scholarship.location}</p>
                             </div>
-                            <div className='flex items-center gap-4 bg-white shadow-md rounded-md p-4 hover:bg-gray-200 hover:shadow-lg transition duration-300 w-full lg:w-auto'>
-                                <FaGraduationCap className='text-blue-500 w-6 h-6' />
-                                <p className='text-base'>{scholarship.educationLevel}</p>
+
+                            <div className='bg-white rounded-xl shadow-lg border border-blue-100 p-4 hover:shadow-xl transition-all duration-300 hover:-translate-y-1'>
+                                <div className='flex items-center gap-2 mb-2'>
+                                    <div className='bg-blue-100 p-1.5 rounded-lg'>
+                                        <FaGraduationCap className='text-blue-600 w-4 h-4' />
+                                    </div>
+                                    <span className='font-semibold text-gray-700 text-sm'>Education Level</span>
+                                </div>
+                                <p className='text-gray-600 font-medium text-sm'>{scholarship.educationLevel}</p>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div className='max-w-6xl lg:px-24 p-4 mx-auto mb-20'>
-                        <div className='flex flex-col md:flex-row justify-between gap-2'>
-                            <div className='flex flex-col md:flex-row gap-2 lg:items-center'>
-                                <span className='flex gap-1 bg-white border px-4 py-2 rounded-md shadow items-center'>
-                                    <MdOutlineRefresh className='w-6 h-6 text-blue-600' />
-                                    Last update: {formatDate(scholarship.dateUpdated)}
-                                </span>
-                                <span className='flex gap-2 bg-white border px-4 py-2 rounded-md shadow items-center'>
-                                    <FaRegCalendarXmark className='w-6 h-6 text-red-500' />
-                                    Deadline: {formatDate(scholarship.applicationDeadline)}
-                                </span>
-                            </div>
-
-                            <div className='flex gap-2 border shadow bg-white rounded-md px-4 py-2 mt-2 md:mt-0'>
-                                <div className='flex gap-2'>
-                                    <FaPersonCirclePlus className='w-6 h-6 text-blue-600' />
-                                    <span>Slots Available:</span>
-                                    <span className='text-blue-500'>{scholarship.approvedScholars}/{scholarship.numberOfScholarships}</span>
+                {/* Status and Deadline Cards */}
+                <div className='max-w-6xl mx-auto px-4 lg:px-6 mb-6'>
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                        <div className='bg-white rounded-xl shadow-lg border border-blue-100 p-4 hover:shadow-xl transition-all duration-300'>
+                            <div className='flex items-center gap-2 mb-2'>
+                                <div className='bg-blue-100 p-1.5 rounded-lg'>
+                                    <MdOutlineRefresh className='w-4 h-4 text-blue-600' />
                                 </div>
+                                <span className='font-semibold text-gray-700 text-sm'>Last Updated</span>
                             </div>
+                            <p className='text-blue-600 font-bold text-sm'>{formatDate(scholarship.dateUpdated)}</p>
                         </div>
 
-                        <div className='flex justify-center items-center w-full h-52 rounded-md my-4 shadow border'>
+                        <div className='bg-white rounded-xl shadow-lg border border-red-100 p-4 hover:shadow-xl transition-all duration-300'>
+                            <div className='flex items-center gap-2 mb-2'>
+                                <div className='bg-red-100 p-1.5 rounded-lg'>
+                                    <FaRegCalendarXmark className='w-4 h-4 text-red-600' />
+                                </div>
+                                <span className='font-semibold text-gray-700 text-sm'>Application Deadline</span>
+                            </div>
+                            <p className='text-red-600 font-bold text-sm'>{formatDate(scholarship.applicationDeadline)}</p>
+                        </div>
+
+                        <div className='bg-white rounded-xl shadow-lg border border-green-100 p-4 hover:shadow-xl transition-all duration-300 md:col-span-2 lg:col-span-1'>
+                            <div className='flex items-center gap-2 mb-2'>
+                                <div className='bg-green-100 p-1.5 rounded-lg'>
+                                    <FaPersonCirclePlus className='w-4 h-4 text-green-600' />
+                                </div>
+                                <span className='font-semibold text-gray-700 text-sm'>Available Slots</span>
+                            </div>
+                            <div className='flex items-center gap-1 mb-2'>
+                                <span className='text-lg font-bold text-green-600'>{scholarship.approvedScholars}</span>
+                                <span className='text-gray-400'>/</span>
+                                <span className='text-lg font-bold text-blue-600'>{scholarship.numberOfScholarships}</span>
+                            </div>
+                            <div className='w-full bg-gray-200 rounded-full h-1.5'>
+                                <div
+                                    className='bg-gradient-to-r from-green-500 to-blue-500 h-1.5 rounded-full transition-all duration-500'
+                                    style={{ width: `${(scholarship.approvedScholars / scholarship.numberOfScholarships) * 100}%` }}
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Banner and Content Section */}
+                <div className='max-w-6xl mx-auto px-4 lg:px-6 mb-8'>
+                    {/* Banner Image */}
+                    <div className='relative rounded-xl overflow-hidden shadow-lg mb-6 group'>
+                        <div className='aspect-video bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center'>
                             {scholarship.bannerImage ? (
-                                <img src={scholarship.bannerImage} alt="Scholarship Banner" className='w-full h-full object-cover' />
-                            ) : 'Scholarship Banner'}
-                        </div>
-
-                        <div>
-                            {scholarship.description && (
-                                <div className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
-                                    <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>Description</span>
-                                    <span className='text-sm px-4 pb-4 whitespace-pre-line'>{scholarship.description}</span>
-                                </div>
-                            )}
-                            {scholarship.sections && scholarship.sections.length > 0 ? (
-                                scholarship.sections.map((section, index) => (
-                                    <div key={index} className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
-                                        <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>{section.title}</span>
-                                        <span className='text-sm px-4 pb-4 whitespace-pre-line'>{section.content}</span>
-                                    </div>
-                                ))
+                                <img
+                                    src={scholarship.bannerImage}
+                                    alt="Scholarship Banner"
+                                    className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-700'
+                                />
                             ) : (
-                                <div>No details available</div>
+                                <div className='text-center'>
+                                    <FaGraduationCap className='w-12 h-12 text-blue-400 mx-auto mb-2' />
+                                    <span className='text-blue-600 font-semibold'>Scholarship Banner</span>
+                                </div>
                             )}
                         </div>
+                        <div className='absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
+                    </div>
 
-                        {/* FAQ Section */}
-                        <div className='flex flex-col gap-2 mt-8 border rounded-md bg-white'>
-                            <span className='font-bold text-xl text-white bg-blue-600 p-4 rounded-t-md'>{scholarship.faqTitle}</span>
-                            <span className='text-sm p-4 whitespace-pre-line'>{scholarship.faqDescription}</span>
-
-                            <div className='border mx-8'></div>
-                            <div className='items-center justify-center flex -translate-y-5'>
-                                <span className='bg-white px-8 text-slate-500'>Do you have more questions?</span>
-                            </div>
-
-                            {/* Contact Section */}
-                            <div className={`flex flex-col ${isEmailLong || isPhoneLong ? 'space-y-6' : 'lg:flex-row lg:space-x-6'} justify-center items-center mb-8 px-2`}>
-                                <div className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
-                                    <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
-                                        <FaEnvelope className='text-white' />
-                                    </div>
-                                    <div className='flex flex-col justify-center flex-grow'>
-                                        <span className='text-slate-600 text-left'>Email us!</span>
-                                        <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{scholarship.contactEmail}</span>
+                    {/* Content Sections */}
+                    <div className='space-y-6'>
+                        {scholarship.description && (
+                            <div className='bg-white rounded-xl shadow-lg border border-blue-100 overflow-hidden hover:shadow-xl transition-all duration-300'>
+                                <div className='bg-gradient-to-r from-blue-600 to-blue-700 p-4'>
+                                    <h2 className='text-lg font-bold text-white'>Description</h2>
+                                </div>
+                                <div className='p-4'>
+                                    <div className='prose prose-blue max-w-none'>
+                                        <p className='text-gray-700 text-sm leading-relaxed whitespace-pre-line'>{scholarship.description}</p>
                                     </div>
                                 </div>
+                            </div>
+                        )}
 
-                                {!isEmailLong && (
-                                    <div className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
-                                        <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
-                                            <FaPhone className='text-white' />
-                                        </div>
-                                        <div className='flex flex-col justify-center flex-grow'>
-                                            <span className='text-slate-600 text-left'>Call us!</span>
-                                            <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{scholarship.contactPhone}</span>
+                        {scholarship.sections && scholarship.sections.length > 0 && (
+                            scholarship.sections.map((section, index) => (
+                                <div key={index} className='bg-white rounded-xl shadow-lg border border-blue-100 overflow-hidden hover:shadow-xl transition-all duration-300'>
+                                    <div className='bg-gradient-to-r from-blue-600 to-blue-700 p-4'>
+                                        <h2 className='text-lg font-bold text-white'>{section.title}</h2>
+                                    </div>
+                                    <div className='p-4'>
+                                        <div className='prose prose-blue max-w-none'>
+                                            <p className='text-gray-700 text-sm leading-relaxed whitespace-pre-line'>{section.content}</p>
                                         </div>
                                     </div>
-                                )}
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>
 
-                                {!isEmailLong && !isPhoneLong && (
-                                    <button className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
-                                        <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
-                                            <FaUser className='text-white' />
+                {/* FAQ and Contact Section */}
+                <div className='max-w-6xl mx-auto px-4 lg:px-6 mb-8'>
+                    <div className='bg-white rounded-xl shadow-lg border border-blue-100 overflow-hidden'>
+                        <div className='bg-gradient-to-r from-blue-600 to-blue-700 p-4'>
+                            <h2 className='text-lg font-bold text-white'>{scholarship.faqTitle}</h2>
+                        </div>
+                        <div className='p-4'>
+                            <div className='prose prose-blue max-w-none mb-6'>
+                                <p className='text-gray-700 text-sm leading-relaxed whitespace-pre-line'>{scholarship.faqDescription}</p>
+                            </div>
+
+                            <div className='border-t border-gray-200 pt-6'>
+                                <h3 className='text-lg font-semibold text-center text-gray-700 mb-6'>Have more questions? Get in touch!</h3>
+
+                                {/* Contact Cards */}
+                                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                                    <div className='group bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-xl p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer'>
+                                        <div className='flex items-center gap-3'>
+                                            <div className='bg-blue-600 w-10 h-10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300'>
+                                                <FaEnvelope className='text-white w-4 h-4' />
+                                            </div>
+                                            <div className='flex-1'>
+                                                <h4 className='font-semibold text-blue-800 mb-1 text-sm'>Email us!</h4>
+                                                <p className='text-blue-600 text-xs break-words'>{scholarship.contactEmail}</p>
+                                            </div>
                                         </div>
-                                        <Link to={`/profile/${scholarship.providerId}`} className='flex flex-col justify-center text-left flex-grow'>
-                                            <span className='text-slate-600'>Visit our profile!</span>
-                                            <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{scholarship.organizationName}</span>
+                                    </div>
+
+                                    <div className='group bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-xl p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer'>
+                                        <div className='flex items-center gap-3'>
+                                            <div className='bg-green-600 w-10 h-10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300'>
+                                                <FaPhone className='text-white w-4 h-4' />
+                                            </div>
+                                            <div className='flex-1'>
+                                                <h4 className='font-semibold text-green-800 mb-1 text-sm'>Call us!</h4>
+                                                <p className='text-green-600 text-xs break-words'>{scholarship.contactPhone}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className='group bg-gradient-to-br from-purple-50 to-purple-100 border-2 border-purple-200 rounded-xl p-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer md:col-span-2 lg:col-span-1'>
+                                        <Link to={`/profile/${scholarship.providerId}`} className='flex items-center gap-3'>
+                                            <div className='bg-purple-600 w-10 h-10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300'>
+                                                <FaUser className='text-white w-4 h-4' />
+                                            </div>
+                                            <div className='flex-1'>
+                                                <h4 className='font-semibold text-purple-800 mb-1 text-sm'>Visit our profile!</h4>
+                                                <p className='text-purple-600 text-xs break-words'>{scholarship.organizationName}</p>
+                                            </div>
                                         </Link>
-                                    </button>
-                                )}
-
-                                {isEmailLong && (
-                                    <div className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
-                                        <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
-                                            <FaPhone className='text-white' />
-                                        </div>
-                                        <div className='flex flex-col justify-center flex-grow'>
-                                            <span className='text-slate-600 text-left'>Call us!</span>
-                                            <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{scholarship.contactPhone}</span>
-                                        </div>
                                     </div>
-                                )}
-
-                                {(isEmailLong || isPhoneLong) && (
-                                    <div className='bg-white border flex flex-row p-4 gap-2 rounded-md hover:bg-slate-200 hover:-translate-y-2 transition ease-in-out w-full lg:w-1/2'>
-                                        <div className='bg-blue-600 w-12 h-12 rounded-md flex items-center justify-center'>
-                                            <FaUser className='text-white' />
-                                        </div>
-                                        <Link to={`/profile/${scholarship.providerId}`} className='flex flex-col justify-center text-left flex-grow'>
-                                            <span className='text-slate-600'>Visit our profile!</span>
-                                            <span className='text-ellipsis overflow-hidden break-words max-w-[300px]'>{scholarship.organizationName}</span>
-                                        </Link>
-                                    </div>
-                                )}
+                                </div>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        {/* Ready to Apply Section */}
-                        <div className='flex flex-col items-center justify-center border-t my-10'>
-                            <span className='font-bold text-slate-700 py-8 text-2xl'>Ready to Apply?</span>
-                            <div className='grid grid-rows-1 lg:flex gap-4 w-full justify-center'>
-                                {/* <button className='bg-white flex border justify-between items-center shadow rounded-md p-4 lg:w-1/2 h-22 hover:-translate-y-2 hover:bg-slate-200 transition ease-in-out group'>
-                                    <div className='flex flex-row gap-4 '>
-                                        <div className='bg-blue-600 hidden lg:block w-14 h-14 rounded-md'></div>
-                                        <div className='flex flex-col text-left'>
-                                            <span className='text-lg text-left'>Apply in Organization's website!</span>
-                                            <span className='text-slate-600'>They'll offer more information!</span>
+                {/* Ready to Apply Section */}
+                <div className='max-w-6xl mx-auto px-4 lg:px-6 mb-8'>
+                    <div className='bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border-2 border-blue-200'>
+                        <div className='text-center mb-6'>
+                            <h2 className='text-2xl font-bold text-blue-800 mb-2'>Ready to Apply?</h2>
+                            <p className='text-blue-600'>Take the next step towards your educational goals!</p>
+                        </div>
+
+                        <div className='flex justify-center'>
+                            <div
+                                onClick={handleApplyClick}
+                                className='group cursor-pointer bg-white border-2 border-blue-300 rounded-xl p-4 hover:shadow-lg hover:-translate-y-2 hover:border-blue-500 transition-all duration-300 w-full max-w-md'
+                            >
+                                <div className='flex items-center justify-between'>
+                                    <div className='flex items-center gap-3'>
+                                        <div className='bg-blue-600 w-12 h-12 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300'>
+                                            <img src={NewLogo} alt="HubIsko Logo" className='w-8 h-8 object-cover rounded-lg' />
+                                        </div>
+                                        <div>
+                                            <h3 className='text-lg font-bold text-blue-800 group-hover:text-blue-900'>Apply with HubIsko!</h3>
+                                            <p className='text-blue-600 text-sm'>We'll guide you step by step!</p>
                                         </div>
                                     </div>
-                                    <BsGlobe2 className='w-8 h-8 ml-4 lg:group-hover:w-12 lg:group-hover:h-12 group-hover:text-blue-600 transition-all ease-in-out' />
-                                </button> */}
-
-                                <div onClick={handleApplyClick} className='cursor-pointer bg-white flex items-center border justify-between shadow rounded-md p-4 lg:w-1/2 h-22 hover:-translate-y-2 hover:bg-slate-200 transition ease-in-out group'>
-                                    <div className='flex flex-row gap-4 items-center'>
-                                        <div className='hidden lg:flex justify-center items-center w-14 h-14 rounded-md'>
-                                            <img src={NewLogo} alt="New Logo" className='w-full h-full object-cover rounded-md' />
-                                        </div>
-                                        <div className='flex flex-col text-left'>
-                                            <span className='text-lg'>Apply now in Hubisko!</span>
-                                            <span className='text-slate-600'>We'll guide you step by step!</span>
-                                        </div>
-                                    </div>
-                                    <FaArrowRightLong className='w-8 h-8 mr-4 group-hover:translate-x-2 group-hover:text-blue-600 transition ease-in-out' />
+                                    <FaArrowRightLong className='w-6 h-6 text-blue-600 group-hover:translate-x-1 group-hover:text-blue-800 transition-all duration-300' />
                                 </div>
                             </div>
                         </div>
@@ -493,8 +569,7 @@ export default function Forums() {
                                         </div>
                                     </div>
                                     <div className='w-full flex gap-2 justify-between'>
-                                        <Link to='/register' className='bg-blue-600 text-white text-center rounded-md w-full hover:bg-blue-800 py-2'>Register as Student</Link>
-                                        <Link to='/register-provider' className='bg-blue-800 text-white text-center rounded-md w-full hover:bg-blue-900 py-2'>Register as Provider</Link>
+                                        <Link to='/register' className='bg-blue-800 text-white text-center rounded-md w-full hover:bg-blue-800 py-2'>Register</Link>
                                     </div>
                                 </div>
                             </>
