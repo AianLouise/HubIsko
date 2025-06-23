@@ -23,16 +23,33 @@ import { FaCog, FaFileAlt, FaHistory, FaUniversity } from 'react-icons/fa'; // I
 export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
     const [isAccountsDropdownOpen, setIsAccountsDropdownOpen] = useState(false);
     const [isInboxDropdownOpen, setIsInboxDropdownOpen] = useState(false);
+    const [isClosing, setIsClosing] = useState(false);
+    const [isOpening, setIsOpening] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
 
     const toggleAccountsDropdown = () => {
         setIsAccountsDropdownOpen(!isAccountsDropdownOpen);
+    };    const toggleInboxDropdown = () => {
+        setIsInboxDropdownOpen(!isInboxDropdownOpen);
+    };    const handleSidebarClose = () => {
+        setIsClosing(true);
+        setTimeout(() => {
+            toggleSidebar();
+            setIsClosing(false);
+        }, 300); // Match the animation duration
     };
 
-    const toggleInboxDropdown = () => {
-        setIsInboxDropdownOpen(!isInboxDropdownOpen);
-    };
+    // Handle opening animation
+    useEffect(() => {
+        if (sidebarOpen && !isClosing) {
+            setIsOpening(true);
+            const timer = setTimeout(() => {
+                setIsOpening(false);
+            }, 300);
+            return () => clearTimeout(timer);
+        }
+    }, [sidebarOpen, isClosing]);
 
     useEffect(() => {
         if (location.pathname.startsWith('/accounts')
@@ -195,25 +212,24 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                 <p className="text-xs text-gray-500">Administrator</p>
                             </div>
 
-                            <div className="relative" ref={dropdownRef}>
-                                <button
+                            <div className="relative" ref={dropdownRef}>                                <button
                                     onClick={toggleDropdown}
-                                    className="flex items-center gap-2 p-1 rounded-lg hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="flex items-center gap-1.5 p-0.5 rounded-lg hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
                                     <div className="relative">
                                         <img
                                             src={currentUser?.profilePicture || 'https://via.placeholder.com/40'}
                                             alt="Admin Profile"
-                                            className="w-10 h-10 rounded-lg object-cover border-2 border-blue-200"
+                                            className="w-8 h-8 rounded-lg object-cover border-2 border-blue-200"
                                             onError={(e) => {
                                                 e.target.style.display = 'none';
                                                 e.target.nextSibling.style.display = 'flex';
                                             }}
                                         />
-                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold border-2 border-blue-200" style={{ display: 'none' }}>
+                                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold border-2 border-blue-200 text-xs" style={{ display: 'none' }}>
                                             {currentUser?.adminDetails?.firstName?.charAt(0) || 'A'}
                                         </div>
-                                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+                                        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
                                     </div>
                                 </button>
 
@@ -244,13 +260,19 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                         </div>
                     </div>
                 </div>
-            </div>
-
-            {sidebarOpen && (
+            </div>            {sidebarOpen && (
                 <div className="fixed inset-0 z-50">
-                    <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={toggleSidebar}></div>
-                    <aside className="fixed inset-y-0 left-0 flex flex-col w-72 bg-white shadow-2xl border-r border-gray-200">
-                        {/* Sidebar Header */}
+                    <div 
+                        className={`fixed inset-0 bg-gray-600 transition-opacity duration-300 ease-in-out ${
+                            isClosing ? 'bg-opacity-0' : 
+                            isOpening ? 'bg-opacity-0 animate-fadeIn' : 'bg-opacity-75'
+                        }`}
+                        onClick={handleSidebarClose}
+                    ></div>
+                    <aside className={`fixed inset-y-0 left-0 flex flex-col w-72 bg-white shadow-2xl border-r border-gray-200 transform transition-transform duration-300 ease-in-out ${
+                        isClosing ? '-translate-x-full' : 
+                        isOpening ? '-translate-x-full animate-slideInFromLeft' : 'translate-x-0'
+                    }`}>                        {/* Sidebar Header */}
                         <div className="flex items-center justify-between p-6 bg-gradient-to-r from-blue-600 to-blue-700">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-md">
@@ -260,19 +282,15 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                     <h1 className="text-xl font-bold text-white">HubIsko</h1>
                                     <p className="text-blue-100 text-xs">Admin Portal</p>
                                 </div>
-                            </div>
-                            <button
-                                onClick={toggleSidebar}
+                            </div>                            <button
+                                onClick={handleSidebarClose}
                                 className="p-2 rounded-lg text-white hover:bg-white/20 transition-colors duration-200"
                             >
                                 <CgClose className="w-5 h-5" />
                             </button>
-                        </div>
-
-                        {/* Sidebar Navigation */}
+                        </div>                        {/* Sidebar Navigation */}
                         <nav className="flex-1 px-4 py-6 overflow-y-auto text-sm">
-                            <ul className="space-y-2">
-                                {/* Dashboard */}
+                            <ul className="space-y-2">                                {/* Dashboard */}
                                 <li>
                                     <Link
                                         to="/admin-dashboard"
@@ -285,9 +303,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                             }`} />
                                         <span className="font-medium">Dashboard</span>
                                     </Link>
-                                </li>
-
-                                {/* Accounts Section */}
+                                </li>                                {/* Accounts Section */}
                                 <li>
                                     <div className="space-y-1">
                                         <Link
@@ -393,9 +409,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                             </ul>
                                         )}
                                     </div>
-                                </li>
-
-                                {/* Scholarship Programs Section */}                            
+                                </li>                                {/* Scholarship Programs Section */}                            
                                     <li>
                                     <Link
                                         to="/scholarship-programs"
@@ -413,9 +427,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                             }`} />
                                         <span className="font-medium">Scholarship Programs</span>
                                     </Link>
-                                </li>
-
-                                {/* Application Inbox */}
+                                </li>                                {/* Application Inbox */}
                                 <li>
                                     <Link
                                         to="/application-inbox"
@@ -438,9 +450,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                             </span>
                                         )}
                                     </Link>
-                                </li>
-
-                                {/* Forums */}
+                                </li>                                {/* Forums */}
                                 <li>
                                     <Link
                                         to="/admin-forums"
@@ -453,9 +463,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                             }`} />
                                         <span className="font-medium">Forums</span>
                                     </Link>
-                                </li>
-
-                                {/* Log History */}
+                                </li>                                {/* Log History */}
                                 <li>
                                     <Link
                                         to="/log-history"
@@ -468,9 +476,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                             }`} />
                                         <span className="font-medium">Log History</span>
                                     </Link>
-                                </li>
-
-                                {/* Generate Reports */}
+                                </li>                                {/* Generate Reports */}
                                 <li>
                                     <Link
                                         to="/admin-reports"
@@ -483,9 +489,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                             }`} />
                                         <span className="font-medium">Generate Reports</span>
                                     </Link>
-                                </li>
-
-                                {/* Settings */}
+                                </li>                                {/* Settings */}
                                 <li>
                                     <Link
                                         to="/admin-settings"
@@ -500,9 +504,7 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                     </Link>
                                 </li>
                             </ul>
-                        </nav>
-
-                        {/* Sidebar Footer */}
+                        </nav>                        {/* Sidebar Footer */}
                         <div className="p-4 border-t border-gray-200 bg-gray-50">
                             <div className="flex items-center gap-3 px-3 py-2">
                                 <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">

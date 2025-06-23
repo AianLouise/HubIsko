@@ -2,6 +2,71 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Sidebar Animation */
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.75;
+  }
+}
+
+@keyframes fadeInStagger {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+.animate-slideInFromLeft {
+  animation: slideInFromLeft 0.3s ease-out forwards;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-fadeInStagger {
+  animation: fadeInStagger 0.4s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-fadeInStagger:nth-child(1) { animation-delay: 0.1s; }
+.animate-fadeInStagger:nth-child(2) { animation-delay: 0.15s; }
+.animate-fadeInStagger:nth-child(3) { animation-delay: 0.2s; }
+.animate-fadeInStagger:nth-child(4) { animation-delay: 0.25s; }
+.animate-fadeInStagger:nth-child(5) { animation-delay: 0.3s; }
+.animate-fadeInStagger:nth-child(6) { animation-delay: 0.35s; }
+.animate-fadeInStagger:nth-child(7) { animation-delay: 0.4s; }
+.animate-fadeInStagger:nth-child(8) { animation-delay: 0.45s; }
+
 /* ModalStyles.css */
 /* .no-scroll {
     overflow: hidden;
