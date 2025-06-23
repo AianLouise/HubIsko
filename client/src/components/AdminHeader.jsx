@@ -244,7 +244,9 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                         </div>
                     </div>
                 </div>
-            </div>            {sidebarOpen && (
+            </div>
+
+            {sidebarOpen && (
                 <div className="fixed inset-0 z-50">
                     <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={toggleSidebar}></div>
                     <aside className="fixed inset-y-0 left-0 flex flex-col w-72 bg-white shadow-2xl border-r border-gray-200">
@@ -268,15 +270,15 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                         </div>
 
                         {/* Sidebar Navigation */}
-                        <nav className="flex-1 px-4 py-6 overflow-y-auto">
+                        <nav className="flex-1 px-4 py-6 overflow-y-auto text-sm">
                             <ul className="space-y-2">
                                 {/* Dashboard */}
                                 <li>
                                     <Link
                                         to="/admin-dashboard"
-                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname.startsWith('/admin-dashboard')
-                                                ? 'bg-blue-600 text-white shadow-md'
-                                                : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname.startsWith('/admin-dashboard')
+                                            ? 'bg-blue-600 text-white shadow-md'
+                                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
                                             }`}
                                     >
                                         <GoHomeFill className={`w-5 h-5 ${location.pathname.startsWith('/admin-dashboard') ? 'text-white' : 'text-blue-600'
@@ -291,27 +293,27 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                         <Link
                                             to="/accounts"
                                             onClick={toggleAccountsDropdown}
-                                            className={`flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname.startsWith('/accounts') ||
-                                                    location.pathname.startsWith('/students') ||
-                                                    location.pathname.startsWith('/provider-accounts') ||
-                                                    location.pathname.startsWith('/verification-details') ||
-                                                    location.pathname.startsWith('/student-details') ||
-                                                    location.pathname.startsWith('/student-applications') ||
-                                                    location.pathname.startsWith('/provider-details') ||
-                                                    location.pathname.startsWith('/scholarship-provider')
-                                                    ? 'bg-blue-600 text-white shadow-md'
-                                                    : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                                            className={`flex items-center justify-between gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname.startsWith('/accounts') ||
+                                                location.pathname.startsWith('/students') ||
+                                                location.pathname.startsWith('/provider-accounts') ||
+                                                location.pathname.startsWith('/verification-details') ||
+                                                location.pathname.startsWith('/student-details') ||
+                                                location.pathname.startsWith('/student-applications') ||
+                                                location.pathname.startsWith('/provider-details') ||
+                                                location.pathname.startsWith('/scholarship-provider')
+                                                ? 'bg-blue-600 text-white shadow-md'
+                                                : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
                                                 }`}
                                         >
                                             <div className="flex items-center gap-3">
                                                 <BsFillPersonFill className={`w-5 h-5 ${location.pathname.startsWith('/accounts') ||
-                                                        location.pathname.startsWith('/students') ||
-                                                        location.pathname.startsWith('/provider-accounts') ||
-                                                        location.pathname.startsWith('/verification-details') ||
-                                                        location.pathname.startsWith('/student-details') ||
-                                                        location.pathname.startsWith('/provider-details') ||
-                                                        location.pathname.startsWith('/scholarship-provider')
-                                                        ? 'text-white' : 'text-blue-600'
+                                                    location.pathname.startsWith('/students') ||
+                                                    location.pathname.startsWith('/provider-accounts') ||
+                                                    location.pathname.startsWith('/verification-details') ||
+                                                    location.pathname.startsWith('/student-details') ||
+                                                    location.pathname.startsWith('/provider-details') ||
+                                                    location.pathname.startsWith('/scholarship-provider')
+                                                    ? 'text-white' : 'text-blue-600'
                                                     }`} />
                                                 <span className="font-medium">Accounts</span>
                                             </div>
@@ -332,8 +334,8 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                                     <Link
                                                         to="/accounts"
                                                         className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all duration-200 ${location.pathname === '/accounts'
-                                                                ? 'bg-blue-100 text-blue-700 font-medium'
-                                                                : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600'
+                                                            ? 'bg-blue-100 text-blue-700 font-medium'
+                                                            : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600'
                                                             }`}
                                                     >
                                                         <BsFillPersonFill className="w-4 h-4 text-blue-600" />
@@ -344,8 +346,8 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                                     <Link
                                                         to="/students"
                                                         className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all duration-200 ${location.pathname === '/students'
-                                                                ? 'bg-blue-100 text-blue-700 font-medium'
-                                                                : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600'
+                                                            ? 'bg-blue-100 text-blue-700 font-medium'
+                                                            : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600'
                                                             }`}
                                                     >
                                                         <PiStudentFill className="w-4 h-4 text-blue-600" />
@@ -356,8 +358,8 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                                     <Link
                                                         to="/student-applications"
                                                         className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all duration-200 ${location.pathname === '/student-applications'
-                                                                ? 'bg-blue-100 text-blue-700 font-medium'
-                                                                : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600'
+                                                            ? 'bg-blue-100 text-blue-700 font-medium'
+                                                            : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600'
                                                             }`}
                                                     >
                                                         <FaFileAlt className="w-4 h-4 text-blue-600" />
@@ -368,8 +370,8 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                                     <Link
                                                         to="/scholarship-provider"
                                                         className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all duration-200 ${location.pathname === '/scholarship-provider'
-                                                                ? 'bg-blue-100 text-blue-700 font-medium'
-                                                                : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600'
+                                                            ? 'bg-blue-100 text-blue-700 font-medium'
+                                                            : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600'
                                                             }`}
                                                     >
                                                         <BsBuildingFill className="w-4 h-4 text-blue-600" />
@@ -380,8 +382,8 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                                     <Link
                                                         to="/scholarship-provider-applications"
                                                         className={`flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-all duration-200 ${location.pathname === '/scholarship-provider-applications'
-                                                                ? 'bg-blue-100 text-blue-700 font-medium'
-                                                                : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600'
+                                                            ? 'bg-blue-100 text-blue-700 font-medium'
+                                                            : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600'
                                                             }`}
                                                     >
                                                         <FaFileAlt className="w-4 h-4 text-blue-600" />
@@ -393,10 +395,11 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                     </div>
                                 </li>
 
-                                {/* Scholarship Programs Section */}                                <li>
+                                {/* Scholarship Programs Section */}                            
+                                    <li>
                                     <Link
                                         to="/scholarship-programs"
-                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname.startsWith('/scholarship-programs') ||
+                                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname.startsWith('/scholarship-programs') ||
                                             location.pathname.startsWith('/scholarship-program-applications') ||
                                             location.pathname.startsWith('/scholarship-applications')
                                             ? 'bg-blue-600 text-white shadow-md'
@@ -416,9 +419,9 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                 <li>
                                     <Link
                                         to="/application-inbox"
-                                        className={`flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname.startsWith('/application-inbox')
-                                                ? 'bg-blue-600 text-white shadow-md'
-                                                : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                                        className={`flex items-center justify-between gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname.startsWith('/application-inbox')
+                                            ? 'bg-blue-600 text-white shadow-md'
+                                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
                                             }`}
                                     >
                                         <div className="flex items-center gap-3">
@@ -428,8 +431,8 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                         </div>
                                         {totalPendingCount > 0 && (
                                             <span className={`px-2 py-1 text-xs font-bold rounded-full ${location.pathname.startsWith('/application-inbox')
-                                                    ? 'bg-white text-blue-600'
-                                                    : 'bg-blue-600 text-white'
+                                                ? 'bg-white text-blue-600'
+                                                : 'bg-blue-600 text-white'
                                                 }`}>
                                                 {totalPendingCount}
                                             </span>
@@ -441,9 +444,9 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                 <li>
                                     <Link
                                         to="/admin-forums"
-                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname === '/admin-forums'
-                                                ? 'bg-blue-600 text-white shadow-md'
-                                                : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname === '/admin-forums'
+                                            ? 'bg-blue-600 text-white shadow-md'
+                                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
                                             }`}
                                     >
                                         <MdForum className={`w-5 h-5 ${location.pathname === '/admin-forums' ? 'text-white' : 'text-blue-600'
@@ -456,9 +459,9 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                 <li>
                                     <Link
                                         to="/log-history"
-                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname === '/log-history'
-                                                ? 'bg-blue-600 text-white shadow-md'
-                                                : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname === '/log-history'
+                                            ? 'bg-blue-600 text-white shadow-md'
+                                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
                                             }`}
                                     >
                                         <FaHistory className={`w-5 h-5 ${location.pathname === '/log-history' ? 'text-white' : 'text-blue-600'
@@ -471,9 +474,9 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                 <li>
                                     <Link
                                         to="/admin-reports"
-                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname === '/admin-reports'
-                                                ? 'bg-blue-600 text-white shadow-md'
-                                                : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname === '/admin-reports'
+                                            ? 'bg-blue-600 text-white shadow-md'
+                                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
                                             }`}
                                     >
                                         <FaFileAlt className={`w-5 h-5 ${location.pathname === '/admin-reports' ? 'text-white' : 'text-blue-600'
@@ -486,9 +489,9 @@ export default function AdminHeader({ sidebarOpen, toggleSidebar }) {
                                 <li>
                                     <Link
                                         to="/admin-settings"
-                                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname === '/admin-settings'
-                                                ? 'bg-blue-600 text-white shadow-md'
-                                                : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${location.pathname === '/admin-settings'
+                                            ? 'bg-blue-600 text-white shadow-md'
+                                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
                                             }`}
                                     >
                                         <FaCog className={`w-5 h-5 ${location.pathname === '/admin-settings' ? 'text-white' : 'text-blue-600'
