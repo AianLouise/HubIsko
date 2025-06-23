@@ -63,6 +63,7 @@ const getAccountLink = (account) => {
 export default function Students() {
   useEffect(() => {
     document.title = "Students | HubIsko";
+    window.scrollTo(0, 0);
   }, []);
 
   const [applicants, setApplicants] = useState([]);

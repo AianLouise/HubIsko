@@ -14,6 +14,7 @@ export default function AccountSettings() {
 
     useEffect(() => {
         document.title = "Account Settings | HubIsko";
+        window.scrollTo(0, 0);
     }, []);
 
     const tabs = [        {

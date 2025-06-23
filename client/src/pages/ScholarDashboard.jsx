@@ -16,6 +16,7 @@ export default function ScholarDashboard() {
 
   useEffect(() => {
     document.title = "Scholar Dashboard | HubIsko";
+    window.scrollTo(0, 0);
   }, []);
 
   const currentUser = useSelector((state) => state.user.currentUser);

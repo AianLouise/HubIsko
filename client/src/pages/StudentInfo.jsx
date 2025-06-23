@@ -15,6 +15,7 @@ export default function StudentInfo() {
 
   useEffect(() => {
     document.title = "Student Info | HubIsko";
+    window.scrollTo(0, 0);
   }, []);
 
   return (

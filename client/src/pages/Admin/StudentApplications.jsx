@@ -29,6 +29,7 @@ const toSentenceCase = (str) => {
 export default function StudentApplications() {
     useEffect(() => {
         document.title = "Student Applications | HubIsko";
+        window.scrollTo(0, 0);
     }, []);
 
     useEffect(() => {

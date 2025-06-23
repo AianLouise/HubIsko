@@ -9,6 +9,7 @@ import axios from "axios";
 export default function ScholarshipApplications() {
     useEffect(() => {
         document.title = "Scholarship Provider Applications | HubIsko";
+        window.scrollTo(0, 0);
     }, []);
 
     const [providers, setProviders] = useState([]);
@@ -28,7 +29,7 @@ export default function ScholarshipApplications() {
 
     return (
         <div className="flex flex-col min-h-screen font-medium text-slate-700">
-           
+
             <main className="flex-grow bg-[#f8f8fb]">
                 <div className="border-b mb-8">
                     <div className="flex items-center justify-between px-6 lg:px-24 mx-auto">
@@ -99,7 +100,7 @@ export default function ScholarshipApplications() {
                         </div>
                     </div>
 
-                                        <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-4">
                         <h1 className="text-xl font-semibold border-b pb-4">Scholarships</h1>
                         <div className="flex gap-4 mt-5">
                             <input
@@ -112,7 +113,7 @@ export default function ScholarshipApplications() {
                                 <span>Filter</span>
                             </button>
                         </div>
-                    
+
                         <table className="w-full mt-4 rounded-md border border-gray-200 bg-white">
                             <thead className="bg-slate-100 rounded-t-md">
                                 <tr>

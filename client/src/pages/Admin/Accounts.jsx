@@ -78,6 +78,7 @@ const getAccountLink = (account) => {
 export default function Accounts() {
     useEffect(() => {
         document.title = "Accounts | HubIsko";
+        window.scrollTo(0, 0);
     }, []);
 
     const [totalAccounts, setTotalAccounts] = useState(0);

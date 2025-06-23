@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { FaFileAlt } from 'react-icons/fa';
+import { FaFileAlt, FaDownload, FaChartBar, FaUsers, FaGraduationCap } from 'react-icons/fa';
 import { useDispatch, useSelector } from "react-redux";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import logo from '../../assets/NewLogo.png';
 
-export default function AdminSettings() {
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
+export default function AdminReports() {
     const { currentUser } = useSelector((state) => state.user);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        document.title = "Generate Reports | HubIsko";
+    }, []);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     const [selectedTab, setSelectedTab] = useState('Update Information');
     const [startDate, setStartDate] = useState('');
@@ -28,11 +38,9 @@ export default function AdminSettings() {
     const [errorMessage, setErrorMessage] = useState('');
     const [errorMessage2, setErrorMessage2] = useState('');
 
-    const handleTabClick = (tab) => setSelectedTab(tab);
-
-    const fetchAccountReportData = async () => {
+    const handleTabClick = (tab) => setSelectedTab(tab);    const fetchAccountReportData = async () => {
         try {
-            const response = await fetch('/api/admin/account-report', {
+            const response = await fetch(`${apiUrl}/api/admin/account-report`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,7 +63,7 @@ export default function AdminSettings() {
         // Fetch the list of verified scholarship providers
         const fetchProviders = async () => {
             try {
-                const response = await fetch('/api/admin/verified-scholarship-providers');
+                const response = await fetch(`${apiUrl}/api/admin/verified-scholarship-providers`);
                 const data = await response.json();
                 setProviders(data);
             } catch (error) {
@@ -68,7 +76,7 @@ export default function AdminSettings() {
 
     const fetchProgramReportData = async () => {
         try {
-            const response = await fetch('/api/admin/program-report', {
+            const response = await fetch(`${apiUrl}/api/admin/program-report`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -573,53 +581,71 @@ export default function AdminSettings() {
             };
             img.onerror = (error) => reject(error);
         });
-    };
-
-    return (
-        <div className="flex flex-col min-h-screen bg-gray-100">
-            <header className="bg-white shadow">
-                <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <h1 className="text-2xl font-bold text-gray-900 flex items-center">
-                        <FaFileAlt className="mr-4 text-blue-600" /> {/* Updated icon */}
-                        Generate Reports
-                    </h1>
+    };    return (
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+            {/* Header Section */}
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg">
+                <div className="max-w-7xl mx-auto px-6 py-8">
+                    <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                            <h1 className="text-3xl font-bold mb-2">Generate Reports</h1>
+                            <p className="text-blue-100 text-base font-medium">
+                                Generate comprehensive reports for accounts and scholarship programs
+                            </p>
+                        </div>
+                        <div className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/20">
+                            <FaChartBar className="text-white text-4xl" />
+                        </div>
+                    </div>
                 </div>
-            </header>
-            <main className="flex-grow">
-                <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                    <div className="px-4 py-6 sm:px-0">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="bg-white shadow rounded-lg p-6">
-                                <h2 className="text-xl font-bold mb-4">Accounts Report</h2>
-                                <p className="text-gray-600">Generate a detailed report of all account informations.</p>
+            </div>
 
-                                <div className="mt-4">
-                                    <label className="block text-gray-700">Start Date</label>
+            {/* Main Content */}
+            <div className="max-w-7xl mx-auto px-6 py-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* Accounts Report Card */}
+                    <div className="bg-white rounded-xl shadow-md border border-blue-100 overflow-hidden hover:shadow-lg transition-all duration-300">
+                        <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6">
+                            <div className="flex items-center">
+                                <div className="bg-white/20 p-3 rounded-lg mr-4">
+                                    <FaUsers className="text-white text-2xl" />
+                                </div>
+                                <div>
+                                    <h2 className="text-xl font-bold text-white">Accounts Report</h2>
+                                    <p className="text-blue-100 text-sm">Generate detailed account information reports</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="p-6">
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
                                     <input
                                         type="date"
-                                        className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                         value={startDate}
                                         onChange={(e) => setStartDate(e.target.value)}
-                                        max={new Date().toISOString().split("T")[0]} // Set max attribute to today's date
+                                        max={new Date().toISOString().split("T")[0]}
                                     />
                                 </div>
 
-                                <div className="mt-4">
-                                    <label className="block text-gray-700">End Date</label>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
                                     <input
                                         type="date"
-                                        className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                                         value={endDate}
                                         onChange={(e) => setEndDate(e.target.value)}
-                                        min={startDate} // Set min attribute to start date
-                                        max={new Date().toISOString().split("T")[0]} // Set max attribute to today's date
+                                        min={startDate}
+                                        max={new Date().toISOString().split("T")[0]}
                                     />
                                 </div>
 
-                                <div className="mt-4">
-                                    <label className="block text-gray-700">Role</label>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
                                     <select
-                                        className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 bg-white"
                                         value={role}
                                         onChange={(e) => setRole(e.target.value)}
                                     >
@@ -631,61 +657,91 @@ export default function AdminSettings() {
                                 </div>
 
                                 {errorMessage && (
-                                    <div className="mt-4 text-red-600">
-                                        {errorMessage}
+                                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                                        <div className="flex items-center">
+                                            <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                                            </svg>
+                                            {errorMessage}
+                                        </div>
                                     </div>
                                 )}
 
-                                <div className="flex mt-4">
+                                <div className="flex gap-3 pt-4">
                                     <button
-                                        className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
+                                        className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 font-medium transition-all duration-300 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                                         onClick={handleGenerateAccountReport}
                                         disabled={accountLoading}
                                     >
-                                        {accountLoading ? 'Generating...' : 'Generate'}
+                                        {accountLoading ? (
+                                            <div className="flex items-center justify-center">
+                                                <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
+                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                                                </svg>
+                                                Generating...
+                                            </div>
+                                        ) : (
+                                            'Generate Report'
+                                        )}
                                     </button>
                                     {accountReportGenerated && (
                                         <button
                                             onClick={generateAccountPDF}
-                                            className="ml-4 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700"
+                                            className="flex items-center px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium transition-all duration-300 hover:shadow-md"
                                         >
+                                            <FaDownload className="mr-2" />
                                             Download PDF
                                         </button>
                                     )}
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <div className="bg-white shadow rounded-lg p-6">
-                                <h2 className="text-xl font-bold mb-4">Scholarship Program Report</h2>
-                                <p className="text-gray-600">Generate a detailed report of all scholarship programs and their statuses.</p>
+                    {/* Scholarship Program Report Card */}
+                    <div className="bg-white rounded-xl shadow-md border border-blue-100 overflow-hidden hover:shadow-lg transition-all duration-300">
+                        <div className="bg-gradient-to-r from-green-600 to-green-700 p-6">
+                            <div className="flex items-center">
+                                <div className="bg-white/20 p-3 rounded-lg mr-4">
+                                    <FaGraduationCap className="text-white text-2xl" />
+                                </div>
+                                <div>
+                                    <h2 className="text-xl font-bold text-white">Scholarship Program Report</h2>
+                                    <p className="text-green-100 text-sm">Generate program activities and status reports</p>
+                                </div>
+                            </div>
+                        </div>
 
-                                <div className="mt-4">
-                                    <label className="block text-gray-700">Start Date</label>
+                        <div className="p-6">
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
                                     <input
                                         type="date"
-                                        className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
                                         value={startDate2}
                                         onChange={(e) => setStartDate2(e.target.value)}
-                                        max={new Date().toISOString().split("T")[0]} // Set max attribute to today's date
+                                        max={new Date().toISOString().split("T")[0]}
                                     />
                                 </div>
 
-                                <div className="mt-4">
-                                    <label className="block text-gray-700">End Date</label>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
                                     <input
                                         type="date"
-                                        className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
                                         value={endDate2}
                                         onChange={(e) => setEndDate2(e.target.value)}
-                                        min={startDate2} // Set min attribute to start date
-                                        max={new Date().toISOString().split("T")[0]} // Set max attribute to today's date
+                                        min={startDate2}
+                                        max={new Date().toISOString().split("T")[0]}
                                     />
                                 </div>
 
-                                <div className="mt-4">
-                                    <label className="block text-gray-700">Provider</label>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Provider</label>
                                     <select
-                                        className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300 bg-white"
                                         value={provider}
                                         onChange={(e) => setProvider(e.target.value)}
                                     >
@@ -698,10 +754,10 @@ export default function AdminSettings() {
                                     </select>
                                 </div>
 
-                                <div className="mt-4">
-                                    <label className="block text-gray-700">Status</label>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
                                     <select
-                                        className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300 bg-white"
                                         value={status}
                                         onChange={(e) => setStatus(e.target.value)}
                                     >
@@ -720,24 +776,40 @@ export default function AdminSettings() {
                                 </div>
 
                                 {errorMessage2 && (
-                                    <div className="mt-4 text-red-600">
-                                        {errorMessage2}
+                                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                                        <div className="flex items-center">
+                                            <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                                            </svg>
+                                            {errorMessage2}
+                                        </div>
                                     </div>
                                 )}
 
-                                <div className="flex mt-4">
+                                <div className="flex gap-3 pt-4">
                                     <button
-                                        className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
+                                        className="flex-1 bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 font-medium transition-all duration-300 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                                         onClick={handleGenerateProgramReport}
                                         disabled={programLoading}
                                     >
-                                        {programLoading ? 'Generating...' : 'Generate'}
+                                        {programLoading ? (
+                                            <div className="flex items-center justify-center">
+                                                <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
+                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                                                </svg>
+                                                Generating...
+                                            </div>
+                                        ) : (
+                                            'Generate Report'
+                                        )}
                                     </button>
                                     {programReportGenerated && (
                                         <button
                                             onClick={generateProgramPDF}
-                                            className="ml-4 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700"
+                                            className="flex items-center px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium transition-all duration-300 hover:shadow-md"
                                         >
+                                            <FaDownload className="mr-2" />
                                             Download PDF
                                         </button>
                                     )}
@@ -746,7 +818,26 @@ export default function AdminSettings() {
                         </div>
                     </div>
                 </div>
-            </main>
+
+                {/* Report Generation Info */}
+                <div className="mt-8 bg-white rounded-xl shadow-md border border-blue-100 p-6">
+                    <div className="flex items-start">
+                        <div className="bg-blue-100 p-3 rounded-lg mr-4">
+                            <FaFileAlt className="text-blue-600 text-xl" />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-semibold text-gray-900 mb-2">Report Information</h3>
+                            <div className="text-sm text-gray-600 space-y-1">
+                                <p>• Reports are generated in PDF format and include comprehensive data analysis</p>
+                                <p>• Account reports contain user details, registration dates, and status information</p>
+                                <p>• Program reports include scholarship details, provider information, and program statuses</p>
+                                <p>• Use date filters to generate reports for specific time periods</p>
+                                <p>• Generated reports include overview statistics and detailed record information</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

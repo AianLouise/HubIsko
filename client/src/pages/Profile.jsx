@@ -18,6 +18,7 @@ export default function Profile() {
 
   useEffect(() => {
     document.title = "Profile | HubIsko";
+    window.scrollTo(0, 0);
   }, []);
 
   const currentUser = useSelector((state) => state.user.currentUser);

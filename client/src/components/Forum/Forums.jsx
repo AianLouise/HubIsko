@@ -10,6 +10,7 @@ import ForumsIcon from '../../assets/ForumsIcon.png';
 export default function Forums() {
     useEffect(() => {
         document.title = "Forums | HubIsko";
+        window.scrollTo(0, 0);
     }, []);
 
     const navigate = useNavigate();

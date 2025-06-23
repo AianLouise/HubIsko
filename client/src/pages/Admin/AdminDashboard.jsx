@@ -11,6 +11,7 @@ import { FiMenu } from "react-icons/fi";
 export default function AdminDashboard() {
     useEffect(() => {
         document.title = "Admin Dashboard | HubIsko";
+        scrollTo(0, 0);
     }, []);
 
     const navigate = useNavigate();

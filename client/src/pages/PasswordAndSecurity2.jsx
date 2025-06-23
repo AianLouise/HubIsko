@@ -12,6 +12,7 @@ export default function PasswordAndSecurity() {
     useTokenExpiry();
     useEffect(() => {
         document.title = "Account Settings | HubIsko";
+        window.scrollTo(0, 0);
     }, []);
 
     const currentUser = useSelector((state) => state.user.currentUser);

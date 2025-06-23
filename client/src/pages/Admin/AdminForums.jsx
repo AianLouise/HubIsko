@@ -12,6 +12,7 @@ import ForumsIcon from '../../assets/ForumsIconwTexture.png';
 export default function AdminForums() {
   useEffect(() => {
     document.title = "Forums | HubIsko";
+    window.scrollTo(0, 0);
   }, []);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);

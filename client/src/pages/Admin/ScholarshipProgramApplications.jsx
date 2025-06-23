@@ -10,6 +10,7 @@ import { FaFileAlt } from "react-icons/fa";
 export default function ScholarshipProgramApplications() {
     useEffect(() => {
         document.title = "Scholarship Program Applications | HubIsko";
+        window.scrollTo(0, 0);
     }, []);
     const [programs, setPrograms] = useState([]);
 

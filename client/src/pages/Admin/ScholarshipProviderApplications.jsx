@@ -284,62 +284,101 @@ export default function ScholarshipProviderApplications() {
                                     )}
                                 </tbody>
                             </table>
-                        </div>
-
-                        {/* Pagination Controls */}
+                        </div>                        {/* Pagination and Results Info */}
                         {filteredProviders.length > 0 && (
                             <div className="bg-white px-6 py-4 border-t border-gray-100">
                                 <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-                                    <div className="flex items-center text-sm text-gray-600">
-                                        <span>Showing {startIndex + 1} to {Math.min(endIndex, filteredProviders.length)} of {filteredProviders.length} applications</span>
+                                    <div className="text-sm text-gray-700">
+                                        Showing {startIndex + 1} to {Math.min(endIndex, filteredProviders.length)} of {filteredProviders.length} applications
                                     </div>
                                     
                                     {totalPages > 1 && (
                                         <div className="flex items-center gap-2">
+                                            {/* Previous Button */}
                                             <button
-                                                onClick={() => handlePageChange(currentPage - 1)}
+                                                onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                                                 disabled={currentPage === 1}
-                                                className="px-3 py-1.5 text-sm border border-gray-200 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                                                className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
                                                 Previous
                                             </button>
-                                            
-                                            <div className="flex gap-1">
-                                                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                                                    let pageNum;
-                                                    if (totalPages <= 5) {
-                                                        pageNum = i + 1;
-                                                    } else if (currentPage <= 3) {
-                                                        pageNum = i + 1;
-                                                    } else if (currentPage >= totalPages - 2) {
-                                                        pageNum = totalPages - 4 + i;
-                                                    } else {
-                                                        pageNum = currentPage - 2 + i;
-                                                    }
-                                                    
-                                                    return (
+
+                                            {/* Page Numbers */}
+                                            <div className="flex items-center gap-1">
+                                                {/* First page */}
+                                                {currentPage > 3 && (
+                                                    <>
                                                         <button
-                                                            key={pageNum}
-                                                            onClick={() => handlePageChange(pageNum)}
-                                                            className={`px-3 py-1.5 text-sm border rounded-md transition-all duration-200 ${
-                                                                currentPage === pageNum
-                                                                    ? 'bg-blue-600 text-white border-blue-600'
-                                                                    : 'border-gray-200 hover:bg-gray-50'
+                                                            onClick={() => handlePageChange(1)}
+                                                            className="w-10 h-10 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-700"
+                                                        >
+                                                            1
+                                                        </button>
+                                                        {currentPage > 4 && (
+                                                            <span className="px-2 text-gray-500">...</span>
+                                                        )}
+                                                    </>
+                                                )}
+
+                                                {/* Current page range */}
+                                                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                                                    .filter(page => page >= Math.max(1, currentPage - 2) && page <= Math.min(totalPages, currentPage + 2))
+                                                    .map(page => (
+                                                        <button
+                                                            key={page}
+                                                            onClick={() => handlePageChange(page)}
+                                                            className={`w-10 h-10 text-sm font-medium rounded-lg ${
+                                                                page === currentPage
+                                                                    ? 'bg-blue-600 text-white border border-blue-600'
+                                                                    : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700'
                                                             }`}
                                                         >
-                                                            {pageNum}
+                                                            {page}
                                                         </button>
-                                                    );
-                                                })}
+                                                    ))}
+
+                                                {/* Last page */}
+                                                {currentPage < totalPages - 2 && (
+                                                    <>
+                                                        {currentPage < totalPages - 3 && (
+                                                            <span className="px-2 text-gray-500">...</span>
+                                                        )}
+                                                        <button
+                                                            onClick={() => handlePageChange(totalPages)}
+                                                            className="w-10 h-10 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-700"
+                                                        >
+                                                            {totalPages}
+                                                        </button>
+                                                    </>
+                                                )}
                                             </div>
-                                            
+
+                                            {/* Next Button */}
                                             <button
-                                                onClick={() => handlePageChange(currentPage + 1)}
+                                                onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                                                 disabled={currentPage === totalPages}
-                                                className="px-3 py-1.5 text-sm border border-gray-200 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                                                className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
                                                 Next
                                             </button>
+
+                                            {/* Quick Jump */}
+                                            <div className="flex items-center gap-2 ml-4">
+                                                <span className="text-sm text-gray-500">Go to:</span>
+                                                <input
+                                                    type="number"
+                                                    min="1"
+                                                    max={totalPages}
+                                                    value={currentPage}
+                                                    onChange={(e) => {
+                                                        const page = parseInt(e.target.value);
+                                                        if (page >= 1 && page <= totalPages) {
+                                                            handlePageChange(page);
+                                                        }
+                                                    }}
+                                                    className="w-16 px-2 py-1 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center"
+                                                />
+                                            </div>
                                         </div>
                                     )}
                                 </div>

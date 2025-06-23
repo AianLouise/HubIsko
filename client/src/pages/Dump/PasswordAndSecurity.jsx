@@ -30,6 +30,7 @@ export default function PasswordAndSecurity() {
 
   useEffect(() => {
     document.title = "Account Settings | HubIsko";
+    window.scrollTo(0, 0);
   }, []);
 
   const dispatch = useDispatch();
