@@ -10,6 +10,11 @@ import SmallLogo from '../assets/NewLogoClean.png';
 import { motion } from 'framer-motion';
 
 export default function SignIn() {
+  //Scroll to top on page load
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [formData, setFormData] = useState({});
   const { loading, error } = useSelector((state) => state.user);
   const [showPassword, setShowPassword] = useState(false);

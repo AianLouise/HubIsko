@@ -619,7 +619,7 @@ export default function Home() {
             </div>
 
             <div className='text-center mt-10'>
-              <Link to="/about" className='inline-flex items-center gap-2 bg-blue-600 text-white py-3 px-6 rounded-full font-medium hover:bg-blue-700 transition-colors'>
+              <Link to="/faq" className='inline-flex items-center gap-2 bg-blue-600 text-white py-3 px-6 rounded-full font-medium hover:bg-blue-700 transition-colors'>
                 <span>View More FAQs</span>
                 <FaArrowRight />
               </Link>
